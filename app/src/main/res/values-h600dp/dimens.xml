@@ -21,4 +21,5 @@
     <dimen name="start_menu_grid_text_size">14sp</dimen>
     <dimen name="start_menu_grid_padding">4dp</dimen>
     <dimen name="start_menu_icon_padding">6dp</dimen>
+    <dimen name="start_menu_no_apps_found_text">16sp</dimen>
 </resources>

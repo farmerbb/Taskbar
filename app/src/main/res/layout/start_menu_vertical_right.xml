@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/start_menu_no_apps_found_text"
                     android:textColor="@color/text_color"
                     android:text="@string/loading_apps" />
 
