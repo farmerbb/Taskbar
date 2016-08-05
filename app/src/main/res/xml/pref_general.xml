@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_header_general" >
+
+    <ListPreference
+        android:defaultValue="list"
+        android:entries="@array/pref_start_menu_list"
+        android:entryValues="@array/pref_start_menu_list_values"
+        android:key="start_menu_layout"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_start_menu_layout"/>
+
+    <ListPreference
+        android:defaultValue="bottom_left"
+        android:entries="@array/pref_position_list"
+        android:entryValues="@array/pref_position_list_values"
+        android:key="position"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_position"/>
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="show_background"
+        android:title="@string/pref_title_background_tint"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="scrollbar"
+        android:title="@string/pref_title_scrollbar"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="hide_taskbar"
+        android:title="@string/pref_title_hide_taskbar"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="start_on_boot"
+        android:title="@string/pref_title_start_on_boot"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Taskbar</string>
+    <string name="not_in_multi_window">Not in multi-window mode</string>
+
+    <string name="taskbar_is_active">Taskbar is active</string>
+    <string name="click_to_open_settings">Click to open settings</string>
+    <string name="action_show">Show taskbar</string>
+    <string name="action_hide">Hide taskbar</string>
+    <string name="action_quit">Quit</string>
+    <string name="action_grant_permission">Grant permission</string>
+
+    <string name="permission_dialog_title">Permission needed</string>
+    <string name="permission_dialog_message">Taskbar requires permission to draw over other apps before it can start.\n\nPlease press \'\'Grant Permission\'\' and ensure that Taskbar is set to \'\'Yes\'\'</string>
+
+    <string name="left_arrow" translatable="false">&#10094;</string>
+    <string name="right_arrow" translatable="false">&#10095;</string>
+
+    <string name="pref_header_general">General</string>
+    <string name="pref_title_start_menu_layout">Start menu layout</string>
+    <string name="pref_title_background_tint">Taskbar background tint</string>
+    <string name="pref_title_scrollbar">Show scrollbar on start menu</string>
+    <string name="pref_title_start_on_boot">Launch on boot</string>
+
+    <string-array name="pref_start_menu_list">
+        <item>List</item>
+        <item>Grid</item>
+    </string-array>
+    <string-array name="pref_start_menu_list_values">
+        <item>list</item>
+        <item>grid</item>
+    </string-array>
+
+    <string name="pref_header_recent_apps">Recent apps</string>
+
+    <string name="pref_title_enable_recents">Enable/disable usage access</string>
+    <string name="pref_title_recents_refresh_interval">Refresh list every</string>
+    <string-array name="pref_refresh_frequency">
+        <item>1 second</item>
+        <item>2 seconds</item>
+        <item>5 seconds</item>
+    </string-array>
+    <string-array name="pref_refresh_frequency_values">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+    </string-array>
+
+    <string name="pref_title_amount_of_recents">Display apps launched</string>
+    <string-array name="pref_recents_amount">
+        <item>Within the past day</item>
+        <item>After Taskbar start</item>
+    </string-array>
+    <string-array name="pref_recents_amount_values">
+        <item>past_day</item>
+        <item>app_start</item>
+    </string-array>
+
+    <string name="pref_title_sort_order">Sort order</string>
+    <string-array name="pref_sort_order">
+        <item>Recently used (descending)</item>
+        <item>Recently used (ascending)</item>
+        <item>Most time used (descending)</item>
+        <item>Most time used (ascending)</item>
+    </string-array>
+    <string-array name="pref_sort_order_values">
+        <item>false</item>
+        <item>true</item>
+        <item>most_used_false</item>
+        <item>most_used_true</item>
+    </string-array>
+
+    <string name="pref_header_advanced">Advanced</string>
+
+    <string name="pref_title_freeform_hack">Freeform window hack</string>
+    <string name="pref_description_freeform_hack">Allows Taskbar to remain in the freeform window workspace even with no windows open, for a more desktop-like experience.\n\nMake sure this app is in a freeform window when this setting is checked, and then (re)start Taskbar for this to work.</string>
+
+    <string name="pref_header_about">About Taskbar</string>
+    <string name="pref_about_description">Taskbar: start menu and recent apps at your fingertips\n\n&#169; 2016 Braden Farmer\n\nClick here to check for updates or leave a rating! %1$s</string>
+
+    <string name="pref_title_hide_taskbar">Hide Taskbar when selecting an app</string>
+
+    <string name="pref_title_launcher">Replace home screen</string>
+    <string name="pref_description_launcher">Use Taskbar as a lightweight home screen replacement</string>
+
+    <string name="set_wallpaper">Set wallpaper using&#8230;</string>
+    <string name="pref_disable_animations">Faster app switching</string>
+
+    <string name="pref_title_position">Position on screen</string>
+    <string-array name="pref_position_list">
+        <item>Left (horizontal)</item>
+        <item>Left (vertical)</item>
+        <item>Right (horizontal)</item>
+        <item>Right (vertical)</item>
+    </string-array>
+    <string-array name="pref_position_list_values">
+        <item>bottom_left</item>
+        <item>bottom_vertical_left</item>
+        <item>bottom_right</item>
+        <item>bottom_vertical_right</item>
+    </string-array>
+
+    <string name="app_info">App info</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="open_taskbar_settings">Open settings</string>
+    <string name="quit_taskbar">Quit</string>
+
+    <string name="pref_title_keyboard_shortcut">Enable keyboard shortcuts</string>
+    <string name="pref_description_keyboard_shortcut">&#183; Press WinKey+M or Search+M at any time to automatically start or stop Taskbar\n&#183; When Taskbar is active, press WinKey or Search to show the start menu\n\nThis may require you to manually set Taskbar as the search assistant in Settings.</string>
+
+    <string name="loading_apps">Loading apps&#8230;</string>
+    <string name="press_enter">No apps found\n\nPress Enter to search using Google</string>
+
+    <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_message">Unfortunately, due to OEM restrictions, this feature can\'t be enabled on your device.\n\nYou may still be able to enable it by using this adb shell command:\n\nappops set %1$s %2$s allow</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
+
+    <string name="pin_app">Pin to recents</string>
+    <string name="unpin_app">Unpin from recents</string>
+    <string name="block_app">Block from recents</string>
+    <string name="unblock_app">Unblock from recents</string>
+    <string name="clear_pinned_apps">Reset pinned/blocked apps</string>
+    <string name="are_you_sure">Are you sure?</string>
+
+</resources>

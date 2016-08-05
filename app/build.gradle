@@ -1,0 +1,32 @@
+apply plugin: 'android-sdk-manager'
+apply plugin: 'com.android.application'
+
+ext {
+    SUPPORT_LIBRARY_VERSION = "24.1.1"
+}
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.farmerbb.taskbar"
+        minSdkVersion 21
+        targetSdkVersion 24
+        versionCode 26
+        versionName "1.1.4"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
+}
+

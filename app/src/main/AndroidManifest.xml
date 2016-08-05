@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.farmerbb.taskbar">
+
+    <permission android:name="com.farmerbb.taskbar.START_STOP_TASKBAR"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.farmerbb.taskbar.START_STOP_TASKBAR" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false"/>
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_allapps_pressed"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.InvisibleActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.InvisibleActivity"/>
+        <activity
+            android:name=".activity.InvisibleActivityFreeform"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.InvisibleActivity"/>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:enabled="false"
+            android:theme="@style/AppTheme.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.KeyboardShortcutActivity"
+            android:label="@string/app_name"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:enabled="false"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.ASSIST" />
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.APP_MAPS" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ContextMenuActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Material.Light.Dialog"/>
+
+        <activity
+            android:name=".activity.UninstallActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Material.Light.Dialog"/>
+
+        <service android:name=".service.TaskbarService"/>
+        <service android:name=".service.StartMenuService"/>
+        <service android:name=".service.NotificationService"/>
+
+        <receiver
+            android:name=".receiver.ShowHideTaskbarReceiver"
+            android:permission="com.farmerbb.taskbar.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.SHOW_HIDE_TASKBAR"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.StartReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.START"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.QuitReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.QUIT"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.PackageUpgradeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
