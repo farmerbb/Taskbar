@@ -267,7 +267,7 @@ public class StartMenuService extends Service {
                 Collections.sort(list, new Comparator<ResolveInfo>() {
                     @Override
                     public int compare(ResolveInfo ai1, ResolveInfo ai2) {
-                        return ai1.activityInfo.loadLabel(pm).toString().compareTo(ai2.activityInfo.loadLabel(pm).toString());
+                        return ai1.activityInfo.loadLabel(pm).toString().toLowerCase().compareTo(ai2.activityInfo.loadLabel(pm).toString().toLowerCase());
                     }
                 });
 
