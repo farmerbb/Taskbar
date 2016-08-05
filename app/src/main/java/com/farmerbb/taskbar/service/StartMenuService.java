@@ -78,6 +78,8 @@ public class StartMenuService extends Service {
 
     private int layoutId = R.layout.start_menu_left;
 
+    private List<String> currentStartMenuIds = new ArrayList<>();
+
     private View.OnClickListener ocl = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -293,27 +295,53 @@ public class StartMenuService extends Service {
                             false));
                 }
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        StartMenuAdapter adapter;
-                        SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
-                        if(pref.getString("start_menu_layout", "list").equals("grid")) {
-                            startMenu.setNumColumns(3);
-                            adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
-                        } else
-                            adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
+                // Now that we've generated the list of apps,
+                // we need to determine if we need to redraw the start menu or not
+                boolean shouldRedrawStartMenu = false;
+                List<String> finalApplicationIds = new ArrayList<>();
 
-                        int position = startMenu.getFirstVisiblePosition();
-                        startMenu.setAdapter(adapter);
-                        startMenu.setSelection(position);
-
-                        if(adapter.getCount() > 0)
-                            textView.setText(null);
-                        else
-                            textView.setText(getString(R.string.press_enter));
+                if(query == null) {
+                    for(AppEntry entry : entries) {
+                        finalApplicationIds.add(entry.getPackageName());
                     }
-                });
+
+                    if(finalApplicationIds.size() != currentStartMenuIds.size())
+                        shouldRedrawStartMenu = true;
+                    else {
+                        for(int i = 0; i < finalApplicationIds.size(); i++) {
+                            if(!finalApplicationIds.get(i).equals(currentStartMenuIds.get(i))) {
+                                shouldRedrawStartMenu = true;
+                                break;
+                            }
+                        }
+                    }
+                } else shouldRedrawStartMenu = true;
+
+                if(shouldRedrawStartMenu) {
+                    if(query == null) currentStartMenuIds = finalApplicationIds;
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            StartMenuAdapter adapter;
+                            SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+                            if(pref.getString("start_menu_layout", "list").equals("grid")) {
+                                startMenu.setNumColumns(3);
+                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
+                            } else
+                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
+
+                            int position = startMenu.getFirstVisiblePosition();
+                            startMenu.setAdapter(adapter);
+                            startMenu.setSelection(position);
+
+                            if(adapter.getCount() > 0)
+                                textView.setText(null);
+                            else
+                                textView.setText(getString(R.string.press_enter));
+                        }
+                    });
+                }
             }
         };
 
