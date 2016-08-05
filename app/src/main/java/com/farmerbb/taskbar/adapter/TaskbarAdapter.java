@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.adapter;
 
 import android.app.ActivityOptions;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -77,7 +78,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
 
                 try {
                     getContext().startActivity(intent);
-                } catch (NullPointerException e) { /* Gracefully fail */ }
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
 
                 if(pref.getBoolean("hide_taskbar", false))
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));

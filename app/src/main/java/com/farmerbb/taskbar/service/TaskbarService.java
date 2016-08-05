@@ -384,9 +384,19 @@ public class TaskbarService extends Service {
 
             // Generate the AppEntries for TaskbarAdapter
             List<AppEntry> entries = new ArrayList<>();
+            List<String> pinnedAppsToRemove = new ArrayList<>();
 
             for(AppEntry entry : pba.getPinnedApps()) {
-                entries.add(entry);
+                try {
+                    pm.getPackageInfo(entry.getPackageName(), 0);
+                    entries.add(entry);
+                } catch (PackageManager.NameNotFoundException e) {
+                    pinnedAppsToRemove.add(entry.getComponentName());
+                }
+            }
+
+            for(String component : pinnedAppsToRemove) {
+                pba.removePinnedApp(this, component);
             }
 
             int number = usageStatsList6.size() == MAX_NUM_OF_COLUMNS
