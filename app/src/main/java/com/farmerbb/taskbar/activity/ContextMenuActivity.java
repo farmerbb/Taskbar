@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -159,7 +158,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                             packageName,
                             componentName,
                             appName,
-                            ((BitmapDrawable) throwaway.resolveActivityInfo(getPackageManager(), 0).loadIcon(getPackageManager())).getBitmap(),
+                            throwaway.resolveActivityInfo(getPackageManager(), 0).loadIcon(getPackageManager()),
                             true));
                 }
                 break;

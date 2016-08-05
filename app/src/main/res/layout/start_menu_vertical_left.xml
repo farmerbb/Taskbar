@@ -64,7 +64,7 @@
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
-                    android:queryBackground="@null"
+                    android:queryBackground="@android:color/transparent"
                     android:iconifiedByDefault="false" />
 
         </FrameLayout>

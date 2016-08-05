@@ -31,7 +31,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
@@ -409,7 +408,7 @@ public class TaskbarService extends Service {
                         usageStatsList6.get(i).getPackageName(),
                         intent.resolveActivity(pm).flattenToString(),
                         intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
-                        ((BitmapDrawable) intent.resolveActivityInfo(pm, 0).loadIcon(pm)).getBitmap(),
+                        intent.resolveActivityInfo(pm, 0).loadIcon(pm),
                         false));
             }
 

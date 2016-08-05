@@ -15,8 +15,13 @@
 
 package com.farmerbb.taskbar.util;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
@@ -25,18 +30,19 @@ public class AppEntry implements Serializable {
     private String packageName;
     private String componentName;
     private String label;
-    private transient Bitmap icon;
+    private transient Drawable icon;
     private byte[] iconByteArray;
 
-    public AppEntry(String packageName, String componentName, String label, Bitmap icon, boolean shouldCompress) {
+    public AppEntry(String packageName, String componentName, String label, Drawable icon, boolean shouldCompress) {
         this.packageName = packageName;
         this.componentName = componentName;
         this.label = label;
         this.icon = icon;
 
-        if(shouldCompress) {
+        if(shouldCompress && icon instanceof BitmapDrawable) {
+            Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            icon.compress(Bitmap.CompressFormat.PNG, 0, stream);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
             iconByteArray = stream.toByteArray();
         }
     }
@@ -53,8 +59,14 @@ public class AppEntry implements Serializable {
         return label;
     }
 
-    public Bitmap getIcon() {
-        if(icon == null) icon = BitmapFactory.decodeByteArray(iconByteArray, 0, iconByteArray.length);
+    public Drawable getIcon(Context context) {
+        if(icon == null) {
+            if(iconByteArray != null)
+                icon = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(iconByteArray, 0, iconByteArray.length));
+            else try {
+                icon = context.getPackageManager().getActivityIcon(ComponentName.unflattenFromString(componentName));
+            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+        }
         return icon;
     }
 }

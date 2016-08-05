@@ -32,7 +32,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -291,7 +290,7 @@ public class StartMenuService extends Service {
                                     appInfo.activityInfo.applicationInfo.packageName,
                                     appInfo.activityInfo.name).flattenToString(),
                             appInfo.loadLabel(pm).toString(),
-                            ((BitmapDrawable) appInfo.loadIcon(pm)).getBitmap(),
+                            appInfo.loadIcon(pm),
                             false));
                 }
 

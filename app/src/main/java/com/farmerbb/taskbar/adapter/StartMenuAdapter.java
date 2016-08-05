@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
@@ -66,7 +65,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         textView.setText(entry.getLabel());
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
-        imageView.setImageDrawable(new BitmapDrawable(getContext().getResources(), entry.getIcon()));
+        imageView.setImageDrawable(entry.getIcon(getContext()));
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
         layout.setOnClickListener(new View.OnClickListener() {
