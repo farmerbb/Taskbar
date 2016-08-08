@@ -582,7 +582,9 @@ public class TaskbarService extends Service {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu() {
+        SharedPreferences pref = U.getSharedPreferences(this);
         Intent intent = new Intent(this, ContextMenuActivity.class);
+        intent.putExtra("dont_show_quit", pref.getBoolean("on_home_screen", false) && !pref.getBoolean("taskbar_active", false));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

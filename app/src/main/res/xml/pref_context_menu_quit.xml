@@ -17,10 +17,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
         <Preference
-            android:key="open_taskbar_settings"
-            android:title="@string/open_taskbar_settings" />
-
-        <Preference
             android:key="quit_taskbar"
             android:title="@string/quit_taskbar" />
 

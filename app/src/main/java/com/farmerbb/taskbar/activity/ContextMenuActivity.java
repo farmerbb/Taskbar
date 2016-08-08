@@ -129,10 +129,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("app_info").setOnPreferenceClickListener(this);
             findPreference("uninstall").setOnPreferenceClickListener(this);
         } else {
-            addPreferencesFromResource(R.xml.pref_context_menu_alt);
-
+            addPreferencesFromResource(R.xml.pref_context_menu_open_settings);
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
-            findPreference("quit_taskbar").setOnPreferenceClickListener(this);
+
+            if(!getIntent().getBooleanExtra("dont_show_quit", false)) {
+                addPreferencesFromResource(R.xml.pref_context_menu_quit);
+                findPreference("quit_taskbar").setOnPreferenceClickListener(this);
+            }
         }
     }
 
