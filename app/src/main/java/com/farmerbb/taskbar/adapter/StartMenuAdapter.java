@@ -113,16 +113,13 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu(AppEntry entry) {
-        SharedPreferences pref = U.getSharedPreferences(getContext());
-        if(pref.getBoolean("hide_taskbar", false))
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-        else
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         Intent intent = new Intent(getContext(), ContextMenuActivity.class);
         intent.putExtra("package_name", entry.getPackageName());
         intent.putExtra("app_name", entry.getLabel());
         intent.putExtra("component_name", entry.getComponentName());
+        intent.putExtra("launched_from_start_menu", true);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

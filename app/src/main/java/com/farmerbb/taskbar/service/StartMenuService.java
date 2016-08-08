@@ -170,6 +170,7 @@ public class StartMenuService extends Service {
         boolean scrollbar = pref.getBoolean("scrollbar", false);
         startMenu.setFastScrollEnabled(scrollbar);
         startMenu.setFastScrollAlwaysVisible(scrollbar);
+        startMenu.setScrollBarStyle(scrollbar ? View.SCROLLBARS_OUTSIDE_INSET : View.SCROLLBARS_INSIDE_OVERLAY);
 
         searchView = (SearchView) layout.findViewById(R.id.search);
         if(shouldShowSearchBox) {

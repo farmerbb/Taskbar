@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.WindowManager;
 
@@ -43,11 +44,16 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     String componentName;
     String appName;
 
+    boolean showStartMenu = false;
+    boolean shouldHideTaskbar = false;
+
     @SuppressLint("RtlHardcoded")
     @SuppressWarnings("deprecation")
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+        showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -71,6 +77,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
         }
 
+        params.width = getResources().getDimensionPixelSize(R.dimen.context_menu_width);
         params.dimAmount = 0;
 
         getWindow().setAttributes(params);
@@ -100,9 +107,16 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     findPreference("block_app").setOnPreferenceClickListener(this);
                     findPreference("block_app").setTitle(R.string.unblock_app);
                 } else {
-                    addPreferencesFromResource(R.xml.pref_context_menu_pin);
-                    findPreference("pin_app").setOnPreferenceClickListener(this);
-                    findPreference("pin_app").setTitle(R.string.pin_app);
+                    final int MAX_NUM_OF_COLUMNS =
+                            pref.getString("position", "bottom_left").contains("vertical")
+                                    ? getResources().getInteger(R.integer.num_of_columns_vertical)
+                                    : getResources().getInteger(R.integer.num_of_columns);
+
+                    if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
+                        addPreferencesFromResource(R.xml.pref_context_menu_pin);
+                        findPreference("pin_app").setOnPreferenceClickListener(this);
+                        findPreference("pin_app").setTitle(R.string.pin_app);
+                    }
 
                     addPreferencesFromResource(R.xml.pref_context_menu_block);
                     findPreference("block_app").setOnPreferenceClickListener(this);
@@ -131,6 +145,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(intent);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
                 break;
             case "uninstall":
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode()) {
@@ -139,12 +156,21 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     startActivity(intent2);
                 } else
                     startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("package_name"))));
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
                 break;
             case "open_taskbar_settings":
                 startActivity(new Intent(this, MainActivity.class));
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
                 break;
             case "quit_taskbar":
                 sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
                 break;
             case "pin_app":
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
@@ -188,5 +214,18 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     protected void onPause() {
         super.onPause();
         if(!isFinishing()) finish();
+    }
+
+    @Override
+    public void finish() {
+        if(showStartMenu)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
+        else if(shouldHideTaskbar) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(pref.getBoolean("hide_taskbar", false))
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+        }
+
+        super.finish();
     }
 }

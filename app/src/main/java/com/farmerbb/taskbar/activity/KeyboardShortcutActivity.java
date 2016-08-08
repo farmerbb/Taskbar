@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.activity;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,9 +47,16 @@ public class KeyboardShortcutActivity extends Activity {
                 if(getIntent().hasExtra(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD) && isServiceRunning()) {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
                 } else {
-                    Intent intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
-                    if(intent.resolveActivity(getPackageManager()) != null)
+                    Intent intent;
+                    try {
+                        intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
+                        intent.setComponent(intent.resolveActivity(getPackageManager()));
                         startActivity(intent);
+                    } catch (NullPointerException | ActivityNotFoundException e) {
+                        intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
+                        if(intent.resolveActivity(getPackageManager()) != null)
+                            startActivity(intent);
+                    }
                 }
                 break;
         }

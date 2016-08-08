@@ -88,7 +88,10 @@ public class NotificationService extends Service {
         stopService(taskbarIntent);
         stopService(startMenuIntent);
 
-        startService(taskbarIntent);
-        startService(startMenuIntent);
+        boolean isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
+        if(!isHidden) {
+            startService(taskbarIntent);
+            startService(startMenuIntent);
+        }
     }
 }

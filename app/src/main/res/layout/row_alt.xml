@@ -39,6 +39,7 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/text_color"
         android:maxLines="1"
+        android:singleLine="true"
         android:ellipsize="end"
         android:textSize="@dimen/start_menu_grid_text_size"
         tools:text="@string/app_name" />

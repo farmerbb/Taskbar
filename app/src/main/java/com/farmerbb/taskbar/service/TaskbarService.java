@@ -295,94 +295,14 @@ public class TaskbarService extends Service {
     private void updateRecentApps(boolean firstRefresh) {
         final PackageManager pm = getPackageManager();
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
-
-        // Get list of all recently used apps
-        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        List<UsageStats> usageStatsList = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis());
-        if(usageStatsList.size() > 0 || pba.getPinnedApps().size() > 0) {
-            List<UsageStats> usageStatsList2 = new ArrayList<>();
-            List<UsageStats> usageStatsList3 = new ArrayList<>();
-            List<UsageStats> usageStatsList4 = new ArrayList<>();
-            List<UsageStats> usageStatsList5 = new ArrayList<>();
-            List<UsageStats> usageStatsList6;
-
-            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-            homeIntent.addCategory(Intent.CATEGORY_HOME);
-            ResolveInfo defaultLauncher = pm.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
-
-            // Filter out apps without a launcher intent
-            // Also filter out the current launcher, and Taskbar itself
-            for(UsageStats packageInfo : usageStatsList) {
-                if(pm.getLaunchIntentForPackage(packageInfo.getPackageName()) != null
-                        && !packageInfo.getPackageName().equals(BuildConfig.APPLICATION_ID)
-                        && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName))
-                    usageStatsList2.add(packageInfo);
-            }
-
-            // Filter out apps that don't fall within our current search interval
-            for(UsageStats stats : usageStatsList2) {
-                if(stats.getLastTimeUsed() > searchInterval)
-                    usageStatsList3.add(stats);
-            }
-
-            // Sort apps by either most recently used, or most time used
-            if(sortOrder.contains("most_used")) {
-                Collections.sort(usageStatsList3, new Comparator<UsageStats>() {
-                    @Override
-                    public int compare(UsageStats us1, UsageStats us2) {
-                        return Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground());
-                    }
-                });
-            } else {
-                Collections.sort(usageStatsList3, new Comparator<UsageStats>() {
-                    @Override
-                    public int compare(UsageStats us1, UsageStats us2) {
-                        return Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed());
-                    }
-                });
-            }
-
-            // Filter out any duplicate entries
-            List<String> applicationIds = new ArrayList<>();
-            for(UsageStats stats : usageStatsList3) {
-                if(!applicationIds.contains(stats.getPackageName())) {
-                    usageStatsList4.add(stats);
-                    applicationIds.add(stats.getPackageName());
-                }
-            }
-
-            // Filter out anything on the pinned/blocked apps lists
-            // Pinned apps will be added back later
-            List<String> applicationIdsToRemove = new ArrayList<>();
-
-            for(AppEntry entry : pba.getPinnedApps()) {
-                applicationIdsToRemove.add(entry.getPackageName());
-            }
-
-            for(AppEntry entry : pba.getBlockedApps()) {
-                applicationIdsToRemove.add(entry.getPackageName());
-            }
-
-            for(UsageStats stats : usageStatsList4) {
-                if(!applicationIdsToRemove.contains(stats.getPackageName())) {
-                    usageStatsList5.add(stats);
-                }
-            }
-
-            // Truncate list to a maximum length
-            final SharedPreferences pref = U.getSharedPreferences(this);
-            final int MAX_NUM_OF_COLUMNS =
-                    pref.getString("position", "bottom_left").contains("vertical")
-                            ? getResources().getInteger(R.integer.num_of_columns_vertical)
-                            : getResources().getInteger(R.integer.num_of_columns);
-
-            if(usageStatsList5.size() > MAX_NUM_OF_COLUMNS)
-                usageStatsList6 = usageStatsList5.subList(0, MAX_NUM_OF_COLUMNS);
-            else
-                usageStatsList6 = usageStatsList5;
-
-            // Generate the AppEntries for TaskbarAdapter
-            List<AppEntry> entries = new ArrayList<>();
+        final SharedPreferences pref = U.getSharedPreferences(this);
+        final int MAX_NUM_OF_COLUMNS =
+                pref.getString("position", "bottom_left").contains("vertical")
+                        ? getResources().getInteger(R.integer.num_of_columns_vertical)
+                        : getResources().getInteger(R.integer.num_of_columns);
+        List<AppEntry> entries = new ArrayList<>();
+        
+        if(pba.getPinnedApps().size() > 0) {
             List<String> pinnedAppsToRemove = new ArrayList<>();
 
             for(AppEntry entry : pba.getPinnedApps()) {
@@ -397,38 +317,130 @@ public class TaskbarService extends Service {
             for(String component : pinnedAppsToRemove) {
                 pba.removePinnedApp(this, component);
             }
+        }
 
-            int number = usageStatsList6.size() == MAX_NUM_OF_COLUMNS
-                    ? usageStatsList6.size() - pba.getPinnedApps().size()
-                    : usageStatsList6.size();
+        // Get list of all recently used apps
+        List<UsageStats> usageStatsList;
 
-            for(int i = 0; i < number; i++) {
-                Intent intent = pm.getLaunchIntentForPackage(usageStatsList6.get(i).getPackageName());
-                entries.add(new AppEntry(
-                        usageStatsList6.get(i).getPackageName(),
-                        intent.resolveActivity(pm).flattenToString(),
-                        intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
-                        intent.resolveActivityInfo(pm, 0).loadIcon(pm),
-                        false));
-            }
+        if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
+            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+            usageStatsList = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis());
+        } else usageStatsList = new ArrayList<>();
 
-            if(usageStatsList6.size() != MAX_NUM_OF_COLUMNS)
-                while(entries.size() > MAX_NUM_OF_COLUMNS) {
-                    entries.remove(entries.size() - 1);
+        if(usageStatsList.size() > 0 || pba.getPinnedApps().size() > 0) {
+            if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
+                List<UsageStats> usageStatsList2 = new ArrayList<>();
+                List<UsageStats> usageStatsList3 = new ArrayList<>();
+                List<UsageStats> usageStatsList4 = new ArrayList<>();
+                List<UsageStats> usageStatsList5 = new ArrayList<>();
+                List<UsageStats> usageStatsList6;
+
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory(Intent.CATEGORY_HOME);
+                ResolveInfo defaultLauncher = pm.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+                // Filter out apps without a launcher intent
+                // Also filter out the current launcher, and Taskbar itself
+                for(UsageStats packageInfo : usageStatsList) {
+                    if(pm.getLaunchIntentForPackage(packageInfo.getPackageName()) != null
+                            && !packageInfo.getPackageName().equals(BuildConfig.APPLICATION_ID)
+                            && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName))
+                        usageStatsList2.add(packageInfo);
                 }
 
-            // Determine if we need to reverse the order
-            boolean needToReverseOrder;
-            switch(pref.getString("position", "bottom_left")) {
-                case "bottom_left":
-                    needToReverseOrder = sortOrder.contains("true");
-                    break;
-                default:
-                    needToReverseOrder = sortOrder.contains("false");
-                    break;
+                // Filter out apps that don't fall within our current search interval
+                for(UsageStats stats : usageStatsList2) {
+                    if(stats.getLastTimeUsed() > searchInterval)
+                        usageStatsList3.add(stats);
+                }
+
+                // Sort apps by either most recently used, or most time used
+                if(sortOrder.contains("most_used")) {
+                    Collections.sort(usageStatsList3, new Comparator<UsageStats>() {
+                        @Override
+                        public int compare(UsageStats us1, UsageStats us2) {
+                            return Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground());
+                        }
+                    });
+                } else {
+                    Collections.sort(usageStatsList3, new Comparator<UsageStats>() {
+                        @Override
+                        public int compare(UsageStats us1, UsageStats us2) {
+                            return Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed());
+                        }
+                    });
+                }
+
+                // Filter out any duplicate entries
+                List<String> applicationIds = new ArrayList<>();
+                for(UsageStats stats : usageStatsList3) {
+                    if(!applicationIds.contains(stats.getPackageName())) {
+                        usageStatsList4.add(stats);
+                        applicationIds.add(stats.getPackageName());
+                    }
+                }
+
+                // Filter out anything on the pinned/blocked apps lists
+                // Pinned apps will be added back later
+                List<String> applicationIdsToRemove = new ArrayList<>();
+
+                for(AppEntry entry : pba.getPinnedApps()) {
+                    applicationIdsToRemove.add(entry.getPackageName());
+                }
+
+                for(AppEntry entry : pba.getBlockedApps()) {
+                    applicationIdsToRemove.add(entry.getPackageName());
+                }
+
+                for(UsageStats stats : usageStatsList4) {
+                    if(!applicationIdsToRemove.contains(stats.getPackageName())) {
+                        usageStatsList5.add(stats);
+                    }
+                }
+
+                // Truncate list to a maximum length
+                if(usageStatsList5.size() > MAX_NUM_OF_COLUMNS)
+                    usageStatsList6 = usageStatsList5.subList(0, MAX_NUM_OF_COLUMNS);
+                else
+                    usageStatsList6 = usageStatsList5;
+
+                // Determine if we need to reverse the order
+                boolean needToReverseOrder;
+                switch(pref.getString("position", "bottom_left")) {
+                    case "bottom_right":
+                        needToReverseOrder = sortOrder.contains("false");
+                        break;
+                    default:
+                        needToReverseOrder = sortOrder.contains("true");
+                        break;
+                }
+
+                if(needToReverseOrder) {
+                    Collections.reverse(usageStatsList6);
+                }
+
+                // Generate the AppEntries for TaskbarAdapter
+                int number = usageStatsList6.size() == MAX_NUM_OF_COLUMNS
+                        ? usageStatsList6.size() - pba.getPinnedApps().size()
+                        : usageStatsList6.size();
+
+                for(int i = 0; i < number; i++) {
+                    Intent intent = pm.getLaunchIntentForPackage(usageStatsList6.get(i).getPackageName());
+                    entries.add(new AppEntry(
+                            usageStatsList6.get(i).getPackageName(),
+                            intent.resolveActivity(pm).flattenToString(),
+                            intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
+                            intent.resolveActivityInfo(pm, 0).loadIcon(pm),
+                            false));
+                }
             }
 
-            if(needToReverseOrder) {
+            while(entries.size() > MAX_NUM_OF_COLUMNS) {
+                entries.remove(entries.size() - 1);
+            }
+
+            // Determine if we need to reverse the order again
+            if(pref.getString("position", "bottom_left").contains("vertical")) {
                 Collections.reverse(entries);
             }
 
@@ -570,12 +582,6 @@ public class TaskbarService extends Service {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu() {
-        SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("hide_taskbar", false))
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-        else
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-
         Intent intent = new Intent(this, ContextMenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

@@ -13,8 +13,8 @@ android {
         applicationId "com.farmerbb.taskbar"
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 30
-        versionName "1.1.4"
+        versionCode 31
+        versionName "1.1.5"
     }
 
     buildTypes {
