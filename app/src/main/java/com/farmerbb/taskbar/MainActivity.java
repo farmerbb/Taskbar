@@ -35,6 +35,7 @@ import android.widget.Switch;
 
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
+import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.fragment.SettingsFragment;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -55,6 +56,7 @@ public class MainActivity extends Activity {
         if(pref.getBoolean("taskbar_active", false) && !isServiceRunning())
             editor.putBoolean("taskbar_active", false);
 
+        // Ensure that components that should be enabled are enabled properly
         boolean launcherEnabled = pref.getBoolean("launcher", false) && canDrawOverlays();
         editor.putBoolean("launcher", launcherEnabled);
         editor.apply();
@@ -62,6 +64,11 @@ public class MainActivity extends Activity {
         ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
         getPackageManager().setComponentEnabledSetting(component,
                 launcherEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        ComponentName component2 = new ComponentName(BuildConfig.APPLICATION_ID, KeyboardShortcutActivity.class.getName());
+        getPackageManager().setComponentEnabledSetting(component2,
+                pref.getBoolean("keyboard_shortcut", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         setContentView(R.layout.main);

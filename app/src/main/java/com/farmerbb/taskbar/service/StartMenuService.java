@@ -351,7 +351,7 @@ public class StartMenuService extends Service {
     private void toggleStartMenu() {
         if(layout.getVisibility() == View.GONE)
             showStartMenu();
-       else
+        else
             hideStartMenu();
     }
 

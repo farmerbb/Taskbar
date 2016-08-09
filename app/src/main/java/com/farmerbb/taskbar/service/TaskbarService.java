@@ -381,7 +381,6 @@ public class TaskbarService extends Service {
                 }
 
                 // Filter out anything on the pinned/blocked apps lists
-                // Pinned apps will be added back later
                 List<String> applicationIdsToRemove = new ArrayList<>();
 
                 for(AppEntry entry : pba.getPinnedApps()) {
