@@ -39,15 +39,17 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.SearchView;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
@@ -164,7 +166,8 @@ public class StartMenuService extends Service {
         }
 
         // Initialize views
-        layout = (LinearLayout) View.inflate(this, layoutId, null);
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.AppTheme);
+        layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
         startMenu = (ThemedGridView) layout.findViewById(R.id.start_menu);
 
         boolean scrollbar = pref.getBoolean("scrollbar", false);
@@ -194,6 +197,7 @@ public class StartMenuService extends Service {
 
                             Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
                             intent.putExtra(SearchManager.QUERY, query);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             if(intent.resolveActivity(getPackageManager()) != null)
                                 startActivity(intent);
                             else {

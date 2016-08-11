@@ -16,8 +16,6 @@
 package com.farmerbb.taskbar;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.ComponentName;
@@ -29,6 +27,8 @@ import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -42,7 +42,7 @@ import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.U;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private Switch theSwitch;
 
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.main);
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             actionBar.setCustomView(R.layout.switch_layout);
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);

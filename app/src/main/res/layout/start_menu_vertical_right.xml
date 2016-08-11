@@ -15,12 +15,13 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/start_menu_layout"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:clickable="true"
-              android:visibility="gone" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/start_menu_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:visibility="gone">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -59,13 +60,13 @@
             android:background="@color/translucent_gray"
             android:layout_marginRight="@dimen/icon_size" >
 
-                <SearchView
+                <android.support.v7.widget.SearchView
                     android:id="@+id/search"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
-                    android:queryBackground="@android:color/transparent"
-                    android:iconifiedByDefault="false" />
+                    app:queryBackground="@android:color/transparent"
+                    app:iconifiedByDefault="false" />
 
         </FrameLayout>
 
