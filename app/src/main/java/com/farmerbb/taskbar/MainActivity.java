@@ -29,9 +29,9 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.view.Display;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
@@ -44,7 +44,7 @@ import com.farmerbb.taskbar.util.U;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Switch theSwitch;
+    private SwitchCompat theSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
         }
 
-        theSwitch = (Switch) findViewById(R.id.the_switch);
+        theSwitch = (SwitchCompat) findViewById(R.id.the_switch);
         if(theSwitch != null) {
             theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
 

@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:visibility="gone" />
 
-    <com.farmerbb.taskbar.view.ThemedGridView
+    <com.farmerbb.taskbar.view.TaskbarGridView
         android:id="@+id/taskbar"
         android:layout_height="wrap_content"
         android:layout_width="@dimen/icon_size"

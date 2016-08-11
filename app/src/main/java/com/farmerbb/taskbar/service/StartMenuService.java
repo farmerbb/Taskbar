@@ -57,7 +57,7 @@ import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.U;
-import com.farmerbb.taskbar.view.ThemedGridView;
+import com.farmerbb.taskbar.view.TaskbarGridView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,7 +68,7 @@ public class StartMenuService extends Service {
 
     private WindowManager windowManager;
     private LinearLayout layout;
-    private ThemedGridView startMenu;
+    private TaskbarGridView startMenu;
     private SearchView searchView;
     private TextView textView;
 
@@ -168,7 +168,7 @@ public class StartMenuService extends Service {
         // Initialize views
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.AppTheme);
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
-        startMenu = (ThemedGridView) layout.findViewById(R.id.start_menu);
+        startMenu = (TaskbarGridView) layout.findViewById(R.id.start_menu);
 
         boolean scrollbar = pref.getBoolean("scrollbar", false);
         startMenu.setFastScrollEnabled(scrollbar);

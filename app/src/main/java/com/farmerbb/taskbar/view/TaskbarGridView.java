@@ -17,16 +17,13 @@ package com.farmerbb.taskbar.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.ContextThemeWrapper;
 import android.widget.GridView;
 
-import com.farmerbb.taskbar.R;
-
-public class ThemedGridView extends GridView {
+public class TaskbarGridView extends GridView {
     private boolean enabled = true;
 
-    public ThemedGridView(Context context, AttributeSet attrs) {
-        super(new ContextThemeWrapper(context, R.style.AppTheme), attrs);
+    public TaskbarGridView(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     @Override

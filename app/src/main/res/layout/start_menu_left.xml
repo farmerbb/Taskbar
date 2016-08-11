@@ -29,7 +29,7 @@
             android:padding="1dp"
             android:background="@color/translucent_gray" >
 
-                <com.farmerbb.taskbar.view.ThemedGridView
+                <com.farmerbb.taskbar.view.TaskbarGridView
                     android:id="@+id/start_menu"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="@dimen/start_menu_height"

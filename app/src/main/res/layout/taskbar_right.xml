@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <com.farmerbb.taskbar.view.ThemedGridView
+        <com.farmerbb.taskbar.view.TaskbarGridView
             android:id="@+id/taskbar"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/icon_size"

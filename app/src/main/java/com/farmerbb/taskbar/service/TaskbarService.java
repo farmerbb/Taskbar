@@ -38,8 +38,10 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,14 +65,14 @@ import com.farmerbb.taskbar.adapter.TaskbarAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
-import com.farmerbb.taskbar.view.ThemedGridView;
+import com.farmerbb.taskbar.view.TaskbarGridView;
 
 public class TaskbarService extends Service {
 
     private WindowManager windowManager;
     private LinearLayout layout;
     private ImageView startButton;
-    private ThemedGridView taskbar;
+    private TaskbarGridView taskbar;
     private Button button;
     private View divider;
     private Space space;
@@ -189,8 +191,9 @@ public class TaskbarService extends Service {
         }
 
         // Initialize views
-        layout = (LinearLayout) View.inflate(this, layoutId, null);
-        taskbar = (ThemedGridView) layout.findViewById(R.id.taskbar);
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.AppTheme);
+        layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
+        taskbar = (TaskbarGridView) layout.findViewById(R.id.taskbar);
         divider = layout.findViewById(R.id.divider);
         space = (Space) layout.findViewById(R.id.space);
 
