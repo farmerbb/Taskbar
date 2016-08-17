@@ -50,10 +50,12 @@ import com.farmerbb.taskbar.util.U;
 
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
 
-    private boolean finishedLoadingPrefs = false;
+    private boolean finishedLoadingPrefs;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        finishedLoadingPrefs = false;
+
         super.onActivityCreated(savedInstanceState);
 
         // Set values
