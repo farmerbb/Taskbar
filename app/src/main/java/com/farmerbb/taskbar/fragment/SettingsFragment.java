@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -37,6 +38,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 
 import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
@@ -83,11 +85,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         bindPreferenceSummaryToValue(findPreference("show_background"));
         bindPreferenceSummaryToValue(findPreference("scrollbar"));
         bindPreferenceSummaryToValue(findPreference("position"));
+        bindPreferenceSummaryToValue(findPreference("theme"));
 
         finishedLoadingPrefs = true;
     }
 
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+        @SuppressLint("CommitPrefEdits")
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
@@ -102,6 +106,19 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 preference
                         .setSummary(index >= 0 ? listPreference.getEntries()[index]
                                 : null);
+
+                if(finishedLoadingPrefs && preference.getKey().equals("theme")) {
+                    SharedPreferences pref = U.getSharedPreferences(getActivity());
+                    pref.edit().putString("theme", stringValue).commit();
+
+                    // Restart app
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(0, 0);
+
+                    System.exit(0);
+                }
 
             } else if(!(preference instanceof CheckBoxPreference)) {
                 // For all other preferences, set the summary to the value's

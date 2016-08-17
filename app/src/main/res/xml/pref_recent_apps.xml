@@ -51,6 +51,11 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:key="hide_foreground"
+        android:title="@string/pref_title_hide_foreground"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
         android:key="disable_animations"
         android:title="@string/pref_disable_animations"/>
 

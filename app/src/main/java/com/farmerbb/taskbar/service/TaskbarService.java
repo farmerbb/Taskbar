@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.Service;
+import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
@@ -323,12 +324,10 @@ public class TaskbarService extends Service {
         }
 
         // Get list of all recently used apps
-        List<UsageStats> usageStatsList;
-
-        if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
-            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-            usageStatsList = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis());
-        } else usageStatsList = new ArrayList<>();
+        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        List<UsageStats> usageStatsList = pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS
+                ? mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis())
+                : new ArrayList<UsageStats>();
 
         if(usageStatsList.size() > 0 || pba.getPinnedApps().size() > 0) {
             if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
@@ -392,6 +391,24 @@ public class TaskbarService extends Service {
 
                 for(AppEntry entry : pba.getBlockedApps()) {
                     applicationIdsToRemove.add(entry.getPackageName());
+                }
+
+                // Filter out the currently running foreground app, if requested by the user
+                if(pref.getBoolean("hide_foreground", false)) {
+                    UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
+                    UsageEvents.Event foregroundEvent = new UsageEvents.Event();
+                    UsageEvents.Event eventCache = new UsageEvents.Event();
+
+                    while(events.hasNextEvent()) {
+                        events.getNextEvent(eventCache);
+
+                        if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND)
+                            foregroundEvent = eventCache;
+                    }
+
+                    String currentForegroundApp = foregroundEvent.getPackageName();
+                    if(!applicationIdsToRemove.contains(currentForegroundApp))
+                        applicationIdsToRemove.add(currentForegroundApp);
                 }
 
                 for(UsageStats stats : usageStatsList4) {

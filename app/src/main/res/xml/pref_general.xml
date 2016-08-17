@@ -36,6 +36,15 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_position"/>
 
+    <ListPreference
+        android:defaultValue="light"
+        android:entries="@array/pref_theme_list"
+        android:entryValues="@array/pref_theme_list_values"
+        android:key="theme"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_theme"/>
+
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="show_background"

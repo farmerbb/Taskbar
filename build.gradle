@@ -10,7 +10,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.2.0-beta1'
         classpath 'com.github.JakeWharton:sdk-manager-plugin:-SNAPSHOT'
 
         // NOTE: Do not place your application dependencies here; they belong

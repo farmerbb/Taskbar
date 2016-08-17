@@ -28,6 +28,6 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="AppTheme.Dialog" parent="@android:style/Theme.Material.Light.Dialog" />
+    <style name="AppTheme.Dialog" parent="@android:style/Theme.Material.Dialog" />
 
 </resources>

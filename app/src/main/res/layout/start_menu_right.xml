@@ -33,7 +33,7 @@
                     android:id="@+id/start_menu"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="@dimen/start_menu_height"
-                    android:background="@android:color/white"
+                    android:background="@color/start_menu_background"
                     android:listSelector="@null"
                     android:clickable="false" />
 
@@ -62,7 +62,7 @@
                     android:id="@+id/search"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
+                    android:background="@color/start_menu_background"
                     app:queryBackground="@android:color/transparent"
                     app:iconifiedByDefault="false" />
 
