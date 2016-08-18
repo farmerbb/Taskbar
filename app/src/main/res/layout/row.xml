@@ -35,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_gravity="center_vertical"
-        android:textColor="@color/text_color"
         android:textSize="18sp"
         android:maxLines="1"
         android:ellipsize="end"

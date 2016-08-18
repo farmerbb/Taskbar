@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
+import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.U;
 
@@ -60,9 +62,19 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             convertView = LayoutInflater.from(getContext()).inflate(isGrid ? R.layout.row_alt : R.layout.row, parent, false);
 
         final AppEntry entry = getItem(position);
+        final SharedPreferences pref = U.getSharedPreferences(getContext());
 
         TextView textView = (TextView) convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text_color));
+                break;
+            case "dark":
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text_color_dark));
+                break;
+        }
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
         imageView.setImageDrawable(entry.getIcon(getContext()));
@@ -71,8 +83,6 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences pref = U.getSharedPreferences(getContext());
-
                 Intent intent = new Intent();
                 intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -115,12 +125,25 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
     private void openContextMenu(AppEntry entry) {
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-        Intent intent = new Intent(getContext(), ContextMenuActivity.class);
-        intent.putExtra("package_name", entry.getPackageName());
-        intent.putExtra("app_name", entry.getLabel());
-        intent.putExtra("component_name", entry.getComponentName());
-        intent.putExtra("launched_from_start_menu", true);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        SharedPreferences pref = U.getSharedPreferences(getContext());
+        Intent intent = null;
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                intent = new Intent(getContext(), ContextMenuActivity.class);
+                break;
+            case "dark":
+                intent = new Intent(getContext(), ContextMenuActivityDark.class);
+                break;
+        }
+
+        if(intent != null) {
+            intent.putExtra("package_name", entry.getPackageName());
+            intent.putExtra("app_name", entry.getLabel());
+            intent.putExtra("component_name", entry.getComponentName());
+            intent.putExtra("launched_from_start_menu", true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             DisplayManager dm = (DisplayManager) getContext().getSystemService(DISPLAY_SERVICE);

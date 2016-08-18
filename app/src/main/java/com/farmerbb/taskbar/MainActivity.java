@@ -53,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
 
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                setTheme(R.style.AppTheme);
+                break;
+            case "dark":
+                setTheme(R.style.AppTheme_Dark);
+                break;
+        }
+
         if(pref.getBoolean("taskbar_active", false) && !isServiceRunning())
             editor.putBoolean("taskbar_active", false);
 

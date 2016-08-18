@@ -16,10 +16,20 @@
 
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="start_menu_background">@color/start_menu_background</item>
+        <item name="text_color">@color/text_color</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="start_menu_background">@color/start_menu_background_dark</item>
+        <item name="text_color">@color/text_color_dark</item>
     </style>
 
     <style name="AppTheme.HomeActivity" parent="@android:style/Theme.Material.Wallpaper.NoTitleBar"/>
@@ -29,5 +39,7 @@
     </style>
 
     <style name="AppTheme.Dialog" parent="@android:style/Theme.Material.Light.Dialog" />
+
+    <style name="AppTheme.Dialog.Dark" parent="@android:style/Theme.Material.Dialog" />
 
 </resources>

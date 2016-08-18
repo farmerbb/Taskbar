@@ -62,6 +62,7 @@ import android.widget.Space;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
+import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.adapter.TaskbarAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
@@ -192,7 +193,18 @@ public class TaskbarService extends Service {
         }
 
         // Initialize views
-        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.AppTheme);
+        int theme = 0;
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                theme = R.style.AppTheme;
+                break;
+            case "dark":
+                theme = R.style.AppTheme_Dark;
+                break;
+        }
+
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
         taskbar = (TaskbarGridView) layout.findViewById(R.id.taskbar);
         divider = layout.findViewById(R.id.divider);
@@ -602,9 +614,21 @@ public class TaskbarService extends Service {
     @SuppressWarnings("deprecation")
     private void openContextMenu() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        Intent intent = new Intent(this, ContextMenuActivity.class);
-        intent.putExtra("dont_show_quit", pref.getBoolean("on_home_screen", false) && !pref.getBoolean("taskbar_active", false));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = null;
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                intent = new Intent(this, ContextMenuActivity.class);
+                break;
+            case "dark":
+                intent = new Intent(this, ContextMenuActivityDark.class);
+                break;
+        }
+
+        if(intent != null) {
+            intent.putExtra("dont_show_quit", pref.getBoolean("on_home_screen", false) && !pref.getBoolean("taskbar_active", false));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);

@@ -34,7 +34,7 @@
                     android:id="@+id/start_menu"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="@dimen/start_menu_height"
-                    android:background="@color/start_menu_background"
+                    android:background="?start_menu_background"
                     android:listSelector="@null"
                     android:clickable="false" />
 
@@ -45,7 +45,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textSize="@dimen/start_menu_no_apps_found_text"
-                    android:textColor="@color/text_color"
+                    android:textColor="?text_color"
                     android:text="@string/loading_apps" />
 
         </FrameLayout>
@@ -64,7 +64,7 @@
                     android:id="@+id/search"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="wrap_content"
-                    android:background="@color/start_menu_background"
+                    android:background="?start_menu_background"
                     app:queryBackground="@android:color/transparent"
                     app:iconifiedByDefault="false" />
 

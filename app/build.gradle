@@ -2,7 +2,7 @@ apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 ext {
-    SUPPORT_LIBRARY_VERSION = "24.1.1"
+    SUPPORT_LIBRARY_VERSION = "24.2.0"
 }
 
 android {
@@ -14,7 +14,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 24
 
-        versionCode 38
+        versionCode 39
         versionName "1.1.6"
 
         resConfigs "en"

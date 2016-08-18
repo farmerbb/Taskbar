@@ -110,16 +110,11 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                                 : null);
 
                 if(finishedLoadingPrefs && preference.getKey().equals("theme")) {
-                    SharedPreferences pref = U.getSharedPreferences(getActivity());
-                    pref.edit().putString("theme", stringValue).commit();
-
-                    // Restart app
+                    // Restart MainActivity
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     getActivity().overridePendingTransition(0, 0);
-
-                    System.exit(0);
                 }
 
             } else if(!(preference instanceof CheckBoxPreference)) {

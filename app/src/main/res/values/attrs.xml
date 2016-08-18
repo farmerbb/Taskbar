@@ -15,6 +15,8 @@
 -->
 
 <resources>
-    <color name="text_color">#FFFFFF</color>
-    <color name="start_menu_background">#252525</color>
+
+    <attr name="start_menu_background" format="reference|color" />
+    <attr name="text_color" format="reference|color" />
+
 </resources>

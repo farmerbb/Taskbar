@@ -39,6 +39,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.SearchView;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
@@ -166,7 +167,18 @@ public class StartMenuService extends Service {
         }
 
         // Initialize views
-        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.AppTheme);
+        int theme = 0;
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                theme = R.style.AppTheme;
+                break;
+            case "dark":
+                theme = R.style.AppTheme_Dark;
+                break;
+        }
+
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
         startMenu = (TaskbarGridView) layout.findViewById(R.id.start_menu);
 

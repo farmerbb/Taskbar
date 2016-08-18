@@ -41,8 +41,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_allapps_pressed"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name=".util.TaskbarApplication" >
+        android:theme="@style/AppTheme" >
 
         <activity
             android:name=".MainActivity"
@@ -101,6 +100,11 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Dialog"/>
+        <activity
+            android:name=".activity.ContextMenuActivityDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Dialog.Dark"/>
 
         <activity
             android:name=".activity.UninstallActivity"
