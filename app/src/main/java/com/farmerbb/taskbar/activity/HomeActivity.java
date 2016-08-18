@@ -117,20 +117,20 @@ public class HomeActivity extends Activity {
         }, 100);
 
         if(canDrawOverlays()) {
-            SharedPreferences pref = U.getSharedPreferences(this);
+            final SharedPreferences pref = U.getSharedPreferences(this);
             pref.edit().putBoolean("on_home_screen", true).apply();
 
-            // We always start the Taskbar and Start Menu services, even if the app isn't normally running
-            startService(new Intent(this, TaskbarService.class));
-            startService(new Intent(this, StartMenuService.class));
-
-            if(pref.getBoolean("taskbar_active", false))
-                startService(new Intent(this, NotificationService.class));
-
-            // Show the Taskbar temporarily, as nothing else will be visible on screen
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    // We always start the Taskbar and Start Menu services, even if the app isn't normally running
+                    startService(new Intent(HomeActivity.this, TaskbarService.class));
+                    startService(new Intent(HomeActivity.this, StartMenuService.class));
+
+                    if(pref.getBoolean("taskbar_active", false))
+                        startService(new Intent(HomeActivity.this, NotificationService.class));
+
+                    // Show the Taskbar temporarily, as nothing else will be visible on screen
                     LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
                 }
             }, 100);
