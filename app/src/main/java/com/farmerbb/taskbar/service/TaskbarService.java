@@ -115,7 +115,7 @@ public class TaskbarService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             taskbarShownTemporarily = false;
-            hideTaskbar(true);
+            hideTaskbar();
         }
     };
 
@@ -131,7 +131,7 @@ public class TaskbarService extends Service {
     private BroadcastReceiver tempHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(taskbarShownTemporarily) hideTaskbar(false);
+            if(taskbarShownTemporarily) hideTaskbar();
         }
     };
 
@@ -553,7 +553,7 @@ public class TaskbarService extends Service {
         if(startButton.getVisibility() == View.GONE)
             showTaskbar();
         else
-            hideTaskbar(true);
+            hideTaskbar();
     }
 
     private void showTaskbar() {
@@ -577,7 +577,7 @@ public class TaskbarService extends Service {
         LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
     }
 
-    private void hideTaskbar(boolean shouldHideStartMenu) {
+    private void hideTaskbar() {
         startButton.setVisibility(View.GONE);
 
         if(isShowingRecents) {
@@ -594,8 +594,8 @@ public class TaskbarService extends Service {
 
         button.setText(getString(R.string.right_arrow));
 
-        if(shouldHideStartMenu)
-            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
+        LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
     }
 
     @Override
