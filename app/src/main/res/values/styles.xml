@@ -38,8 +38,12 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog" />
+    <style name="AppTheme.Dialog" parent="@android:style/Theme.Material.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
-    <style name="AppTheme.Dialog.Dark" parent="Theme.AppCompat.Dialog" />
+    <style name="AppTheme.Dialog.Dark" parent="@android:style/Theme.Material.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
 </resources>
