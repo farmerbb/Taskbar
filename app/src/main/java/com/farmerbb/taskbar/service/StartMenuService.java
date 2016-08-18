@@ -39,7 +39,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.SearchView;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
@@ -202,7 +201,7 @@ public class StartMenuService extends Service {
                             layout.performClick();
                         } else {
                             SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
-                            if(pref.getBoolean("hide_taskbar", false))
+                            if(pref.getBoolean("hide_taskbar", true))
                                 LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                             else
                                 LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

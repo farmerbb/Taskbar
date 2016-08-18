@@ -43,10 +43,19 @@ import com.farmerbb.taskbar.util.U;
 
 public class HomeActivity extends Activity {
 
+    boolean dontStopServices = false;
+
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             finish();
+        }
+    };
+
+    private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            dontStopServices = true;
         }
     };
 
@@ -93,11 +102,19 @@ public class HomeActivity extends Activity {
         setContentView(view);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dontStopServices = false;
+            }
+        }, 100);
 
         if(canDrawOverlays()) {
             SharedPreferences pref = U.getSharedPreferences(this);
@@ -138,8 +155,15 @@ public class HomeActivity extends Activity {
 
         // Stop the Taskbar and Start Menu services if they should normally not be active
         if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-            stopService(new Intent(this, TaskbarService.class));
-            stopService(new Intent(this, StartMenuService.class));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(!dontStopServices) {
+                        stopService(new Intent(HomeActivity.this, StartMenuService.class));
+                        stopService(new Intent(HomeActivity.this, TaskbarService.class));
+                    }
+                }
+            }, 100);
         }
     }
 
@@ -148,6 +172,7 @@ public class HomeActivity extends Activity {
         super.onDestroy();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(killReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
     }
 
     @Override

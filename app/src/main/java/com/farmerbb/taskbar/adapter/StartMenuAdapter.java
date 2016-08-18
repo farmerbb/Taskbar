@@ -92,7 +92,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                     getContext().startActivity(intent);
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
 
-                if(pref.getBoolean("hide_taskbar", false))
+                if(pref.getBoolean("hide_taskbar", true))
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                 else
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

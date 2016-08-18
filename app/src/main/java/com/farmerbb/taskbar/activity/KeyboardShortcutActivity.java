@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.activity;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.SearchManager;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;

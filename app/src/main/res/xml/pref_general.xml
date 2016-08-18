@@ -56,7 +56,7 @@
         android:title="@string/pref_title_scrollbar"/>
 
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="hide_taskbar"
         android:title="@string/pref_title_hide_taskbar"/>
 
