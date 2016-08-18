@@ -43,19 +43,10 @@ import com.farmerbb.taskbar.util.U;
 
 public class HomeActivity extends Activity {
 
-    boolean dontStopServices = false;
-
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             finish();
-        }
-    };
-
-    private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            dontStopServices = true;
         }
     };
 
@@ -102,35 +93,27 @@ public class HomeActivity extends Activity {
         setContentView(view);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dontStopServices = false;
-            }
-        }, 100);
-
         if(canDrawOverlays()) {
-            final SharedPreferences pref = U.getSharedPreferences(this);
+            SharedPreferences pref = U.getSharedPreferences(this);
             pref.edit().putBoolean("on_home_screen", true).apply();
 
+            // We always start the Taskbar and Start Menu services, even if the app isn't normally running
+            startService(new Intent(this, TaskbarService.class));
+            startService(new Intent(this, StartMenuService.class));
+
+            if(pref.getBoolean("taskbar_active", false))
+                startService(new Intent(this, NotificationService.class));
+
+            // Show the Taskbar temporarily, as nothing else will be visible on screen
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    // We always start the Taskbar and Start Menu services, even if the app isn't normally running
-                    startService(new Intent(HomeActivity.this, TaskbarService.class));
-                    startService(new Intent(HomeActivity.this, StartMenuService.class));
-
-                    if(pref.getBoolean("taskbar_active", false))
-                        startService(new Intent(HomeActivity.this, NotificationService.class));
-
-                    // Show the Taskbar temporarily, as nothing else will be visible on screen
                     LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
                 }
             }, 100);
@@ -155,15 +138,8 @@ public class HomeActivity extends Activity {
 
         // Stop the Taskbar and Start Menu services if they should normally not be active
         if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(!dontStopServices) {
-                        stopService(new Intent(HomeActivity.this, StartMenuService.class));
-                        stopService(new Intent(HomeActivity.this, TaskbarService.class));
-                    }
-                }
-            }, 100);
+            stopService(new Intent(this, TaskbarService.class));
+            stopService(new Intent(this, StartMenuService.class));
         }
     }
 
@@ -172,7 +148,6 @@ public class HomeActivity extends Activity {
         super.onDestroy();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(killReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
     }
 
     @Override
