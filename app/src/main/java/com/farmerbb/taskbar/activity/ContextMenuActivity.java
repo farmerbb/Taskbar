@@ -85,7 +85,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         // Generate options to show on the menu, depending on which icon was clicked
         if(getIntent().hasExtra("package_name") && getIntent().hasExtra("app_name")) {
             appName = getIntent().getStringExtra("app_name");
-            setTitle(appName);
+            addPreferencesFromResource(R.xml.pref_context_menu_header);
+            findPreference("header").setTitle(appName);
 
             final PackageManager pm = getPackageManager();
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
