@@ -29,6 +29,7 @@ import android.preference.PreferenceActivity;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.BuildConfig;
@@ -81,6 +82,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         params.dimAmount = 0;
 
         getWindow().setAttributes(params);
+
+        View view = findViewById(android.R.id.list);
+        if(view != null) view.setPadding(0, 0, 0, 0);
 
         // Generate options to show on the menu, depending on which icon was clicked
         if(getIntent().hasExtra("package_name") && getIntent().hasExtra("app_name")) {
