@@ -60,6 +60,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Space;
 
 import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
@@ -408,17 +409,19 @@ public class TaskbarService extends Service {
                 // Filter out the currently running foreground app, if requested by the user
                 if(pref.getBoolean("hide_foreground", false)) {
                     UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
-                    UsageEvents.Event foregroundEvent = new UsageEvents.Event();
                     UsageEvents.Event eventCache = new UsageEvents.Event();
+                    String currentForegroundApp = null;
 
                     while(events.hasNextEvent()) {
                         events.getNextEvent(eventCache);
 
-                        if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND)
-                            foregroundEvent = eventCache;
+                        if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                            if(!(eventCache.getPackageName().equals(BuildConfig.APPLICATION_ID)
+                                    && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())))
+                                currentForegroundApp = eventCache.getPackageName();
+                        }
                     }
 
-                    String currentForegroundApp = foregroundEvent.getPackageName();
                     if(!applicationIdsToRemove.contains(currentForegroundApp))
                         applicationIdsToRemove.add(currentForegroundApp);
                 }
