@@ -563,7 +563,9 @@ public class TaskbarService extends Service {
         startButton.setVisibility(View.VISIBLE);
 
         if(isShowingRecents) {
-            taskbar.setVisibility(View.VISIBLE);
+            if(taskbar.getVisibility() == View.GONE)
+                taskbar.setVisibility(View.INVISIBLE);
+
             divider.setVisibility(View.VISIBLE);
             space.setVisibility(View.VISIBLE);
         }

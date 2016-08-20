@@ -17,16 +17,21 @@ package com.farmerbb.taskbar.util;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.DummyActivity;
+import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 
 public class U {
 
@@ -67,5 +72,21 @@ public class U {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public static void lockDevice(Context context) {
+        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, LockDeviceReceiver.class.getName());
+        context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        DevicePolicyManager mDevicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        if(mDevicePolicyManager.isAdminActive(component))
+            mDevicePolicyManager.lockNow();
+        else {
+            Intent intent = new Intent(context, DummyActivity.class);
+            intent.putExtra("device_admin", true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
     }
 }

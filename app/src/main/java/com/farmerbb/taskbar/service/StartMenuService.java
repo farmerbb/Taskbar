@@ -145,7 +145,7 @@ public class StartMenuService extends Service {
                 PixelFormat.TRANSLUCENT);
 
         // Determine where to show the start menu on screen
-        SharedPreferences pref = U.getSharedPreferences(this);
+        final SharedPreferences pref = U.getSharedPreferences(this);
         switch(pref.getString("position", "bottom_left")) {
             case "bottom_left":
                 layoutId = R.layout.start_menu_left;
@@ -234,6 +234,9 @@ public class StartMenuService extends Service {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    View closeButton = searchView.findViewById(R.id.search_close_btn);
+                    if(closeButton != null) closeButton.setVisibility(View.GONE);
+
                     refreshApps(newText);
                     return true;
                 }
@@ -247,6 +250,19 @@ public class StartMenuService extends Service {
             });
 
             searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+            LinearLayout powerButton = (LinearLayout) layout.findViewById(R.id.power_button);
+            powerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(pref.getBoolean("hide_taskbar", true))
+                        LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                    else
+                        LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+
+                    U.lockDevice(StartMenuService.this);
+                }
+            });
         } else {
             FrameLayout searchViewLayout = (FrameLayout) layout.findViewById(R.id.search_view_layout);
             searchViewLayout.setVisibility(View.GONE);

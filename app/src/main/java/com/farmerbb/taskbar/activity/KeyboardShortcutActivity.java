@@ -27,6 +27,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.util.U;
 
+import java.util.Set;
+
 public class KeyboardShortcutActivity extends Activity {
 
     @Override
@@ -36,11 +38,17 @@ public class KeyboardShortcutActivity extends Activity {
         // Perform different actions depending on how this activity was launched
         switch(getIntent().getAction()) {
             case Intent.ACTION_MAIN:
-                SharedPreferences pref = U.getSharedPreferences(this);
-                if(pref.getBoolean("taskbar_active", false))
-                    sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
-                else
-                    sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
+                Set<String> categories = getIntent().getSelector().getCategories();
+
+                if(categories.contains(Intent.CATEGORY_APP_MAPS)) {
+                    SharedPreferences pref = U.getSharedPreferences(this);
+                    if(pref.getBoolean("taskbar_active", false))
+                        sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
+                    else
+                        sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
+                } else if(categories.contains(Intent.CATEGORY_APP_CALENDAR))
+                    U.lockDevice(this);
+
                 break;
             case Intent.ACTION_ASSIST:
                 if(getIntent().hasExtra(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD) && isServiceRunning()) {

@@ -58,13 +58,34 @@
             android:paddingBottom="1dp"
             android:background="@color/translucent_gray" >
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/search"
+                <LinearLayout
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="wrap_content"
-                    android:background="?start_menu_background"
-                    app:queryBackground="@android:color/transparent"
-                    app:iconifiedByDefault="false" />
+                    android:background="?start_menu_background" >
+
+                        <android.support.v7.widget.SearchView
+                            android:id="@+id/search"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:queryBackground="@android:color/transparent"
+                            app:iconifiedByDefault="false" />
+
+                        <LinearLayout
+                            android:id="@+id/power_button"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:clickable="true" >
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_power_settings_new_black_24dp" />
+
+                        </LinearLayout>
+
+                </LinearLayout>
 
         </FrameLayout>
 

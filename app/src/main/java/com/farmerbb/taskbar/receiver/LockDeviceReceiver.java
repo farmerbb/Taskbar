@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.activity;
+package com.farmerbb.taskbar.receiver;
 
-public class ContextMenuActivityDark extends ContextMenuActivity {}
+import android.app.admin.DeviceAdminReceiver;
+
+public class LockDeviceReceiver extends DeviceAdminReceiver {}

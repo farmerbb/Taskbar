@@ -90,7 +90,9 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                openContextMenu(entry);
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                openContextMenu(entry, location);
                 return true;
             }
         });
@@ -99,8 +101,11 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
             @Override
             public boolean onGenericMotion(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
-                    openContextMenu(entry);
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    openContextMenu(entry, location);
+                }
 
                 return false;
             }
@@ -110,7 +115,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
     }
 
     @SuppressWarnings("deprecation")
-    private void openContextMenu(AppEntry entry) {
+    private void openContextMenu(AppEntry entry, int[] location) {
         SharedPreferences pref = U.getSharedPreferences(getContext());
         Intent intent = null;
 
@@ -127,6 +132,8 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
             intent.putExtra("package_name", entry.getPackageName());
             intent.putExtra("app_name", entry.getLabel());
             intent.putExtra("component_name", entry.getComponentName());
+            intent.putExtra("x", location[0]);
+            intent.putExtra("y", location[1]);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 

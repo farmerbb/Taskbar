@@ -122,8 +122,7 @@
     <string name="quit_taskbar">Quit</string>
 
     <string name="pref_title_keyboard_shortcut">Enable keyboard shortcuts</string>
-    <string name="pref_description_keyboard_shortcut">&#183; Press WinKey+M or Search+M at any time to automatically start or stop Taskbar\n&#183; When Taskbar is active, press WinKey or Search to show the start menu\n\nThis may require you to manually set Taskbar as the search assistant in Settings.</string>
-
+    <string name="pref_description_keyboard_shortcut">Start/stop Taskbar\n&#8226; WinKey+M, Search+M\n\nLock device\n&#8226; WinKey+L, Search+L\n\nShow start menu\n&#8226; WinKey, Search\n(requires Taskbar to be set as the search assistant in Settings)</string>
     <string name="loading_apps">Loading apps&#8230;</string>
     <string name="press_enter">No apps found\n\nPress Enter to search using Google</string>
 
@@ -150,5 +149,8 @@
         <item>light</item>
         <item>dark</item>
     </string-array>
+
+    <string name="device_admin_description_short">Allows Taskbar to lock this device via the start menu</string>
+    <string name="device_admin_description">Allows Taskbar to lock this device via the start menu.\n\nThis will require you to deactivate Taskbar as a device administrator prior to installing.</string>
 
 </resources>

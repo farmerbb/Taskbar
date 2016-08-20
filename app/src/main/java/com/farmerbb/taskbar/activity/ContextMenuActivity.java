@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -59,23 +61,51 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
         SharedPreferences pref = U.getSharedPreferences(this);
-        switch(pref.getString("position", "bottom_left")) {
-            case "bottom_left":
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                params.y = getResources().getDimensionPixelSize(R.dimen.icon_size);
-                break;
-            case "bottom_vertical_left":
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                params.x = getResources().getDimensionPixelSize(R.dimen.icon_size);
-                break;
-            case "bottom_right":
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                params.y = getResources().getDimensionPixelSize(R.dimen.icon_size);
-                break;
-            case "bottom_vertical_right":
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                params.x = getResources().getDimensionPixelSize(R.dimen.icon_size);
-                break;
+
+        DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+
+        if(showStartMenu) {
+            int offset = getResources().getDimensionPixelSize(R.dimen.context_menu_offset);
+
+            switch(pref.getString("position", "bottom_left")) {
+                case "bottom_left":
+                case "bottom_vertical_left":
+                    params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    params.x = getIntent().getIntExtra("x", 0) + offset;
+                    params.y = display.getHeight() - getIntent().getIntExtra("y", 0) - offset;
+                    break;
+                case "bottom_right":
+                case "bottom_vertical_right":
+                    params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    params.x = getIntent().getIntExtra("x", 0) - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset;
+                    params.y = display.getHeight() - getIntent().getIntExtra("y", 0) - offset;
+                    break;
+            }
+        } else {
+            switch(pref.getString("position", "bottom_left")) {
+                case "bottom_left":
+                    params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    params.x = getIntent().getIntExtra("x", 0);
+                    params.y = getResources().getDimensionPixelSize(R.dimen.icon_size);
+                    break;
+                case "bottom_vertical_left":
+                    params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    params.x = getResources().getDimensionPixelSize(R.dimen.icon_size);
+                    params.y = display.getHeight() - getIntent().getIntExtra("y", display.getHeight());
+                    break;
+                case "bottom_right":
+                    params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    params.x = display.getWidth() - getIntent().getIntExtra("x", display.getWidth());
+                    params.y = getResources().getDimensionPixelSize(R.dimen.icon_size);
+                    break;
+                case "bottom_vertical_right":
+                    params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    params.x = getResources().getDimensionPixelSize(R.dimen.icon_size);
+                    params.y = display.getHeight() - getIntent().getIntExtra("y", display.getHeight());
+                    break;
+            }
         }
 
         params.width = getResources().getDimensionPixelSize(R.dimen.context_menu_width);
@@ -159,7 +189,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "uninstall":
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode()) {
-                    Intent intent2 = new Intent(ContextMenuActivity.this, UninstallActivity.class);
+                    Intent intent2 = new Intent(ContextMenuActivity.this, DummyActivity.class);
                     intent2.putExtra("uninstall", getIntent().getStringExtra("package_name"));
                     startActivity(intent2);
                 } else

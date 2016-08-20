@@ -16,12 +16,17 @@
 package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
-public class UninstallActivity extends Activity {
+import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+
+public class DummyActivity extends Activity {
 
     boolean shouldFinish = false;
 
@@ -39,7 +44,15 @@ public class UninstallActivity extends Activity {
             finish();
         else {
             shouldFinish = true;
-            startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("uninstall"))));
+
+            if(getIntent().hasExtra("uninstall"))
+                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("uninstall"))));
+            else if(getIntent().hasExtra("device_admin")) {
+                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, new ComponentName(this, LockDeviceReceiver.class));
+                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.device_admin_description));
+                startActivity(intent);
+            } else finish();
         }
     }
 }
