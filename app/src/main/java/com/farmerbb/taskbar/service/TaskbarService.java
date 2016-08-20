@@ -286,6 +286,8 @@ public class TaskbarService extends Service {
     private void startRefreshingRecents() {
         if(thread != null) thread.interrupt();
 
+        currentTaskbarIds.clear();
+
         handler = new Handler();
         thread = new Thread() {
             @Override

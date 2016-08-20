@@ -72,13 +72,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 case "bottom_left":
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = getIntent().getIntExtra("x", 0) + offset;
+                    params.x = getIntent().getIntExtra("x", 0);
                     params.y = display.getHeight() - getIntent().getIntExtra("y", 0) - offset;
                     break;
                 case "bottom_right":
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = getIntent().getIntExtra("x", 0) - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset;
+                    params.x = getIntent().getIntExtra("x", 0) - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
                     params.y = display.getHeight() - getIntent().getIntExtra("y", 0) - offset;
                     break;
             }
