@@ -95,6 +95,7 @@ public class TaskbarService extends Service {
     private int layoutId = R.layout.taskbar_left;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
+    private int numOfPinnedApps = -1;
 
     private View.OnClickListener ocl = new View.OnClickListener() {
         @Override
@@ -292,14 +293,13 @@ public class TaskbarService extends Service {
         thread = new Thread() {
             @Override
             public void run() {
+                updateRecentApps(true);
+
                 if(!isRefreshingRecents) {
                     isRefreshingRecents = true;
-                    boolean firstRefresh = true;
-
                     while(shouldRefreshRecents) {
-                        updateRecentApps(firstRefresh);
-                        firstRefresh = false;
                         SystemClock.sleep(refreshInterval);
+                        updateRecentApps(false);
                     }
 
                     isRefreshingRecents = false;
@@ -489,7 +489,8 @@ public class TaskbarService extends Service {
                 finalApplicationIds.add(entry.getPackageName());
             }
 
-            if(finalApplicationIds.size() != currentTaskbarIds.size())
+            if(finalApplicationIds.size() != currentTaskbarIds.size()
+                    || numOfPinnedApps != pba.getPinnedApps().size())
                 shouldRedrawTaskbar = true;
             else {
                 for(int i = 0; i < finalApplicationIds.size(); i++) {
@@ -502,8 +503,9 @@ public class TaskbarService extends Service {
 
             if(shouldRedrawTaskbar) {
                 currentTaskbarIds = finalApplicationIds;
+                numOfPinnedApps = pba.getPinnedApps().size();
 
-                final TaskbarAdapter taskbarAdapter = new TaskbarAdapter(this, R.layout.icon, entries);
+                final TaskbarAdapter taskbarAdapter = new TaskbarAdapter(this, R.layout.icon, entries, numOfPinnedApps);
                 final int numOfEntries = entries.size();
 
                 handler.post(new Runnable() {

@@ -54,7 +54,10 @@ public class KeyboardShortcutActivity extends Activity {
                 if(getIntent().hasExtra(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD) && isServiceRunning()) {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
                 } else {
-                    Intent intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
+                    Intent intent = new Intent("com.google.android.googlequicksearchbox.TEXT_ASSIST");
+                    if(intent.resolveActivity(getPackageManager()) == null)
+                        intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
+
                     if(intent.resolveActivity(getPackageManager()) != null)
                         startActivity(intent);
                 }

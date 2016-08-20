@@ -31,8 +31,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -46,8 +46,11 @@ import static android.content.Context.DISPLAY_SERVICE;
 
 public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
 
-    public TaskbarAdapter(Context context, int layout, List<AppEntry> list) {
+    private int numOfPinnedApps = 0;
+
+    public TaskbarAdapter(Context context, int layout, List<AppEntry> list, int numOfPinnedApps) {
         super(context, layout, list);
+        this.numOfPinnedApps = numOfPinnedApps;
     }
 
     @Override
@@ -65,7 +68,12 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
 
         imageView.setImageDrawable(entry.getIcon(getContext()));
 
-        LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
+        if(pref.getBoolean("shortcut_icon", true) && position < numOfPinnedApps) {
+            ImageView imageView2 = (ImageView) convertView.findViewById(R.id.shortcut_icon);
+            imageView2.setVisibility(View.VISIBLE);
+        }
+
+        FrameLayout layout = (FrameLayout) convertView.findViewById(R.id.entry);
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

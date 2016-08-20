@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<LinearLayout
+<FrameLayout
     android:id="@+id/entry"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
@@ -29,4 +29,17 @@
         android:padding="8dp"
         tools:src="@drawable/ic_allapps_pressed" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/shortcut_icon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/translucent_white"
+        android:layout_gravity="bottom|left"
+        android:src="@drawable/ic_reply_black_24dp"
+        android:scaleX="-1"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</FrameLayout>

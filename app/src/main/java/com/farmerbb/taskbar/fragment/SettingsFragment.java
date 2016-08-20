@@ -88,6 +88,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         bindPreferenceSummaryToValue(findPreference("scrollbar"));
         bindPreferenceSummaryToValue(findPreference("position"));
         bindPreferenceSummaryToValue(findPreference("theme"));
+        bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
 
         finishedLoadingPrefs = true;
     }
