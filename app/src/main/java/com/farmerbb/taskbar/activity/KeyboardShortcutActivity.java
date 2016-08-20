@@ -58,6 +58,8 @@ public class KeyboardShortcutActivity extends Activity {
                     if(intent.resolveActivity(getPackageManager()) == null)
                         intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
 
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
                     if(intent.resolveActivity(getPackageManager()) != null)
                         startActivity(intent);
                 }
