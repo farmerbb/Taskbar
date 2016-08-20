@@ -17,11 +17,13 @@ package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
@@ -51,7 +53,15 @@ public class DummyActivity extends Activity {
                 Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                 intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, new ComponentName(this, LockDeviceReceiver.class));
                 intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.device_admin_description));
-                startActivity(intent);
+
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Toast toast = Toast.makeText(this, getString(R.string.lock_device_not_supported), Toast.LENGTH_SHORT);
+                    toast.show();
+
+                    finish();
+                }
             } else finish();
         }
     }

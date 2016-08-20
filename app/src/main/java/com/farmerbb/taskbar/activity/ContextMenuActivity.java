@@ -134,14 +134,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             }
         } else {
             appName = getIntent().getStringExtra("app_name");
-
-            if(getResources().getConfiguration().smallestScreenWidthDp >= 600
-                    && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
-                setTitle(appName);
-            else {
-                addPreferencesFromResource(R.xml.pref_context_menu_header);
-                findPreference("header").setTitle(appName);
-            }
+            addPreferencesFromResource(R.xml.pref_context_menu_header);
+            findPreference("header").setTitle(appName);
 
             final PackageManager pm = getPackageManager();
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
