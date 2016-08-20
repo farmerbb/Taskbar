@@ -49,6 +49,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
+    boolean isStartButton = false;
 
     @SuppressLint("RtlHardcoded")
     @SuppressWarnings("deprecation")
@@ -57,6 +58,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         super.onPostCreate(savedInstanceState);
 
         showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
+        isStartButton = !getIntent().hasExtra("package_name") && !getIntent().hasExtra("app_name");
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -66,43 +68,49 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
         if(showStartMenu) {
+            int x = getIntent().getIntExtra("x", 0);
+            int y = getIntent().getIntExtra("y", 0);
             int offset = getResources().getDimensionPixelSize(R.dimen.context_menu_offset);
 
             switch(pref.getString("position", "bottom_left")) {
                 case "bottom_left":
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = getIntent().getIntExtra("x", 0);
-                    params.y = display.getHeight() - getIntent().getIntExtra("y", 0) - offset;
+                    params.x = x;
+                    params.y = display.getHeight() - y - offset;
                     break;
                 case "bottom_right":
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = getIntent().getIntExtra("x", 0) - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
-                    params.y = display.getHeight() - getIntent().getIntExtra("y", 0) - offset;
+                    params.x = x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
+                    params.y = display.getHeight() - y - offset;
                     break;
             }
         } else {
+            int x = getIntent().getIntExtra("x", display.getWidth());
+            int y = getIntent().getIntExtra("y", display.getHeight());
+            int offset = getResources().getDimensionPixelSize(R.dimen.icon_size);
+
             switch(pref.getString("position", "bottom_left")) {
                 case "bottom_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = getIntent().getIntExtra("x", 0);
-                    params.y = getResources().getDimensionPixelSize(R.dimen.icon_size);
+                    params.x = isStartButton ? 0 : x;
+                    params.y = offset;
                     break;
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = getResources().getDimensionPixelSize(R.dimen.icon_size);
-                    params.y = display.getHeight() - getIntent().getIntExtra("y", display.getHeight());
+                    params.x = offset;
+                    params.y = display.getHeight() - y - (isStartButton ? 0 : offset);
                     break;
                 case "bottom_right":
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                    params.x = display.getWidth() - getIntent().getIntExtra("x", display.getWidth());
-                    params.y = getResources().getDimensionPixelSize(R.dimen.icon_size);
+                    params.x = display.getWidth() - x;
+                    params.y = offset;
                     break;
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                    params.x = getResources().getDimensionPixelSize(R.dimen.icon_size);
-                    params.y = display.getHeight() - getIntent().getIntExtra("y", display.getHeight());
+                    params.x = offset;
+                    params.y = display.getHeight() - y - (isStartButton ? 0 : offset);
                     break;
             }
         }
@@ -116,7 +124,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         if(view != null) view.setPadding(0, 0, 0, 0);
 
         // Generate options to show on the menu, depending on which icon was clicked
-        if(getIntent().hasExtra("package_name") && getIntent().hasExtra("app_name")) {
+        if(isStartButton) {
+            addPreferencesFromResource(R.xml.pref_context_menu_open_settings);
+            findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
+
+            if(!getIntent().getBooleanExtra("dont_show_quit", false)) {
+                addPreferencesFromResource(R.xml.pref_context_menu_quit);
+                findPreference("quit_taskbar").setOnPreferenceClickListener(this);
+            }
+        } else {
             appName = getIntent().getStringExtra("app_name");
 
             if(getResources().getConfiguration().smallestScreenWidthDp >= 600
@@ -168,14 +184,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             findPreference("app_info").setOnPreferenceClickListener(this);
             findPreference("uninstall").setOnPreferenceClickListener(this);
-        } else {
-            addPreferencesFromResource(R.xml.pref_context_menu_open_settings);
-            findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
-
-            if(!getIntent().getBooleanExtra("dont_show_quit", false)) {
-                addPreferencesFromResource(R.xml.pref_context_menu_quit);
-                findPreference("quit_taskbar").setOnPreferenceClickListener(this);
-            }
         }
     }
 
