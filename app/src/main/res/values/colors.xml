@@ -20,9 +20,9 @@
     <color name="colorAccent">#FF7043</color> <!-- Deep Orange 400 -->
 
     <color name="text_color">#757575</color>
-    <color name="text_color_dark">#FFFFFF</color>
+    <color name="text_color_dark">#BEBEBE</color>
     <color name="translucent_gray">#40000000</color>
     <color name="translucent_white">#99FFFFFF</color>
-    <color name="start_menu_background">#FFFFFF</color>
-    <color name="start_menu_background_dark">#252525</color>
+    <color name="start_menu_background">#FAFAFA</color>
+    <color name="start_menu_background_dark">#303030</color>
 </resources>
