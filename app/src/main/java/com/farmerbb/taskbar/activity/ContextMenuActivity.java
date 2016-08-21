@@ -189,7 +189,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @Override
     public boolean onPreferenceClick(Preference p) {
-        switch(p.getKey()) {
+        boolean appIsValid = true;
+
+        if(!isStartButton) {
+            try {
+                getPackageManager().getPackageInfo(getIntent().getStringExtra("package_name"), 0);
+            } catch(PackageManager.NameNotFoundException e) {
+                appIsValid = false;
+            }
+        }
+
+        if(appIsValid) switch(p.getKey()) {
             case "app_info":
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getIntent().getStringExtra("package_name")));
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode())

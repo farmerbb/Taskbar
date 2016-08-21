@@ -18,8 +18,11 @@ package com.farmerbb.taskbar;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
@@ -27,6 +30,7 @@ import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -46,9 +50,18 @@ public class MainActivity extends AppCompatActivity {
 
     private SwitchCompat theSwitch;
 
+    private BroadcastReceiver switchReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateSwitch();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(switchReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_SWITCH"));
 
         SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
@@ -114,10 +127,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(theSwitch != null) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
-        }
+        updateSwitch();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(switchReceiver);
     }
 
     @SuppressWarnings("deprecation")
@@ -172,5 +189,12 @@ public class MainActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.M)
     private boolean canDrawOverlays() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this);
+    }
+
+    private void updateSwitch() {
+        if(theSwitch != null) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
+        }
     }
 }

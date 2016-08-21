@@ -117,14 +117,16 @@ public class StartMenuService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
-            drawStartMenu();
-        else {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            pref.edit().putBoolean("taskbar_active", false).apply();
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("taskbar_active", false) || pref.getBoolean("on_home_screen", false)) {
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+                drawStartMenu();
+            else {
+                pref.edit().putBoolean("taskbar_active", false).apply();
 
-            stopSelf();
-        }
+                stopSelf();
+            }
+        } else stopSelf();
     }
 
     @SuppressLint("RtlHardcoded")

@@ -27,6 +27,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
@@ -49,33 +50,44 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
-            boolean isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
-            String label = getString(isHidden ? R.string.action_show : R.string.action_hide);
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("taskbar_active", false)) {
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
+                boolean isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
+                String label = getString(isHidden ? R.string.action_show : R.string.action_hide);
 
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent receiverIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.farmerbb.taskbar.SHOW_HIDE_TASKBAR"), PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent receiverIntent2 = PendingIntent.getBroadcast(this, 0, new Intent("com.farmerbb.taskbar.QUIT"), PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent receiverIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.farmerbb.taskbar.SHOW_HIDE_TASKBAR"), PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent receiverIntent2 = PendingIntent.getBroadcast(this, 0, new Intent("com.farmerbb.taskbar.QUIT"), PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_allapps)
-                    .setContentIntent(contentIntent)
-                    .setContentTitle(getString(R.string.taskbar_is_active))
-                    .setContentText(getString(R.string.click_to_open_settings))
-                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                    .addAction(0, label, receiverIntent)
-                    .addAction(0, getString(R.string.action_quit), receiverIntent2)
-                    .setPriority(Notification.PRIORITY_MIN)
-                    .setShowWhen(false)
-                    .setOngoing(true);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_allapps)
+                        .setContentIntent(contentIntent)
+                        .setContentTitle(getString(R.string.taskbar_is_active))
+                        .setContentText(getString(R.string.click_to_open_settings))
+                        .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                        .addAction(0, label, receiverIntent)
+                        .addAction(0, getString(R.string.action_quit), receiverIntent2)
+                        .setPriority(Notification.PRIORITY_MIN)
+                        .setShowWhen(false)
+                        .setOngoing(true);
 
-            startForeground(8675309, mBuilder.build());
-        } else {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            pref.edit().putBoolean("taskbar_active", false).apply();
+                startForeground(8675309, mBuilder.build());
 
-            stopSelf();
-        }
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
+            } else {
+                pref.edit().putBoolean("taskbar_active", false).apply();
+
+                stopSelf();
+            }
+        } else stopSelf();
+    }
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
+
+        super.onDestroy();
     }
 
     @Override
