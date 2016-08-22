@@ -64,6 +64,7 @@ import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
+import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.adapter.TaskbarAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
@@ -421,7 +422,8 @@ public class TaskbarService extends Service {
 
                         if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
                             if(!(eventCache.getPackageName().equals(BuildConfig.APPLICATION_ID)
-                                    && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())))
+                                    && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())
+                                    && !eventCache.getClassName().equals(InvisibleActivityFreeform.class.getCanonicalName())))
                                 currentForegroundApp = eventCache.getPackageName();
                         }
                     }
