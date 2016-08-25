@@ -17,13 +17,17 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,16 +39,19 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Display;
 import android.view.MenuItem;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
+import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
 
@@ -67,7 +74,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         addPreferencesFromResource(R.xml.pref_recent_apps);
         addPreferencesFromResource(R.xml.pref_advanced);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && hasFreeformSupport())
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             addPreferencesFromResource(R.xml.pref_freeform_hack);
 
         addPreferencesFromResource(R.xml.pref_about);
@@ -79,6 +86,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
         findPreference("about").setOnPreferenceClickListener(this);
         findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            findPreference("freeform_hack").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
         bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
@@ -156,8 +166,10 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
     }
 
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
-    public boolean onPreferenceClick(Preference p) {
+    public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
             case "clear_pinned_apps":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -196,7 +208,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 break;
             case "keyboard_shortcut":
                 ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, KeyboardShortcutActivity.class.getName());
-                 getActivity().getPackageManager().setComponentEnabledSetting(component,
+                getActivity().getPackageManager().setComponentEnabledSetting(component,
                         ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP);
                 break;
@@ -208,6 +220,38 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 try {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                break;
+            case "freeform_hack":
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                if(((CheckBoxPreference) p).isChecked() && pref.getBoolean("taskbar_active", false)) {
+                    if(!hasFreeformSupport()) {
+                        ((CheckBoxPreference) p).setChecked(false);
+
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+                        builder2.setTitle(R.string.freeform_dialog_title)
+                                .setMessage(R.string.freeform_dialog_message)
+                                .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        ((CheckBoxPreference) p).setChecked(true);
+                                    }
+                                });
+
+                        AlertDialog dialog2 = builder2.create();
+                        dialog2.show();
+                        dialog2.setCancelable(false);
+                    }
+
+                    if(getActivity().isInMultiWindowMode() && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                        DisplayManager dm = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
+                        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                        Intent freeformIntent = new Intent(getActivity(), InvisibleActivityFreeform.class);
+                        freeformIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                        startActivity(freeformIntent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                    }
+                } else
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
                 break;
         }
 

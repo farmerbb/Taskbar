@@ -393,6 +393,8 @@ public class StartMenuService extends Service {
         layout.setOnClickListener(ocl);
         layout.setVisibility(View.VISIBLE);
 
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
+
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!pref.getBoolean("on_home_screen", false)) {
             Intent intent = new Intent(this, InvisibleActivity.class);
@@ -417,7 +419,7 @@ public class StartMenuService extends Service {
         layout.setOnClickListener(null);
         layout.setVisibility(View.INVISIBLE);
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_INVISIBLE_ACTIVITY"));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
 
         layout.postDelayed(new Runnable() {
             @Override

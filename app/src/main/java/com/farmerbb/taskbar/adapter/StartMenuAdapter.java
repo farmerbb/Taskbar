@@ -39,7 +39,9 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
+import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
@@ -83,6 +85,16 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences pref = U.getSharedPreferences(getContext());
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                        && pref.getBoolean("freeform_hack", false)
+                        && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                    Intent freeformHackIntent = new Intent(getContext(), InvisibleActivityFreeform.class);
+                    freeformHackIntent.putExtra("check_multiwindow", true);
+                    freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getContext().startActivity(freeformHackIntent);
+                }
+
                 Intent intent = new Intent();
                 intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

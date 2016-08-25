@@ -17,20 +17,27 @@ package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Display;
 
 import com.farmerbb.taskbar.service.StartMenuService;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.Set;
 
 public class KeyboardShortcutActivity extends Activity {
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +45,23 @@ public class KeyboardShortcutActivity extends Activity {
         // Perform different actions depending on how this activity was launched
         switch(getIntent().getAction()) {
             case Intent.ACTION_MAIN:
-                Set<String> categories = getIntent().getSelector().getCategories();
+                Intent selector = getIntent().getSelector();
+                Set<String> categories = selector != null ? selector.getCategories() : getIntent().getCategories();
 
                 if(categories.contains(Intent.CATEGORY_APP_MAPS)) {
                     SharedPreferences pref = U.getSharedPreferences(this);
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                            && pref.getBoolean("freeform_hack", false)
+                            && isInMultiWindowMode()
+                            && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                        DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                        Intent intent = new Intent(this, InvisibleActivityFreeform.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                        startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                    }
+
                     if(pref.getBoolean("taskbar_active", false))
                         sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
                     else

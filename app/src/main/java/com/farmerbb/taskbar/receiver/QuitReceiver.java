@@ -43,6 +43,6 @@ public class QuitReceiver extends BroadcastReceiver {
 
         context.stopService(notificationIntent);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_INVISIBLE_ACTIVITY"));
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
     }
 }

@@ -16,11 +16,13 @@
 package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -38,6 +40,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
 
@@ -56,6 +59,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
 
         showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
         isStartButton = !getIntent().hasExtra("package_name") && !getIntent().hasExtra("app_name");
@@ -205,6 +210,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode())
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                startFreeformActivity();
                 startActivity(intent);
 
                 showStartMenu = false;
@@ -214,14 +220,19 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode()) {
                     Intent intent2 = new Intent(ContextMenuActivity.this, DummyActivity.class);
                     intent2.putExtra("uninstall", getIntent().getStringExtra("package_name"));
+
+                    startFreeformActivity();
                     startActivity(intent2);
-                } else
+                } else {
+                    startFreeformActivity();
                     startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("package_name"))));
+                }
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 break;
             case "open_taskbar_settings":
+                startFreeformActivity();
                 startActivity(new Intent(this, MainActivity.class));
 
                 showStartMenu = false;
@@ -279,6 +290,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @Override
     public void finish() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING"));
+
         if(showStartMenu)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
         else if(shouldHideTaskbar) {
@@ -288,5 +301,21 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         }
 
         super.finish();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void startFreeformActivity() {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && isInMultiWindowMode()
+                && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+            Intent intent = new Intent(this, InvisibleActivityFreeform.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+        }
     }
 }

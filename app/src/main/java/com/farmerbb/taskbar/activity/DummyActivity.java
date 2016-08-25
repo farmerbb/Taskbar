@@ -23,10 +23,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.util.U;
 
 public class DummyActivity extends Activity {
 
@@ -57,8 +57,7 @@ public class DummyActivity extends Activity {
                 try {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
-                    Toast toast = Toast.makeText(this, getString(R.string.lock_device_not_supported), Toast.LENGTH_SHORT);
-                    toast.show();
+                    U.showToast(this, R.string.lock_device_not_supported);
 
                     finish();
                 }

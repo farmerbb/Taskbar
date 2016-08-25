@@ -63,7 +63,7 @@
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity

@@ -44,6 +44,7 @@ import com.farmerbb.taskbar.fragment.SettingsFragment;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class MainActivity extends AppCompatActivity {
@@ -153,12 +154,15 @@ public class MainActivity extends AppCompatActivity {
         editor.putLong("time_of_service_start", System.currentTimeMillis());
         editor.apply();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false) && isInMultiWindowMode()) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && isInMultiWindowMode()
+                && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
             DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
             Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
             Intent intent = new Intent(this, InvisibleActivityFreeform.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
             startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
         }
 

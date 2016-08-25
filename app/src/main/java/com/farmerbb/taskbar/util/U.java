@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
@@ -38,6 +39,7 @@ public class U {
     private U() {}
 
     private static SharedPreferences pref;
+    private static Toast toast;
 
     public static SharedPreferences getSharedPreferences(Context context) {
         if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
@@ -88,5 +90,20 @@ public class U {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
+    }
+
+    public static void showToast(Context context, int message) {
+        showToast(context, message, Toast.LENGTH_SHORT);
+    }
+
+    public static void showToastLong(Context context, int message) {
+        showToast(context, message, Toast.LENGTH_LONG);
+    }
+
+    private static void showToast(Context context, int message, int length) {
+        if(toast != null) toast.cancel();
+
+        toast = Toast.makeText(context, context.getString(message), length);
+        toast.show();
     }
 }

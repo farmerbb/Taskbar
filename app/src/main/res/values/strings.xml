@@ -88,8 +88,8 @@
 
     <string name="pref_header_advanced">Advanced</string>
 
-    <string name="pref_title_freeform_hack">Freeform window hack</string>
-    <string name="pref_description_freeform_hack">Allows Taskbar to remain in the freeform window workspace even with no windows open, for a more desktop-like experience.\n\nMake sure this app is in a freeform window when this setting is checked, and then (re)start Taskbar for this to work.</string>
+    <string name="pref_title_freeform_hack">Freeform window hack (experimental)</string>
+    <string name="pref_description_freeform_hack">Allows Taskbar to remain in the freeform window workspace even with no windows open, for a more desktop-like experience.\n\nFor best results, make sure this app is already in a freeform window when this setting is checked, and then (re)start Taskbar.</string>
 
     <string name="pref_header_about">About Taskbar</string>
     <string name="pref_about_description">Taskbar: start menu and recent apps at your fingertips\n\n&#169; 2016 Braden Farmer\n\nClick here to check for updates or leave a rating! %1$s</string>
@@ -155,5 +155,8 @@
     <string name="lock_device_not_supported">Not supported on this device</string>
 
     <string name="pref_title_shortcut_icon">Show shortcut icon for pinned apps</string>
+
+    <string name="freeform_dialog_title">Note</string>
+    <string name="freeform_dialog_message">Freeform window mode may not be supported on your device.  If it\'s not, please manually enable it using this adb shell command, then reboot:\n\nsettings put global enable_freeform_support 1</string>
 
 </resources>
