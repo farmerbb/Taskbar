@@ -88,8 +88,8 @@
 
     <string name="pref_header_advanced">Advanced</string>
 
-    <string name="pref_title_freeform_hack">Freeform window hack (experimental)</string>
-    <string name="pref_description_freeform_hack">Allows Taskbar to remain in the freeform window workspace even with no windows open, for a more desktop-like experience.\n\nFor best results, make sure this app is already in a freeform window when this setting is checked, and then (re)start Taskbar.</string>
+    <string name="pref_title_freeform_hack">Freeform window support</string>
+    <string name="pref_description_freeform_hack">Allows Taskbar to launch apps in freeform window mode, for a more desktop-like experience.\n\nThis feature is experimental, and may cause issues with standard split-screen multitasking.</string>
 
     <string name="pref_header_about">About Taskbar</string>
     <string name="pref_about_description">Taskbar: start menu and recent apps at your fingertips\n\n&#169; 2016 Braden Farmer\n\nClick here to check for updates or leave a rating! %1$s</string>
@@ -156,7 +156,6 @@
 
     <string name="pref_title_shortcut_icon">Show shortcut icon for pinned apps</string>
 
-    <string name="freeform_dialog_title">Note</string>
-    <string name="freeform_dialog_message">Freeform window mode may not be supported on your device.  If it\'s not, please manually enable it using this adb shell command, then reboot:\n\nsettings put global enable_freeform_support 1</string>
-
+    <string name="freeform_dialog_title">Enable freeform support</string>
+    <string name="freeform_dialog_message">Freeform window mode is not enabled on your device. To enable, please follow one of these steps:\n\n<b>Full support</b>\nConnect your device to a computer, and run this adb shell command:\n\nsettings put global enable_freeform_support 1\n\n<b>Partial support</b>\nGo to Developer Options, scroll down to the bottom, and turn on \'\'Force activities to be resizable\'\'\n\nReboot your device to complete the process.</string>
 </resources>

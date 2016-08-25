@@ -401,7 +401,7 @@ public class StartMenuService extends Service {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
                 DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
                 Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 

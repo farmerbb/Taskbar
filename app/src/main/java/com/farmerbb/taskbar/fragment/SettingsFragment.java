@@ -74,8 +74,18 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         addPreferencesFromResource(R.xml.pref_recent_apps);
         addPreferencesFromResource(R.xml.pref_advanced);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            if(!pref.getBoolean("freeform_hack_override", false)) {
+                pref.edit()
+                        .putBoolean("freeform_hack", hasFreeformSupport())
+                        .putBoolean("freeform_hack_override", true)
+                        .apply();
+            }
+
             addPreferencesFromResource(R.xml.pref_freeform_hack);
+            findPreference("freeform_hack").setOnPreferenceClickListener(this);
+        }
 
         addPreferencesFromResource(R.xml.pref_about);
 
@@ -86,9 +96,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
         findPreference("about").setOnPreferenceClickListener(this);
         findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            findPreference("freeform_hack").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
         bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
@@ -222,8 +229,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                 break;
             case "freeform_hack":
-                SharedPreferences pref = U.getSharedPreferences(getActivity());
-                if(((CheckBoxPreference) p).isChecked() && pref.getBoolean("taskbar_active", false)) {
+                if(((CheckBoxPreference) p).isChecked()) {
                     if(!hasFreeformSupport()) {
                         ((CheckBoxPreference) p).setChecked(false);
 
@@ -242,7 +248,10 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         dialog2.setCancelable(false);
                     }
 
-                    if(getActivity().isInMultiWindowMode() && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                    SharedPreferences pref = U.getSharedPreferences(getActivity());
+                    if(pref.getBoolean("taskbar_active", false)
+                            && getActivity().isInMultiWindowMode()
+                            && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
                         DisplayManager dm = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
                         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -281,7 +290,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     @TargetApi(Build.VERSION_CODES.N)
     private boolean hasFreeformSupport() {
         return getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
-                || Settings.Global.getInt(getActivity().getContentResolver(), "enable_freeform_support", -1) == 1;
+                || Settings.Global.getInt(getActivity().getContentResolver(), "enable_freeform_support", -1) == 1
+                || Settings.Global.getInt(getActivity().getContentResolver(), "force_resizable_activities", -1) == 1;
     }
 
     @TargetApi(Build.VERSION_CODES.M)

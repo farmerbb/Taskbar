@@ -7,14 +7,14 @@ ext {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
         minSdkVersion 21
         targetSdkVersion 24
 
-        versionCode 53
+        versionCode 54
         versionName "1.1.8"
 
         resConfigs "en"
