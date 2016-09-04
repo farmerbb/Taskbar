@@ -41,6 +41,7 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
@@ -85,6 +86,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
             addPreferencesFromResource(R.xml.pref_freeform_hack);
             findPreference("freeform_hack").setOnPreferenceClickListener(this);
+            findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
         }
 
         addPreferencesFromResource(R.xml.pref_about);
@@ -106,6 +108,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         bindPreferenceSummaryToValue(findPreference("position"));
         bindPreferenceSummaryToValue(findPreference("theme"));
         bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
+        bindPreferenceSummaryToValue(findPreference("invisible_button"));
 
         finishedLoadingPrefs = true;
     }
@@ -231,15 +234,17 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             case "freeform_hack":
                 if(((CheckBoxPreference) p).isChecked()) {
                     if(!hasFreeformSupport()) {
-                        ((CheckBoxPreference) p).setChecked(false);
-
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
                         builder2.setTitle(R.string.freeform_dialog_title)
                                 .setMessage(R.string.freeform_dialog_message)
-                                .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                                .setPositiveButton(R.string.action_developer_options, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        ((CheckBoxPreference) p).setChecked(true);
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+
+                                        try {
+                                            startActivity(intent);
+                                        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                                     }
                                 });
 
@@ -261,6 +266,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     }
                 } else
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+                break;
+            case "freeform_mode_help":
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+                builder2.setView(View.inflate(getActivity(), R.layout.freeform_help_dialog, null))
+                        .setTitle(R.string.freeform_help_dialog_title)
+                        .setPositiveButton(R.string.action_close, null);
+
+                AlertDialog dialog2 = builder2.create();
+                dialog2.show();
                 break;
         }
 

@@ -64,6 +64,7 @@ public class U {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.setCancelable(false);
     }
 
     public static void showErrorDialog(final Context context, String appopCmd) {
@@ -94,10 +95,6 @@ public class U {
 
     public static void showToast(Context context, int message) {
         showToast(context, message, Toast.LENGTH_SHORT);
-    }
-
-    public static void showToastLong(Context context, int message) {
-        showToast(context, message, Toast.LENGTH_LONG);
     }
 
     private static void showToast(Context context, int message, int length) {

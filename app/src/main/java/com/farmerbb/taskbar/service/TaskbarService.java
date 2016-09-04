@@ -256,7 +256,7 @@ public class TaskbarService extends Service {
         LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
 
         button = (Button) layout.findViewById(R.id.hide_taskbar_button);
-        button.setText(getString(R.string.left_arrow));
+        updateButton(false);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -555,7 +555,6 @@ public class TaskbarService extends Service {
                     space.setVisibility(View.GONE);
                 }
             });
-
         }
     }
 
@@ -584,7 +583,7 @@ public class TaskbarService extends Service {
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("collapsed", true).apply();
 
-        button.setText(getString(R.string.left_arrow));
+        updateButton(false);
 
         Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
         LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
@@ -605,7 +604,7 @@ public class TaskbarService extends Service {
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("collapsed", false).apply();
 
-        button.setText(getString(R.string.right_arrow));
+        updateButton(true);
 
         Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
         LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
@@ -650,5 +649,13 @@ public class TaskbarService extends Service {
             startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
         } else
             startActivity(intent);
+    }
+
+    private void updateButton(boolean isCollapsed) {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        boolean hide = pref.getBoolean("invisible_button", false);
+
+        if(button != null) button.setText(getString(isCollapsed ? R.string.right_arrow : R.string.left_arrow));
+        if(layout != null) layout.setAlpha(isCollapsed && hide ? 0 : 1);
     }
 }

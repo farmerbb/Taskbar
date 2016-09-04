@@ -39,10 +39,10 @@ public class QuitReceiver extends BroadcastReceiver {
         if(!pref.getBoolean("on_home_screen", false)) {
             context.stopService(taskbarIntent);
             context.stopService(startMenuIntent);
+
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
         }
 
         context.stopService(notificationIntent);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
     }
 }

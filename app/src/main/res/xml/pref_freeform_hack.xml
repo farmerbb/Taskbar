@@ -22,4 +22,8 @@
         android:title="@string/pref_title_freeform_hack"
         android:summary="@string/pref_description_freeform_hack" />
 
+    <Preference
+        android:key="freeform_mode_help"
+        android:title="@string/pref_title_freeform_mode_help" />
+
 </PreferenceScreen>
