@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
@@ -85,29 +86,28 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean shouldDelay = false;
+
                 SharedPreferences pref = U.getSharedPreferences(getContext());
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                         && pref.getBoolean("freeform_hack", false)
                         && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                    shouldDelay = true;
+
                     Intent freeformHackIntent = new Intent(getContext(), InvisibleActivityFreeform.class);
                     freeformHackIntent.putExtra("check_multiwindow", true);
                     freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getContext().startActivity(freeformHackIntent);
                 }
 
-                Intent intent = new Intent();
-                intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                try {
-                    getContext().startActivity(intent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-
-                if(pref.getBoolean("hide_taskbar", true))
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                else
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                if(shouldDelay) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            launchApp(entry.getComponentName());
+                        }
+                    }, 100);
+                } else launchApp(entry.getComponentName());
             }
         });
 
@@ -171,5 +171,22 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             getContext().startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
         } else
             getContext().startActivity(intent);
+    }
+
+    private void launchApp(String componentName) {
+        Intent intent = new Intent();
+        intent.setComponent(ComponentName.unflattenFromString(componentName));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        try {
+            getContext().startActivity(intent);
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+
+        SharedPreferences pref = U.getSharedPreferences(getContext());
+        if(pref.getBoolean("hide_taskbar", true))
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+        else
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
     }
 }
