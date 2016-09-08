@@ -32,7 +32,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -60,6 +59,7 @@ import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.U;
 import com.farmerbb.taskbar.view.TaskbarGridView;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -302,7 +302,9 @@ public class StartMenuService extends Service {
                 Collections.sort(list, new Comparator<ResolveInfo>() {
                     @Override
                     public int compare(ResolveInfo ai1, ResolveInfo ai2) {
-                        return ai1.activityInfo.loadLabel(pm).toString().toLowerCase().compareTo(ai2.activityInfo.loadLabel(pm).toString().toLowerCase());
+                        return Collator.getInstance().compare(
+                                ai1.activityInfo.loadLabel(pm).toString(),
+                                ai2.activityInfo.loadLabel(pm).toString());
                     }
                 });
 
@@ -317,38 +319,14 @@ public class StartMenuService extends Service {
                     }
                 }
 
-                Drawable defaultIcon = pm.getDefaultActivityIcon();
-
-                final List<AppEntry> entries = new ArrayList<>();
-                for(ResolveInfo appInfo : queryList) {
-
-                    // Attempt to work around frequently reported OutOfMemoryErrors
-                    Drawable icon;
-
-                    try {
-                        icon = appInfo.loadIcon(pm);
-                    } catch (OutOfMemoryError e) {
-                        icon = defaultIcon;
-                    }
-
-                    entries.add(new AppEntry(
-                            appInfo.activityInfo.applicationInfo.packageName,
-                            new ComponentName(
-                                    appInfo.activityInfo.applicationInfo.packageName,
-                                    appInfo.activityInfo.name).flattenToString(),
-                            appInfo.loadLabel(pm).toString(),
-                            icon,
-                            false));
-                }
-
                 // Now that we've generated the list of apps,
                 // we need to determine if we need to redraw the start menu or not
                 boolean shouldRedrawStartMenu = false;
                 List<String> finalApplicationIds = new ArrayList<>();
 
                 if(query == null) {
-                    for(AppEntry entry : entries) {
-                        finalApplicationIds.add(entry.getPackageName());
+                    for(ResolveInfo appInfo : queryList) {
+                        finalApplicationIds.add(appInfo.activityInfo.applicationInfo.packageName);
                     }
 
                     if(finalApplicationIds.size() != currentStartMenuIds.size())
@@ -365,6 +343,18 @@ public class StartMenuService extends Service {
 
                 if(shouldRedrawStartMenu) {
                     if(query == null) currentStartMenuIds = finalApplicationIds;
+
+                    final List<AppEntry> entries = new ArrayList<>();
+                    for(ResolveInfo appInfo : queryList) {
+                        entries.add(new AppEntry(
+                                appInfo.activityInfo.applicationInfo.packageName,
+                                new ComponentName(
+                                        appInfo.activityInfo.applicationInfo.packageName,
+                                        appInfo.activityInfo.name).flattenToString(),
+                                appInfo.loadLabel(pm).toString(),
+                                appInfo.loadIcon(pm),
+                                false));
+                    }
 
                     handler.post(new Runnable() {
                         @Override

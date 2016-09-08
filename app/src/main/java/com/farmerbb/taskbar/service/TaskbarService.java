@@ -323,6 +323,7 @@ public class TaskbarService extends Service {
                         ? getResources().getInteger(R.integer.num_of_columns_vertical)
                         : getResources().getInteger(R.integer.num_of_columns);
         List<AppEntry> entries = new ArrayList<>();
+        List<Intent> intentCache = new ArrayList<>();
         
         if(pba.getPinnedApps().size() > 0) {
             List<String> pinnedAppsToRemove = new ArrayList<>();
@@ -466,22 +467,20 @@ public class TaskbarService extends Service {
 
                 for(int i = 0; i < number; i++) {
                     Intent intent = pm.getLaunchIntentForPackage(usageStatsList6.get(i).getPackageName());
-                    entries.add(new AppEntry(
-                            usageStatsList6.get(i).getPackageName(),
-                            intent.resolveActivity(pm).flattenToString(),
-                            intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
-                            intent.resolveActivityInfo(pm, 0).loadIcon(pm),
-                            false));
+                    intentCache.add(intent);
+                    entries.add(new AppEntry(usageStatsList6.get(i).getPackageName(), null, null, null, false));
                 }
             }
 
             while(entries.size() > MAX_NUM_OF_COLUMNS) {
                 entries.remove(entries.size() - 1);
+                intentCache.remove(intentCache.size() - 1);
             }
 
             // Determine if we need to reverse the order again
             if(pref.getString("position", "bottom_left").contains("vertical")) {
                 Collections.reverse(entries);
+                Collections.reverse(intentCache);
             }
 
             // Now that we've generated the list of apps,
@@ -508,6 +507,23 @@ public class TaskbarService extends Service {
             if(shouldRedrawTaskbar) {
                 currentTaskbarIds = finalApplicationIds;
                 numOfPinnedApps = pba.getPinnedApps().size();
+
+                int intentCachePos = -1;
+                for(int i = 0; i < entries.size(); i++) {
+                    if(entries.get(i).getComponentName() == null) {
+                        intentCachePos++;
+                        Intent intent = intentCache.get(intentCachePos);
+                        String packageName = entries.get(i).getPackageName();
+
+                        entries.remove(i);
+                        entries.add(i, new AppEntry(
+                            packageName,
+                            intent.resolveActivity(pm).flattenToString(),
+                            intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
+                            intent.resolveActivityInfo(pm, 0).loadIcon(pm),
+                            false));
+                    }
+                }
 
                 final TaskbarAdapter taskbarAdapter = new TaskbarAdapter(this, R.layout.icon, entries, numOfPinnedApps);
                 final int numOfEntries = entries.size();
