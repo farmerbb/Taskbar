@@ -1,6 +1,4 @@
-﻿Taskbar puts a start menu and recent apps tray on top of your screen accessible at any time, increasing your productivity and turning your Android tablet or phone into a real multitasking machine!
-﻿
-﻿On devices running Android 7.0 Nougat, Taskbar can also launch apps in freeform windows for a PC-like experience!  No root required!  (see below for instructions)
+﻿Taskbar puts a start menu and recent apps tray on top of your screen accessible at any time, increasing your productivity and turning your Android tablet or phone into a real multitasking machine!<br><br>On devices running Android 7.0 Nougat, Taskbar can also launch apps in freeform windows for a PC-like experience!  No root required!  (see below for instructions)
 
 ## Features
 * Start menu - shows you all applications installed on the device, configurable as a list or as a grid
@@ -11,7 +9,7 @@
 * Designed with keyboard and mouse in mind
 * 100% free, open source, and no ads
 
-## Freeform window mode (Android 7.0 Nougat)
+#### Freeform window mode (Android 7.0 Nougat)
 
 Taskbar lets you launch apps in freeform floating windows on Android 7.0 Nougat.  No root access is required.  Simply follow these steps to configure your device for launching apps in freeform mode:
 
