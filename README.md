@@ -24,6 +24,7 @@ For more information and detailed instructions, click "Help & instructions for f
 ## Download
 * Google Play (https://play.google.com/store/apps/details?id=com.farmerbb.taskbar)
 * F-Droid (https://f-droid.org/repository/browse/?fdid=com.farmerbb.taskbar)
+* APKMirror (http://www.apkmirror.com/apk/braden-farmer/taskbar/)
 
 ## How to Build
 Prerequisites:
