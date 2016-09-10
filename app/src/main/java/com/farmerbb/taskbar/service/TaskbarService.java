@@ -602,9 +602,6 @@ public class TaskbarService extends Service {
         pref.edit().putBoolean("collapsed", true).apply();
 
         updateButton(false);
-
-        Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
-        LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
     }
 
     private void hideTaskbar() {
