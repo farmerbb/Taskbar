@@ -152,7 +152,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
-                    && isInMultiWindowMode()) {
+                    && isInMultiWindowMode()
+                    && FreeformHackHelper.getInstance().isFreeformHackActive()) {
                 String windowSizePref = pref.getString("window_size", "standard");
 
                 if(!windowSizePref.equals("standard")) {
