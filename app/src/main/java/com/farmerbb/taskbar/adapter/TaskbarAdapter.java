@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar.adapter;
 
 import android.app.ActivityOptions;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -104,11 +103,19 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
                 if(pref.getBoolean("disable_animations", false))
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                try {
-                    getContext().startActivity(intent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                switch(pref.getString("window_size", "standard")) {
+                    case "standard":
+                        U.launchStandard(getContext(), intent);
+                        break;
+                    case "fullscreen":
+                        U.launchFullscreen(getContext(), intent);
+                        break;
+                    case "phone_size":
+                        U.launchPhoneSize(getContext(), intent);
+                        break;
+                }
 
-                if(pref.getBoolean("hide_taskbar", true))
+                if(pref.getBoolean("hide_taskbar", true) && !pref.getBoolean("in_freeform_workspace", false))
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                 else
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

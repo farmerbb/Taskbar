@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.util;
 
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
@@ -25,8 +26,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.view.Display;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.BuildConfig;
@@ -102,5 +106,48 @@ public class U {
 
         toast = Toast.makeText(context, context.getString(message), length);
         toast.show();
+    }
+
+    public static void launchStandard(Context context, Intent intent) {
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
+    public static void launchFullscreen(Context context, Intent intent) {
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+        try {
+            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                    0,
+                    0,
+                    display.getWidth(),
+                    display.getHeight() - context.getResources().getDimensionPixelSize(R.dimen.icon_size)
+            )).toBundle());
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
+    public static void launchPhoneSize(Context context, Intent intent) {
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+        int width1 = display.getWidth() / 2;
+        int width2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_width) / 2;
+        int height1 = display.getHeight() / 2;
+        int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
+
+        try {
+            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                    width1 - width2,
+                    height1 - height2,
+                    width1 + width2,
+                    height1 + height2
+            )).toBundle());
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 }

@@ -69,6 +69,12 @@ public class InvisibleActivity extends Activity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        onBackPressed();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 

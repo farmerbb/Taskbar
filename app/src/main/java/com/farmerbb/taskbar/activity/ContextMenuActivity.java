@@ -139,6 +139,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             }
         } else {
             appName = getIntent().getStringExtra("app_name");
+            packageName = getIntent().getStringExtra("package_name");
+            componentName = getIntent().getStringExtra("component_name");
 
             if(getResources().getConfiguration().screenWidthDp >= 600
                     && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
@@ -148,16 +150,35 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("header").setTitle(appName);
             }
 
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && pref.getBoolean("freeform_hack", false)
+                    && isInMultiWindowMode()) {
+                String windowSizePref = pref.getString("window_size", "standard");
+
+                if(!windowSizePref.equals("standard")) {
+                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_standard);
+                    findPreference("window_size_standard").setOnPreferenceClickListener(this);
+                }
+
+                if(!windowSizePref.equals("fullscreen")) {
+                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_fullscreen);
+                    findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
+                }
+
+                if(!windowSizePref.equals("phone_size")) {
+                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_phone_size);
+                    findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
+                }
+            }
+
             final PackageManager pm = getPackageManager();
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             ResolveInfo defaultLauncher = pm.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
-            packageName = getIntent().getStringExtra("package_name");
 
             if(!packageName.equals(BuildConfig.APPLICATION_ID)
                     && !packageName.equals(defaultLauncher.activityInfo.packageName)) {
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
-                componentName = getIntent().getStringExtra("component_name");
 
                 if(pba.isPinned(componentName)) {
                     addPreferencesFromResource(R.xml.pref_context_menu_pin);
@@ -276,6 +297,24 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                             false));
                 }
                 break;
+            case "window_size_standard":
+                U.launchStandard(this, generateIntent());
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "window_size_fullscreen":
+                U.launchFullscreen(this, generateIntent());
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "window_size_phone_size":
+                U.launchPhoneSize(this, generateIntent());
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
         }
 
         finish();
@@ -293,10 +332,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING"));
 
         if(showStartMenu)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
         else if(shouldHideTaskbar) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("hide_taskbar", true))
+            if(pref.getBoolean("hide_taskbar", true) && !pref.getBoolean("in_freeform_workspace", false))
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
         }
 
@@ -317,5 +356,18 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
             startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
         }
+    }
+
+    private Intent generateIntent() {
+        Intent intent = new Intent();
+        intent.setComponent(ComponentName.unflattenFromString(componentName));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("disable_animations", false) && !showStartMenu)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+        return intent;
     }
 }

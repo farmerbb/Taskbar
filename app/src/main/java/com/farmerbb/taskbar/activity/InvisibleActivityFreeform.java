@@ -58,7 +58,6 @@ public class InvisibleActivityFreeform extends Activity {
             overridePendingTransition(0, 0);
 
             FreeformHackHelper.getInstance().setFreeformHackActive(false);
-            System.out.println("onFinish");
         }
     };
 
@@ -93,7 +92,8 @@ public class InvisibleActivityFreeform extends Activity {
             LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
 
             FreeformHackHelper.getInstance().setFreeformHackActive(true);
-            System.out.println("onCreate");
+
+            showTaskbar = true;
         }
     }
 
@@ -104,26 +104,12 @@ public class InvisibleActivityFreeform extends Activity {
         // Show the taskbar when activity is resumed (no other freeform windows are active)
         if(showTaskbar)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-        else
-            showTaskbar = true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(!doNotHide) {
-                    SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
-                    if(pref.getBoolean("hide_taskbar", true))
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                    else
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                }
-            }
-        }, 100);
+        possiblyHideTaskbar();
     }
 
     @Override
@@ -136,11 +122,49 @@ public class InvisibleActivityFreeform extends Activity {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
 
             FreeformHackHelper.getInstance().setFreeformHackActive(false);
-            System.out.println("onDestroy");
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        pref.edit().putBoolean("in_freeform_workspace", true).apply();
+
+        // Show the taskbar when activity is started
+        if(showTaskbar)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        pref.edit().putBoolean("in_freeform_workspace", false).apply();
+
+        possiblyHideTaskbar();
     }
 
     // We don't want this activity to finish under normal circumstances
     @Override
     public void finish() {}
+
+    private void possiblyHideTaskbar() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(!doNotHide) {
+                    SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
+                    if(pref.getBoolean("hide_taskbar", true)
+                            && !pref.getBoolean("in_freeform_workspace", false)
+                            && !pref.getBoolean("on_home_screen", false))
+                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                    else
+                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                }
+            }
+        }, 100);
+    }
 }

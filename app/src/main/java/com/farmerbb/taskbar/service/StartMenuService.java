@@ -85,14 +85,21 @@ public class StartMenuService extends Service {
     private View.OnClickListener ocl = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            toggleStartMenu();
+            toggleStartMenu(true);
         }
     };
     
     private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            toggleStartMenu();
+            toggleStartMenu(true);
+        }
+    };
+
+    private BroadcastReceiver toggleReceiverAlt = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            toggleStartMenu(false);
         }
     };
     
@@ -204,7 +211,7 @@ public class StartMenuService extends Service {
                             layout.performClick();
                         } else {
                             SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
-                            if(pref.getBoolean("hide_taskbar", true))
+                            if(pref.getBoolean("hide_taskbar", true) && !pref.getBoolean("in_freeform_workspace", false))
                                 LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                             else
                                 LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
@@ -258,7 +265,7 @@ public class StartMenuService extends Service {
             powerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(pref.getBoolean("hide_taskbar", true))
+                    if(pref.getBoolean("hide_taskbar", true) && !pref.getBoolean("in_freeform_workspace", false))
                         LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                     else
                         LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
@@ -274,6 +281,7 @@ public class StartMenuService extends Service {
         textView = (TextView) layout.findViewById(R.id.no_apps_found);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiverAlt, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
         LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         handler = new Handler();
@@ -384,15 +392,17 @@ public class StartMenuService extends Service {
         thread.start();
     }
     
-    private void toggleStartMenu() {
+    private void toggleStartMenu(boolean shouldReset) {
         if(layout.getVisibility() == View.GONE)
-            showStartMenu();
+            showStartMenu(shouldReset);
         else
             hideStartMenu();
     }
 
     @SuppressWarnings("deprecation")
-    private void showStartMenu() {
+    private void showStartMenu(boolean shouldReset) {
+        if(shouldReset) startMenu.setSelection(0);
+
         layout.setOnClickListener(ocl);
         layout.setVisibility(View.VISIBLE);
 
@@ -428,7 +438,6 @@ public class StartMenuService extends Service {
             @Override
             public void run() {
                 layout.setVisibility(View.GONE);
-                startMenu.setSelection(0);
                 searchView.setQuery(null, false);
                 hasSubmittedQuery = false;
             }
@@ -441,6 +450,7 @@ public class StartMenuService extends Service {
         if(layout != null) windowManager.removeView(layout);
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
     }
 

@@ -473,8 +473,10 @@ public class TaskbarService extends Service {
             }
 
             while(entries.size() > MAX_NUM_OF_COLUMNS) {
-                entries.remove(entries.size() - 1);
-                intentCache.remove(intentCache.size() - 1);
+                try {
+                    entries.remove(entries.size() - 1);
+                    intentCache.remove(intentCache.size() - 1);
+                } catch (ArrayIndexOutOfBoundsException e) { /* Gracefully fail */ }
             }
 
             // Determine if we need to reverse the order again

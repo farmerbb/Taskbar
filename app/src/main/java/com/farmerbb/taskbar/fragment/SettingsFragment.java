@@ -73,7 +73,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         // Add preferences
         addPreferencesFromResource(R.xml.pref_general);
         addPreferencesFromResource(R.xml.pref_recent_apps);
-        addPreferencesFromResource(R.xml.pref_advanced);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
@@ -86,9 +85,11 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
             addPreferencesFromResource(R.xml.pref_freeform_hack);
             findPreference("freeform_hack").setOnPreferenceClickListener(this);
+            bindPreferenceSummaryToValue(findPreference("window_size"));
             findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
         }
 
+        addPreferencesFromResource(R.xml.pref_advanced);
         addPreferencesFromResource(R.xml.pref_about);
 
         // Set OnClickListeners for certain preferences
