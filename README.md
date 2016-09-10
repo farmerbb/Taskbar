@@ -19,7 +19,7 @@ Taskbar lets you launch apps in freeform floating windows on Android 7.0 Nougat.
 4. Clear all recent apps, then go back to the (empty) recent apps page
 5. Press Taskbar's start button and select an app to launch it in a freeform window
 
-For more information and detailed instructions, click "Help & information for freeform mode" inside the Taskbar app.
+For more information and detailed instructions, click "Help & instructions" inside the Taskbar app.
 
 ## Download
 * Google Play (https://play.google.com/store/apps/details?id=com.farmerbb.taskbar)
