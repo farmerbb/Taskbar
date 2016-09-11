@@ -85,8 +85,13 @@ public class NotificationService extends Service {
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("is_restarting", false))
+            pref.edit().remove("is_restarting").apply();
+        else {
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        }
 
         super.onDestroy();
     }

@@ -120,12 +120,28 @@ public class U {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
+        int left = 0;
+        int top = 0;
+        int right = display.getWidth();
+        int bottom = display.getHeight();
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
+
+        SharedPreferences pref = getSharedPreferences(context);
+        String position = pref.getString("position", "bottom_left");
+
+        if(position.contains("vertical_left"))
+            left = left + iconSize;
+        else if(position.contains("vertical_right"))
+            right = right - iconSize;
+        else
+            bottom = bottom - iconSize;
+
         try {
             context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
-                    0,
-                    0,
-                    display.getWidth(),
-                    display.getHeight() - context.getResources().getDimensionPixelSize(R.dimen.icon_size)
+                    left,
+                    top,
+                    right,
+                    bottom
             )).toBundle());
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }

@@ -297,6 +297,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     private void restartTaskbar() {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean("taskbar_active", false)) {
+            pref.edit().putBoolean("is_restarting", true).apply();
+
             stopTaskbarService();
             startTaskbarService();
         }
