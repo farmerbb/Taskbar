@@ -56,8 +56,6 @@ public class InvisibleActivityFreeform extends Activity {
         public void onReceive(Context context, Intent intent) {
             InvisibleActivityFreeform.super.finish();
             overridePendingTransition(0, 0);
-
-            FreeformHackHelper.getInstance().setFreeformHackActive(false);
         }
     };
 

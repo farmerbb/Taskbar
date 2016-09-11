@@ -305,7 +305,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 shouldHideTaskbar = true;
                 break;
             case "window_size_fullscreen":
-                U.launchFullscreen(this, generateIntent());
+                U.launchFullscreen(this, generateIntent(), false);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

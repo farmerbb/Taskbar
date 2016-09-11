@@ -116,12 +116,19 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    public static void launchFullscreen(Context context, Intent intent) {
+    public static void launchFullscreen(Context context, Intent intent, boolean padStatusBar) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
+        int statusBarHeight = 0;
+        if(padStatusBar) {
+            int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if(resourceId > 0)
+                statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        }
+
         int left = 0;
-        int top = 0;
+        int top = statusBarHeight;
         int right = display.getWidth();
         int bottom = display.getHeight();
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);

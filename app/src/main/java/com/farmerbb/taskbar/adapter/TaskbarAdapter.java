@@ -108,7 +108,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
                         U.launchStandard(getContext(), intent);
                         break;
                     case "fullscreen":
-                        U.launchFullscreen(getContext(), intent);
+                        U.launchFullscreen(getContext(), intent, true);
                         break;
                     case "phone_size":
                         U.launchPhoneSize(getContext(), intent);
