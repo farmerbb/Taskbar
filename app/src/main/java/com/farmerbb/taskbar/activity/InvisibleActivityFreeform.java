@@ -110,7 +110,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         // Show the taskbar when activity is resumed (no other freeform windows are active)
         if(showTaskbar)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
     }
 
     @Override
@@ -146,7 +146,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         // Show the taskbar when activity is started
         if(showTaskbar)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
     }
 
     @Override
@@ -171,7 +171,7 @@ public class InvisibleActivityFreeform extends Activity {
                     if(pref.getBoolean("hide_taskbar", true)
                             && !FreeformHackHelper.getInstance().isInFreeformWorkspace()
                             && !pref.getBoolean("on_home_screen", false))
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
                     else
                         LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
                 }
