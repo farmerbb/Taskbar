@@ -115,7 +115,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
                         break;
                 }
 
-                if(pref.getBoolean("hide_taskbar", true) && !pref.getBoolean("in_freeform_workspace", false))
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                 else
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

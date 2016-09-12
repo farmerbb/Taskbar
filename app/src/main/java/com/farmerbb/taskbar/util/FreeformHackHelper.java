@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.util;
 public class FreeformHackHelper {
 
     private boolean freeformHackActive = false;
+    private boolean inFreeformWorkspace = false;
 
     private static FreeformHackHelper theInstance;
 
@@ -35,5 +36,13 @@ public class FreeformHackHelper {
 
     public void setFreeformHackActive(boolean value) {
         freeformHackActive = value;
+    }
+
+    public boolean isInFreeformWorkspace() {
+        return inFreeformWorkspace;
+    }
+
+    public void setInFreeformWorkspace(boolean value) {
+        inFreeformWorkspace = value;
     }
 }

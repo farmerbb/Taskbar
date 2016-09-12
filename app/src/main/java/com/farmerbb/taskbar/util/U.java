@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.view.Display;
@@ -171,6 +172,24 @@ public class U {
                     width1 + width2,
                     height1 + height2
             )).toBundle());
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
+    public static void checkForUpdates(Context context) {
+        String url;
+        try {
+            context.getPackageManager().getPackageInfo("com.android.vending", 0);
+            url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+        } catch (PackageManager.NameNotFoundException e) {
+            url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.APPLICATION_ID;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try {
+            context.startActivity(intent);
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 }

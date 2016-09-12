@@ -336,7 +336,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
         else if(shouldHideTaskbar) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("hide_taskbar", true) && !pref.getBoolean("in_freeform_workspace", false))
+            if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
         }
 

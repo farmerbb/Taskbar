@@ -36,6 +36,7 @@ public class InvisibleActivityFreeform extends Activity {
     boolean showTaskbar = false;
     boolean doNotHide = false;
     boolean proceedWithOnCreate = true;
+    boolean finish = false;
 
     private BroadcastReceiver appearingReceiver = new BroadcastReceiver() {
         @Override
@@ -56,6 +57,14 @@ public class InvisibleActivityFreeform extends Activity {
         public void onReceive(Context context, Intent intent) {
             InvisibleActivityFreeform.super.finish();
             overridePendingTransition(0, 0);
+
+            if(!finish) {
+                FreeformHackHelper helper = FreeformHackHelper.getInstance();
+                helper.setFreeformHackActive(false);
+                helper.setInFreeformWorkspace(false);
+
+                finish = true;
+            }
         }
     };
 
@@ -119,7 +128,13 @@ public class InvisibleActivityFreeform extends Activity {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(disappearingReceiver);
             LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
 
-            FreeformHackHelper.getInstance().setFreeformHackActive(false);
+            if(!finish) {
+                FreeformHackHelper helper = FreeformHackHelper.getInstance();
+                helper.setFreeformHackActive(false);
+                helper.setInFreeformWorkspace(false);
+
+                finish = true;
+            }
         }
     }
 
@@ -127,8 +142,7 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onStart() {
         super.onStart();
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("in_freeform_workspace", true).apply();
+        FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
         // Show the taskbar when activity is started
         if(showTaskbar)
@@ -139,8 +153,7 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onStop() {
         super.onStop();
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("in_freeform_workspace", false).apply();
+        if(!finish) FreeformHackHelper.getInstance().setInFreeformWorkspace(false);
 
         possiblyHideTaskbar();
     }
@@ -156,7 +169,7 @@ public class InvisibleActivityFreeform extends Activity {
                 if(!doNotHide) {
                     SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
                     if(pref.getBoolean("hide_taskbar", true)
-                            && !pref.getBoolean("in_freeform_workspace", false)
+                            && !FreeformHackHelper.getInstance().isInFreeformWorkspace()
                             && !pref.getBoolean("on_home_screen", false))
                         LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                     else

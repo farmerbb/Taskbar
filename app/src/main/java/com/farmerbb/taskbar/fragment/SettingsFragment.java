@@ -224,13 +224,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         PackageManager.DONT_KILL_APP);
                 break;
             case "about":
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                try {
-                    startActivity(intent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                U.checkForUpdates(getActivity());
                 break;
             case "freeform_hack":
                 if(((CheckBoxPreference) p).isChecked()) {
