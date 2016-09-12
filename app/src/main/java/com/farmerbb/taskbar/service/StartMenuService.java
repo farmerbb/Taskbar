@@ -32,6 +32,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -353,15 +354,32 @@ public class StartMenuService extends Service {
                 if(shouldRedrawStartMenu) {
                     if(query == null) currentStartMenuIds = finalApplicationIds;
 
+                    Drawable defaultIcon = pm.getDefaultActivityIcon();
+
                     final List<AppEntry> entries = new ArrayList<>();
                     for(ResolveInfo appInfo : queryList) {
+
+                        // Attempt to work around frequently reported OutOfMemoryErrors
+                        String label;
+                        Drawable icon;
+
+                        try {
+                            label = appInfo.loadLabel(pm).toString();
+                            icon = appInfo.loadIcon(pm);
+                        } catch (OutOfMemoryError e) {
+                            System.gc();
+
+                            label = appInfo.activityInfo.applicationInfo.packageName;
+                            icon = defaultIcon;
+                        }
+
                         entries.add(new AppEntry(
                                 appInfo.activityInfo.applicationInfo.packageName,
                                 new ComponentName(
                                         appInfo.activityInfo.applicationInfo.packageName,
                                         appInfo.activityInfo.name).flattenToString(),
-                                appInfo.loadLabel(pm).toString(),
-                                appInfo.loadIcon(pm),
+                                label,
+                                icon,
                                 false));
                     }
 

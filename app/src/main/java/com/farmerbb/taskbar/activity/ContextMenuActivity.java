@@ -347,6 +347,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     private void startFreeformActivity() {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("taskbar_active", false)
                 && pref.getBoolean("freeform_hack", false)
                 && isInMultiWindowMode()
                 && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
