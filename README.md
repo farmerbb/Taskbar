@@ -1,4 +1,4 @@
-﻿Taskbar puts a start menu and recent apps tray on top of your screen accessible at any time, increasing your productivity and turning your Android tablet or phone into a real multitasking machine!<br><br>On devices running Android 7.0 Nougat, Taskbar can also launch apps in freeform windows for a PC-like experience!  No root required!  (see below for instructions)
+﻿Taskbar puts a start menu and recent apps tray on top of your screen that's accessible at any time, increasing your productivity and turning your Android tablet (or phone) into a real multitasking machine!<br><br>On devices running Android 7.0 Nougat, Taskbar can also launch apps in freeform windows for a PC-like experience!  No root required!  (see below for instructions)
 
 ## Features
 * Start menu - shows you all applications installed on the device, configurable as a list or as a grid
