@@ -30,6 +30,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
@@ -689,5 +690,11 @@ public class TaskbarService extends Service {
 
         if(button != null) button.setText(getString(isCollapsed ? R.string.right_arrow : R.string.left_arrow));
         if(layout != null) layout.setAlpha(isCollapsed && hide ? 0 : 1);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        startRefreshingRecents();
     }
 }

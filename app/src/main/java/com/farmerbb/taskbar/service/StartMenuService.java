@@ -265,7 +265,7 @@ public class StartMenuService extends Service {
                     View closeButton = searchView.findViewById(R.id.search_close_btn);
                     if(closeButton != null) closeButton.setVisibility(View.GONE);
 
-                    refreshApps(newText);
+                    refreshApps(newText, false);
                     return true;
                 }
             });
@@ -298,21 +298,25 @@ public class StartMenuService extends Service {
 
         textView = (TextView) layout.findViewById(R.id.no_apps_found);
 
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
         LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiverAlt, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
         LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         handler = new Handler();
-        refreshApps();
+        refreshApps(true);
 
         windowManager.addView(layout, params);
     }
     
-    private void refreshApps() {
-        refreshApps(null);
+    private void refreshApps(boolean firstDraw) {
+        refreshApps(null, firstDraw);
     }
 
-    private void refreshApps(final String query) {
+    private void refreshApps(final String query, final boolean firstDraw) {
         if(thread != null) thread.interrupt();
 
         handler = new Handler();
@@ -350,7 +354,7 @@ public class StartMenuService extends Service {
                 boolean shouldRedrawStartMenu = false;
                 List<String> finalApplicationIds = new ArrayList<>();
 
-                if(query == null) {
+                if(query == null && !firstDraw) {
                     for(ResolveInfo appInfo : queryList) {
                         finalApplicationIds.add(appInfo.activityInfo.applicationInfo.packageName);
                     }
@@ -460,7 +464,7 @@ public class StartMenuService extends Service {
 
         if(searchView.getVisibility() == View.VISIBLE) searchView.requestFocus();
 
-        refreshApps();
+        refreshApps(false);
     }
 
     private void hideStartMenu() {
