@@ -165,7 +165,8 @@ public class InvisibleActivityFreeform extends Activity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+                    if(showTaskbar)
+                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
                 }
             }, 100);
         }

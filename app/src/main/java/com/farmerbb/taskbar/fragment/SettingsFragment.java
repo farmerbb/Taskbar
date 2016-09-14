@@ -308,10 +308,4 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     private boolean canDrawOverlays() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(getActivity());
     }
-
-    private void enableDisableLauncherPref(boolean enabled) {
-        CheckBoxPreference launcherPreference = (CheckBoxPreference) findPreference("launcher");
-        launcherPreference.setEnabled(!enabled);
-        if(enabled) launcherPreference.setChecked(true);
-    }
 }

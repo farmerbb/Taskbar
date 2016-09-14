@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -108,7 +107,20 @@ public class HomeActivity extends Activity {
         if(canDrawOverlays()) {
             SharedPreferences pref = U.getSharedPreferences(this);
 
-            if(!pref.getBoolean("freeform_hack", false)) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && pref.getBoolean("freeform_hack", false)
+                    && hasFreeformSupport()) {
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+
+                Intent intent = new Intent(HomeActivity.this, BootToFreeformActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+            } else {
                 pref.edit().putBoolean("on_home_screen", true).apply();
 
                 // We always start the Taskbar and Start Menu services, even if the app isn't normally running
@@ -126,19 +138,6 @@ public class HomeActivity extends Activity {
                     }
                 }, 100);
             }
-
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-
-                Intent intent = new Intent(HomeActivity.this, BootToFreeformActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
-            }
         } else {
             ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
             getPackageManager().setComponentEnabledSetting(component,
@@ -154,7 +153,9 @@ public class HomeActivity extends Activity {
         super.onPause();
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!pref.getBoolean("freeform_hack", false)) {
+        if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && hasFreeformSupport())) {
             pref.edit().putBoolean("on_home_screen", false).apply();
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
@@ -182,5 +183,12 @@ public class HomeActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.M)
     private boolean canDrawOverlays() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private boolean hasFreeformSupport() {
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
+                || Settings.Global.getInt(getContentResolver(), "enable_freeform_support", -1) == 1
+                || Settings.Global.getInt(getContentResolver(), "force_resizable_activities", -1) == 1;
     }
 }
