@@ -53,6 +53,17 @@ public class HomeActivity extends Activity {
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            LauncherHelper.getInstance().setOnHomeScreen(false);
+
+            // Stop the Taskbar and Start Menu services if they should normally not be active
+            SharedPreferences pref = U.getSharedPreferences(HomeActivity.this);
+            if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+                stopService(new Intent(HomeActivity.this, TaskbarService.class));
+                stopService(new Intent(HomeActivity.this, StartMenuService.class));
+
+                LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+            }
+
             finish();
         }
     };
