@@ -72,6 +72,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
+        int statusBarHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if(resourceId > 0)
+            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+
         if(showStartMenu) {
             int x = getIntent().getIntExtra("x", 0);
             int y = getIntent().getIntExtra("y", 0);
@@ -89,6 +94,18 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
                     params.y = display.getHeight() - y - offset;
+                    break;
+                case "top_left":
+                case "top_vertical_left":
+                    params.gravity = Gravity.TOP | Gravity.LEFT;
+                    params.x = x;
+                    params.y = y - offset + statusBarHeight;
+                    break;
+                case "top_right":
+                case "top_vertical_right":
+                    params.gravity = Gravity.TOP | Gravity.LEFT;
+                    params.x = x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
+                    params.y = y - offset + statusBarHeight;
                     break;
             }
         } else {
@@ -116,6 +133,26 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                     params.x = offset;
                     params.y = display.getHeight() - y - (isStartButton ? 0 : offset);
+                    break;
+                case "top_left":
+                    params.gravity = Gravity.TOP | Gravity.LEFT;
+                    params.x = isStartButton ? 0 : x;
+                    params.y = offset;
+                    break;
+                case "top_vertical_left":
+                    params.gravity = Gravity.TOP | Gravity.LEFT;
+                    params.x = offset;
+                    params.y = isStartButton ? 0 : y - statusBarHeight;
+                    break;
+                case "top_right":
+                    params.gravity = Gravity.TOP | Gravity.RIGHT;
+                    params.x = display.getWidth() - x;
+                    params.y = offset;
+                    break;
+                case "top_vertical_right":
+                    params.gravity = Gravity.TOP | Gravity.RIGHT;
+                    params.x = offset;
+                    params.y = isStartButton ? 0 : y - statusBarHeight;
                     break;
             }
         }

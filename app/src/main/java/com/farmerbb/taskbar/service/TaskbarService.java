@@ -195,6 +195,22 @@ public class TaskbarService extends Service {
                 layoutId = R.layout.taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
+            case "top_left":
+                layoutId = R.layout.taskbar_left;
+                params.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case "top_vertical_left":
+                layoutId = R.layout.taskbar_top_vertical;
+                params.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case "top_right":
+                layoutId = R.layout.taskbar_right;
+                params.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case "top_vertical_right":
+                layoutId = R.layout.taskbar_top_vertical;
+                params.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
         }
 
         // Initialize views
@@ -449,6 +465,7 @@ public class TaskbarService extends Service {
                 boolean needToReverseOrder;
                 switch(pref.getString("position", "bottom_left")) {
                     case "bottom_right":
+                    case "top_right":
                         needToReverseOrder = sortOrder.contains("false");
                         break;
                     default:

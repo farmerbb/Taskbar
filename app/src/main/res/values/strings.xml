@@ -104,16 +104,24 @@
 
     <string name="pref_title_position">Position on screen</string>
     <string-array name="pref_position_list">
-        <item>Left (horizontal)</item>
-        <item>Left (vertical)</item>
-        <item>Right (horizontal)</item>
-        <item>Right (vertical)</item>
+        <item>Bottom left (horizontal)</item>
+        <item>Bottom left (vertical)</item>
+        <item>Bottom right (horizontal)</item>
+        <item>Bottom right (vertical)</item>
+        <item>Top left (horizontal)</item>
+        <item>Top left (vertical)</item>
+        <item>Top right (horizontal)</item>
+        <item>Top right (vertical)</item>
     </string-array>
     <string-array name="pref_position_list_values">
         <item>bottom_left</item>
         <item>bottom_vertical_left</item>
         <item>bottom_right</item>
         <item>bottom_vertical_right</item>
+        <item>top_left</item>
+        <item>top_vertical_left</item>
+        <item>top_right</item>
+        <item>top_vertical_right</item>
     </string-array>
 
     <string name="app_info">App info</string>

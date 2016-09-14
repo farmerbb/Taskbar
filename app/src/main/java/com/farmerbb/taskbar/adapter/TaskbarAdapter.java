@@ -67,9 +67,10 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
         ImageView imageView2 = (ImageView) convertView.findViewById(R.id.shortcut_icon);
         imageView.setImageDrawable(entry.getIcon(getContext()));
 
+        String taskbarPosition = pref.getString("position", "bottom_left");
         if(pref.getBoolean("shortcut_icon", true)) {
             boolean shouldShowShortcutIcon;
-            if(pref.getString("position", "bottom_left").contains("vertical"))
+            if(taskbarPosition.contains("vertical"))
                 shouldShowShortcutIcon = position >= getCount() - numOfPinnedApps;
             else
                 shouldShowShortcutIcon = position < numOfPinnedApps;
@@ -77,7 +78,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
             if(shouldShowShortcutIcon) imageView2.setVisibility(View.VISIBLE);
         }
 
-        if(pref.getString("position", "bottom_left").equals("bottom_right")) {
+        if(taskbarPosition.equals("bottom_right") || taskbarPosition.equals("top_right")) {
             imageView.setRotationY(180);
             imageView2.setRotationY(180);
         }

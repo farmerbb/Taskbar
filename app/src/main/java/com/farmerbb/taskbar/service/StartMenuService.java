@@ -175,6 +175,22 @@ public class StartMenuService extends Service {
                 layoutId = R.layout.start_menu_vertical_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
+            case "top_left":
+                layoutId = R.layout.start_menu_top_left;
+                params.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case "top_vertical_left":
+                layoutId = R.layout.start_menu_vertical_left;
+                params.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case "top_right":
+                layoutId = R.layout.start_menu_top_right;
+                params.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case "top_vertical_right":
+                layoutId = R.layout.start_menu_vertical_right;
+                params.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
         }
 
         // Initialize views
