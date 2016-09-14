@@ -97,7 +97,7 @@
     <string name="pref_title_hide_taskbar">Collapse Taskbar when selecting an app</string>
 
     <string name="pref_title_launcher">Replace home screen</string>
-    <string name="pref_description_launcher">Use Taskbar as a lightweight home screen replacement</string>
+    <string name="pref_description_launcher">Use Taskbar as a home screen replacement</string>
 
     <string name="set_wallpaper">Set wallpaper using&#8230;</string>
     <string name="pref_disable_animations">Faster app switching</string>
