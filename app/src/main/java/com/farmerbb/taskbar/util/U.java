@@ -129,27 +129,28 @@ public class U {
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
         int statusBarHeight = 0;
-        if(padStatusBar) {
-            int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if(resourceId > 0)
-                statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
-        }
-
-        int left = 0;
-        int top = statusBarHeight;
-        int right = display.getWidth();
-        int bottom = display.getHeight();
-        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if(resourceId > 0)
+            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
 
         SharedPreferences pref = getSharedPreferences(context);
         String position = pref.getString("position", "bottom_left");
+        boolean overridePad = position.equals("top_left") || position.equals("top_right");
+
+        int left = 0;
+        int top = padStatusBar || overridePad ? statusBarHeight : 0;
+        int right = display.getWidth();
+        int bottom = display.getHeight() + (!padStatusBar && overridePad ? statusBarHeight : 0);
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
         if(position.contains("vertical_left"))
             left = left + iconSize;
         else if(position.contains("vertical_right"))
             right = right - iconSize;
-        else
+        else if(position.contains("bottom"))
             bottom = bottom - iconSize;
+        else
+            top = top + iconSize;
 
         try {
             context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(

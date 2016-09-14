@@ -15,7 +15,7 @@ android {
         targetSdkVersion 24
 
         versionCode 67
-        versionName "1.1.10"
+        versionName "1.2-alpha1"
 
         resConfigs "en"
     }
