@@ -57,10 +57,14 @@ public class HomeActivity extends Activity {
         }
     };
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver restartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            forceTaskbarRestart = true;
+            if(intent.getAction().contains("TRUE"))
+                forceTaskbarRestart = true;
+
+            if(intent.getAction().contains("FALSE"))
+                forceTaskbarRestart = false;
         }
     };
 
@@ -107,7 +111,8 @@ public class HomeActivity extends Activity {
         setContentView(view);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.B2F_FORCE_RESTART_TRUE"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.B2F_FORCE_RESTART_FALSE"));
     }
 
     @SuppressWarnings("deprecation")
@@ -117,7 +122,6 @@ public class HomeActivity extends Activity {
 
         if(canDrawOverlays()) {
             SharedPreferences pref = U.getSharedPreferences(this);
-
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
                     && hasFreeformSupport()
@@ -135,22 +139,17 @@ public class HomeActivity extends Activity {
             } else {
                 LauncherHelper.getInstance().setOnHomeScreen(true);
 
-                forceTaskbarRestart = false;
-
-                // We always start the Taskbar and Start Menu services, even if the app isn't normally running
-                startService(new Intent(this, TaskbarService.class));
-                startService(new Intent(this, StartMenuService.class));
-
-                if(pref.getBoolean("taskbar_active", false))
-                    startService(new Intent(this, NotificationService.class));
-
-                // Show the Taskbar temporarily, as nothing else will be visible on screen
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
-                    }
-                }, 100);
+                if(forceTaskbarRestart) {
+                    forceTaskbarRestart = false;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            LauncherHelper.getInstance().setOnHomeScreen(true);
+                            startTaskbar();
+                        }
+                    }, 100);
+                } else
+                    startTaskbar();
             }
         } else {
             ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
@@ -160,6 +159,24 @@ public class HomeActivity extends Activity {
 
             finish();
         }
+    }
+
+    private void startTaskbar() {
+        // We always start the Taskbar and Start Menu services, even if the app isn't normally running
+        startService(new Intent(this, TaskbarService.class));
+        startService(new Intent(this, StartMenuService.class));
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("taskbar_active", false))
+            startService(new Intent(this, NotificationService.class));
+
+        // Show the Taskbar temporarily, as nothing else will be visible on screen
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+            }
+        }, 100);
     }
 
     @Override
@@ -187,7 +204,7 @@ public class HomeActivity extends Activity {
         super.onDestroy();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(killReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(restartReceiver);
     }
 
     @Override

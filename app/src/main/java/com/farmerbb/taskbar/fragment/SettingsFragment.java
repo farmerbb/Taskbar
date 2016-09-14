@@ -258,8 +258,12 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         freeformIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
                         startActivity(freeformIntent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
                     }
-                } else
+
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.B2F_FORCE_RESTART_FALSE"));
+                } else {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.B2F_FORCE_RESTART_TRUE"));
+                }
                 break;
             case "freeform_mode_help":
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
