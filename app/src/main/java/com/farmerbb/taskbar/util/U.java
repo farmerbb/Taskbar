@@ -38,6 +38,9 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.service.NotificationService;
+import com.farmerbb.taskbar.service.StartMenuService;
+import com.farmerbb.taskbar.service.TaskbarService;
 
 public class U {
 
@@ -100,6 +103,10 @@ public class U {
 
     public static void showToast(Context context, int message) {
         showToast(context, message, Toast.LENGTH_SHORT);
+    }
+
+    public static void showToastLong(Context context, int message) {
+        showToast(context, message, Toast.LENGTH_LONG);
     }
 
     private static void showToast(Context context, int message, int length) {
@@ -191,5 +198,26 @@ public class U {
         try {
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
+    public static void startTaskbar(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        if(!pref.getBoolean("taskbar_active", false)) {
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("is_hidden", false);
+
+            if(pref.getBoolean("first_run", true)) {
+                editor.putBoolean("first_run", false);
+                editor.putBoolean("collapsed", true);
+            }
+
+            editor.putBoolean("taskbar_active", true);
+            editor.putLong("time_of_service_start", System.currentTimeMillis());
+            editor.apply();
+
+            context.startService(new Intent(context, TaskbarService.class));
+            context.startService(new Intent(context, StartMenuService.class));
+            context.startService(new Intent(context, NotificationService.class));
+        }
     }
 }

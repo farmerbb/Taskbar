@@ -28,23 +28,6 @@ import com.farmerbb.taskbar.util.U;
 public class StartReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences pref = U.getSharedPreferences(context);
-        if(!pref.getBoolean("taskbar_active", false)) {
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("is_hidden", false);
-
-            if(pref.getBoolean("first_run", true)) {
-                editor.putBoolean("first_run", false);
-                editor.putBoolean("collapsed", true);
-            }
-
-            editor.putBoolean("taskbar_active", true);
-            editor.putLong("time_of_service_start", System.currentTimeMillis());
-            editor.apply();
-
-            context.startService(new Intent(context, TaskbarService.class));
-            context.startService(new Intent(context, StartMenuService.class));
-            context.startService(new Intent(context, NotificationService.class));
-        }
+        U.startTaskbar(context);
     }
 }

@@ -184,4 +184,8 @@
     <string name="window_size_fullscreen">Fullscreen window</string>
     <string name="window_size_phone_size">Phone size window</string>
 
+    <string name="pref_title_boot_to_freeform">Boot to Freeform&#8482;</string>
+    <string name="pref_description_boot_to_freeform">Completely locks the device to freeform mode (requires Taskbar to be set as your launcher)</string>
+    <string name="cannot_stop_taskbar">Taskbar can\'t be stopped while Boot to Freeform is enabled</string>
+
 </resources>

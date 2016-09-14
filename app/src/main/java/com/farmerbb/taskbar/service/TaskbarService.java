@@ -88,7 +88,6 @@ public class TaskbarService extends Service {
     private boolean shouldRefreshRecents = true;
     private boolean taskbarShownTemporarily = false;
     private boolean isRefreshingRecents = false;
-    private boolean isCollapsed = false;
 
     private int refreshInterval = -1;
     private long searchInterval = -1;
@@ -110,6 +109,7 @@ public class TaskbarService extends Service {
     private BroadcastReceiver showReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            taskbarShownTemporarily = false;
             showTaskbar();
         }
     };
@@ -117,6 +117,7 @@ public class TaskbarService extends Service {
     private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            taskbarShownTemporarily = false;
             hideTaskbar();
         }
     };
@@ -124,20 +125,16 @@ public class TaskbarService extends Service {
     private BroadcastReceiver tempShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(isCollapsed) {
-                taskbarShownTemporarily = true;
-                showTaskbar();
-            }
+            SharedPreferences pref = U.getSharedPreferences(TaskbarService.this);
+            if(!pref.getBoolean("collapsed", false)) taskbarShownTemporarily = true;
+            showTaskbar();
         }
     };
 
     private BroadcastReceiver tempHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(!isCollapsed && taskbarShownTemporarily) {
-                taskbarShownTemporarily = false;
-                hideTaskbar();
-            }
+            if(taskbarShownTemporarily) hideTaskbar();
         }
     };
 
@@ -580,6 +577,7 @@ public class TaskbarService extends Service {
     }
 
     private void toggleTaskbar() {
+        taskbarShownTemporarily = false;
         if(startButton.getVisibility() == View.GONE)
             showTaskbar();
         else
@@ -669,8 +667,6 @@ public class TaskbarService extends Service {
     }
 
     private void updateButton(boolean isCollapsed) {
-        this.isCollapsed = isCollapsed;
-
         SharedPreferences pref = U.getSharedPreferences(this);
         boolean hide = pref.getBoolean("invisible_button", false);
 

@@ -2,7 +2,7 @@ apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 ext {
-    SUPPORT_LIBRARY_VERSION = "24.2.0"
+    SUPPORT_LIBRARY_VERSION = "24.2.1"
 }
 
 android {

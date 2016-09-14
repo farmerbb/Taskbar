@@ -17,6 +17,8 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -25,11 +27,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -95,6 +100,7 @@ public class HomeActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onResume() {
         super.onResume();
@@ -117,6 +123,25 @@ public class HomeActivity extends Activity {
                     LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
                 }
             }, 100);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && pref.getBoolean("freeform_hack", false)
+                    && pref.getBoolean("boot_to_freeform", false)) {
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+
+                if(!isServiceRunning()) {
+                    U.startTaskbar(this);
+                }
+
+                Intent intent = new Intent(HomeActivity.this, BootToFreeformActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+            }
         } else {
             ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
             getPackageManager().setComponentEnabledSetting(component,
@@ -125,6 +150,16 @@ public class HomeActivity extends Activity {
 
             finish();
         }
+    }
+
+    private boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if(NotificationService.class.getName().equals(service.service.getClassName()))
+                return true;
+        }
+
+        return false;
     }
 
     @Override

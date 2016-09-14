@@ -60,6 +60,12 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity
+            android:name=".activity.BootToFreeformActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.InvisibleActivity"/>
+        <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"

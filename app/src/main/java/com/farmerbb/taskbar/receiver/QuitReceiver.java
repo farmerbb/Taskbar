@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -29,20 +30,25 @@ import com.farmerbb.taskbar.util.U;
 public class QuitReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent taskbarIntent = new Intent(context, TaskbarService.class);
-        Intent startMenuIntent = new Intent(context, StartMenuService.class);
-        Intent notificationIntent = new Intent(context, NotificationService.class);
-
         SharedPreferences pref = U.getSharedPreferences(context);
-        pref.edit().putBoolean("taskbar_active", false).apply();
+        if(pref.getBoolean("boot_to_freeform", false)) {
+            U.showToastLong(context, R.string.cannot_stop_taskbar);
+        } else {
+            Intent taskbarIntent = new Intent(context, TaskbarService.class);
+            Intent startMenuIntent = new Intent(context, StartMenuService.class);
+            Intent notificationIntent = new Intent(context, NotificationService.class);
 
-        if(!pref.getBoolean("on_home_screen", false)) {
-            context.stopService(taskbarIntent);
-            context.stopService(startMenuIntent);
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+            pref.edit().putBoolean("taskbar_active", false).apply();
+
+            if (!pref.getBoolean("on_home_screen", false)) {
+                context.stopService(taskbarIntent);
+                context.stopService(startMenuIntent);
+
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+            }
+
+            context.stopService(notificationIntent);
         }
-
-        context.stopService(notificationIntent);
     }
 }

@@ -28,7 +28,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -74,8 +73,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         addPreferencesFromResource(R.xml.pref_general);
         addPreferencesFromResource(R.xml.pref_recent_apps);
 
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
                         .putBoolean("freeform_hack", hasFreeformSupport())
@@ -87,9 +86,14 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             findPreference("freeform_hack").setOnPreferenceClickListener(this);
             bindPreferenceSummaryToValue(findPreference("window_size"));
             findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
+            findPreference("boot_to_freeform").setOnPreferenceClickListener(this);
+
+            if(pref.getBoolean("boot_to_freeform", false)) U.startTaskbar(getActivity());
         }
 
         addPreferencesFromResource(R.xml.pref_advanced);
+        findPreference("launcher").setEnabled(!pref.getBoolean("boot_to_freeform", false));
+
         addPreferencesFromResource(R.xml.pref_about);
 
         // Set OnClickListeners for certain preferences
@@ -271,6 +275,24 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();
                 break;
+            case "boot_to_freeform":
+                if(canDrawOverlays()) {
+                    enableDisableLauncherPref(((CheckBoxPreference) p).isChecked());
+
+                    SharedPreferences pref = U.getSharedPreferences(getActivity());
+                    boolean shouldEnableLauncher = ((CheckBoxPreference) p).isChecked() || pref.getBoolean("launcher", false);
+
+                    ComponentName component2 = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
+                    getActivity().getPackageManager().setComponentEnabledSetting(component2,
+                            shouldEnableLauncher ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP);
+
+                    U.startTaskbar(getActivity());
+                } else {
+                    U.showPermissionDialog(getActivity());
+                    ((CheckBoxPreference) p).setChecked(false);
+                }
+                break;
         }
 
         return true;
@@ -308,5 +330,11 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     @TargetApi(Build.VERSION_CODES.M)
     private boolean canDrawOverlays() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(getActivity());
+    }
+
+    private void enableDisableLauncherPref(boolean enabled) {
+        CheckBoxPreference launcherPreference = (CheckBoxPreference) findPreference("launcher");
+        launcherPreference.setEnabled(!enabled);
+        if(enabled) launcherPreference.setChecked(true);
     }
 }
