@@ -27,4 +27,5 @@
     <dimen name="context_menu_offset">48dp</dimen>
     <dimen name="phone_size_width">320dp</dimen>
     <dimen name="phone_size_height">480dp</dimen>
+    <dimen name="max_width">@dimen/match_parent</dimen>
 </resources>

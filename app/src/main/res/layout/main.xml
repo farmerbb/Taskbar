@@ -19,12 +19,15 @@
               android:layout_height="fill_parent"
               android:clipToPadding="true"
               android:fitsSystemWindows="true"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:background="?attr/main_activity_background" >
 
     <LinearLayout
         android:id="@+id/fragmentContainer"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="@dimen/max_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="?attr/start_menu_background" />
 
 </LinearLayout>

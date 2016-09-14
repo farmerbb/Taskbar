@@ -22,6 +22,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="start_menu_background">@color/start_menu_background</item>
         <item name="text_color">@color/text_color</item>
+        <item name="main_activity_background">@color/main_activity_background</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat">
@@ -30,6 +31,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="start_menu_background">@color/start_menu_background_dark</item>
         <item name="text_color">@color/text_color_dark</item>
+        <item name="main_activity_background">@color/main_activity_background_dark</item>
     </style>
 
     <style name="AppTheme.HomeActivity" parent="@android:style/Theme.Material.Wallpaper.NoTitleBar"/>

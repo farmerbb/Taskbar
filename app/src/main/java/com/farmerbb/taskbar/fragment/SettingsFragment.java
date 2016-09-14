@@ -26,7 +26,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
@@ -69,6 +72,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         finishedLoadingPrefs = false;
 
         super.onActivityCreated(savedInstanceState);
+
+        // Remove dividers
+        View rootView = getView();
+        if(rootView != null) {
+            ListView list = (ListView) rootView.findViewById(android.R.id.list);
+            if(list != null) list.setDivider(null);
+        }
 
         // Set values
         setRetainInstance(true);
