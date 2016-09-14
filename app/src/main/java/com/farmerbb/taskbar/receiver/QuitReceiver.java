@@ -25,6 +25,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class QuitReceiver extends BroadcastReceiver {
@@ -37,7 +38,7 @@ public class QuitReceiver extends BroadcastReceiver {
         SharedPreferences pref = U.getSharedPreferences(context);
         pref.edit().putBoolean("taskbar_active", false).apply();
 
-        if(!pref.getBoolean("on_home_screen", false)) {
+        if(!LauncherHelper.getInstance().isOnHomeScreen()) {
             context.stopService(taskbarIntent);
             context.stopService(startMenuIntent);
 

@@ -68,6 +68,7 @@ import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.adapter.TaskbarAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
 import com.farmerbb.taskbar.view.TaskbarGridView;
@@ -155,7 +156,7 @@ public class TaskbarService extends Service {
         super.onCreate();
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("taskbar_active", false) || pref.getBoolean("on_home_screen", false)) {
+        if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
                 drawTaskbar();
             else {
@@ -671,7 +672,7 @@ public class TaskbarService extends Service {
         }
 
         if(intent != null) {
-            intent.putExtra("dont_show_quit", pref.getBoolean("on_home_screen", false) && !pref.getBoolean("taskbar_active", false));
+            intent.putExtra("dont_show_quit", LauncherHelper.getInstance().isOnHomeScreen() && !pref.getBoolean("taskbar_active", false));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 

@@ -35,6 +35,7 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class InvisibleActivityFreeform extends Activity {
@@ -151,13 +152,13 @@ public class InvisibleActivityFreeform extends Activity {
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
         if(bootToFreeformActive()) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            pref.edit().putBoolean("on_home_screen", true).apply();
+            LauncherHelper.getInstance().setOnHomeScreen(true);
 
             // We always start the Taskbar and Start Menu services, even if the app isn't normally running
             startService(new Intent(this, TaskbarService.class));
             startService(new Intent(this, StartMenuService.class));
 
+            SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getBoolean("taskbar_active", false))
                 startService(new Intent(this, NotificationService.class));
 
@@ -185,10 +186,10 @@ public class InvisibleActivityFreeform extends Activity {
         possiblyHideTaskbar();
 
         if(bootToFreeformActive()) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            pref.edit().putBoolean("on_home_screen", false).apply();
+            LauncherHelper.getInstance().setOnHomeScreen(false);
 
             // Stop the Taskbar and Start Menu services if they should normally not be active
+            SharedPreferences pref = U.getSharedPreferences(this);
             if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
                 stopService(new Intent(this, TaskbarService.class));
                 stopService(new Intent(this, StartMenuService.class));
@@ -208,7 +209,7 @@ public class InvisibleActivityFreeform extends Activity {
                     SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
                     if(pref.getBoolean("hide_taskbar", true)
                             && !FreeformHackHelper.getInstance().isInFreeformWorkspace()
-                            && !pref.getBoolean("on_home_screen", false))
+                            && !LauncherHelper.getInstance().isOnHomeScreen())
                         LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                     else
                         LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

@@ -23,13 +23,14 @@ import android.content.SharedPreferences;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class PackageUpgradeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("taskbar_active", false) || pref.getBoolean("on_home_screen", false)) {
+        if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
             context.startService(new Intent(context, TaskbarService.class));
             context.startService(new Intent(context, StartMenuService.class));
         }

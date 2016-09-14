@@ -58,6 +58,7 @@ import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 import com.farmerbb.taskbar.view.TaskbarGridView;
 
@@ -128,7 +129,7 @@ public class StartMenuService extends Service {
         super.onCreate();
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("taskbar_active", false) || pref.getBoolean("on_home_screen", false)) {
+        if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
                 drawStartMenu();
             else {
@@ -447,14 +448,13 @@ public class StartMenuService extends Service {
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        boolean onHomeScreen = pref.getBoolean("on_home_screen", false);
-
+        boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
         if(!onHomeScreen || (onHomeScreen && FreeformHackHelper.getInstance().isInFreeformWorkspace())) {
             Intent intent = new Intent(this, InvisibleActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
+            SharedPreferences pref = U.getSharedPreferences(this);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
                 DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
                 Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);

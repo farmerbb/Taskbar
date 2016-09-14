@@ -45,6 +45,7 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class MainActivity extends AppCompatActivity {
@@ -177,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("taskbar_active", false).apply();
 
-        if(!pref.getBoolean("on_home_screen", false)) {
+        if(!LauncherHelper.getInstance().isOnHomeScreen()) {
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
 

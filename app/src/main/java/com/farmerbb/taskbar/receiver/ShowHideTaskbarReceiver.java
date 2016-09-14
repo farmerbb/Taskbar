@@ -24,6 +24,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class ShowHideTaskbarReceiver extends BroadcastReceiver {
@@ -47,7 +48,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
 
             context.stopService(notificationIntent);
 
-            if(!pref.getBoolean("on_home_screen", false)) {
+            if(!LauncherHelper.getInstance().isOnHomeScreen()) {
                 context.stopService(taskbarIntent);
                 context.stopService(startMenuIntent);
 
