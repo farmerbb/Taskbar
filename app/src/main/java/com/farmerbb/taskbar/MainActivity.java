@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
         // Ensure that components that should be enabled are enabled properly
         boolean launcherEnabled = pref.getBoolean("launcher", false) && canDrawOverlays();
         editor.putBoolean("launcher", launcherEnabled);
-        if(pref.getBoolean("boot_to_freeform", false) && !launcherEnabled)
-            editor.putBoolean("boot_to_freeform", false);
 
         editor.apply();
 
@@ -119,13 +117,8 @@ public class MainActivity extends AppCompatActivity {
                             U.showPermissionDialog(MainActivity.this);
                             compoundButton.setChecked(false);
                         }
-                    } else {
-                        if(pref.getBoolean("boot_to_freeform", false)) {
-                            U.showToastLong(MainActivity.this, R.string.cannot_stop_taskbar);
-                            compoundButton.setChecked(true);
-                        } else
-                            stopTaskbarService();
-                    }
+                    } else
+                        stopTaskbarService();
                 }
             });
         }

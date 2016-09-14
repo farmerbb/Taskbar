@@ -107,31 +107,28 @@ public class HomeActivity extends Activity {
 
         if(canDrawOverlays()) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            pref.edit().putBoolean("on_home_screen", true).apply();
 
-            // We always start the Taskbar and Start Menu services, even if the app isn't normally running
-            startService(new Intent(this, TaskbarService.class));
-            startService(new Intent(this, StartMenuService.class));
+            if(!pref.getBoolean("freeform_hack", false)) {
+                pref.edit().putBoolean("on_home_screen", true).apply();
 
-            if(pref.getBoolean("taskbar_active", false))
-                startService(new Intent(this, NotificationService.class));
+                // We always start the Taskbar and Start Menu services, even if the app isn't normally running
+                startService(new Intent(this, TaskbarService.class));
+                startService(new Intent(this, StartMenuService.class));
 
-            // Show the Taskbar temporarily, as nothing else will be visible on screen
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
-                }
-            }, 100);
+                if(pref.getBoolean("taskbar_active", false))
+                    startService(new Intent(this, NotificationService.class));
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                    && pref.getBoolean("freeform_hack", false)
-                    && pref.getBoolean("boot_to_freeform", false)) {
+                // Show the Taskbar temporarily, as nothing else will be visible on screen
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+                    }
+                }, 100);
+            }
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-
-                if(!isServiceRunning()) {
-                    U.startTaskbar(this);
-                }
 
                 Intent intent = new Intent(HomeActivity.this, BootToFreeformActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -152,29 +149,21 @@ public class HomeActivity extends Activity {
         }
     }
 
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(NotificationService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("on_home_screen", false).apply();
+        if(!pref.getBoolean("freeform_hack", false)) {
+            pref.edit().putBoolean("on_home_screen", false).apply();
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
-        // Stop the Taskbar and Start Menu services if they should normally not be active
-        if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-            stopService(new Intent(this, TaskbarService.class));
-            stopService(new Intent(this, StartMenuService.class));
+            // Stop the Taskbar and Start Menu services if they should normally not be active
+            if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+                stopService(new Intent(this, TaskbarService.class));
+                stopService(new Intent(this, StartMenuService.class));
+            }
         }
     }
 

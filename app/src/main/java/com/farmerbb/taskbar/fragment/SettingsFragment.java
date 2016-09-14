@@ -86,14 +86,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             findPreference("freeform_hack").setOnPreferenceClickListener(this);
             bindPreferenceSummaryToValue(findPreference("window_size"));
             findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
-            findPreference("boot_to_freeform").setOnPreferenceClickListener(this);
-
-            if(pref.getBoolean("boot_to_freeform", false)) U.startTaskbar(getActivity());
         }
 
         addPreferencesFromResource(R.xml.pref_advanced);
-        findPreference("launcher").setEnabled(!pref.getBoolean("boot_to_freeform", false));
-
         addPreferencesFromResource(R.xml.pref_about);
 
         // Set OnClickListeners for certain preferences
@@ -274,24 +269,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();
-                break;
-            case "boot_to_freeform":
-                if(canDrawOverlays()) {
-                    enableDisableLauncherPref(((CheckBoxPreference) p).isChecked());
-
-                    SharedPreferences pref = U.getSharedPreferences(getActivity());
-                    boolean shouldEnableLauncher = ((CheckBoxPreference) p).isChecked() || pref.getBoolean("launcher", false);
-
-                    ComponentName component2 = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
-                    getActivity().getPackageManager().setComponentEnabledSetting(component2,
-                            shouldEnableLauncher ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
-
-                    U.startTaskbar(getActivity());
-                } else {
-                    U.showPermissionDialog(getActivity());
-                    ((CheckBoxPreference) p).setChecked(false);
-                }
                 break;
         }
 

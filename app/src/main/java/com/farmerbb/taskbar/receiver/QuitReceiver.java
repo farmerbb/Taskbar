@@ -30,25 +30,20 @@ import com.farmerbb.taskbar.util.U;
 public class QuitReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        Intent taskbarIntent = new Intent(context, TaskbarService.class);
+        Intent startMenuIntent = new Intent(context, StartMenuService.class);
+        Intent notificationIntent = new Intent(context, NotificationService.class);
+
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("boot_to_freeform", false)) {
-            U.showToastLong(context, R.string.cannot_stop_taskbar);
-        } else {
-            Intent taskbarIntent = new Intent(context, TaskbarService.class);
-            Intent startMenuIntent = new Intent(context, StartMenuService.class);
-            Intent notificationIntent = new Intent(context, NotificationService.class);
+        pref.edit().putBoolean("taskbar_active", false).apply();
 
+        if(!pref.getBoolean("on_home_screen", false)) {
+            context.stopService(taskbarIntent);
+            context.stopService(startMenuIntent);
 
-            pref.edit().putBoolean("taskbar_active", false).apply();
-
-            if (!pref.getBoolean("on_home_screen", false)) {
-                context.stopService(taskbarIntent);
-                context.stopService(startMenuIntent);
-
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
-            }
-
-            context.stopService(notificationIntent);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
         }
+
+        context.stopService(notificationIntent);
     }
 }

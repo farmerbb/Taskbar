@@ -33,12 +33,6 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_window_size"/>
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="boot_to_freeform"
-        android:title="@string/pref_title_boot_to_freeform"
-        android:summary="@string/pref_description_boot_to_freeform" />
-
     <Preference
         android:key="freeform_mode_help"
         android:title="@string/pref_title_freeform_mode_help" />

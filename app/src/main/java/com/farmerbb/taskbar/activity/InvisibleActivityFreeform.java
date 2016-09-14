@@ -22,12 +22,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
+import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.service.NotificationService;
+import com.farmerbb.taskbar.service.StartMenuService;
+import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -144,6 +150,26 @@ public class InvisibleActivityFreeform extends Activity {
 
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
+        if(bootToFreeformActive()) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("on_home_screen", true).apply();
+
+            // We always start the Taskbar and Start Menu services, even if the app isn't normally running
+            startService(new Intent(this, TaskbarService.class));
+            startService(new Intent(this, StartMenuService.class));
+
+            if(pref.getBoolean("taskbar_active", false))
+                startService(new Intent(this, NotificationService.class));
+
+            // Show the taskbar when activity is started
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+                }
+            }, 100);
+        }
+
         // Show the taskbar when activity is started
         if(showTaskbar)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
@@ -156,6 +182,17 @@ public class InvisibleActivityFreeform extends Activity {
         if(!finish) FreeformHackHelper.getInstance().setInFreeformWorkspace(false);
 
         possiblyHideTaskbar();
+
+        if(bootToFreeformActive()) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("on_home_screen", false).apply();
+
+            // Stop the Taskbar and Start Menu services if they should normally not be active
+            if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+                stopService(new Intent(this, TaskbarService.class));
+                stopService(new Intent(this, StartMenuService.class));
+            }
+        }
     }
 
     // We don't want this activity to finish under normal circumstances
@@ -177,5 +214,13 @@ public class InvisibleActivityFreeform extends Activity {
                 }
             }
         }, 100);
+    }
+
+    private boolean bootToFreeformActive() {
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo defaultLauncher = getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
     }
 }
