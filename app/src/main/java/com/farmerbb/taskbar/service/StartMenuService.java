@@ -448,7 +448,9 @@ public class StartMenuService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!pref.getBoolean("on_home_screen", false)) {
+        boolean onHomeScreen = pref.getBoolean("on_home_screen", false);
+
+        if(!onHomeScreen || (onHomeScreen && FreeformHackHelper.getInstance().isInFreeformWorkspace())) {
             Intent intent = new Intent(this, InvisibleActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

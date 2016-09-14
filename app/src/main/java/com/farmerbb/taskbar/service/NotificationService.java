@@ -89,7 +89,9 @@ public class NotificationService extends Service {
             pref.edit().remove("is_restarting").apply();
         else {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+
+            if(!pref.getBoolean("on_home_screen", false))
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
         }
 
         super.onDestroy();

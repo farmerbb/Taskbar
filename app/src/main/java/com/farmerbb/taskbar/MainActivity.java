@@ -177,8 +177,13 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("taskbar_active", false).apply();
 
-        stopService(new Intent(this, TaskbarService.class));
-        stopService(new Intent(this, StartMenuService.class));
+        if(!pref.getBoolean("on_home_screen", false)) {
+            stopService(new Intent(this, TaskbarService.class));
+            stopService(new Intent(this, StartMenuService.class));
+
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        }
+
         stopService(new Intent(this, NotificationService.class));
     }
 
