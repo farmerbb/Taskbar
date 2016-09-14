@@ -25,6 +25,6 @@
     <color name="translucent_white">#99FFFFFF</color>
     <color name="start_menu_background">#FAFAFA</color>
     <color name="start_menu_background_dark">#303030</color>
-    <color name="main_activity_background">#F5F5F5</color>
+    <color name="main_activity_background">#F0F0F0</color>
     <color name="main_activity_background_dark">#252525</color>
 </resources>
