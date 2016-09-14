@@ -70,6 +70,10 @@
         android:key="start_on_boot"
         android:title="@string/pref_title_start_on_boot"/>
 
+    <Preference
+        android:key="blacklist"
+        android:title="@string/pref_title_blacklist" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

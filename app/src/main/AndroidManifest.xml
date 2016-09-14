@@ -112,6 +112,12 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Dialog.Dark"/>
+        <activity
+            android:name=".activity.SelectAppActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.SelectAppActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
 
         <activity
             android:name=".activity.DummyActivity"

@@ -45,12 +45,17 @@ import android.view.View;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.ContextMenuActivity;
+import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
+import com.farmerbb.taskbar.activity.SelectAppActivity;
+import com.farmerbb.taskbar.activity.SelectAppActivityDark;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
@@ -98,6 +103,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
         findPreference("about").setOnPreferenceClickListener(this);
         findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+        findPreference("blacklist").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
         bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
@@ -111,6 +117,19 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
 
         finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        int size = Blacklist.getInstance(getActivity()).getBlockedApps().size();
+        String summary = size + " " + (size == 1 ? getString(R.string.app_hidden) : getString(R.string.apps_hidden));
+
+        Preference blacklistPref = findPreference("blacklist");
+        if(blacklistPref != null) {
+            blacklistPref.setSummary(summary);
+        }
     }
 
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
@@ -273,6 +292,21 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();
+                break;
+            case "blacklist":
+                Intent intent = null;
+
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getActivity(), SelectAppActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getActivity(), SelectAppActivityDark.class);
+                        break;
+                }
+
+                startActivity(intent);
                 break;
         }
 

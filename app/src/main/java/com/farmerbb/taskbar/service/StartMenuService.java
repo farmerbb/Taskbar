@@ -57,6 +57,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -328,14 +329,33 @@ public class StartMenuService extends Service {
 
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                final List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
+
+                final List<ResolveInfo> unfilteredList = pm.queryIntentActivities(intent, 0);
+                final List<ResolveInfo> list = new ArrayList<>();
+                Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
+
+                for(ResolveInfo appInfo : unfilteredList) {
+                    if(!blacklist.isBlocked(appInfo.activityInfo.packageName))
+                        list.add(appInfo);
+                }
 
                 Collections.sort(list, new Comparator<ResolveInfo>() {
                     @Override
                     public int compare(ResolveInfo ai1, ResolveInfo ai2) {
-                        return Collator.getInstance().compare(
-                                ai1.activityInfo.loadLabel(pm).toString(),
-                                ai2.activityInfo.loadLabel(pm).toString());
+                        String label1;
+                        String label2;
+
+                        try {
+                            label1 = ai1.activityInfo.loadLabel(pm).toString();
+                            label2 = ai2.activityInfo.loadLabel(pm).toString();
+                        } catch (OutOfMemoryError e) {
+                            System.gc();
+
+                            label1 = ai1.activityInfo.packageName;
+                            label2 = ai2.activityInfo.packageName;
+                        }
+
+                        return Collator.getInstance().compare(label1, label2);
                     }
                 });
 
@@ -390,14 +410,14 @@ public class StartMenuService extends Service {
                         } catch (OutOfMemoryError e) {
                             System.gc();
 
-                            label = appInfo.activityInfo.applicationInfo.packageName;
+                            label = appInfo.activityInfo.packageName;
                             icon = defaultIcon;
                         }
 
                         entries.add(new AppEntry(
-                                appInfo.activityInfo.applicationInfo.packageName,
+                                appInfo.activityInfo.packageName,
                                 new ComponentName(
-                                        appInfo.activityInfo.applicationInfo.packageName,
+                                        appInfo.activityInfo.packageName,
                                         appInfo.activityInfo.name).flattenToString(),
                                 label,
                                 icon,
@@ -421,8 +441,10 @@ public class StartMenuService extends Service {
 
                             if(adapter.getCount() > 0)
                                 textView.setText(null);
-                            else
+                            else if(query != null)
                                 textView.setText(getString(R.string.press_enter));
+                            else
+                                textView.setText(getString(R.string.nothing_to_see_here));
                         }
                     });
                 }

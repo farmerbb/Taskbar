@@ -133,6 +133,7 @@
     <string name="pref_description_keyboard_shortcut">Start/stop Taskbar\n&#8226; WinKey+M, Search+M\n\nLock device\n&#8226; WinKey+L, Search+L\n\nShow start menu\n&#8226; WinKey, Search\n(requires Taskbar to be set as the search assistant in Settings)</string>
     <string name="loading_apps">Loading apps&#8230;</string>
     <string name="press_enter">No apps found\n\nPress Enter to search using Google</string>
+    <string name="nothing_to_see_here">Nothing to see here, move along&#8230;</string>
 
     <string name="error_dialog_title">Error</string>
     <string name="error_dialog_message">Unfortunately, due to OEM restrictions, this feature can\'t be enabled on your device.\n\nYou may still be able to enable it by using this adb shell command:\n\nappops set %1$s %2$s allow</string>
@@ -191,5 +192,10 @@
     <string name="window_size_standard">Standard window</string>
     <string name="window_size_fullscreen">Fullscreen window</string>
     <string name="window_size_phone_size">Phone size window</string>
+
+    <string name="pref_title_blacklist">Hide apps from start menu</string>
+    <string name="app_hidden">app hidden</string>
+    <string name="apps_hidden">apps hidden</string>
+    <string name="blacklist_dialog_title">Hidden apps</string>
 
 </resources>
