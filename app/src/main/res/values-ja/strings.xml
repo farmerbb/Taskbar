@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Taskbar</string>
+    <string name="not_in_multi_window">マルチウインドウモードではありません</string>
+
+    <string name="taskbar_is_active">Taskbar はアクティブです</string>
+    <string name="click_to_open_settings">クリックすると設定を開きます</string>
+    <string name="action_show">Taskbar を表示</string>
+    <string name="action_hide">Taskbar を非表示</string>
+    <string name="action_quit">終了</string>
+    <string name="action_grant_permission">アクセス許可を付与</string>
+
+    <string name="permission_dialog_title">アクセス許可が必要です</string>
+    <string name="permission_dialog_message">Taskbar は他のアプリの上に描画するため、アプリの開始前にアクセス許可が必要です。\n\n\'\'アクセス許可を付与\'\' を押して、Taskbar を \'\'はい\'\' に設定することを確認してください</string>
+
+    <string name="pref_header_general">全般</string>
+    <string name="pref_title_start_menu_layout">スタートメニューのレイアウト</string>
+    <string name="pref_title_background_tint">Taskbar 背景の色合い</string>
+    <string name="pref_title_scrollbar">スタートメニューにスクロールバーを表示</string>
+    <string name="pref_title_start_on_boot">ブート時に起動</string>
+
+    <string-array name="pref_start_menu_list">
+        <item>リスト</item>
+        <item>グリッド</item>
+    </string-array>
+    <string-array name="pref_start_menu_list_values">
+        <item>list</item>
+        <item>grid</item>
+    </string-array>
+
+    <string name="pref_header_recent_apps">最近使用したアプリ</string>
+
+    <string name="pref_title_enable_recents">使用状況アクセスを有効/無効にする</string>
+    <string name="pref_title_recents_refresh_interval">リストのリフレッシュ間隔</string>
+    <string-array name="pref_refresh_frequency">
+        <item>1 秒</item>
+        <item>2 秒</item>
+        <item>5 秒</item>
+    </string-array>
+    <string-array name="pref_refresh_frequency_values">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+    </string-array>
+
+    <string name="pref_title_amount_of_recents">起動したアプリの表示</string>
+    <string-array name="pref_recents_amount">
+        <item>経過日内</item>
+        <item>Taskbar 開始後</item>
+    </string-array>
+    <string-array name="pref_recents_amount_values">
+        <item>past_day</item>
+        <item>app_start</item>
+    </string-array>
+
+    <string name="pref_title_sort_order">並び順</string>
+    <string-array name="pref_sort_order">
+        <item>最近使用した (降順)</item>
+        <item>最近使用した (昇順)</item>
+        <item>長時間使用した (降順)</item>
+        <item>長時間使用した (昇順)</item>
+    </string-array>
+    <string-array name="pref_sort_order_values">
+        <item>false</item>
+        <item>true</item>
+        <item>most_used_false</item>
+        <item>most_used_true</item>
+    </string-array>
+
+    <string name="pref_header_advanced">詳細</string>
+
+    <string name="pref_title_freeform_hack">フリーフォーム ウインドウ サポート</string>
+    <string name="pref_description_freeform_hack">Taskbar がよりデスクトップライクな操作のフリーフォーム ウインドウ モードでアプリを起動できるようにします。\n\nこの機能は実験的で、標準の分割画面マルチタスクで問題が発生する可能性があります。</string>
+
+    <string name="pref_header_about">Taskbar について</string>
+    <string name="pref_about_description">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; 2016 Braden Farmer\n\nここをクリックして更新の確認、または評価してください! %1$s</string>
+
+    <string name="pref_title_hide_taskbar">アプリを選択したときに Taskbar を折りたたむ</string>
+
+    <string name="pref_title_launcher">ホーム画面を置き換え</string>
+    <string name="pref_description_launcher">Taskbar をホーム画面の置き換えとして使用します</string>
+
+    <string name="set_wallpaper">壁紙を設定&#8230;</string>
+    <string name="pref_disable_animations">高速アプリ切り替え</string>
+
+    <string name="pref_title_position">画面での位置</string>
+    <string-array name="pref_position_list">
+        <item>左下 (横)</item>
+        <item>左下 (縦)</item>
+        <item>右下 (横)</item>
+        <item>右下 (縦)</item>
+        <item>左上 (横)</item>
+        <item>左上 (縦)</item>
+        <item>右上 (横)</item>
+        <item>右上 (縦)</item>
+    </string-array>
+    <string-array name="pref_position_list_values">
+        <item>bottom_left</item>
+        <item>bottom_vertical_left</item>
+        <item>bottom_right</item>
+        <item>bottom_vertical_right</item>
+        <item>top_left</item>
+        <item>top_vertical_left</item>
+        <item>top_right</item>
+        <item>top_vertical_right</item>
+    </string-array>
+
+    <string name="app_info">アプリ情報</string>
+    <string name="uninstall">アンインストール</string>
+    <string name="open_taskbar_settings">設定を開く</string>
+    <string name="quit_taskbar">終了</string>
+
+    <string name="pref_title_keyboard_shortcut">キーボードショートカットを有効にする</string>
+    <string name="pref_description_keyboard_shortcut">Taskbar の開始/停止\n&#8226; Winキー+M, 検索+M\n\nデバイスのロック\n&#8226; Winキー+L, 検索+L\n\nスタートメニューを表示\n&#8226; Winキー, 検索\n(設定で Taskbar を検索アシスタントとして設定が必要)</string>
+    <string name="loading_apps">アプリのロード中&#8230;</string>
+    <string name="press_enter">アプリが見つかりません\n\nEnter を押すと Google で検索します</string>
+    <string name="nothing_to_see_here">ここには何もありません&#8230;</string>
+
+    <string name="error_dialog_title">エラー</string>
+    <string name="error_dialog_message">残念ながら OEM の制限のため、お使いのデバイスでこの機能を有効にできません。\n\nadb シェルコマンドを使用して有効にすることができる可能性があります:\n\nappops set %1$s %2$s allow</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">キャンセル</string>
+
+    <string name="pin_app">最近使用にピン止め</string>
+    <string name="unpin_app">最近使用からピン止め解除</string>
+    <string name="block_app">最近使用からブロック</string>
+    <string name="unblock_app">最近使用からブロック解除</string>
+    <string name="clear_pinned_apps">アプリのピン止め/ブロックをリセット</string>
+    <string name="are_you_sure">よろしいですか?</string>
+
+    <string name="pref_title_hide_foreground">前面アプリケーションのアイコンを非表示</string>
+
+    <string name="pref_title_theme">テーマ</string>
+    <string-array name="pref_theme_list">
+        <item>ライト</item>
+        <item>ダーク</item>
+    </string-array>
+    <string-array name="pref_theme_list_values">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+    <string name="device_admin_description_short">Taskbar がスタートメニューからこのデバイスをロックできるようにします</string>
+    <string name="device_admin_description">Taskbar がスタートメニューからこのデバイスをロックできるようにします。\n\nこれは、インストールする前にデバイス管理者として Taskbar を非アクティブにする必要があります。</string>
+    <string name="lock_device_not_supported">このデバイスでサポートされていません</string>
+
+    <string name="pref_title_shortcut_icon">ピン止めしたアプリのショートカットアイコンを表示</string>
+
+    <string name="freeform_dialog_title">フリーフォームサポートを有効にする</string>
+    <string name="freeform_dialog_message">Taskbar がフリーフォーム ウインドウ モードでアプリを起動するために、次の手順に従ってください:\n\n&#8226; 開発者オプションに移動します\n\n&#8226; 最下部にスクロールして \'\'強制的にアクティビティをリサイズ可能にする\'\' をオンにします\n\n&#8226; お使いのデバイスを再起動します</string>
+
+    <string name="pref_title_invisible_button">Taskbar を折りたたんでいるときボタンを非表示</string>
+    <string name="pref_title_freeform_mode_help">ヘルプ &amp; フリーフォームモードの説明</string>
+    <string name="freeform_help_dialog_title">ヘルプ &amp; 説明</string>
+    <string name="freeform_help_dialog_message"><b>フリーフォームモードについて</b>\n\nTaskbar は Android 7.0 Nougat 上でアプリをフリーフォーム フローティング ウインドウで起動することができます。ルート アクセス許可は必要がありません。フリーフォームモードでアプリを起動するには次の手順に従ってください:\n\n<b>1.</b> Taskbar アプリ内で \'\'フリーフォーム ウインドウ サポート\'\' のボックスをチェックします\n\n<b>2.</b> ポップアップで表示される向きに従って、お使いのデバイスに適切な設定を有効にします\n\n<b>3.</b> Taskbar をオンにして、お使いのデバイスの最近使用したアプリのページに移動します\n\n<b>4.</b> 最近使用したアプリをすべてクリアして、(空の) 最近使用したアプリのページに戻ります\n\n<b>5.</b> Taskbar の開始ボタンを押して、フリーフォーム ウインドウで起動するアプリを選択します\n\n<b>トラブルシューティング</b>\n\n<i>&#8226; アプリがまだ全画面モードで起動します</i>\n\n起動するアプリがすでにメモリにロードされている場合、Taskbar はそれをフォアグラウンドに移動します。フリーフォームモードでアプリを起動するため、新規の状態から起動する必要があります。\n\n最近使用したアプリからアプリをアプリを外にスワイプして、Taskbar を使用して最近使用したアプリのページから再起移動します。これが動作しない場合は、アプリのアイコンを長押しして、\'\'アプリ情報\'\' を選択し、アプリを強制的に停止します。\n\nTaskbar は、お使いのデバイスの最近使用したアプリから、ホーム画面から、フリーフォームワークスペース自身からのみアプリをフリーフォームモードで起動できることにご注意ください。別の全画面アプリからアプリを起動すると、同じく全画面モードで起動されます。\n\n<i>&#8226; 最大化されたアプリがウインドウに復元できません</i>\n\nアプリのタイトルバーで最大化ボタンを押した場合、Android はアプリをフリーフォームモードの外に出して、全画面モードに移動します。そのため、新規の状態から起動した場合のみ Taskbar はアプリをフリーフォームウインドウで起動することができます。\n\nこれを修正するために、アプリのウインドウ フレームの外側をクリックしてウインドウを最大化することができます。これによりフリーフォーム ウインドウ ワークスペースに残ったまま、利用可能なスペースすべてにウインドウを広げます。\n\n<b>完全にシステムレベルのフリーフォーム ウインドウ サポートを有効にする</b>\n\nAndroid SDK をインストールしたコンピュータが利用できる場合、次の adb シェルコマンドを実行して、システムレベルでフリーフォームモードのサポートを有効にすることができます:\n\nsettings put global enable_freeform_support 1\n\n上記のコマンドを実行した後、お使いのデバイスを再起動します。お使いのデバイスの最近使用したアプリのページで、アプリのエントリーに、指定したアプリをフリーフォームモードに入る/終了する新しいボタンが表示されます。</string>
+
+    <string name="action_developer_options">開発者オプションを開く</string>
+    <string name="action_close">閉じる</string>
+
+    <string name="pref_header_freeform">フリーフォームモード</string>
+    <string name="pref_title_window_size">デフォルト ウインドウ サイズ</string>
+    <string-array name="pref_window_size_list">
+        <item>標準</item>
+        <item>全画面</item>
+        <item>電話サイズ</item>
+    </string-array>
+    <string-array name="pref_window_size_list_values">
+        <item>standard</item>
+        <item>fullscreen</item>
+        <item>phone_size</item>
+    </string-array>
+
+    <string name="window_size_standard">標準ウインドウ</string>
+    <string name="window_size_fullscreen">全画面ウインドウ</string>
+    <string name="window_size_phone_size">電話サイズ ウインドウ</string>
+
+    <string name="pref_title_blacklist">スタートメニューからアプリを非表示</string>
+    <string name="app_hidden">非表示アプリ</string>
+    <string name="apps_hidden">非表示アプリ</string>
+    <string name="blacklist_dialog_title">非表示のアプリ</string>
+
+</resources>
