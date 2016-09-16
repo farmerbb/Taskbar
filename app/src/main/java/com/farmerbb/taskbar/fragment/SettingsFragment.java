@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -82,11 +83,16 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        // On smaller-screened devices, set "Grid" as the default start menu layout
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        if(getResources().getConfiguration().smallestScreenWidthDp < 600) {
+            pref.edit().putString("start_menu_layout", "grid").apply();
+        }
+
         // Add preferences
         addPreferencesFromResource(R.xml.pref_general);
         addPreferencesFromResource(R.xml.pref_recent_apps);
 
-        SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
@@ -331,16 +337,16 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         return true;
     }
 
-    private void startTaskbarService() {
+    private void startTaskbarService(boolean fullRestart) {
         getActivity().startService(new Intent(getActivity(), TaskbarService.class));
         getActivity().startService(new Intent(getActivity(), StartMenuService.class));
-        getActivity().startService(new Intent(getActivity(), NotificationService.class));
+        if(fullRestart) getActivity().startService(new Intent(getActivity(), NotificationService.class));
     }
 
-    private void stopTaskbarService() {
+    private void stopTaskbarService(boolean fullRestart) {
         getActivity().stopService(new Intent(getActivity(), TaskbarService.class));
         getActivity().stopService(new Intent(getActivity(), StartMenuService.class));
-        getActivity().stopService(new Intent(getActivity(), NotificationService.class));
+        if(fullRestart) getActivity().stopService(new Intent(getActivity(), NotificationService.class));
     }
 
     private void restartTaskbar() {
@@ -348,8 +354,11 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         if(pref.getBoolean("taskbar_active", false)) {
             pref.edit().putBoolean("is_restarting", true).apply();
 
-            stopTaskbarService();
-            startTaskbarService();
+            stopTaskbarService(true);
+            startTaskbarService(true);
+        } else if(isServiceRunning()) {
+            stopTaskbarService(false);
+            startTaskbarService(false);
         }
     }
 
@@ -363,5 +372,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     @TargetApi(Build.VERSION_CODES.M)
     private boolean canDrawOverlays() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(getActivity());
+    }
+
+    private boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if(StartMenuService.class.getName().equals(service.service.getClassName()))
+                return true;
+        }
+
+        return false;
     }
 }

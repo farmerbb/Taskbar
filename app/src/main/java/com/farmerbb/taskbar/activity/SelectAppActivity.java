@@ -181,6 +181,7 @@ public class SelectAppActivity extends AppCompatActivity {
         protected void onPostExecute(AppListAdapter adapter) {
             progressBar.setVisibility(View.GONE);
             appList.setAdapter(adapter);
+            setFinishOnTouchOutside(true);
         }
     }
 }
