@@ -159,6 +159,6 @@
 
     <string name="reboot_required">Reboot your device to complete freeform mode setup</string>
 
-    <string name="set_as_default_home">Please press the Home button and set Taskbar as your default launcher</string>
+    <string name="set_as_default_home">Please press \'\'Always\'\' to set Taskbar as your default launcher</string>
 
 </resources>

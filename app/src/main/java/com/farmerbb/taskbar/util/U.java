@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
@@ -196,5 +197,13 @@ public class U {
         try {
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
+    public static boolean bootToFreeformActive(Context context) {
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
     }
 }

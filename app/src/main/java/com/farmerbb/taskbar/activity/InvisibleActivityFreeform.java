@@ -17,9 +17,7 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,7 +31,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.BuildConfig;
-import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -145,7 +142,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
-        if(bootToFreeformActive()) {
+        if(U.bootToFreeformActive(this)) {
             LauncherHelper.getInstance().setOnHomeScreen(true);
 
             // We always start the Taskbar and Start Menu services, even if the app isn't normally running
@@ -164,17 +161,6 @@ public class InvisibleActivityFreeform extends Activity {
                         LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
                 }
             }, 100);
-        } else if(!isServiceRunning() && isHomeScreenEnabled()) {
-            U.showToastLong(this, R.string.set_as_default_home);
-
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    reallyFinish();
-                }
-            }, 100);
         }
 
         // Show the taskbar when activity is started
@@ -190,7 +176,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         possiblyHideTaskbar();
 
-        if(bootToFreeformActive()) {
+        if(U.bootToFreeformActive(this)) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
 
             // Stop the Taskbar and Start Menu services if they should normally not be active
@@ -224,14 +210,6 @@ public class InvisibleActivityFreeform extends Activity {
         }, 100);
     }
 
-    private boolean bootToFreeformActive() {
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory(Intent.CATEGORY_HOME);
-        ResolveInfo defaultLauncher = getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
-
-        return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
-    }
-
     private void reallyFinish() {
         InvisibleActivityFreeform.super.finish();
         overridePendingTransition(0, 0);
@@ -243,20 +221,5 @@ public class InvisibleActivityFreeform extends Activity {
 
             finish = true;
         }
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(NotificationService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
-    }
-
-    public boolean isHomeScreenEnabled() {
-        return getPackageManager().getComponentEnabledSetting(new ComponentName(this, HomeActivity.class))
-                == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
     }
 }

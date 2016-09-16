@@ -124,12 +124,26 @@ public class HomeActivity extends Activity {
                     && pref.getBoolean("freeform_hack", false)
                     && hasFreeformSupport()
                     && !LauncherHelper.getInstance().shouldForceTaskbarRestart()) {
-                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-                Intent intent = new Intent(this, InvisibleActivityFreeform.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                if(U.bootToFreeformActive(this)) {
+                    DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                    Intent intent = new Intent(this, InvisibleActivityFreeform.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                } else {
+                    U.showToastLong(this, R.string.set_as_default_home);
+
+                    Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                    homeIntent.addCategory(Intent.CATEGORY_HOME);
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        startActivity(homeIntent);
+                        finish();
+                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                }
             } else {
                 final LauncherHelper helper = LauncherHelper.getInstance();
                 helper.setOnHomeScreen(true);
