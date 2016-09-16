@@ -139,8 +139,6 @@ public class InvisibleActivityFreeform extends Activity {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onStart() {
         super.onStart();
