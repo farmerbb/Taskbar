@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.util;
 public class LauncherHelper {
 
     private boolean onHomeScreen = false;
+    private boolean forceTaskbarRestart = false;
 
     private static LauncherHelper theInstance;
 
@@ -35,5 +36,13 @@ public class LauncherHelper {
 
     public void setOnHomeScreen(boolean value) {
         onHomeScreen = value;
+    }
+
+    public boolean shouldForceTaskbarRestart() {
+        return forceTaskbarRestart;
+    }
+
+    public void setForceTaskbarRestart(boolean value) {
+        forceTaskbarRestart = value;
     }
 }

@@ -29,9 +29,6 @@
     <string name="permission_dialog_title">Permission needed</string>
     <string name="permission_dialog_message">Taskbar requires permission to draw over other apps before it can start.\n\nPlease press \'\'Grant Permission\'\' and ensure that Taskbar is set to \'\'Yes\'\'</string>
 
-    <string name="left_arrow" translatable="false">&#10094;</string>
-    <string name="right_arrow" translatable="false">&#10095;</string>
-
     <string name="pref_header_general">General</string>
     <string name="pref_title_start_menu_layout">Start menu layout</string>
     <string name="pref_title_background_tint">Taskbar background tint</string>
@@ -41,10 +38,6 @@
     <string-array name="pref_start_menu_list">
         <item>List</item>
         <item>Grid</item>
-    </string-array>
-    <string-array name="pref_start_menu_list_values">
-        <item>list</item>
-        <item>grid</item>
     </string-array>
 
     <string name="pref_header_recent_apps">Recent apps</string>
@@ -56,20 +49,11 @@
         <item>2 seconds</item>
         <item>5 seconds</item>
     </string-array>
-    <string-array name="pref_refresh_frequency_values">
-        <item>1</item>
-        <item>2</item>
-        <item>5</item>
-    </string-array>
 
     <string name="pref_title_amount_of_recents">Display apps launched</string>
     <string-array name="pref_recents_amount">
         <item>Within the past day</item>
         <item>After Taskbar start</item>
-    </string-array>
-    <string-array name="pref_recents_amount_values">
-        <item>past_day</item>
-        <item>app_start</item>
     </string-array>
 
     <string name="pref_title_sort_order">Sort order</string>
@@ -78,12 +62,6 @@
         <item>Recently used (ascending)</item>
         <item>Most time used (descending)</item>
         <item>Most time used (ascending)</item>
-    </string-array>
-    <string-array name="pref_sort_order_values">
-        <item>false</item>
-        <item>true</item>
-        <item>most_used_false</item>
-        <item>most_used_true</item>
     </string-array>
 
     <string name="pref_header_advanced">Advanced</string>
@@ -112,16 +90,6 @@
         <item>Top left (vertical)</item>
         <item>Top right (horizontal)</item>
         <item>Top right (vertical)</item>
-    </string-array>
-    <string-array name="pref_position_list_values">
-        <item>bottom_left</item>
-        <item>bottom_vertical_left</item>
-        <item>bottom_right</item>
-        <item>bottom_vertical_right</item>
-        <item>top_left</item>
-        <item>top_vertical_left</item>
-        <item>top_right</item>
-        <item>top_vertical_right</item>
     </string-array>
 
     <string name="app_info">App info</string>
@@ -154,10 +122,6 @@
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    <string-array name="pref_theme_list_values">
-        <item>light</item>
-        <item>dark</item>
-    </string-array>
 
     <string name="device_admin_description_short">Allows Taskbar to lock this device via the start menu</string>
     <string name="device_admin_description">Allows Taskbar to lock this device via the start menu.\n\nThis will require you to deactivate Taskbar as a device administrator prior to installing.</string>
@@ -183,11 +147,6 @@
         <item>Fullscreen</item>
         <item>Phone size</item>
     </string-array>
-    <string-array name="pref_window_size_list_values">
-        <item>standard</item>
-        <item>fullscreen</item>
-        <item>phone_size</item>
-    </string-array>
 
     <string name="window_size_standard">Standard window</string>
     <string name="window_size_fullscreen">Fullscreen window</string>
@@ -197,5 +156,7 @@
     <string name="app_hidden">app hidden</string>
     <string name="apps_hidden">apps hidden</string>
     <string name="blacklist_dialog_title">Hidden apps</string>
+
+    <string name="reboot_required">Reboot your device to complete freeform mode setup</string>
 
 </resources>

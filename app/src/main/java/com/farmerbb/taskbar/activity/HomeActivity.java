@@ -48,7 +48,7 @@ import com.farmerbb.taskbar.util.U;
 
 public class HomeActivity extends Activity {
 
-    boolean forceTaskbarRestart = false;
+    private boolean forceTaskbarStop = false;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
@@ -65,17 +65,6 @@ public class HomeActivity extends Activity {
             }
 
             finish();
-        }
-    };
-
-    private BroadcastReceiver restartReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().contains("TRUE"))
-                forceTaskbarRestart = true;
-
-            if(intent.getAction().contains("FALSE"))
-                forceTaskbarRestart = false;
         }
     };
 
@@ -122,8 +111,6 @@ public class HomeActivity extends Activity {
         setContentView(view);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.B2F_FORCE_RESTART_TRUE"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.B2F_FORCE_RESTART_FALSE"));
     }
 
     @SuppressWarnings("deprecation")
@@ -136,27 +123,25 @@ public class HomeActivity extends Activity {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
                     && hasFreeformSupport()
-                    && !forceTaskbarRestart) {
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-
-                Intent intent = new Intent(HomeActivity.this, BootToFreeformActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
+                    && !LauncherHelper.getInstance().shouldForceTaskbarRestart()) {
                 DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
                 Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
+                Intent intent = new Intent(this, InvisibleActivityFreeform.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
                 startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
             } else {
-                LauncherHelper.getInstance().setOnHomeScreen(true);
+                final LauncherHelper helper = LauncherHelper.getInstance();
+                helper.setOnHomeScreen(true);
 
-                if(forceTaskbarRestart) {
-                    forceTaskbarRestart = false;
+                if(helper.shouldForceTaskbarRestart()) {
+                    helper.setForceTaskbarRestart(false);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            LauncherHelper.getInstance().setOnHomeScreen(true);
+                            helper.setOnHomeScreen(true);
                             startTaskbar();
+                            forceTaskbarStop = true;
                         }
                     }, 100);
                 } else
@@ -207,6 +192,10 @@ public class HomeActivity extends Activity {
                 stopService(new Intent(this, TaskbarService.class));
                 stopService(new Intent(this, StartMenuService.class));
             }
+        } else if(forceTaskbarStop) {
+            forceTaskbarStop = false;
+            stopService(new Intent(this, TaskbarService.class));
+            stopService(new Intent(this, StartMenuService.class));
         }
     }
 
@@ -215,7 +204,7 @@ public class HomeActivity extends Activity {
         super.onDestroy();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(killReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(restartReceiver);
+        LauncherHelper.getInstance().setForceTaskbarRestart(false);
     }
 
     @Override

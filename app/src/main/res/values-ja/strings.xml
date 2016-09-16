@@ -39,10 +39,6 @@
         <item>リスト</item>
         <item>グリッド</item>
     </string-array>
-    <string-array name="pref_start_menu_list_values">
-        <item>list</item>
-        <item>grid</item>
-    </string-array>
 
     <string name="pref_header_recent_apps">最近使用したアプリ</string>
 
@@ -53,20 +49,11 @@
         <item>2 秒</item>
         <item>5 秒</item>
     </string-array>
-    <string-array name="pref_refresh_frequency_values">
-        <item>1</item>
-        <item>2</item>
-        <item>5</item>
-    </string-array>
 
     <string name="pref_title_amount_of_recents">起動したアプリの表示</string>
     <string-array name="pref_recents_amount">
         <item>経過日内</item>
         <item>Taskbar 開始後</item>
-    </string-array>
-    <string-array name="pref_recents_amount_values">
-        <item>past_day</item>
-        <item>app_start</item>
     </string-array>
 
     <string name="pref_title_sort_order">並び順</string>
@@ -75,12 +62,6 @@
         <item>最近使用した (昇順)</item>
         <item>長時間使用した (降順)</item>
         <item>長時間使用した (昇順)</item>
-    </string-array>
-    <string-array name="pref_sort_order_values">
-        <item>false</item>
-        <item>true</item>
-        <item>most_used_false</item>
-        <item>most_used_true</item>
     </string-array>
 
     <string name="pref_header_advanced">詳細</string>
@@ -109,16 +90,6 @@
         <item>左上 (縦)</item>
         <item>右上 (横)</item>
         <item>右上 (縦)</item>
-    </string-array>
-    <string-array name="pref_position_list_values">
-        <item>bottom_left</item>
-        <item>bottom_vertical_left</item>
-        <item>bottom_right</item>
-        <item>bottom_vertical_right</item>
-        <item>top_left</item>
-        <item>top_vertical_left</item>
-        <item>top_right</item>
-        <item>top_vertical_right</item>
     </string-array>
 
     <string name="app_info">アプリ情報</string>
@@ -151,10 +122,6 @@
         <item>ライト</item>
         <item>ダーク</item>
     </string-array>
-    <string-array name="pref_theme_list_values">
-        <item>light</item>
-        <item>dark</item>
-    </string-array>
 
     <string name="device_admin_description_short">Taskbar がスタートメニューからこのデバイスをロックできるようにします</string>
     <string name="device_admin_description">Taskbar がスタートメニューからこのデバイスをロックできるようにします。\n\nこれは、インストールする前にデバイス管理者として Taskbar を非アクティブにする必要があります。</string>
@@ -180,11 +147,6 @@
         <item>全画面</item>
         <item>電話サイズ</item>
     </string-array>
-    <string-array name="pref_window_size_list_values">
-        <item>standard</item>
-        <item>fullscreen</item>
-        <item>phone_size</item>
-    </string-array>
 
     <string name="window_size_standard">標準ウインドウ</string>
     <string name="window_size_fullscreen">全画面ウインドウ</string>
@@ -194,5 +156,7 @@
     <string name="app_hidden">非表示アプリ</string>
     <string name="apps_hidden">非表示アプリ</string>
     <string name="blacklist_dialog_title">非表示のアプリ</string>
+
+    <string name="reboot_required">Reboot your device to complete freeform mode setup</string>
 
 </resources>

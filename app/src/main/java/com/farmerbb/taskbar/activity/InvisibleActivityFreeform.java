@@ -62,16 +62,7 @@ public class InvisibleActivityFreeform extends Activity {
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            InvisibleActivityFreeform.super.finish();
-            overridePendingTransition(0, 0);
-
-            if(!finish) {
-                FreeformHackHelper helper = FreeformHackHelper.getInstance();
-                helper.setFreeformHackActive(false);
-                helper.setInFreeformWorkspace(false);
-
-                finish = true;
-            }
+            reallyFinish();
         }
     };
 
@@ -194,6 +185,8 @@ public class InvisibleActivityFreeform extends Activity {
                 stopService(new Intent(this, TaskbarService.class));
                 stopService(new Intent(this, StartMenuService.class));
             }
+
+            reallyFinish();
         }
     }
 
@@ -224,5 +217,18 @@ public class InvisibleActivityFreeform extends Activity {
         ResolveInfo defaultLauncher = getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
         return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
+    }
+
+    private void reallyFinish() {
+        InvisibleActivityFreeform.super.finish();
+        overridePendingTransition(0, 0);
+
+        if(!finish) {
+            FreeformHackHelper helper = FreeformHackHelper.getInstance();
+            helper.setFreeformHackActive(false);
+            helper.setInFreeformWorkspace(false);
+
+            finish = true;
+        }
     }
 }

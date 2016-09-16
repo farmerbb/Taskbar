@@ -60,17 +60,11 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity
-            android:name=".activity.BootToFreeformActivity"
-            android:documentLaunchMode="always"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.InvisibleActivity"/>
-        <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity
             android:name=".activity.HomeActivity"
@@ -118,7 +112,6 @@
         <activity
             android:name=".activity.SelectAppActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
-
         <activity
             android:name=".activity.DummyActivity"
             android:documentLaunchMode="always"

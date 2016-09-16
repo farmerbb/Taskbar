@@ -26,9 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,8 +46,6 @@ import android.widget.ListView;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
@@ -60,12 +56,14 @@ import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
 
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
 
     private boolean finishedLoadingPrefs;
+    private boolean showReminderToast = false;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -132,6 +130,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     @Override
     public void onResume() {
         super.onResume();
+
+        if(showReminderToast) {
+            showReminderToast = false;
+
+            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(hasFreeformSupport());
+
+            if(hasFreeformSupport())
+                U.showToastLong(getActivity(), R.string.reboot_required);
+        }
 
         int size = Blacklist.getInstance(getActivity()).getBlockedApps().size();
         String summary = size + " " + (size == 1 ? getString(R.string.app_hidden) : getString(R.string.apps_hidden));
@@ -257,14 +264,17 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             case "freeform_hack":
                 if(((CheckBoxPreference) p).isChecked()) {
                     if(!hasFreeformSupport()) {
+                        ((CheckBoxPreference) p).setChecked(false);
+
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
                         builder2.setTitle(R.string.freeform_dialog_title)
                                 .setMessage(R.string.freeform_dialog_message)
                                 .setPositiveButton(R.string.action_developer_options, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+                                        showReminderToast = true;
 
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
                                         try {
                                             startActivity(intent);
                                         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
@@ -287,11 +297,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         freeformIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
                         startActivity(freeformIntent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
                     }
-
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.B2F_FORCE_RESTART_FALSE"));
                 } else {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.B2F_FORCE_RESTART_TRUE"));
+                    LauncherHelper.getInstance().setForceTaskbarRestart(true);
                 }
                 break;
             case "freeform_mode_help":
