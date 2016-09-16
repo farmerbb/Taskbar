@@ -42,6 +42,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
+import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
 public class ContextMenuActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
@@ -191,7 +192,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     && pref.getBoolean("freeform_hack", false)
                     && isInMultiWindowMode()
                     && FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                String windowSizePref = pref.getString("window_size", "standard");
+                String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
 
                 if(!windowSizePref.equals("standard")) {
                     addPreferencesFromResource(R.xml.pref_context_menu_window_size_standard);
@@ -336,18 +337,24 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 }
                 break;
             case "window_size_standard":
+                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "standard");
+
                 U.launchStandard(this, generateIntent());
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 break;
             case "window_size_fullscreen":
+                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "fullscreen");
+
                 U.launchFullscreen(this, generateIntent(), false);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 break;
             case "window_size_phone_size":
+                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "phone_size");
+
                 U.launchPhoneSize(this, generateIntent());
 
                 showStartMenu = false;

@@ -112,8 +112,8 @@
     <string name="unpin_app">Unpin from recents</string>
     <string name="block_app">Block from recents</string>
     <string name="unblock_app">Unblock from recents</string>
-    <string name="clear_pinned_apps">Reset pinned/blocked apps</string>
-    <string name="are_you_sure">Are you sure?</string>
+    <string name="clear_pinned_apps">Reset per-app preferences</string>
+    <string name="are_you_sure">This will reset the following:\n\n&#8226; Pinned Taskbar apps\n&#8226; Blocked Taskbar apps\n\nAre you sure?</string>
 
     <string name="pref_title_hide_foreground">Hide icon for foreground application</string>
 

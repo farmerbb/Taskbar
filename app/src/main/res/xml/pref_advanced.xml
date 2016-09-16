@@ -30,6 +30,10 @@
         android:title="@string/pref_title_keyboard_shortcut"
         android:summary="@string/pref_description_keyboard_shortcut" />
 
+    <Preference
+        android:key="clear_pinned_apps"
+        android:title="@string/clear_pinned_apps"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

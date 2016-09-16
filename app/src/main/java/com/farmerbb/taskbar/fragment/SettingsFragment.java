@@ -59,6 +59,7 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
+import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
@@ -231,6 +232,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 PinnedBlockedApps.getInstance(getActivity()).clear(getActivity());
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                                    SavedWindowSizes.getInstance(getActivity()).clear(getActivity());
                             }
                         }).setNegativeButton(R.string.action_cancel, null);
 

@@ -42,6 +42,7 @@ import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
@@ -103,10 +104,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            launchApp(entry.getComponentName());
+                            launchApp(entry.getPackageName(), entry.getComponentName());
                         }
                     }, 100);
-                } else launchApp(entry.getComponentName());
+                } else launchApp(entry.getPackageName(), entry.getComponentName());
             }
         });
 
@@ -172,14 +173,13 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             getContext().startActivity(intent);
     }
 
-    private void launchApp(String componentName) {
+    private void launchApp(String packageName, String componentName) {
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(componentName));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        SharedPreferences pref = U.getSharedPreferences(getContext());
-        switch(pref.getString("window_size", "standard")) {
+        switch(SavedWindowSizes.getInstance(getContext()).getWindowSize(getContext(), packageName)) {
             case "standard":
                 U.launchStandard(getContext(), intent);
                 break;
@@ -191,6 +191,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 break;
         }
 
+        SharedPreferences pref = U.getSharedPreferences(getContext());
         if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
         else
