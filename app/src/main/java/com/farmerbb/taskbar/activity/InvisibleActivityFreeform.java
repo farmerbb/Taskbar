@@ -186,7 +186,6 @@ public class InvisibleActivityFreeform extends Activity {
                 stopService(new Intent(this, StartMenuService.class));
             }
 
-            reallyFinish();
         }
     }
 
