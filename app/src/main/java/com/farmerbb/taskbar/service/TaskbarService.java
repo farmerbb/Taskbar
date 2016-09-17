@@ -696,6 +696,10 @@ public class TaskbarService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        startRefreshingRecents();
+
+        if(layout != null) {
+            windowManager.removeView(layout);
+            drawTaskbar();
+        }
     }
 }
