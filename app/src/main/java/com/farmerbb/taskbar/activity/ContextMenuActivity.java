@@ -20,7 +20,6 @@ import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
@@ -193,35 +192,21 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     && pref.getBoolean("freeform_hack", false)
                     && isInMultiWindowMode()
                     && FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
 
-                boolean shouldShowWindowSizePrefs = true;
+                if(!windowSizePref.equals("standard")) {
+                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_standard);
+                    findPreference("window_size_standard").setOnPreferenceClickListener(this);
+                }
 
-                try {
-                    ActivityInfo activityInfo = getPackageManager().getActivityInfo(ComponentName.unflattenFromString(componentName), 0);
-                    if(activityInfo.getThemeResource() == android.R.style.Theme_NoDisplay
-                            || activityInfo.getThemeResource() == android.R.style.Theme_Translucent_NoTitleBar
-                            || activityInfo.screenOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                        shouldShowWindowSizePrefs = false;
+                if(!windowSizePref.equals("fullscreen")) {
+                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_fullscreen);
+                    findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
+                }
 
-                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
-
-                if(shouldShowWindowSizePrefs) {
-                    String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
-
-                    if(!windowSizePref.equals("standard")) {
-                        addPreferencesFromResource(R.xml.pref_context_menu_window_size_standard);
-                        findPreference("window_size_standard").setOnPreferenceClickListener(this);
-                    }
-
-                    if(!windowSizePref.equals("fullscreen")) {
-                        addPreferencesFromResource(R.xml.pref_context_menu_window_size_fullscreen);
-                        findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
-                    }
-
-                    if(!windowSizePref.equals("phone_size")) {
-                        addPreferencesFromResource(R.xml.pref_context_menu_window_size_phone_size);
-                        findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
-                    }
+                if(!windowSizePref.equals("phone_size")) {
+                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_phone_size);
+                    findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
                 }
             }
 

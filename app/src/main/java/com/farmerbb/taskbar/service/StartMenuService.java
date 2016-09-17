@@ -335,7 +335,7 @@ public class StartMenuService extends Service {
                 Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
 
                 for(ResolveInfo appInfo : unfilteredList) {
-                    if(!blacklist.isBlocked(appInfo.activityInfo.packageName))
+                    if(!blacklist.isBlocked(appInfo.activityInfo.name))
                         list.add(appInfo);
                 }
 
@@ -377,7 +377,7 @@ public class StartMenuService extends Service {
 
                 if(query == null && !firstDraw) {
                     for(ResolveInfo appInfo : queryList) {
-                        finalApplicationIds.add(appInfo.activityInfo.applicationInfo.packageName);
+                        finalApplicationIds.add(appInfo.activityInfo.packageName);
                     }
 
                     if(finalApplicationIds.size() != currentStartMenuIds.size())

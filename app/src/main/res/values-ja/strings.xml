@@ -158,7 +158,8 @@
     <string name="blacklist_dialog_title">非表示のアプリ</string>
 
     <string name="reboot_required">Reboot your device to complete freeform mode setup</string>
-
-    <string name="set_as_default_home">Please press \'\'Always\'\' to set Taskbar as your default launcher</string>
+    <string name="enable_force_activities_resizable">Scroll to the bottom and turn on \'\'Force activities to be resizable\'\'</string>
+    <string name="set_as_default_home">Press \'\'Always\'\' to set Taskbar as your default launcher</string>
+    <string name="enable_developer_options">Enable Developer Options by tapping on the build number 7 times</string>
 
 </resources>

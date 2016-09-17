@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -129,7 +130,7 @@ public class SelectAppActivity extends AppCompatActivity {
             }
 
             for(ResolveInfo appInfo : list) {
-                installedApps.add(appInfo.activityInfo.packageName);
+                installedApps.add(appInfo.activityInfo.name);
             }
 
             for(String packageName : blacklistedApps) {
@@ -170,7 +171,7 @@ public class SelectAppActivity extends AppCompatActivity {
                 }
 
                 entries.add(new BlacklistEntry(
-                        appInfo.activityInfo.packageName,
+                        appInfo.activityInfo.name,
                         label));
             }
 

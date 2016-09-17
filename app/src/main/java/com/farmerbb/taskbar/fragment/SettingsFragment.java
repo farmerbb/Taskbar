@@ -86,7 +86,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
         // On smaller-screened devices, set "Grid" as the default start menu layout
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(getResources().getConfiguration().smallestScreenWidthDp < 600) {
+        if(getResources().getConfiguration().smallestScreenWidthDp < 600
+                && pref.getString("start_menu_layout", "null").equals("null")) {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
 
@@ -286,7 +287,14 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
                                         try {
                                             startActivity(intent);
-                                        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                                            U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
+                                        } catch (ActivityNotFoundException e) {
+                                            intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                                            try {
+                                                startActivity(intent);
+                                                U.showToastLong(getActivity(), R.string.enable_developer_options);
+                                            } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
+                                        }
                                     }
                                 });
 
