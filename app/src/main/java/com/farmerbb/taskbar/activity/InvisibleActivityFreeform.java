@@ -22,15 +22,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -44,6 +41,7 @@ public class InvisibleActivityFreeform extends Activity {
     boolean doNotHide = false;
     boolean proceedWithOnCreate = true;
     boolean finish = false;
+    boolean bootToFreeform = false;
 
     private BroadcastReceiver appearingReceiver = new BroadcastReceiver() {
         @Override
@@ -144,6 +142,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         if(U.bootToFreeformActive(this)) {
             LauncherHelper.getInstance().setOnHomeScreen(true);
+            bootToFreeform = true;
 
             // We always start the Taskbar and Start Menu services, even if the app isn't normally running
             startService(new Intent(this, TaskbarService.class));
@@ -176,8 +175,9 @@ public class InvisibleActivityFreeform extends Activity {
 
         possiblyHideTaskbar();
 
-        if(U.bootToFreeformActive(this)) {
+        if(bootToFreeform) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
+            bootToFreeform = false;
 
             // Stop the Taskbar and Start Menu services if they should normally not be active
             SharedPreferences pref = U.getSharedPreferences(this);
