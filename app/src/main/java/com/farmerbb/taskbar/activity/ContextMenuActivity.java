@@ -83,7 +83,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             int y = getIntent().getIntExtra("y", 0);
             int offset = getResources().getDimensionPixelSize(R.dimen.context_menu_offset);
 
-            switch(pref.getString("position", "bottom_left")) {
+            switch(U.getTaskbarPosition(this)) {
                 case "bottom_left":
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
@@ -114,7 +114,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             int y = getIntent().getIntExtra("y", display.getHeight());
             int offset = getResources().getDimensionPixelSize(R.dimen.icon_size);
 
-            switch(pref.getString("position", "bottom_left")) {
+            switch(U.getTaskbarPosition(this)) {
                 case "bottom_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = isStartButton ? 0 : x;
@@ -229,7 +229,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     findPreference("block_app").setTitle(R.string.unblock_app);
                 } else {
                     final int MAX_NUM_OF_COLUMNS =
-                            pref.getString("position", "bottom_left").contains("vertical")
+                            U.getTaskbarPosition(this).contains("vertical")
                                     ? getResources().getInteger(R.integer.num_of_columns_vertical)
                                     : getResources().getInteger(R.integer.num_of_columns);
 

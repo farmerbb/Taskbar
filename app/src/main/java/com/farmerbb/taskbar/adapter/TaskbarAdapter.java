@@ -68,7 +68,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
         ImageView imageView2 = (ImageView) convertView.findViewById(R.id.shortcut_icon);
         imageView.setImageDrawable(entry.getIcon(getContext()));
 
-        String taskbarPosition = pref.getString("position", "bottom_left");
+        String taskbarPosition = U.getTaskbarPosition(getContext());
         if(pref.getBoolean("shortcut_icon", true)) {
             boolean shouldShowShortcutIcon;
             if(taskbarPosition.contains("vertical"))

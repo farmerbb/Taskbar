@@ -159,8 +159,7 @@ public class StartMenuService extends Service {
                 PixelFormat.TRANSLUCENT);
 
         // Determine where to show the start menu on screen
-        final SharedPreferences pref = U.getSharedPreferences(this);
-        switch(pref.getString("position", "bottom_left")) {
+        switch(U.getTaskbarPosition(this)) {
             case "bottom_left":
                 layoutId = R.layout.start_menu_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
@@ -198,6 +197,7 @@ public class StartMenuService extends Service {
         // Initialize views
         int theme = 0;
 
+        final SharedPreferences pref = U.getSharedPreferences(this);
         switch(pref.getString("theme", "light")) {
             case "light":
                 theme = R.style.AppTheme;
@@ -230,7 +230,6 @@ public class StartMenuService extends Service {
                             LinearLayout layout = (LinearLayout) view.findViewById(R.id.entry);
                             layout.performClick();
                         } else {
-                            SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
                             if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
                                 LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                             else

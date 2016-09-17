@@ -33,6 +33,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.Surface;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.BuildConfig;
@@ -131,8 +134,7 @@ public class U {
         if(resourceId > 0)
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
 
-        SharedPreferences pref = getSharedPreferences(context);
-        String position = pref.getString("position", "bottom_left");
+        String position = getTaskbarPosition(context);
         boolean overridePad = position.equals("top_left") || position.equals("top_right");
 
         int left = 0;
@@ -205,5 +207,116 @@ public class U {
         ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
         return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
+    }
+
+    public static String getTaskbarPosition(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        String position = pref.getString("position", "bottom_left");
+
+        if(pref.getBoolean("anchor", false)) {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            int rotation = windowManager.getDefaultDisplay().getRotation();
+
+            switch(position) {
+                case "bottom_left":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "bottom_left";
+                        case Surface.ROTATION_90:
+                            return "bottom_vertical_right";
+                        case Surface.ROTATION_180:
+                            return "top_right";
+                        case Surface.ROTATION_270:
+                            return "top_vertical_left";
+                    }
+                    break;
+                case "bottom_vertical_left":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "bottom_vertical_left";
+                        case Surface.ROTATION_90:
+                            return "bottom_right";
+                        case Surface.ROTATION_180:
+                            return "top_vertical_right";
+                        case Surface.ROTATION_270:
+                            return "top_left";
+                    }
+                    break;
+                case "bottom_right":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "bottom_right";
+                        case Surface.ROTATION_90:
+                            return "top_vertical_right";
+                        case Surface.ROTATION_180:
+                            return "top_left";
+                        case Surface.ROTATION_270:
+                            return "bottom_vertical_left";
+                    }
+                    break;
+                case "bottom_vertical_right":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "bottom_vertical_right";
+                        case Surface.ROTATION_90:
+                            return "top_right";
+                        case Surface.ROTATION_180:
+                            return "top_vertical_left";
+                        case Surface.ROTATION_270:
+                            return "bottom_left";
+                    }
+                    break;
+                case "top_left":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "top_left";
+                        case Surface.ROTATION_90:
+                            return "bottom_vertical_left";
+                        case Surface.ROTATION_180:
+                            return "bottom_right";
+                        case Surface.ROTATION_270:
+                            return "top_vertical_right";
+                    }
+                    break;
+                case "top_vertical_left":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "top_vertical_left";
+                        case Surface.ROTATION_90:
+                            return "bottom_left";
+                        case Surface.ROTATION_180:
+                            return "bottom_vertical_right";
+                        case Surface.ROTATION_270:
+                            return "top_right";
+                    }
+                    break;
+                case "top_right":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "top_right";
+                        case Surface.ROTATION_90:
+                            return "top_vertical_left";
+                        case Surface.ROTATION_180:
+                            return "bottom_left";
+                        case Surface.ROTATION_270:
+                            return "bottom_vertical_right";
+                    }
+                    break;
+                case "top_vertical_right":
+                    switch(rotation) {
+                        case Surface.ROTATION_0:
+                            return "top_vertical_right";
+                        case Surface.ROTATION_90:
+                            return "top_left";
+                        case Surface.ROTATION_180:
+                            return "bottom_vertical_left";
+                        case Surface.ROTATION_270:
+                            return "bottom_right";
+                    }
+                    break;
+            }
+        }
+
+        return position;
     }
 }

@@ -179,8 +179,7 @@ public class TaskbarService extends Service {
                 PixelFormat.TRANSLUCENT);
 
         // Determine where to show the taskbar on screen
-        SharedPreferences pref = U.getSharedPreferences(this);
-        switch(pref.getString("position", "bottom_left")) {
+        switch(U.getTaskbarPosition(this)) {
             case "bottom_left":
                 layoutId = R.layout.taskbar_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
@@ -218,6 +217,7 @@ public class TaskbarService extends Service {
         // Initialize views
         int theme = 0;
 
+        SharedPreferences pref = U.getSharedPreferences(this);
         switch(pref.getString("theme", "light")) {
             case "light":
                 theme = R.style.AppTheme;
@@ -335,9 +335,8 @@ public class TaskbarService extends Service {
     private void updateRecentApps(boolean firstRefresh) {
         final PackageManager pm = getPackageManager();
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
-        final SharedPreferences pref = U.getSharedPreferences(this);
         final int MAX_NUM_OF_COLUMNS =
-                pref.getString("position", "bottom_left").contains("vertical")
+                U.getTaskbarPosition(this).contains("vertical")
                         ? getResources().getInteger(R.integer.num_of_columns_vertical)
                         : getResources().getInteger(R.integer.num_of_columns);
         List<AppEntry> entries = new ArrayList<>();
@@ -431,6 +430,7 @@ public class TaskbarService extends Service {
                 }
 
                 // Filter out the currently running foreground app, if requested by the user
+                SharedPreferences pref = U.getSharedPreferences(this);
                 if(pref.getBoolean("hide_foreground", false)) {
                     UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
                     UsageEvents.Event eventCache = new UsageEvents.Event();
@@ -465,7 +465,7 @@ public class TaskbarService extends Service {
 
                 // Determine if we need to reverse the order
                 boolean needToReverseOrder;
-                switch(pref.getString("position", "bottom_left")) {
+                switch(U.getTaskbarPosition(this)) {
                     case "bottom_right":
                     case "top_right":
                         needToReverseOrder = sortOrder.contains("false");
@@ -499,7 +499,7 @@ public class TaskbarService extends Service {
             }
 
             // Determine if we need to reverse the order again
-            if(pref.getString("position", "bottom_left").contains("vertical")) {
+            if(U.getTaskbarPosition(this).contains("vertical")) {
                 Collections.reverse(entries);
                 Collections.reverse(intentCache);
             }
@@ -555,7 +555,7 @@ public class TaskbarService extends Service {
                         if(numOfEntries > 0) {
                             ViewGroup.LayoutParams params = taskbar.getLayoutParams();
 
-                            if(pref.getString("position", "bottom_left").contains("vertical")) {
+                            if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
                                 params.height = getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
                                 taskbar.setNumColumns(1);
                             } else {

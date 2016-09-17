@@ -131,6 +131,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         bindPreferenceSummaryToValue(findPreference("theme"));
         bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
+        bindPreferenceSummaryToValue(findPreference("anchor"));
 
         finishedLoadingPrefs = true;
     }

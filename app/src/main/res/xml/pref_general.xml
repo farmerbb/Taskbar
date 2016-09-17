@@ -67,6 +67,11 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:key="anchor"
+        android:title="@string/pref_title_anchor"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
         android:key="start_on_boot"
         android:title="@string/pref_title_start_on_boot"/>
 
