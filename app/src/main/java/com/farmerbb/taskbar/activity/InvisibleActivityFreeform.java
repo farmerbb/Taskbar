@@ -88,10 +88,16 @@ public class InvisibleActivityFreeform extends Activity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
-            LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));
-            LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, new IntentFilter("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
-            LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
-            LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, new IntentFilter("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING"));
+            IntentFilter appearingReceiverFilter = new IntentFilter();
+            appearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
+            appearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING");
+
+            IntentFilter disappearingReceiverFilter = new IntentFilter();
+            disappearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_DISAPPEARING");
+            disappearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING");
+
+            LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, appearingReceiverFilter);
+            LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);
             LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
 
             FreeformHackHelper.getInstance().setFreeformHackActive(true);

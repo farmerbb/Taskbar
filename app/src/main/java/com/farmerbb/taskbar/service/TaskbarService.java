@@ -295,6 +295,11 @@ public class TaskbarService extends Service {
 
         if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false)) toggleTaskbar();
 
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(showReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(tempShowReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(tempHideReceiver);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(showReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_TASKBAR"));
         LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_TASKBAR"));
         LocalBroadcastManager.getInstance(this).registerReceiver(tempShowReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
