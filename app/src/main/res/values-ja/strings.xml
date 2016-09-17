@@ -168,4 +168,6 @@
     <string name="dialog_donate_message">Support the development of Taskbar by upgrading to the Donate Version for %1$s!\n\nThe Donate Version is identical to the free version and your preferences will automatically transfer over.\n\nTaskbar is and will always be 100%% free, open source, with absolutely no ads.  However, your support is greatly appreciated!</string>
     <string name="action_no_thanks">No thanks</string>
 
+    <string name="importing_settings">Importing settings&#8230; please wait.</string>
+
 </resources>

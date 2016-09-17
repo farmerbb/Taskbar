@@ -38,6 +38,7 @@ import android.view.Display;
 import android.widget.CompoundButton;
 
 import com.farmerbb.taskbar.activity.HomeActivity;
+import com.farmerbb.taskbar.activity.ImportSettingsActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.fragment.SettingsFragment;
@@ -47,6 +48,9 @@ import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -96,6 +100,27 @@ public class MainActivity extends AppCompatActivity {
                 pref.getBoolean("keyboard_shortcut", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
+            proceedWithAppLaunch();
+        else {
+            boolean freeVersionInstalled = true;
+            try {
+                getPackageManager().getPackageInfo(BuildConfig.BASE_APPLICATION_ID, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                freeVersionInstalled = false;
+            }
+
+            File file = new File(getFilesDir() + "imported_successfully");
+            if(freeVersionInstalled && file.exists()) {
+                startActivity(new Intent(this, ImportSettingsActivity.class));
+                finish();
+            } else {
+                proceedWithAppLaunch();
+            }
+        }
+    }
+    
+    private void proceedWithAppLaunch() {
         setContentView(R.layout.main);
 
         ActionBar actionBar = getSupportActionBar();
@@ -106,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         theSwitch = (SwitchCompat) findViewById(R.id.the_switch);
         if(theSwitch != null) {
+            SharedPreferences pref = U.getSharedPreferences(this);
             theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
 
             theSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -121,6 +121,9 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Dialog"/>
+        <activity
+            android:name=".activity.ImportSettingsActivity"
+            android:theme="@style/AppTheme.Dialog"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

@@ -70,7 +70,10 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                     output.close();
                 } catch (IOException e) { /* Gracefully fail */ }
 
-            System.out.println("done");
+            try {
+                File file = new File(context.getFilesDir() + "imported_successfully");
+                file.createNewFile();
+            } catch (IOException e) { /* Gracefully fail */ }
         }
     }
 }
