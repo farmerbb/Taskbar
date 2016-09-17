@@ -32,4 +32,8 @@ Prerequisites:
 * JDK 8
 * Internet connection (to download dependencies)
 
-Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleRelease" to start the build.  Dependencies will download, and eventually you will end up with an APK file "app-release.apk", ready to install on your Android device.
+Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeRelease" to start the build.  Dependencies will download, and eventually you will end up with an APK file "app-free-release.apk", ready to install on your Android device.
+
+## Translation credits
+* Braden Farmer (English)
+* naofum (Japanese)
