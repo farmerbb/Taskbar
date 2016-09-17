@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -62,10 +63,15 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
+
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
 
     private boolean finishedLoadingPrefs;
     private boolean showReminderToast = false;
+    private int noThanksCount = 0;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -110,7 +116,21 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
 
         addPreferencesFromResource(R.xml.pref_advanced);
-        addPreferencesFromResource(R.xml.pref_about);
+
+        boolean playStoreInstalled = true;
+        try {
+            getActivity().getPackageManager().getPackageInfo("com.android.vending", 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            playStoreInstalled = false;
+        }
+
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+                && playStoreInstalled
+                && !pref.getBoolean("hide_donate", false)) {
+            addPreferencesFromResource(R.xml.pref_about_donate);
+            findPreference("donate").setOnPreferenceClickListener(this);
+        } else
+            addPreferencesFromResource(R.xml.pref_about);
 
         // Set OnClickListeners for certain preferences
         findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
@@ -225,6 +245,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public boolean onPreferenceClick(final Preference p) {
+        final SharedPreferences pref = U.getSharedPreferences(getActivity());
+
         switch(p.getKey()) {
             case "clear_pinned_apps":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -304,7 +326,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         dialog2.setCancelable(false);
                     }
 
-                    SharedPreferences pref = U.getSharedPreferences(getActivity());
                     if(pref.getBoolean("taskbar_active", false)
                             && getActivity().isInMultiWindowMode()
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
@@ -332,7 +353,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             case "blacklist":
                 Intent intent = null;
 
-                SharedPreferences pref = U.getSharedPreferences(getActivity());
                 switch(pref.getString("theme", "light")) {
                     case "light":
                         intent = new Intent(getActivity(), SelectAppActivity.class);
@@ -343,6 +363,40 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 }
 
                 startActivity(intent);
+                break;
+            case "donate":
+                NumberFormat format = NumberFormat.getCurrencyInstance();
+                format.setCurrency(Currency.getInstance(Locale.US));
+
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(getActivity());
+                builder3.setTitle(R.string.pref_title_donate)
+                        .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.BASE_APPLICATION_ID + ".paid"));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                try {
+                                    startActivity(intent);
+                                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                            }
+                        })
+                        .setNegativeButton(R.string.action_no_thanks, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                noThanksCount++;
+
+                                if(noThanksCount == 3) {
+                                    pref.edit().putBoolean("hide_donate", true).apply();
+                                    findPreference("donate").setEnabled(false);
+                                }
+                            }
+                        });
+
+                AlertDialog dialog3 = builder3.create();
+                dialog3.show();
                 break;
         }
 

@@ -163,5 +163,9 @@
     <string name="enable_developer_options">Enable Developer Options by tapping on the build number 7 times</string>
 
     <string name="pref_title_anchor">Anchor Taskbar when screen rotates</string>
+    <string name="pref_title_donate">Donate</string>
+    <string name="pref_summary_donate">Support the development of Taskbar with a small donation by upgrading to the Donate Version</string>
+    <string name="dialog_donate_message">Support the development of Taskbar by upgrading to the Donate Version for %1$s!\n\nThe Donate Version is identical to the free version and your preferences will automatically transfer over.\n\nTaskbar is and will always be 100%% free, open source, with absolutely no ads.  However, your support is greatly appreciated!</string>
+    <string name="action_no_thanks">No thanks</string>
 
 </resources>
