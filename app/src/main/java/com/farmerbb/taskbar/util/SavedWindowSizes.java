@@ -37,7 +37,7 @@ public class SavedWindowSizes implements Serializable {
         int number = -1;
 
         for(int i = 0; i < savedApps.size(); i++) {
-            if(savedApps.get(i).getPackageName().equals(packageName)) {
+            if(savedApps.get(i).getComponentName().equals(packageName)) {
                 number = i;
                 break;
             }
@@ -51,8 +51,8 @@ public class SavedWindowSizes implements Serializable {
 
     public String getWindowSize(Context context, String packageName) {
         for(SavedWindowSizesEntry entry : savedApps) {
-            if(entry.getPackageName().equals(packageName))
-                return entry.getLabel();
+            if(entry.getComponentName().equals(packageName))
+                return entry.getWindowSize();
         }
 
         return U.getSharedPreferences(context).getString("window_size", "standard");
@@ -96,21 +96,7 @@ public class SavedWindowSizes implements Serializable {
         return theInstance;
     }
 
-    private class SavedWindowSizesEntry implements Serializable {
-        private String packageName;
-        private String label;
-
-        private SavedWindowSizesEntry(String packageName, String label) {
-            this.packageName = packageName;
-            this.label = label;
-        }
-
-        private String getPackageName() {
-            return packageName;
-        }
-
-        private String getLabel() {
-            return label;
-        }
+    public List<SavedWindowSizesEntry> getSavedWindowSizes() {
+        return savedApps;
     }
 }

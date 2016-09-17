@@ -21,10 +21,14 @@
     <permission android:name="com.farmerbb.taskbar.START_STOP_TASKBAR"
         android:protectionLevel="signature" />
 
+    <permission android:name="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.farmerbb.taskbar.START_STOP_TASKBAR" />
+    <uses-permission android:name="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -173,6 +177,24 @@
                        android:resource="@xml/device_admin" />
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.SendSettingsReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.RECEIVE_SETTINGS"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.ReceiveSettingsReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.SEND_SETTINGS"/>
             </intent-filter>
         </receiver>
 

@@ -82,6 +82,11 @@ public class Blacklist implements Serializable {
         }
     }
 
+    public void clear(Context context) {
+        blockedApps.clear();
+        save(context);
+    }
+
     public static Blacklist getInstance(Context context) {
         if(theInstance == null)
             try {
