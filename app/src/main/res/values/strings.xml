@@ -153,8 +153,8 @@
     <string name="window_size_phone_size">Phone size window</string>
 
     <string name="pref_title_blacklist">Hide apps from start menu</string>
-    <string name="app_hidden">app hidden</string>
-    <string name="apps_hidden">apps hidden</string>
+    <string name="app_hidden">1 app hidden</string>
+    <string name="apps_hidden">%1$d apps hidden</string>
     <string name="blacklist_dialog_title">Hidden apps</string>
 
     <string name="reboot_required">Reboot your device to complete freeform mode setup</string>

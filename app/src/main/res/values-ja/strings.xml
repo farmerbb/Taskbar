@@ -153,8 +153,8 @@
     <string name="window_size_phone_size">電話サイズ ウインドウ</string>
 
     <string name="pref_title_blacklist">スタートメニューからアプリを非表示</string>
-    <string name="app_hidden">非表示アプリ</string>
-    <string name="apps_hidden">非表示アプリ</string>
+    <string name="app_hidden">1 非表示アプリ</string>
+    <string name="apps_hidden">%1$d 非表示アプリ</string>
     <string name="blacklist_dialog_title">非表示のアプリ</string>
 
     <string name="reboot_required">Reboot your device to complete freeform mode setup</string>

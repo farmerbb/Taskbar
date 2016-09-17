@@ -150,7 +150,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
 
         int size = Blacklist.getInstance(getActivity()).getBlockedApps().size();
-        String summary = size + " " + (size == 1 ? getString(R.string.app_hidden) : getString(R.string.apps_hidden));
+        String summary = size == 1 ? getString(R.string.app_hidden) : getString(R.string.apps_hidden, size);
 
         Preference blacklistPref = findPreference("blacklist");
         if(blacklistPref != null) {
