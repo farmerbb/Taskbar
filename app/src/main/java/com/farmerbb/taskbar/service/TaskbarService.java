@@ -386,7 +386,7 @@ public class TaskbarService extends Service {
                 // Also filter out the current launcher, and Taskbar itself
                 for(UsageStats packageInfo : usageStatsList) {
                     if(pm.getLaunchIntentForPackage(packageInfo.getPackageName()) != null
-                            && !packageInfo.getPackageName().equals(BuildConfig.APPLICATION_ID)
+                            && !packageInfo.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                             && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName))
                         usageStatsList2.add(packageInfo);
                 }
@@ -445,7 +445,7 @@ public class TaskbarService extends Service {
                         events.getNextEvent(eventCache);
 
                         if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-                            if(!(eventCache.getPackageName().equals(BuildConfig.APPLICATION_ID)
+                            if(!(eventCache.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                                     && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())
                                     && !eventCache.getClassName().equals(InvisibleActivityFreeform.class.getCanonicalName())))
                                 currentForegroundApp = eventCache.getPackageName();

@@ -215,7 +215,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             ResolveInfo defaultLauncher = pm.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-            if(!packageName.equals(BuildConfig.APPLICATION_ID)
+            if(!packageName.contains(BuildConfig.BASE_APPLICATION_ID)
                     && !packageName.equals(defaultLauncher.activityInfo.packageName)) {
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
 

@@ -18,6 +18,8 @@ android {
         versionName "1.2-beta2"
 
         resConfigs "en", "ja"
+
+        buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
     }
 
     buildTypes {
@@ -25,6 +27,16 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles 'proguard-android.txt'
+        }
+    }
+
+    productFlavors {
+        paid {
+            applicationId "com.farmerbb.taskbar.paid"
+        }
+
+        free {
+            applicationId "com.farmerbb.taskbar"
         }
     }
 }

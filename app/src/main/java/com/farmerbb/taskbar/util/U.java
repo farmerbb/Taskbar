@@ -189,7 +189,7 @@ public class U {
             context.getPackageManager().getPackageInfo("com.android.vending", 0);
             url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
         } catch (PackageManager.NameNotFoundException e) {
-            url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.APPLICATION_ID;
+            url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.BASE_APPLICATION_ID;
         }
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
