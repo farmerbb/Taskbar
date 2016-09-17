@@ -34,6 +34,6 @@ Prerequisites:
 
 Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeRelease" to start the build.  Dependencies will download, and eventually you will end up with an APK file "app-free-release.apk", ready to install on your Android device.
 
-## Translation credits
+## Translation Credits
 * Braden Farmer (English)
 * naofum (Japanese)
