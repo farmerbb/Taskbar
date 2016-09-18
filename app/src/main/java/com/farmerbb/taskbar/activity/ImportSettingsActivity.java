@@ -18,8 +18,12 @@ public class ImportSettingsActivity extends Activity {
     private BroadcastReceiver settingsReceivedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            startActivity(new Intent(ImportSettingsActivity.this, MainActivity.class));
-            finish();
+            Intent restartIntent = new Intent(ImportSettingsActivity.this, MainActivity.class);
+            restartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(restartIntent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            System.exit(0);
         }
     };
 
@@ -27,11 +31,13 @@ public class ImportSettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.import_settings);
+        setFinishOnTouchOutside(false);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(settingsReceivedReceiver, new IntentFilter("com.farmerbb.taskbar.IMPORT_FINISHED"));
 
-        if(broadcastSent) {
-            sendBroadcast(new Intent("com.farmerbb.taskbar.SEND_SETTINGS"));
+        if(!broadcastSent) {
+            sendBroadcast(new Intent("com.farmerbb.taskbar.RECEIVE_SETTINGS"));
+            broadcastSent = true;
         }
     }
 
@@ -41,4 +47,8 @@ public class ImportSettingsActivity extends Activity {
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(settingsReceivedReceiver);
     }
+
+    // Disable back button
+    @Override
+    public void onBackPressed() {}
 }

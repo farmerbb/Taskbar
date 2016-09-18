@@ -1,9 +1,11 @@
 package com.farmerbb.taskbar.receiver;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;
@@ -11,7 +13,6 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.BlacklistEntry;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
-import com.farmerbb.taskbar.util.SavedWindowSizesEntry;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,26 +27,52 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
             PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
             pba.clear(context);
 
-            AppEntry[] pinnedAppsArray = (AppEntry[]) intent.getSerializableExtra("pinned_apps");
-            if(pinnedAppsArray != null)
-                for(AppEntry entry : pinnedAppsArray) {
-                    pba.addPinnedApp(context, entry);
+            String[] pinnedAppsPackageNames = intent.getStringArrayExtra("pinned_apps_package_names");
+            String[] pinnedAppsComponentNames = intent.getStringArrayExtra("pinned_apps_component_names");
+            String[] pinnedAppsLabels = intent.getStringArrayExtra("pinned_apps_labels");
+
+            if(pinnedAppsPackageNames != null && pinnedAppsComponentNames != null && pinnedAppsLabels != null)
+                for(int i = 0; i < pinnedAppsPackageNames.length; i++) {
+                    Intent throwaway = new Intent();
+                    throwaway.setComponent(ComponentName.unflattenFromString(pinnedAppsComponentNames[i]));
+
+                    pba.addPinnedApp(context, new AppEntry(
+                            pinnedAppsPackageNames[i],
+                            pinnedAppsComponentNames[i],
+                            pinnedAppsLabels[i],
+                            throwaway.resolveActivityInfo(context.getPackageManager(), 0).loadIcon(context.getPackageManager()),
+                            true
+                    ));
                 }
 
-            AppEntry[] blockedAppsArray = (AppEntry[]) intent.getSerializableExtra("blocked_apps");
-            if(blockedAppsArray != null)
-                for(AppEntry entry : blockedAppsArray) {
-                    pba.addBlockedApp(context, entry);
+            String[] blockedAppsPackageNames = intent.getStringArrayExtra("blocked_apps_package_names");
+            String[] blockedAppsComponentNames = intent.getStringArrayExtra("blocked_apps_component_names");
+            String[] blockedAppsLabels = intent.getStringArrayExtra("blocked_apps_labels");
+
+            if(blockedAppsPackageNames != null && blockedAppsComponentNames != null && blockedAppsLabels != null)
+                for(int i = 0; i < blockedAppsPackageNames.length; i++) {
+                    pba.addBlockedApp(context, new AppEntry(
+                            blockedAppsPackageNames[i],
+                            blockedAppsComponentNames[i],
+                            blockedAppsLabels[i],
+                            null,
+                            false
+                    ));
                 }
 
             // Get blacklist
             Blacklist blacklist = Blacklist.getInstance(context);
             blacklist.clear(context);
 
-            BlacklistEntry[] blacklistedAppsArray = (BlacklistEntry[]) intent.getSerializableExtra("blacklist");
-            if(blacklistedAppsArray != null)
-                for(BlacklistEntry entry : blacklistedAppsArray) {
-                    blacklist.addBlockedApp(context, entry);
+            String[] blacklistPackageNames = intent.getStringArrayExtra("blacklist_package_names");
+            String[] blacklistLabels = intent.getStringArrayExtra("blacklist_labels");
+
+            if(blacklistPackageNames != null && blacklistLabels != null)
+                for(int i = 0; i < blacklistPackageNames.length; i++) {
+                    blacklist.addBlockedApp(context, new BlacklistEntry(
+                            blacklistPackageNames[i],
+                            blacklistLabels[i]
+                    ));
                 }
 
             // Get saved window sizes
@@ -53,10 +80,15 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                 SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
                 savedWindowSizes.clear(context);
 
-                SavedWindowSizesEntry[] savedWindowSizesArray = (SavedWindowSizesEntry[]) intent.getSerializableExtra("saved_window_sizes");
-                if(savedWindowSizesArray != null)
-                    for(SavedWindowSizesEntry entry : savedWindowSizesArray) {
-                        savedWindowSizes.setWindowSize(context, entry.getComponentName(), entry.getWindowSize());
+                String[] savedWindowSizesComponentNames = intent.getStringArrayExtra("saved_window_sizes_component_names");
+                String[] savedWindowSizesWindowSizes = intent.getStringArrayExtra("saved_window_sizes_window_sizes");
+
+                if(savedWindowSizesComponentNames != null && savedWindowSizesWindowSizes != null)
+                    for(int i = 0; i < savedWindowSizesComponentNames.length; i++) {
+                        savedWindowSizes.setWindowSize(context,
+                                savedWindowSizesComponentNames[i],
+                                savedWindowSizesWindowSizes[i]
+                        );
                     }
             }
 
@@ -71,8 +103,9 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                 } catch (IOException e) { /* Gracefully fail */ }
 
             try {
-                File file = new File(context.getFilesDir() + "imported_successfully");
-                file.createNewFile();
+                File file = new File(context.getFilesDir() + File.separator + "imported_successfully");
+                if(file.createNewFile())
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.IMPORT_FINISHED"));
             } catch (IOException e) { /* Gracefully fail */ }
         }
     }

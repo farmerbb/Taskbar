@@ -169,5 +169,8 @@
     <string name="action_no_thanks">No thanks</string>
 
     <string name="importing_settings">Importing settings&#8230; please wait.</string>
+    <string name="settings_imported_successfully">Settings imported successfully</string>
+    <string name="import_dialog_message">Thank you for purchasing the Donate Version of Taskbar!\n\nYour settings have been imported successfully and you may now uninstall the free version of the app.</string>
+    <string name="action_uninstall">Uninstall</string>
 
 </resources>

@@ -325,9 +325,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(pba2.isBlocked(componentName))
                     pba2.removeBlockedApp(this, componentName);
                 else {
-                    Intent throwaway = new Intent();
-                    throwaway.setComponent(ComponentName.unflattenFromString(componentName));
-
                     pba2.addBlockedApp(this, new AppEntry(
                             packageName,
                             componentName,

@@ -18,15 +18,19 @@ package com.farmerbb.taskbar;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -50,7 +54,6 @@ import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,15 +106,8 @@ public class MainActivity extends AppCompatActivity {
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
             proceedWithAppLaunch();
         else {
-            boolean freeVersionInstalled = true;
-            try {
-                getPackageManager().getPackageInfo(BuildConfig.BASE_APPLICATION_ID, 0);
-            } catch (PackageManager.NameNotFoundException e) {
-                freeVersionInstalled = false;
-            }
-
-            File file = new File(getFilesDir() + "imported_successfully");
-            if(freeVersionInstalled && file.exists()) {
+            File file = new File(getFilesDir() + File.separator + "imported_successfully");
+            if(freeVersionInstalled() && !file.exists()) {
                 startActivity(new Intent(this, ImportSettingsActivity.class));
                 finish();
             } else {
@@ -119,7 +115,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    
+
+    private boolean freeVersionInstalled() {
+        try {
+            getPackageManager().getPackageInfo(BuildConfig.BASE_APPLICATION_ID, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
     private void proceedWithAppLaunch() {
         setContentView(R.layout.main);
 
@@ -151,6 +156,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SettingsFragment(), "SettingsFragment").commit();
+
+        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.settings_imported_successfully)
+                    .setMessage(R.string.import_dialog_message)
+                    .setPositiveButton(R.string.action_uninstall, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
+                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            dialog.setCancelable(false);
+        }
     }
 
     @Override

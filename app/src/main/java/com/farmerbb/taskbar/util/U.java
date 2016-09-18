@@ -33,7 +33,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;

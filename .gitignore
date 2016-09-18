@@ -6,4 +6,5 @@
 /build
 /captures
 /app/build
-/app/app-release.apk
+/app/app-free-release.apk
+/app/app-paid-release.apk

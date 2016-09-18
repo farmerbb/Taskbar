@@ -18,17 +18,17 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.farmerbb.taskbar">
 
-    <permission android:name="com.farmerbb.taskbar.START_STOP_TASKBAR"
+    <permission android:name="${applicationId}.START_STOP_TASKBAR"
         android:protectionLevel="signature" />
 
-    <permission android:name="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS"
+    <permission android:name="${applicationId}.SEND_RECEIVE_SETTINGS"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="com.farmerbb.taskbar.START_STOP_TASKBAR" />
-    <uses-permission android:name="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS" />
+    <uses-permission android:name="${applicationId}.START_STOP_TASKBAR" />
+    <uses-permission android:name="${applicationId}.SEND_RECEIVE_SETTINGS" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -131,7 +131,7 @@
 
         <receiver
             android:name=".receiver.ShowHideTaskbarReceiver"
-            android:permission="com.farmerbb.taskbar.START_STOP_TASKBAR" >
+            android:permission="${applicationId}.START_STOP_TASKBAR" >
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.SHOW_HIDE_TASKBAR"/>
             </intent-filter>
@@ -140,7 +140,7 @@
             android:name=".receiver.StartReceiver"
             android:enabled="true"
             android:exported="true"
-            android:permission="com.farmerbb.taskbar.START_STOP_TASKBAR" >
+            android:permission="${applicationId}.START_STOP_TASKBAR" >
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.START"/>
             </intent-filter>
@@ -149,7 +149,7 @@
             android:name=".receiver.QuitReceiver"
             android:enabled="true"
             android:exported="true"
-            android:permission="com.farmerbb.taskbar.START_STOP_TASKBAR" >
+            android:permission="${applicationId}.START_STOP_TASKBAR" >
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.QUIT"/>
             </intent-filter>
@@ -186,7 +186,7 @@
             android:name=".receiver.SendSettingsReceiver"
             android:enabled="true"
             android:exported="true"
-            android:permission="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS" >
+            android:permission="com.farmerbb.taskbar.paid.SEND_RECEIVE_SETTINGS" >
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.RECEIVE_SETTINGS"/>
             </intent-filter>
