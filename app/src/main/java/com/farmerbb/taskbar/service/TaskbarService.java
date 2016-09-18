@@ -171,6 +171,8 @@ public class TaskbarService extends Service {
     private void drawTaskbar() {
         // Initialize layout params
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        U.setCachedRotation(windowManager.getDefaultDisplay().getRotation());
+
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,

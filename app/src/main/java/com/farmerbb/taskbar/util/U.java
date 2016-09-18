@@ -48,6 +48,7 @@ public class U {
 
     private static SharedPreferences pref;
     private static Toast toast;
+    private static Integer cachedRotation;
 
     public static SharedPreferences getSharedPreferences(Context context) {
         if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
@@ -208,13 +209,17 @@ public class U {
         return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
     }
 
+    public static void setCachedRotation(int cachedRotation) {
+        U.cachedRotation = cachedRotation;
+    }
+
     public static String getTaskbarPosition(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         String position = pref.getString("position", "bottom_left");
 
         if(pref.getBoolean("anchor", false)) {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            int rotation = windowManager.getDefaultDisplay().getRotation();
+            int rotation = cachedRotation != null ? cachedRotation : windowManager.getDefaultDisplay().getRotation();
 
             switch(position) {
                 case "bottom_left":
