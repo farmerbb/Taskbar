@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
@@ -117,9 +118,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean freeVersionInstalled() {
+        PackageManager pm = getPackageManager();
         try {
-            getPackageManager().getPackageInfo(BuildConfig.BASE_APPLICATION_ID, 0);
-            return true;
+            PackageInfo pInfo = pm.getPackageInfo(BuildConfig.BASE_APPLICATION_ID, 0);
+            return pInfo.versionCode >= 68
+                    && pm.checkSignatures(BuildConfig.BASE_APPLICATION_ID, BuildConfig.APPLICATION_ID)
+                    == PackageManager.SIGNATURE_MATCH;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
