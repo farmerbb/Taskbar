@@ -32,6 +32,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
@@ -89,6 +90,7 @@ public class TaskbarService extends Service {
     private boolean isShowingRecents = true;
     private boolean shouldRefreshRecents = true;
     private boolean taskbarShownTemporarily = false;
+    private boolean taskbarHiddenTemporarily = false;
     private boolean isRefreshingRecents = false;
 
     private int refreshInterval = -1;
@@ -96,6 +98,7 @@ public class TaskbarService extends Service {
     private String sortOrder = "false";
 
     private int layoutId = R.layout.taskbar_left;
+    private int currentTaskbarPosition = 0;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
@@ -112,6 +115,7 @@ public class TaskbarService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             taskbarShownTemporarily = false;
+            taskbarHiddenTemporarily = false;
             showTaskbar();
         }
     };
@@ -120,6 +124,7 @@ public class TaskbarService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             taskbarShownTemporarily = false;
+            taskbarHiddenTemporarily = false;
             hideTaskbar();
         }
     };
@@ -127,16 +132,14 @@ public class TaskbarService extends Service {
     private BroadcastReceiver tempShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SharedPreferences pref = U.getSharedPreferences(TaskbarService.this);
-            if(!pref.getBoolean("collapsed", false)) taskbarShownTemporarily = true;
-            showTaskbar();
+            tempShowTaskbar();
         }
     };
 
     private BroadcastReceiver tempHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(taskbarShownTemporarily) hideTaskbar();
+            tempHideTaskbar();
         }
     };
 
@@ -310,6 +313,17 @@ public class TaskbarService extends Service {
         startRefreshingRecents();
 
         windowManager.addView(layout, params);
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if(layout != null) {
+                    int[] location = new int[2];
+                    layout.getLocationOnScreen(location);
+                    currentTaskbarPosition = location[1];
+                }
+            }
+        });
     }
 
     private void startRefreshingRecents() {
@@ -325,9 +339,31 @@ public class TaskbarService extends Service {
 
                 if(!isRefreshingRecents) {
                     isRefreshingRecents = true;
-                    while(shouldRefreshRecents) {
+                    while(shouldRefreshRecents || taskbarHiddenTemporarily) {
                         SystemClock.sleep(refreshInterval);
-                        updateRecentApps(false);
+                        if(!taskbarHiddenTemporarily)
+                            updateRecentApps(false);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(layout != null) {
+                                    int[] location = new int[2];
+                                    layout.getLocationOnScreen(location);
+
+                                    if(location[1] > currentTaskbarPosition)
+                                        currentTaskbarPosition = location[1];
+                                    else if(location[1] == currentTaskbarPosition && taskbarHiddenTemporarily)
+                                        tempShowTaskbar();
+                                    else if(location[1] < currentTaskbarPosition) {
+                                        if(currentTaskbarPosition - location[1] == getNavBarSize())
+                                            currentTaskbarPosition = location[1];
+                                        else
+                                            tempHideTaskbar();
+                                    }
+                                }
+                            }
+                        });
                     }
 
                     isRefreshingRecents = false;
@@ -604,6 +640,8 @@ public class TaskbarService extends Service {
 
     private void toggleTaskbar() {
         taskbarShownTemporarily = false;
+        taskbarHiddenTemporarily = false;
+
         if(startButton.getVisibility() == View.GONE)
             showTaskbar();
         else
@@ -622,7 +660,20 @@ public class TaskbarService extends Service {
         }
 
         shouldRefreshRecents = true;
-        startRefreshingRecents();
+        if(!taskbarHiddenTemporarily) {
+            startRefreshingRecents();
+
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    if(layout != null) {
+                        int[] location = new int[2];
+                        layout.getLocationOnScreen(location);
+                        currentTaskbarPosition = location[1];
+                    }
+                }
+            });
+        }
 
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("collapsed", true).apply();
@@ -640,7 +691,8 @@ public class TaskbarService extends Service {
         }
 
         shouldRefreshRecents = false;
-        if(thread != null) thread.interrupt();
+        if(thread != null && !taskbarHiddenTemporarily)
+            thread.interrupt();
 
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("collapsed", false).apply();
@@ -649,6 +701,42 @@ public class TaskbarService extends Service {
 
         Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
         LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
+    }
+
+    private void tempShowTaskbar() {
+        if(!taskbarHiddenTemporarily) {
+            SharedPreferences pref = U.getSharedPreferences(TaskbarService.this);
+            if(!pref.getBoolean("collapsed", false)) taskbarShownTemporarily = true;
+        }
+
+        showTaskbar();
+
+        if(taskbarHiddenTemporarily)
+            taskbarHiddenTemporarily = false;
+    }
+
+    private void tempHideTaskbar() {
+        if(!taskbarShownTemporarily) {
+            SharedPreferences pref = U.getSharedPreferences(TaskbarService.this);
+            if(pref.getBoolean("collapsed", false)) taskbarHiddenTemporarily = true;
+        }
+
+        hideTaskbar();
+
+        if(taskbarShownTemporarily)
+            taskbarShownTemporarily = false;
+    }
+
+    private int getNavBarSize() {
+        Point size = new Point();
+        Point realSize = new Point();
+
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        display.getSize(size);
+        display.getRealSize(realSize);
+
+        return realSize.y - size.y;
     }
 
     @Override
