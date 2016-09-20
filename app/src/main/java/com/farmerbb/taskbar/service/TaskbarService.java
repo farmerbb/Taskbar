@@ -700,13 +700,22 @@ public class TaskbarService extends Service {
         if(layout != null) layout.setAlpha(isCollapsed && hide ? 0 : 1);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if(layout != null) {
             windowManager.removeView(layout);
-            drawTaskbar();
+
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+                drawTaskbar();
+            else {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                pref.edit().putBoolean("taskbar_active", false).apply();
+
+                stopSelf();
+            }
         }
     }
 }

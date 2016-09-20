@@ -518,13 +518,22 @@ public class StartMenuService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if(layout != null) {
             windowManager.removeView(layout);
-            drawStartMenu();
+
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+                drawStartMenu();
+            else {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                pref.edit().putBoolean("taskbar_active", false).apply();
+
+                stopSelf();
+            }
         }
     }
 }
