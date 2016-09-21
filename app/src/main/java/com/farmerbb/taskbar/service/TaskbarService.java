@@ -333,6 +333,7 @@ public class TaskbarService extends Service {
 
     private void startRefreshingRecents() {
         if(thread != null) thread.interrupt();
+        stopThread2 = true;
 
         currentTaskbarIds.clear();
 
@@ -352,8 +353,6 @@ public class TaskbarService extends Service {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                System.out.println("Running runnable");
-
                                 if(layout != null) {
                                     int[] location = new int[2];
                                     layout.getLocationOnScreen(location);
@@ -740,8 +739,6 @@ public class TaskbarService extends Service {
                     stopThread2 = false;
 
                     while(!stopThread2) {
-                        System.out.println("thread2");
-
                         SystemClock.sleep(refreshInterval);
 
                         handler2.post(new Runnable() {
