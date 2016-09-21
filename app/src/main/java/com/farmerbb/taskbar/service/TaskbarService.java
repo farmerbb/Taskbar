@@ -104,6 +104,8 @@ public class TaskbarService extends Service {
 
     private int layoutId = R.layout.taskbar_left;
     private int currentTaskbarPosition = 0;
+    private boolean showHideAutomagically = false;
+    private boolean positionIsVertical = false;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
@@ -193,34 +195,42 @@ public class TaskbarService extends Service {
             case "bottom_left":
                 layoutId = R.layout.taskbar_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                positionIsVertical = false;
                 break;
             case "bottom_vertical_left":
                 layoutId = R.layout.taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                positionIsVertical = true;
                 break;
             case "bottom_right":
                 layoutId = R.layout.taskbar_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                positionIsVertical = false;
                 break;
             case "bottom_vertical_right":
                 layoutId = R.layout.taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                positionIsVertical = true;
                 break;
             case "top_left":
                 layoutId = R.layout.taskbar_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
+                positionIsVertical = false;
                 break;
             case "top_vertical_left":
                 layoutId = R.layout.taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
+                positionIsVertical = true;
                 break;
             case "top_right":
                 layoutId = R.layout.taskbar_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
+                positionIsVertical = false;
                 break;
             case "top_vertical_right":
                 layoutId = R.layout.taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
+                positionIsVertical = true;
                 break;
         }
 
@@ -318,22 +328,14 @@ public class TaskbarService extends Service {
         startRefreshingRecents();
 
         windowManager.addView(layout, params);
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                if(layout != null) {
-                    int[] location = new int[2];
-                    layout.getLocationOnScreen(location);
-                    currentTaskbarPosition = location[1];
-                }
-            }
-        });
     }
 
     private void startRefreshingRecents() {
         if(thread != null) thread.interrupt();
         stopThread2 = true;
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        showHideAutomagically = pref.getBoolean("hide_when_keyboard_shown", false);
 
         currentTaskbarIds.clear();
 
@@ -350,29 +352,30 @@ public class TaskbarService extends Service {
                         SystemClock.sleep(refreshInterval);
                         updateRecentApps(false);
 
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(layout != null) {
-                                    int[] location = new int[2];
-                                    layout.getLocationOnScreen(location);
+                        if(showHideAutomagically && !positionIsVertical)
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(layout != null) {
+                                        int[] location = new int[2];
+                                        layout.getLocationOnScreen(location);
 
-                                    if(location[1] != 0) {
-                                        if(location[1] > currentTaskbarPosition) {
-                                            currentTaskbarPosition = location[1];
-                                        } else if(location[1] < currentTaskbarPosition) {
-                                            if(currentTaskbarPosition - location[1] == getNavBarSize())
+                                        if(location[1] != 0) {
+                                            if(location[1] > currentTaskbarPosition) {
                                                 currentTaskbarPosition = location[1];
-                                            else if(!startThread2) {
-                                                startThread2 = true;
-                                                tempHideTaskbar(true);
+                                            } else if(location[1] < currentTaskbarPosition) {
+                                                if(currentTaskbarPosition - location[1] == getNavBarSize())
+                                                    currentTaskbarPosition = location[1];
+                                                else if(!startThread2) {
+                                                    startThread2 = true;
+                                                    tempHideTaskbar(true);
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        });
-                    }
+                            });
+                        }
 
                     isRefreshingRecents = false;
                 }
@@ -674,17 +677,6 @@ public class TaskbarService extends Service {
         pref.edit().putBoolean("collapsed", true).apply();
 
         updateButton(false);
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                if(layout != null) {
-                    int[] location = new int[2];
-                    layout.getLocationOnScreen(location);
-                    currentTaskbarPosition = location[1];
-                }
-            }
-        });
     }
 
     private void hideTaskbar() {
@@ -731,7 +723,7 @@ public class TaskbarService extends Service {
         if(taskbarShownTemporarily)
             taskbarShownTemporarily = false;
 
-        if(monitorPositionChanges) {
+        if(monitorPositionChanges && showHideAutomagically && !positionIsVertical) {
             if(thread2 != null) thread2.interrupt();
 
             handler2 = new Handler();
@@ -854,6 +846,7 @@ public class TaskbarService extends Service {
 
         if(layout != null) {
             windowManager.removeView(layout);
+            currentTaskbarPosition = 0;
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
                 drawTaskbar();

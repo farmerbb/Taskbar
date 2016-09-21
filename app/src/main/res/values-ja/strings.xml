@@ -173,4 +173,7 @@
     <string name="import_dialog_message">Thank you for purchasing the Donate Version of Taskbar!\n\nYour settings have been imported successfully and you may now uninstall the free version of the app.</string>
     <string name="action_uninstall">Uninstall</string>
 
+    <string name="pref_title_hide_when_keyboard_shown">Collapse Taskbar automatically</string>
+    <string name="pref_description_hide_when_keyboard_shown">When the on-screen keyboard is shown, and Taskbar is horizontal, automatically collapse Taskbar to avoid blocking text fields. (Experimental)</string>
+
 </resources>

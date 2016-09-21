@@ -152,6 +152,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
         bindPreferenceSummaryToValue(findPreference("anchor"));
+        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
 
         finishedLoadingPrefs = true;
     }
