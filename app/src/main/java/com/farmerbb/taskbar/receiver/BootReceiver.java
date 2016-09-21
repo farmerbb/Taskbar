@@ -33,8 +33,11 @@ public class BootReceiver extends BroadcastReceiver {
         if(pref.getBoolean("start_on_boot", false)) {
             pref.edit().putBoolean("taskbar_active", true).putLong("time_of_service_start", System.currentTimeMillis()).apply();
 
-            context.startService(new Intent(context, TaskbarService.class));
-            context.startService(new Intent(context, StartMenuService.class));
+            if(!pref.getBoolean("is_hidden", false)) {
+                context.startService(new Intent(context, TaskbarService.class));
+                context.startService(new Intent(context, StartMenuService.class));
+            }
+
             context.startService(new Intent(context, NotificationService.class));
         } else
             pref.edit().putBoolean("taskbar_active", isServiceRunning(context)).apply();
