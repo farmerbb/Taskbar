@@ -357,14 +357,16 @@ public class TaskbarService extends Service {
                                     int[] location = new int[2];
                                     layout.getLocationOnScreen(location);
 
-                                    if(location[1] > currentTaskbarPosition) {
-                                        currentTaskbarPosition = location[1];
-                                    } else if(location[1] < currentTaskbarPosition) {
-                                        if(currentTaskbarPosition - location[1] == getNavBarSize())
+                                    if(location[1] != 0) {
+                                        if(location[1] > currentTaskbarPosition) {
                                             currentTaskbarPosition = location[1];
-                                        else if(!startThread2) {
-                                            startThread2 = true;
-                                            tempHideTaskbar(true);
+                                        } else if(location[1] < currentTaskbarPosition) {
+                                            if(currentTaskbarPosition - location[1] == getNavBarSize())
+                                                currentTaskbarPosition = location[1];
+                                            else if(!startThread2) {
+                                                startThread2 = true;
+                                                tempHideTaskbar(true);
+                                            }
                                         }
                                     }
                                 }
@@ -762,18 +764,22 @@ public class TaskbarService extends Service {
             int[] location = new int[2];
             layout.getLocationOnScreen(location);
 
-            if(location[1] > currentTaskbarPosition) {
-                currentTaskbarPosition = location[1];
-                if(taskbarHiddenTemporarily) {
+            if(location[1] == 0) {
+                return true;
+            } else {
+                if(location[1] > currentTaskbarPosition) {
+                    currentTaskbarPosition = location[1];
+                    if(taskbarHiddenTemporarily) {
+                        tempShowTaskbar();
+                        return true;
+                    }
+                } else if(location[1] == currentTaskbarPosition && taskbarHiddenTemporarily) {
                     tempShowTaskbar();
                     return true;
+                } else if(location[1] < currentTaskbarPosition
+                        && currentTaskbarPosition - location[1] == getNavBarSize()) {
+                    currentTaskbarPosition = location[1];
                 }
-            } else if(location[1] == currentTaskbarPosition && taskbarHiddenTemporarily) {
-                tempShowTaskbar();
-                return true;
-            } else if(location[1] < currentTaskbarPosition
-                    && currentTaskbarPosition - location[1] == getNavBarSize()) {
-                currentTaskbarPosition = location[1];
             }
         }
 
