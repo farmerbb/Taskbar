@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
             dialog.setCancelable(false);
+
+            if(theSwitch != null) theSwitch.setChecked(false);
         }
     }
 
