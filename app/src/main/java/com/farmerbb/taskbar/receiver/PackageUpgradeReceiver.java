@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
-import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class PackageUpgradeReceiver extends BroadcastReceiver {
