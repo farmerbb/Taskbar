@@ -30,7 +30,7 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if((!pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) || LauncherHelper.getInstance().isOnHomeScreen()) {
+        if((pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) || LauncherHelper.getInstance().isOnHomeScreen()) {
             context.startService(new Intent(context, TaskbarService.class));
             context.startService(new Intent(context, StartMenuService.class));
         }
