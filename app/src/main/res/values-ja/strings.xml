@@ -157,23 +157,23 @@
     <string name="apps_hidden">%1$d 非表示アプリ</string>
     <string name="blacklist_dialog_title">非表示のアプリ</string>
 
-    <string name="reboot_required">Reboot your device to complete freeform mode setup</string>
-    <string name="enable_force_activities_resizable">Scroll to the bottom and turn on \'\'Force activities to be resizable\'\'</string>
-    <string name="set_as_default_home">Press \'\'Always\'\' to set Taskbar as your default launcher</string>
-    <string name="enable_developer_options">Enable Developer Options by tapping on the build number 7 times</string>
+    <string name="reboot_required">お使いのデバイスを再起動して、フリーフォームモードの設定を完了してください</string>
+    <string name="enable_force_activities_resizable">下部にスクロールして \'\'強制的にアクティビティをリサイズ可能にする\'\' をオンにします</string>
+    <string name="set_as_default_home">\'\'常に\'\' を押して、Taskbar をお使いのデフォルトのランチャーとして設定します</string>
+    <string name="enable_developer_options">ビルド番号を 7 回タップして、開発者オプションを有効にします</string>
 
-    <string name="pref_title_anchor">Anchor Taskbar when screen rotates</string>
-    <string name="pref_title_donate">Donate</string>
-    <string name="pref_summary_donate">Support the development of Taskbar with a small donation by upgrading to the Donate Version</string>
-    <string name="dialog_donate_message">Support the development of Taskbar by upgrading to the Donate Version for %1$s!\n\nThe Donate Version is identical to the free version and your preferences will automatically transfer over.\n\nTaskbar is and will always be 100%% free, open source, with absolutely no ads.  However, your support is greatly appreciated!</string>
-    <string name="action_no_thanks">No thanks</string>
+    <string name="pref_title_anchor">画面の向きを変えたときに Taskbar を固定</string>
+    <string name="pref_title_donate">寄付</string>
+    <string name="pref_summary_donate">寄付バージョンにアップグレードすることによる少額の寄付で、Taskbar の開発をサポートします</string>
+    <string name="dialog_donate_message">%1$s の寄付バージョンにアップグレードすることで、Taskbar の開発をサポートします!\n\n寄付バージョンは無料バージョンと同じで、設定は自動的に引き継がれます。\n\nTaskbar は常に 100%% フリー、オープンソースで、まったく広告はありません。しかし、あなたのご支援は大変感謝します!</string>
+    <string name="action_no_thanks">いいえ結構です</string>
 
-    <string name="importing_settings">Importing settings&#8230; please wait.</string>
-    <string name="settings_imported_successfully">Settings imported successfully</string>
-    <string name="import_dialog_message">Thank you for purchasing the Donate Version of Taskbar!\n\nYour settings have been imported successfully and you may now uninstall the free version of the app.</string>
-    <string name="action_uninstall">Uninstall</string>
+    <string name="importing_settings">設定のインポート中&#8230; しばらくお待ちください。</string>
+    <string name="settings_imported_successfully">設定を正常にインポートしました</string>
+    <string name="import_dialog_message">Taskbar の寄付バージョンをご購入いただきありがとうございます!\n\n設定を正常にインポートしました。無料バージョンのアプリをアンインストールすることができます。</string>
+    <string name="action_uninstall">アンインストール</string>
 
-    <string name="pref_title_hide_when_keyboard_shown">Collapse Taskbar automatically</string>
-    <string name="pref_description_hide_when_keyboard_shown">When the on-screen keyboard is shown, and Taskbar is horizontal, automatically collapse Taskbar to avoid blocking text fields. (Experimental)</string>
+    <string name="pref_title_hide_when_keyboard_shown">Taskbar を自動的に折りたたむ</string>
+    <string name="pref_description_hide_when_keyboard_shown">オンスクリーン キーボードが表示され、Taskbar が横向きのとき、テキストフィールドがブロックされるのを防止するため自動的に Taskbar を折りたたみます。 (実験的)</string>
 
 </resources>
