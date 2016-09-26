@@ -390,10 +390,7 @@ public class TaskbarService extends Service {
     private void updateRecentApps(boolean firstRefresh) {
         final PackageManager pm = getPackageManager();
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
-        final int MAX_NUM_OF_COLUMNS =
-                U.getTaskbarPosition(this).contains("vertical")
-                        ? getResources().getInteger(R.integer.num_of_columns_vertical)
-                        : getResources().getInteger(R.integer.num_of_columns);
+        final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfColumns(this);
         List<AppEntry> entries = new ArrayList<>();
         List<Intent> intentCache = new ArrayList<>();
         

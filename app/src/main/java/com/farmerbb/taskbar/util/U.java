@@ -32,6 +32,7 @@ import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -322,5 +323,30 @@ public class U {
         }
 
         return position;
+    }
+
+    public static int getMaxNumOfColumns(Context context) {
+        // The base Taskbar size without any recent apps added.
+        // Someday this might be automatically calculated, but today is not that day.
+        float baseTaskbarSize = 92;
+        int numOfColumns = 0;
+
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float maxScreenSize = getTaskbarPosition(context).contains("vertical")
+                ? metrics.heightPixels / metrics.density
+                : metrics.widthPixels / metrics.density;
+
+        float iconSize = context.getResources().getDimension(R.dimen.icon_size) / metrics.density;
+
+        SharedPreferences pref = getSharedPreferences(context);
+        int userMaxNumOfColumns = Integer.valueOf(pref.getString("max_num_of_recents", "10"));
+
+        while(baseTaskbarSize + iconSize < maxScreenSize
+                && numOfColumns < userMaxNumOfColumns) {
+            baseTaskbarSize = baseTaskbarSize + iconSize;
+            numOfColumns++;
+        }
+
+        return numOfColumns;
     }
 }
