@@ -130,10 +130,7 @@ public class U {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-        int statusBarHeight = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if(resourceId > 0)
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        int statusBarHeight = getStatusBarHeight(context);
 
         String position = getTaskbarPosition(context);
         boolean overridePad = position.equals("top_left") || position.equals("top_right");
@@ -333,7 +330,7 @@ public class U {
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         float maxScreenSize = getTaskbarPosition(context).contains("vertical")
-                ? metrics.heightPixels / metrics.density
+                ? (metrics.heightPixels - getStatusBarHeight(context)) / metrics.density
                 : metrics.widthPixels / metrics.density;
 
         float iconSize = context.getResources().getDimension(R.dimen.icon_size) / metrics.density;
@@ -348,5 +345,14 @@ public class U {
         }
 
         return numOfColumns;
+    }
+
+    private static int getStatusBarHeight(Context context) {
+        int statusBarHeight = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if(resourceId > 0)
+            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+
+        return statusBarHeight;
     }
 }
