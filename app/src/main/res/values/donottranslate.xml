@@ -68,6 +68,7 @@
         <item>10</item>
         <item>15</item>
         <item>20</item>
+        <item>2147483647</item>
     </string-array>
 
 </resources>
