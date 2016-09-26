@@ -20,9 +20,12 @@
 
         <Preference android:key="about" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_donate">
+
         <Preference
             android:key="donate"
-            android:title="@string/pref_title_donate"
             android:summary="@string/pref_summary_donate"/>
 
     </PreferenceCategory>

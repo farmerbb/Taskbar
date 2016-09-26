@@ -43,6 +43,10 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_theme"/>
 
+    <Preference
+        android:key="blacklist"
+        android:title="@string/pref_title_blacklist" />
+
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="show_background"
@@ -72,10 +76,6 @@
         android:defaultValue="false"
         android:key="start_on_boot"
         android:title="@string/pref_title_start_on_boot"/>
-
-    <Preference
-        android:key="blacklist"
-        android:title="@string/pref_title_blacklist" />
 
     <PreferenceCategory android:title="\n\n" />
 
