@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.support.v7.app.ActionBar;
@@ -33,6 +34,19 @@ public class FreeformModeFragment extends SettingsFragment {
 
         // Add preferences
         addPreferencesFromResource(R.xml.pref_freeform_hack);
+
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        if(!pref.getBoolean("freeform_hack_override", false)) {
+            pref.edit()
+                    .putBoolean("freeform_hack", hasFreeformSupport())
+                    .putBoolean("freeform_hack_override", true)
+                    .apply();
+        }
+
+        findPreference("freeform_hack").setOnPreferenceClickListener(this);
+        findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
+
+        bindPreferenceSummaryToValue(findPreference("window_size"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_freeform);
