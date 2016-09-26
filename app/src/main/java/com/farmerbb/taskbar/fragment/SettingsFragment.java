@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -56,7 +57,6 @@ import com.farmerbb.taskbar.activity.SelectAppActivityDark;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
-import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
@@ -69,14 +69,12 @@ import java.util.Locale;
 
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
 
-    private boolean finishedLoadingPrefs;
-    private boolean showReminderToast = false;
-    private int noThanksCount = 0;
+    boolean finishedLoadingPrefs;
+    boolean showReminderToast = false;
+    int noThanksCount = 0;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
-
         super.onActivityCreated(savedInstanceState);
 
         // Remove dividers
@@ -95,87 +93,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         if(getResources().getConfiguration().smallestScreenWidthDp < 600
                 && pref.getString("start_menu_layout", "null").equals("null")) {
             pref.edit().putString("start_menu_layout", "grid").apply();
-        }
-
-        // Add preferences
-        addPreferencesFromResource(R.xml.pref_general);
-        addPreferencesFromResource(R.xml.pref_recent_apps);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if(!pref.getBoolean("freeform_hack_override", false)) {
-                pref.edit()
-                        .putBoolean("freeform_hack", hasFreeformSupport())
-                        .putBoolean("freeform_hack_override", true)
-                        .apply();
-            }
-
-            addPreferencesFromResource(R.xml.pref_freeform_hack);
-            findPreference("freeform_hack").setOnPreferenceClickListener(this);
-            bindPreferenceSummaryToValue(findPreference("window_size"));
-            findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
-        }
-
-        addPreferencesFromResource(R.xml.pref_advanced);
-
-        boolean playStoreInstalled = true;
-        try {
-            getActivity().getPackageManager().getPackageInfo("com.android.vending", 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            playStoreInstalled = false;
-        }
-
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
-                && playStoreInstalled
-                && !pref.getBoolean("hide_donate", false)) {
-            addPreferencesFromResource(R.xml.pref_about_donate);
-            findPreference("donate").setOnPreferenceClickListener(this);
-        } else
-            addPreferencesFromResource(R.xml.pref_about);
-
-        // Set OnClickListeners for certain preferences
-        findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
-        findPreference("enable_recents").setOnPreferenceClickListener(this);
-        findPreference("launcher").setOnPreferenceClickListener(this);
-        findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
-        findPreference("about").setOnPreferenceClickListener(this);
-        findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
-        findPreference("blacklist").setOnPreferenceClickListener(this);
-
-        bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
-        bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
-        bindPreferenceSummaryToValue(findPreference("recents_amount"));
-        bindPreferenceSummaryToValue(findPreference("sort_order"));
-        bindPreferenceSummaryToValue(findPreference("show_background"));
-        bindPreferenceSummaryToValue(findPreference("scrollbar"));
-        bindPreferenceSummaryToValue(findPreference("position"));
-        bindPreferenceSummaryToValue(findPreference("theme"));
-        bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
-        bindPreferenceSummaryToValue(findPreference("invisible_button"));
-        bindPreferenceSummaryToValue(findPreference("anchor"));
-        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
-
-        finishedLoadingPrefs = true;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(showReminderToast) {
-            showReminderToast = false;
-
-            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(hasFreeformSupport());
-
-            if(hasFreeformSupport())
-                U.showToastLong(getActivity(), R.string.reboot_required);
-        }
-
-        int size = Blacklist.getInstance(getActivity()).getBlockedApps().size();
-        String summary = size == 1 ? getString(R.string.app_hidden) : getString(R.string.apps_hidden, size);
-
-        Preference blacklistPref = findPreference("blacklist");
-        if(blacklistPref != null) {
-            blacklistPref.setSummary(summary);
         }
     }
 
@@ -200,6 +117,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     // Restart MainActivity
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("theme_change", true);
                     startActivity(intent);
                     getActivity().overridePendingTransition(0, 0);
                 }
@@ -216,7 +134,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
     };
 
-    private void bindPreferenceSummaryToValue(Preference preference) {
+    void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference
                 .setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
@@ -399,6 +317,34 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 AlertDialog dialog3 = builder3.create();
                 dialog3.show();
                 break;
+            case "pref_screen_general":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new GeneralFragment(), "GeneralFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_recent_apps":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new RecentAppsFragment(), "RecentAppsFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_freeform":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new FreeformModeFragment(), "FreeformModeFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_advanced":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new AdvancedFragment(), "AdvancedFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
         }
 
         return true;
@@ -430,7 +376,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private boolean hasFreeformSupport() {
+    boolean hasFreeformSupport() {
         return getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
                 || Settings.Global.getInt(getActivity().getContentResolver(), "enable_freeform_support", -1) == 1
                 || Settings.Global.getInt(getActivity().getContentResolver(), "force_resizable_activities", -1) == 1;

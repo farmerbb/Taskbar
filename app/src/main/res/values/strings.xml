@@ -29,7 +29,7 @@
     <string name="permission_dialog_title">Permission needed</string>
     <string name="permission_dialog_message">Taskbar requires permission to draw over other apps before it can start.\n\nPlease press \'\'Grant Permission\'\' and ensure that Taskbar is set to \'\'Yes\'\'</string>
 
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">General settings</string>
     <string name="pref_title_start_menu_layout">Start menu layout</string>
     <string name="pref_title_background_tint">Taskbar background tint</string>
     <string name="pref_title_scrollbar">Show scrollbar on start menu</string>
@@ -64,7 +64,7 @@
         <item>Most time used (ascending)</item>
     </string-array>
 
-    <string name="pref_header_advanced">Advanced</string>
+    <string name="pref_header_advanced">Advanced settings</string>
 
     <string name="pref_title_freeform_hack">Freeform window support</string>
     <string name="pref_description_freeform_hack">Allows Taskbar to launch apps in freeform window mode, for a more desktop-like experience.\n\nThis feature is experimental, and may cause issues with standard split-screen multitasking.</string>

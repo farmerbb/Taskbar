@@ -19,6 +19,7 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -46,7 +47,11 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.ImportSettingsActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
-import com.farmerbb.taskbar.fragment.SettingsFragment;
+import com.farmerbb.taskbar.fragment.AboutFragment;
+import com.farmerbb.taskbar.fragment.AdvancedFragment;
+import com.farmerbb.taskbar.fragment.FreeformModeFragment;
+import com.farmerbb.taskbar.fragment.GeneralFragment;
+import com.farmerbb.taskbar.fragment.RecentAppsFragment;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -105,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.DONT_KILL_APP);
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
-            proceedWithAppLaunch();
+            proceedWithAppLaunch(savedInstanceState);
         else {
             File file = new File(getFilesDir() + File.separator + "imported_successfully");
             if(freeVersionInstalled() && !file.exists()) {
                 startActivity(new Intent(this, ImportSettingsActivity.class));
                 finish();
             } else {
-                proceedWithAppLaunch();
+                proceedWithAppLaunch(savedInstanceState);
             }
         }
     }
@@ -129,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void proceedWithAppLaunch() {
+    private void proceedWithAppLaunch(Bundle savedInstanceState) {
         setContentView(R.layout.main);
 
         ActionBar actionBar = getSupportActionBar();
@@ -159,7 +164,31 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SettingsFragment(), "SettingsFragment").commit();
+        if(savedInstanceState == null) {
+            if(!getIntent().hasExtra("theme_change"))
+                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment").commit();
+            else
+                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new GeneralFragment(), "GeneralFragment").commit();
+        } else {
+            String fragmentName = savedInstanceState.getString("fragment_name");
+            if(fragmentName != null) switch(fragmentName) {
+                case "AboutFragment":
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), fragmentName).commit();
+                    break;
+                case "AdvancedFragment":
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AdvancedFragment(), fragmentName).commit();
+                    break;
+                case "FreeformModeFragment":
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FreeformModeFragment(), fragmentName).commit();
+                    break;
+                case "GeneralFragment":
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new GeneralFragment(), fragmentName).commit();
+                    break;
+                case "RecentAppsFragment":
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new RecentAppsFragment(), fragmentName).commit();
+                    break;
+            }
+        }
 
         if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -263,5 +292,24 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences pref = U.getSharedPreferences(this);
             theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof AboutFragment)
+            super.onBackPressed();
+        else
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                    .commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("fragment_name", getFragmentManager().findFragmentById(R.id.fragmentContainer).getTag());
+
+        super.onSaveInstanceState(outState);
     }
 }

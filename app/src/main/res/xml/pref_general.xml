@@ -16,8 +16,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_header_general" >
-
     <ListPreference
         android:defaultValue="list"
         android:entries="@array/pref_start_menu_list"
@@ -79,6 +77,6 @@
         android:key="blacklist"
         android:title="@string/pref_title_blacklist" />
 
-    </PreferenceCategory>
+    <PreferenceCategory android:title="\n\n" />
 
 </PreferenceScreen>

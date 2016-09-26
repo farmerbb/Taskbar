@@ -16,8 +16,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_header_recent_apps" >
-
     <Preference
         android:key="enable_recents"
         android:title="@string/pref_title_enable_recents"/>
@@ -64,6 +62,6 @@
         android:key="shortcut_icon"
         android:title="@string/pref_title_shortcut_icon"/>
 
-    </PreferenceCategory>
+    <PreferenceCategory android:title="\n\n" />
 
 </PreferenceScreen>

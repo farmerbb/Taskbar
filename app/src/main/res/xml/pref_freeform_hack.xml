@@ -16,8 +16,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_header_freeform">
-
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="freeform_hack"
@@ -37,6 +35,6 @@
         android:key="freeform_mode_help"
         android:title="@string/pref_title_freeform_mode_help" />
 
-    </PreferenceCategory>
+    <PreferenceCategory android:title="\n\n" />
 
 </PreferenceScreen>
