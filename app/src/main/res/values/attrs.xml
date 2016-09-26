@@ -19,6 +19,7 @@
     <attr name="start_menu_background" format="reference|color" />
     <attr name="text_color" format="reference|color" />
     <attr name="main_activity_background" format="reference|color" />
+    <attr name="settings_icon_color" format="reference|color" />
 
     <item name="match_parent" type="dimen">-1</item>
 

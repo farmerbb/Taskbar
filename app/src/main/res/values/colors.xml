@@ -27,4 +27,6 @@
     <color name="start_menu_background_dark">#303030</color>
     <color name="main_activity_background">#F0F0F0</color>
     <color name="main_activity_background_dark">#252525</color>
+    <color name="settings_icon_color">#000000</color>
+    <color name="settings_icon_color_dark">#FFFFFF</color>
 </resources>
