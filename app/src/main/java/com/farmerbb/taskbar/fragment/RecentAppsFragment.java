@@ -39,6 +39,7 @@ public class RecentAppsFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference("recents_amount"));
         bindPreferenceSummaryToValue(findPreference("sort_order"));
         bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
+        bindPreferenceSummaryToValue(findPreference("max_num_of_recents"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_recent_apps);

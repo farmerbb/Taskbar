@@ -176,4 +176,12 @@
     <string name="pref_title_hide_when_keyboard_shown">Collapse Taskbar automatically</string>
     <string name="pref_description_hide_when_keyboard_shown">When the on-screen keyboard is shown, and Taskbar is horizontal, automatically collapse Taskbar to avoid blocking text fields. (Experimental)</string>
 
+    <string name="pref_max_num_of_recents">Maximum number of recent/pinned apps</string>
+    <string-array name="pref_max_num_of_recents_list">
+        <item>10 apps</item>
+        <item>15 apps</item>
+        <item>20 apps</item>
+    </string-array>
+
+
 </resources>

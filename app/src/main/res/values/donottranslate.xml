@@ -64,4 +64,10 @@
         <item>phone_size</item>
     </string-array>
 
+    <string-array name="pref_max_num_of_recents_list_values">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+
 </resources>
