@@ -142,15 +142,13 @@
 
     <string name="pref_header_freeform">Freeform mode</string>
     <string name="pref_title_window_size">Default window size</string>
-    <string-array name="pref_window_size_list">
-        <item>Standard</item>
-        <item>Fullscreen</item>
-        <item>Phone size</item>
-    </string-array>
 
-    <string name="window_size_standard">Standard window</string>
-    <string name="window_size_fullscreen">Fullscreen window</string>
-    <string name="window_size_phone_size">Phone size window</string>
+    <string name="window_size_standard">Standard</string>
+    <string name="window_size_fullscreen">Fullscreen</string>
+    <string name="window_size_phone_size">Phone size</string>
+    <string name="window_size_large">Large</string>
+    <string name="window_size_half_left">Half screen (left)</string>
+    <string name="window_size_half_right">Half screen (right)</string>
 
     <string name="pref_title_blacklist">Hide apps from start menu</string>
     <string name="app_hidden">1 app hidden</string>
@@ -183,5 +181,7 @@
         <item>20 apps</item>
         <item>Unlimited</item>
     </string-array>
+
+    <string name="show_window_sizes">Window sizes&#8230;</string>
 
 </resources>

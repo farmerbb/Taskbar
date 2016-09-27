@@ -20,4 +20,24 @@
         android:key="window_size_standard"
         android:title="@string/window_size_standard" />
 
+    <Preference
+        android:key="window_size_large"
+        android:title="@string/window_size_large" />
+
+    <Preference
+        android:key="window_size_fullscreen"
+        android:title="@string/window_size_fullscreen" />
+
+    <Preference
+        android:key="window_size_half_left"
+        android:title="@string/window_size_half_left" />
+
+    <Preference
+        android:key="window_size_half_right"
+        android:title="@string/window_size_half_right" />
+
+    <Preference
+        android:key="window_size_phone_size"
+        android:title="@string/window_size_phone_size" />
+
 </PreferenceScreen>

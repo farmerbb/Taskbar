@@ -192,22 +192,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     && pref.getBoolean("freeform_hack", false)
                     && isInMultiWindowMode()
                     && FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
-
-                if(!windowSizePref.equals("standard")) {
-                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_standard);
-                    findPreference("window_size_standard").setOnPreferenceClickListener(this);
-                }
-
-                if(!windowSizePref.equals("fullscreen")) {
-                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_fullscreen);
-                    findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
-                }
-
-                if(!windowSizePref.equals("phone_size")) {
-                    addPreferencesFromResource(R.xml.pref_context_menu_window_size_phone_size);
-                    findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
-                }
+                addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
+                findPreference("show_window_sizes").setOnPreferenceClickListener(this);
             }
 
             final PackageManager pm = getPackageManager();
@@ -249,6 +235,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onPreferenceClick(Preference p) {
         boolean appIsValid = true;
@@ -260,6 +247,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 appIsValid = false;
             }
         }
+
+        boolean dontFinish = false;
 
         if(appIsValid) switch(p.getKey()) {
             case "app_info":
@@ -330,6 +319,24 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                             false));
                 }
                 break;
+            case "show_window_sizes":
+                getPreferenceScreen().removeAll();
+
+                String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
+
+                addPreferencesFromResource(R.xml.pref_context_menu_window_size_list);
+                findPreference("window_size_standard").setOnPreferenceClickListener(this);
+                findPreference("window_size_large").setOnPreferenceClickListener(this);
+                findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
+                findPreference("window_size_half_left").setOnPreferenceClickListener(this);
+                findPreference("window_size_half_right").setOnPreferenceClickListener(this);
+                findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
+
+                CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
+                findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
+
+                dontFinish = true;
+                break;
             case "window_size_standard":
                 SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "standard");
 
@@ -338,10 +345,34 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 break;
+            case "window_size_large":
+                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "large");
+
+                U.launchLarge(this, generateIntent());
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
             case "window_size_fullscreen":
                 SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "fullscreen");
 
                 U.launchFullscreen(this, generateIntent(), false);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "window_size_half_left":
+                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "half_left");
+
+                U.launchHalfLeft(this, generateIntent(), false);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "window_size_half_right":
+                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "half_right");
+
+                U.launchHalfRight(this, generateIntent(), false);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -356,7 +387,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
         }
 
-        finish();
+        if(!dontFinish) finish();
         return true;
     }
 

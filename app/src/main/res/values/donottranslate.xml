@@ -58,9 +58,21 @@
         <item>dark</item>
     </string-array>
 
+    <string-array name="pref_window_size_list">
+        <item>@string/window_size_standard</item>
+        <item>@string/window_size_large</item>
+        <item>@string/window_size_fullscreen</item>
+        <item>@string/window_size_half_left</item>
+        <item>@string/window_size_half_right</item>
+        <item>@string/window_size_phone_size</item>
+    </string-array>
+
     <string-array name="pref_window_size_list_values">
         <item>standard</item>
+        <item>large</item>
         <item>fullscreen</item>
+        <item>half_left</item>
+        <item>half_right</item>
         <item>phone_size</item>
     </string-array>
 

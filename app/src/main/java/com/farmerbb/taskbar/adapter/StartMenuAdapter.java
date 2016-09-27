@@ -183,8 +183,17 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             case "standard":
                 U.launchStandard(getContext(), intent);
                 break;
+            case "large":
+                U.launchLarge(getContext(), intent);
+                break;
             case "fullscreen":
                 U.launchFullscreen(getContext(), intent, true);
+                break;
+            case "half_left":
+                U.launchHalfLeft(getContext(), intent, true);
+                break;
+            case "half_right":
+                U.launchHalfRight(getContext(), intent, true);
                 break;
             case "phone_size":
                 U.launchPhoneSize(getContext(), intent);

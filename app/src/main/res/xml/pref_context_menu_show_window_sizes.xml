@@ -17,7 +17,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:key="window_size_fullscreen"
-        android:title="@string/window_size_fullscreen" />
+        android:key="show_window_sizes"
+        android:title="@string/show_window_sizes" />
 
 </PreferenceScreen>

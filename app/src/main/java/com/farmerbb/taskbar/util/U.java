@@ -51,6 +51,10 @@ public class U {
     private static Toast toast;
     private static Integer cachedRotation;
 
+    private static final int FULLSCREEN = 0;
+    private static final int LEFT = -1;
+    private static final int RIGHT = 1;
+
     public static SharedPreferences getSharedPreferences(Context context) {
         if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
         return pref;
@@ -126,7 +130,28 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    public static void launchFullscreen(Context context, Intent intent, boolean padStatusBar) {
+    public static void launchLarge(Context context, Intent intent) {
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+        int width1 = display.getWidth() / 8;
+        int width2 = display.getWidth() - width1;
+        int height1 = display.getHeight() / 8;
+        int height2 = display.getHeight() - height1;
+
+        try {
+            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                    width1,
+                    height1,
+                    width2,
+                    height2
+            )).toBundle());
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
+    private static void launchFullscreen(Context context, Intent intent, boolean padStatusBar, int launchType) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -135,17 +160,17 @@ public class U {
         String position = getTaskbarPosition(context);
         boolean overridePad = position.equals("top_left") || position.equals("top_right");
 
-        int left = 0;
+        int left = launchType == RIGHT ? display.getWidth() / 2 : 0;
         int top = padStatusBar || overridePad ? statusBarHeight : 0;
-        int right = display.getWidth();
+        int right = launchType == LEFT ? display.getWidth() / 2 : display.getWidth();
         int bottom = display.getHeight() + (!padStatusBar && overridePad ? statusBarHeight : 0);
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
-        if(position.contains("vertical_left"))
-            left = left + iconSize;
-        else if(position.contains("vertical_right"))
-            right = right - iconSize;
-        else if(position.contains("bottom"))
+        if(position.contains("vertical_left")) {
+            if(launchType != RIGHT) left = left + iconSize;
+        } else if(position.contains("vertical_right")) {
+            if(launchType != LEFT) right = right - iconSize;
+        } else if(position.contains("bottom"))
             bottom = bottom - iconSize;
         else
             top = top + iconSize;
@@ -158,6 +183,18 @@ public class U {
                     bottom
             )).toBundle());
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
+    public static void launchFullscreen(Context context, Intent intent, boolean padStatusBar) {
+        launchFullscreen(context, intent, padStatusBar, FULLSCREEN);
+    }
+
+    public static void launchHalfLeft(Context context, Intent intent, boolean padStatusBar) {
+        launchFullscreen(context, intent, padStatusBar, LEFT);
+    }
+
+    public static void launchHalfRight(Context context, Intent intent, boolean padStatusBar) {
+        launchFullscreen(context, intent, padStatusBar, RIGHT);
     }
 
     @SuppressWarnings("deprecation")
