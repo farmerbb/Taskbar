@@ -62,8 +62,8 @@
         <item>@string/window_size_standard</item>
         <item>@string/window_size_large</item>
         <item>@string/window_size_fullscreen</item>
-        <item>@string/window_size_half_left</item>
-        <item>@string/window_size_half_right</item>
+        <item>@string/window_size_half_left_alt</item>
+        <item>@string/window_size_half_right_alt</item>
         <item>@string/window_size_phone_size</item>
     </string-array>
 

@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
@@ -160,16 +161,31 @@ public class U {
         String position = getTaskbarPosition(context);
         boolean overridePad = position.equals("top_left") || position.equals("top_right");
 
-        int left = launchType == RIGHT ? display.getWidth() / 2 : 0;
-        int top = padStatusBar || overridePad ? statusBarHeight : 0;
-        int right = launchType == LEFT ? display.getWidth() / 2 : display.getWidth();
-        int bottom = display.getHeight() + (!padStatusBar && overridePad ? statusBarHeight : 0);
+        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        int left = launchType == RIGHT && isLandscape
+                ? display.getWidth() / 2
+                : 0;
+
+        int top = launchType == RIGHT && isPortrait
+                ? display.getHeight() / 2
+                : padStatusBar || overridePad ? statusBarHeight : 0;
+
+        int right = launchType == LEFT && isLandscape
+                ? display.getWidth() / 2
+                : display.getWidth();
+
+        int bottom = launchType == LEFT && isPortrait
+                ? display.getHeight() / 2
+                : display.getHeight() + (!padStatusBar && overridePad ? statusBarHeight : 0);
+
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
         if(position.contains("vertical_left")) {
-            if(launchType != RIGHT) left = left + iconSize;
+            if(launchType != RIGHT || isPortrait) left = left + iconSize;
         } else if(position.contains("vertical_right")) {
-            if(launchType != LEFT) right = right - iconSize;
+            if(launchType != LEFT || isPortrait) right = right - iconSize;
         } else if(position.contains("bottom"))
             bottom = bottom - iconSize;
         else

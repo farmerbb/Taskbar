@@ -147,8 +147,10 @@
     <string name="window_size_fullscreen">Fullscreen</string>
     <string name="window_size_phone_size">Phone size</string>
     <string name="window_size_large">Large</string>
-    <string name="window_size_half_left">Half screen (left)</string>
-    <string name="window_size_half_right">Half screen (right)</string>
+    <string name="window_size_half_left">@string/window_size_half_left_alt</string>
+    <string name="window_size_half_left_alt">Half screen (left/top)</string>
+    <string name="window_size_half_right">@string/window_size_half_right_alt</string>
+    <string name="window_size_half_right_alt">Half screen (right/bottom)</string>
 
     <string name="pref_title_blacklist">Hide apps from start menu</string>
     <string name="app_hidden">1 app hidden</string>
