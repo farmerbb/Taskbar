@@ -168,17 +168,30 @@ public class U {
                 ? display.getWidth() / 2
                 : 0;
 
-        int top = launchType == RIGHT && isPortrait
-                ? display.getHeight() / 2
-                : padStatusBar || overridePad ? statusBarHeight : 0;
+        int top;
+        if(launchType == RIGHT && isPortrait) {
+            top = (display.getHeight() / 2)
+                    + (!padStatusBar && overridePad ? statusBarHeight / 2 : 0)
+                    + (!padStatusBar && !overridePad ? statusBarHeight / 2 : 0);
+        } else {
+            top = padStatusBar || overridePad ? statusBarHeight : 0;
+        }
 
         int right = launchType == LEFT && isLandscape
                 ? display.getWidth() / 2
                 : display.getWidth();
 
-        int bottom = launchType == LEFT && isPortrait
-                ? display.getHeight() / 2
-                : display.getHeight() + (!padStatusBar && overridePad ? statusBarHeight : 0);
+        int bottom;
+        if(launchType == LEFT && isPortrait) {
+            bottom = display.getHeight() / 2
+                    + (!padStatusBar && overridePad ? statusBarHeight / 2 : 0)
+                    - (!padStatusBar && !overridePad ? statusBarHeight / 2 : 0);
+        } else {
+            bottom = display.getHeight()
+                    + ((!padStatusBar && overridePad) || (!padStatusBar && launchType == RIGHT && isPortrait)
+                    ? statusBarHeight
+                    : 0);
+        }
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
@@ -186,9 +199,10 @@ public class U {
             if(launchType != RIGHT || isPortrait) left = left + iconSize;
         } else if(position.contains("vertical_right")) {
             if(launchType != LEFT || isPortrait) right = right - iconSize;
-        } else if(position.contains("bottom"))
-            bottom = bottom - iconSize;
-        else
+        } else if(position.contains("bottom")) {
+            if(isLandscape || (launchType != LEFT && isPortrait))
+                bottom = bottom - iconSize;
+        } else if(isLandscape || (launchType != RIGHT && isPortrait))
             top = top + iconSize;
 
         try {
