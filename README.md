@@ -32,7 +32,7 @@ Prerequisites:
 * JDK 8
 * Internet connection (to download dependencies)
 
-Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeRelease" to start the build.  Dependencies will download, and eventually you will end up with an APK file "app-free-release.apk", ready to install on your Android device.
+Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK files "app-free-debug.apk" and "app-paid-debug.apk", ready to install on your Android device.
 
 ## Translation Credits
 * Braden Farmer (English)
