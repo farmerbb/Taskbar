@@ -407,7 +407,7 @@ public class StartMenuService extends Service {
 
                         try {
                             label = appInfo.loadLabel(pm).toString();
-                            icon = appInfo.loadIcon(pm);
+                            icon = U.loadIcon(StartMenuService.this, pm, appInfo.activityInfo);
                         } catch (OutOfMemoryError e) {
                             System.gc();
 
@@ -472,7 +472,7 @@ public class StartMenuService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
 
         boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
-        if(!onHomeScreen || (onHomeScreen && FreeformHackHelper.getInstance().isInFreeformWorkspace())) {
+        if(!onHomeScreen || FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             Intent intent = new Intent(this, InvisibleActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

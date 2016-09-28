@@ -15,13 +15,17 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.Blacklist;
+import com.farmerbb.taskbar.util.U;
 
 public class GeneralFragment extends SettingsFragment {
 
@@ -36,6 +40,7 @@ public class GeneralFragment extends SettingsFragment {
 
         // Set OnClickListeners for certain preferences
         findPreference("blacklist").setOnPreferenceClickListener(this);
+        findPreference("icon_pack_list").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
         bindPreferenceSummaryToValue(findPreference("show_background"));
@@ -64,6 +69,26 @@ public class GeneralFragment extends SettingsFragment {
         Preference blacklistPref = findPreference("blacklist");
         if(blacklistPref != null) {
             blacklistPref.setSummary(summary);
+        }
+
+        Preference iconPackListPref = findPreference("icon_pack_list");
+        if(iconPackListPref != null) {
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            String iconPackPackage = pref.getString("icon_pack", BuildConfig.APPLICATION_ID);
+            PackageManager pm = getActivity().getPackageManager();
+
+            boolean iconPackValid = true;
+            try {
+                pm.getPackageInfo(iconPackPackage, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                iconPackValid = false;
+            }
+
+            if(!iconPackValid || iconPackPackage.equals(BuildConfig.APPLICATION_ID)) {
+                iconPackListPref.setSummary(getString(R.string.icon_pack_none));
+            } else {
+                iconPackListPref.setSummary(pm.getLaunchIntentForPackage(iconPackPackage).resolveActivityInfo(pm, 0).loadLabel(pm));
+            }
         }
     }
 }

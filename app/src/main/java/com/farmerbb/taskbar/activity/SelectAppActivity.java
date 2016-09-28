@@ -174,7 +174,7 @@ public class SelectAppActivity extends AppCompatActivity {
                         label));
             }
 
-            return new AppListAdapter(SelectAppActivity.this, R.layout.row, entries);
+            return new AppListAdapter(SelectAppActivity.this, R.layout.row_blacklist, entries);
         }
 
         @Override

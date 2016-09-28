@@ -594,7 +594,7 @@ public class TaskbarService extends Service {
                             packageName,
                             intent.resolveActivity(pm).flattenToString(),
                             intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
-                            intent.resolveActivityInfo(pm, 0).loadIcon(pm),
+                            U.loadIcon(TaskbarService.this, pm, intent.resolveActivityInfo(pm, 0)),
                             false));
                     }
                 }

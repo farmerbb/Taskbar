@@ -25,10 +25,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -421,5 +423,27 @@ public class U {
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
 
         return statusBarHeight;
+    }
+
+    public static Drawable loadIcon(Context context, PackageManager pm, ActivityInfo appInfo) {
+        SharedPreferences pref = getSharedPreferences(context);
+        String iconPackPackage = pref.getString("icon_pack", BuildConfig.APPLICATION_ID);
+        IconPackManager iconPackManager = IconPackManager.getInstance();
+
+        try {
+            pm.getPackageInfo(iconPackPackage, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            iconPackPackage = BuildConfig.APPLICATION_ID;
+            pref.edit().putString("icon_pack", iconPackPackage).apply();
+        }
+
+        if(iconPackPackage.equals(BuildConfig.APPLICATION_ID))
+            return appInfo.loadIcon(pm);
+        else {
+            IconPack iconPack = iconPackManager.getIconPack(context, iconPackPackage);
+            Drawable icon = iconPack.getDrawableIconForPackage(context, new ComponentName(appInfo.packageName, appInfo.name).toString());
+
+            return icon == null ? appInfo.loadIcon(pm) : icon;
+        }
     }
 }

@@ -186,4 +186,8 @@
 
     <string name="show_window_sizes">Window sizes&#8230;</string>
 
+    <string name="icon_pack">Icon pack</string>
+    <string name="icon_pack_none">None</string>
+    <string name="no_icon_packs_installed">No icon packs installed</string>
+
 </resources>

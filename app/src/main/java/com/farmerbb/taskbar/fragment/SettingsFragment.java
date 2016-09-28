@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -50,6 +51,8 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
+import com.farmerbb.taskbar.activity.IconPackActivity;
+import com.farmerbb.taskbar.activity.IconPackActivityDark;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
@@ -345,6 +348,20 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;
+            case "icon_pack_list":
+                Intent intent2 = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent2 = new Intent(getActivity(), IconPackActivity.class);
+                        break;
+                    case "dark":
+                        intent2 = new Intent(getActivity(), IconPackActivityDark.class);
+                        break;
+                }
+
+                startActivityForResult(intent2, 123);
+                break;
         }
 
         return true;
@@ -364,7 +381,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
     private void restartTaskbar() {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(pref.getBoolean("taskbar_active", false)) {
+        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
             pref.edit().putBoolean("is_restarting", true).apply();
 
             stopTaskbarService(true);
@@ -395,5 +412,11 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
 
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 123 && resultCode == Activity.RESULT_OK)
+            restartTaskbar();
     }
 }

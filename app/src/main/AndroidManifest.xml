@@ -124,6 +124,12 @@
         <activity
             android:name=".activity.ImportSettingsActivity"
             android:theme="@style/AppTheme.Dialog"/>
+        <activity
+            android:name=".activity.IconPackActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.IconPackActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>
