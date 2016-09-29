@@ -416,7 +416,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 123 && resultCode == Activity.RESULT_OK)
+        if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
+            U.refreshPinnedIcons(getActivity());
             restartTaskbar();
+        }
     }
 }

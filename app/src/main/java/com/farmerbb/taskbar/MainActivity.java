@@ -208,6 +208,14 @@ public class MainActivity extends AppCompatActivity {
             dialog.setCancelable(false);
 
             if(theSwitch != null) theSwitch.setChecked(false);
+
+            SharedPreferences pref = U.getSharedPreferences(this);
+            String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
+            if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
+                pref.edit().putString("icon_pack", BuildConfig.APPLICATION_ID).apply();
+            } else {
+                U.refreshPinnedIcons(this);
+            }
         }
     }
 

@@ -46,6 +46,9 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class U {
 
     private U() {}
@@ -444,6 +447,33 @@ public class U {
             Drawable icon = iconPack.getDrawableIconForPackage(context, new ComponentName(appInfo.packageName, appInfo.name).toString());
 
             return icon == null ? appInfo.loadIcon(pm) : icon;
+        }
+    }
+
+    public static void refreshPinnedIcons(Context context) {
+        PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
+        List<AppEntry> pinnedAppsList = new ArrayList<>(pba.getPinnedApps());
+        List<AppEntry> blockedAppsList = new ArrayList<>(pba.getBlockedApps());
+        PackageManager pm = context.getPackageManager();
+
+        pba.clear(context);
+
+        for(AppEntry entry : pinnedAppsList) {
+            Intent throwaway = new Intent();
+            throwaway.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
+
+            AppEntry newEntry = new AppEntry(
+                    entry.getPackageName(),
+                    entry.getComponentName(),
+                    entry.getLabel(),
+                    U.loadIcon(context, pm, throwaway.resolveActivityInfo(pm, 0)),
+                    true);
+
+            pba.addPinnedApp(context, newEntry);
+        }
+
+        for(AppEntry entry : blockedAppsList) {
+            pba.addBlockedApp(context, entry);
         }
     }
 }
