@@ -34,6 +34,14 @@ Prerequisites:
 
 Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK files "app-free-debug.apk" and "app-paid-debug.apk", ready to install on your Android device.
 
+## Icon Pack Support
+Taskbar includes support for ADW-style icon packs.  If you are an icon pack developer and would like to include support for applying the icon pack from within your app, simply use the following code:
+
+    Intent intent = new Intent("com.farmerbb.taskbar.APPLY_ICON_PACK");
+    intent.putExtra(Intent.EXTRA_PACKAGE_NAME, "com.iconpack.name");
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent);
+
 ## Translation Credits
 * Braden Farmer (English)
 * naofum (Japanese)
