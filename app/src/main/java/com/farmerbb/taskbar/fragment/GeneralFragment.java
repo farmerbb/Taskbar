@@ -87,7 +87,9 @@ public class GeneralFragment extends SettingsFragment {
             if(!iconPackValid || iconPackPackage.equals(BuildConfig.APPLICATION_ID)) {
                 iconPackListPref.setSummary(getString(R.string.icon_pack_none));
             } else {
-                iconPackListPref.setSummary(pm.getLaunchIntentForPackage(iconPackPackage).resolveActivityInfo(pm, 0).loadLabel(pm));
+                try {
+                    iconPackListPref.setSummary(pm.getApplicationLabel(pm.getApplicationInfo(iconPackPackage, 0)));
+                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
             }
         }
     }

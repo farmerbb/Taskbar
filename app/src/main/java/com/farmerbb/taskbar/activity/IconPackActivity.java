@@ -95,7 +95,7 @@ public class IconPackActivity extends AppCompatActivity {
                 imageView.setImageDrawable(null);
             } else {
                 try {
-                    imageView.setImageDrawable(pm.getActivityIcon(pm.getLaunchIntentForPackage(entry.getPackageName())));
+                    imageView.setImageDrawable(pm.getApplicationIcon(entry.getPackageName()));
                 } catch (PackageManager.NameNotFoundException e) {
                     imageView.setImageDrawable(pm.getDefaultActivityIcon());
                 }

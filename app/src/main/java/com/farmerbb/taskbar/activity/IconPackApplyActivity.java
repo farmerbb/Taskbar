@@ -53,8 +53,6 @@ public class IconPackApplyActivity extends Activity {
             if(iconPackValid) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.apply_icon_pack)
-                        .setMessage(getString(R.string.apply_icon_pack_description,
-                                pm.getLaunchIntentForPackage(iconPackPackage).resolveActivityInfo(pm, 0).loadLabel(pm)))
                         .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -73,6 +71,11 @@ public class IconPackApplyActivity extends Activity {
                                 finish();
                             }
                         });
+
+                try {
+                    builder.setMessage(getString(R.string.apply_icon_pack_description,
+                            pm.getApplicationLabel(pm.getApplicationInfo(iconPackPackage, 0))));
+                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
