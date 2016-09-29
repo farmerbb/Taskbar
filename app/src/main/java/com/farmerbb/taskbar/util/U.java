@@ -438,6 +438,7 @@ public class U {
         } catch (PackageManager.NameNotFoundException e) {
             iconPackPackage = BuildConfig.APPLICATION_ID;
             pref.edit().putString("icon_pack", iconPackPackage).apply();
+            refreshPinnedIcons(context);
         }
 
         if(iconPackPackage.equals(BuildConfig.APPLICATION_ID))
