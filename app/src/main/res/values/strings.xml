@@ -193,5 +193,6 @@
     <string name="apply_icon_pack">Apply icon pack</string>
     <string name="apply_icon_pack_description">Apply \'\'%1$s\'\' to Taskbar?</string>
     <string name="must_specify_extra">Must specify Intent.EXTRA_PACKAGE_NAME</string>
+    <string name="invalid_package_name">Invalid package name</string>
 
 </resources>

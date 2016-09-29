@@ -43,32 +43,44 @@ public class IconPackApplyActivity extends Activity {
             final String iconPackPackage = getIntent().getStringExtra(Intent.EXTRA_PACKAGE_NAME);
             PackageManager pm = getPackageManager();
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.apply_icon_pack)
-                    .setMessage(getString(R.string.apply_icon_pack_description,
-                            pm.getLaunchIntentForPackage(iconPackPackage).resolveActivityInfo(pm, 0).loadLabel(pm)))
-                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences pref = U.getSharedPreferences(IconPackApplyActivity.this);
-                            pref.edit().putString("icon_pack", iconPackPackage).apply();
+            boolean iconPackValid = true;
+            try {
+                pm.getPackageInfo(iconPackPackage, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                iconPackValid = false;
+            }
 
-                            U.refreshPinnedIcons(IconPackApplyActivity.this);
-                            restartTaskbar();
+            if(iconPackValid) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.apply_icon_pack)
+                        .setMessage(getString(R.string.apply_icon_pack_description,
+                                pm.getLaunchIntentForPackage(iconPackPackage).resolveActivityInfo(pm, 0).loadLabel(pm)))
+                        .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences pref = U.getSharedPreferences(IconPackApplyActivity.this);
+                                pref.edit().putString("icon_pack", iconPackPackage).apply();
 
-                            finish();
-                        }
-                    });
+                                U.refreshPinnedIcons(IconPackApplyActivity.this);
+                                restartTaskbar();
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.setCancelable(false);
+                                finish();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCancelable(false);
+            } else {
+                U.showToast(this, R.string.invalid_package_name);
+                finish();
+            }
         } else {
             U.showToast(this, R.string.must_specify_extra);
             finish();
