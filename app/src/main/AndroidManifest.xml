@@ -132,6 +132,7 @@
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.IconPackApplyActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.Dialog"
             android:exported="true">
             <intent-filter>
