@@ -130,6 +130,17 @@
         <activity
             android:name=".activity.IconPackActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.IconPackApplyActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="com.farmerbb.taskbar.APPLY_ICON_PACK"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

@@ -190,4 +190,8 @@
     <string name="icon_pack_none">None</string>
     <string name="no_icon_packs_installed">No icon packs installed</string>
 
+    <string name="apply_icon_pack">Apply icon pack</string>
+    <string name="apply_icon_pack_description">Apply \'\'%1$s\'\' to Taskbar?</string>
+    <string name="must_specify_extra">Must specify Intent.EXTRA_PACKAGE_NAME</string>
+
 </resources>
