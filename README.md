@@ -39,7 +39,6 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
 
     Intent intent = new Intent("com.farmerbb.taskbar.APPLY_ICON_PACK");
     intent.putExtra(Intent.EXTRA_PACKAGE_NAME, "com.iconpack.name");
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(intent);
 
 ## Translation Credits
