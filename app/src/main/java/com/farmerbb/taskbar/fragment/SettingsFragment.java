@@ -98,6 +98,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 && pref.getString("start_menu_layout", "null").equals("null")) {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if(!pref.getBoolean("freeform_hack_override", false)) {
+                pref.edit()
+                        .putBoolean("freeform_hack", hasFreeformSupport())
+                        .putBoolean("freeform_hack_override", true)
+                        .apply();
+            }
+        }
     }
 
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
