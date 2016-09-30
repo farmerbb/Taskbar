@@ -38,6 +38,7 @@ public class AdvancedFragment extends SettingsFragment {
         findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
+        bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_advanced);

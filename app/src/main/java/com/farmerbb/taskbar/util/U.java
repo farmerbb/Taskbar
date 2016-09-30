@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
@@ -431,6 +432,7 @@ public class U {
     public static Drawable loadIcon(Context context, PackageManager pm, ActivityInfo appInfo) {
         SharedPreferences pref = getSharedPreferences(context);
         String iconPackPackage = pref.getString("icon_pack", BuildConfig.APPLICATION_ID);
+        boolean useMask = pref.getBoolean("icon_pack_use_mask", false);
         IconPackManager iconPackManager = IconPackManager.getInstance();
 
         try {
@@ -445,9 +447,21 @@ public class U {
             return appInfo.loadIcon(pm);
         else {
             IconPack iconPack = iconPackManager.getIconPack(context, iconPackPackage);
-            Drawable icon = iconPack.getDrawableIconForPackage(context, new ComponentName(appInfo.packageName, appInfo.name).toString());
+            String componentName = new ComponentName(appInfo.packageName, appInfo.name).toString();
 
-            return icon == null ? appInfo.loadIcon(pm) : icon;
+            if(!useMask) {
+                Drawable icon = iconPack.getDrawableIconForPackage(context, componentName);
+                return icon == null ? appInfo.loadIcon(pm) : icon;
+            } else {
+                Drawable drawable = appInfo.loadIcon(pm);
+                if(drawable instanceof BitmapDrawable) {
+                    return new BitmapDrawable(context.getResources(),
+                            iconPack.getIconForPackage(context, componentName, ((BitmapDrawable) drawable).getBitmap()));
+                } else {
+                    Drawable icon = iconPack.getDrawableIconForPackage(context, componentName);
+                    return icon == null ? drawable : icon;
+                }
+            }
         }
     }
 

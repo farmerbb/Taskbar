@@ -195,4 +195,7 @@
     <string name="must_specify_extra">Must specify Intent.EXTRA_PACKAGE_NAME</string>
     <string name="invalid_package_name">Invalid package name</string>
 
+    <string name="pref_title_use_mask">Use masks for unthemed icons</string>
+    <string name="pref_description_use_mask">When an icon pack is set, generate icons unthemed apps using masking images found within the icon pack. (Experimental)</string>
+
 </resources>

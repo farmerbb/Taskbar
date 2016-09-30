@@ -34,6 +34,12 @@
         android:title="@string/pref_title_hide_when_keyboard_shown"
         android:summary="@string/pref_description_hide_when_keyboard_shown" />
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="icon_pack_use_mask"
+        android:title="@string/pref_title_use_mask"
+        android:summary="@string/pref_description_use_mask" />
+
     <Preference
         android:key="clear_pinned_apps"
         android:title="@string/clear_pinned_apps"/>
