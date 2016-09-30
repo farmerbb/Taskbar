@@ -61,6 +61,7 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.IconPackManager;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
@@ -129,6 +130,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
+            } else if(finishedLoadingPrefs && preference.getKey().equals("icon_pack_use_mask")) {
+                IconPackManager.getInstance().forceReload();
             }
 
             if(finishedLoadingPrefs) restartTaskbar();
