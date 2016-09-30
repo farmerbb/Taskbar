@@ -61,7 +61,7 @@ public class NotificationService extends Service {
                 PendingIntent receiverIntent2 = PendingIntent.getBroadcast(this, 0, new Intent("com.farmerbb.taskbar.QUIT"), PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_allapps)
+                        .setSmallIcon(R.drawable.ic_system)
                         .setContentIntent(contentIntent)
                         .setContentTitle(getString(R.string.taskbar_is_active))
                         .setContentText(getString(R.string.click_to_open_settings))
