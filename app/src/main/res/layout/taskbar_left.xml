@@ -21,9 +21,7 @@
         <ImageView
             android:id="@+id/start_button"
             android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:padding="4dp"
-            android:src="@drawable/all_apps_button_icon" />
+            android:layout_height="@dimen/icon_size" />
 
         <View
             android:id="@+id/divider"

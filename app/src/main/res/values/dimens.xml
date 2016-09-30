@@ -28,4 +28,6 @@
     <dimen name="phone_size_width">320dp</dimen>
     <dimen name="phone_size_height">480dp</dimen>
     <dimen name="max_width">@dimen/match_parent</dimen>
+    <dimen name="app_drawer_icon_padding">4dp</dimen>
+    <dimen name="app_drawer_icon_padding_alt">7dp</dimen>
 </resources>

@@ -198,4 +198,6 @@
     <string name="pref_title_use_mask">Use masks for unthemed icons</string>
     <string name="pref_description_use_mask">When an icon pack is set, generate icons unthemed apps using masking images found within the icon pack. (Experimental)</string>
 
+    <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
+
 </resources>
