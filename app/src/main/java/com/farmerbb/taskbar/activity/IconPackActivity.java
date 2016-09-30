@@ -15,13 +15,16 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -72,6 +75,15 @@ public class IconPackActivity extends AppCompatActivity {
         super.finish();
     }
 
+    private void openIconPackActivity(String packageName) {
+        Intent intent = new Intent("org.adw.launcher.THEMES");
+        intent.setPackage(packageName);
+
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
     private class AppListAdapter extends ArrayAdapter<IconPack> {
         AppListAdapter(Context context, int layout, List<IconPack> list) {
             super(context, layout, list);
@@ -109,6 +121,25 @@ public class IconPackActivity extends AppCompatActivity {
                     pref.edit().putString("icon_pack", entry.getPackageName()).apply();
                     setResult(RESULT_OK);
                     finish();
+                }
+            });
+
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    openIconPackActivity(entry.getPackageName());
+                    return false;
+                }
+            });
+
+            layout.setOnGenericMotionListener(new View.OnGenericMotionListener() {
+                @Override
+                public boolean onGenericMotion(View view, MotionEvent motionEvent) {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                        openIconPackActivity(entry.getPackageName());
+                    }
+                    return false;
                 }
             });
 
