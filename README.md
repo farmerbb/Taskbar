@@ -41,6 +41,6 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
     intent.putExtra(Intent.EXTRA_PACKAGE_NAME, "com.iconpack.name");
     startActivity(intent);
 
-## Translation Credits
-* Braden Farmer (English)
-* naofum (Japanese)
+## Contributors
+* Mark Morilla (icons) (https://plus.google.com/106169552593075739372)
+* naofum (Japanese translation)
