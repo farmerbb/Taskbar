@@ -70,13 +70,12 @@ public class IconPackManager {
         forceReload = true;
     }
 
-    IconPack getIconPack(Context context, String packageName) {
+    IconPack getIconPack(String packageName) {
         if(forceReload || currentIconPack == null || !currentIconPack.getPackageName().equals(packageName)) {
             forceReload = false;
 
             currentIconPack = new IconPack();
             currentIconPack.setPackageName(packageName);
-            currentIconPack.load(context);
         }
 
         return currentIconPack;

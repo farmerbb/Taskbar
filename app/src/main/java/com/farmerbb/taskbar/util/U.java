@@ -446,7 +446,7 @@ public class U {
         if(iconPackPackage.equals(BuildConfig.APPLICATION_ID))
             return appInfo.loadIcon(pm);
         else {
-            IconPack iconPack = iconPackManager.getIconPack(context, iconPackPackage);
+            IconPack iconPack = iconPackManager.getIconPack(iconPackPackage);
             String componentName = new ComponentName(appInfo.packageName, appInfo.name).toString();
 
             if(!useMask) {

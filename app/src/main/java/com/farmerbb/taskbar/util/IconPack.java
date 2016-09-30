@@ -47,6 +47,7 @@ public class IconPack {
     private String packageName;
     private String name;
 
+    private boolean mIsLoading = false;
     private boolean mLoaded = false;
     private Map<String, String> mPackagesDrawables = new HashMap<>();
 
@@ -74,84 +75,91 @@ public class IconPack {
         this.packageName = packageName;
     }
 
-    void load(Context mContext) {
-        SharedPreferences pref = U.getSharedPreferences(mContext);
-        boolean loadMasks = pref.getBoolean("icon_pack_use_mask", false);
+    private void load(Context mContext) {
+        if(!mIsLoading) {
+            mIsLoading = true;
 
-        // Load appfilter.xml from the icon pack package
-        PackageManager pm = mContext.getPackageManager();
-        try {
-            XmlPullParser xpp = null;
+            SharedPreferences pref = U.getSharedPreferences(mContext);
+            boolean loadMasks = pref.getBoolean("icon_pack_use_mask", false);
 
-            iconPackres = pm.getResourcesForApplication(packageName);
-            int appfilterid = iconPackres.getIdentifier("appfilter", "xml", packageName);
-            if(appfilterid > 0) {
-                xpp = iconPackres.getXml(appfilterid);
-            } else {
-                // No resource found, try to open it from assets folder
-                try {
-                    InputStream appfilterstream = iconPackres.getAssets().open("appfilter.xml");
+            // Load appfilter.xml from the icon pack package
+            PackageManager pm = mContext.getPackageManager();
+            try {
+                XmlPullParser xpp = null;
 
-                    XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                    factory.setNamespaceAware(true);
-                    xpp = factory.newPullParser();
-                    xpp.setInput(appfilterstream, "utf-8");
-                } catch (IOException e) { /* Gracefully fail */ }
-            }
+                iconPackres = pm.getResourcesForApplication(packageName);
+                int appfilterid = iconPackres.getIdentifier("appfilter", "xml", packageName);
+                if(appfilterid > 0) {
+                    xpp = iconPackres.getXml(appfilterid);
+                } else {
+                    // No resource found, try to open it from assets folder
+                    try {
+                        InputStream appfilterstream = iconPackres.getAssets().open("appfilter.xml");
 
-            if(xpp != null) {
-                int eventType = xpp.getEventType();
-                while(eventType != XmlPullParser.END_DOCUMENT) {
-                    if(eventType == XmlPullParser.START_TAG) {
-                        if(loadMasks) {
-                            if(xpp.getName().equals("iconback")) {
-                                for(int i = 0; i < xpp.getAttributeCount(); i++) {
-                                    if(xpp.getAttributeName(i).startsWith("img")) {
-                                        String drawableName = xpp.getAttributeValue(i);
-                                        Bitmap iconback = loadBitmap(drawableName);
-                                        if(iconback != null)
-                                            mBackImages.add(iconback);
+                        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                        factory.setNamespaceAware(true);
+                        xpp = factory.newPullParser();
+                        xpp.setInput(appfilterstream, "utf-8");
+                    } catch (IOException e) { /* Gracefully fail */ }
+                }
+
+                if(xpp != null) {
+                    int eventType = xpp.getEventType();
+                    while(eventType != XmlPullParser.END_DOCUMENT) {
+                        if(eventType == XmlPullParser.START_TAG) {
+                            if(loadMasks) {
+                                if(xpp.getName().equals("iconback")) {
+                                    for(int i = 0; i < xpp.getAttributeCount(); i++) {
+                                        if(xpp.getAttributeName(i).startsWith("img")) {
+                                            String drawableName = xpp.getAttributeValue(i);
+                                            Bitmap iconback = loadBitmap(drawableName);
+                                            if(iconback != null)
+                                                mBackImages.add(iconback);
+                                        }
+                                    }
+                                } else if(xpp.getName().equals("iconmask")) {
+                                    if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
+                                        String drawableName = xpp.getAttributeValue(0);
+                                        mMaskImage = loadBitmap(drawableName);
+                                    }
+                                } else if(xpp.getName().equals("iconupon")) {
+                                    if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
+                                        String drawableName = xpp.getAttributeValue(0);
+                                        mFrontImage = loadBitmap(drawableName);
+                                    }
+                                } else if(xpp.getName().equals("scale")) {
+                                    if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("factor")) {
+                                        mFactor = Float.valueOf(xpp.getAttributeValue(0));
                                     }
                                 }
-                            } else if(xpp.getName().equals("iconmask")) {
-                                if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
-                                    String drawableName = xpp.getAttributeValue(0);
-                                    mMaskImage = loadBitmap(drawableName);
+                            }
+
+                            if(xpp.getName().equals("item")) {
+                                String componentName = null;
+                                String drawableName = null;
+
+                                for(int i = 0; i < xpp.getAttributeCount(); i++) {
+                                    if(xpp.getAttributeName(i).equals("component")) {
+                                        componentName = xpp.getAttributeValue(i);
+                                    } else if(xpp.getAttributeName(i).equals("drawable")) {
+                                        drawableName = xpp.getAttributeValue(i);
+                                    }
                                 }
-                            } else if(xpp.getName().equals("iconupon")) {
-                                if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
-                                    String drawableName = xpp.getAttributeValue(0);
-                                    mFrontImage = loadBitmap(drawableName);
-                                }
-                            } else if(xpp.getName().equals("scale")) {
-                                if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("factor")) {
-                                    mFactor = Float.valueOf(xpp.getAttributeValue(0));
+                                if(!mPackagesDrawables.containsKey(componentName)) {
+                                    mPackagesDrawables.put(componentName, drawableName);
+                                    totalIcons = totalIcons + 1;
                                 }
                             }
                         }
-
-                        if(xpp.getName().equals("item")) {
-                            String componentName = null;
-                            String drawableName = null;
-
-                            for(int i = 0; i < xpp.getAttributeCount(); i++) {
-                                if(xpp.getAttributeName(i).equals("component")) {
-                                    componentName = xpp.getAttributeValue(i);
-                                } else if(xpp.getAttributeName(i).equals("drawable")) {
-                                    drawableName = xpp.getAttributeValue(i);
-                                }
-                            }
-                            if(!mPackagesDrawables.containsKey(componentName)) {
-                                mPackagesDrawables.put(componentName, drawableName);
-                                totalIcons = totalIcons + 1;
-                            }
-                        }
+                        eventType = xpp.next();
                     }
-                    eventType = xpp.next();
                 }
-            }
-            mLoaded = true;
-        } catch (PackageManager.NameNotFoundException | XmlPullParserException | IOException e) { /* Gracefully fail */ }
+
+                mLoaded = true;
+            } catch (PackageManager.NameNotFoundException | XmlPullParserException | IOException e) { /* Gracefully fail */ }
+
+            mIsLoading = false;
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -202,7 +210,7 @@ public class IconPack {
         if(drawable != null) {
             Bitmap BMP = loadBitmap(drawable);
             if(BMP == null) {
-                return generateBitmap(defaultBitmap);
+                return generateBitmap(componentName, defaultBitmap);
             } else {
                 return BMP;
             }
@@ -219,14 +227,14 @@ public class IconPack {
             }
         }
 
-        return generateBitmap(defaultBitmap);
+        return generateBitmap(componentName, defaultBitmap);
     }
 
-    private Bitmap generateBitmap(Bitmap defaultBitmap) {
+    private Bitmap generateBitmap(String componentName, Bitmap defaultBitmap) {
         // If no support images in the icon pack, return the bitmap itself
         if(mBackImages.size() == 0) return defaultBitmap;
 
-        Random r = new Random();
+        Random r = new Random(generateSeed(componentName));
         int backImageInd = r.nextInt(mBackImages.size());
         Bitmap backImage = mBackImages.get(backImageInd);
         int w = backImage.getWidth();
@@ -275,5 +283,16 @@ public class IconPack {
         }
 
         return result;
+    }
+
+    private long generateSeed(String packageName) {
+        long seed = 0;
+
+        for(int i = 0; i < packageName.length(); i++) {
+            char ch = packageName.charAt(i);
+            seed = seed + (long) ch;
+        }
+
+        return seed;
     }
 }
