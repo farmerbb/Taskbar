@@ -21,6 +21,7 @@ import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
@@ -443,7 +444,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         if(openInNewWindow) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+
+            switch(intent.resolveActivityInfo(getPackageManager(), 0).launchMode) {
+                case ActivityInfo.LAUNCH_SINGLE_TASK:
+                case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
+                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    break;
+            }
         }
 
         SharedPreferences pref = U.getSharedPreferences(this);
