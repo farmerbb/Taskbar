@@ -184,7 +184,7 @@
         <item>Unlimited</item>
     </string-array>
 
-    <string name="show_window_sizes">Window sizes&#8230;</string>
+    <string name="show_window_sizes">New window&#8230;</string>
 
     <string name="icon_pack">Icon pack</string>
     <string name="icon_pack_none">None</string>

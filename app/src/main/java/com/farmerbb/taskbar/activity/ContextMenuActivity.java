@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -54,6 +55,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
     boolean isStartButton = false;
+    boolean openInNewWindow = false;
 
     @SuppressLint("RtlHardcoded")
     @SuppressWarnings("deprecation")
@@ -337,6 +339,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
                 findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
 
+                openInNewWindow = true;
                 dontFinish = true;
                 break;
             case "window_size_standard":
@@ -431,11 +434,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     private Intent generateIntent() {
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(componentName));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        if(openInNewWindow) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        }
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("disable_animations", false) && !showStartMenu)
