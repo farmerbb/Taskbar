@@ -105,7 +105,9 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
                 if(pref.getBoolean("disable_animations", false))
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                switch(SavedWindowSizes.getInstance(getContext()).getWindowSize(getContext(), entry.getPackageName())) {
+                if(!pref.getBoolean("freeform_hack", false))
+                    U.launchStandard(getContext(), intent);
+                else switch(SavedWindowSizes.getInstance(getContext()).getWindowSize(getContext(), entry.getPackageName())) {
                     case "standard":
                         U.launchStandard(getContext(), intent);
                         break;

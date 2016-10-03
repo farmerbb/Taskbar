@@ -179,7 +179,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        switch(SavedWindowSizes.getInstance(getContext()).getWindowSize(getContext(), packageName)) {
+        SharedPreferences pref = U.getSharedPreferences(getContext());
+        if(!pref.getBoolean("freeform_hack", false))
+            U.launchStandard(getContext(), intent);
+        else switch(SavedWindowSizes.getInstance(getContext()).getWindowSize(getContext(), packageName)) {
             case "standard":
                 U.launchStandard(getContext(), intent);
                 break;
@@ -200,7 +203,6 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 break;
         }
 
-        SharedPreferences pref = U.getSharedPreferences(getContext());
         if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
         else
