@@ -204,7 +204,7 @@
 
     <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
 
-    <string name="already_blacklisted">%1$s can\'t be on the top apps list because it is hidden</string>
-    <string name="already_top_app">%1$s can\'t be hidden because it is on the top apps list</string>
+    <string name="already_blacklisted">%1$s can\'t be selected because it is on the hidden apps list</string>
+    <string name="already_top_app">%1$s can\'t be selected because it is on the top apps list</string>
 
 </resources>
