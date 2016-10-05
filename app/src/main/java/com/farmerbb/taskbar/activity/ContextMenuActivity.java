@@ -43,6 +43,7 @@ import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
@@ -307,7 +308,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                             packageName,
                             componentName,
                             appName,
-                            U.loadIcon(this, getPackageManager(), throwaway.resolveActivityInfo(getPackageManager(), 0)),
+                            IconCache.getInstance().getIcon(this, getPackageManager(), throwaway.resolveActivityInfo(getPackageManager(), 0)),
                             true));
                 }
                 break;

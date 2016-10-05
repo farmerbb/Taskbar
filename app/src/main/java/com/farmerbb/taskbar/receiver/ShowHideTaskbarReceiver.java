@@ -24,6 +24,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -51,6 +52,8 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
             if(!LauncherHelper.getInstance().isOnHomeScreen()) {
                 context.stopService(taskbarIntent);
                 context.stopService(startMenuIntent);
+
+                IconCache.getInstance().clearCache();
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
             }

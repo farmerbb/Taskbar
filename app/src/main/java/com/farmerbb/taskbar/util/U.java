@@ -25,13 +25,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -432,42 +429,6 @@ public class U {
         return statusBarHeight;
     }
 
-    public static Drawable loadIcon(Context context, PackageManager pm, ActivityInfo appInfo) {
-        SharedPreferences pref = getSharedPreferences(context);
-        String iconPackPackage = pref.getString("icon_pack", BuildConfig.APPLICATION_ID);
-        boolean useMask = pref.getBoolean("icon_pack_use_mask", false);
-        IconPackManager iconPackManager = IconPackManager.getInstance();
-
-        try {
-            pm.getPackageInfo(iconPackPackage, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            iconPackPackage = BuildConfig.APPLICATION_ID;
-            pref.edit().putString("icon_pack", iconPackPackage).apply();
-            refreshPinnedIcons(context);
-        }
-
-        if(iconPackPackage.equals(BuildConfig.APPLICATION_ID))
-            return appInfo.loadIcon(pm);
-        else {
-            IconPack iconPack = iconPackManager.getIconPack(iconPackPackage);
-            String componentName = new ComponentName(appInfo.packageName, appInfo.name).toString();
-
-            if(!useMask) {
-                Drawable icon = iconPack.getDrawableIconForPackage(context, componentName);
-                return icon == null ? appInfo.loadIcon(pm) : icon;
-            } else {
-                Drawable drawable = appInfo.loadIcon(pm);
-                if(drawable instanceof BitmapDrawable) {
-                    return new BitmapDrawable(context.getResources(),
-                            iconPack.getIconForPackage(context, componentName, ((BitmapDrawable) drawable).getBitmap()));
-                } else {
-                    Drawable icon = iconPack.getDrawableIconForPackage(context, componentName);
-                    return icon == null ? drawable : icon;
-                }
-            }
-        }
-    }
-
     public static void refreshPinnedIcons(Context context) {
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
         List<AppEntry> pinnedAppsList = new ArrayList<>(pba.getPinnedApps());
@@ -484,7 +445,7 @@ public class U {
                     entry.getPackageName(),
                     entry.getComponentName(),
                     entry.getLabel(),
-                    U.loadIcon(context, pm, throwaway.resolveActivityInfo(pm, 0)),
+                    IconCache.getInstance().getIcon(context, pm, throwaway.resolveActivityInfo(pm, 0)),
                     true);
 
             pba.addPinnedApp(context, newEntry);

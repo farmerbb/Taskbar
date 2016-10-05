@@ -66,7 +66,7 @@ public class IconPackManager {
         return iconPacks;
     }
 
-    public void forceReload() {
+    void forceReload() {
         forceReload = true;
     }
 

@@ -59,7 +59,7 @@ import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.IconPackManager;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
@@ -166,7 +166,7 @@ public class StartMenuService extends Service {
 
     @SuppressLint("RtlHardcoded")
     private void drawStartMenu() {
-        IconPackManager.getInstance().forceReload();
+        IconCache.getInstance().clearCache();
 
         boolean shouldShowSearchBox = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
 
@@ -430,7 +430,7 @@ public class StartMenuService extends Service {
 
                         try {
                             label = appInfo.loadLabel(pm).toString();
-                            icon = U.loadIcon(StartMenuService.this, pm, appInfo.activityInfo);
+                            icon = IconCache.getInstance().getIcon(StartMenuService.this, pm, appInfo.activityInfo);
                         } catch (OutOfMemoryError e) {
                             System.gc();
 
