@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
@@ -43,6 +44,7 @@ import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
+import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
@@ -69,6 +71,13 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
         TextView textView = (TextView) convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
+
+        Intent intent = new Intent();
+        intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
+        String name = intent.resolveActivityInfo(getContext().getPackageManager(), 0).name;
+
+        TopApps topApps = TopApps.getInstance(getContext());
+        textView.setTypeface(null, topApps.isTopApp(name) ? Typeface.BOLD : Typeface.NORMAL);
 
         switch(pref.getString("theme", "light")) {
             case "light":
