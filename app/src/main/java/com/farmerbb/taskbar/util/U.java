@@ -430,6 +430,8 @@ public class U {
     }
 
     public static void refreshPinnedIcons(Context context) {
+        IconCache.getInstance().clearCache();
+
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
         List<AppEntry> pinnedAppsList = new ArrayList<>(pba.getPinnedApps());
         List<AppEntry> blockedAppsList = new ArrayList<>(pba.getBlockedApps());

@@ -74,6 +74,5 @@ public class IconCache {
     public void clearCache() {
         drawables.clear();
         IconPackManager.getInstance().forceReload();
-        System.gc();
     }
 }
