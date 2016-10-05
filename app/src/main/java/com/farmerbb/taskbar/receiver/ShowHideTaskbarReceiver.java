@@ -53,7 +53,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 context.stopService(taskbarIntent);
                 context.stopService(startMenuIntent);
 
-                IconCache.getInstance().clearCache();
+                IconCache.getInstance(context).clearCache();
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
             }

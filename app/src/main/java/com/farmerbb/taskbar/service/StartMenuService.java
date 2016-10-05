@@ -166,7 +166,7 @@ public class StartMenuService extends Service {
 
     @SuppressLint("RtlHardcoded")
     private void drawStartMenu() {
-        IconCache.getInstance().clearCache();
+        IconCache.getInstance(this).clearCache();
 
         boolean shouldShowSearchBox = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
 
@@ -430,7 +430,7 @@ public class StartMenuService extends Service {
 
                         try {
                             label = appInfo.loadLabel(pm).toString();
-                            icon = IconCache.getInstance().getIcon(StartMenuService.this, pm, appInfo.activityInfo);
+                            icon = IconCache.getInstance(StartMenuService.this).getIcon(StartMenuService.this, pm, appInfo.activityInfo);
                         } catch (OutOfMemoryError e) {
                             System.gc();
 

@@ -32,7 +32,6 @@ public class IconPackManager {
     private static IconPackManager theInstance;
 
     private IconPack currentIconPack;
-    private boolean forceReload = false;
 
     private IconPackManager() {}
 
@@ -66,14 +65,12 @@ public class IconPackManager {
         return iconPacks;
     }
 
-    void forceReload() {
-        forceReload = true;
+    void nullify() {
+        currentIconPack = null;
     }
 
     IconPack getIconPack(String packageName) {
-        if(forceReload || currentIconPack == null || !currentIconPack.getPackageName().equals(packageName)) {
-            forceReload = false;
-
+        if(currentIconPack == null || !currentIconPack.getPackageName().equals(packageName)) {
             currentIconPack = new IconPack();
             currentIconPack.setPackageName(packageName);
         }

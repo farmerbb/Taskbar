@@ -32,6 +32,7 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -190,6 +191,8 @@ public class InvisibleActivityFreeform extends Activity {
             if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
                 stopService(new Intent(this, TaskbarService.class));
                 stopService(new Intent(this, StartMenuService.class));
+
+                IconCache.getInstance(this).clearCache();
             }
 
         }

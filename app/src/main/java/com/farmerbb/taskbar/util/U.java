@@ -430,7 +430,7 @@ public class U {
     }
 
     public static void refreshPinnedIcons(Context context) {
-        IconCache.getInstance().clearCache();
+        IconCache.getInstance(context).clearCache();
 
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
         List<AppEntry> pinnedAppsList = new ArrayList<>(pba.getPinnedApps());
@@ -447,7 +447,7 @@ public class U {
                     entry.getPackageName(),
                     entry.getComponentName(),
                     entry.getLabel(),
-                    IconCache.getInstance().getIcon(context, pm, throwaway.resolveActivityInfo(pm, 0)),
+                    IconCache.getInstance(context).getIcon(context, pm, throwaway.resolveActivityInfo(pm, 0)),
                     true);
 
             pba.addPinnedApp(context, newEntry);

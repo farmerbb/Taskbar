@@ -308,7 +308,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                             packageName,
                             componentName,
                             appName,
-                            IconCache.getInstance().getIcon(this, getPackageManager(), throwaway.resolveActivityInfo(getPackageManager(), 0)),
+                            IconCache.getInstance(this).getIcon(this, getPackageManager(), throwaway.resolveActivityInfo(getPackageManager(), 0)),
                             true));
                 }
                 break;

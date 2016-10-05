@@ -25,6 +25,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -41,6 +42,8 @@ public class QuitReceiver extends BroadcastReceiver {
         if(!LauncherHelper.getInstance().isOnHomeScreen()) {
             context.stopService(taskbarIntent);
             context.stopService(startMenuIntent);
+
+            IconCache.getInstance(context).clearCache();
 
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
         }

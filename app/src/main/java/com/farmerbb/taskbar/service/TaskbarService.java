@@ -181,7 +181,7 @@ public class TaskbarService extends Service {
 
     @SuppressLint("RtlHardcoded")
     private void drawTaskbar() {
-        IconCache.getInstance().clearCache();
+        IconCache.getInstance(this).clearCache();
 
         // Initialize layout params
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -608,7 +608,7 @@ public class TaskbarService extends Service {
                             packageName,
                             intent.resolveActivity(pm).flattenToString(),
                             intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
-                            IconCache.getInstance().getIcon(TaskbarService.this, pm, intent.resolveActivityInfo(pm, 0)),
+                            IconCache.getInstance(TaskbarService.this).getIcon(TaskbarService.this, pm, intent.resolveActivityInfo(pm, 0)),
                             false));
                     }
                 }
