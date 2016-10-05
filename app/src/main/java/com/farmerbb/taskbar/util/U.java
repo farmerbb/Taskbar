@@ -62,6 +62,9 @@ public class U {
     private static final int LEFT = -1;
     private static final int RIGHT = 1;
 
+    public static final int HIDDEN = 0;
+    public static final int TOP_APPS = 1;
+
     public static SharedPreferences getSharedPreferences(Context context) {
         if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
         return pref;
@@ -115,17 +118,17 @@ public class U {
     }
 
     public static void showToast(Context context, int message) {
-        showToast(context, message, Toast.LENGTH_SHORT);
+        showToast(context, context.getString(message), Toast.LENGTH_SHORT);
     }
 
     public static void showToastLong(Context context, int message) {
-        showToast(context, message, Toast.LENGTH_LONG);
+        showToast(context, context.getString(message), Toast.LENGTH_LONG);
     }
 
-    private static void showToast(Context context, int message, int length) {
+    public static void showToast(Context context, String message, int length) {
         if(toast != null) toast.cancel();
 
-        toast = Toast.makeText(context, context.getString(message), length);
+        toast = Toast.makeText(context, message, length);
         toast.show();
     }
 

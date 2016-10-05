@@ -152,10 +152,14 @@
     <string name="window_size_half_right">@string/window_size_half_right_alt</string>
     <string name="window_size_half_right_alt">Half screen (right/bottom)</string>
 
-    <string name="pref_title_blacklist">Hide apps from start menu</string>
+    <string name="pref_title_blacklist">Configure apps in start menu</string>
     <string name="app_hidden">1 app hidden</string>
     <string name="apps_hidden">%1$d apps hidden</string>
-    <string name="blacklist_dialog_title">Hidden apps</string>
+    <string name="blacklist_dialog_title">Hidden</string>
+    <string name="top_app">1 top app</string>
+    <string name="top_apps">%1$d top apps</string>
+    <string name="top_apps_dialog_title">Top apps</string>
+    <string name="start_menu_apps">Start menu apps</string>
 
     <string name="reboot_required">Reboot your device to complete freeform mode setup</string>
     <string name="enable_force_activities_resizable">Scroll to the bottom and turn on \'\'Force activities to be resizable\'\'</string>
@@ -199,5 +203,8 @@
     <string name="pref_description_use_mask">When an icon pack is set, generate icons for unthemed apps using masking images found within the icon pack. (Experimental)</string>
 
     <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
+
+    <string name="already_blacklisted">%1$s can\'t be on the top apps list because it is hidden</string>
+    <string name="already_top_app">%1$s can\'t be hidden because it is on the top apps list</string>
 
 </resources>

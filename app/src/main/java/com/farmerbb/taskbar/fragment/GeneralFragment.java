@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.Blacklist;
+import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
 public class GeneralFragment extends SettingsFragment {
@@ -66,6 +67,9 @@ public class GeneralFragment extends SettingsFragment {
 
         int size = Blacklist.getInstance(getActivity()).getBlockedApps().size();
         String summary = size == 1 ? getString(R.string.app_hidden) : getString(R.string.apps_hidden, size);
+
+        size = TopApps.getInstance(getActivity()).getTopApps().size();
+        summary = summary + "\n" + (size == 1 ? getString(R.string.top_app) : getString(R.string.top_apps, size));
 
         Preference blacklistPref = findPreference("blacklist");
         if(blacklistPref != null) {

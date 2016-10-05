@@ -15,26 +15,28 @@
 
 package com.farmerbb.taskbar.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.adapter.AppListAdapter;
+import com.farmerbb.taskbar.fragment.SelectAppFragment;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.BlacklistEntry;
+import com.farmerbb.taskbar.util.TopApps;
+import com.farmerbb.taskbar.util.U;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -46,21 +48,60 @@ public class SelectAppActivity extends AppCompatActivity {
 
     private AppListGenerator appListGenerator;
     private ProgressBar progressBar;
-    private ListView appList;
+    private AppListAdapter hiddenAdapter;
+    private AppListAdapter topAppsAdapter;
+
+    private class SelectAppPagerAdapter extends FragmentPagerAdapter {
+
+        SelectAppPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return SelectAppFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch(position) {
+                case U.HIDDEN:
+                    return getString(R.string.blacklist_dialog_title);
+                case U.TOP_APPS:
+                    return getString(R.string.top_apps_dialog_title);
+            }
+
+            return null;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.select_app);
-        setFinishOnTouchOutside(false);
-        setTitle(R.string.blacklist_dialog_title);
+        if(savedInstanceState == null) {
+            setContentView(R.layout.configure_start_menu);
+            setFinishOnTouchOutside(false);
+            setTitle(R.string.start_menu_apps);
 
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        appList = (ListView) findViewById(R.id.list);
-
-        appListGenerator = new AppListGenerator();
-        appListGenerator.execute();
+            progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+            appListGenerator = new AppListGenerator();
+            appListGenerator.execute();
+        } else {
+            // Workaround for ViewPager disappearing on config change
+            finish();
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(SelectAppActivity.this, SelectAppActivity.class));
+                }
+            });
+        }
     }
 
     @Override
@@ -71,47 +112,20 @@ public class SelectAppActivity extends AppCompatActivity {
         super.finish();
     }
 
-    private class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
-        AppListAdapter(Context context, int layout, List<BlacklistEntry> list) {
-            super(context, layout, list);
+    public AppListAdapter getAppListAdapter(int type) {
+        switch(type) {
+            case U.HIDDEN:
+                return hiddenAdapter;
+            case U.TOP_APPS:
+                return topAppsAdapter;
         }
 
-        @Override
-        public View getView(int position, View convertView, final ViewGroup parent) {
-            // Check if an existing view is being reused, otherwise inflate the view
-            if(convertView == null)
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_blacklist, parent, false);
-
-            final BlacklistEntry entry = getItem(position);
-            final Blacklist blacklist = Blacklist.getInstance(getContext());
-
-            TextView textView = (TextView) convertView.findViewById(R.id.name);
-            textView.setText(entry.getLabel());
-
-            final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-            checkBox.setChecked(blacklist.isBlocked(entry.getPackageName()));
-
-            LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
-            layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(blacklist.isBlocked(entry.getPackageName())) {
-                        blacklist.removeBlockedApp(getContext(), entry.getPackageName());
-                        checkBox.setChecked(false);
-                    } else {
-                        blacklist.addBlockedApp(getContext(), entry);
-                        checkBox.setChecked(true);
-                    }
-                }
-            });
-
-            return convertView;
-        }
+        return null;
     }
 
-    private final class AppListGenerator extends AsyncTask<Void, Void, AppListAdapter> {
+    private final class AppListGenerator extends AsyncTask<Void, Void, AppListAdapter[]> {
         @Override
-        protected AppListAdapter doInBackground(Void... params) {
+        protected AppListAdapter[] doInBackground(Void... params) {
             final PackageManager pm = getPackageManager();
 
             Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -119,13 +133,19 @@ public class SelectAppActivity extends AppCompatActivity {
 
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
 
-            // Remove any uninstalled apps from the blacklist
+            // Remove any uninstalled apps from the blacklist and top apps
             Blacklist blacklist = Blacklist.getInstance(SelectAppActivity.this);
+            TopApps topApps = TopApps.getInstance(SelectAppActivity.this);
             List<String> blacklistedApps = new ArrayList<>();
+            List<String> topAppsList = new ArrayList<>();
             List<String> installedApps = new ArrayList<>();
 
             for(BlacklistEntry entry : blacklist.getBlockedApps()) {
                blacklistedApps.add(entry.getPackageName());
+            }
+
+            for(BlacklistEntry entry : topApps.getTopApps()) {
+                topAppsList.add(entry.getPackageName());
             }
 
             for(ResolveInfo appInfo : list) {
@@ -135,6 +155,11 @@ public class SelectAppActivity extends AppCompatActivity {
             for(String packageName : blacklistedApps) {
                 if(!installedApps.contains(packageName))
                     blacklist.removeBlockedApp(SelectAppActivity.this, packageName);
+            }
+
+            for(String packageName : topAppsList) {
+                if(!installedApps.contains(packageName))
+                    topApps.removeTopApp(SelectAppActivity.this, packageName);
             }
 
             Collections.sort(list, new Comparator<ResolveInfo>() {
@@ -174,13 +199,26 @@ public class SelectAppActivity extends AppCompatActivity {
                         label));
             }
 
-            return new AppListAdapter(SelectAppActivity.this, R.layout.row_blacklist, entries);
+            return new AppListAdapter[] {
+                    new AppListAdapter(SelectAppActivity.this, R.layout.row_blacklist, entries, U.HIDDEN),
+                    new AppListAdapter(SelectAppActivity.this, R.layout.row_blacklist, entries, U.TOP_APPS)
+            };
         }
 
         @Override
-        protected void onPostExecute(AppListAdapter adapter) {
+        protected void onPostExecute(AppListAdapter[] adapters) {
+            hiddenAdapter = adapters[U.HIDDEN];
+            topAppsAdapter = adapters[U.TOP_APPS];
+
+            SelectAppPagerAdapter pagerAdapter = new SelectAppPagerAdapter(getSupportFragmentManager());
+            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+            viewPager.setAdapter(pagerAdapter);
+
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+            tabLayout.setupWithViewPager(viewPager);
+
+            findViewById(R.id.configure_start_menu_layout).setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
-            appList.setAdapter(adapter);
             setFinishOnTouchOutside(true);
         }
     }

@@ -13,6 +13,7 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.BlacklistEntry;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
+import com.farmerbb.taskbar.util.TopApps;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,6 +73,21 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                     blacklist.addBlockedApp(context, new BlacklistEntry(
                             blacklistPackageNames[i],
                             blacklistLabels[i]
+                    ));
+                }
+
+            // Get top apps
+            TopApps topApps = TopApps.getInstance(context);
+            topApps.clear(context);
+
+            String[] topAppsPackageNames = intent.getStringArrayExtra("top_apps_package_names");
+            String[] topAppsLabels = intent.getStringArrayExtra("top_apps_labels");
+
+            if(topAppsPackageNames != null && topAppsLabels != null)
+                for(int i = 0; i < topAppsPackageNames.length; i++) {
+                    topApps.addTopApp(context, new BlacklistEntry(
+                            topAppsPackageNames[i],
+                            topAppsLabels[i]
                     ));
                 }
 

@@ -59,7 +59,9 @@ import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.IconPackManager;
 import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 import com.farmerbb.taskbar.view.TaskbarGridView;
 
@@ -76,6 +78,7 @@ public class StartMenuService extends Service {
     private TaskbarGridView startMenu;
     private SearchView searchView;
     private TextView textView;
+    private PackageManager pm;
 
     private Handler handler;
     private Thread thread;
@@ -113,6 +116,26 @@ public class StartMenuService extends Service {
             hideStartMenu();
         }
     };
+
+    private Comparator<ResolveInfo> comparator = new Comparator<ResolveInfo>() {
+        @Override
+        public int compare(ResolveInfo ai1, ResolveInfo ai2) {
+            String label1;
+            String label2;
+
+            try {
+                label1 = ai1.activityInfo.loadLabel(pm).toString();
+                label2 = ai2.activityInfo.loadLabel(pm).toString();
+            } catch (OutOfMemoryError e) {
+                System.gc();
+
+                label1 = ai1.activityInfo.packageName;
+                label2 = ai2.activityInfo.packageName;
+            }
+
+            return Collator.getInstance().compare(label1, label2);
+        }
+    };
     
     @Override
     public IBinder onBind(Intent intent) {
@@ -143,6 +166,8 @@ public class StartMenuService extends Service {
 
     @SuppressLint("RtlHardcoded")
     private void drawStartMenu() {
+        IconPackManager.getInstance().forceReload();
+
         boolean shouldShowSearchBox = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
 
         int focusableFlag = shouldShowSearchBox
@@ -326,39 +351,37 @@ public class StartMenuService extends Service {
         thread = new Thread() {
             @Override
             public void run() {
-                final PackageManager pm = getPackageManager();
+                if(pm == null) pm = getPackageManager();
 
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
                 final List<ResolveInfo> unfilteredList = pm.queryIntentActivities(intent, 0);
+                final List<ResolveInfo> topAppsList = new ArrayList<>();
+                final List<ResolveInfo> allAppsList = new ArrayList<>();
                 final List<ResolveInfo> list = new ArrayList<>();
-                Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
 
+                TopApps topApps = TopApps.getInstance(StartMenuService.this);
                 for(ResolveInfo appInfo : unfilteredList) {
-                    if(!blacklist.isBlocked(appInfo.activityInfo.name))
-                        list.add(appInfo);
+                    if(topApps.isTopApp(appInfo.activityInfo.name))
+                        topAppsList.add(appInfo);
                 }
 
-                Collections.sort(list, new Comparator<ResolveInfo>() {
-                    @Override
-                    public int compare(ResolveInfo ai1, ResolveInfo ai2) {
-                        String label1;
-                        String label2;
+                Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
+                for(ResolveInfo appInfo : unfilteredList) {
+                    if(!blacklist.isBlocked(appInfo.activityInfo.name)
+                            && !topApps.isTopApp(appInfo.activityInfo.name))
+                        allAppsList.add(appInfo);
+                }
 
-                        try {
-                            label1 = ai1.activityInfo.loadLabel(pm).toString();
-                            label2 = ai2.activityInfo.loadLabel(pm).toString();
-                        } catch (OutOfMemoryError e) {
-                            System.gc();
+                Collections.sort(topAppsList, comparator);
+                Collections.sort(allAppsList, comparator);
 
-                            label1 = ai1.activityInfo.packageName;
-                            label2 = ai2.activityInfo.packageName;
-                        }
+                list.addAll(topAppsList);
+                list.addAll(allAppsList);
 
-                        return Collator.getInstance().compare(label1, label2);
-                    }
-                });
+                topAppsList.clear();
+                allAppsList.clear();
 
                 List<ResolveInfo> queryList;
                 if(query == null)

@@ -70,6 +70,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.adapter.TaskbarAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.IconPackManager;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
@@ -180,6 +181,8 @@ public class TaskbarService extends Service {
 
     @SuppressLint("RtlHardcoded")
     private void drawTaskbar() {
+        IconPackManager.getInstance().forceReload();
+
         // Initialize layout params
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         U.setCachedRotation(windowManager.getDefaultDisplay().getRotation());

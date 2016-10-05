@@ -139,8 +139,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
-            } else if(finishedLoadingPrefs && preference.getKey().equals("icon_pack_use_mask")) {
-                IconPackManager.getInstance().forceReload();
             }
 
             if(finishedLoadingPrefs) restartTaskbar();
