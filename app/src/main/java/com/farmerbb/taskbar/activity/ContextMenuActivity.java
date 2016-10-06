@@ -454,10 +454,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             }
         }
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("disable_animations", false) && !showStartMenu)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
         return intent;
     }
 }
