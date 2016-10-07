@@ -144,48 +144,59 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
-                && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                && !FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             shouldDelay = true;
 
-            if(launchedFromTaskbar) {
+            int msToWait = 0;
+            if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
                 float factor = Settings.Global.getFloat(context.getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1);
                 if(factor < 0.5)
                     factor = 0.5f;
 
-                int msToWait = (int) (750 * factor);
+                msToWait = (int) (750 * factor);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startFreeformHack(context);
+                        startFreeformHack(context, launchedFromTaskbar);
                     }
                 }, msToWait);
+            } else
+                startFreeformHack(context, launchedFromTaskbar);
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        continueLaunchingApp(context, packageName, componentName, true, padStatusBar, openInNewWindow);
-                    }
-                }, msToWait + 100);
-            } else {
-                startFreeformHack(context);
-            }
-        }
-
-        if(shouldDelay) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+                    continueLaunchingApp(context, packageName, componentName, true, padStatusBar, openInNewWindow);
                 }
-            }, 100);
-        } else continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+            }, msToWait + 100);
+        }
+
+        if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
+            if(shouldDelay) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+                    }
+                }, 100);
+            } else
+                continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+        } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+            continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
     }
 
-    private static void startFreeformHack(Context context) {
+    private static void startFreeformHack(Context context, boolean launchedFromTaskbar) {
         Intent freeformHackIntent = new Intent(context, InvisibleActivityFreeform.class);
         freeformHackIntent.putExtra("check_multiwindow", true);
         freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        if(launchedFromTaskbar) {
+            SharedPreferences pref = getSharedPreferences(context);
+            if(pref.getBoolean("disable_animations", false))
+                freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        }
+
         context.startActivity(freeformHackIntent);
     }
 

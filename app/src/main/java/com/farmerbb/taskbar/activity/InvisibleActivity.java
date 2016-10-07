@@ -32,7 +32,6 @@ public class InvisibleActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             finish();
-            overridePendingTransition(0, 0);
         }
     };
 

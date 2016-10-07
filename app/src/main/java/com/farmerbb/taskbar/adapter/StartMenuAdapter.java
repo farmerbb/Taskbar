@@ -91,6 +91,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
                 U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), false, true, false);
             }
         });

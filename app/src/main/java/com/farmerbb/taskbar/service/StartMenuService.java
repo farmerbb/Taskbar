@@ -486,6 +486,7 @@ public class StartMenuService extends Service {
     }
 
     @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
     private void showStartMenu(boolean shouldReset) {
         if(shouldReset) startMenu.setSelection(0);
 
@@ -495,13 +496,14 @@ public class StartMenuService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
 
         boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
-        if(!onHomeScreen || FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+        boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
+
+        if(!onHomeScreen || inFreeformMode) {
             Intent intent = new Intent(this, InvisibleActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-            SharedPreferences pref = U.getSharedPreferences(this);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+            if(inFreeformMode) {
                 DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
                 Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
