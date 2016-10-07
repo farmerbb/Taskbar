@@ -103,6 +103,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
                         .putBoolean("freeform_hack", hasFreeformSupport())
+                        .putString("window_size", "large")
                         .putBoolean("freeform_hack_override", true)
                         .apply();
             }
