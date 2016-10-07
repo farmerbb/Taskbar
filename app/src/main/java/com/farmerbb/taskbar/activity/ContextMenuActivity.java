@@ -193,7 +193,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
-                    && isInMultiWindowMode()) {
+                    && (FreeformHackHelper.getInstance().isFreeformHackActive() || isInMultiWindowMode())) {
                 addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
             }

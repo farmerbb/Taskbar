@@ -167,7 +167,7 @@ public class U {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    continueLaunchingApp(context, packageName, componentName, true, padStatusBar, openInNewWindow);
+                    continueLaunchingApp(context, packageName, componentName, true, padStatusBar, false);
                 }
             }, msToWait + 100);
         }
@@ -232,7 +232,7 @@ public class U {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
             try {
                 context.startActivity(intent);
-            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+            } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
         } else switch(SavedWindowSizes.getInstance(context).getWindowSize(context, packageName)) {
             case "standard":
                 launchMode1(context, intent, 1);
@@ -278,7 +278,7 @@ public class U {
                     width2,
                     height2
             )).toBundle());
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
     }
 
     @SuppressWarnings("deprecation")
@@ -343,7 +343,7 @@ public class U {
                     right,
                     bottom
             )).toBundle());
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
     }
 
     @SuppressWarnings("deprecation")
@@ -364,7 +364,7 @@ public class U {
                     width1 + width2,
                     height1 + height2
             )).toBundle());
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
     }
 
     public static void checkForUpdates(Context context) {
