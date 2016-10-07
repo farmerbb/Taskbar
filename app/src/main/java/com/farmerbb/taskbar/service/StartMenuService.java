@@ -534,7 +534,10 @@ public class StartMenuService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(layout != null) windowManager.removeView(layout);
+        if(layout != null)
+            try {
+                windowManager.removeView(layout);
+            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
@@ -547,7 +550,9 @@ public class StartMenuService extends Service {
         super.onConfigurationChanged(newConfig);
 
         if(layout != null) {
-            windowManager.removeView(layout);
+            try {
+                windowManager.removeView(layout);
+            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
                 drawStartMenu();

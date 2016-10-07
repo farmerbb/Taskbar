@@ -808,7 +808,10 @@ public class TaskbarService extends Service {
         shouldRefreshRecents = false;
 
         super.onDestroy();
-        if(layout != null) windowManager.removeView(layout);
+        if(layout != null)
+            try {
+                windowManager.removeView(layout);
+            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(showReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
@@ -858,7 +861,10 @@ public class TaskbarService extends Service {
         super.onConfigurationChanged(newConfig);
 
         if(layout != null) {
-            windowManager.removeView(layout);
+            try {
+                windowManager.removeView(layout);
+            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+
             currentTaskbarPosition = 0;
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
