@@ -534,7 +534,7 @@ public class StartMenuService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(layout != null) windowManager.removeView(layout);
+        if(layout != null && layout.getWindowToken() != null) windowManager.removeView(layout);
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
@@ -546,17 +546,16 @@ public class StartMenuService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(layout != null) {
+        if(layout != null && layout.getWindowToken() != null)
             windowManager.removeView(layout);
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
-                drawStartMenu();
-            else {
-                SharedPreferences pref = U.getSharedPreferences(this);
-                pref.edit().putBoolean("taskbar_active", false).apply();
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+            drawStartMenu();
+        else {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("taskbar_active", false).apply();
 
-                stopSelf();
-            }
+            stopSelf();
         }
     }
 }

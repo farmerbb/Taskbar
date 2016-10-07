@@ -808,7 +808,7 @@ public class TaskbarService extends Service {
         shouldRefreshRecents = false;
 
         super.onDestroy();
-        if(layout != null) windowManager.removeView(layout);
+        if(layout != null && layout.getWindowToken() != null) windowManager.removeView(layout);
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(showReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
@@ -857,18 +857,18 @@ public class TaskbarService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(layout != null) {
+        if(layout != null && layout.getWindowToken() != null)
             windowManager.removeView(layout);
-            currentTaskbarPosition = 0;
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
-                drawTaskbar();
-            else {
-                SharedPreferences pref = U.getSharedPreferences(this);
-                pref.edit().putBoolean("taskbar_active", false).apply();
+        currentTaskbarPosition = 0;
 
-                stopSelf();
-            }
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+            drawTaskbar();
+        else {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("taskbar_active", false).apply();
+
+            stopSelf();
         }
     }
 }
