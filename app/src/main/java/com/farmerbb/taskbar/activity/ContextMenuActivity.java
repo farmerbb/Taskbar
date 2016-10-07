@@ -285,7 +285,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "open_taskbar_settings":
                 startFreeformActivity();
-                startActivity(new Intent(this, MainActivity.class));
+
+                Intent intent2 = new Intent(this, MainActivity.class);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent2);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
