@@ -235,7 +235,12 @@ public class U {
             } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
         } else switch(SavedWindowSizes.getInstance(context).getWindowSize(context, packageName)) {
             case "standard":
-                launchMode1(context, intent, 1);
+                if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    try {
+                        context.startActivity(intent);
+                    } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
+                else
+                    launchMode1(context, intent, 1);
                 break;
             case "large":
                 launchMode1(context, intent, 2);
