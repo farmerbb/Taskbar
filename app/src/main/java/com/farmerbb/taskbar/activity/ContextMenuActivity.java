@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -238,6 +239,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     }
 
     @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     public boolean onPreferenceClick(Preference p) {
         boolean appIsValid = true;
@@ -350,7 +352,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "window_size_phone_size":
                 SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, p.getKey().replace("window_size_", ""));
 
-                U.launchApp(this, packageName, componentName, false, false, true);
+                U.launchApp(this, packageName, componentName, false, !isInMultiWindowMode(), true);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
