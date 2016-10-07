@@ -124,7 +124,7 @@
     </string-array>
 
     <string name="device_admin_description_short">Allows Taskbar to lock this device via the start menu</string>
-    <string name="device_admin_description">Allows Taskbar to lock this device via the start menu.\n\nThis will require you to deactivate Taskbar as a device administrator prior to installing.</string>
+    <string name="device_admin_description">Allows Taskbar to lock this device via the start menu.\n\nThis will require you to deactivate Taskbar as a device administrator prior to uninstalling.</string>
     <string name="lock_device_not_supported">Not supported on this device</string>
 
     <string name="pref_title_shortcut_icon">Show shortcut icon for pinned apps</string>
