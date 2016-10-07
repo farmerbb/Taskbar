@@ -148,21 +148,25 @@ public class U {
             shouldDelay = true;
 
             if(launchedFromTaskbar) {
-                float msToWait = 750 * Settings.Global.getFloat(context.getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1);
+                float factor = Settings.Global.getFloat(context.getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1);
+                if(factor < 0.5)
+                    factor = 0.5f;
+
+                int msToWait = (int) (750 * factor);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         startFreeformHack(context);
                     }
-                }, (int) msToWait);
+                }, msToWait);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         continueLaunchingApp(context, packageName, componentName, true, padStatusBar, openInNewWindow);
                     }
-                }, (int) msToWait + 100);
+                }, msToWait + 100);
             } else {
                 startFreeformHack(context);
             }
