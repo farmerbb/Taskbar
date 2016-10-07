@@ -214,7 +214,7 @@ public class U {
             }
         }
 
-        if(!pref.getBoolean("freeform_hack", false)) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
             try {
                 context.startActivity(intent);
             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
