@@ -32,7 +32,9 @@ import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
@@ -42,6 +44,7 @@ import android.widget.Toast;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
+import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 
 import java.util.ArrayList;
@@ -129,21 +132,105 @@ public class U {
         toast.show();
     }
 
-    public static void launchStandard(Context context, Intent intent) {
-        try {
-            context.startActivity(intent);
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    public static void launchApp(final Context context, final String packageName, final String componentName, final boolean launchedFromTaskbar) {
+        boolean shouldDelay = false;
+
+        SharedPreferences pref = U.getSharedPreferences(context);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+            shouldDelay = true;
+
+            if(launchedFromTaskbar) {
+                float msToWait = 750 * Settings.Global.getFloat(context.getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startFreeformHack(context);
+                    }
+                }, (int) msToWait);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        continueLaunchingApp(context, packageName, componentName, true);
+                    }
+                }, (int) msToWait + 100);
+            } else {
+                startFreeformHack(context);
+            }
+        }
+
+        if(shouldDelay) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar);
+                }
+            }, 100);
+        } else continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar);
     }
 
+    private static void startFreeformHack(Context context) {
+        Intent freeformHackIntent = new Intent(context, InvisibleActivityFreeform.class);
+        freeformHackIntent.putExtra("check_multiwindow", true);
+        freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(freeformHackIntent);
+    }
+
+    private static void continueLaunchingApp(Context context, String packageName, String componentName, boolean launchedFromTaskbar) {
+        SharedPreferences pref = getSharedPreferences(context);
+        Intent intent = new Intent();
+        intent.setComponent(ComponentName.unflattenFromString(componentName));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        
+        if(launchedFromTaskbar) {
+            if(pref.getBoolean("disable_animations", false))
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        }
+
+        if(!pref.getBoolean("freeform_hack", false)) {
+            try {
+                context.startActivity(intent);
+            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } else switch(SavedWindowSizes.getInstance(context).getWindowSize(context, packageName)) {
+            case "standard":
+                launchStandard(context, intent);
+                break;
+            case "large":
+                launchLarge(context, intent);
+                break;
+            case "fullscreen":
+                launchFullscreen(context, intent, true);
+                break;
+            case "half_left":
+                launchHalfLeft(context, intent, true);
+                break;
+            case "half_right":
+                launchHalfRight(context, intent, true);
+                break;
+            case "phone_size":
+                launchPhoneSize(context, intent);
+                break;
+        }
+
+        if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+        else
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+    }
+    
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    public static void launchLarge(Context context, Intent intent) {
+    private static void launchMode1(Context context, Intent intent, int factor) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-        int width1 = display.getWidth() / 8;
+        int width1 = display.getWidth() / (4 * factor);
         int width2 = display.getWidth() - width1;
-        int height1 = display.getHeight() / 8;
+        int height1 = display.getHeight() / (4 * factor);
         int height2 = display.getHeight() - height1;
 
         try {
@@ -158,7 +245,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchFullscreen(Context context, Intent intent, boolean padStatusBar, int launchType) {
+    private static void launchMode2(Context context, Intent intent, boolean padStatusBar, int launchType) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -221,16 +308,24 @@ public class U {
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
+    public static void launchStandard(Context context, Intent intent) {
+        launchMode1(context, intent, 1);
+    }
+
+    public static void launchLarge(Context context, Intent intent) {
+        launchMode1(context, intent, 2);
+    }
+
     public static void launchFullscreen(Context context, Intent intent, boolean padStatusBar) {
-        launchFullscreen(context, intent, padStatusBar, FULLSCREEN);
+        launchMode2(context, intent, padStatusBar, FULLSCREEN);
     }
 
     public static void launchHalfLeft(Context context, Intent intent, boolean padStatusBar) {
-        launchFullscreen(context, intent, padStatusBar, LEFT);
+        launchMode2(context, intent, padStatusBar, LEFT);
     }
 
     public static void launchHalfRight(Context context, Intent intent, boolean padStatusBar) {
-        launchFullscreen(context, intent, padStatusBar, RIGHT);
+        launchMode2(context, intent, padStatusBar, RIGHT);
     }
 
     @SuppressWarnings("deprecation")

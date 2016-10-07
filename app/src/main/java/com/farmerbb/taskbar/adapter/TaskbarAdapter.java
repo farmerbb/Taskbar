@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.adapter;
 
 import android.app.ActivityOptions;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -88,50 +89,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences pref = U.getSharedPreferences(getContext());
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                        && pref.getBoolean("freeform_hack", false)
-                        && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                    Intent freeformHackIntent = new Intent(getContext(), InvisibleActivityFreeform.class);
-                    freeformHackIntent.putExtra("check_multiwindow", true);
-                    freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getContext().startActivity(freeformHackIntent);
-                }
-
-                Intent intent = new Intent();
-                intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                if(pref.getBoolean("disable_animations", false))
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                if(!pref.getBoolean("freeform_hack", false))
-                    U.launchStandard(getContext(), intent);
-                else switch(SavedWindowSizes.getInstance(getContext()).getWindowSize(getContext(), entry.getPackageName())) {
-                    case "standard":
-                        U.launchStandard(getContext(), intent);
-                        break;
-                    case "large":
-                        U.launchLarge(getContext(), intent);
-                        break;
-                    case "fullscreen":
-                        U.launchFullscreen(getContext(), intent, true);
-                        break;
-                    case "half_left":
-                        U.launchHalfLeft(getContext(), intent, true);
-                        break;
-                    case "half_right":
-                        U.launchHalfRight(getContext(), intent, true);
-                        break;
-                    case "phone_size":
-                        U.launchPhoneSize(getContext(), intent);
-                        break;
-                }
-
-                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                else
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), true);
             }
         });
 
