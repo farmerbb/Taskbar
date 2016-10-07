@@ -16,12 +16,10 @@
 package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
@@ -57,7 +55,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
     boolean isStartButton = false;
-    boolean openInNewWindow = false;
 
     @SuppressLint("RtlHardcoded")
     @SuppressWarnings("deprecation")
@@ -196,8 +193,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
-                    && isInMultiWindowMode()
-                    && FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                    && isInMultiWindowMode()) {
                 addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
             }
@@ -344,53 +340,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
                 findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
 
-                openInNewWindow = true;
                 dontFinish = true;
                 break;
             case "window_size_standard":
-                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "standard");
-
-                U.launchStandard(this, generateIntent());
-
-                showStartMenu = false;
-                shouldHideTaskbar = true;
-                break;
             case "window_size_large":
-                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "large");
-
-                U.launchLarge(this, generateIntent());
-
-                showStartMenu = false;
-                shouldHideTaskbar = true;
-                break;
             case "window_size_fullscreen":
-                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "fullscreen");
-
-                U.launchFullscreen(this, generateIntent(), false);
-
-                showStartMenu = false;
-                shouldHideTaskbar = true;
-                break;
             case "window_size_half_left":
-                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "half_left");
-
-                U.launchHalfLeft(this, generateIntent(), false);
-
-                showStartMenu = false;
-                shouldHideTaskbar = true;
-                break;
             case "window_size_half_right":
-                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "half_right");
-
-                U.launchHalfRight(this, generateIntent(), false);
-
-                showStartMenu = false;
-                shouldHideTaskbar = true;
-                break;
             case "window_size_phone_size":
-                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, "phone_size");
+                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, p.getKey().replace("window_size_", ""));
 
-                U.launchPhoneSize(this, generateIntent());
+                U.launchApp(this, packageName, componentName, false, false, true);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -437,26 +397,5 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
             startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.N)
-    private Intent generateIntent() {
-        Intent intent = new Intent();
-        intent.setComponent(ComponentName.unflattenFromString(componentName));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        if(openInNewWindow) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
-            switch(intent.resolveActivityInfo(getPackageManager(), 0).launchMode) {
-                case ActivityInfo.LAUNCH_SINGLE_TASK:
-                case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
-                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                    break;
-            }
-        }
-
-        return intent;
     }
 }

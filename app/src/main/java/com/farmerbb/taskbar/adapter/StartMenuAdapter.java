@@ -91,7 +91,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), false);
+                U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), false, true, false);
             }
         });
 

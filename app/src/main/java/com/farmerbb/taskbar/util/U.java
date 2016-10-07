@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -132,10 +133,15 @@ public class U {
         toast.show();
     }
 
-    public static void launchApp(final Context context, final String packageName, final String componentName, final boolean launchedFromTaskbar) {
+    public static void launchApp(final Context context,
+                                 final String packageName,
+                                 final String componentName,
+                                 final boolean launchedFromTaskbar,
+                                 final boolean padStatusBar,
+                                 final boolean openInNewWindow) {
         boolean shouldDelay = false;
 
-        SharedPreferences pref = U.getSharedPreferences(context);
+        SharedPreferences pref = getSharedPreferences(context);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
@@ -154,7 +160,7 @@ public class U {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        continueLaunchingApp(context, packageName, componentName, true);
+                        continueLaunchingApp(context, packageName, componentName, true, padStatusBar, openInNewWindow);
                     }
                 }, (int) msToWait + 100);
             } else {
@@ -166,10 +172,10 @@ public class U {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar);
+                    continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
                 }
             }, 100);
-        } else continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar);
+        } else continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
     }
 
     private static void startFreeformHack(Context context) {
@@ -179,7 +185,13 @@ public class U {
         context.startActivity(freeformHackIntent);
     }
 
-    private static void continueLaunchingApp(Context context, String packageName, String componentName, boolean launchedFromTaskbar) {
+    @TargetApi(Build.VERSION_CODES.N)
+    private static void continueLaunchingApp(Context context,
+                                             String packageName,
+                                             String componentName,
+                                             boolean launchedFromTaskbar,
+                                             boolean padStatusBar,
+                                             boolean openInNewWindow) {
         SharedPreferences pref = getSharedPreferences(context);
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(componentName));
@@ -191,28 +203,39 @@ public class U {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
+        if(openInNewWindow) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+
+            switch(intent.resolveActivityInfo(context.getPackageManager(), 0).launchMode) {
+                case ActivityInfo.LAUNCH_SINGLE_TASK:
+                case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
+                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    break;
+            }
+        }
+
         if(!pref.getBoolean("freeform_hack", false)) {
             try {
                 context.startActivity(intent);
             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
         } else switch(SavedWindowSizes.getInstance(context).getWindowSize(context, packageName)) {
             case "standard":
-                launchStandard(context, intent);
+                launchMode1(context, intent, 1);
                 break;
             case "large":
-                launchLarge(context, intent);
+                launchMode1(context, intent, 2);
                 break;
             case "fullscreen":
-                launchFullscreen(context, intent, true);
+                launchMode2(context, intent, padStatusBar, FULLSCREEN);
                 break;
             case "half_left":
-                launchHalfLeft(context, intent, true);
+                launchMode2(context, intent, padStatusBar, LEFT);
                 break;
             case "half_right":
-                launchHalfRight(context, intent, true);
+                launchMode2(context, intent, padStatusBar, RIGHT);
                 break;
             case "phone_size":
-                launchPhoneSize(context, intent);
+                launchMode3(context, intent);
                 break;
         }
 
@@ -308,29 +331,9 @@ public class U {
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
-    public static void launchStandard(Context context, Intent intent) {
-        launchMode1(context, intent, 1);
-    }
-
-    public static void launchLarge(Context context, Intent intent) {
-        launchMode1(context, intent, 2);
-    }
-
-    public static void launchFullscreen(Context context, Intent intent, boolean padStatusBar) {
-        launchMode2(context, intent, padStatusBar, FULLSCREEN);
-    }
-
-    public static void launchHalfLeft(Context context, Intent intent, boolean padStatusBar) {
-        launchMode2(context, intent, padStatusBar, LEFT);
-    }
-
-    public static void launchHalfRight(Context context, Intent intent, boolean padStatusBar) {
-        launchMode2(context, intent, padStatusBar, RIGHT);
-    }
-
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    public static void launchPhoneSize(Context context, Intent intent) {
+    private static void launchMode3(Context context, Intent intent) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
