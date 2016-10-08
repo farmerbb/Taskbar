@@ -352,6 +352,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "window_size_phone_size":
                 SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, p.getKey().replace("window_size_", ""));
 
+                startFreeformActivity();
                 U.launchApp(this, packageName, componentName, false, !isInMultiWindowMode(), true);
 
                 showStartMenu = false;
