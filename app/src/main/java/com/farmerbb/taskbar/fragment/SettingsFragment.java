@@ -273,7 +273,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     }
                 } else {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
-                    LauncherHelper.getInstance().setForceTaskbarRestart(true);
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
                 }
                 break;
             case "freeform_mode_help":

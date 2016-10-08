@@ -154,7 +154,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
-        if(U.bootToFreeformActive(this)) {
+        if(U.launcherIsDefault(this)) {
             LauncherHelper.getInstance().setOnHomeScreen(true);
             bootToFreeform = true;
 

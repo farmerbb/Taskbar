@@ -383,7 +383,7 @@ public class U {
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
-    public static boolean bootToFreeformActive(Context context) {
+    public static boolean launcherIsDefault(Context context) {
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);

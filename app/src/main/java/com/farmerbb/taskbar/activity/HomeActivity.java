@@ -49,6 +49,7 @@ import com.farmerbb.taskbar.util.U;
 
 public class HomeActivity extends Activity {
 
+    private boolean forceTaskbarStart = false;
     private boolean forceTaskbarStop = false;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
@@ -68,6 +69,13 @@ public class HomeActivity extends Activity {
             }
 
             finish();
+        }
+    };
+
+    private BroadcastReceiver forceTaskbarStartReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            forceTaskbarStart = true;
         }
     };
 
@@ -106,6 +114,7 @@ public class HomeActivity extends Activity {
         setContentView(view);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
     }
 
     private void setWallpaper() {
@@ -123,7 +132,7 @@ public class HomeActivity extends Activity {
         super.onResume();
 
         if(bootToFreeform()) {
-            if(U.bootToFreeformActive(this)) {
+            if(U.launcherIsDefault(this)) {
                 DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
                 Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -156,8 +165,8 @@ public class HomeActivity extends Activity {
                 final LauncherHelper helper = LauncherHelper.getInstance();
                 helper.setOnHomeScreen(true);
 
-                if(helper.shouldForceTaskbarRestart()) {
-                    helper.setForceTaskbarRestart(false);
+                if(forceTaskbarStart) {
+                    forceTaskbarStart = false;
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -183,8 +192,7 @@ public class HomeActivity extends Activity {
         SharedPreferences pref = U.getSharedPreferences(this);
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
-                && hasFreeformSupport()
-                && !LauncherHelper.getInstance().shouldForceTaskbarRestart();
+                && hasFreeformSupport();
     }
 
     private void startTaskbar() {
@@ -238,7 +246,7 @@ public class HomeActivity extends Activity {
         super.onDestroy();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(killReceiver);
-        LauncherHelper.getInstance().setForceTaskbarRestart(false);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(forceTaskbarStartReceiver);
     }
 
     @Override
