@@ -50,7 +50,6 @@ import com.farmerbb.taskbar.util.U;
 public class HomeActivity extends Activity {
 
     private boolean forceTaskbarStop = false;
-    private boolean setWallpaper = false;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
@@ -110,7 +109,6 @@ public class HomeActivity extends Activity {
     }
 
     private void setWallpaper() {
-        setWallpaper = true;
         LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
         try {
@@ -122,11 +120,7 @@ public class HomeActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        if(setWallpaper) {
-            setWallpaper = false;
-
-            LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
-        }
+        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
     }
 
     @SuppressWarnings("deprecation")
