@@ -147,45 +147,24 @@ public class U {
                 && !FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             shouldDelay = true;
 
-            int msToWait = 0;
-            if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                float factor = Settings.Global.getFloat(context.getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1);
-                if(factor < 0.334)
-                    factor = 0.334f;
-
-                msToWait = (int) (900 * factor);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startFreeformHack(context, launchedFromTaskbar);
-                    }
-                }, msToWait);
-            } else
-                startFreeformHack(context, launchedFromTaskbar);
+            startFreeformHack(context, launchedFromTaskbar);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     continueLaunchingApp(context, packageName, componentName, true, padStatusBar, false);
                 }
-            }, msToWait + 100);
+            }, 100);
         }
 
         if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
-            if(shouldDelay) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
-                    }
-                }, 100);
-            } else
-                continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+            if(!shouldDelay) continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
         } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
             continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
     }
 
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
     private static void startFreeformHack(Context context, boolean launchedFromTaskbar) {
         Intent freeformHackIntent = new Intent(context, InvisibleActivityFreeform.class);
         freeformHackIntent.putExtra("check_multiwindow", true);
@@ -197,7 +176,15 @@ public class U {
                 freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
-        context.startActivity(freeformHackIntent);
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+        context.startActivity(freeformHackIntent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                display.getWidth(),
+                display.getHeight(),
+                display.getWidth() + 1,
+                display.getHeight() + 1
+        )).toBundle());
     }
 
     @TargetApi(Build.VERSION_CODES.N)
