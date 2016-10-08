@@ -146,10 +146,14 @@ public class U {
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             shouldDelay = true;
-            int msToWait = 0;
 
+            int msToWait = 0;
             if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                msToWait = 300;
+                float factor = Settings.Global.getFloat(context.getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1);
+                if(factor < 0.5)
+                    factor = 0.5f;
+
+                msToWait = (int) (750 * factor);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
