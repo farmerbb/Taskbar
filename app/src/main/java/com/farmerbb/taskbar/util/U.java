@@ -150,10 +150,10 @@ public class U {
             int msToWait = 0;
             if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
                 float factor = Settings.Global.getFloat(context.getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1);
-                if(factor < 0.5)
-                    factor = 0.5f;
+                if(factor < 0.334)
+                    factor = 0.334f;
 
-                msToWait = (int) (750 * factor);
+                msToWait = (int) (900 * factor);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
