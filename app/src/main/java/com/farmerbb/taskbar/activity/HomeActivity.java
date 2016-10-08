@@ -50,6 +50,7 @@ import com.farmerbb.taskbar.util.U;
 public class HomeActivity extends Activity {
 
     private boolean forceTaskbarStop = false;
+    private boolean setWallpaper = false;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
@@ -87,11 +88,7 @@ public class HomeActivity extends Activity {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-
-                try {
-                    startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper)));
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                setWallpaper();
                 return false;
             }
         });
@@ -101,11 +98,7 @@ public class HomeActivity extends Activity {
             public boolean onGenericMotion(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                    LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-
-                    try {
-                        startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper)));
-                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                    setWallpaper();
                 }
                 return false;
             }
@@ -116,10 +109,30 @@ public class HomeActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
     }
 
-    @SuppressWarnings("deprecation")
+    private void setWallpaper() {
+        setWallpaper = true;
+        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+
+        try {
+            startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper)));
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(setWallpaper) {
+            setWallpaper = false;
+
+            LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         if(canDrawOverlays()) {
             SharedPreferences pref = U.getSharedPreferences(this);
@@ -193,8 +206,8 @@ public class HomeActivity extends Activity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
