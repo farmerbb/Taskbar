@@ -15,11 +15,15 @@
 
 package com.farmerbb.taskbar.receiver;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.provider.Settings;
 
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -32,6 +36,10 @@ public class BootReceiver extends BroadcastReceiver {
         SharedPreferences pref = U.getSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("reboot_required", false);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && !hasFreeformSupport(context))
+            editor.putBoolean("freeform_hack", false);
 
         if(pref.getBoolean("start_on_boot", false)) {
             editor.putBoolean("taskbar_active", true);
@@ -58,5 +66,12 @@ public class BootReceiver extends BroadcastReceiver {
         }
 
         return false;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private boolean hasFreeformSupport(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
+                || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", -1) == 1
+                || Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", -1) == 1;
     }
 }

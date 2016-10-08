@@ -104,6 +104,10 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         .putBoolean("freeform_hack", hasFreeformSupport())
                         .putBoolean("freeform_hack_override", true)
                         .apply();
+            } else if(!hasFreeformSupport()) {
+                pref.edit().putBoolean("freeform_hack", false).apply();
+
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
             }
         }
     }
