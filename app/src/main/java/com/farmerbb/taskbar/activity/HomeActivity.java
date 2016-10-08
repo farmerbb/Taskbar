@@ -116,45 +116,43 @@ public class HomeActivity extends Activity {
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onResume() {
         super.onResume();
 
-        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        if(bootToFreeform()) {
+            if(U.bootToFreeformActive(this)) {
+                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                Intent intent = new Intent(this, InvisibleActivityFreeform.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+            } else {
+                U.showToastLong(this, R.string.set_as_default_home);
+
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory(Intent.CATEGORY_HOME);
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                try {
+                    startActivity(homeIntent);
+                    finish();
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+            }
+        } else {
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void onStart() {
         super.onStart();
 
         if(canDrawOverlays()) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                    && pref.getBoolean("freeform_hack", false)
-                    && hasFreeformSupport()
-                    && !LauncherHelper.getInstance().shouldForceTaskbarRestart()) {
-
-                if(U.bootToFreeformActive(this)) {
-                    DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-                    Intent intent = new Intent(this, InvisibleActivityFreeform.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                    startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
-                } else {
-                    U.showToastLong(this, R.string.set_as_default_home);
-
-                    Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                    homeIntent.addCategory(Intent.CATEGORY_HOME);
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    try {
-                        startActivity(homeIntent);
-                        finish();
-                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-                }
-            } else {
+            if(!bootToFreeform()) {
                 final LauncherHelper helper = LauncherHelper.getInstance();
                 helper.setOnHomeScreen(true);
 
@@ -179,6 +177,14 @@ public class HomeActivity extends Activity {
 
             finish();
         }
+    }
+
+    private boolean bootToFreeform() {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && hasFreeformSupport()
+                && !LauncherHelper.getInstance().shouldForceTaskbarRestart();
     }
 
     private void startTaskbar() {
