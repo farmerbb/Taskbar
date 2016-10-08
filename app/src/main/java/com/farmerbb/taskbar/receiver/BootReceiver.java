@@ -30,8 +30,13 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("reboot_required", false);
+
         if(pref.getBoolean("start_on_boot", false)) {
-            pref.edit().putBoolean("taskbar_active", true).putLong("time_of_service_start", System.currentTimeMillis()).apply();
+            editor.putBoolean("taskbar_active", true);
+            editor.putLong("time_of_service_start", System.currentTimeMillis());
+            editor.apply();
 
             if(!pref.getBoolean("is_hidden", false)) {
                 context.startService(new Intent(context, TaskbarService.class));
@@ -39,8 +44,10 @@ public class BootReceiver extends BroadcastReceiver {
             }
 
             context.startService(new Intent(context, NotificationService.class));
-        } else
-            pref.edit().putBoolean("taskbar_active", isServiceRunning(context)).apply();
+        } else {
+            editor.putBoolean("taskbar_active", isServiceRunning(context));
+            editor.apply();
+        }
     }
 
     private boolean isServiceRunning(Context context) {

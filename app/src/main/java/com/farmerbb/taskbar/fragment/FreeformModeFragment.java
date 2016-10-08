@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.support.v7.app.ActionBar;
@@ -58,8 +59,12 @@ public class FreeformModeFragment extends SettingsFragment {
 
             ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(hasFreeformSupport());
 
-            if(hasFreeformSupport())
+            if(hasFreeformSupport()) {
                 U.showToastLong(getActivity(), R.string.reboot_required);
+
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                pref.edit().putBoolean("reboot_required", true).apply();
+            }
         }
     }
 }

@@ -107,6 +107,7 @@ public class InvisibleActivityFreeform extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onResume() {
         super.onResume();
@@ -114,6 +115,12 @@ public class InvisibleActivityFreeform extends Activity {
         // Show the taskbar when activity is resumed (no other freeform windows are active)
         if(showTaskbar)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+
+        if(!isInMultiWindowMode()) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(!pref.getBoolean("reboot_required", false))
+                reallyFinish();
+        }
     }
 
     @Override
