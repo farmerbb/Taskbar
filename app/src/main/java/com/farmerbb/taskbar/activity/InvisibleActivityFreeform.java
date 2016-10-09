@@ -189,7 +189,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         possiblyHideTaskbar();
 
-        if(bootToFreeform) {
+        if(bootToFreeform && !finish) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
             bootToFreeform = false;
 
