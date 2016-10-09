@@ -50,7 +50,6 @@ import com.farmerbb.taskbar.util.U;
 public class HomeActivity extends Activity {
 
     private boolean forceTaskbarStart = false;
-    private boolean forceTaskbarStop = false;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
@@ -172,7 +171,6 @@ public class HomeActivity extends Activity {
                         public void run() {
                             helper.setOnHomeScreen(true);
                             startTaskbar();
-                            forceTaskbarStop = true;
                         }
                     }, 100);
                 } else
@@ -218,9 +216,7 @@ public class HomeActivity extends Activity {
         super.onStop();
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && pref.getBoolean("freeform_hack", false)
-                && hasFreeformSupport())) {
+        if(!bootToFreeform()) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
@@ -232,12 +228,6 @@ public class HomeActivity extends Activity {
 
                 IconCache.getInstance(this).clearCache();
             }
-        } else if(forceTaskbarStop) {
-            forceTaskbarStop = false;
-            stopService(new Intent(this, TaskbarService.class));
-            stopService(new Intent(this, StartMenuService.class));
-
-            IconCache.getInstance(this).clearCache();
         }
     }
 
