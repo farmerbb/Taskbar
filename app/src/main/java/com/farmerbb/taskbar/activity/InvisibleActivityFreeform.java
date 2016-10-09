@@ -201,7 +201,6 @@ public class InvisibleActivityFreeform extends Activity {
 
                 IconCache.getInstance(this).clearCache();
             }
-
         }
     }
 
