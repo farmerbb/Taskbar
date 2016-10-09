@@ -172,7 +172,7 @@ public class HomeActivity extends Activity {
                             helper.setOnHomeScreen(true);
                             startTaskbar();
                         }
-                    }, 100);
+                    }, 250);
                 } else
                     startTaskbar();
             }
