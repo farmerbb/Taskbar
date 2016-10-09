@@ -30,7 +30,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class NotificationService extends Service {
@@ -94,7 +93,7 @@ public class NotificationService extends Service {
         else {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
 
-            if(!LauncherHelper.getInstance().isOnHomeScreen())
+            if(!U.launcherIsDefault(this))
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
         }
 
