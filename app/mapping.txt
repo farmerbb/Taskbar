@@ -1,0 +1,71 @@
+com.farmerbb.taskbar.util.AppEntry -> com.farmerbb.taskbar.c.a:
+    java.lang.String packageName -> a
+    java.lang.String componentName -> b
+    java.lang.String label -> c
+    android.graphics.drawable.Drawable icon -> d
+    byte[] iconByteArray -> e
+    void <init>(java.lang.String,java.lang.String,java.lang.String,android.graphics.drawable.Drawable,boolean) -> <init>
+    java.lang.String getPackageName() -> a
+    java.lang.String getComponentName() -> b
+    java.lang.String getLabel() -> c
+    android.graphics.drawable.Drawable getIcon(android.content.Context) -> a
+com.farmerbb.taskbar.util.Blacklist -> com.farmerbb.taskbar.c.b:
+    java.util.List blockedApps -> a
+    com.farmerbb.taskbar.util.Blacklist theInstance -> b
+    void <init>() -> <init>
+    java.util.List getBlockedApps() -> a
+    void addBlockedApp(android.content.Context,com.farmerbb.taskbar.util.BlacklistEntry) -> a
+    void removeBlockedApp(android.content.Context,java.lang.String) -> a
+    boolean isBlocked(java.lang.String) -> a
+    boolean save(android.content.Context) -> c
+    void clear(android.content.Context) -> a
+    com.farmerbb.taskbar.util.Blacklist getInstance(android.content.Context) -> b
+com.farmerbb.taskbar.util.BlacklistEntry -> com.farmerbb.taskbar.c.c:
+    java.lang.String packageName -> a
+    java.lang.String label -> b
+    void <init>(java.lang.String,java.lang.String) -> <init>
+    java.lang.String getPackageName() -> a
+    java.lang.String getLabel() -> b
+com.farmerbb.taskbar.util.PinnedBlockedApps -> com.farmerbb.taskbar.c.j:
+    java.util.List pinnedApps -> a
+    java.util.List blockedApps -> b
+    com.farmerbb.taskbar.util.PinnedBlockedApps theInstance -> c
+    void <init>() -> <init>
+    java.util.List getPinnedApps() -> a
+    java.util.List getBlockedApps() -> b
+    void addPinnedApp(android.content.Context,com.farmerbb.taskbar.util.AppEntry) -> a
+    void addBlockedApp(android.content.Context,com.farmerbb.taskbar.util.AppEntry) -> b
+    void removePinnedApp(android.content.Context,java.lang.String) -> a
+    void removeBlockedApp(android.content.Context,java.lang.String) -> b
+    boolean isPinned(java.lang.String) -> a
+    boolean isBlocked(java.lang.String) -> b
+    void clear(android.content.Context) -> a
+    boolean save(android.content.Context) -> c
+    com.farmerbb.taskbar.util.PinnedBlockedApps getInstance(android.content.Context) -> b
+com.farmerbb.taskbar.util.SavedWindowSizes -> com.farmerbb.taskbar.c.k:
+    java.util.List savedApps -> a
+    com.farmerbb.taskbar.util.SavedWindowSizes theInstance -> b
+    void <init>() -> <init>
+    void setWindowSize(android.content.Context,java.lang.String,java.lang.String) -> a
+    java.lang.String getWindowSize(android.content.Context,java.lang.String) -> a
+    void clear(android.content.Context) -> a
+    boolean save(android.content.Context) -> c
+    com.farmerbb.taskbar.util.SavedWindowSizes getInstance(android.content.Context) -> b
+    java.util.List getSavedWindowSizes() -> a
+com.farmerbb.taskbar.util.SavedWindowSizesEntry -> com.farmerbb.taskbar.c.l:
+    java.lang.String componentName -> a
+    java.lang.String windowSize -> b
+    void <init>(java.lang.String,java.lang.String) -> <init>
+    java.lang.String getComponentName() -> a
+    java.lang.String getWindowSize() -> b
+com.farmerbb.taskbar.util.TopApps -> com.farmerbb.taskbar.c.m:
+    java.util.List topApps -> a
+    com.farmerbb.taskbar.util.TopApps theInstance -> b
+    void <init>() -> <init>
+    java.util.List getTopApps() -> a
+    void addTopApp(android.content.Context,com.farmerbb.taskbar.util.BlacklistEntry) -> a
+    void removeTopApp(android.content.Context,java.lang.String) -> a
+    boolean isTopApp(java.lang.String) -> a
+    boolean save(android.content.Context) -> c
+    void clear(android.content.Context) -> a
+    com.farmerbb.taskbar.util.TopApps getInstance(android.content.Context) -> b

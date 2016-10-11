@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PinnedBlockedApps implements Serializable {
+    static final long serialVersionUID = 6649239269100390617L;
+
     private List<AppEntry> pinnedApps = new ArrayList<>();
     private List<AppEntry> blockedApps = new ArrayList<>();
 

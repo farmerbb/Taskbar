@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TopApps implements Serializable {
+    static final long serialVersionUID = 8541436853152666400L;
+
     private List<BlacklistEntry> topApps = new ArrayList<>();
 
     private static TopApps theInstance;

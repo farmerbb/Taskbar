@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SavedWindowSizes implements Serializable {
+    static final long serialVersionUID = 7111185146180868281L;
+
     private List<SavedWindowSizesEntry> savedApps = new ArrayList<>();
 
     private static SavedWindowSizes theInstance;

@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Blacklist implements Serializable {
+    static final long serialVersionUID = 9033765395690141037L;
+
     private List<BlacklistEntry> blockedApps = new ArrayList<>();
 
     private static Blacklist theInstance;
