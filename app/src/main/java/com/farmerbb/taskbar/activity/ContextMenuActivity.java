@@ -329,8 +329,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "show_window_sizes":
                 getPreferenceScreen().removeAll();
 
-                String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
-
                 addPreferencesFromResource(R.xml.pref_context_menu_window_size_list);
                 findPreference("window_size_standard").setOnPreferenceClickListener(this);
                 findPreference("window_size_large").setOnPreferenceClickListener(this);
@@ -339,8 +337,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("window_size_half_right").setOnPreferenceClickListener(this);
                 findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
 
-                CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
-                findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(pref.getBoolean("save_window_sizes", true)) {
+                    String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
+                    CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
+                    findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
+                }
 
                 dontFinish = true;
                 break;
@@ -350,8 +352,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "window_size_half_left":
             case "window_size_half_right":
             case "window_size_phone_size":
-                SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, p.getKey().replace("window_size_", ""));
-
+                SharedPreferences pref2 = U.getSharedPreferences(this);
+                if(pref2.getBoolean("save_window_sizes", true)) {
+                    SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, p.getKey().replace("window_size_", ""));
+                }
+                
                 startFreeformActivity();
                 U.launchApp(this, packageName, componentName, false, !isInMultiWindowMode(), true);
 

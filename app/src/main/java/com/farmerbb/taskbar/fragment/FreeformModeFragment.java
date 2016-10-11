@@ -40,6 +40,12 @@ public class FreeformModeFragment extends SettingsFragment {
 
         bindPreferenceSummaryToValue(findPreference("window_size"));
 
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        boolean freeformHackEnabled = pref.getBoolean("freeform_hack", false);
+        findPreference("open_in_fullscreen").setEnabled(freeformHackEnabled);
+        findPreference("save_window_sizes").setEnabled(freeformHackEnabled);
+        findPreference("window_size").setEnabled(freeformHackEnabled);
+
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_freeform);
         ActionBar actionBar = activity.getSupportActionBar();

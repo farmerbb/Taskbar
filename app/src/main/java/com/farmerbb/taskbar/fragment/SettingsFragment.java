@@ -274,6 +274,10 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
                 }
+
+                findPreference("open_in_fullscreen").setEnabled(((CheckBoxPreference) p).isChecked());
+                findPreference("save_window_sizes").setEnabled(((CheckBoxPreference) p).isChecked());
+                findPreference("window_size").setEnabled(((CheckBoxPreference) p).isChecked());
                 break;
             case "freeform_mode_help":
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());

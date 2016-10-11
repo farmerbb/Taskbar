@@ -22,6 +22,18 @@
         android:title="@string/pref_title_freeform_hack"
         android:summary="@string/pref_description_freeform_hack" />
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="open_in_fullscreen"
+        android:title="@string/pref_title_open_in_fullscreen"
+        android:summary="@string/pref_description_open_in_fullscreen" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="save_window_sizes"
+        android:title="@string/pref_title_save_window_sizes"
+        android:summary="@string/pref_description_save_window_sizes" />
+
     <ListPreference
         android:defaultValue="standard"
         android:entries="@array/pref_window_size_list"

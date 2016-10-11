@@ -142,9 +142,15 @@ public class U {
         boolean shouldDelay = false;
 
         SharedPreferences pref = getSharedPreferences(context);
+        boolean freeformHackActive = openInNewWindow
+                ? FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                : (pref.getBoolean("open_in_fullscreen", true)
+                    ? FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                    : FreeformHackHelper.getInstance().isFreeformHackActive());
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
-                && !FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+                && !freeformHackActive) {
             shouldDelay = true;
 
             new Handler().postDelayed(new Runnable() {
@@ -163,8 +169,10 @@ public class U {
         }
 
         if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
-            if(!shouldDelay) continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
-        } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+            if(!shouldDelay)
+                continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+        } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                || !pref.getBoolean("open_in_fullscreen", true))
             continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
     }
 

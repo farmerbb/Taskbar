@@ -208,5 +208,8 @@
     <string name="already_top_app">%1$s can\'t be selected because it is on the top apps list</string>
 
     <string name="alt_button_config">Alternate position for collapse button</string>
-
+    <string name="pref_title_open_in_fullscreen">Open windows from fullscreen apps</string>
+    <string name="pref_description_open_in_fullscreen">Requires freeform mode to be initiated at least once after Taskbar starts. When unchecked, freeform windows will only open while in the freeform workspace.</string>
+    <string name="pref_title_save_window_sizes">Save window sizes for apps</string>
+    <string name="pref_description_save_window_sizes">When opening new windows from the context menu</string>
 </resources>
