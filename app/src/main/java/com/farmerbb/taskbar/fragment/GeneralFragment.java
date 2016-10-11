@@ -51,6 +51,7 @@ public class GeneralFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
         bindPreferenceSummaryToValue(findPreference("anchor"));
         bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
+        bindPreferenceSummaryToValue(findPreference("alt_button_config"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_general);

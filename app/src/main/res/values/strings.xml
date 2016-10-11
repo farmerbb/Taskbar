@@ -207,4 +207,6 @@
     <string name="already_blacklisted">%1$s can\'t be selected because it is on the hidden apps list</string>
     <string name="already_top_app">%1$s can\'t be selected because it is on the top apps list</string>
 
+    <string name="alt_button_config">Alternate position for collapse button</string>
+
 </resources>

@@ -251,11 +251,20 @@ public class TaskbarService extends Service {
                 break;
         }
 
+        boolean altButtonConfig = pref.getBoolean("alt_button_config", false);
+
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
         taskbar = (TaskbarGridView) layout.findViewById(R.id.taskbar);
         divider = layout.findViewById(R.id.divider);
-        space = (Space) layout.findViewById(R.id.space);
+
+        if(altButtonConfig) {
+            space = (Space) layout.findViewById(R.id.space_alt);
+            layout.findViewById(R.id.space).setVisibility(View.GONE);
+        } else {
+            space = (Space) layout.findViewById(R.id.space);
+            layout.findViewById(R.id.space_alt).setVisibility(View.GONE);
+        }
 
         taskbar.setEnabled(false);
 
@@ -308,7 +317,14 @@ public class TaskbarService extends Service {
         Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
         LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
 
-        button = (Button) layout.findViewById(R.id.hide_taskbar_button);
+        if(altButtonConfig) {
+            button = (Button) layout.findViewById(R.id.hide_taskbar_button_alt);
+            layout.findViewById(R.id.hide_taskbar_button).setVisibility(View.GONE);
+        } else {
+            button = (Button) layout.findViewById(R.id.hide_taskbar_button);
+            layout.findViewById(R.id.hide_taskbar_button_alt).setVisibility(View.GONE);
+        }
+
         updateButton(false);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -317,13 +333,20 @@ public class TaskbarService extends Service {
             }
         });
 
-        LinearLayout buttonLayout = (LinearLayout) layout.findViewById(R.id.hide_taskbar_button_layout);
+        LinearLayout buttonLayout = (LinearLayout) layout.findViewById(altButtonConfig
+                ? R.id.hide_taskbar_button_layout_alt
+                : R.id.hide_taskbar_button_layout);
         if(buttonLayout != null) buttonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleTaskbar();
             }
         });
+
+        LinearLayout buttonLayoutToHide = (LinearLayout) layout.findViewById(altButtonConfig
+                ? R.id.hide_taskbar_button_layout
+                : R.id.hide_taskbar_button_layout_alt);
+        if(buttonLayoutToHide != null) buttonLayoutToHide.setVisibility(View.GONE);
 
         if(pref.getBoolean("show_background", true))
             layout.setBackgroundColor(ContextCompat.getColor(this, R.color.translucent_gray));

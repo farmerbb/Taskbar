@@ -18,6 +18,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
+        <Button
+            android:layout_width="24dp"
+            android:layout_height="@dimen/icon_size"
+            android:textColor="@color/translucent_white"
+            android:textSize="20dp"
+            android:background="@null"
+            android:id="@+id/hide_taskbar_button_alt" />
+
+        <Space
+            android:id="@+id/space_alt"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/start_button"
             android:layout_width="@dimen/icon_size"
