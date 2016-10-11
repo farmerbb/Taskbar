@@ -30,6 +30,8 @@
     <uses-permission android:name="${applicationId}.START_STOP_TASKBAR" />
     <uses-permission android:name="${applicationId}.SEND_RECEIVE_SETTINGS" />
 
+    <uses-permission-sdk-23 android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false"/>
@@ -140,6 +142,20 @@
                 <action android:name="com.farmerbb.taskbar.APPLY_ICON_PACK"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ShortcutActivity"
+            android:label="@string/pref_header_freeform"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:enabled="false"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

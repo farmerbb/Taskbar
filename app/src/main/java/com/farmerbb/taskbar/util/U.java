@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -46,6 +47,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
+import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 
 import java.util.ArrayList;
@@ -182,7 +184,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void startFreeformHack(Context context, boolean launchedFromTaskbar) {
+    public static void startFreeformHack(Context context, boolean launchedFromTaskbar) {
         Intent freeformHackIntent = new Intent(context, InvisibleActivityFreeform.class);
         freeformHackIntent.putExtra("check_multiwindow", true);
         freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -587,5 +589,20 @@ public class U {
         for(AppEntry entry : blockedAppsList) {
             pba.addBlockedApp(context, entry);
         }
+    }
+
+    public static Intent getShortcutIntent(Context context) {
+        Intent shortcutIntent = new Intent(context, ShortcutActivity.class);
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+        shortcutIntent.putExtra("is_launching_shortcut", true);
+
+        BitmapDrawable drawable = (BitmapDrawable) context.getDrawable(R.mipmap.ic_freeform_mode);
+
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        if(drawable != null) intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, drawable.getBitmap());
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.pref_header_freeform));
+
+        return intent;
     }
 }

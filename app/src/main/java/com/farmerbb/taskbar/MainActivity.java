@@ -47,6 +47,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.ImportSettingsActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
+import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.FreeformModeFragment;
@@ -108,6 +109,11 @@ public class MainActivity extends AppCompatActivity {
         ComponentName component2 = new ComponentName(BuildConfig.APPLICATION_ID, KeyboardShortcutActivity.class.getName());
         getPackageManager().setComponentEnabledSetting(component2,
                 pref.getBoolean("keyboard_shortcut", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        ComponentName component3 = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+        getPackageManager().setComponentEnabledSetting(component3,
+                pref.getBoolean("freeform_hack", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))

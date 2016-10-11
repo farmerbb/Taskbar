@@ -15,13 +15,18 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.content.ComponentName;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
+import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.util.U;
 
 public class FreeformModeFragment extends SettingsFragment {
@@ -37,6 +42,7 @@ public class FreeformModeFragment extends SettingsFragment {
 
         findPreference("freeform_hack").setOnPreferenceClickListener(this);
         findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
+        findPreference("add_shortcut").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("window_size"));
 
@@ -45,6 +51,12 @@ public class FreeformModeFragment extends SettingsFragment {
         findPreference("open_in_fullscreen").setEnabled(freeformHackEnabled);
         findPreference("save_window_sizes").setEnabled(freeformHackEnabled);
         findPreference("window_size").setEnabled(freeformHackEnabled);
+        findPreference("add_shortcut").setEnabled(freeformHackEnabled);
+
+        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+        getActivity().getPackageManager().setComponentEnabledSetting(component,
+                freeformHackEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_freeform);
@@ -68,6 +80,12 @@ public class FreeformModeFragment extends SettingsFragment {
             findPreference("open_in_fullscreen").setEnabled(hasFreeformSupport());
             findPreference("save_window_sizes").setEnabled(hasFreeformSupport());
             findPreference("window_size").setEnabled(hasFreeformSupport());
+            findPreference("add_shortcut").setEnabled(hasFreeformSupport());
+
+            ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+            getActivity().getPackageManager().setComponentEnabledSetting(component,
+                    hasFreeformSupport() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
 
             if(hasFreeformSupport()) {
                 U.showToastLong(getActivity(), R.string.reboot_required);

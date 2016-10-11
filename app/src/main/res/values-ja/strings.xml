@@ -213,4 +213,7 @@
     <string name="pref_title_save_window_sizes">Save window sizes for apps</string>
     <string name="pref_description_save_window_sizes">When opening new windows from the context menu</string>
 
+    <string name="add_shortcut">Add shortcut to home screen</string>
+    <string name="shortcut_created">Freeform mode shortcut created</string>
+
 </resources>

@@ -44,6 +44,10 @@
         android:title="@string/pref_title_window_size"/>
 
     <Preference
+        android:key="add_shortcut"
+        android:title="@string/add_shortcut" />
+
+    <Preference
         android:key="freeform_mode_help"
         android:title="@string/pref_title_freeform_mode_help" />
 
