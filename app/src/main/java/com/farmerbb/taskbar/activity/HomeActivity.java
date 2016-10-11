@@ -159,6 +159,8 @@ public class HomeActivity extends Activity {
     protected void onStart() {
         super.onStart();
 
+        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+
         if(canDrawOverlays()) {
             if(!bootToFreeform()) {
                 final LauncherHelper helper = LauncherHelper.getInstance();
