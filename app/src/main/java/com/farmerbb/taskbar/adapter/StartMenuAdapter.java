@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
@@ -70,10 +71,12 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
-        String name = intent.resolveActivityInfo(getContext().getPackageManager(), 0).name;
+        ActivityInfo activityInfo = intent.resolveActivityInfo(getContext().getPackageManager(), 0);
 
-        TopApps topApps = TopApps.getInstance(getContext());
-        textView.setTypeface(null, topApps.isTopApp(name) ? Typeface.BOLD : Typeface.NORMAL);
+        if(activityInfo != null) {
+            TopApps topApps = TopApps.getInstance(getContext());
+            textView.setTypeface(null, topApps.isTopApp(activityInfo.name) ? Typeface.BOLD : Typeface.NORMAL);
+        }
 
         switch(pref.getString("theme", "light")) {
             case "light":
