@@ -73,10 +73,8 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
         ActivityInfo activityInfo = intent.resolveActivityInfo(getContext().getPackageManager(), 0);
 
-        if(activityInfo != null) {
-            TopApps topApps = TopApps.getInstance(getContext());
-            textView.setTypeface(null, topApps.isTopApp(activityInfo.name) ? Typeface.BOLD : Typeface.NORMAL);
-        }
+        if(activityInfo != null)
+            textView.setTypeface(null, isTopApp(activityInfo) ? Typeface.BOLD : Typeface.NORMAL);
 
         switch(pref.getString("theme", "light")) {
             case "light":
@@ -124,6 +122,11 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         });
 
         return convertView;
+    }
+
+    private boolean isTopApp(ActivityInfo activityInfo) {
+        TopApps topApps = TopApps.getInstance(getContext());
+        return topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name) || topApps.isTopApp(activityInfo.name);
     }
 
     @SuppressWarnings("deprecation")

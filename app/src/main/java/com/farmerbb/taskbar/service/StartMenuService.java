@@ -363,14 +363,17 @@ public class StartMenuService extends Service {
 
                 TopApps topApps = TopApps.getInstance(StartMenuService.this);
                 for(ResolveInfo appInfo : unfilteredList) {
-                    if(topApps.isTopApp(appInfo.activityInfo.name))
+                    if(topApps.isTopApp(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name)
+                            || topApps.isTopApp(appInfo.activityInfo.name))
                         topAppsList.add(appInfo);
                 }
 
                 Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
                 for(ResolveInfo appInfo : unfilteredList) {
-                    if(!blacklist.isBlocked(appInfo.activityInfo.name)
-                            && !topApps.isTopApp(appInfo.activityInfo.name))
+                    if(!(blacklist.isBlocked(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name)
+                            || blacklist.isBlocked(appInfo.activityInfo.name))
+                            && !(topApps.isTopApp(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name)
+                            || topApps.isTopApp(appInfo.activityInfo.name)))
                         allAppsList.add(appInfo);
                 }
 

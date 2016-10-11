@@ -149,6 +149,7 @@ public class SelectAppActivity extends AppCompatActivity {
             }
 
             for(ResolveInfo appInfo : list) {
+                installedApps.add(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name);
                 installedApps.add(appInfo.activityInfo.name);
             }
 
@@ -195,7 +196,7 @@ public class SelectAppActivity extends AppCompatActivity {
                 }
 
                 entries.add(new BlacklistEntry(
-                        appInfo.activityInfo.name,
+                        appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name,
                         label));
             }
 

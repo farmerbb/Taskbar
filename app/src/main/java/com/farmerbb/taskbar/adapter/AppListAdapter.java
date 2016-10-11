@@ -51,22 +51,28 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
     private void setupHidden(int position, View convertView) {
         final BlacklistEntry entry = getItem(position);
 
+        final String componentName = entry.getPackageName();
+        final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;
+
         TextView textView = (TextView) convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
         final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-        checkBox.setChecked(blacklist.isBlocked(entry.getPackageName()));
+        checkBox.setChecked(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt));
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(topApps.isTopApp(entry.getPackageName())) {
+                if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
                     U.showToast(getContext(),
                             getContext().getString(R.string.already_top_app, entry.getLabel()),
                             Toast.LENGTH_SHORT);
-                } else if(blacklist.isBlocked(entry.getPackageName())) {
-                    blacklist.removeBlockedApp(getContext(), entry.getPackageName());
+                } else if(blacklist.isBlocked(componentName)) {
+                    blacklist.removeBlockedApp(getContext(), componentName);
+                    checkBox.setChecked(false);
+                } else if(blacklist.isBlocked(componentNameAlt)) {
+                    blacklist.removeBlockedApp(getContext(), componentNameAlt);
                     checkBox.setChecked(false);
                 } else {
                     blacklist.addBlockedApp(getContext(), entry);
@@ -79,22 +85,28 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
     private void setupTopApps(int position, View convertView) {
         final BlacklistEntry entry = getItem(position);
 
+        final String componentName = entry.getPackageName();
+        final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;
+
         TextView textView = (TextView) convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
         final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-        checkBox.setChecked(topApps.isTopApp(entry.getPackageName()));
+        checkBox.setChecked(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt));
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(blacklist.isBlocked(entry.getPackageName())) {
+                if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
                     U.showToast(getContext(),
                             getContext().getString(R.string.already_blacklisted, entry.getLabel()),
                             Toast.LENGTH_SHORT);
-                } else if(topApps.isTopApp(entry.getPackageName())) {
-                    topApps.removeTopApp(getContext(), entry.getPackageName());
+                } else if(topApps.isTopApp(componentName)) {
+                    topApps.removeTopApp(getContext(), componentName);
+                    checkBox.setChecked(false);
+                } else if(topApps.isTopApp(componentNameAlt)) {
+                    topApps.removeTopApp(getContext(), componentNameAlt);
                     checkBox.setChecked(false);
                 } else {
                     topApps.addTopApp(getContext(), entry);
