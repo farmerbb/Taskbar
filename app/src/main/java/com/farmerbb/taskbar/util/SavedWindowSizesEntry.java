@@ -3,6 +3,8 @@ package com.farmerbb.taskbar.util;
 import java.io.Serializable;
 
 public class SavedWindowSizesEntry implements Serializable {
+    static final long serialVersionUID = 4308104486351313269L;
+
     private String componentName;
     private String windowSize;
 

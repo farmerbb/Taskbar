@@ -18,6 +18,8 @@ package com.farmerbb.taskbar.util;
 import java.io.Serializable;
 
 public class BlacklistEntry implements Serializable {
+    static final long serialVersionUID = 2534812642210454191L;
+
     private String packageName;
     private String label;
 

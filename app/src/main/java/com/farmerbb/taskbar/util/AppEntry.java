@@ -27,6 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public class AppEntry implements Serializable {
+    static final long serialVersionUID = -3982172488299272068L;
+
     private String packageName;
     private String componentName;
     private String label;
