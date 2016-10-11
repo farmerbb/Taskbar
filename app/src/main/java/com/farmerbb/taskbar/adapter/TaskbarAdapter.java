@@ -83,7 +83,7 @@ public class TaskbarAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), true, true, false);
+                U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), null, true, true, false);
             }
         });
 

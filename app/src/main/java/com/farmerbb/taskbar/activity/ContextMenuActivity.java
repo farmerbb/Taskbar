@@ -352,13 +352,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "window_size_half_left":
             case "window_size_half_right":
             case "window_size_phone_size":
+                String windowSize = p.getKey().replace("window_size_", "");
+
                 SharedPreferences pref2 = U.getSharedPreferences(this);
                 if(pref2.getBoolean("save_window_sizes", true)) {
-                    SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, p.getKey().replace("window_size_", ""));
+                    SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, windowSize);
                 }
                 
                 startFreeformActivity();
-                U.launchApp(this, packageName, componentName, false, !isInMultiWindowMode(), true);
+                U.launchApp(this, packageName, componentName, windowSize, false, !isInMultiWindowMode(), true);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

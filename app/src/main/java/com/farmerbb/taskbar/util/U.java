@@ -136,6 +136,7 @@ public class U {
     public static void launchApp(final Context context,
                                  final String packageName,
                                  final String componentName,
+                                 final String windowSize,
                                  final boolean launchedFromTaskbar,
                                  final boolean padStatusBar,
                                  final boolean openInNewWindow) {
@@ -162,7 +163,8 @@ public class U {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+                            continueLaunchingApp(context, packageName, componentName, windowSize,
+                                    launchedFromTaskbar, padStatusBar, openInNewWindow);
                         }
                     }, 100);
                 }
@@ -171,9 +173,11 @@ public class U {
 
         if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
             if(!shouldDelay)
-                continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+                continueLaunchingApp(context, packageName, componentName, windowSize,
+                        launchedFromTaskbar, padStatusBar, openInNewWindow);
         } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace() || !openInFullscreen)
-            continueLaunchingApp(context, packageName, componentName, launchedFromTaskbar, padStatusBar, openInNewWindow);
+            continueLaunchingApp(context, packageName, componentName, windowSize,
+                    launchedFromTaskbar, padStatusBar, openInNewWindow);
     }
 
     @SuppressWarnings("deprecation")
@@ -205,6 +209,7 @@ public class U {
     private static void continueLaunchingApp(Context context,
                                              String packageName,
                                              String componentName,
+                                             String windowSize,
                                              boolean launchedFromTaskbar,
                                              boolean padStatusBar,
                                              boolean openInNewWindow) {
@@ -230,11 +235,18 @@ public class U {
             }
         }
 
+        if(windowSize == null) {
+            if(pref.getBoolean("save_window_sizes", true))
+                windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, packageName);
+            else
+                windowSize = pref.getString("window_size", "standard");
+        }
+
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
             try {
                 context.startActivity(intent);
             } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
-        } else switch(SavedWindowSizes.getInstance(context).getWindowSize(context, packageName)) {
+        } else switch(windowSize) {
             case "standard":
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     try {
