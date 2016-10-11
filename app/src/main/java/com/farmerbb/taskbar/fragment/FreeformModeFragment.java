@@ -65,6 +65,10 @@ public class FreeformModeFragment extends SettingsFragment {
 
             ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(hasFreeformSupport());
 
+            findPreference("open_in_fullscreen").setEnabled(hasFreeformSupport());
+            findPreference("save_window_sizes").setEnabled(hasFreeformSupport());
+            findPreference("window_size").setEnabled(hasFreeformSupport());
+
             if(hasFreeformSupport()) {
                 U.showToastLong(getActivity(), R.string.reboot_required);
 
