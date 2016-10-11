@@ -660,13 +660,11 @@ public class TaskbarService extends Service {
                             if(shouldRefreshRecents) {
                                 taskbar.setVisibility(View.VISIBLE);
                                 divider.setVisibility(View.VISIBLE);
-                                space.setVisibility(View.VISIBLE);
                             }
                         } else {
                             isShowingRecents = false;
                             taskbar.setVisibility(View.GONE);
                             divider.setVisibility(View.GONE);
-                            space.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -679,7 +677,6 @@ public class TaskbarService extends Service {
                     isShowingRecents = false;
                     taskbar.setVisibility(View.GONE);
                     divider.setVisibility(View.GONE);
-                    space.setVisibility(View.GONE);
                 }
             });
         }
@@ -697,13 +694,13 @@ public class TaskbarService extends Service {
 
     private void showTaskbar() {
         startButton.setVisibility(View.VISIBLE);
+        space.setVisibility(View.VISIBLE);
 
         if(isShowingRecents) {
             if(taskbar.getVisibility() == View.GONE)
                 taskbar.setVisibility(View.INVISIBLE);
 
             divider.setVisibility(View.VISIBLE);
-            space.setVisibility(View.VISIBLE);
         }
 
         shouldRefreshRecents = true;
@@ -717,11 +714,11 @@ public class TaskbarService extends Service {
 
     private void hideTaskbar() {
         startButton.setVisibility(View.GONE);
+        space.setVisibility(View.GONE);
 
         if(isShowingRecents) {
             taskbar.setVisibility(View.GONE);
             divider.setVisibility(View.GONE);
-            space.setVisibility(View.GONE);
         }
 
         shouldRefreshRecents = false;

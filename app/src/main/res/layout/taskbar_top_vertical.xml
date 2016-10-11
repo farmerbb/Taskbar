@@ -40,8 +40,7 @@
     <Space
         android:id="@+id/space_alt"
         android:layout_height="4dp"
-        android:layout_width="match_parent"
-        android:visibility="gone" />
+        android:layout_width="match_parent" />
 
     <ImageView
         android:id="@+id/start_button"
@@ -69,8 +68,7 @@
     <Space
         android:id="@+id/space"
         android:layout_height="4dp"
-        android:layout_width="match_parent"
-        android:visibility="gone" />
+        android:layout_width="match_parent" />
 
     <LinearLayout
         android:layout_width="@dimen/icon_size"

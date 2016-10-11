@@ -29,8 +29,7 @@
         <Space
             android:id="@+id/space_alt"
             android:layout_width="4dp"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent" />
 
         <ImageView
             android:id="@+id/start_button"
@@ -58,8 +57,7 @@
         <Space
             android:id="@+id/space"
             android:layout_width="4dp"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent" />
         
         <Button
             android:layout_width="24dp"

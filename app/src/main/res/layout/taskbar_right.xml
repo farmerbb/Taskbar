@@ -30,8 +30,7 @@
         <Space
             android:id="@+id/space"
             android:layout_width="4dp"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent" />
 
         <com.farmerbb.taskbar.view.TaskbarGridView
             android:id="@+id/taskbar"
@@ -60,8 +59,7 @@
         <Space
             android:id="@+id/space_alt"
             android:layout_width="4dp"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent" />
 
         <Button
             android:layout_width="24dp"
