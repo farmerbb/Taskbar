@@ -146,6 +146,7 @@
         </activity>
         <activity
             android:name=".activity.ShortcutActivity"
+            android:icon="@mipmap/ic_freeform_mode"
             android:label="@string/pref_header_freeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
