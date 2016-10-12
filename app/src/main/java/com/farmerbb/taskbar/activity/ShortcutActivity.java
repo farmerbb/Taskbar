@@ -15,15 +15,11 @@
 
 package com.farmerbb.taskbar.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 
 import com.farmerbb.taskbar.util.U;
 
@@ -35,7 +31,7 @@ public class ShortcutActivity extends Activity {
 
         if(getIntent().hasExtra("is_launching_shortcut")) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("freeform_hack", false) && hasFreeformSupport()) {
+            if(pref.getBoolean("freeform_hack", false) && U.hasFreeformSupport(this)) {
                 sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
 
                 new Handler().postDelayed(new Runnable() {
@@ -48,12 +44,5 @@ public class ShortcutActivity extends Activity {
         } else setResult(RESULT_OK, U.getShortcutIntent(this));
 
         finish();
-    }
-
-    @TargetApi(Build.VERSION_CODES.N)
-    private boolean hasFreeformSupport() {
-        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
-                || Settings.Global.getInt(getContentResolver(), "enable_freeform_support", -1) == 1
-                || Settings.Global.getInt(getContentResolver(), "force_resizable_activities", -1) == 1;
     }
 }

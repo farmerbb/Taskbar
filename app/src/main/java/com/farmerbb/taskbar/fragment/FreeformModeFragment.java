@@ -25,7 +25,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.util.U;
 
@@ -75,19 +74,19 @@ public class FreeformModeFragment extends SettingsFragment {
         if(showReminderToast) {
             showReminderToast = false;
 
-            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(hasFreeformSupport());
+            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
 
-            findPreference("open_in_fullscreen").setEnabled(hasFreeformSupport());
-            findPreference("save_window_sizes").setEnabled(hasFreeformSupport());
-            findPreference("window_size").setEnabled(hasFreeformSupport());
-            findPreference("add_shortcut").setEnabled(hasFreeformSupport());
+            findPreference("open_in_fullscreen").setEnabled(U.hasFreeformSupport(getActivity()));
+            findPreference("save_window_sizes").setEnabled(U.hasFreeformSupport(getActivity()));
+            findPreference("window_size").setEnabled(U.hasFreeformSupport(getActivity()));
+            findPreference("add_shortcut").setEnabled(U.hasFreeformSupport(getActivity()));
 
             ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
             getActivity().getPackageManager().setComponentEnabledSetting(component,
-                    hasFreeformSupport() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    U.hasFreeformSupport(getActivity()) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
 
-            if(hasFreeformSupport()) {
+            if(U.hasFreeformSupport(getActivity())) {
                 U.showToastLong(getActivity(), R.string.reboot_required);
 
                 SharedPreferences pref = U.getSharedPreferences(getActivity());

@@ -192,7 +192,7 @@ public class HomeActivity extends Activity {
         SharedPreferences pref = U.getSharedPreferences(this);
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
-                && hasFreeformSupport();
+                && U.hasFreeformSupport(this);
     }
 
     private void startTaskbar() {
@@ -249,12 +249,5 @@ public class HomeActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.M)
     private boolean canDrawOverlays() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this);
-    }
-
-    @TargetApi(Build.VERSION_CODES.N)
-    private boolean hasFreeformSupport() {
-        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
-                || Settings.Global.getInt(getContentResolver(), "enable_freeform_support", -1) == 1
-                || Settings.Global.getInt(getContentResolver(), "force_resizable_activities", -1) == 1;
     }
 }

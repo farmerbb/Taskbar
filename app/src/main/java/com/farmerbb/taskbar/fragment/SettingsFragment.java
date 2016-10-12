@@ -101,10 +101,10 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
-                        .putBoolean("freeform_hack", hasFreeformSupport())
+                        .putBoolean("freeform_hack", U.hasFreeformSupport(getActivity()))
                         .putBoolean("freeform_hack_override", true)
                         .apply();
-            } else if(!hasFreeformSupport()) {
+            } else if(!U.hasFreeformSupport(getActivity())) {
                 pref.edit().putBoolean("freeform_hack", false).apply();
 
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
@@ -125,9 +125,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 int index = listPreference.findIndexOfValue(stringValue);
 
                 // Set the summary to reflect the new value.
-                preference
-                        .setSummary(index >= 0 ? listPreference.getEntries()[index]
-                                : null);
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
                 if(finishedLoadingPrefs && preference.getKey().equals("theme")) {
                     // Restart MainActivity
@@ -152,16 +150,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
     void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
-        preference
-                .setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's
         // current value.
-        if(!(preference instanceof CheckBoxPreference)) sBindPreferenceSummaryToValueListener.onPreferenceChange(
-                preference,
-                PreferenceManager.getDefaultSharedPreferences(
-                        preference.getContext()).getString(preference.getKey(),
-                        ""));
+        if(!(preference instanceof CheckBoxPreference))
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
     }
 
     @Override
@@ -231,7 +226,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 break;
             case "freeform_hack":
                 if(((CheckBoxPreference) p).isChecked()) {
-                    if(!hasFreeformSupport()) {
+                    if(!U.hasFreeformSupport(getActivity())) {
                         ((CheckBoxPreference) p).setChecked(false);
 
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
@@ -423,13 +418,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             stopTaskbarService(false);
             startTaskbarService(false);
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.N)
-    boolean hasFreeformSupport() {
-        return getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
-                || Settings.Global.getInt(getActivity().getContentResolver(), "enable_freeform_support", -1) == 1
-                || Settings.Global.getInt(getActivity().getContentResolver(), "force_resizable_activities", -1) == 1;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
