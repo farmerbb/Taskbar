@@ -70,6 +70,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.adapter.TaskbarAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
@@ -351,7 +352,10 @@ public class TaskbarService extends Service {
         if(pref.getBoolean("show_background", true))
             layout.setBackgroundColor(ContextCompat.getColor(this, R.color.translucent_gray));
 
-        if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false)) toggleTaskbar();
+        if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+            showTaskbar();
+        else if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false))
+            toggleTaskbar();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(showReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
