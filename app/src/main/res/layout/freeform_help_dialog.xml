@@ -33,7 +33,8 @@
             android:layout_width="match_parent"
             android:id="@+id/dialogMessage"
             android:textSize="15sp"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:textIsSelectable="true" />
 
     </ScrollView>
 
