@@ -97,6 +97,7 @@ public class TaskbarService extends Service {
     private boolean taskbarShownTemporarily = false;
     private boolean taskbarHiddenTemporarily = false;
     private boolean isRefreshingRecents = false;
+    private boolean isFirstStart = true;
 
     private boolean startThread2 = false;
     private boolean stopThread2 = false;
@@ -352,7 +353,7 @@ public class TaskbarService extends Service {
         if(pref.getBoolean("show_background", true))
             layout.setBackgroundColor(ContextCompat.getColor(this, R.color.translucent_gray));
 
-        if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+        if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar();
         else if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false))
             toggleTaskbar();
@@ -370,6 +371,8 @@ public class TaskbarService extends Service {
         startRefreshingRecents();
 
         windowManager.addView(layout, params);
+
+        isFirstStart = false;
     }
 
     private void startRefreshingRecents() {
@@ -841,6 +844,8 @@ public class TaskbarService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(tempShowReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(tempHideReceiver);
+
+        isFirstStart = true;
     }
 
     @SuppressWarnings("deprecation")
