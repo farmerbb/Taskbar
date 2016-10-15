@@ -249,39 +249,41 @@ public class StartMenuService extends Service {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     if(!hasSubmittedQuery) {
-                        hasSubmittedQuery = true;
-
                         ListAdapter adapter = startMenu.getAdapter();
-                        if(adapter.getCount() > 0) {
-                            View view = adapter.getView(0, null, startMenu);
-                            LinearLayout layout = (LinearLayout) view.findViewById(R.id.entry);
-                            layout.performClick();
-                        } else {
-                            if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
-                                LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                            else
-                                LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                        if(adapter != null) {
+                            hasSubmittedQuery = true;
 
-                            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                            intent.putExtra(SearchManager.QUERY, query);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            if(intent.resolveActivity(getPackageManager()) != null)
-                                startActivity(intent);
-                            else {
-                                Uri uri = new Uri.Builder()
-                                        .scheme("https")
-                                        .authority("www.google.com")
-                                        .path("search")
-                                        .appendQueryParameter("q", query)
-                                        .build();
+                            if(adapter.getCount() > 0) {
+                                View view = adapter.getView(0, null, startMenu);
+                                LinearLayout layout = (LinearLayout) view.findViewById(R.id.entry);
+                                layout.performClick();
+                            } else {
+                                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                                    LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                                else
+                                    LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-                                intent = new Intent(Intent.ACTION_VIEW);
-                                intent.setData(uri);
+                                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                                intent.putExtra(SearchManager.QUERY, query);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                                try {
+                                if(intent.resolveActivity(getPackageManager()) != null)
                                     startActivity(intent);
-                                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                                else {
+                                    Uri uri = new Uri.Builder()
+                                            .scheme("https")
+                                            .authority("www.google.com")
+                                            .path("search")
+                                            .appendQueryParameter("q", query)
+                                            .build();
+
+                                    intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(uri);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                    try {
+                                        startActivity(intent);
+                                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                                }
                             }
                         }
                     }
@@ -454,24 +456,28 @@ public class StartMenuService extends Service {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            StartMenuAdapter adapter;
-                            SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
-                            if(pref.getString("start_menu_layout", "list").equals("grid")) {
-                                startMenu.setNumColumns(3);
-                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
-                            } else
-                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
+                            String queryText = searchView.getQuery().toString();
+                            if(query == null && queryText.length() == 0
+                                    || query != null && query.equals(queryText)) {
+                                StartMenuAdapter adapter;
+                                SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+                                if(pref.getString("start_menu_layout", "list").equals("grid")) {
+                                    startMenu.setNumColumns(3);
+                                    adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
+                                } else
+                                    adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
 
-                            int position = startMenu.getFirstVisiblePosition();
-                            startMenu.setAdapter(adapter);
-                            startMenu.setSelection(position);
+                                int position = startMenu.getFirstVisiblePosition();
+                                startMenu.setAdapter(adapter);
+                                startMenu.setSelection(position);
 
-                            if(adapter.getCount() > 0)
-                                textView.setText(null);
-                            else if(query != null)
-                                textView.setText(getString(R.string.press_enter));
-                            else
-                                textView.setText(getString(R.string.nothing_to_see_here));
+                                if(adapter.getCount() > 0)
+                                    textView.setText(null);
+                                else if(query != null)
+                                    textView.setText(getString(R.string.press_enter));
+                                else
+                                    textView.setText(getString(R.string.nothing_to_see_here));
+                            }
                         }
                     });
                 }
