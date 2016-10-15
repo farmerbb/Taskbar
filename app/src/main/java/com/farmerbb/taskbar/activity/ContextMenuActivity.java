@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.activity;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -261,7 +262,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startFreeformActivity();
-                startActivity(intent);
+
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -275,7 +279,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     startActivity(intent2);
                 } else {
                     startFreeformActivity();
-                    startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("package_name"))));
+
+                    try {
+                        startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("package_name"))));
+                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                 }
 
                 showStartMenu = false;

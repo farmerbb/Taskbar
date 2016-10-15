@@ -47,9 +47,11 @@ public class DummyActivity extends Activity {
         else {
             shouldFinish = true;
 
-            if(getIntent().hasExtra("uninstall"))
-                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("uninstall"))));
-            else if(getIntent().hasExtra("device_admin")) {
+            if(getIntent().hasExtra("uninstall")) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("uninstall"))));
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+            } else if(getIntent().hasExtra("device_admin")) {
                 Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                 intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, new ComponentName(this, LockDeviceReceiver.class));
                 intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.device_admin_description));
