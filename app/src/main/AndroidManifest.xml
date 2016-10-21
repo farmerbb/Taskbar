@@ -159,6 +159,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.StartTaskbarActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:enabled="false"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true" />
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

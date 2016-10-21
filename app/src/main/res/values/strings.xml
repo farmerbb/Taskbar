@@ -216,4 +216,10 @@
     <string name="add_shortcut">Add shortcut to home screen</string>
     <string name="shortcut_created">Freeform mode shortcut created</string>
 
+    <string name="start_taskbar">Start Taskbar</string>
+    <string name="start_taskbar_long">Start the Taskbar service</string>
+    <string name="freeform_mode_long">Open apps in resizeable windows</string>
+    <string name="no_freeform_support">Freeform mode is not enabled on your device &#8211; open Taskbar and enable it first</string>
+    <string name="enable_recent_apps">Taskbar can optionally show icons for your most recently used apps along the edge of your screen.  To do this, Taskbar requires usage access permissions.\n\nEnable support for recent apps?</string>
+
 </resources>

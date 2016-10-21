@@ -606,7 +606,6 @@ public class U {
         return intent;
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     public static boolean hasFreeformSupport(Context context) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)

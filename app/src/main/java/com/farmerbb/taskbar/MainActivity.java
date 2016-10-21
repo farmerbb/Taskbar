@@ -19,6 +19,7 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -28,9 +29,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Rect;
+import android.graphics.drawable.Icon;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -48,6 +53,7 @@ import com.farmerbb.taskbar.activity.ImportSettingsActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
+import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.FreeformModeFragment;
@@ -62,6 +68,7 @@ import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -113,7 +120,12 @@ public class MainActivity extends AppCompatActivity {
 
         ComponentName component3 = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
         getPackageManager().setComponentEnabledSetting(component3,
-                pref.getBoolean("freeform_hack", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        ComponentName component4 = new ComponentName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
+        getPackageManager().setComponentEnabledSetting(component4,
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
@@ -152,16 +164,48 @@ public class MainActivity extends AppCompatActivity {
 
         theSwitch = (SwitchCompat) findViewById(R.id.the_switch);
         if(theSwitch != null) {
-            SharedPreferences pref = U.getSharedPreferences(this);
+            final SharedPreferences pref = U.getSharedPreferences(this);
             theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
 
             theSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b) {
-                        if(canDrawOverlays())
+                        if(canDrawOverlays()) {
+                            boolean firstRun = pref.getBoolean("first_run", true);
                             startTaskbarService();
-                        else {
+
+                            if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                ApplicationInfo applicationInfo = null;
+                                try {
+                                    applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+                                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+
+                                if(applicationInfo != null) {
+                                    AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+                                    int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+
+                                    if(mode != AppOpsManager.MODE_ALLOWED) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                        builder.setTitle(R.string.pref_header_recent_apps)
+                                                .setMessage(R.string.enable_recent_apps)
+                                                .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        try {
+                                                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                                                        } catch (ActivityNotFoundException e) {
+                                                            U.showErrorDialog(MainActivity.this, "GET_USAGE_STATS");
+                                                        }
+                                                    }
+                                                }).setNegativeButton(R.string.action_cancel, null);
+
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }
+                                }
+                            }
+                        } else {
                             U.showPermissionDialog(MainActivity.this);
                             compoundButton.setChecked(false);
                         }
@@ -223,6 +267,35 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 U.refreshPinnedIcons(this);
             }
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+            shortcutManager.removeAllDynamicShortcuts();
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setClassName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
+            intent.putExtra("is_launching_shortcut", true);
+
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
+                    .setShortLabel(getString(R.string.start_taskbar))
+                    .setLongLabel(getString(R.string.start_taskbar_long))
+                    .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_start))
+                    .setIntent(intent)
+                    .build();
+
+            Intent intent2 = new Intent(Intent.ACTION_MAIN);
+            intent2.setClassName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+            intent2.putExtra("is_launching_shortcut", true);
+
+            ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
+                    .setShortLabel(getString(R.string.pref_header_freeform))
+                    .setLongLabel(getString(R.string.freeform_mode_long))
+                    .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_freeform))
+                    .setIntent(intent2)
+                    .build();
+
+            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut2));
         }
     }
 

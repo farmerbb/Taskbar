@@ -57,7 +57,6 @@ import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivityDark;
-import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -275,11 +274,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 findPreference("save_window_sizes").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("window_size").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("add_shortcut").setEnabled(((CheckBoxPreference) p).isChecked());
-
-                ComponentName component2 = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
-                getActivity().getPackageManager().setComponentEnabledSetting(component2,
-                        ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
 
                 break;
             case "freeform_mode_help":

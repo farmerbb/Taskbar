@@ -17,34 +17,17 @@ package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 
-import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.U;
-
-public class ShortcutActivity extends Activity {
+public class StartTaskbarActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if(getIntent().hasExtra("is_launching_shortcut")) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("freeform_hack", false) && U.hasFreeformSupport(this)) {
-                sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        U.startFreeformHack(ShortcutActivity.this, false);
-                    }
-                }, 100);
-            } else
-                U.showToastLong(this, R.string.no_freeform_support);
-        } else
-            setResult(RESULT_OK, U.getShortcutIntent(this));
+            sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
+        }
 
         finish();
     }
