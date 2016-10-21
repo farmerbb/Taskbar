@@ -271,31 +271,32 @@ public class MainActivity extends AppCompatActivity {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-            shortcutManager.removeAllDynamicShortcuts();
 
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.setClassName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
-            intent.putExtra("is_launching_shortcut", true);
+            if(shortcutManager.getDynamicShortcuts().size() == 0) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setClassName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
+                intent.putExtra("is_launching_shortcut", true);
 
-            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
-                    .setShortLabel(getString(R.string.start_taskbar))
-                    .setLongLabel(getString(R.string.start_taskbar_long))
-                    .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_start))
-                    .setIntent(intent)
-                    .build();
+                ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
+                        .setShortLabel(getString(R.string.start_taskbar))
+                        .setLongLabel(getString(R.string.start_taskbar_long))
+                        .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_start))
+                        .setIntent(intent)
+                        .build();
 
-            Intent intent2 = new Intent(Intent.ACTION_MAIN);
-            intent2.setClassName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
-            intent2.putExtra("is_launching_shortcut", true);
+                Intent intent2 = new Intent(Intent.ACTION_MAIN);
+                intent2.setClassName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+                intent2.putExtra("is_launching_shortcut", true);
 
-            ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
-                    .setShortLabel(getString(R.string.pref_header_freeform))
-                    .setLongLabel(getString(R.string.freeform_mode_long))
-                    .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_freeform))
-                    .setIntent(intent2)
-                    .build();
+                ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
+                        .setShortLabel(getString(R.string.pref_header_freeform))
+                        .setLongLabel(getString(R.string.freeform_mode_long))
+                        .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_freeform))
+                        .setIntent(intent2)
+                        .build();
 
-            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut2));
+                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut2));
+            }
         }
     }
 

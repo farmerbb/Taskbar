@@ -14,7 +14,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
 
-        versionCode 85
+        versionCode 86
         versionName "2.0.4"
 
         resConfigs "en", "ja"
