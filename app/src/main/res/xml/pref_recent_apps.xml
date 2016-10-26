@@ -71,6 +71,11 @@
         android:key="shortcut_icon"
         android:title="@string/pref_title_shortcut_icon"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="disable_scrolling_list"
+        android:title="@string/disable_scrolling_list"/>
+
     <PreferenceCategory android:title="\n\n" />
 
 </PreferenceScreen>

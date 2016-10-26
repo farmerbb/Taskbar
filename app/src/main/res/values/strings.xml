@@ -222,4 +222,6 @@
     <string name="no_freeform_support">Freeform mode is not enabled on your device &#8211; open Taskbar and enable it first</string>
     <string name="enable_recent_apps">Taskbar can optionally show icons for your most recently used apps along the edge of your screen.  To do this, Taskbar requires usage access permissions.\n\nEnable support for recent apps?</string>
 
+    <string name="disable_scrolling_list">Disable scrolling list</string>
+
 </resources>

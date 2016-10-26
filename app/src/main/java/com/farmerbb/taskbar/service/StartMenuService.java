@@ -49,6 +49,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -63,7 +64,6 @@ import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
-import com.farmerbb.taskbar.view.TaskbarGridView;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class StartMenuService extends Service {
 
     private WindowManager windowManager;
     private LinearLayout layout;
-    private TaskbarGridView startMenu;
+    private GridView startMenu;
     private SearchView searchView;
     private TextView textView;
     private PackageManager pm;
@@ -236,7 +236,7 @@ public class StartMenuService extends Service {
 
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
-        startMenu = (TaskbarGridView) layout.findViewById(R.id.start_menu);
+        startMenu = (GridView) layout.findViewById(R.id.start_menu);
 
         boolean scrollbar = pref.getBoolean("scrollbar", false);
         startMenu.setFastScrollEnabled(scrollbar);

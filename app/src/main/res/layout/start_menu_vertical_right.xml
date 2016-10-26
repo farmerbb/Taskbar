@@ -30,7 +30,7 @@
             android:background="@color/translucent_gray"
             android:layout_marginRight="@dimen/icon_size" >
 
-                <com.farmerbb.taskbar.view.TaskbarGridView
+                <GridView
                     android:id="@+id/start_menu"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="@dimen/start_menu_height"

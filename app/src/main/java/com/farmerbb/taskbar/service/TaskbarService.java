@@ -50,8 +50,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +59,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.LinearLayout;
 import android.widget.Space;
 
 import com.farmerbb.taskbar.BuildConfig;
@@ -68,21 +69,20 @@ import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
-import com.farmerbb.taskbar.adapter.TaskbarAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.U;
-import com.farmerbb.taskbar.view.TaskbarGridView;
 
 public class TaskbarService extends Service {
 
     private WindowManager windowManager;
     private LinearLayout layout;
     private ImageView startButton;
-    private TaskbarGridView taskbar;
+    private LinearLayout taskbar;
+    private FrameLayout scrollView;
     private Button button;
     private View divider;
     private Space space;
@@ -257,7 +257,8 @@ public class TaskbarService extends Service {
 
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
-        taskbar = (TaskbarGridView) layout.findViewById(R.id.taskbar);
+        taskbar = (LinearLayout) layout.findViewById(R.id.taskbar);
+        scrollView = (FrameLayout) layout.findViewById(R.id.taskbar_scrollview);
         divider = layout.findViewById(R.id.divider);
 
         if(altButtonConfig) {
@@ -267,8 +268,6 @@ public class TaskbarService extends Service {
             space = (Space) layout.findViewById(R.id.space);
             layout.findViewById(R.id.space_alt).setVisibility(View.GONE);
         }
-
-        taskbar.setEnabled(false);
 
         startButton = (ImageView) layout.findViewById(R.id.start_button);
         int padding;
@@ -435,7 +434,7 @@ public class TaskbarService extends Service {
         final PackageManager pm = getPackageManager();
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
         final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfColumns(this);
-        List<AppEntry> entries = new ArrayList<>();
+        final List<AppEntry> entries = new ArrayList<>();
         List<Intent> intentCache = new ArrayList<>();
         
         if(pba.getPinnedApps().size() > 0) {
@@ -467,7 +466,6 @@ public class TaskbarService extends Service {
                 List<UsageStats> usageStatsList3 = new ArrayList<>();
                 List<UsageStats> usageStatsList4 = new ArrayList<>();
                 List<UsageStats> usageStatsList5 = new ArrayList<>();
-                List<UsageStats> usageStatsList6;
 
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                 homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -554,12 +552,6 @@ public class TaskbarService extends Service {
                     }
                 }
 
-                // Truncate list to a maximum length
-                if(usageStatsList5.size() > MAX_NUM_OF_COLUMNS)
-                    usageStatsList6 = usageStatsList5.subList(0, MAX_NUM_OF_COLUMNS);
-                else
-                    usageStatsList6 = usageStatsList5;
-
                 // Determine if we need to reverse the order
                 boolean needToReverseOrder;
                 switch(U.getTaskbarPosition(this)) {
@@ -573,22 +565,27 @@ public class TaskbarService extends Service {
                 }
 
                 if(needToReverseOrder) {
-                    Collections.reverse(usageStatsList6);
+                    Collections.reverse(usageStatsList5);
                 }
 
                 // Generate the AppEntries for TaskbarAdapter
-                int number = usageStatsList6.size() == MAX_NUM_OF_COLUMNS
-                        ? usageStatsList6.size() - pba.getPinnedApps().size()
-                        : usageStatsList6.size();
+                int number = usageStatsList5.size() == MAX_NUM_OF_COLUMNS
+                        ? usageStatsList5.size() - pba.getPinnedApps().size()
+                        : usageStatsList5.size();
 
                 for(int i = 0; i < number; i++) {
-                    Intent intent = pm.getLaunchIntentForPackage(usageStatsList6.get(i).getPackageName());
+                    Intent intent = pm.getLaunchIntentForPackage(usageStatsList5.get(i).getPackageName());
                     intentCache.add(intent);
-                    entries.add(new AppEntry(usageStatsList6.get(i).getPackageName(), null, null, null, false));
+                    entries.add(new AppEntry(usageStatsList5.get(i).getPackageName(), null, null, null, false));
                 }
             }
 
-            while(entries.size() > MAX_NUM_OF_COLUMNS) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            int maxNumOfEntries = pref.getBoolean("disable_scrolling_list", false)
+                    ? MAX_NUM_OF_COLUMNS
+                    : Integer.valueOf(pref.getString("max_num_of_recents", "10"));
+
+            while(entries.size() > maxNumOfEntries) {
                 try {
                     entries.remove(entries.size() - 1);
                     intentCache.remove(intentCache.size() - 1);
@@ -643,34 +640,35 @@ public class TaskbarService extends Service {
                     }
                 }
 
-                final TaskbarAdapter taskbarAdapter = new TaskbarAdapter(this, R.layout.icon, entries, numOfPinnedApps);
-                final int numOfEntries = entries.size();
+                final int numOfEntries = Math.min(entries.size(), maxNumOfEntries);
 
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         if(numOfEntries > 0) {
-                            ViewGroup.LayoutParams params = taskbar.getLayoutParams();
+                            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
 
                             if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
-                                params.height = getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
-                                taskbar.setNumColumns(1);
+                                params.height = getResources().getDimensionPixelSize(R.dimen.icon_size) * Math.min(numOfEntries, MAX_NUM_OF_COLUMNS);
                             } else {
-                                params.width = getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
-                                taskbar.setNumColumns(numOfEntries);
+                                params.width = getResources().getDimensionPixelSize(R.dimen.icon_size) * Math.min(numOfEntries, MAX_NUM_OF_COLUMNS);
                             }
 
-                            taskbar.setLayoutParams(params);
-                            taskbar.setAdapter(taskbarAdapter);
+                            scrollView.setLayoutParams(params);
+
+                            taskbar.removeAllViews();
+                            for(int i = 0; i < entries.size(); i++) {
+                                taskbar.addView(getView(entries, i));
+                            }
 
                             isShowingRecents = true;
                             if(shouldRefreshRecents) {
-                                taskbar.setVisibility(View.VISIBLE);
+                                scrollView.setVisibility(View.VISIBLE);
                                 divider.setVisibility(View.VISIBLE);
                             }
                         } else {
                             isShowingRecents = false;
-                            taskbar.setVisibility(View.GONE);
+                            scrollView.setVisibility(View.GONE);
                             divider.setVisibility(View.GONE);
                         }
                     }
@@ -682,7 +680,7 @@ public class TaskbarService extends Service {
                 @Override
                 public void run() {
                     isShowingRecents = false;
-                    taskbar.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.GONE);
                     divider.setVisibility(View.GONE);
                 }
             });
@@ -704,8 +702,8 @@ public class TaskbarService extends Service {
         space.setVisibility(View.VISIBLE);
 
         if(isShowingRecents) {
-            if(taskbar.getVisibility() == View.GONE)
-                taskbar.setVisibility(View.INVISIBLE);
+            if(scrollView.getVisibility() == View.GONE)
+                scrollView.setVisibility(View.INVISIBLE);
 
             divider.setVisibility(View.VISIBLE);
         }
@@ -724,7 +722,7 @@ public class TaskbarService extends Service {
         space.setVisibility(View.GONE);
 
         if(isShowingRecents) {
-            taskbar.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
             divider.setVisibility(View.GONE);
         }
 
@@ -905,5 +903,98 @@ public class TaskbarService extends Service {
                 stopSelf();
             }
         }
+    }
+
+    private View getView(List<AppEntry> list, int position) {
+        View convertView = View.inflate(this, R.layout.icon, null);
+
+        final AppEntry entry = list.get(position);
+        final SharedPreferences pref = U.getSharedPreferences(this);
+
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
+        ImageView imageView2 = (ImageView) convertView.findViewById(R.id.shortcut_icon);
+        imageView.setImageDrawable(entry.getIcon(this));
+
+        String taskbarPosition = U.getTaskbarPosition(this);
+        if(pref.getBoolean("shortcut_icon", true)) {
+            boolean shouldShowShortcutIcon;
+            if(taskbarPosition.contains("vertical"))
+                shouldShowShortcutIcon = position >= list.size() - numOfPinnedApps;
+            else
+                shouldShowShortcutIcon = position < numOfPinnedApps;
+
+            if(shouldShowShortcutIcon) imageView2.setVisibility(View.VISIBLE);
+        }
+
+        if(taskbarPosition.equals("bottom_right") || taskbarPosition.equals("top_right")) {
+            imageView.setRotationY(180);
+            imageView2.setRotationY(180);
+        }
+
+        FrameLayout layout = (FrameLayout) convertView.findViewById(R.id.entry);
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), null, true, true, false);
+            }
+        });
+
+        layout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                openContextMenu(entry, location);
+                return true;
+            }
+        });
+
+        layout.setOnGenericMotionListener(new View.OnGenericMotionListener() {
+            @Override
+            public boolean onGenericMotion(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    openContextMenu(entry, location);
+                }
+
+                return false;
+            }
+        });
+
+        return convertView;
+    }
+
+    @SuppressWarnings("deprecation")
+    private void openContextMenu(AppEntry entry, int[] location) {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        Intent intent = null;
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                intent = new Intent(this, ContextMenuActivity.class);
+                break;
+            case "dark":
+                intent = new Intent(this, ContextMenuActivityDark.class);
+                break;
+        }
+
+        if(intent != null) {
+            intent.putExtra("package_name", entry.getPackageName());
+            intent.putExtra("app_name", entry.getLabel());
+            intent.putExtra("component_name", entry.getComponentName());
+            intent.putExtra("x", location[0]);
+            intent.putExtra("y", location[1]);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+        } else
+            startActivity(intent);
     }
 }

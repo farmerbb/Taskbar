@@ -46,13 +46,22 @@
             android:layout_marginRight="2dp"
             android:background="@color/translucent_white"
             android:visibility="gone" />
-        
-        <com.farmerbb.taskbar.view.TaskbarGridView
-            android:id="@+id/taskbar"
+
+        <HorizontalScrollView
+            android:id="@+id/taskbar_scrollview"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/icon_size"
-            android:clickable="false"
-            android:visibility="gone" />
+            android:scrollbars="none"
+            android:visibility="gone" >
+
+                <LinearLayout
+                    android:id="@+id/taskbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:clickable="false" />
+
+        </HorizontalScrollView>
 
         <Space
             android:id="@+id/space"
