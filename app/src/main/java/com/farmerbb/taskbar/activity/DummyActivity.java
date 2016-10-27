@@ -22,6 +22,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.view.View;
 
 import com.farmerbb.taskbar.R;
@@ -48,8 +49,13 @@ public class DummyActivity extends Activity {
             shouldFinish = true;
 
             if(getIntent().hasExtra("uninstall")) {
+                UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
+
+                Intent intent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("package_name")));
+                intent.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(getIntent().getLongExtra("user_id", 0)));
+
                 try {
-                    startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("uninstall"))));
+                    startActivity(intent);
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             } else if(getIntent().hasExtra("device_admin")) {
                 Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);

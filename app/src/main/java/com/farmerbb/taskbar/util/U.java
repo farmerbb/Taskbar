@@ -26,6 +26,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -34,7 +36,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
@@ -138,7 +144,7 @@ public class U {
     public static void launchApp(final Context context,
                                  final String packageName,
                                  final String componentName,
-                                 final String windowSize,
+                                 final long userId, final String windowSize,
                                  final boolean launchedFromTaskbar,
                                  final boolean padStatusBar,
                                  final boolean openInNewWindow) {
@@ -165,8 +171,8 @@ public class U {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            continueLaunchingApp(context, packageName, componentName, windowSize,
-                                    launchedFromTaskbar, padStatusBar, openInNewWindow);
+                            continueLaunchingApp(context, packageName, componentName, userId,
+                                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow);
                         }
                     }, 100);
                 }
@@ -175,11 +181,11 @@ public class U {
 
         if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
             if(!shouldDelay)
-                continueLaunchingApp(context, packageName, componentName, windowSize,
-                        launchedFromTaskbar, padStatusBar, openInNewWindow);
+                continueLaunchingApp(context, packageName, componentName, userId,
+                        windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow);
         } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace() || !openInFullscreen)
-            continueLaunchingApp(context, packageName, componentName, windowSize,
-                    launchedFromTaskbar, padStatusBar, openInNewWindow);
+            continueLaunchingApp(context, packageName, componentName, userId,
+                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow);
     }
 
     @SuppressWarnings("deprecation")
@@ -211,6 +217,7 @@ public class U {
     private static void continueLaunchingApp(Context context,
                                              String packageName,
                                              String componentName,
+                                             long userId,
                                              String windowSize,
                                              boolean launchedFromTaskbar,
                                              boolean padStatusBar,
@@ -220,7 +227,7 @@ public class U {
         intent.setComponent(ComponentName.unflattenFromString(componentName));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        
+
         if(launchedFromTaskbar) {
             if(pref.getBoolean("disable_animations", false))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -229,11 +236,14 @@ public class U {
         if(openInNewWindow) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-            switch(intent.resolveActivityInfo(context.getPackageManager(), 0).launchMode) {
-                case ActivityInfo.LAUNCH_SINGLE_TASK:
-                case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
-                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                    break;
+            ActivityInfo activityInfo = intent.resolveActivityInfo(context.getPackageManager(), 0);
+            if(activityInfo != null) {
+                switch(activityInfo.launchMode) {
+                    case ActivityInfo.LAUNCH_SINGLE_TASK:
+                    case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
+                        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                        break;
+                }
             }
         }
 
@@ -245,32 +255,44 @@ public class U {
         }
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
-            try {
-                context.startActivity(intent);
-            } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                try {
+                    context.startActivity(intent, null);
+                } catch (ActivityNotFoundException e) {
+                    launchAndroidForWork(context, intent.getComponent(), null, userId);
+                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } else
+                launchAndroidForWork(context, intent.getComponent(), null, userId);
         } else switch(windowSize) {
             case "standard":
-                if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
-                    try {
-                        context.startActivity(intent);
-                    } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
-                else
-                    launchMode1(context, intent, 1);
+                if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+                    UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+                    if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                        try {
+                            context.startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            launchAndroidForWork(context, intent.getComponent(), null, userId);
+                        } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                    } else
+                        launchAndroidForWork(context, intent.getComponent(), null, userId);
+                } else
+                    launchMode1(context, intent, 1, userId);
                 break;
             case "large":
-                launchMode1(context, intent, 2);
+                launchMode1(context, intent, 2, userId);
                 break;
             case "fullscreen":
-                launchMode2(context, intent, padStatusBar, FULLSCREEN);
+                launchMode2(context, intent, padStatusBar, FULLSCREEN, userId);
                 break;
             case "half_left":
-                launchMode2(context, intent, padStatusBar, LEFT);
+                launchMode2(context, intent, padStatusBar, LEFT, userId);
                 break;
             case "half_right":
-                launchMode2(context, intent, padStatusBar, RIGHT);
+                launchMode2(context, intent, padStatusBar, RIGHT, userId);
                 break;
             case "phone_size":
-                launchMode3(context, intent);
+                launchMode3(context, intent, userId);
                 break;
         }
 
@@ -282,7 +304,7 @@ public class U {
     
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode1(Context context, Intent intent, int factor) {
+    private static void launchMode1(Context context, Intent intent, int factor, long userId) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -291,19 +313,27 @@ public class U {
         int height1 = display.getHeight() / (4 * factor);
         int height2 = display.getHeight() - height1;
 
-        try {
-            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
-                    width1,
-                    height1,
-                    width2,
-                    height2
-            )).toBundle());
-        } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
+        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                width1,
+                height1,
+                width2,
+                height2
+        )).toBundle();
+
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+            try {
+                context.startActivity(intent, bundle);
+            } catch (ActivityNotFoundException e) {
+                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+        } else
+            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
     }
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode2(Context context, Intent intent, boolean padStatusBar, int launchType) {
+    private static void launchMode2(Context context, Intent intent, boolean padStatusBar, int launchType, long userId) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -356,19 +386,27 @@ public class U {
         } else if(isLandscape || (launchType != RIGHT && isPortrait))
             top = top + iconSize;
 
-        try {
-            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
-                    left,
-                    top,
-                    right,
-                    bottom
-            )).toBundle());
-        } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
+        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                left,
+                top,
+                right,
+                bottom
+        )).toBundle();
+
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+            try {
+                context.startActivity(intent, bundle);
+            } catch (ActivityNotFoundException e) {
+                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+        } else
+            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
     }
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode3(Context context, Intent intent) {
+    private static void launchMode3(Context context, Intent intent, long userId) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -377,14 +415,29 @@ public class U {
         int height1 = display.getHeight() / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
-        try {
-            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
-                    width1 - width2,
-                    height1 - height2,
-                    width1 + width2,
-                    height1 + height2
-            )).toBundle());
-        } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
+        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                width1 - width2,
+                height1 - height2,
+                width1 + width2,
+                height1 + height2
+        )).toBundle();
+
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+            try {
+                context.startActivity(intent, bundle);
+            } catch (ActivityNotFoundException e) {
+                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+        } else
+            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+    }
+
+    private static void launchAndroidForWork(Context context, ComponentName componentName, Bundle bundle, long userId) {
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+
+        launcherApps.startMainActivity(componentName, userManager.getUserForSerialNumber(userId), null, bundle);
     }
 
     public static void checkForUpdates(Context context) {
@@ -580,17 +633,31 @@ public class U {
         pba.clear(context);
 
         for(AppEntry entry : pinnedAppsList) {
-            Intent throwaway = new Intent();
-            throwaway.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-            AppEntry newEntry = new AppEntry(
-                    entry.getPackageName(),
-                    entry.getComponentName(),
-                    entry.getLabel(),
-                    IconCache.getInstance(context).getIcon(context, pm, throwaway.resolveActivityInfo(pm, 0)),
-                    true);
+            final List<UserHandle> userHandles = userManager.getUserProfiles();
+            LauncherActivityInfo appInfo = null;
 
-            pba.addPinnedApp(context, newEntry);
+            for(UserHandle handle : userHandles) {
+                List<LauncherActivityInfo> list = launcherApps.getActivityList(entry.getPackageName(), handle);
+                if(!list.isEmpty()) {
+                    appInfo = list.get(0);
+                    break;
+                }
+            }
+
+            if(appInfo != null) {
+                AppEntry newEntry = new AppEntry(
+                        entry.getPackageName(),
+                        entry.getComponentName(),
+                        entry.getLabel(),
+                        IconCache.getInstance(context).getIcon(context, pm, appInfo),
+                        true);
+
+                newEntry.setUserId(entry.getUserId(context));
+                pba.addPinnedApp(context, newEntry);
+            }
         }
 
         for(AppEntry entry : blockedAppsList) {

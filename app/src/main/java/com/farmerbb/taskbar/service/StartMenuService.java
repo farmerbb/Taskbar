@@ -27,8 +27,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -38,6 +39,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.SearchView;
@@ -117,20 +120,20 @@ public class StartMenuService extends Service {
         }
     };
 
-    private Comparator<ResolveInfo> comparator = new Comparator<ResolveInfo>() {
+    private Comparator<LauncherActivityInfo> comparator = new Comparator<LauncherActivityInfo>() {
         @Override
-        public int compare(ResolveInfo ai1, ResolveInfo ai2) {
+        public int compare(LauncherActivityInfo ai1, LauncherActivityInfo ai2) {
             String label1;
             String label2;
 
             try {
-                label1 = ai1.activityInfo.loadLabel(pm).toString();
-                label2 = ai2.activityInfo.loadLabel(pm).toString();
+                label1 = ai1.getLabel().toString();
+                label2 = ai2.getLabel().toString();
             } catch (OutOfMemoryError e) {
                 System.gc();
 
-                label1 = ai1.activityInfo.packageName;
-                label2 = ai2.activityInfo.packageName;
+                label1 = ai1.getApplicationInfo().packageName;
+                label2 = ai2.getApplicationInfo().packageName;
             }
 
             return Collator.getInstance().compare(label1, label2);
@@ -355,27 +358,33 @@ public class StartMenuService extends Service {
             public void run() {
                 if(pm == null) pm = getPackageManager();
 
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
+                LauncherApps launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-                final List<ResolveInfo> unfilteredList = pm.queryIntentActivities(intent, 0);
-                final List<ResolveInfo> topAppsList = new ArrayList<>();
-                final List<ResolveInfo> allAppsList = new ArrayList<>();
-                final List<ResolveInfo> list = new ArrayList<>();
+                final List<UserHandle> userHandles = userManager.getUserProfiles();
+                final List<LauncherActivityInfo> unfilteredList = new ArrayList<>();
+
+                for(UserHandle handle : userHandles) {
+                    unfilteredList.addAll(launcherApps.getActivityList(null, handle));
+                }
+
+                final List<LauncherActivityInfo> topAppsList = new ArrayList<>();
+                final List<LauncherActivityInfo> allAppsList = new ArrayList<>();
+                final List<LauncherActivityInfo> list = new ArrayList<>();
 
                 TopApps topApps = TopApps.getInstance(StartMenuService.this);
-                for(ResolveInfo appInfo : unfilteredList) {
-                    if(topApps.isTopApp(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name)
-                            || topApps.isTopApp(appInfo.activityInfo.name))
+                for(LauncherActivityInfo appInfo : unfilteredList) {
+                    if(topApps.isTopApp(appInfo.getComponentName().flattenToString())
+                            || topApps.isTopApp(appInfo.getName()))
                         topAppsList.add(appInfo);
                 }
 
                 Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
-                for(ResolveInfo appInfo : unfilteredList) {
-                    if(!(blacklist.isBlocked(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name)
-                            || blacklist.isBlocked(appInfo.activityInfo.name))
-                            && !(topApps.isTopApp(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name)
-                            || topApps.isTopApp(appInfo.activityInfo.name)))
+                for(LauncherActivityInfo appInfo : unfilteredList) {
+                    if(!(blacklist.isBlocked(appInfo.getComponentName().flattenToString())
+                            || blacklist.isBlocked(appInfo.getName()))
+                            && !(topApps.isTopApp(appInfo.getComponentName().flattenToString())
+                            || topApps.isTopApp(appInfo.getName())))
                         allAppsList.add(appInfo);
                 }
 
@@ -388,13 +397,13 @@ public class StartMenuService extends Service {
                 topAppsList.clear();
                 allAppsList.clear();
 
-                List<ResolveInfo> queryList;
+                List<LauncherActivityInfo> queryList;
                 if(query == null)
                     queryList = list;
                 else {
                     queryList = new ArrayList<>();
-                    for(ResolveInfo appInfo : list) {
-                        if(appInfo.loadLabel(pm).toString().toLowerCase().contains(query.toLowerCase()))
+                    for(LauncherActivityInfo appInfo : list) {
+                        if(appInfo.getLabel().toString().toLowerCase().contains(query.toLowerCase()))
                             queryList.add(appInfo);
                     }
                 }
@@ -405,8 +414,8 @@ public class StartMenuService extends Service {
                 List<String> finalApplicationIds = new ArrayList<>();
 
                 if(query == null && !firstDraw) {
-                    for(ResolveInfo appInfo : queryList) {
-                        finalApplicationIds.add(appInfo.activityInfo.packageName);
+                    for(LauncherActivityInfo appInfo : queryList) {
+                        finalApplicationIds.add(appInfo.getApplicationInfo().packageName);
                     }
 
                     if(finalApplicationIds.size() != currentStartMenuIds.size())
@@ -427,30 +436,33 @@ public class StartMenuService extends Service {
                     Drawable defaultIcon = pm.getDefaultActivityIcon();
 
                     final List<AppEntry> entries = new ArrayList<>();
-                    for(ResolveInfo appInfo : queryList) {
+                    for(LauncherActivityInfo appInfo : queryList) {
 
                         // Attempt to work around frequently reported OutOfMemoryErrors
                         String label;
                         Drawable icon;
 
                         try {
-                            label = appInfo.loadLabel(pm).toString();
-                            icon = IconCache.getInstance(StartMenuService.this).getIcon(StartMenuService.this, pm, appInfo.activityInfo);
+                            label = appInfo.getLabel().toString();
+                            icon = IconCache.getInstance(StartMenuService.this).getIcon(StartMenuService.this, pm, appInfo);
                         } catch (OutOfMemoryError e) {
                             System.gc();
 
-                            label = appInfo.activityInfo.packageName;
+                            label = appInfo.getApplicationInfo().packageName;
                             icon = defaultIcon;
                         }
 
-                        entries.add(new AppEntry(
-                                appInfo.activityInfo.packageName,
+                        AppEntry newEntry = new AppEntry(
+                                appInfo.getApplicationInfo().packageName,
                                 new ComponentName(
-                                        appInfo.activityInfo.packageName,
-                                        appInfo.activityInfo.name).flattenToString(),
+                                        appInfo.getApplicationInfo().packageName,
+                                        appInfo.getName()).flattenToString(),
                                 label,
                                 icon,
-                                false));
+                                false);
+
+                        newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
+                        entries.add(newEntry);
                     }
 
                     handler.post(new Runnable() {

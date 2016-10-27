@@ -28,6 +28,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -39,6 +41,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.view.ContextThemeWrapper;
@@ -435,19 +439,23 @@ public class TaskbarService extends Service {
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
         final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfColumns(this);
         final List<AppEntry> entries = new ArrayList<>();
-        List<Intent> intentCache = new ArrayList<>();
+        List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(this);
         
         if(pba.getPinnedApps().size() > 0) {
+            UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
+            LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
+
             List<String> pinnedAppsToRemove = new ArrayList<>();
 
             for(AppEntry entry : pba.getPinnedApps()) {
-                try {
-                    pm.getPackageInfo(entry.getPackageName(), 0);
+                boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
+                        userManager.getUserForSerialNumber(entry.getUserId(this)));
+
+                if(packageEnabled)
                     entries.add(entry);
-                } catch (PackageManager.NameNotFoundException e) {
+                else
                     pinnedAppsToRemove.add(entry.getComponentName());
-                }
             }
 
             for(String component : pinnedAppsToRemove) {
@@ -574,24 +582,45 @@ public class TaskbarService extends Service {
                         ? usageStatsList5.size() - pba.getPinnedApps().size()
                         : usageStatsList5.size();
 
+                UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
+                LauncherApps launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
+
+                final List<UserHandle> userHandles = userManager.getUserProfiles();
+
                 for(int i = 0; i < number; i++) {
-                    Intent intent = pm.getLaunchIntentForPackage(usageStatsList5.get(i).getPackageName());
-                    intentCache.add(intent);
-                    entries.add(new AppEntry(usageStatsList5.get(i).getPackageName(), null, null, null, false));
+                    for(UserHandle handle : userHandles) {
+                        List<LauncherActivityInfo> list = launcherApps.getActivityList(usageStatsList5.get(i).getPackageName(), handle);
+                        if(!list.isEmpty()) {
+                            launcherAppCache.add(list.get(0));
+
+                            AppEntry newEntry = new AppEntry(
+                                    usageStatsList5.get(i).getPackageName(),
+                                    null,
+                                    null,
+                                    null,
+                                    false
+                            );
+
+                            newEntry.setUserId(userManager.getSerialNumberForUser(handle));
+                            entries.add(newEntry);
+
+                            break;
+                        }
+                    }
                 }
             }
 
             while(entries.size() > maxNumOfEntries) {
                 try {
                     entries.remove(entries.size() - 1);
-                    intentCache.remove(intentCache.size() - 1);
+                    launcherAppCache.remove(launcherAppCache.size() - 1);
                 } catch (ArrayIndexOutOfBoundsException e) { /* Gracefully fail */ }
             }
 
             // Determine if we need to reverse the order again
             if(U.getTaskbarPosition(this).contains("vertical")) {
                 Collections.reverse(entries);
-                Collections.reverse(intentCache);
+                Collections.reverse(launcherAppCache);
             }
 
             // Now that we've generated the list of apps,
@@ -619,20 +648,26 @@ public class TaskbarService extends Service {
                 currentTaskbarIds = finalApplicationIds;
                 numOfPinnedApps = pba.getPinnedApps().size();
 
-                int intentCachePos = -1;
+                UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
+
+                int launcherAppCachePos = -1;
                 for(int i = 0; i < entries.size(); i++) {
                     if(entries.get(i).getComponentName() == null) {
-                        intentCachePos++;
-                        Intent intent = intentCache.get(intentCachePos);
+                        launcherAppCachePos++;
+                        LauncherActivityInfo appInfo = launcherAppCache.get(launcherAppCachePos);
                         String packageName = entries.get(i).getPackageName();
 
                         entries.remove(i);
-                        entries.add(i, new AppEntry(
-                            packageName,
-                            intent.resolveActivity(pm).flattenToString(),
-                            intent.resolveActivityInfo(pm, 0).loadLabel(pm).toString(),
-                            IconCache.getInstance(TaskbarService.this).getIcon(TaskbarService.this, pm, intent.resolveActivityInfo(pm, 0)),
-                            false));
+
+                        AppEntry newEntry = new AppEntry(
+                                packageName,
+                                appInfo.getComponentName().flattenToString(),
+                                appInfo.getLabel().toString(),
+                                IconCache.getInstance(TaskbarService.this).getIcon(TaskbarService.this, pm, appInfo),
+                                false);
+
+                        newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
+                        entries.add(i, newEntry);
                     }
                 }
 
@@ -931,7 +966,7 @@ public class TaskbarService extends Service {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), null, true, true, false);
+                U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(TaskbarService.this), null, true, true, false);
             }
         });
 
@@ -980,6 +1015,7 @@ public class TaskbarService extends Service {
             intent.putExtra("package_name", entry.getPackageName());
             intent.putExtra("app_name", entry.getLabel());
             intent.putExtra("component_name", entry.getComponentName());
+            intent.putExtra("user_id", entry.getUserId(this));
             intent.putExtra("x", location[0]);
             intent.putExtra("y", location[1]);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

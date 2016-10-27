@@ -22,6 +22,8 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
@@ -29,9 +31,9 @@ import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
 import android.view.Gravity;
@@ -53,6 +55,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     String packageName;
     String componentName;
     String appName;
+    long userId = 0;
 
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
@@ -184,6 +187,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             appName = getIntent().getStringExtra("app_name");
             packageName = getIntent().getStringExtra("package_name");
             componentName = getIntent().getStringExtra("component_name");
+            userId = getIntent().getLongExtra("user_id", 0);
 
             if(getResources().getConfiguration().screenWidthDp >= 600
                     && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
@@ -243,29 +247,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public boolean onPreferenceClick(Preference p) {
-        boolean appIsValid = true;
-
-        if(!isStartButton) {
-            try {
-                getPackageManager().getPackageInfo(getIntent().getStringExtra("package_name"), 0);
-            } catch(PackageManager.NameNotFoundException e) {
-                appIsValid = false;
-            }
-        }
-
+        UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
+        LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
+        boolean appIsValid = isStartButton ||
+                !launcherApps.getActivityList(getIntent().getStringExtra("package_name"),
+                        userManager.getUserForSerialNumber(userId)).isEmpty();
         boolean dontFinish = false;
 
         if(appIsValid) switch(p.getKey()) {
             case "app_info":
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getIntent().getStringExtra("package_name")));
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode())
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
                 startFreeformActivity();
-
-                try {
-                    startActivity(intent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                launcherApps.startAppDetailsActivity(ComponentName.unflattenFromString(componentName), userManager.getUserForSerialNumber(userId), null, null);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -273,15 +265,19 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "uninstall":
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode()) {
                     Intent intent2 = new Intent(ContextMenuActivity.this, DummyActivity.class);
-                    intent2.putExtra("uninstall", getIntent().getStringExtra("package_name"));
+                    intent2.putExtra("uninstall", packageName);
+                    intent2.putExtra("user_id", userId);
 
                     startFreeformActivity();
                     startActivity(intent2);
                 } else {
                     startFreeformActivity();
 
+                    Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName));
+                    intent2.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(userId));
+
                     try {
-                        startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("package_name"))));
+                        startActivity(intent2);
                     } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                 }
 
@@ -309,15 +305,21 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(pba.isPinned(componentName))
                     pba.removePinnedApp(this, componentName);
                 else {
-                    Intent throwaway = new Intent();
-                    throwaway.setComponent(ComponentName.unflattenFromString(componentName));
+                    Intent intent = new Intent();
+                    intent.setComponent(ComponentName.unflattenFromString(componentName));
 
-                    pba.addPinnedApp(this, new AppEntry(
-                            packageName,
-                            componentName,
-                            appName,
-                            IconCache.getInstance(this).getIcon(this, getPackageManager(), throwaway.resolveActivityInfo(getPackageManager(), 0)),
-                            true));
+                    LauncherActivityInfo appInfo = launcherApps.resolveActivity(intent, userManager.getUserForSerialNumber(userId));
+                    if(appInfo != null) {
+                        AppEntry newEntry = new AppEntry(
+                                packageName,
+                                componentName,
+                                appName,
+                                IconCache.getInstance(this).getIcon(this, getPackageManager(), appInfo),
+                                true);
+
+                        newEntry.setUserId(userId);
+                        pba.addPinnedApp(this, newEntry);
+                    }
                 }
                 break;
             case "block_app":
@@ -367,7 +369,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 }
                 
                 startFreeformActivity();
-                U.launchApp(this, packageName, componentName, windowSize, false, !isInMultiWindowMode(), true);
+                U.launchApp(this, packageName, componentName, userId, windowSize, false, !isInMultiWindowMode(), true);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

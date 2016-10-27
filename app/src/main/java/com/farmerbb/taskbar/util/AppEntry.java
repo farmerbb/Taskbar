@@ -22,6 +22,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Process;
+import android.os.UserManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
@@ -32,6 +34,7 @@ public class AppEntry implements Serializable {
     private String packageName;
     private String componentName;
     private String label;
+    private Long userId;
     private transient Drawable icon;
     private byte[] iconByteArray;
 
@@ -59,6 +62,18 @@ public class AppEntry implements Serializable {
 
     public String getLabel() {
         return label;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getUserId(Context context) {
+        if(userId == null) {
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            return userManager.getSerialNumberForUser(Process.myUserHandle());
+        } else
+            return userId;
     }
 
     public Drawable getIcon(Context context) {

@@ -35,17 +35,20 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             String[] pinnedAppsPackageNames = new String[pinnedAppsList.size()];
             String[] pinnedAppsComponentNames = new String[pinnedAppsList.size()];
             String[] pinnedAppsLabels = new String[pinnedAppsList.size()];
+            long[] pinnedAppsUserIds = new long[pinnedAppsList.size()];
 
             for(int i = 0; i < pinnedAppsList.size(); i++) {
                 AppEntry entry = pinnedAppsList.get(i);
                 pinnedAppsPackageNames[i] = entry.getPackageName();
                 pinnedAppsComponentNames[i] = entry.getComponentName();
                 pinnedAppsLabels[i] = entry.getLabel();
+                pinnedAppsUserIds[i] = entry.getUserId(context);
             }
 
             sendSettingsIntent.putExtra("pinned_apps_package_names", pinnedAppsPackageNames);
             sendSettingsIntent.putExtra("pinned_apps_component_names", pinnedAppsComponentNames);
             sendSettingsIntent.putExtra("pinned_apps_labels", pinnedAppsLabels);
+            sendSettingsIntent.putExtra("pinned_apps_user_ids", pinnedAppsUserIds);
 
             List<AppEntry> blockedAppsList = pba.getBlockedApps();
 

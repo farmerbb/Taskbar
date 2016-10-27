@@ -46,8 +46,6 @@ import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
 
-import static android.content.Context.DISPLAY_SERVICE;
-
 public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
     private boolean isGrid = false;
@@ -93,7 +91,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             @Override
             public void onClick(View view) {
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), null, false, true, false);
+                U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), entry.getUserId(getContext()), null, false, true, false);
             }
         });
 
@@ -149,6 +147,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             intent.putExtra("package_name", entry.getPackageName());
             intent.putExtra("app_name", entry.getLabel());
             intent.putExtra("component_name", entry.getComponentName());
+            intent.putExtra("user_id", entry.getUserId(getContext()));
             intent.putExtra("launched_from_start_menu", true);
             intent.putExtra("x", location[0]);
             intent.putExtra("y", location[1]);
@@ -156,7 +155,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
-            DisplayManager dm = (DisplayManager) getContext().getSystemService(DISPLAY_SERVICE);
+            DisplayManager dm = (DisplayManager) getContext().getSystemService(Context.DISPLAY_SERVICE);
             Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
             getContext().startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());

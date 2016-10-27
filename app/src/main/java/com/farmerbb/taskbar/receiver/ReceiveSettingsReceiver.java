@@ -4,13 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.LauncherApps;
 import android.os.Build;
+import android.os.Process;
+import android.os.UserManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.BlacklistEntry;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.TopApps;
@@ -31,19 +35,35 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
             String[] pinnedAppsPackageNames = intent.getStringArrayExtra("pinned_apps_package_names");
             String[] pinnedAppsComponentNames = intent.getStringArrayExtra("pinned_apps_component_names");
             String[] pinnedAppsLabels = intent.getStringArrayExtra("pinned_apps_labels");
+            long[] pinnedAppsUserIds = intent.getLongArrayExtra("pinned_apps_user_ids");
+
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
             if(pinnedAppsPackageNames != null && pinnedAppsComponentNames != null && pinnedAppsLabels != null)
                 for(int i = 0; i < pinnedAppsPackageNames.length; i++) {
                     Intent throwaway = new Intent();
                     throwaway.setComponent(ComponentName.unflattenFromString(pinnedAppsComponentNames[i]));
 
-                    pba.addPinnedApp(context, new AppEntry(
+                    long userId;
+                    if(pinnedAppsUserIds != null)
+                        userId = pinnedAppsUserIds[i];
+                    else
+                        userId = userManager.getSerialNumberForUser(Process.myUserHandle());
+
+                    AppEntry newEntry = new AppEntry(
                             pinnedAppsPackageNames[i],
                             pinnedAppsComponentNames[i],
                             pinnedAppsLabels[i],
-                            throwaway.resolveActivityInfo(context.getPackageManager(), 0).loadIcon(context.getPackageManager()),
+                            IconCache.getInstance(context).getIcon(
+                                    context,
+                                    context.getPackageManager(),
+                                    launcherApps.resolveActivity(throwaway, userManager.getUserForSerialNumber(userId))),
                             true
-                    ));
+                    );
+
+                    newEntry.setUserId(userId);
+                    pba.addPinnedApp(context, newEntry);
                 }
 
             String[] blockedAppsPackageNames = intent.getStringArrayExtra("blocked_apps_package_names");
