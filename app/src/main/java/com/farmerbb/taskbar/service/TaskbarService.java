@@ -89,7 +89,6 @@ public class TaskbarService extends Service {
     private LinearLayout taskbar;
     private FrameLayout scrollView;
     private Button button;
-    private View divider;
     private Space space;
 
     private Handler handler;
@@ -264,7 +263,6 @@ public class TaskbarService extends Service {
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
         taskbar = (LinearLayout) layout.findViewById(R.id.taskbar);
         scrollView = (FrameLayout) layout.findViewById(R.id.taskbar_scrollview);
-        divider = layout.findViewById(R.id.divider);
 
         if(altButtonConfig) {
             space = (Space) layout.findViewById(R.id.space_alt);
@@ -438,7 +436,6 @@ public class TaskbarService extends Service {
     private void updateRecentApps(boolean firstRefresh) {
         final PackageManager pm = getPackageManager();
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
-        final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfColumns(this);
         final List<AppEntry> entries = new ArrayList<>();
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(this);
@@ -701,12 +698,10 @@ public class TaskbarService extends Service {
                             isShowingRecents = true;
                             if(shouldRefreshRecents) {
                                 scrollView.setVisibility(View.VISIBLE);
-                                divider.setVisibility(View.VISIBLE);
                             }
                         } else {
                             isShowingRecents = false;
                             scrollView.setVisibility(View.GONE);
-                            divider.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -718,7 +713,6 @@ public class TaskbarService extends Service {
                 public void run() {
                     isShowingRecents = false;
                     scrollView.setVisibility(View.GONE);
-                    divider.setVisibility(View.GONE);
                 }
             });
         }
@@ -741,8 +735,6 @@ public class TaskbarService extends Service {
         if(isShowingRecents) {
             if(scrollView.getVisibility() == View.GONE)
                 scrollView.setVisibility(View.INVISIBLE);
-
-            divider.setVisibility(View.VISIBLE);
         }
 
         shouldRefreshRecents = true;
@@ -760,7 +752,6 @@ public class TaskbarService extends Service {
 
         if(isShowingRecents) {
             scrollView.setVisibility(View.GONE);
-            divider.setVisibility(View.GONE);
         }
 
         shouldRefreshRecents = false;

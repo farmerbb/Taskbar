@@ -41,25 +41,32 @@
             android:visibility="gone" >
 
                 <LinearLayout
-                    android:id="@+id/taskbar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:rotationY="180"
-                    android:clickable="false" />
+                    android:clickable="false">
+
+                        <LinearLayout
+                            android:id="@+id/taskbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:rotationY="180"
+                            android:clickable="false" />
+
+                        <View
+                            android:id="@+id/divider"
+                            android:layout_width="1dp"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:background="@color/translucent_white" />
+
+                </LinearLayout>
 
         </HorizontalScrollView>
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="1dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:background="@color/translucent_white"
-            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/start_button"

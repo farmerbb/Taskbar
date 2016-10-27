@@ -47,17 +47,6 @@
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_height="1dp"
-        android:layout_width="44dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:background="@color/translucent_white"
-        android:visibility="gone" />
-
     <ScrollView
         android:id="@+id/taskbar_scrollview"
         android:layout_width="@dimen/icon_size"
@@ -67,11 +56,29 @@
         android:visibility="gone" >
 
         <LinearLayout
-            android:id="@+id/taskbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:clickable="false" />
+            android:clickable="false">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_height="1dp"
+                android:layout_width="44dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@color/translucent_white" />
+
+            <LinearLayout
+                android:id="@+id/taskbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clickable="false" />
+
+        </LinearLayout>
 
     </ScrollView>
 
