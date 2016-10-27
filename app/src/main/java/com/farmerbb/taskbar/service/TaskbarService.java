@@ -681,11 +681,15 @@ public class TaskbarService extends Service {
                             if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
                                 float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
 
-                                params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries, maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size));
+                                params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
+                                        maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size))
+                                        + getResources().getDimensionPixelSize(R.dimen.divider_size);
                             } else {
                                 float maxScreenSize = metrics.widthPixels;
 
-                                params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries, maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size));
+                                params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
+                                        maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size))
+                                        + getResources().getDimensionPixelSize(R.dimen.divider_size);
                             }
 
                             scrollView.setLayoutParams(params);
@@ -732,10 +736,8 @@ public class TaskbarService extends Service {
         startButton.setVisibility(View.VISIBLE);
         space.setVisibility(View.VISIBLE);
 
-        if(isShowingRecents) {
-            if(scrollView.getVisibility() == View.GONE)
-                scrollView.setVisibility(View.INVISIBLE);
-        }
+        if(isShowingRecents && scrollView.getVisibility() == View.GONE)
+            scrollView.setVisibility(View.INVISIBLE);
 
         shouldRefreshRecents = true;
         startRefreshingRecents();
