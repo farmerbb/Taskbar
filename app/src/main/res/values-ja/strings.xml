@@ -224,4 +224,8 @@
 
     <string name="disable_scrolling_list">Disable scrolling list</string>
 
+    <string name="double_tap_to_sleep">Double tap to sleep</string>
+    <string name="enable_double_tap_to_sleep">Enable double tap to sleep?</string>
+    <string name="action_dont_show_again">Don\'t show again</string>
+
 </resources>

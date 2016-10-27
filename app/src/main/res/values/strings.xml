@@ -123,8 +123,8 @@
         <item>Dark</item>
     </string-array>
 
-    <string name="device_admin_description_short">Allows Taskbar to lock this device via the start menu</string>
-    <string name="device_admin_description">Allows Taskbar to lock this device via the start menu.\n\nThis will require you to deactivate Taskbar as a device administrator prior to uninstalling.</string>
+    <string name="device_admin_description_short">Allows Taskbar to turn off the device\'s screen</string>
+    <string name="device_admin_description">Allows Taskbar to turn off the device\'s screen.\n\nThis will require you to deactivate Taskbar as a device administrator prior to uninstalling.</string>
     <string name="lock_device_not_supported">Not supported on this device</string>
 
     <string name="pref_title_shortcut_icon">Show shortcut icon for pinned apps</string>
@@ -223,5 +223,9 @@
     <string name="enable_recent_apps">Taskbar can optionally show icons for your most recently used apps along the edge of your screen.  To do this, Taskbar requires usage access permissions.\n\nEnable support for recent apps?</string>
 
     <string name="disable_scrolling_list">Disable scrolling list</string>
+
+    <string name="double_tap_to_sleep">Double tap to sleep</string>
+    <string name="enable_double_tap_to_sleep">Enable double tap to sleep?</string>
+    <string name="action_dont_show_again">Don\'t show again</string>
 
 </resources>

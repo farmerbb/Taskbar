@@ -22,10 +22,12 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
@@ -33,7 +35,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -106,6 +111,102 @@ public class HomeActivity extends Activity {
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     setWallpaper();
                 }
+                return false;
+            }
+        });
+
+        final GestureDetector detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {}
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {}
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return false;
+            }
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return false;
+            }
+        });
+
+        detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                final SharedPreferences pref = U.getSharedPreferences(HomeActivity.this);
+                if(getResources().getConfiguration().keyboard == Configuration.KEYBOARD_NOKEYS
+                        && !pref.getBoolean("dont_show_double_tap_dialog", false)) {
+                    if(pref.getBoolean("double_tap_to_sleep", false)) {
+                        U.lockDevice(HomeActivity.this);
+                    } else {
+                        int theme = -1;
+                        switch(pref.getString("theme", "light")) {
+                            case "light":
+                                theme = R.style.AppTheme;
+                                break;
+                            case "dark":
+                                theme = R.style.AppTheme_Dark;
+                                break;
+                        }
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(HomeActivity.this, theme));
+                        builder.setTitle(R.string.double_tap_to_sleep)
+                                .setMessage(R.string.enable_double_tap_to_sleep)
+                                .setNegativeButton(pref.getBoolean("double_tap_dialog_shown", false)
+                                        ? R.string.action_dont_show_again
+                                        : R.string.action_cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        pref.edit().putBoolean(pref.getBoolean("double_tap_dialog_shown", false)
+                                                ? "dont_show_double_tap_dialog"
+                                                : "double_tap_dialog_shown", true).apply();
+                                    }
+                                })
+                                .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        pref.edit().putBoolean("double_tap_to_sleep", true).apply();
+                                        U.lockDevice(HomeActivity.this);
+                                    }
+                                });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTapEvent(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                return false;
+            }
+
+        });
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                detector.onTouchEvent(event);
                 return false;
             }
         });
