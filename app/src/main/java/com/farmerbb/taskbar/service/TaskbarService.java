@@ -45,6 +45,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
@@ -678,11 +679,16 @@ public class TaskbarService extends Service {
                     public void run() {
                         if(numOfEntries > 0) {
                             ViewGroup.LayoutParams params = scrollView.getLayoutParams();
+                            DisplayMetrics metrics = getResources().getDisplayMetrics();
 
                             if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
-                                params.height = getResources().getDimensionPixelSize(R.dimen.icon_size) * Math.min(numOfEntries, MAX_NUM_OF_COLUMNS);
+                                float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
+
+                                params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries, maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size));
                             } else {
-                                params.width = getResources().getDimensionPixelSize(R.dimen.icon_size) * Math.min(numOfEntries, MAX_NUM_OF_COLUMNS);
+                                float maxScreenSize = metrics.widthPixels;
+
+                                params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries, maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size));
                             }
 
                             scrollView.setLayoutParams(params);

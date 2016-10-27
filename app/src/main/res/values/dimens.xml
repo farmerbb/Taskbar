@@ -30,4 +30,5 @@
     <dimen name="max_width">@dimen/match_parent</dimen>
     <dimen name="app_drawer_icon_padding">4dp</dimen>
     <dimen name="app_drawer_icon_padding_alt">7dp</dimen>
+    <dimen name="base_taskbar_size">92dp</dimen>
 </resources>
