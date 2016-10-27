@@ -433,7 +433,7 @@ public class TaskbarService extends Service {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    private void updateRecentApps(boolean firstRefresh) {
+    private void updateRecentApps(final boolean firstRefresh) {
         final PackageManager pm = getPackageManager();
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
         final List<AppEntry> entries = new ArrayList<>();
@@ -701,8 +701,36 @@ public class TaskbarService extends Service {
 
                             isShowingRecents = true;
                             if(shouldRefreshRecents) {
-                                scrollView.setVisibility(View.VISIBLE);
+                                if(firstRefresh)
+                                    scrollView.setVisibility(View.INVISIBLE);
+                                else
+                                    scrollView.setVisibility(View.VISIBLE);
                             }
+
+                            if(firstRefresh)
+                                new Handler().post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        switch(U.getTaskbarPosition(TaskbarService.this)) {
+                                            case "bottom_left":
+                                            case "top_left":
+                                            case "top_vertical_left":
+                                            case "top_vertical_right":
+                                                scrollView.scrollTo(0, 0);
+                                                break;
+                                            case "bottom_vertical_left":
+                                            case "bottom_right":
+                                            case "bottom_vertical_right":
+                                            case "top_right":
+                                                scrollView.scrollTo(scrollView.getWidth(), scrollView.getHeight());
+                                                break;
+                                        }
+
+                                        if(shouldRefreshRecents) {
+                                            scrollView.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                });
                         } else {
                             isShowingRecents = false;
                             scrollView.setVisibility(View.GONE);
