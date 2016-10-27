@@ -553,6 +553,13 @@ public class U {
         return numOfColumns;
     }
 
+    public static int getMaxNumOfEntries(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getBoolean("disable_scrolling_list", false)
+                ? getMaxNumOfColumns(context)
+                : Integer.valueOf(pref.getString("max_num_of_recents", "10"));
+    }
+
     private static int getStatusBarHeight(Context context) {
         int statusBarHeight = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");

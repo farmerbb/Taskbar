@@ -436,6 +436,7 @@ public class TaskbarService extends Service {
         final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfColumns(this);
         final List<AppEntry> entries = new ArrayList<>();
         List<Intent> intentCache = new ArrayList<>();
+        int maxNumOfEntries = U.getMaxNumOfEntries(this);
         
         if(pba.getPinnedApps().size() > 0) {
             List<String> pinnedAppsToRemove = new ArrayList<>();
@@ -456,12 +457,12 @@ public class TaskbarService extends Service {
 
         // Get list of all recently used apps
         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        List<UsageStats> usageStatsList = pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS
+        List<UsageStats> usageStatsList = pba.getPinnedApps().size() < maxNumOfEntries
                 ? mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis())
                 : new ArrayList<UsageStats>();
 
         if(usageStatsList.size() > 0 || pba.getPinnedApps().size() > 0) {
-            if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
+            if(pba.getPinnedApps().size() < maxNumOfEntries) {
                 List<UsageStats> usageStatsList2 = new ArrayList<>();
                 List<UsageStats> usageStatsList3 = new ArrayList<>();
                 List<UsageStats> usageStatsList4 = new ArrayList<>();
@@ -569,7 +570,7 @@ public class TaskbarService extends Service {
                 }
 
                 // Generate the AppEntries for TaskbarAdapter
-                int number = usageStatsList5.size() == MAX_NUM_OF_COLUMNS
+                int number = usageStatsList5.size() == maxNumOfEntries
                         ? usageStatsList5.size() - pba.getPinnedApps().size()
                         : usageStatsList5.size();
 
@@ -579,11 +580,6 @@ public class TaskbarService extends Service {
                     entries.add(new AppEntry(usageStatsList5.get(i).getPackageName(), null, null, null, false));
                 }
             }
-
-            SharedPreferences pref = U.getSharedPreferences(this);
-            int maxNumOfEntries = pref.getBoolean("disable_scrolling_list", false)
-                    ? MAX_NUM_OF_COLUMNS
-                    : Integer.valueOf(pref.getString("max_num_of_recents", "10"));
 
             while(entries.size() > maxNumOfEntries) {
                 try {

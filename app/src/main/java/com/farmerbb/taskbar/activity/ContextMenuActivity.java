@@ -218,7 +218,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     findPreference("block_app").setOnPreferenceClickListener(this);
                     findPreference("block_app").setTitle(R.string.unblock_app);
                 } else {
-                    final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfColumns(this);
+                    final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfEntries(this);
 
                     if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
                         addPreferencesFromResource(R.xml.pref_context_menu_pin);
