@@ -734,16 +734,22 @@ public class TaskbarService extends Service {
                                     public void run() {
                                         switch(U.getTaskbarPosition(TaskbarService.this)) {
                                             case "bottom_left":
+                                            case "bottom_right":
                                             case "top_left":
-                                            case "top_vertical_left":
-                                            case "top_vertical_right":
-                                                scrollView.scrollTo(0, 0);
+                                            case "top_right":
+                                                if(sortOrder.contains("false"))
+                                                    scrollView.scrollTo(0, 0);
+                                                else if(sortOrder.contains("true"))
+                                                    scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
                                                 break;
                                             case "bottom_vertical_left":
-                                            case "bottom_right":
                                             case "bottom_vertical_right":
-                                            case "top_right":
-                                                scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
+                                            case "top_vertical_left":
+                                            case "top_vertical_right":
+                                                if(sortOrder.contains("false"))
+                                                    scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
+                                                else if(sortOrder.contains("true"))
+                                                    scrollView.scrollTo(0, 0);
                                                 break;
                                         }
 
