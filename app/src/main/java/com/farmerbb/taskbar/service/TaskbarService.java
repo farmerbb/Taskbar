@@ -700,14 +700,14 @@ public class TaskbarService extends Service {
                             }
 
                             isShowingRecents = true;
-                            if(shouldRefreshRecents) {
+                            if(shouldRefreshRecents && scrollView.getVisibility() != View.VISIBLE) {
                                 if(firstRefresh)
                                     scrollView.setVisibility(View.INVISIBLE);
                                 else
                                     scrollView.setVisibility(View.VISIBLE);
                             }
 
-                            if(firstRefresh)
+                            if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
                                 new Handler().post(new Runnable() {
                                     @Override
                                     public void run() {
