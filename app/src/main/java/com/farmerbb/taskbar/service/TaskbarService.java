@@ -473,6 +473,7 @@ public class TaskbarService extends Service {
                 List<UsageStats> usageStatsList3 = new ArrayList<>();
                 List<UsageStats> usageStatsList4 = new ArrayList<>();
                 List<UsageStats> usageStatsList5 = new ArrayList<>();
+                List<UsageStats> usageStatsList6;
 
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                 homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -559,6 +560,12 @@ public class TaskbarService extends Service {
                     }
                 }
 
+                // Truncate list to a maximum length
+                if(usageStatsList5.size() > maxNumOfEntries)
+                    usageStatsList6 = usageStatsList5.subList(0, maxNumOfEntries);
+                else
+                    usageStatsList6 = usageStatsList5;
+
                 // Determine if we need to reverse the order
                 boolean needToReverseOrder;
                 switch(U.getTaskbarPosition(this)) {
@@ -572,13 +579,13 @@ public class TaskbarService extends Service {
                 }
 
                 if(needToReverseOrder) {
-                    Collections.reverse(usageStatsList5);
+                    Collections.reverse(usageStatsList6);
                 }
 
                 // Generate the AppEntries for TaskbarAdapter
-                int number = usageStatsList5.size() == maxNumOfEntries
-                        ? usageStatsList5.size() - pba.getPinnedApps().size()
-                        : usageStatsList5.size();
+                int number = usageStatsList6.size() == maxNumOfEntries
+                        ? usageStatsList6.size() - pba.getPinnedApps().size()
+                        : usageStatsList6.size();
 
                 UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
                 LauncherApps launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
@@ -587,12 +594,12 @@ public class TaskbarService extends Service {
 
                 for(int i = 0; i < number; i++) {
                     for(UserHandle handle : userHandles) {
-                        List<LauncherActivityInfo> list = launcherApps.getActivityList(usageStatsList5.get(i).getPackageName(), handle);
+                        List<LauncherActivityInfo> list = launcherApps.getActivityList(usageStatsList6.get(i).getPackageName(), handle);
                         if(!list.isEmpty()) {
                             launcherAppCache.add(list.get(0));
 
                             AppEntry newEntry = new AppEntry(
-                                    usageStatsList5.get(i).getPackageName(),
+                                    usageStatsList6.get(i).getPackageName(),
                                     null,
                                     null,
                                     null,
