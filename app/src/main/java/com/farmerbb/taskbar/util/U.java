@@ -640,7 +640,21 @@ public class U {
             for(UserHandle handle : userHandles) {
                 List<LauncherActivityInfo> list = launcherApps.getActivityList(entry.getPackageName(), handle);
                 if(!list.isEmpty()) {
-                    appInfo = list.get(0);
+                    // Google App workaround
+                    if(!entry.getPackageName().equals("com.google.android.googlequicksearchbox"))
+                        appInfo = list.get(0);
+                    else {
+                        boolean added = false;
+                        for(LauncherActivityInfo info : list) {
+                            if(info.getName().equals("com.google.android.googlequicksearchbox.SearchActivity")) {
+                                appInfo = info;
+                                added = true;
+                            }
+                        }
+
+                        if(!added) appInfo = list.get(0);
+                    }
+
                     break;
                 }
             }

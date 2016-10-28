@@ -594,12 +594,26 @@ public class TaskbarService extends Service {
 
                 for(int i = 0; i < number; i++) {
                     for(UserHandle handle : userHandles) {
-                        List<LauncherActivityInfo> list = launcherApps.getActivityList(usageStatsList6.get(i).getPackageName(), handle);
+                        String packageName = usageStatsList6.get(i).getPackageName();
+                        List<LauncherActivityInfo> list = launcherApps.getActivityList(packageName, handle);
                         if(!list.isEmpty()) {
-                            launcherAppCache.add(list.get(0));
+                            // Google App workaround
+                            if(!packageName.equals("com.google.android.googlequicksearchbox"))
+                                launcherAppCache.add(list.get(0));
+                            else {
+                                boolean added = false;
+                                for(LauncherActivityInfo info : list) {
+                                    if(info.getName().equals("com.google.android.googlequicksearchbox.SearchActivity")) {
+                                        launcherAppCache.add(info);
+                                        added = true;
+                                    }
+                                }
+
+                                if(!added) launcherAppCache.add(list.get(0));
+                            }
 
                             AppEntry newEntry = new AppEntry(
-                                    usageStatsList6.get(i).getPackageName(),
+                                    packageName,
                                     null,
                                     null,
                                     null,
