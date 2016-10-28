@@ -729,7 +729,10 @@ public class TaskbarService extends Service {
                                             case "bottom_right":
                                             case "bottom_vertical_right":
                                             case "top_right":
-                                                scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
+                                                scrollView.scrollTo(taskbar.getWidth() - scrollView.getWidth()
+                                                                + getResources().getDimensionPixelSize(R.dimen.divider_size),
+                                                        taskbar.getHeight() - scrollView.getHeight()
+                                                                + getResources().getDimensionPixelSize(R.dimen.divider_size));
                                                 break;
                                         }
 

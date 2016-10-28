@@ -581,13 +581,11 @@ public class U {
         return position;
     }
 
-    public static int getMaxNumOfColumns(Context context) {
-        // The base Taskbar size without any recent apps added.
-        // Someday this might be automatically calculated, but today is not that day.
-        float baseTaskbarSize = 92;
+    private static int getMaxNumOfColumns(Context context) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float baseTaskbarSize = context.getResources().getDimension(R.dimen.base_taskbar_size) / metrics.density;
         int numOfColumns = 0;
 
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         float maxScreenSize = getTaskbarPosition(context).contains("vertical")
                 ? (metrics.heightPixels - getStatusBarHeight(context)) / metrics.density
                 : metrics.widthPixels / metrics.density;
