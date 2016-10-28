@@ -51,7 +51,7 @@ public class DummyActivity extends Activity {
             if(getIntent().hasExtra("uninstall")) {
                 UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
 
-                Intent intent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("package_name")));
+                Intent intent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + getIntent().getStringExtra("uninstall")));
                 intent.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(getIntent().getLongExtra("user_id", 0)));
 
                 try {
