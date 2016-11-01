@@ -279,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
 
                 ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
                         .setShortLabel(getString(R.string.start_taskbar))
-                        .setLongLabel(getString(R.string.start_taskbar_long))
                         .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_start))
                         .setIntent(intent)
                         .build();
@@ -290,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
 
                 ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
                         .setShortLabel(getString(R.string.pref_header_freeform))
-                        .setLongLabel(getString(R.string.freeform_mode_long))
                         .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_freeform))
                         .setIntent(intent2)
                         .build();
