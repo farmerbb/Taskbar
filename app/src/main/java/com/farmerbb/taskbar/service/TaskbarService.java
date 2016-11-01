@@ -272,6 +272,13 @@ public class TaskbarService extends Service {
             layout.findViewById(R.id.space_alt).setVisibility(View.GONE);
         }
 
+        space.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleTaskbar();
+            }
+        });
+
         startButton = (ImageView) layout.findViewById(R.id.start_button);
         int padding;
 
