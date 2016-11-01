@@ -437,7 +437,9 @@ public class U {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-        launcherApps.startMainActivity(componentName, userManager.getUserForSerialNumber(userId), null, bundle);
+        try {
+            launcherApps.startMainActivity(componentName, userManager.getUserForSerialNumber(userId), null, bundle);
+        } catch (NullPointerException e) { /* Gracefully fail */ }
     }
 
     public static void checkForUpdates(Context context) {
