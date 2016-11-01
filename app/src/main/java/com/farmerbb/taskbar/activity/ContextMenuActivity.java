@@ -26,6 +26,7 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ShortcutInfo;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
@@ -50,6 +51,8 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
+import java.util.List;
+
 public class ContextMenuActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 
     String packageName;
@@ -60,6 +63,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
     boolean isStartButton = false;
+    boolean secondaryMenu = false;
+
+    List<ShortcutInfo> shortcuts;
 
     @SuppressLint("RtlHardcoded")
     @SuppressWarnings("deprecation")
@@ -74,8 +80,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        SharedPreferences pref = U.getSharedPreferences(this);
-
         DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -174,7 +178,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         View view = findViewById(android.R.id.list);
         if(view != null) view.setPadding(0, 0, 0, 0);
 
-        // Generate options to show on the menu, depending on which icon was clicked
+        generateMenu();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void generateMenu() {
         if(isStartButton) {
             addPreferencesFromResource(R.xml.pref_context_menu_open_settings);
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
@@ -197,11 +205,23 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("header").setTitle(appName);
             }
 
+
+            SharedPreferences pref = U.getSharedPreferences(this);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
                     && (FreeformHackHelper.getInstance().isFreeformHackActive() || isInMultiWindowMode())) {
                 addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
+            }
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                int shortcutCount = getLauncherShortcuts();
+
+                if(shortcutCount > 1) {
+                    addPreferencesFromResource(R.xml.pref_context_menu_shortcuts);
+                    findPreference("app_shortcuts").setOnPreferenceClickListener(this);
+                } else if(shortcutCount == 1)
+                    generateShortcuts();
             }
 
             final PackageManager pm = getPackageManager();
@@ -244,7 +264,42 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     }
 
     @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.N)
+    private void generateShortcuts() {
+        addPreferencesFromResource(R.xml.pref_context_menu_shortcut_list);
+        switch(shortcuts.size()) {
+            case 5:
+                findPreference("shortcut_5").setTitle(getShortcutTitle(shortcuts.get(4)));
+                findPreference("shortcut_5").setOnPreferenceClickListener(this);
+            case 4:
+                findPreference("shortcut_4").setTitle(getShortcutTitle(shortcuts.get(3)));
+                findPreference("shortcut_4").setOnPreferenceClickListener(this);
+            case 3:
+                findPreference("shortcut_3").setTitle(getShortcutTitle(shortcuts.get(2)));
+                findPreference("shortcut_3").setOnPreferenceClickListener(this);
+            case 2:
+                findPreference("shortcut_2").setTitle(getShortcutTitle(shortcuts.get(1)));
+                findPreference("shortcut_2").setOnPreferenceClickListener(this);
+            case 1:
+                findPreference("shortcut_1").setTitle(getShortcutTitle(shortcuts.get(0)));
+                findPreference("shortcut_1").setOnPreferenceClickListener(this);
+                break;
+        }
+
+        switch(shortcuts.size()) {
+            case 1:
+                getPreferenceScreen().removePreference(findPreference("shortcut_2"));
+            case 2:
+                getPreferenceScreen().removePreference(findPreference("shortcut_3"));
+            case 3:
+                getPreferenceScreen().removePreference(findPreference("shortcut_4"));
+            case 4:
+                getPreferenceScreen().removePreference(findPreference("shortcut_5"));
+                break;
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N_MR1)
     @Override
     public boolean onPreferenceClick(Preference p) {
         UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
@@ -252,7 +307,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         boolean appIsValid = isStartButton ||
                 !launcherApps.getActivityList(getIntent().getStringExtra("package_name"),
                         userManager.getUserForSerialNumber(userId)).isEmpty();
-        boolean dontFinish = false;
 
         if(appIsValid) switch(p.getKey()) {
             case "app_info":
@@ -353,7 +407,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
                 }
 
-                dontFinish = true;
+                secondaryMenu = true;
                 break;
             case "window_size_standard":
             case "window_size_large":
@@ -374,9 +428,25 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 break;
+            case "app_shortcuts":
+                getPreferenceScreen().removeAll();
+                generateShortcuts();
+
+                secondaryMenu = true;
+                break;
+            case "shortcut_1":
+            case "shortcut_2":
+            case "shortcut_3":
+            case "shortcut_4":
+            case "shortcut_5":
+                U.startShortcut(this, componentName, shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1));
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
         }
 
-        if(!dontFinish) finish();
+        if(!secondaryMenu) finish();
         return true;
     }
 
@@ -416,5 +486,45 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
             startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private int getLauncherShortcuts() {
+        LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
+        if(launcherApps.hasShortcutHostPermission()) {
+            UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
+
+            LauncherApps.ShortcutQuery query = new LauncherApps.ShortcutQuery();
+            query.setActivity(ComponentName.unflattenFromString(componentName));
+            query.setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC
+                    | LauncherApps.ShortcutQuery.FLAG_MATCH_MANIFEST
+                    | LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED);
+
+            shortcuts = launcherApps.getShortcuts(query, userManager.getUserForSerialNumber(userId));
+            return shortcuts.size();
+        }
+
+        return 0;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private CharSequence getShortcutTitle(ShortcutInfo shortcut) {
+        CharSequence longLabel = shortcut.getLongLabel();
+        if(longLabel != null && longLabel.length() > 0 && longLabel.length() <= 20)
+            return longLabel;
+        else
+            return shortcut.getShortLabel();
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onBackPressed() {
+        if(secondaryMenu) {
+            secondaryMenu = false;
+
+            getPreferenceScreen().removeAll();
+            generateMenu();
+        } else
+            super.onBackPressed();
     }
 }

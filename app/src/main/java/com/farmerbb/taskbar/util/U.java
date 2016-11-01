@@ -30,6 +30,7 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ShortcutInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -141,6 +142,18 @@ public class U {
         toast.show();
     }
 
+    public static void startShortcut(Context context, String componentName, ShortcutInfo shortcut) {
+        launchApp(context,
+                null,
+                componentName,
+                0,
+                null,
+                false,
+                false,
+                false,
+                shortcut);
+    }
+
     public static void launchApp(final Context context,
                                  final String packageName,
                                  final String componentName,
@@ -148,6 +161,25 @@ public class U {
                                  final boolean launchedFromTaskbar,
                                  final boolean padStatusBar,
                                  final boolean openInNewWindow) {
+        launchApp(context,
+                packageName,
+                componentName,
+                userId,
+                windowSize,
+                launchedFromTaskbar,
+                padStatusBar,
+                openInNewWindow,
+                null);
+    }
+
+    private static void launchApp(final Context context,
+                                 final String packageName,
+                                 final String componentName,
+                                 final long userId, final String windowSize,
+                                 final boolean launchedFromTaskbar,
+                                 final boolean padStatusBar,
+                                 final boolean openInNewWindow,
+                                 final ShortcutInfo shortcut) {
         boolean shouldDelay = false;
 
         SharedPreferences pref = getSharedPreferences(context);
@@ -172,7 +204,7 @@ public class U {
                         @Override
                         public void run() {
                             continueLaunchingApp(context, packageName, componentName, userId,
-                                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow);
+                                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow, shortcut);
                         }
                     }, 100);
                 }
@@ -182,10 +214,10 @@ public class U {
         if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
             if(!shouldDelay)
                 continueLaunchingApp(context, packageName, componentName, userId,
-                        windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow);
+                        windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow, shortcut);
         } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace() || !openInFullscreen)
             continueLaunchingApp(context, packageName, componentName, userId,
-                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow);
+                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow, shortcut);
     }
 
     @SuppressWarnings("deprecation")
@@ -221,7 +253,8 @@ public class U {
                                              String windowSize,
                                              boolean launchedFromTaskbar,
                                              boolean padStatusBar,
-                                             boolean openInNewWindow) {
+                                             boolean openInNewWindow,
+                                             ShortcutInfo shortcut) {
         SharedPreferences pref = getSharedPreferences(context);
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(componentName));
@@ -255,44 +288,50 @@ public class U {
         }
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
-            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-            if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-                try {
-                    context.startActivity(intent, null);
-                } catch (ActivityNotFoundException e) {
+            if(shortcut == null) {
+                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+                if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                    try {
+                        context.startActivity(intent, null);
+                    } catch (ActivityNotFoundException e) {
+                        launchAndroidForWork(context, intent.getComponent(), null, userId);
+                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                } else
                     launchAndroidForWork(context, intent.getComponent(), null, userId);
-                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
             } else
-                launchAndroidForWork(context, intent.getComponent(), null, userId);
+                launchShortcut(context, shortcut, null);
         } else switch(windowSize) {
             case "standard":
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-                    UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-                    if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-                        try {
-                            context.startActivity(intent);
-                        } catch (ActivityNotFoundException e) {
+                    if(shortcut == null) {
+                        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+                        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                            try {
+                                context.startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                launchAndroidForWork(context, intent.getComponent(), null, userId);
+                            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                        } else
                             launchAndroidForWork(context, intent.getComponent(), null, userId);
-                        } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                     } else
-                        launchAndroidForWork(context, intent.getComponent(), null, userId);
+                        launchShortcut(context, shortcut, null);
                 } else
-                    launchMode1(context, intent, 1, userId);
+                    launchMode1(context, intent, 1, userId, shortcut);
                 break;
             case "large":
-                launchMode1(context, intent, 2, userId);
+                launchMode1(context, intent, 2, userId, shortcut);
                 break;
             case "fullscreen":
-                launchMode2(context, intent, padStatusBar, FULLSCREEN, userId);
+                launchMode2(context, intent, padStatusBar, FULLSCREEN, userId, shortcut);
                 break;
             case "half_left":
-                launchMode2(context, intent, padStatusBar, LEFT, userId);
+                launchMode2(context, intent, padStatusBar, LEFT, userId, shortcut);
                 break;
             case "half_right":
-                launchMode2(context, intent, padStatusBar, RIGHT, userId);
+                launchMode2(context, intent, padStatusBar, RIGHT, userId, shortcut);
                 break;
             case "phone_size":
-                launchMode3(context, intent, userId);
+                launchMode3(context, intent, userId, shortcut);
                 break;
         }
 
@@ -304,7 +343,7 @@ public class U {
     
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode1(Context context, Intent intent, int factor, long userId) {
+    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -320,20 +359,23 @@ public class U {
                 height2
         )).toBundle();
 
-        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-            try {
-                context.startActivity(intent, bundle);
-            } catch (ActivityNotFoundException e) {
+        if(shortcut == null) {
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                try {
+                    context.startActivity(intent, bundle);
+                } catch (ActivityNotFoundException e) {
+                    launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } else
                 launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
         } else
-            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+            launchShortcut(context, shortcut, bundle);
     }
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode2(Context context, Intent intent, boolean padStatusBar, int launchType, long userId) {
+    private static void launchMode2(Context context, Intent intent, boolean padStatusBar, int launchType, long userId, ShortcutInfo shortcut) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -393,20 +435,23 @@ public class U {
                 bottom
         )).toBundle();
 
-        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-            try {
-                context.startActivity(intent, bundle);
-            } catch (ActivityNotFoundException e) {
+        if(shortcut == null) {
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                try {
+                    context.startActivity(intent, bundle);
+                } catch (ActivityNotFoundException e) {
+                    launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } else
                 launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
         } else
-            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+            launchShortcut(context, shortcut, bundle);
     }
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode3(Context context, Intent intent, long userId) {
+    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -422,15 +467,18 @@ public class U {
                 height1 + height2
         )).toBundle();
 
-        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-            try {
-                context.startActivity(intent, bundle);
-            } catch (ActivityNotFoundException e) {
+        if(shortcut == null) {
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                try {
+                    context.startActivity(intent, bundle);
+                } catch (ActivityNotFoundException e) {
+                    launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } else
                 launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
         } else
-            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+            launchShortcut(context, shortcut, bundle);
     }
 
     private static void launchAndroidForWork(Context context, ComponentName componentName, Bundle bundle, long userId) {
@@ -439,7 +487,16 @@ public class U {
 
         try {
             launcherApps.startMainActivity(componentName, userManager.getUserForSerialNumber(userId), null, bundle);
-        } catch (NullPointerException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private static void launchShortcut(Context context, ShortcutInfo shortcut, Bundle bundle) {
+        LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+
+        try {
+            launcherApps.startShortcut(shortcut, null, bundle);
+        } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
     }
 
     public static void checkForUpdates(Context context) {

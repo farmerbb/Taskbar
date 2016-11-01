@@ -228,4 +228,6 @@
     <string name="enable_double_tap_to_sleep">Enable double tap to sleep?</string>
     <string name="action_dont_show_again">Don\'t show again</string>
 
+    <string name="app_shortcuts">Shortcuts&#8230;</string>
+
 </resources>
