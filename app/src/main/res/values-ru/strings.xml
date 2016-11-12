@@ -1,466 +1,231 @@
-
-
-1
 <?xml version="1.0" encoding="utf-8"?>
-2
 <!-- Copyright 2016 Braden Farmer
-3
-​
-4
+
      Licensed under the Apache License, Version 2.0 (the "License");
-5
      you may not use this file except in compliance with the License.
-6
      You may obtain a copy of the License at
-7
-​
-8
+
           http://www.apache.org/licenses/LICENSE-2.0
-9
-​
-10
+
      Unless required by applicable law or agreed to in writing, software
-11
      distributed under the License is distributed on an "AS IS" BASIS,
-12
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-13
      See the License for the specific language governing permissions and
-14
      limitations under the License.
-15
 -->
-16
-​
-17
+
 <resources>
-18
-​
-19
+
     <string name="app_name">Taskbar</string>
-20
-    <string name="not_in_multi_window">Not in multi-window mode</string>
-21
-​
-22
-    <string name="taskbar_is_active">Taskbar is active</string>
-23
-    <string name="click_to_open_settings">Click to open settings</string>
-24
-    <string name="action_show">Show taskbar</string>
-25
-    <string name="action_hide">Hide taskbar</string>
-26
-    <string name="action_quit">Quit</string>
-27
-    <string name="action_grant_permission">Grant permission</string>
-28
-​
-29
-    <string name="permission_dialog_title">Permission needed</string>
-30
-    <string name="permission_dialog_message">Taskbar requires permission to draw over other apps before it can start.\n\nPlease press \'\'Grant Permission\'\' and ensure that Taskbar is set to \'\'Yes\'\'</string>
-31
-​
-32
-    <string name="pref_header_general">General settings</string>
-33
-    <string name="pref_title_start_menu_layout">Start menu layout</string>
-34
-    <string name="pref_title_background_tint">Taskbar background tint</string>
-35
-    <string name="pref_title_scrollbar">Show scrollbar on start menu</string>
-36
-    <string name="pref_title_start_on_boot">Launch on boot</string>
-37
-​
-38
+    <string name="not_in_multi_window">Не в многооконном режиме</string>
+
+    <string name="taskbar_is_active">Taskbar запущен</string>
+    <string name="click_to_open_settings">Нажмите для запуска настроек</string>
+    <string name="action_show">Показать</string>
+    <string name="action_hide">Скрыть</string>
+    <string name="action_quit">Выйти</string>
+    <string name="action_grant_permission">Разрешить</string>
+
+    <string name="permission_dialog_title">Необходимо разрешение</string>
+    <string name="permission_dialog_message">Taskbar требует разрешение "Показывать поверх других окон" для его запуска.\n\nПожалйста, нажмите \'\'Разрешить\'\' и убедитись, что у Taskbar значение \'\'Да\'\'</string>
+
+    <string name="pref_header_general">Главные настройки</string>
+    <string name="pref_title_start_menu_layout">Макет меню</string>
+    <string name="pref_title_background_tint">Фон меню</string>
+    <string name="pref_title_scrollbar">Показать полосу прокрутки в меню</string>
+    <string name="pref_title_start_on_boot">Запускать при загрузке</string>
+
     <string-array name="pref_start_menu_list">
-39
-        <item>List</item>
-40
-        <item>Grid</item>
-41
+        <item>Список</item>
+        <item>Сетка</item>
     </string-array>
-42
-​
-43
-    <string name="pref_header_recent_apps">Recent apps</string>
-44
-​
-45
-    <string name="pref_title_enable_recents">Enable/disable usage access</string>
-46
-    <string name="pref_title_recents_refresh_interval">Refresh list every</string>
-47
+
+    <string name="pref_header_recent_apps">Недавние приложения</string>
+
+    <string name="pref_title_enable_recents">Включить/выключить разрешение</string>
+    <string name="pref_title_recents_refresh_interval">Обновлять список через</string>
     <string-array name="pref_refresh_frequency">
-48
-        <item>1 second</item>
-49
-        <item>2 seconds</item>
-50
-        <item>5 seconds</item>
-51
+        <item>1 секунду</item>
+        <item>2 секунды</item>
+        <item>5 секунд</item>
     </string-array>
-52
-​
-53
-    <string name="pref_title_amount_of_recents">Display apps launched</string>
-54
+
+    <string name="pref_title_amount_of_recents">Показывать список</string>
     <string-array name="pref_recents_amount">
-55
-        <item>Within the past day</item>
-56
-        <item>After Taskbar start</item>
-57
+        <item>В течение дня</item>
+        <item>После запуска Taskbar</item>
     </string-array>
-58
-​
-59
-    <string name="pref_title_sort_order">Sort order</string>
-60
+
+    <string name="pref_title_sort_order">Сортировка за</string>
     <string-array name="pref_sort_order">
-61
-        <item>Recently used (descending)</item>
-62
-        <item>Recently used (ascending)</item>
-63
-        <item>Most time used (descending)</item>
-64
-        <item>Most time used (ascending)</item>
-65
+        <item>частотой использования (по убыванию)</item>
+        <item>частотой использования (по возрастанию)</item>
+        <item>временем использования (по убыванию)</item>
+        <item>временем использования (по возрастанию)</item>
     </string-array>
-66
-​
-67
-    <string name="pref_header_advanced">Advanced settings</string>
-68
-​
-69
-    <string name="pref_title_freeform_hack">Freeform window support</string>
-70
-    <string name="pref_description_freeform_hack">Allows Taskbar to launch apps in freeform window mode, for a more desktop-like experience.\n\nThis feature is experimental, and may cause issues with standard split-screen multitasking.</string>
-71
-​
-72
-    <string name="pref_header_about">About Taskbar</string>
-73
-    <string name="pref_about_description">Taskbar: start menu and recent apps at your fingertips\n\n&#169; 2016 Braden Farmer\nApp logo by Mark Morilla\n\nClick here to check for updates or leave a rating! %1$s</string>
-74
-​
-75
-    <string name="pref_title_hide_taskbar">Collapse Taskbar when selecting apps</string>
-76
-​
-77
-    <string name="pref_title_launcher">Replace home screen</string>
-78
-    <string name="pref_description_launcher">Use Taskbar as a home screen replacement</string>
-79
-​
-80
-    <string name="set_wallpaper">Set wallpaper using&#8230;</string>
-81
-    <string name="pref_disable_animations">Faster app switching</string>
-82
-​
-83
-    <string name="pref_title_position">Position on screen</string>
-84
+
+    <string name="pref_header_advanced">Расширенные настройки</string>
+
+    <string name="pref_title_freeform_hack">Режим Freeform</string>
+    <string name="pref_description_freeform_hack">Разрешить Taskbar запускать приложения в режиме Freeform для большей схожести с ПК.\n\nЭто эксперементальная возможность, могут быть проблемы со стандартным режимом многозадачности.</string>
+
+    <string name="pref_header_about">О Taskbar</string>
+    <string name="pref_about_description">Taskbar: меню приложений и список недавних у вас под рукой\n\n&#169; 2016 Braden Farmer\nЛоготип: Mark Morilla\n\nНажмите сюда, чтобы оставить оценку или обновиться! %1$s</string>
+
+    <string name="pref_title_hide_taskbar">Скрыть Taskbar после выбора приложения</string>
+
+    <string name="pref_title_launcher">Заменить главный экран</string>
+    <string name="pref_description_launcher">Использовать Taskbar как замену главного экрана</string>
+
+    <string name="set_wallpaper">Сменить обои используя&#8230;</string>
+    <string name="pref_disable_animations">Быстрое переключение приложений</string>
+
+    <string name="pref_title_position">Размещение на экране</string>
     <string-array name="pref_position_list">
-85
-        <item>Bottom left (horizontal)</item>
-86
-        <item>Bottom left (vertical)</item>
-87
-        <item>Bottom right (horizontal)</item>
-88
-        <item>Bottom right (vertical)</item>
-89
-        <item>Top left (horizontal)</item>
-90
-        <item>Top left (vertical)</item>
-91
-        <item>Top right (horizontal)</item>
-92
-        <item>Top right (vertical)</item>
-93
+        <item>Снизу слева (по горинзонтали)</item>
+        <item>Снизу слева (по вертикали)</item>
+        <item>Снизу справа (по горинзонтали)</item>
+        <item>Снизу справа (по вертикали)</item>
+        <item>Сверху слева (по горинзонтали)</item>
+        <item>Сверху слева (по вертикали)</item>
+        <item>Сверху справа (по горинзонтали)</item>
+        <item>Сверху справа (по вертикали)</item>
     </string-array>
-94
-​
-95
-    <string name="app_info">App info</string>
-96
-    <string name="uninstall">Uninstall</string>
-97
-    <string name="open_taskbar_settings">Open settings</string>
-98
-    <string name="quit_taskbar">Quit</string>
-99
-​
-100
-    <string name="pref_title_keyboard_shortcut">Enable keyboard shortcuts</string>
-101
-    <string name="pref_description_keyboard_shortcut">Start/stop Taskbar\n&#8226; WinKey+M, Search+M\n\nLock device\n&#8226; WinKey+L, Search+L\n\nShow start menu\n&#8226; WinKey, Search\n(requires Taskbar to be set as the search assistant in Settings)</string>
-102
-    <string name="loading_apps">Loading apps&#8230;</string>
-103
-    <string name="press_enter">No apps found\n\nPress Enter to search using Google</string>
-104
-    <string name="nothing_to_see_here">Nothing to see here, move along&#8230;</string>
-105
-​
-106
-    <string name="error_dialog_title">Error</string>
-107
-    <string name="error_dialog_message">Unfortunately, due to OEM restrictions, this feature can\'t be enabled on your device.\n\nYou may still be able to enable it by using this adb shell command:\n\nappops set %1$s %2$s allow</string>
-108
+
+    <string name="app_info">Информация</string>
+    <string name="uninstall">Удалить</string>
+    <string name="open_taskbar_settings">Настройки</string>
+    <string name="quit_taskbar">Выход</string>
+
+    <string name="pref_title_keyboard_shortcut">Включить управление клавиатурой</string>
+    <string name="pref_description_keyboard_shortcut">Запуск/остановка Taskbar\n&#8226; WinKey+M, Search+M\n\nЗаблокировать устройство\n&#8226; WinKey+L, Search+L\n\nПоказать меню\n&#8226; WinKey, Search\n(нужно установить Taskbar ассистентом по умолчанию)</string>
+    <string name="loading_apps">Загрузка&#8230;</string>
+    <string name="press_enter">Не найдено приложений\n\nНажмите Enter для поиска в Google</string>
+    <string name="nothing_to_see_here">Здесь ничего нет&#8230;</string>
+
+    <string name="error_dialog_title">Ошибка</string>
+    <string name="error_dialog_message">К сожалению, эту функцию нельзя включить на вашем устройстве.\n\nВы можете включить ее самостоятельно используя adb shell:\n\nappops set %1$s %2$s allow</string>
     <string name="action_ok">OK</string>
-109
-    <string name="action_cancel">Cancel</string>
-110
-​
-111
-    <string name="pin_app">Pin to recents</string>
-112
-    <string name="unpin_app">Unpin from recents</string>
-113
-    <string name="block_app">Block from recents</string>
-114
-    <string name="unblock_app">Unblock from recents</string>
-115
-    <string name="clear_pinned_apps">Reset per-app preferences</string>
-116
-    <string name="are_you_sure">This will reset the following:\n\n&#8226; Pinned Taskbar apps\n&#8226; Blocked Taskbar apps\n\nAre you sure?</string>
-117
-​
-118
-    <string name="pref_title_hide_foreground">Hide icon for foreground application</string>
-119
-​
-120
-    <string name="pref_title_theme">Theme</string>
-121
+    <string name="action_cancel">Отмена</string>
+
+    <string name="pin_app">Закрепить</string>
+    <string name="unpin_app">Открепить</string>
+    <string name="block_app">Не показывать в Недавних Приложениях</string>
+    <string name="unblock_app">Показывать в Недавних Приложениях</string>
+    <string name="clear_pinned_apps">Сбросить список закрепленных приложений</string>
+    <string name="are_you_sure">Это сбросит:\n\n&#8226; Закрепленные приложения\n&#8226; Заблокированные приложения\n&#8226;\n\nВы уверены?</string>
+
+    <string name="pref_title_hide_foreground">Не показывать текущее приложение</string>
+
+    <string name="pref_title_theme">Тема</string>
     <string-array name="pref_theme_list">
-122
-        <item>Light</item>
-123
-        <item>Dark</item>
-124
+        <item>Светлая</item>
+        <item>Темная</item>
     </string-array>
-125
-​
-126
-    <string name="device_admin_description_short">Allows Taskbar to turn off the device\'s screen</string>
-127
-    <string name="device_admin_description">Allows Taskbar to turn off the device\'s screen.\n\nThis will require you to deactivate Taskbar as a device administrator prior to uninstalling.</string>
-128
-    <string name="lock_device_not_supported">Not supported on this device</string>
-129
-​
-130
-    <string name="pref_title_shortcut_icon">Show shortcut icon for pinned apps</string>
-131
-​
-132
-    <string name="freeform_dialog_title">Enable freeform support</string>
-133
-    <string name="freeform_dialog_message">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options\n\n&#8226; Scroll to the bottom and turn on \'\'Force activities to be resizable\'\'\n\n&#8226; Reboot your device</string>
-134
-​
-135
-    <string name="pref_title_invisible_button">Hide button while Taskbar is collapsed</string>
-136
-    <string name="pref_title_freeform_mode_help">Help &amp; instructions for freeform mode</string>
-137
-    <string name="freeform_help_dialog_title">Help &amp; instructions</string>
-138
-    <string name="freeform_help_dialog_message"><b>About freeform mode</b>\n\nTaskbar lets you launch apps in freeform floating windows on Android 7.0 Nougat. No root access is required. Simply follow these steps to configure your device for launching apps in freeform mode:\n\n<b>1.</b> Check the box for \'\'Freeform window support\'\' inside the Taskbar app\n\n<b>2.</b> Follow the directions that appear in the pop-up to enable the proper settings on your device\n\n<b>3.</b> With Taskbar turned on, go to your device\'s recent apps page\n\n<b>4.</b> Clear all recent apps, then go back to the (empty) recent apps page\n\n<b>5.</b> Press Taskbar\'s start button and select an app to launch it in a freeform window\n\n<b>Troubleshooting</b>\n\n<i>&#8226; Apps still launch full-screen</i>\n\nIf an app is launched that is already loaded into memory, Taskbar will bring it into the foreground. In order to launch the app into freeform mode, it has to be launched from a fresh state.\n\nSwipe the app away from recents, and then re-launch it from the recent apps page using Taskbar. If this doesn\'t work, then long-press the app icon, select \'\'App info\'\', and then force stop the app.\n\nNote that Taskbar can only launch apps in freeform mode from your device\'s recent apps page, from the home screen, or from the freeform workspace itself. Launching apps from within another full-screen app will also launch it into full-screen mode.\n\n<i>&#8226; Apps that are maximized cannot be restored into a window</i>\n\nIf you press the Maximize button on an app\'s title bar, Android will bring the app out of freeform mode and into full-screen mode. As mentioned above, Taskbar can only launch apps into freeform windows if they are launched from a fresh state.\n\nTo fix this, you can maximize windows by tapping or clicking just outside the app\'s window frame.  This will expand the window to fill all the available space while keeping it in the freeform window workspace.\n\n<b>Enabling full system-level freeform window support</b>\n\nIf you have access to a computer with the Android SDK installed, you can enable support for freeform mode at the system level by running the following adb shell command:\n\nsettings put global enable_freeform_support 1\n\nReboot your device after running the above command, and a new button will appear for app entries in your device\'s recent apps page to enter/exit freeform mode for a given app.</string>
-139
-​
-140
-    <string name="action_developer_options">Open Developer Options</string>
-141
-    <string name="action_close">Close</string>
-142
-​
-143
-    <string name="pref_header_freeform">Freeform mode</string>
-144
-    <string name="pref_title_window_size">Default window size</string>
-145
-​
-146
-    <string name="window_size_standard">Standard</string>
-147
-    <string name="window_size_fullscreen">Fullscreen</string>
-148
-    <string name="window_size_phone_size">Phone size</string>
-149
-    <string name="window_size_large">Large</string>
-150
+
+    <string name="device_admin_description_short">Разрешить Taskbar выключать экран</string>
+    <string name="device_admin_description">Разрешает Taskbar выключать экран устройства.\n\nЭто потребует выключения этой возможности для удаления Taskbar.</string>
+    <string name="lock_device_not_supported">Не поддерживается на этом устройстве</string>
+
+    <string name="pref_title_shortcut_icon">Показать значок ярлыка для закрепленных приложений</string>
+
+    <string name="freeform_dialog_title">Включить Freeform</string>
+    <string name="freeform_dialog_message">Для запуска приложений в режиме Freeform:\n\n&#8226; Откройте Настройки Разработчика\n\n&#8226; Прокрутите вниз и включите \'\'Изменение размера в многооконном режиме\'\'\n\n&#8226; Перезагрузите устройство</string>
+
+    <string name="pref_title_invisible_button">Спрятать кнопку Taskbar при скрытии</string>
+    <string name="pref_title_freeform_mode_help">Инструкции для режима Freeform</string>
+    <string name="freeform_help_dialog_title">Инструкции</string>
+    <string name="freeform_help_dialog_message"><b>О режиме</b>\n\nTaskbar разрешает запуск приложений в режиме Freeform на Android 7.0+ без root-прав. Просто выполните следующие шаги:\n\n<b>1.</b> Проверьте настройку \'\'Включить Freeform\'\' внутри Taskbar.\n\n<b>2.</b> Следуйте указаниям в новом окне\n\n<b>3.</b> С включенным Taskbar, откройте список недавних приложений.\n\n<b>4.</b> Закройте все окна там и откройте список снова.\n\n<b>5.</b> Нажмите на меню Taskbar и нажмите на приложение, которое вы хотите запустить в режиме Freeform \n\n<b>Решение проблем</b>\n\n<i>&#8226; Приложения все равно запускаются в полноэкранном режиме</i>\n\nЕсли приложение уже запущено, Taskbar покажет его на переднем плане. Чтобы запустить приложение в режиме Freeform mode, оно должно запуститься заново.\n\n Если это не работает, остановите приложение.\n\nTaskbar может запускать программы в режиме Freeform только со списка недавних приложений, с домашнего экрана или с рабочего стола Freeform. Запуск приложения в полноэкранном приложении запустит его в полноэкранном режиме тоже.\n\n<i>&#8226; Развернутые приложения нельзя вернуть в нормальный размер</i>\n\nЕсли вы нажмете кнопку "Развернуть" на окне приложения, Android вернет приложение в полноэкранный режми. Как сказано выше, Taskbar может запускать приложения в Freeform только если их запускать остановленными.\n\nВы можете развернуть окна нажатием на место, не занятым приложениями.  Это расширит окно на весь экран не переходя в полноэкранный режим.\n\n<b>Включение полного режима Freeform</b>\n\nЕсли у вас есть доступ к компьютеру с установленным Android SDK, вы можете включить поддержку используя adb shell:\n\nsettings put global enable_freeform_support 1\n\nПерезагрузите устройство и новая кнопка появится в окне недавних приложений для переключения режима Freeform определенному приложению.</string>
+
+    <string name="action_developer_options">Настройки Разработчика</string>
+    <string name="action_close">Закрыть</string>
+
+    <string name="pref_header_freeform">Режим Freeform</string>
+    <string name="pref_title_window_size">Размер окна по умолчанию</string>
+
+    <string name="window_size_standard">По умолчанию</string>
+    <string name="window_size_fullscreen">Полный экран</string>
+    <string name="window_size_phone_size">Размер телефона</string>
+    <string name="window_size_large">Огромный</string>
     <string name="window_size_half_left">@string/window_size_half_left_alt</string>
-151
-    <string name="window_size_half_left_alt">Half screen (left/top)</string>
-152
+    <string name="window_size_half_left_alt">Половина экрана (левая/верхняя)</string>
     <string name="window_size_half_right">@string/window_size_half_right_alt</string>
-153
-    <string name="window_size_half_right_alt">Half screen (right/bottom)</string>
-154
-​
-155
-    <string name="pref_title_blacklist">Configure apps in start menu</string>
-156
-    <string name="app_hidden">1 app hidden</string>
-157
-    <string name="apps_hidden">%1$d apps hidden</string>
-158
-    <string name="blacklist_dialog_title">Hidden</string>
-159
-    <string name="top_app">1 top app</string>
-160
-    <string name="top_apps">%1$d top apps</string>
-161
-    <string name="top_apps_dialog_title">Top apps</string>
-162
-    <string name="start_menu_apps">Start menu apps</string>
-163
-​
-164
-    <string name="reboot_required">Reboot your device to complete freeform mode setup</string>
-165
-    <string name="enable_force_activities_resizable">Scroll to the bottom and turn on \'\'Force activities to be resizable\'\'</string>
-166
-    <string name="set_as_default_home">Press \'\'Always\'\' to set Taskbar as your default launcher</string>
-167
-    <string name="enable_developer_options">Enable Developer Options by tapping on the build number 7 times</string>
-168
-​
-169
-    <string name="pref_title_anchor">Anchor Taskbar when screen rotates</string>
-170
-    <string name="pref_title_donate">Donate</string>
-171
-    <string name="pref_summary_donate">Support the development of Taskbar with a small donation by upgrading to the Donate Version</string>
-172
-    <string name="dialog_donate_message">Support the development of Taskbar by upgrading to the Donate Version for %1$s!\n\nThe Donate Version is identical to the free version and your preferences will automatically transfer over.\n\nTaskbar is and will always be 100%% free, open source, with absolutely no ads.  However, your support is greatly appreciated!</string>
-173
-    <string name="action_no_thanks">No thanks</string>
-174
-​
-175
-    <string name="importing_settings">Importing settings&#8230; please wait.</string>
-176
-    <string name="settings_imported_successfully">Settings imported successfully</string>
-177
-    <string name="import_dialog_message">Thank you for purchasing the Donate Version of Taskbar!\n\nYour settings have been imported successfully and you may now uninstall the free version of the app.</string>
-178
-    <string name="action_uninstall">Uninstall</string>
-179
-​
-180
-    <string name="pref_title_hide_when_keyboard_shown">Collapse Taskbar automatically</string>
-181
-    <string name="pref_description_hide_when_keyboard_shown">When the on-screen keyboard is shown, and Taskbar is horizontal, automatically collapse Taskbar to avoid blocking text fields. (Experimental)</string>
-182
-​
-183
-    <string name="pref_max_num_of_recents">Maximum number of recent/pinned apps</string>
-184
+    <string name="window_size_half_right_alt">Половина экрана (правая/нижняя)</string>
+
+    <string name="pref_title_blacklist">Настроить приложения в меню</string>
+    <string name="app_hidden">1 приложение спрятано</string>
+    <string name="apps_hidden">%1$d приложений спрятано</string>
+    <string name="blacklist_dialog_title">Спрятанные</string>
+    <string name="top_app">1 приложение наверху</string>
+    <string name="top_apps">%1$d приложений наверху</string>
+    <string name="top_apps_dialog_title">Первые приложения</string>
+    <string name="start_menu_apps">Приложения в меню</string>
+
+    <string name="reboot_required">Перезагрузите устройство для завершения операции</string>
+    <string name="enable_force_activities_resizable">Прокрутите вниз и включите \'\'Изменение размера в многооконном режиме\'\'\n\n</string>
+    <string name="set_as_default_home">Нажмите \'\'Всегда\'\' для применения Taskbar в качестве рабочего стола</string>
+    <string name="enable_developer_options">Включите Настройки Разработчика нажиманием на номер сборки 7 раз</string>
+
+    <string name="pref_title_anchor">Привязать Taskbar к повороту экрана</string>
+    <string name="pref_title_donate">Пожертвовать</string>
+    <string name="pref_summary_donate">Поддержите разработку Taskbar обновлением до версии Donate</string>
+    <string name="dialog_donate_message">Поддержите разработку Taskbar обновлением до версии Donate за %1$s!\n\nВерсия Donate такая же самая, как и бесплатная. Ваши настройки сохранятся.\n\nTaskbar всегда будет 100%% бесплатным, с открытым исходным кодом и без рекламы. Но ваша поддержка сильно ценится!</string>
+    <string name="action_no_thanks">Нет, спасибо</string>
+
+    <string name="importing_settings">Импортирование настроек&#8230; подождите.</string>
+    <string name="settings_imported_successfully">Импорт успешен</string>
+    <string name="import_dialog_message">Спасибо за покупку версии Donate!\n\nВаши настройки сохранились и вы можете удалить бесплатную версию.</string>
+    <string name="action_uninstall">Удалить</string>
+
+    <string name="pref_title_hide_when_keyboard_shown">Спрятать автоматически</string>
+    <string name="pref_description_hide_when_keyboard_shown">Когда появляется клавиатура и Taskbar в горинзонтальном режиме, спрятать Taskbar для показа текстовых полей</string>
+
+    <string name="pref_max_num_of_recents">Максимальное количество закрепленных приложений</string>
     <string-array name="pref_max_num_of_recents_list">
-185
-        <item>10 apps</item>
-186
-        <item>15 apps</item>
-187
-        <item>20 apps</item>
-188
-        <item>Unlimited</item>
-189
+        <item>10 приложений</item>
+        <item>15 приложений</item>
+        <item>20 приложений</item>
+        <item>Без ограничений</item>
     </string-array>
-190
-​
-191
-    <string name="show_window_sizes">New window&#8230;</string>
-192
-​
-193
-    <string name="icon_pack">Icon pack</string>
-194
-    <string name="icon_pack_none">None</string>
-195
-    <string name="no_icon_packs_installed">No icon packs installed</string>
-196
-​
-197
-    <string name="apply_icon_pack">Apply icon pack</string>
-198
-    <string name="apply_icon_pack_description">Apply \'\'%1$s\'\' to Taskbar?</string>
-199
-    <string name="must_specify_extra">Must specify Intent.EXTRA_PACKAGE_NAME</string>
-200
-    <string name="invalid_package_name">Invalid package name</string>
-201
-​
-202
-    <string name="pref_title_use_mask">Use masks for unthemed icons</string>
-203
-    <string name="pref_description_use_mask">When an icon pack is set, generate icons for unthemed apps using masking images found within the icon pack. (Experimental)</string>
-204
-​
-205
-    <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
-206
-​
-207
-    <string name="already_blacklisted">%1$s can\'t be selected because it is on the hidden apps list</string>
-208
-    <string name="already_top_app">%1$s can\'t be selected because it is on the top apps list</string>
-209
-​
-210
-    <string name="alt_button_config">Alternative position for collapse button</string>
-211
-    <string name="pref_title_open_in_fullscreen">Open windows from fullscreen apps</string>
-212
-    <string name="pref_description_open_in_fullscreen">Requires freeform mode to be initiated at least once after Taskbar starts. When unchecked, freeform windows will only open while in the freeform workspace.</string>
-213
-    <string name="pref_title_save_window_sizes">Save window sizes for apps</string>
-214
-    <string name="pref_description_save_window_sizes">When opening new windows from the context menu</string>
-215
-​
-216
-    <string name="add_shortcut">Add shortcut to home screen</string>
-217
-    <string name="shortcut_created">Freeform mode shortcut created</string>
-218
-​
-219
-    <string name="start_taskbar">Start Taskbar</string>
-220
-    <string name="no_freeform_support">Freeform mode is not enabled on your device &#8211; open Taskbar and enable it first</string>
-221
-    <string name="enable_recent_apps">Taskbar can optionally show icons for your most recently used apps along the edge of your screen.  To do this, Taskbar requires usage access permissions.\n\nEnable support for recent apps?</string>
-222
-​
-223
-    <string name="disable_scrolling_list">Disable scrolling list</string>
-224
-​
-225
+
+    <string name="show_window_sizes">Новое окно&#8230;</string>
+
+    <string name="icon_pack">Пакет иконок</string>
+    <string name="icon_pack_none">Нет</string>
+    <string name="no_icon_packs_installed">Не установлен пакет иконок</string>
+
+    <string name="apply_icon_pack">Применить пакет иконок</string>
+    <string name="apply_icon_pack_description">Применить \'\'%1$s\'\'?</string>
+    <string name="must_specify_extra">Нужно указать Intent.EXTRA_PACKAGE_NAME</string>
+    <string name="invalid_package_name">Неверное имя пакета</string>
+
+    <string name="pref_title_use_mask">Использовать маску для иконок</string>
+    <string name="pref_description_use_mask">Когда пакет иконок установлен, генерировать иконки используя найденные маски</string>
+
+    <string name="pref_title_app_drawer_icon">Использовать иконку Taskbar в качестве иконки меню</string>
+
+    <string name="already_blacklisted">%1$s нельзя выбрать, он уже в списке</string>
+    <string name="already_top_app">%1$s нельзя выбрать, он уже в списке</string>
+
+    <string name="alt_button_config">Другая позиция кнопки скрытия</string>
+    <string name="pref_title_open_in_fullscreen">Открывать в полноэкранном режиме</string>
+    <string name="pref_description_open_in_fullscreen">Требует настройки Freeform. Когда не выбран, окна будут открыватся только в рабочем столе режима Freeform.</string>
+    <string name="pref_title_save_window_sizes">Сохранять размеры окон</string>
+    <string name="pref_description_save_window_sizes">при открытии окон с контекстного меню</string>
+
+    <string name="add_shortcut">Добавить ярльк на рабочий стол</string>
+    <string name="shortcut_created">Ярлык Freeform создан</string>
+
+    <string name="start_taskbar">Запустить Taskbar</string>
+    <string name="no_freeform_support">Режим не выключен на вашем устройстве &#8211; откройте Taskbar и включите его</string>
+    <string name="enable_recent_apps">Taskbar может показывать список недавно запущенных приложений.  Для этого, Taskbar требует доступ к истории использования.\n\nВключить поддержку недавних приложений?</string>
+
+    <string name="disable_scrolling_list">Отключить список</string>
+
     <string name="double_tap_to_sleep">Double tap to sleep</string>
-226
-    <string name="enable_double_tap_to_sleep">Enable double tap to sleep?</string>
-227
-    <string name="action_dont_show_again">Don\'t show again</string>
-228
-​
-229
-    <string name="app_shortcuts">More actions&#8230;</string>
-230
-​
-231
+    <string name="enable_double_tap_to_sleep">Включить DT2S?</string>
+    <string name="action_dont_show_again">Не показывать снова</string>
+
+    <string name="app_shortcuts">Действия&#8230;</string>
+
 </resources>
-232
-​
