@@ -320,7 +320,10 @@ public class TaskbarService extends Service {
                 break;
             case "app_start":
                 long oneDayAgo = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
-                long startTime = pref.getLong("time_of_service_start", System.currentTimeMillis());
+                long appStartTime = pref.getLong("time_of_service_start", System.currentTimeMillis());
+                long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+                long startTime = deviceStartTime > appStartTime ? deviceStartTime : appStartTime;
+
                 searchInterval = startTime > oneDayAgo ? startTime : oneDayAgo;
                 break;
         }
@@ -1027,7 +1030,7 @@ public class TaskbarService extends Service {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(TaskbarService.this), null, true, true, false);
+                U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(TaskbarService.this), null, true, false);
             }
         });
 

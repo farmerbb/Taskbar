@@ -14,10 +14,10 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
 
-        versionCode 91
-        versionName "2.1.1"
+        versionCode 92
+        versionName "2.1.2"
 
-        resConfigs "en", "ja"
+        resConfigs "en", "ja", "ru"
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
     }

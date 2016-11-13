@@ -17,17 +17,13 @@ package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
-import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.Display;
 
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -54,12 +50,7 @@ public class KeyboardShortcutActivity extends Activity {
                             && pref.getBoolean("freeform_hack", false)
                             && isInMultiWindowMode()
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                        DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-                        Intent intent = new Intent(this, InvisibleActivityFreeform.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                        startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                        U.startFreeformHack(this, false, false);
                     }
 
                     if(pref.getBoolean("taskbar_active", false))

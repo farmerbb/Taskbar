@@ -17,7 +17,6 @@
 <resources>
 
     <string name="app_name">Taskbar</string>
-    <string name="not_in_multi_window">Не в многооконном режиме</string>
 
     <string name="taskbar_is_active">Taskbar запущен</string>
     <string name="click_to_open_settings">Нажмите для запуска настроек</string>
@@ -227,5 +226,7 @@
     <string name="action_dont_show_again">Не показывать снова</string>
 
     <string name="app_shortcuts">Действия&#8230;</string>
+
+    <string name="usage_stats_message">Please ensure that Taskbar is set to \'\'On\'\'</string>
 
 </resources>

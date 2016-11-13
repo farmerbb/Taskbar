@@ -67,7 +67,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
                 if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
                     U.showToast(getContext(),
                             getContext().getString(R.string.already_top_app, entry.getLabel()),
-                            Toast.LENGTH_SHORT);
+                            Toast.LENGTH_LONG);
                 } else if(blacklist.isBlocked(componentName)) {
                     blacklist.removeBlockedApp(getContext(), componentName);
                     checkBox.setChecked(false);
@@ -101,7 +101,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
                 if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
                     U.showToast(getContext(),
                             getContext().getString(R.string.already_blacklisted, entry.getLabel()),
-                            Toast.LENGTH_SHORT);
+                            Toast.LENGTH_LONG);
                 } else if(topApps.isTopApp(componentName)) {
                     topApps.removeTopApp(getContext(), componentName);
                     checkBox.setChecked(false);

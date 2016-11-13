@@ -19,7 +19,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
@@ -29,8 +28,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
-import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,7 +39,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -53,7 +49,6 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.activity.IconPackActivityDark;
-import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivityDark;
@@ -196,6 +191,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             case "enable_recents":
                 try {
                     startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                    U.showToastLong(getActivity(), R.string.usage_stats_message);
                 } catch (ActivityNotFoundException e) {
                     U.showErrorDialog(getActivity(), "GET_USAGE_STATS");
                 }
@@ -258,12 +254,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     if(pref.getBoolean("taskbar_active", false)
                             && getActivity().isInMultiWindowMode()
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                        DisplayManager dm = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
-                        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-                        Intent freeformIntent = new Intent(getActivity(), InvisibleActivityFreeform.class);
-                        freeformIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                        startActivity(freeformIntent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                        U.startFreeformHack(getActivity(), false, false);
                     }
                 } else {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
