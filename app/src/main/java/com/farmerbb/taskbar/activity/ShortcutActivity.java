@@ -38,7 +38,7 @@ public class ShortcutActivity extends Activity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        U.startFreeformHack(ShortcutActivity.this, false);
+                        U.startFreeformHack(ShortcutActivity.this, true, false);
                     }
                 }, 100);
             } else

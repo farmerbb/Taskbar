@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -28,8 +27,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Rect;
-import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,7 +34,6 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -233,12 +229,7 @@ public class HomeActivity extends Activity {
 
         if(bootToFreeform()) {
             if(U.launcherIsDefault(this)) {
-                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-                Intent intent = new Intent(this, InvisibleActivityFreeform.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                U.startFreeformHack(this, false, false);
             } else {
                 U.showToastLong(this, R.string.set_as_default_home);
 

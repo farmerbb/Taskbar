@@ -89,7 +89,8 @@ public class U {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+                            context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
                         } catch (ActivityNotFoundException e) {
                             showErrorDialog(context, "SYSTEM_ALERT_WINDOW");
                         }
@@ -142,13 +143,12 @@ public class U {
         toast.show();
     }
 
-    public static void startShortcut(Context context, String componentName, ShortcutInfo shortcut) {
+    public static void startShortcut(Context context, String packageName, String componentName, ShortcutInfo shortcut) {
         launchApp(context,
-                null,
+                packageName,
                 componentName,
                 0,
                 null,
-                false,
                 false,
                 false,
                 shortcut);
@@ -159,7 +159,6 @@ public class U {
                                  final String componentName,
                                  final long userId, final String windowSize,
                                  final boolean launchedFromTaskbar,
-                                 final boolean padStatusBar,
                                  final boolean openInNewWindow) {
         launchApp(context,
                 packageName,
@@ -167,7 +166,6 @@ public class U {
                 userId,
                 windowSize,
                 launchedFromTaskbar,
-                padStatusBar,
                 openInNewWindow,
                 null);
     }
@@ -177,7 +175,6 @@ public class U {
                                  final String componentName,
                                  final long userId, final String windowSize,
                                  final boolean launchedFromTaskbar,
-                                 final boolean padStatusBar,
                                  final boolean openInNewWindow,
                                  final ShortcutInfo shortcut) {
         boolean shouldDelay = false;
@@ -198,13 +195,13 @@ public class U {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    startFreeformHack(context, launchedFromTaskbar);
+                    startFreeformHack(context, true, launchedFromTaskbar);
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             continueLaunchingApp(context, packageName, componentName, userId,
-                                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow, shortcut);
+                                    windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
                         }
                     }, 100);
                 }
@@ -214,18 +211,20 @@ public class U {
         if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
             if(!shouldDelay)
                 continueLaunchingApp(context, packageName, componentName, userId,
-                        windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow, shortcut);
+                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
         } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace() || !openInFullscreen)
             continueLaunchingApp(context, packageName, componentName, userId,
-                    windowSize, launchedFromTaskbar, padStatusBar, openInNewWindow, shortcut);
+                    windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
     }
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    public static void startFreeformHack(Context context, boolean launchedFromTaskbar) {
+    public static void startFreeformHack(Context context, boolean checkMultiWindow, boolean launchedFromTaskbar) {
         Intent freeformHackIntent = new Intent(context, InvisibleActivityFreeform.class);
-        freeformHackIntent.putExtra("check_multiwindow", true);
         freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+
+        if(checkMultiWindow)
+            freeformHackIntent.putExtra("check_multiwindow", true);
 
         if(launchedFromTaskbar) {
             SharedPreferences pref = getSharedPreferences(context);
@@ -252,12 +251,13 @@ public class U {
                                              long userId,
                                              String windowSize,
                                              boolean launchedFromTaskbar,
-                                             boolean padStatusBar,
                                              boolean openInNewWindow,
                                              ShortcutInfo shortcut) {
         SharedPreferences pref = getSharedPreferences(context);
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(componentName));
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -322,13 +322,13 @@ public class U {
                 launchMode1(context, intent, 2, userId, shortcut);
                 break;
             case "fullscreen":
-                launchMode2(context, intent, padStatusBar, FULLSCREEN, userId, shortcut);
+                launchMode2(context, intent, FULLSCREEN, userId, shortcut);
                 break;
             case "half_left":
-                launchMode2(context, intent, padStatusBar, LEFT, userId, shortcut);
+                launchMode2(context, intent, LEFT, userId, shortcut);
                 break;
             case "half_right":
-                launchMode2(context, intent, padStatusBar, RIGHT, userId, shortcut);
+                launchMode2(context, intent, RIGHT, userId, shortcut);
                 break;
             case "phone_size":
                 launchMode3(context, intent, userId, shortcut);
@@ -375,14 +375,12 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode2(Context context, Intent intent, boolean padStatusBar, int launchType, long userId, ShortcutInfo shortcut) {
+    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
         int statusBarHeight = getStatusBarHeight(context);
-
         String position = getTaskbarPosition(context);
-        boolean overridePad = position.equals("top_left") || position.equals("top_right");
 
         boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -391,30 +389,17 @@ public class U {
                 ? display.getWidth() / 2
                 : 0;
 
-        int top;
-        if(launchType == RIGHT && isPortrait) {
-            top = (display.getHeight() / 2)
-                    + (!padStatusBar && overridePad ? statusBarHeight / 2 : 0)
-                    + (!padStatusBar && !overridePad ? statusBarHeight / 2 : 0);
-        } else {
-            top = padStatusBar || overridePad ? statusBarHeight : 0;
-        }
+        int top = launchType == RIGHT && isPortrait
+                ? display.getHeight() / 2
+                : statusBarHeight;
 
         int right = launchType == LEFT && isLandscape
                 ? display.getWidth() / 2
                 : display.getWidth();
 
-        int bottom;
-        if(launchType == LEFT && isPortrait) {
-            bottom = display.getHeight() / 2
-                    + (!padStatusBar && overridePad ? statusBarHeight / 2 : 0)
-                    - (!padStatusBar && !overridePad ? statusBarHeight / 2 : 0);
-        } else {
-            bottom = display.getHeight()
-                    + ((!padStatusBar && overridePad) || (!padStatusBar && launchType == RIGHT && isPortrait)
-                    ? statusBarHeight
-                    : 0);
-        }
+        int bottom = launchType == LEFT && isPortrait
+                ? display.getHeight() / 2
+                : display.getHeight();
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 

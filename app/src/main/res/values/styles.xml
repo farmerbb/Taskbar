@@ -38,7 +38,7 @@
 
     <style name="AppTheme.HomeActivity" parent="@android:style/Theme.Material.Wallpaper.NoTitleBar"/>
 
-    <style name="AppTheme.InvisibleActivity" parent="@android:style/Theme.DeviceDefault.Dialog.NoActionBar">
+    <style name="AppTheme.InvisibleActivity" parent="@android:style/Theme.Material.Dialog.NoActionBar">
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 

@@ -17,7 +17,6 @@ package com.farmerbb.taskbar;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.FragmentTransaction;
@@ -34,9 +33,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
-import android.graphics.Rect;
 import android.graphics.drawable.Icon;
-import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,12 +42,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.view.Display;
 import android.widget.CompoundButton;
 
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.ImportSettingsActivity;
-import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
@@ -194,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         try {
                                                             startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                                                            U.showToastLong(MainActivity.this, R.string.usage_stats_message);
                                                         } catch (ActivityNotFoundException e) {
                                                             U.showErrorDialog(MainActivity.this, "GET_USAGE_STATS");
                                                         }
@@ -332,12 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 && pref.getBoolean("freeform_hack", false)
                 && isInMultiWindowMode()
                 && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-            Intent intent = new Intent(this, InvisibleActivityFreeform.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+            U.startFreeformHack(this, false, false);
         }
 
         startService(new Intent(this, TaskbarService.class));

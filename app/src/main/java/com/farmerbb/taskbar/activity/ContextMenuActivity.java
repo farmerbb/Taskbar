@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -27,7 +26,6 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
-import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -423,7 +421,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 }
                 
                 startFreeformActivity();
-                U.launchApp(this, packageName, componentName, userId, windowSize, false, !isInMultiWindowMode(), true);
+                U.launchApp(getApplicationContext(), packageName, componentName, userId, windowSize, false, true);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -439,7 +437,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "shortcut_3":
             case "shortcut_4":
             case "shortcut_5":
-                U.startShortcut(this, componentName, shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1));
+                U.startShortcut(getApplicationContext(), packageName, componentName, shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -479,12 +477,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 && pref.getBoolean("freeform_hack", false)
                 && isInMultiWindowMode()
                 && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-            Intent intent = new Intent(this, InvisibleActivityFreeform.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+            U.startFreeformHack(this, false, false);
         }
     }
 
