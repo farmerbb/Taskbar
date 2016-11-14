@@ -191,7 +191,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             case "enable_recents":
                 try {
                     startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                    U.showToastLong(getActivity(), R.string.usage_stats_message);
                 } catch (ActivityNotFoundException e) {
                     U.showErrorDialog(getActivity(), "GET_USAGE_STATS");
                 }
