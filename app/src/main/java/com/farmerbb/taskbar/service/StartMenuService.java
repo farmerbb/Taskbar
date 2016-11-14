@@ -171,7 +171,8 @@ public class StartMenuService extends Service {
     private void drawStartMenu() {
         IconCache.getInstance(this).clearCache();
 
-        boolean shouldShowSearchBox = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
+        boolean shouldShowSearchBox = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1;
 
         int focusableFlag = shouldShowSearchBox
                 ? WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
