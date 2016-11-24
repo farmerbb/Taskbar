@@ -85,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_power_settings_new_black_24dp" />
+                    android:src="@drawable/ic_more_vert_black_24dp" />
 
             </LinearLayout>
 

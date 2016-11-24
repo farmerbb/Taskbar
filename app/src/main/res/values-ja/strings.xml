@@ -229,4 +229,9 @@
 
     <string name="usage_stats_message">Please ensure that Taskbar is set to \'\'On\'\'</string>
 
+    <string name="volume">Volume</string>
+    <string name="file_manager">File manager</string>
+    <string name="system_settings">System settings</string>
+    <string name="lock_device">Lock device</string>
+
 </resources>

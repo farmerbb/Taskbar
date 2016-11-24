@@ -58,6 +58,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.ContextMenuActivity;
+import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
@@ -317,12 +319,9 @@ public class StartMenuService extends Service {
             powerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
-                        LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                    else
-                        LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-
-                    U.lockDevice(StartMenuService.this);
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    openContextMenu(location);
                 }
             });
         } else {
@@ -587,5 +586,38 @@ public class StartMenuService extends Service {
                 stopSelf();
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void openContextMenu(int[] location) {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        Intent intent = null;
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                intent = new Intent(this, ContextMenuActivity.class);
+                break;
+            case "dark":
+                intent = new Intent(this, ContextMenuActivityDark.class);
+                break;
+        }
+
+        if(intent != null) {
+            intent.putExtra("launched_from_start_menu", true);
+            intent.putExtra("is_overflow_menu", true);
+            intent.putExtra("x", location[0]);
+            intent.putExtra("y", location[1]);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+        } else
+            startActivity(intent);
     }
 }

@@ -16,12 +16,20 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <Preference
-            android:key="open_taskbar_settings"
-            android:title="@string/open_taskbar_settings" />
+    <Preference
+        android:key="volume"
+        android:title="@string/volume" />
 
-        <Preference
-            android:key="start_menu_apps"
-            android:title="@string/start_menu_apps" />
+    <Preference
+        android:key="file_manager"
+        android:title="@string/file_manager" />
+
+    <Preference
+        android:key="system_settings"
+        android:title="@string/system_settings" />
+
+    <Preference
+        android:key="lock_device"
+        android:title="@string/lock_device" />
 
 </PreferenceScreen>

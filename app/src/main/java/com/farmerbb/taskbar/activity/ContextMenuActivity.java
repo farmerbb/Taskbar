@@ -27,12 +27,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
 import android.hardware.display.DisplayManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.UserManager;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
 import android.view.Gravity;
@@ -61,6 +63,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
     boolean isStartButton = false;
+    boolean isOverflowMenu = false;
     boolean secondaryMenu = false;
 
     List<ShortcutInfo> shortcuts;
@@ -73,8 +76,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
 
+        boolean isNonAppMenu = !getIntent().hasExtra("package_name") && !getIntent().hasExtra("app_name");
         showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
-        isStartButton = !getIntent().hasExtra("package_name") && !getIntent().hasExtra("app_name");
+        isStartButton = isNonAppMenu && getIntent().getBooleanExtra("is_start_button", false);
+        isOverflowMenu = isNonAppMenu && getIntent().getBooleanExtra("is_overflow_menu", false);
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -184,11 +189,18 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         if(isStartButton) {
             addPreferencesFromResource(R.xml.pref_context_menu_open_settings);
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
+            findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
             if(!getIntent().getBooleanExtra("dont_show_quit", false)) {
                 addPreferencesFromResource(R.xml.pref_context_menu_quit);
                 findPreference("quit_taskbar").setOnPreferenceClickListener(this);
             }
+        } else if(isOverflowMenu) {
+            addPreferencesFromResource(R.xml.pref_context_menu_overflow);
+            findPreference("volume").setOnPreferenceClickListener(this);
+            findPreference("file_manager").setOnPreferenceClickListener(this);
+            findPreference("system_settings").setOnPreferenceClickListener(this);
+            findPreference("lock_device").setOnPreferenceClickListener(this);
         } else {
             appName = getIntent().getStringExtra("app_name");
             packageName = getIntent().getStringExtra("package_name");
@@ -419,7 +431,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(pref2.getBoolean("save_window_sizes", true)) {
                     SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, windowSize);
                 }
-                
+
                 startFreeformActivity();
                 U.launchApp(getApplicationContext(), packageName, componentName, userId, windowSize, false, true);
 
@@ -438,6 +450,69 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "shortcut_4":
             case "shortcut_5":
                 U.startShortcut(getApplicationContext(), packageName, componentName, shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1));
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "start_menu_apps":
+                startFreeformActivity();
+
+                Intent intent = null;
+
+                SharedPreferences pref3 = U.getSharedPreferences(this);
+                switch(pref3.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(this, SelectAppActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(this, SelectAppActivityDark.class);
+                        break;
+                }
+
+                startActivity(intent);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "volume":
+                AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
+                audio.adjustSuggestedStreamVolume(AudioManager.ADJUST_SAME, AudioManager.USE_DEFAULT_STREAM_TYPE, AudioManager.FLAG_SHOW_UI);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "file_manager":
+                startFreeformActivity();
+
+                Intent fileManagerIntent = new Intent("android.provider.action.BROWSE");
+                fileManagerIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
+
+                try {
+                    startActivity(fileManagerIntent);
+                } catch (ActivityNotFoundException e) {
+                    U.showToast(this, R.string.lock_device_not_supported);
+                }
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "system_settings":
+                startFreeformActivity();
+
+                Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
+
+                try {
+                    startActivity(settingsIntent);
+                } catch (ActivityNotFoundException e) {
+                    U.showToast(this, R.string.lock_device_not_supported);
+                }
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "lock_device":
+                U.lockDevice(this);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

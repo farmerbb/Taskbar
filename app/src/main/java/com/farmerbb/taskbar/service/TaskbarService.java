@@ -957,6 +957,7 @@ public class TaskbarService extends Service {
 
         if(intent != null) {
             intent.putExtra("dont_show_quit", LauncherHelper.getInstance().isOnHomeScreen() && !pref.getBoolean("taskbar_active", false));
+            intent.putExtra("is_start_button", true);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 
