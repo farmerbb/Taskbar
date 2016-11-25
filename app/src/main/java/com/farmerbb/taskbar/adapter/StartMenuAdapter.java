@@ -25,6 +25,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
@@ -41,6 +42,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
@@ -128,38 +130,50 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
     }
 
     @SuppressWarnings("deprecation")
-    private void openContextMenu(AppEntry entry, int[] location) {
+    private void openContextMenu(final AppEntry entry, final int[] location) {
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences pref = U.getSharedPreferences(getContext());
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getContext(), ContextMenuActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getContext(), ContextMenuActivityDark.class);
+                        break;
+                }
+
+                if(intent != null) {
+                    intent.putExtra("package_name", entry.getPackageName());
+                    intent.putExtra("app_name", entry.getLabel());
+                    intent.putExtra("component_name", entry.getComponentName());
+                    intent.putExtra("user_id", entry.getUserId(getContext()));
+                    intent.putExtra("launched_from_start_menu", true);
+                    intent.putExtra("x", location[0]);
+                    intent.putExtra("y", location[1]);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                    DisplayManager dm = (DisplayManager) getContext().getSystemService(Context.DISPLAY_SERVICE);
+                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                    getContext().startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                } else
+                    getContext().startActivity(intent);
+            }
+        }, shouldDelay() ? 100 : 0);
+    }
+
+    private boolean shouldDelay() {
         SharedPreferences pref = U.getSharedPreferences(getContext());
-        Intent intent = null;
-
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                intent = new Intent(getContext(), ContextMenuActivity.class);
-                break;
-            case "dark":
-                intent = new Intent(getContext(), ContextMenuActivityDark.class);
-                break;
-        }
-
-        if(intent != null) {
-            intent.putExtra("package_name", entry.getPackageName());
-            intent.putExtra("app_name", entry.getLabel());
-            intent.putExtra("component_name", entry.getComponentName());
-            intent.putExtra("user_id", entry.getUserId(getContext()));
-            intent.putExtra("launched_from_start_menu", true);
-            intent.putExtra("x", location[0]);
-            intent.putExtra("y", location[1]);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
-            DisplayManager dm = (DisplayManager) getContext().getSystemService(Context.DISPLAY_SERVICE);
-            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-            getContext().startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
-        } else
-            getContext().startActivity(intent);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }
 }

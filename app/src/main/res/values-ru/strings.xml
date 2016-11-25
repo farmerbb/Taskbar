@@ -229,9 +229,16 @@
 
     <string name="usage_stats_message">Проверьте, включен ли Taskbar</string>
 
-    <string name="volume">Volume</string>
+    <string name="volume">Volume control</string>
     <string name="file_manager">File manager</string>
     <string name="system_settings">System settings</string>
     <string name="lock_device">Lock device</string>
+
+    <string name="show_search_bar">Search bar visibility</string>
+    <string-array name="pref_show_search_bar_list">
+        <item>Always show</item>
+        <item>When hardware keyboard is detected</item>
+        <item>Never show</item>
+    </string-array>
 
 </resources>

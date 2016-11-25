@@ -28,6 +28,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
@@ -88,6 +89,13 @@ public class SelectAppActivity extends AppCompatActivity {
             setContentView(R.layout.configure_start_menu);
             setFinishOnTouchOutside(false);
             setTitle(R.string.start_menu_apps);
+
+            if(getIntent().hasExtra("no_shadow")) {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.dimAmount = 0;
+                getWindow().setAttributes(params);
+            }
+
 
             progressBar = (ProgressBar) findViewById(R.id.progress_bar);
             appListGenerator = new AppListGenerator();

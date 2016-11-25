@@ -39,6 +39,7 @@ public class AdvancedFragment extends SettingsFragment {
 
         bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
         bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
+        bindPreferenceSummaryToValue(findPreference("show_search_bar"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_advanced);

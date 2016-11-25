@@ -40,6 +40,15 @@
         android:title="@string/pref_title_use_mask"
         android:summary="@string/pref_description_use_mask" />
 
+    <ListPreference
+        android:defaultValue="keyboard"
+        android:entries="@array/pref_show_search_bar_list"
+        android:entryValues="@array/pref_show_search_bar_list_values"
+        android:key="show_search_bar"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/show_search_bar" />
+
     <Preference
         android:key="clear_pinned_apps"
         android:title="@string/clear_pinned_apps"/>

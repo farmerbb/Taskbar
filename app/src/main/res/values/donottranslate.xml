@@ -83,4 +83,10 @@
         <item>2147483647</item>
     </string-array>
 
+    <string-array name="pref_show_search_bar_list_values">
+        <item>always</item>
+        <item>keyboard</item>
+        <item>never</item>
+    </string-array>
+
 </resources>

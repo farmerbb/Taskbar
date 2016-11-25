@@ -49,8 +49,10 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -173,12 +175,22 @@ public class StartMenuService extends Service {
     private void drawStartMenu() {
         IconCache.getInstance(this).clearCache();
 
-        boolean shouldShowSearchBox = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1;
+        final SharedPreferences pref = U.getSharedPreferences(this);
+        boolean hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
+        boolean shouldShowSearchBox = false;
 
-        int focusableFlag = shouldShowSearchBox
-                ? WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                : WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+            switch(pref.getString("show_search_bar", "keyboard")) {
+                case "always":
+                    shouldShowSearchBox = true;
+                    break;
+                case "keyboard":
+                    shouldShowSearchBox = hasHardwareKeyboard;
+                    break;
+                case "never":
+                    shouldShowSearchBox = false;
+                    break;
+            }
 
         // Initialize layout params
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -188,7 +200,7 @@ public class StartMenuService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
-                focusableFlag,
+                shouldShowSearchBox ? 0 : WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 PixelFormat.TRANSLUCENT);
 
         // Determine where to show the start menu on screen
@@ -230,7 +242,6 @@ public class StartMenuService extends Service {
         // Initialize views
         int theme = 0;
 
-        final SharedPreferences pref = U.getSharedPreferences(this);
         switch(pref.getString("theme", "light")) {
             case "light":
                 theme = R.style.AppTheme;
@@ -251,6 +262,8 @@ public class StartMenuService extends Service {
 
         searchView = (SearchView) layout.findViewById(R.id.search);
         if(shouldShowSearchBox) {
+            if(!hasHardwareKeyboard) searchView.setIconifiedByDefault(true);
+
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -306,14 +319,23 @@ public class StartMenuService extends Service {
                 }
             });
 
+            layout.requestFocus();
+
             searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if(!b) LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                    ViewGroup.LayoutParams params = startMenu.getLayoutParams();
+                    params.height = getResources().getDimensionPixelSize(b ? R.dimen.start_menu_height_half : R.dimen.start_menu_height);
+                    startMenu.setLayoutParams(params);
+
+                    if(!b) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                 }
             });
 
-            searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            searchView.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
             LinearLayout powerButton = (LinearLayout) layout.findViewById(R.id.power_button);
             powerButton.setOnClickListener(new View.OnClickListener() {
@@ -548,6 +570,7 @@ public class StartMenuService extends Service {
             @Override
             public void run() {
                 layout.setVisibility(View.GONE);
+                searchView.setIconified(true);
                 searchView.setQuery(null, false);
                 hasSubmittedQuery = false;
             }
@@ -589,35 +612,47 @@ public class StartMenuService extends Service {
     }
 
     @SuppressWarnings("deprecation")
-    private void openContextMenu(int[] location) {
+    private void openContextMenu(final int[] location) {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(StartMenuService.this, ContextMenuActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(StartMenuService.this, ContextMenuActivityDark.class);
+                        break;
+                }
+
+                if(intent != null) {
+                    intent.putExtra("launched_from_start_menu", true);
+                    intent.putExtra("is_overflow_menu", true);
+                    intent.putExtra("x", location[0]);
+                    intent.putExtra("y", location[1]);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                    DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                    startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                } else
+                    startActivity(intent);
+            }
+        }, shouldDelay() ? 100 : 0);
+    }
+
+    private boolean shouldDelay() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        Intent intent = null;
-
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                intent = new Intent(this, ContextMenuActivity.class);
-                break;
-            case "dark":
-                intent = new Intent(this, ContextMenuActivityDark.class);
-                break;
-        }
-
-        if(intent != null) {
-            intent.putExtra("launched_from_start_menu", true);
-            intent.putExtra("is_overflow_menu", true);
-            intent.putExtra("x", location[0]);
-            intent.putExtra("y", location[1]);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
-            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
-        } else
-            startActivity(intent);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }
 }
