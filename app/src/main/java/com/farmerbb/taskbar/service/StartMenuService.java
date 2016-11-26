@@ -176,7 +176,7 @@ public class StartMenuService extends Service {
         IconCache.getInstance(this).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(this);
-        boolean hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
+        final boolean hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
         boolean shouldShowSearchBox = false;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -261,6 +261,8 @@ public class StartMenuService extends Service {
         startMenu.setScrollBarStyle(scrollbar ? View.SCROLLBARS_OUTSIDE_INSET : View.SCROLLBARS_INSIDE_OVERLAY);
 
         searchView = (SearchView) layout.findViewById(R.id.search);
+        FrameLayout searchViewLayout = (FrameLayout) layout.findViewById(R.id.search_view_layout);
+
         if(shouldShowSearchBox) {
             if(!hasHardwareKeyboard) searchView.setIconifiedByDefault(true);
 
@@ -311,6 +313,8 @@ public class StartMenuService extends Service {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    searchView.setIconified(false);
+                    
                     View closeButton = searchView.findViewById(R.id.search_close_btn);
                     if(closeButton != null) closeButton.setVisibility(View.GONE);
 
@@ -319,18 +323,22 @@ public class StartMenuService extends Service {
                 }
             });
 
-            layout.requestFocus();
-
             searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    ViewGroup.LayoutParams params = startMenu.getLayoutParams();
-                    params.height = getResources().getDimensionPixelSize(b ? R.dimen.start_menu_height_half : R.dimen.start_menu_height);
-                    startMenu.setLayoutParams(params);
-
+                    if(!hasHardwareKeyboard) {
+                        ViewGroup.LayoutParams params = startMenu.getLayoutParams();
+                        params.height = getResources().getDimensionPixelSize(b ? R.dimen.start_menu_height_half : R.dimen.start_menu_height);
+                        startMenu.setLayoutParams(params);
+                    }
+                    
                     if(!b) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        if(hasHardwareKeyboard)
+                            LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                        else {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);          
+                        }        
                     }
                 }
             });
@@ -346,11 +354,16 @@ public class StartMenuService extends Service {
                     openContextMenu(location);
                 }
             });
-        } else {
-            FrameLayout searchViewLayout = (FrameLayout) layout.findViewById(R.id.search_view_layout);
+            
+            searchViewLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        searchView.setIconified(false);
+                    }
+                }); 
+        } else
             searchViewLayout.setVisibility(View.GONE);
-        }
-
+        
         textView = (TextView) layout.findViewById(R.id.no_apps_found);
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
@@ -570,9 +583,12 @@ public class StartMenuService extends Service {
             @Override
             public void run() {
                 layout.setVisibility(View.GONE);
-                searchView.setIconified(true);
                 searchView.setQuery(null, false);
+                searchView.setIconified(true);
                 hasSubmittedQuery = false;
+                
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
             }
         }, 250);
     }

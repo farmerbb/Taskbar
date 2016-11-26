@@ -236,9 +236,9 @@
 
     <string name="show_search_bar">Search bar visibility</string>
     <string-array name="pref_show_search_bar_list">
-        <item>Always show</item>
-        <item>When hardware keyboard is detected</item>
-        <item>Never show</item>
+        <item>Hardware or software keyboard (Experimental)</item>
+        <item>Hardware keyboard only</item>
+        <item>Never show search bar</item>
     </string-array>
 
 </resources>
