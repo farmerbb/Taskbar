@@ -115,11 +115,9 @@
             android:theme="@style/AppTheme.Dialog.Dark"/>
         <activity
             android:name=".activity.SelectAppActivity"
-            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
         <activity
             android:name=".activity.SelectAppActivityDark"
-            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DummyActivity"
@@ -169,6 +167,12 @@
             android:enabled="false"
             android:theme="@android:style/Theme.NoDisplay"
             android:exported="true" />
+        <activity
+            android:name=".activity.ClearDataActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.ClearDataActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

@@ -112,7 +112,6 @@
     <string name="block_app">最近使用からブロック</string>
     <string name="unblock_app">最近使用からブロック解除</string>
     <string name="clear_pinned_apps">アプリのピン止め/ブロックをリセット</string>
-    <string name="are_you_sure">よろしいですか?</string>
 
     <string name="pref_title_hide_foreground">前面アプリケーションのアイコンを非表示</string>
 
@@ -240,5 +239,11 @@
         <item>Hardware keyboard only</item>
         <item>Never show search bar</item>
     </string-array>
+
+    <string name="clear_pba">Pinned/blocked Taskbar apps</string>
+    <string name="clear_hidden_apps">Start menu &#8211; Hidden apps</string>
+    <string name="clear_top_apps">Start menu &#8211; Top apps</string>
+    <string name="clear_window_sizes">Saved freeform window sizes</string>
+    <string name="action_reset">Reset</string>
 
 </resources>

@@ -46,6 +46,8 @@ import android.widget.ListView;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.ClearDataActivity;
+import com.farmerbb.taskbar.activity.ClearDataActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.activity.IconPackActivityDark;
@@ -56,8 +58,6 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.PinnedBlockedApps;
-import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
 import java.text.NumberFormat;
@@ -173,20 +173,18 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
         switch(p.getKey()) {
             case "clear_pinned_apps":
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.clear_pinned_apps)
-                        .setMessage(R.string.are_you_sure)
-                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                PinnedBlockedApps.getInstance(getActivity()).clear(getActivity());
-                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                                    SavedWindowSizes.getInstance(getActivity()).clear(getActivity());
-                            }
-                        }).setNegativeButton(R.string.action_cancel, null);
+                Intent clearIntent = null;
 
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        clearIntent = new Intent(getActivity(), ClearDataActivity.class);
+                        break;
+                    case "dark":
+                        clearIntent = new Intent(getActivity(), ClearDataActivityDark.class);
+                        break;
+                }
+
+                startActivity(clearIntent);
                 break;
             case "enable_recents":
                 try {

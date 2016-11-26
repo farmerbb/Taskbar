@@ -16,5 +16,4 @@
 
 <resources>
     <string name="pref_description_launcher">Taskbar をホーム画面の置き換えとして使用します</string>
-    <string name="are_you_sure">よろしいですか?</string>
 </resources>
