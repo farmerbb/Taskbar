@@ -2,12 +2,12 @@ apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 ext {
-    SUPPORT_LIBRARY_VERSION = "25.0.0"
+    SUPPORT_LIBRARY_VERSION = "25.0.1"
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
