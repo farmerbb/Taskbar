@@ -246,4 +246,6 @@
     <string name="clear_window_sizes">Saved window sizes</string>
     <string name="action_reset">Reset</string>
     
+    <string name="tools">Tools</string>
+
 </resources>

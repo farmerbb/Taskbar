@@ -245,5 +245,7 @@
     <string name="clear_top_apps">Start menu &#8211; Top apps</string>
     <string name="clear_window_sizes">Saved window sizes</string>
     <string name="action_reset">Reset</string>
+
+    <string name="tools">Tools</string>
     
 </resources>

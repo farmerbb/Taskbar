@@ -198,6 +198,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("quit_taskbar").setOnPreferenceClickListener(this);
             }
         } else if(isOverflowMenu) {
+            if(getResources().getConfiguration().screenWidthDp >= 600
+                    && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
+                setTitle(R.string.tools);
+            else {
+                addPreferencesFromResource(R.xml.pref_context_menu_header);
+                findPreference("header").setTitle(R.string.tools);
+            }
+
             addPreferencesFromResource(R.xml.pref_context_menu_overflow);
             findPreference("volume").setOnPreferenceClickListener(this);
             findPreference("file_manager").setOnPreferenceClickListener(this);
@@ -216,7 +224,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 addPreferencesFromResource(R.xml.pref_context_menu_header);
                 findPreference("header").setTitle(appName);
             }
-
 
             SharedPreferences pref = U.getSharedPreferences(this);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
