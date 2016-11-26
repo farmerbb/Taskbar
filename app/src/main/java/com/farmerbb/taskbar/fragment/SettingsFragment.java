@@ -121,13 +121,18 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 // Set the summary to reflect the new value.
                 preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
-                if(finishedLoadingPrefs && preference.getKey().equals("theme")) {
-                    // Restart MainActivity
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("theme_change", true);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(0, 0);
+                if(finishedLoadingPrefs) {
+                    if(preference.getKey().equals("theme")) {
+                        // Restart MainActivity
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("theme_change", true);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(0, 0);
+                    }
+
+                    if(preference.getKey().equals("show_search_bar"))
+                        findPreference("hide_when_keyboard_shown").setEnabled(!stringValue.equals("always"));
                 }
 
             } else if(!(preference instanceof CheckBoxPreference)) {

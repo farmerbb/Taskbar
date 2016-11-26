@@ -392,7 +392,8 @@ public class TaskbarService extends Service {
         stopThread2 = true;
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        showHideAutomagically = pref.getBoolean("hide_when_keyboard_shown", false);
+        showHideAutomagically = pref.getBoolean("hide_when_keyboard_shown", false)
+                && !pref.getString("show_search_bar", "keyboard").equals("always");
 
         currentTaskbarIds.clear();
 
