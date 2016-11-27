@@ -208,9 +208,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             addPreferencesFromResource(R.xml.pref_context_menu_overflow);
             findPreference("volume").setOnPreferenceClickListener(this);
-            findPreference("file_manager").setOnPreferenceClickListener(this);
             findPreference("system_settings").setOnPreferenceClickListener(this);
             findPreference("lock_device").setOnPreferenceClickListener(this);
+            findPreference("power_menu").setOnPreferenceClickListener(this);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                findPreference("file_manager").setOnPreferenceClickListener(this);
         } else {
             appName = getIntent().getStringExtra("app_name");
             packageName = getIntent().getStringExtra("package_name");
@@ -531,6 +534,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "lock_device":
                 U.lockDevice(this);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "power_menu":
+                U.showPowerMenu(this);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

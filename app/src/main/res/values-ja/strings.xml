@@ -232,6 +232,7 @@
     <string name="file_manager">File manager</string>
     <string name="system_settings">System settings</string>
     <string name="lock_device">Lock device</string>
+    <string name="power_menu">Power menu</string>
 
     <string name="show_search_bar">Search bar visibility</string>
     <string-array name="pref_show_search_bar_list">
@@ -247,5 +248,8 @@
     <string name="action_reset">Reset</string>
 
     <string name="tools">Tools</string>
+
+    <string name="enable_accessibility">Taskbar\'s accessibility service must be enabled to show the power menu</string>
+    <string name="accessibility_service_description">Allows Taskbar to show the device\'s power menu.\n\n(This service is not used for any other purpose)</string>
 
 </resources>

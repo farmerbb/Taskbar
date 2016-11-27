@@ -56,6 +56,7 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.service.PowerMenuService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +127,31 @@ public class U {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
+    }
+
+    public static void showPowerMenu(Context context) {
+        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, PowerMenuService.class.getName());
+        context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        if(isAccessibilityServiceEnabled(context))
+            context.startService(new Intent(context, PowerMenuService.class));
+        else {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            try {
+                context.startActivity(intent);
+                showToastLong(context, R.string.enable_accessibility);
+            } catch (ActivityNotFoundException e) {
+                showToast(context, R.string.lock_device_not_supported);
+            }
+        }
+    }
+
+    private static boolean isAccessibilityServiceEnabled(Context context) {
+        String accessibilityServices = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        return accessibilityServices.contains(PowerMenuService.class.getName());
     }
 
     public static void showToast(Context context, int message) {

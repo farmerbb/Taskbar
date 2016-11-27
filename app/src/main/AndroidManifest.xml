@@ -177,6 +177,17 @@
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>
         <service android:name=".service.NotificationService"/>
+        <service
+            android:name=".service.PowerMenuService"
+            android:enabled="false"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice"
+                       android:resource="@xml/accessibility_service" />
+        </service>
 
         <receiver
             android:name=".receiver.ShowHideTaskbarReceiver"

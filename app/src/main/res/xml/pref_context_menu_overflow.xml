@@ -21,11 +21,15 @@
         android:title="@string/volume" />
 
     <Preference
+        android:key="lock_device"
+        android:title="@string/lock_device" />
+
+    <Preference
         android:key="system_settings"
         android:title="@string/system_settings" />
 
     <Preference
-        android:key="lock_device"
-        android:title="@string/lock_device" />
+        android:key="power_menu"
+        android:title="@string/power_menu" />
 
 </PreferenceScreen>
