@@ -151,7 +151,11 @@ public class U {
 
     private static boolean isAccessibilityServiceEnabled(Context context) {
         String accessibilityServices = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-        return accessibilityServices != null && accessibilityServices.contains(PowerMenuService.class.getName());
+        ComponentName component = new ComponentName(context, PowerMenuService.class);
+
+        return accessibilityServices != null
+                && (accessibilityServices.contains(component.flattenToString())
+                || accessibilityServices.contains(component.flattenToShortString()));
     }
 
     public static void showToast(Context context, int message) {
