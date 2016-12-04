@@ -69,10 +69,17 @@ public class KeyboardShortcutActivity extends Activity {
                     if(intent.resolveActivity(getPackageManager()) == null)
                         intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
 
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                    if(intent.resolveActivity(getPackageManager()) != null)
-                        startActivity(intent);
+                    if(intent.resolveActivity(getPackageManager()) != null) {
+                        SharedPreferences pref = U.getSharedPreferences(this);
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                                && pref.getBoolean("freeform_hack", false)
+                                && isInMultiWindowMode())
+                            U.launchAppFullscreen(getApplicationContext(), intent);
+                        else
+                            startActivity(intent);
+                    }
                 }
                 break;
         }
