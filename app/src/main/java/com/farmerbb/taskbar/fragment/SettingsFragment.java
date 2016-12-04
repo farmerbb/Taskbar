@@ -200,7 +200,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 break;
             case "launcher":
                 if(canDrawOverlays()) {
-                    ComponentName component = new ComponentName(this, HomeActivity.class);
+                    ComponentName component = new ComponentName(getActivity(), HomeActivity.class);
                     getActivity().getPackageManager().setComponentEnabledSetting(component,
                             ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);
@@ -213,7 +213,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
                 break;
             case "keyboard_shortcut":
-                ComponentName component = new ComponentName(this, KeyboardShortcutActivity.class);
+                ComponentName component = new ComponentName(getActivity(), KeyboardShortcutActivity.class);
                 getActivity().getPackageManager().setComponentEnabledSetting(component,
                         ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP);
