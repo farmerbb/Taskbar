@@ -238,30 +238,44 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.settings_imported_successfully)
-                    .setMessage(R.string.import_dialog_message)
-                    .setPositiveButton(R.string.action_uninstall, new DialogInterface.OnClickListener() {
+            final SharedPreferences pref = U.getSharedPreferences(this);
+            if(!pref.getBoolean("dont_show_uninstall_dialog", false)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.settings_imported_successfully)
+                        .setMessage(R.string.import_dialog_message)
+                        .setPositiveButton(R.string.action_uninstall, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                pref.edit().putBoolean("uninstall_dialog_shown", true).apply();
+
+                                try {
+                                    startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
+                                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                            }
+                        });
+
+                if(pref.getBoolean("uninstall_dialog_shown", false))
+                    builder.setNegativeButton(R.string.action_dont_show_again, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
-                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            pref.edit().putBoolean("dont_show_uninstall_dialog", true).apply();
                         }
                     });
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.setCancelable(false);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCancelable(false);
+            }
 
-            if(theSwitch != null) theSwitch.setChecked(false);
+            if(!pref.getBoolean("uninstall_dialog_shown", false)) {
+                if(theSwitch != null) theSwitch.setChecked(false);
 
-            SharedPreferences pref = U.getSharedPreferences(this);
-            String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
-            if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
-                pref.edit().putString("icon_pack", BuildConfig.APPLICATION_ID).apply();
-            } else {
-                U.refreshPinnedIcons(this);
+                String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
+                if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
+                    pref.edit().putString("icon_pack", BuildConfig.APPLICATION_ID).apply();
+                } else {
+                    U.refreshPinnedIcons(this);
+                }
             }
         }
 
