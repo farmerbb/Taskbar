@@ -191,6 +191,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
+            if(U.launcherIsDefault(this) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+                addPreferencesFromResource(R.xml.pref_context_menu_change_wallpaper);
+                findPreference("change_wallpaper").setOnPreferenceClickListener(this);
+            }
+
             if(!getIntent().getBooleanExtra("dont_show_quit", false)) {
                 addPreferencesFromResource(R.xml.pref_context_menu_quit);
                 findPreference("quit_taskbar").setOnPreferenceClickListener(this);
@@ -537,6 +542,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "power_menu":
                 U.showPowerMenu(this);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                break;
+            case "change_wallpaper":
+                Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
+                intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                U.launchAppFullscreen(getApplicationContext(), intent3);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
