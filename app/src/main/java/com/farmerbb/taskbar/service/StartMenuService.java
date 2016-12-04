@@ -48,6 +48,7 @@ import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -352,6 +353,19 @@ public class StartMenuService extends Service {
                     int[] location = new int[2];
                     view.getLocationOnScreen(location);
                     openContextMenu(location);
+                }
+            });
+
+            powerButton.setOnGenericMotionListener(new View.OnGenericMotionListener() {
+                @Override
+                public boolean onGenericMotion(View view, MotionEvent motionEvent) {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                        int[] location = new int[2];
+                        view.getLocationOnScreen(location);
+                        openContextMenu(location);
+                    }
+                    return false;
                 }
             });
             
