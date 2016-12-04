@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -27,7 +26,6 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
-import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -481,14 +479,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         break;
                 }
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref3.getBoolean("freeform_hack", false)) {
-                    DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                        && pref3.getBoolean("freeform_hack", false)
+                        && intent != null && isInMultiWindowMode()) {
+                    intent.putExtra("no_shadow", true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
-                    if(intent != null && isInMultiWindowMode())
-                        intent.putExtra("no_shadow", true);
-
-                    startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                    U.launchAppFullscreen(getApplicationContext(), intent);
                 } else
                     startActivity(intent);
 

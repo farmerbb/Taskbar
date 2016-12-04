@@ -514,6 +514,13 @@ public class U {
         } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
     }
 
+    public static void launchAppFullscreen(Context context, Intent intent) {
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
+
+        launchMode2(context, intent, FULLSCREEN, userId, null);
+    }
+
     public static void checkForUpdates(Context context) {
         String url;
         try {
