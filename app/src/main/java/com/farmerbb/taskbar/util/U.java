@@ -114,7 +114,7 @@ public class U {
     }
 
     public static void lockDevice(Context context) {
-        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, LockDeviceReceiver.class.getName());
+        ComponentName component = new ComponentName(context, LockDeviceReceiver.class);
         context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
@@ -130,7 +130,7 @@ public class U {
     }
 
     public static void showPowerMenu(Context context) {
-        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, PowerMenuService.class.getName());
+        ComponentName component = new ComponentName(context, PowerMenuService.class);
         context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 

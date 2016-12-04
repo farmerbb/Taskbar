@@ -103,22 +103,22 @@ public class MainActivity extends AppCompatActivity {
 
         editor.apply();
 
-        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
+        ComponentName component = new ComponentName(this, HomeActivity.class);
         getPackageManager().setComponentEnabledSetting(component,
                 launcherEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
-        ComponentName component2 = new ComponentName(BuildConfig.APPLICATION_ID, KeyboardShortcutActivity.class.getName());
+        ComponentName component2 = new ComponentName(this, KeyboardShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component2,
                 pref.getBoolean("keyboard_shortcut", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
-        ComponentName component3 = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+        ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component3,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
-        ComponentName component4 = new ComponentName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
+        ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
         getPackageManager().setComponentEnabledSetting(component4,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(shortcutManager.getDynamicShortcuts().size() == 0) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setClassName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
+                intent.setClass(this, StartTaskbarActivity.class);
                 intent.putExtra("is_launching_shortcut", true);
 
                 ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
                 Intent intent2 = new Intent(Intent.ACTION_MAIN);
-                intent2.setClassName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+                intent2.setClass(this, ShortcutActivity.class);
                 intent2.putExtra("is_launching_shortcut", true);
 
                 ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")

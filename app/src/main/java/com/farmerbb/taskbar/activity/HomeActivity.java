@@ -271,7 +271,7 @@ public class HomeActivity extends Activity {
                     startTaskbar();
             }
         } else {
-            ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
+            ComponentName component = new ComponentName(this, HomeActivity.class);
             getPackageManager().setComponentEnabledSetting(component,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
