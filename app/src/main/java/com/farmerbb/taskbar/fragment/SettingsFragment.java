@@ -267,6 +267,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 findPreference("save_window_sizes").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("window_size").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("add_shortcut").setEnabled(((CheckBoxPreference) p).isChecked());
+                findPreference("force_new_window").setEnabled(((CheckBoxPreference) p).isChecked());
 
                 break;
             case "freeform_mode_help":
