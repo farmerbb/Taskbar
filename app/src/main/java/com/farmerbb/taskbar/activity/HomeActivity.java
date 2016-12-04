@@ -143,8 +143,7 @@ public class HomeActivity extends Activity {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
                 final SharedPreferences pref = U.getSharedPreferences(HomeActivity.this);
-                if(getResources().getConfiguration().keyboard == Configuration.KEYBOARD_NOKEYS
-                        && !pref.getBoolean("dont_show_double_tap_dialog", false)) {
+                if(!pref.getBoolean("dont_show_double_tap_dialog", false)) {
                     if(pref.getBoolean("double_tap_to_sleep", false)) {
                         U.lockDevice(HomeActivity.this);
                     } else {
