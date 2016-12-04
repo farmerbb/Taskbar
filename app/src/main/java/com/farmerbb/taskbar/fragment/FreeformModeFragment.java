@@ -47,6 +47,7 @@ public class FreeformModeFragment extends SettingsFragment {
         findPreference("save_window_sizes").setEnabled(freeformHackEnabled);
         findPreference("window_size").setEnabled(freeformHackEnabled);
         findPreference("add_shortcut").setEnabled(freeformHackEnabled);
+        findPreference("force_new_window").setEnabled(freeformHackEnabled);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_freeform);
@@ -71,6 +72,7 @@ public class FreeformModeFragment extends SettingsFragment {
             findPreference("save_window_sizes").setEnabled(U.hasFreeformSupport(getActivity()));
             findPreference("window_size").setEnabled(U.hasFreeformSupport(getActivity()));
             findPreference("add_shortcut").setEnabled(U.hasFreeformSupport(getActivity()));
+            findPreference("force_new_window").setEnabled(U.hasFreeformSupport(getActivity()));
 
             if(U.hasFreeformSupport(getActivity())) {
                 U.showToastLong(getActivity(), R.string.reboot_required);

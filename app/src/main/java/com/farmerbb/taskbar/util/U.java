@@ -296,7 +296,7 @@ public class U {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
-        if(openInNewWindow) {
+        if(openInNewWindow || pref.getBoolean("force_new_window", false)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
             ActivityInfo activityInfo = intent.resolveActivityInfo(context.getPackageManager(), 0);

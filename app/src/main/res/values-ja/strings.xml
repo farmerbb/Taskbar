@@ -252,4 +252,7 @@
     <string name="enable_accessibility">Taskbar\'s accessibility service must be enabled to show the power menu</string>
     <string name="accessibility_service_description">Allows Taskbar to show the device\'s power menu.\n\n(This service is not used for any other purpose)</string>
 
+    <string name="pref_title_force_new_window">Always open apps in new windows</string>
+    <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
+
 </resources>
