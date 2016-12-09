@@ -30,7 +30,7 @@
 
     <string name="pref_header_general">General settings</string>
     <string name="pref_title_start_menu_layout">Start menu layout</string>
-    <string name="pref_title_background_tint">Taskbar background tint</string>
+    <string name="pref_title_background_tint">Background tint</string>
     <string name="pref_title_scrollbar">Show scrollbar on start menu</string>
     <string name="pref_title_start_on_boot">Launch on boot</string>
 
@@ -255,5 +255,7 @@
     <string name="pref_title_force_new_window">Always open apps in new windows</string>
     <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
     <string name="change_wallpaper">Change wallpaper</string>
+
+    <string name="notification_settings">Notification settings</string>
 
 </resources>

@@ -50,6 +50,10 @@
         android:title="@string/show_search_bar" />
 
     <Preference
+        android:key="notification_settings"
+        android:title="@string/notification_settings"/>
+
+    <Preference
         android:key="clear_pinned_apps"
         android:title="@string/clear_pinned_apps"/>
 

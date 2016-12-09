@@ -61,12 +61,13 @@ import com.farmerbb.taskbar.service.PowerMenuService;
 import java.util.ArrayList;
 import java.util.List;
 
+import moe.banana.support.ToastCompat;
+
 public class U {
 
     private U() {}
 
     private static SharedPreferences pref;
-    private static Toast toast;
     private static Integer cachedRotation;
 
     private static final int FULLSCREEN = 0;
@@ -167,10 +168,7 @@ public class U {
     }
 
     public static void showToast(Context context, String message, int length) {
-        if(toast != null) toast.cancel();
-
-        toast = Toast.makeText(context, message, length);
-        toast.show();
+        ToastCompat.makeText(context, message, length).show();
     }
 
     public static void startShortcut(Context context, String packageName, String componentName, ShortcutInfo shortcut) {

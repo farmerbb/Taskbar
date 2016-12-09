@@ -54,6 +54,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -180,18 +181,17 @@ public class StartMenuService extends Service {
         final boolean hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
         boolean shouldShowSearchBox = false;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-            switch(pref.getString("show_search_bar", "keyboard")) {
-                case "always":
-                    shouldShowSearchBox = true;
-                    break;
-                case "keyboard":
-                    shouldShowSearchBox = hasHardwareKeyboard;
-                    break;
-                case "never":
-                    shouldShowSearchBox = false;
-                    break;
-            }
+        switch(pref.getString("show_search_bar", "keyboard")) {
+            case "always":
+                shouldShowSearchBox = true;
+                break;
+            case "keyboard":
+                shouldShowSearchBox = hasHardwareKeyboard;
+                break;
+            case "never":
+                shouldShowSearchBox = false;
+                break;
+        }
 
         // Initialize layout params
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -320,6 +320,20 @@ public class StartMenuService extends Service {
                     if(closeButton != null) closeButton.setVisibility(View.GONE);
 
                     refreshApps(newText, false);
+
+                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                EditText editText = (EditText) searchView.findViewById(R.id.search_src_text);
+                                if(editText != null) {
+                                    editText.requestFocus();
+                                    editText.setSelection(editText.getText().length());
+                                }
+                            }
+                        }, 50);
+                    }
+
                     return true;
                 }
             });
@@ -334,7 +348,7 @@ public class StartMenuService extends Service {
                     }
                     
                     if(!b) {
-                        if(hasHardwareKeyboard)
+                        if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
                             LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
                         else {
                             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

@@ -260,6 +260,15 @@
                 <action android:name="com.farmerbb.taskbar.SEND_SETTINGS"/>
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receiver.UninstallReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

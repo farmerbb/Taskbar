@@ -450,12 +450,11 @@ public class TaskbarService extends Service {
         final List<AppEntry> entries = new ArrayList<>();
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(this);
+        int realNumOfPinnedApps = 0;
         
         if(pba.getPinnedApps().size() > 0) {
             UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
             LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
-
-            List<String> pinnedAppsToRemove = new ArrayList<>();
 
             for(AppEntry entry : pba.getPinnedApps()) {
                 boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
@@ -464,22 +463,20 @@ public class TaskbarService extends Service {
                 if(packageEnabled)
                     entries.add(entry);
                 else
-                    pinnedAppsToRemove.add(entry.getComponentName());
+                    realNumOfPinnedApps--;
             }
-
-            for(String component : pinnedAppsToRemove) {
-                pba.removePinnedApp(this, component);
-            }
+            
+            realNumOfPinnedApps = realNumOfPinnedApps + pba.getPinnedApps().size();
         }
 
         // Get list of all recently used apps
         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        List<UsageStats> usageStatsList = pba.getPinnedApps().size() < maxNumOfEntries
+        List<UsageStats> usageStatsList = realNumOfPinnedApps < maxNumOfEntries
                 ? mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis())
                 : new ArrayList<UsageStats>();
 
-        if(usageStatsList.size() > 0 || pba.getPinnedApps().size() > 0) {
-            if(pba.getPinnedApps().size() < maxNumOfEntries) {
+        if(usageStatsList.size() > 0 || realNumOfPinnedApps > 0) {
+            if(realNumOfPinnedApps < maxNumOfEntries) {
                 List<UsageStats> usageStatsList2 = new ArrayList<>();
                 List<UsageStats> usageStatsList3 = new ArrayList<>();
                 List<UsageStats> usageStatsList4 = new ArrayList<>();
@@ -595,7 +592,7 @@ public class TaskbarService extends Service {
 
                 // Generate the AppEntries for TaskbarAdapter
                 int number = usageStatsList6.size() == maxNumOfEntries
-                        ? usageStatsList6.size() - pba.getPinnedApps().size()
+                        ? usageStatsList6.size() - realNumOfPinnedApps
                         : usageStatsList6.size();
 
                 UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
@@ -663,7 +660,7 @@ public class TaskbarService extends Service {
             }
 
             if(finalApplicationIds.size() != currentTaskbarIds.size()
-                    || numOfPinnedApps != pba.getPinnedApps().size())
+                    || numOfPinnedApps != realNumOfPinnedApps)
                 shouldRedrawTaskbar = true;
             else {
                 for(int i = 0; i < finalApplicationIds.size(); i++) {
@@ -676,7 +673,7 @@ public class TaskbarService extends Service {
 
             if(shouldRedrawTaskbar) {
                 currentTaskbarIds = finalApplicationIds;
-                numOfPinnedApps = pba.getPinnedApps().size();
+                numOfPinnedApps = realNumOfPinnedApps;
 
                 UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
 

@@ -378,6 +378,16 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
                 U.showToast(getActivity(), R.string.shortcut_created);
                 break;
+            case "notification_settings":
+                Intent intent4 = new Intent();
+                intent4.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                intent4.putExtra("app_package", BuildConfig.APPLICATION_ID);
+                intent4.putExtra("app_uid", getActivity().getApplicationInfo().uid);
+
+                try {
+                    startActivity(intent4);
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                break;
         }
 
         return true;

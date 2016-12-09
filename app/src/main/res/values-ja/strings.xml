@@ -256,4 +256,6 @@
     <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
     <string name="change_wallpaper">Change wallpaper</string>
 
+    <string name="notification_settings">Notification settings</string>
+
 </resources>
