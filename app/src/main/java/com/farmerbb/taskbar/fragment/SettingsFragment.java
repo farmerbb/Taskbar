@@ -66,6 +66,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
     boolean finishedLoadingPrefs;
     boolean showReminderToast = false;
+    boolean restartNotificationService = false;
     int noThanksCount = 0;
 
     @Override
@@ -384,6 +385,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
                 try {
                     startActivity(intent4);
+                    restartNotificationService = true;
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                 break;
         }
@@ -426,6 +428,24 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
             U.refreshPinnedIcons(getActivity());
             restartTaskbar();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(restartNotificationService) {
+            restartNotificationService = false;
+
+            if(U.isServiceRunning(getActivity(), NotificationService.class)) {
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                pref.edit().putBoolean("is_restarting", true).apply();
+
+                Intent intent = new Intent(getActivity(), NotificationService.class);
+                getActivity().stopService(intent);
+                getActivity().startService(intent);
+            }
         }
     }
 }
