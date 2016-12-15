@@ -36,6 +36,7 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
@@ -338,6 +339,10 @@ public class TaskbarService extends Service {
             button = (Button) layout.findViewById(R.id.hide_taskbar_button);
             layout.findViewById(R.id.hide_taskbar_button_alt).setVisibility(View.GONE);
         }
+
+        try {
+            button.setTypeface(Typeface.createFromFile("/system/fonts/Roboto-Regular.ttf"));
+        } catch (RuntimeException e) { /* Gracefully fail */ }
 
         updateButton(false);
         button.setOnClickListener(new View.OnClickListener() {
