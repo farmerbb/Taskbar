@@ -258,4 +258,6 @@
 
     <string name="notification_settings">Notification settings</string>
 
+    <string name="click_to_add_widget">Click to add widget</string>
+
 </resources>

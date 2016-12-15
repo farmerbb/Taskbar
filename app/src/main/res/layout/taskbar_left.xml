@@ -36,6 +36,14 @@
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size" />
 
+        <ImageView
+            android:id="@+id/dashboard_button"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginEnd="8dp"
+            android:rotation="90"
+            android:src="@drawable/ic_view_module_black_24dp" />
+
         <HorizontalScrollView
             android:id="@+id/taskbar_scrollview"
             android:layout_width="wrap_content"

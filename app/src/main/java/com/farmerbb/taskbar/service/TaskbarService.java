@@ -91,6 +91,7 @@ public class TaskbarService extends Service {
     private FrameLayout scrollView;
     private Button button;
     private Space space;
+    private ImageView dashboardButton;
 
     private Handler handler;
     private Handler handler2;
@@ -115,6 +116,7 @@ public class TaskbarService extends Service {
     private int currentTaskbarPosition = 0;
     private boolean showHideAutomagically = false;
     private boolean positionIsVertical = false;
+    private boolean dashboardEnabled = true;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
@@ -366,6 +368,18 @@ public class TaskbarService extends Service {
                 ? R.id.hide_taskbar_button_layout
                 : R.id.hide_taskbar_button_layout_alt);
         if(buttonLayoutToHide != null) buttonLayoutToHide.setVisibility(View.GONE);
+
+        dashboardButton = (ImageView) layout.findViewById(R.id.dashboard_button);
+
+        if(dashboardEnabled)
+            dashboardButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                startService(new Intent(TaskbarService.this, DashboardService.class));
+                }
+            });
+        else
+            dashboardButton.setVisibility(View.GONE);
 
         if(pref.getBoolean("show_background", true))
             layout.setBackgroundColor(ContextCompat.getColor(this, R.color.translucent_gray));
@@ -804,6 +818,9 @@ public class TaskbarService extends Service {
         startButton.setVisibility(View.VISIBLE);
         space.setVisibility(View.VISIBLE);
 
+        if(dashboardEnabled)
+            dashboardButton.setVisibility(View.VISIBLE);
+
         if(isShowingRecents && scrollView.getVisibility() == View.GONE)
             scrollView.setVisibility(View.INVISIBLE);
 
@@ -819,6 +836,9 @@ public class TaskbarService extends Service {
     private void hideTaskbar() {
         startButton.setVisibility(View.GONE);
         space.setVisibility(View.GONE);
+
+        if(dashboardEnabled)
+            dashboardButton.setVisibility(View.GONE);
 
         if(isShowingRecents) {
             scrollView.setVisibility(View.GONE);
