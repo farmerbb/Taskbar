@@ -109,19 +109,9 @@ public class IconPackApplyActivity extends Activity {
 
             stopTaskbarService(true);
             startTaskbarService(true);
-        } else if(isServiceRunning()) {
+        } else if(U.isServiceRunning(this, StartMenuService.class)) {
             stopTaskbarService(false);
             startTaskbarService(false);
         }
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(StartMenuService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 }

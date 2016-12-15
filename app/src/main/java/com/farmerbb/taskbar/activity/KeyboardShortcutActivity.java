@@ -62,7 +62,7 @@ public class KeyboardShortcutActivity extends Activity {
 
                 break;
             case Intent.ACTION_ASSIST:
-                if(getIntent().hasExtra(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD) && isServiceRunning()) {
+                if(getIntent().hasExtra(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD) && U.isServiceRunning(this, StartMenuService.class)) {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
                 } else {
                     Intent intent = new Intent("com.google.android.googlequicksearchbox.TEXT_ASSIST");
@@ -85,15 +85,5 @@ public class KeyboardShortcutActivity extends Activity {
         }
 
         finish();
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(StartMenuService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 }

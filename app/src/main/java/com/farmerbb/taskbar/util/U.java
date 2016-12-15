@@ -16,8 +16,10 @@
 package com.farmerbb.taskbar.util;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -776,5 +778,15 @@ public class U {
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
                 || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", -1) == 1
                 || Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", -1) == 1);
+    }
+
+    public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if(cls.getName().equals(service.service.getClassName()))
+                return true;
+        }
+
+        return false;
     }
 }

@@ -18,12 +18,10 @@ package com.farmerbb.taskbar.fragment;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -412,7 +410,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
             stopTaskbarService(true);
             startTaskbarService(true);
-        } else if(isServiceRunning()) {
+        } else if(U.isServiceRunning(getActivity(), StartMenuService.class)) {
             stopTaskbarService(false);
             startTaskbarService(false);
         }
@@ -421,16 +419,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     @TargetApi(Build.VERSION_CODES.M)
     private boolean canDrawOverlays() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(getActivity());
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(StartMenuService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 
     @Override

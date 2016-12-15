@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        if(pref.getBoolean("taskbar_active", false) && !isServiceRunning())
+        if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
             editor.putBoolean("taskbar_active", false);
 
         // Ensure that components that should be enabled are enabled properly
@@ -364,16 +364,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         stopService(new Intent(this, NotificationService.class));
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(NotificationService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
