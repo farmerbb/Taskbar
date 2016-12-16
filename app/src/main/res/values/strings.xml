@@ -63,7 +63,7 @@
         <item>Most time used (ascending)</item>
     </string-array>
 
-    <string name="pref_header_advanced">Advanced settings</string>
+    <string name="pref_header_advanced">Advanced &amp; experimental</string>
 
     <string name="pref_title_freeform_hack">Freeform window support</string>
     <string name="pref_description_freeform_hack">Allows Taskbar to launch apps in freeform window mode, for a more desktop-like experience.\n\nThis feature is experimental, and may cause issues with standard split-screen multitasking.</string>
@@ -176,7 +176,7 @@
     <string name="action_uninstall">Uninstall</string>
 
     <string name="pref_title_hide_when_keyboard_shown">Collapse Taskbar automatically</string>
-    <string name="pref_description_hide_when_keyboard_shown">When the on-screen keyboard is shown, and Taskbar is horizontal, automatically collapse Taskbar to avoid blocking text fields. (Experimental)</string>
+    <string name="pref_description_hide_when_keyboard_shown">When the on-screen keyboard is shown</string>
 
     <string name="pref_max_num_of_recents">Maximum number of recent/pinned apps</string>
     <string-array name="pref_max_num_of_recents_list">
@@ -198,7 +198,7 @@
     <string name="invalid_package_name">Invalid package name</string>
 
     <string name="pref_title_use_mask">Use masks for unthemed icons</string>
-    <string name="pref_description_use_mask">When an icon pack is set, generate icons for unthemed apps using masking images found within the icon pack. (Experimental)</string>
+    <string name="pref_description_use_mask">May reduce performance when an icon pack is set</string>
 
     <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
 
@@ -236,7 +236,7 @@
 
     <string name="show_search_bar">Search bar visibility</string>
     <string-array name="pref_show_search_bar_list">
-        <item>Hardware or software keyboard (Experimental)</item>
+        <item>Hardware or software keyboard</item>
         <item>Hardware keyboard only</item>
         <item>Never show search bar</item>
     </string-array>
@@ -256,8 +256,12 @@
     <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
     <string name="change_wallpaper">Change wallpaper</string>
 
-    <string name="notification_settings">Notification settings</string>
+    <string name="notification_settings">System notification settings</string>
 
+    <string name="pref_header_appearance">Appearance</string>
+    <string name="dashboard">Enable the dashboard</string>
+    <string name="dashboard_description">Adds a button to the Taskbar where widgets can be displayed</string>
+    <string name="dashboard_grid_size">Dashboard grid size</string>
     <string name="click_to_add_widget">Click to add widget</string>
 
 </resources>

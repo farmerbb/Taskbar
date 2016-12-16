@@ -59,6 +59,7 @@ public class AboutFragment extends SettingsFragment implements OnPreferenceClick
             findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
 
         findPreference("pref_screen_general").setOnPreferenceClickListener(this);
+        findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
         findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
         findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
         findPreference("about").setOnPreferenceClickListener(this);

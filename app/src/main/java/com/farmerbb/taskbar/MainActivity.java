@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.FragmentTransaction;
@@ -51,6 +50,7 @@ import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
+import com.farmerbb.taskbar.fragment.AppearanceFragment;
 import com.farmerbb.taskbar.fragment.FreeformModeFragment;
 import com.farmerbb.taskbar.fragment.GeneralFragment;
 import com.farmerbb.taskbar.fragment.RecentAppsFragment;
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             if(!getIntent().hasExtra("theme_change"))
                 getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment").commit();
             else
-                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new GeneralFragment(), "GeneralFragment").commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment").commit();
         } else {
             String fragmentName = savedInstanceState.getString("fragment_name");
             if(fragmentName != null) switch(fragmentName) {
@@ -233,6 +233,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "RecentAppsFragment":
                     getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new RecentAppsFragment(), fragmentName).commit();
+                    break;
+                case "AppearanceFragment":
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), fragmentName).commit();
                     break;
             }
         }

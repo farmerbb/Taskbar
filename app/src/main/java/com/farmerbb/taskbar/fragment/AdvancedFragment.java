@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -38,15 +39,16 @@ public class AdvancedFragment extends SettingsFragment {
         findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
         findPreference("launcher").setOnPreferenceClickListener(this);
         findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
-        findPreference("notification_settings").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
-        bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
-        bindPreferenceSummaryToValue(findPreference("show_search_bar"));
+        bindPreferenceSummaryToValue(findPreference("dashboard"));
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        boolean searchBarEnabled = pref.getString("show_search_bar", "keyboard").equals("always");
-        findPreference("hide_when_keyboard_shown").setEnabled(!searchBarEnabled);
+        if(pref.getString("show_search_bar", "keyboard").equals("always")) {
+            CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("hide_when_keyboard_shown");
+            checkBoxPreference.setEnabled(false);
+            checkBoxPreference.setChecked(false);
+        } else
+            bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_advanced);
