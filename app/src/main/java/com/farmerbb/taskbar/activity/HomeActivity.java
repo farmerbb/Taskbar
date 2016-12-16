@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -60,6 +61,7 @@ public class HomeActivity extends Activity {
             if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
                 stopService(new Intent(HomeActivity.this, TaskbarService.class));
                 stopService(new Intent(HomeActivity.this, StartMenuService.class));
+                stopService(new Intent(HomeActivity.this, DashboardService.class));
 
                 IconCache.getInstance(context).clearCache();
 
@@ -288,6 +290,7 @@ public class HomeActivity extends Activity {
         // We always start the Taskbar and Start Menu services, even if the app isn't normally running
         startService(new Intent(this, TaskbarService.class));
         startService(new Intent(this, StartMenuService.class));
+        startService(new Intent(this, DashboardService.class));
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false))
@@ -316,6 +319,7 @@ public class HomeActivity extends Activity {
             if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
                 stopService(new Intent(this, TaskbarService.class));
                 stopService(new Intent(this, StartMenuService.class));
+                stopService(new Intent(this, DashboardService.class));
 
                 IconCache.getInstance(this).clearCache();
             }

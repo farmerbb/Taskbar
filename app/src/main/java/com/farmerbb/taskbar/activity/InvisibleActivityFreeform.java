@@ -28,9 +28,11 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.Dashboard;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -161,6 +163,7 @@ public class InvisibleActivityFreeform extends Activity {
             // We always start the Taskbar and Start Menu services, even if the app isn't normally running
             startService(new Intent(this, TaskbarService.class));
             startService(new Intent(this, StartMenuService.class));
+            startService(new Intent(this, DashboardService.class));
 
             SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getBoolean("taskbar_active", false))
@@ -198,6 +201,7 @@ public class InvisibleActivityFreeform extends Activity {
             if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
                 stopService(new Intent(this, TaskbarService.class));
                 stopService(new Intent(this, StartMenuService.class));
+                stopService(new Intent(this, DashboardService.class));
 
                 IconCache.getInstance(this).clearCache();
             }

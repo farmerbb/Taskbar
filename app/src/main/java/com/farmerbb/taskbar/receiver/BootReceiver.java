@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -45,6 +46,7 @@ public class BootReceiver extends BroadcastReceiver {
             if(!pref.getBoolean("is_hidden", false)) {
                 context.startService(new Intent(context, TaskbarService.class));
                 context.startService(new Intent(context, StartMenuService.class));
+                context.startService(new Intent(context, DashboardService.class));
             }
 
             context.startService(new Intent(context, NotificationService.class));

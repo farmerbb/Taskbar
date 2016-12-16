@@ -17,9 +17,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/cell_border" >
+    android:background="@color/translucent_gray" >
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,10 +29,12 @@
 
     <TextView
         android:id="@+id/empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center"
         android:fontFamily="sans-serif-thin"
+        android:background="@drawable/cell_border"
         android:text="@string/click_to_add_widget"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp" />

@@ -52,6 +52,7 @@ import com.farmerbb.taskbar.activity.IconPackActivityDark;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivityDark;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -398,12 +399,14 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     private void startTaskbarService(boolean fullRestart) {
         getActivity().startService(new Intent(getActivity(), TaskbarService.class));
         getActivity().startService(new Intent(getActivity(), StartMenuService.class));
+        getActivity().startService(new Intent(getActivity(), DashboardService.class));
         if(fullRestart) getActivity().startService(new Intent(getActivity(), NotificationService.class));
     }
 
     private void stopTaskbarService(boolean fullRestart) {
         getActivity().stopService(new Intent(getActivity(), TaskbarService.class));
         getActivity().stopService(new Intent(getActivity(), StartMenuService.class));
+        getActivity().stopService(new Intent(getActivity(), DashboardService.class));
         if(fullRestart) getActivity().stopService(new Intent(getActivity(), NotificationService.class));
     }
 

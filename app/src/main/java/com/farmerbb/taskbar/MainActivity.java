@@ -54,6 +54,7 @@ import com.farmerbb.taskbar.fragment.AppearanceFragment;
 import com.farmerbb.taskbar.fragment.FreeformModeFragment;
 import com.farmerbb.taskbar.fragment.GeneralFragment;
 import com.farmerbb.taskbar.fragment.RecentAppsFragment;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -350,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
         startService(new Intent(this, TaskbarService.class));
         startService(new Intent(this, StartMenuService.class));
+        startService(new Intent(this, DashboardService.class));
         startService(new Intent(this, NotificationService.class));
     }
 
@@ -360,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
         if(!LauncherHelper.getInstance().isOnHomeScreen()) {
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
+            stopService(new Intent(this, DashboardService.class));
 
             IconCache.getInstance(this).clearCache();
 

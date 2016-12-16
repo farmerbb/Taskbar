@@ -116,7 +116,7 @@ public class TaskbarService extends Service {
     private int currentTaskbarPosition = 0;
     private boolean showHideAutomagically = false;
     private boolean positionIsVertical = false;
-    private boolean dashboardEnabled = true;
+    private boolean dashboardEnabled = false;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
@@ -371,11 +371,12 @@ public class TaskbarService extends Service {
 
         dashboardButton = (ImageView) layout.findViewById(R.id.dashboard_button);
 
+        dashboardEnabled = pref.getBoolean("dashboard", false);
         if(dashboardEnabled)
             dashboardButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                startService(new Intent(TaskbarService.this, DashboardService.class));
+                    LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
                 }
             });
         else
@@ -730,13 +731,13 @@ public class TaskbarService extends Service {
                                 float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
 
                                 params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                        maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size))
+                                        maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
                                         + getResources().getDimensionPixelSize(R.dimen.divider_size);
                             } else {
                                 float maxScreenSize = metrics.widthPixels;
 
                                 params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                        maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size))
+                                        maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
                                         + getResources().getDimensionPixelSize(R.dimen.divider_size);
                             }
 

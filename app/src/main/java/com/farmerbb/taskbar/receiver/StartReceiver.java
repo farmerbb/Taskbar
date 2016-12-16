@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -44,6 +45,7 @@ public class StartReceiver extends BroadcastReceiver {
 
             context.startService(new Intent(context, TaskbarService.class));
             context.startService(new Intent(context, StartMenuService.class));
+            context.startService(new Intent(context, DashboardService.class));
             context.startService(new Intent(context, NotificationService.class));
         }
     }

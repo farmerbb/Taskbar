@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -33,6 +34,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent taskbarIntent = new Intent(context, TaskbarService.class);
         Intent startMenuIntent = new Intent(context, StartMenuService.class);
+        Intent dashboardIntent = new Intent(context, DashboardService.class);
         Intent notificationIntent = new Intent(context, NotificationService.class);
 
         SharedPreferences pref = U.getSharedPreferences(context);
@@ -42,6 +44,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
             context.stopService(notificationIntent);
             context.startService(taskbarIntent);
             context.startService(startMenuIntent);
+            context.startService(dashboardIntent);
             context.startService(notificationIntent);
 
         } else {
@@ -52,6 +55,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
             if(!LauncherHelper.getInstance().isOnHomeScreen()) {
                 context.stopService(taskbarIntent);
                 context.stopService(startMenuIntent);
+                context.stopService(dashboardIntent);
 
                 IconCache.getInstance(context).clearCache();
 

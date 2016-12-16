@@ -663,8 +663,9 @@ public class U {
     }
 
     private static int getMaxNumOfColumns(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float baseTaskbarSize = context.getResources().getDimension(R.dimen.base_taskbar_size) / metrics.density;
+        float baseTaskbarSize = context.getResources().getDimension(pref.getBoolean("dashboard", false) ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size) / metrics.density;
         int numOfColumns = 0;
 
         float maxScreenSize = getTaskbarPosition(context).contains("vertical")
@@ -673,7 +674,6 @@ public class U {
 
         float iconSize = context.getResources().getDimension(R.dimen.icon_size) / metrics.density;
 
-        SharedPreferences pref = getSharedPreferences(context);
         int userMaxNumOfColumns = Integer.valueOf(pref.getString("max_num_of_recents", "10"));
 
         while(baseTaskbarSize + iconSize < maxScreenSize

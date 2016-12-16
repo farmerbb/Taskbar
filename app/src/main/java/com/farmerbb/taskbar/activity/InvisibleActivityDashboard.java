@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -36,6 +37,8 @@ public class InvisibleActivityDashboard extends Activity {
 
     int REQUEST_PICK_APPWIDGET = 456;
     int REQUEST_CREATE_APPWIDGET = 789;
+
+    boolean shouldFinish = true;
 
     int cellId = -1;
 
@@ -50,6 +53,8 @@ public class InvisibleActivityDashboard extends Activity {
             Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
             pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+
+            shouldFinish = false;
         }
     };
 
@@ -94,9 +99,11 @@ public class InvisibleActivityDashboard extends Activity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        onBackPressed();
+    protected void onPause() {
+        super.onPause();
+
+        if(shouldFinish)
+            onBackPressed();
     }
 
     @Override
@@ -134,6 +141,8 @@ public class InvisibleActivityDashboard extends Activity {
             intent.setComponent(appWidgetInfo.configure);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+
+            shouldFinish = false;
         } else {
             createWidget(data);
         }
@@ -144,5 +153,7 @@ public class InvisibleActivityDashboard extends Activity {
         intent.putExtra("appWidgetId", data.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1));
         intent.putExtra("cellId", cellId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+        shouldFinish = true;
     }
 }

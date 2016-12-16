@@ -27,6 +27,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -93,12 +94,14 @@ public class IconPackApplyActivity extends Activity {
     private void startTaskbarService(boolean fullRestart) {
         startService(new Intent(this, TaskbarService.class));
         startService(new Intent(this, StartMenuService.class));
+        startService(new Intent(this, DashboardService.class));
         if(fullRestart) startService(new Intent(this, NotificationService.class));
     }
 
     private void stopTaskbarService(boolean fullRestart) {
         stopService(new Intent(this, TaskbarService.class));
         stopService(new Intent(this, StartMenuService.class));
+        stopService(new Intent(this, DashboardService.class));
         if(fullRestart) stopService(new Intent(this, NotificationService.class));
     }
 
