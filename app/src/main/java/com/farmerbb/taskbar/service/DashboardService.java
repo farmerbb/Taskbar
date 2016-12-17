@@ -107,6 +107,22 @@ public class DashboardService extends Service {
         }
     };
 
+    private View.OnLongClickListener olcl = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            layout.setVisibility(View.GONE);
+
+            Bundle bundle = (Bundle) v.getTag();
+            int cellId = bundle.getInt("cellId");
+
+            Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
+            intent.putExtra("cellId", cellId);
+            LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
+
+            return true;
+        }
+    };
+
     private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -121,34 +137,28 @@ public class DashboardService extends Service {
 
             if(intent.hasExtra("appWidgetId") && intent.hasExtra("cellId")) {
                 int appWidgetId = intent.getExtras().getInt("appWidgetId", -1);
-                final int cellId = intent.getExtras().getInt("cellId", -1);
+                int cellId = intent.getExtras().getInt("cellId", -1);
 
                 AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 
                 LauncherAppWidgetHostView hostView = (LauncherAppWidgetHostView) mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
                 hostView.setAppWidget(appWidgetId, appWidgetInfo);
-                hostView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        layout.setVisibility(View.GONE);
+                hostView.setOnLongClickListener(olcl);
 
-                        Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
-                        intent.putExtra("cellId", cellId);
-                        LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
-
-                        return true;
-                    }
-                });
+                Bundle bundle = new Bundle();
+                bundle.putInt("cellId", cellId);
+                hostView.setTag(bundle);
 
                 FrameLayout cellLayout = cells.get(cellId);
                 cellLayout.findViewById(R.id.empty).setVisibility(View.GONE);
+                cellLayout.setOnLongClickListener(olcl);
 
                 LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
                 linearLayout.addView(hostView);
 
-                Bundle bundle = (Bundle) cellLayout.getTag();
-                bundle.putInt("appWidgetId", appWidgetId);
-                cellLayout.setTag(bundle);
+                Bundle bundle2 = (Bundle) cellLayout.getTag();
+                bundle2.putInt("appWidgetId", appWidgetId);
+                cellLayout.setTag(bundle2);
             }
         }
     };
@@ -172,6 +182,7 @@ public class DashboardService extends Service {
 
                 cellLayout.setTag(bundle);
                 cellLayout.setOnClickListener(cellOcl);
+                cellLayout.setOnLongClickListener(null);
             }
         }
     };
@@ -220,7 +231,7 @@ public class DashboardService extends Service {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
-                0,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 PixelFormat.TRANSLUCENT);
 
         // Initialize views

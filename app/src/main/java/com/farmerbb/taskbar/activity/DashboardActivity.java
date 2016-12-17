@@ -87,6 +87,8 @@ public class DashboardActivity extends Activity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+
+                            shouldFinish = true;
                         }
                     })
                     .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
@@ -95,6 +97,8 @@ public class DashboardActivity extends Activity {
                             Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
                             intent.putExtra("cellId", cellId);
                             LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent);
+
+                            shouldFinish = true;
                         }
                     });
 
@@ -188,6 +192,8 @@ public class DashboardActivity extends Activity {
             }
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
+
+            shouldFinish = true;
         }
     }
 
