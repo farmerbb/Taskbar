@@ -18,6 +18,8 @@
 
     <string name="left_arrow" translatable="false">&#10094;</string>
     <string name="right_arrow" translatable="false">&#10095;</string>
+    <string name="x" translatable="false">&#215;</string>
+    <string name="dashboard_grid_description" translatable="false">%1$d &#215; %2$d</string>
 
     <string-array name="pref_start_menu_list_values">
         <item>list</item>

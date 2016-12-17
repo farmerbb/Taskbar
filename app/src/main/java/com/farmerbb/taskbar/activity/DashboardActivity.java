@@ -1,4 +1,7 @@
-/* Copyright 2016 Braden Farmer
+/* Based on code by Leonardo Fischer
+ * See https://github.com/lgfischer/WidgetHostExample
+ *
+ * Copyright 2016 Braden Farmer
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +19,33 @@
 package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
-import android.appwidget.AppWidgetHost;
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-public class InvisibleActivityDashboard extends Activity {
+import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.LauncherAppWidgetHost;
+import com.farmerbb.taskbar.util.U;
+
+public class DashboardActivity extends Activity {
 
     private AppWidgetManager mAppWidgetManager;
-    private AppWidgetHost mAppWidgetHost;
+    private LauncherAppWidgetHost mAppWidgetHost;
 
     int REQUEST_PICK_APPWIDGET = 456;
     int REQUEST_CREATE_APPWIDGET = 789;
@@ -45,13 +58,49 @@ public class InvisibleActivityDashboard extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             mAppWidgetManager = AppWidgetManager.getInstance(context);
-            mAppWidgetHost = new AppWidgetHost(context, intent.getIntExtra("appWidgetId", -1));
+            mAppWidgetHost = new LauncherAppWidgetHost(context, intent.getIntExtra("appWidgetId", -1));
             cellId = intent.getIntExtra("cellId", -1);
 
             int appWidgetId = mAppWidgetHost.allocateAppWidgetId();
             Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
             pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+
+            try {
+                startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+            } catch (ActivityNotFoundException e) {
+                U.showToast(DashboardActivity.this, R.string.lock_device_not_supported);
+            }
+
+            shouldFinish = false;
+        }
+    };
+
+    private BroadcastReceiver removeWidgetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            cellId = intent.getIntExtra("cellId", -1);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
+            builder.setTitle(R.string.remove_widget)
+                    .setMessage(R.string.are_you_sure)
+                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+                        }
+                    })
+                    .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
+                            intent.putExtra("cellId", cellId);
+                            LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent);
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            dialog.setCancelable(false);
 
             shouldFinish = false;
         }
@@ -64,6 +113,7 @@ public class InvisibleActivityDashboard extends Activity {
         }
     };
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +122,16 @@ public class InvisibleActivityDashboard extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
+        DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+        setContentView(R.layout.incognito);
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.incognitoLayout);
+        layout.setLayoutParams(new FrameLayout.LayoutParams(display.getWidth(), display.getHeight()));
+
         LocalBroadcastManager.getInstance(this).registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED"));
         LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
     }
 
@@ -110,6 +169,7 @@ public class InvisibleActivityDashboard extends Activity {
         super.onDestroy();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(addWidgetReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(removeWidgetReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
     }
 

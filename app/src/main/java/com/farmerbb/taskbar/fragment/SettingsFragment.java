@@ -22,10 +22,12 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,6 +41,9 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.farmerbb.taskbar.BuildConfig;
@@ -165,6 +170,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     @Override
@@ -391,6 +397,50 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     restartNotificationService = true;
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                 break;
+            case "dashboard_grid_size":
+                AlertDialog.Builder builder4 = new AlertDialog.Builder(getActivity());
+                LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.dashboard_size_dialog, null);
+
+                boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+                boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+                int editTextId = -1;
+                int editText2Id = -1;
+
+                if(isPortrait) {
+                    editTextId = R.id.fragmentEditText2;
+                    editText2Id = R.id.fragmentEditText1;
+                }
+
+                if(isLandscape) {
+                    editTextId = R.id.fragmentEditText1;
+                    editText2Id = R.id.fragmentEditText2;
+                }
+
+                final EditText editText = (EditText) dialogLayout.findViewById(editTextId);
+                final EditText editText2 = (EditText) dialogLayout.findViewById(editText2Id);
+
+                builder4.setView(dialogLayout)
+                        .setTitle(R.string.dashboard_grid_size)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putInt("dashboard_width", Integer.parseInt(editText.getText().toString()));
+                                editor.putInt("dashboard_height", Integer.parseInt(editText2.getText().toString()));
+                                editor.apply();
+
+                                updateDashboardGridSize(true);
+                            }
+                        })
+                        .setNegativeButton(R.string.action_cancel, null);
+
+                editText.setText(Integer.toString(pref.getInt("dashboard_width", getResources().getInteger(R.integer.dashboard_width))));
+                editText2.setText(Integer.toString(pref.getInt("dashboard_height", getResources().getInteger(R.integer.dashboard_height))));
+
+                AlertDialog dialog4 = builder4.create();
+                dialog4.show();
+
+                break;
         }
 
         return true;
@@ -452,5 +502,31 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 getActivity().startService(intent);
             }
         }
+    }
+
+    protected void updateDashboardGridSize(boolean restartTaskbar) {
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        int width = pref.getInt("dashboard_width", getResources().getInteger(R.integer.dashboard_width));
+        int height = pref.getInt("dashboard_height", getResources().getInteger(R.integer.dashboard_height));
+
+        boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        int first = -1;
+        int second = -1;
+
+        if(isPortrait) {
+            first = height;
+            second = width;
+        }
+
+        if(isLandscape) {
+            first = width;
+            second = height;
+        }
+
+        findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
+
+        if(restartTaskbar) restartTaskbar();
     }
 }

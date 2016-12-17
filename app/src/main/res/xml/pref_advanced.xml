@@ -30,20 +30,19 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="hide_when_keyboard_shown"
-        android:title="@string/pref_title_hide_when_keyboard_shown"
-        android:summary="@string/pref_description_hide_when_keyboard_shown" />
-
-    <CheckBoxPreference
-        android:defaultValue="false"
         android:key="dashboard"
         android:title="@string/dashboard"
         android:summary="@string/dashboard_description" />
 
     <Preference
         android:key="dashboard_grid_size"
-        android:title="@string/dashboard_grid_size"
-        android:summary="4 x 2"/>
+        android:title="@string/dashboard_grid_size" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="hide_when_keyboard_shown"
+        android:title="@string/pref_title_hide_when_keyboard_shown"
+        android:summary="@string/pref_description_hide_when_keyboard_shown" />
 
     <Preference
         android:key="clear_pinned_apps"

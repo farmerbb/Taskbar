@@ -37,7 +37,6 @@ public class DummyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new View(this));
-        setTitle(null);
     }
 
     @Override

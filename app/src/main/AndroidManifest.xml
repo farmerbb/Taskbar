@@ -67,12 +67,6 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity
-            android:name=".activity.InvisibleActivityDashboard"
-            android:documentLaunchMode="always"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.InvisibleActivity"/>
-        <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
@@ -129,7 +123,7 @@
             android:name=".activity.DummyActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.Dialog"/>
+            android:theme="@style/AppTheme.Incognito"/>
         <activity
             android:name=".activity.ImportSettingsActivity"
             android:theme="@style/AppTheme.Dialog"/>
@@ -179,6 +173,18 @@
         <activity
             android:name=".activity.ClearDataActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.DashboardActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.DashboardActivityDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>
