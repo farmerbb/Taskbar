@@ -382,8 +382,9 @@ public class TaskbarService extends Service {
         else
             dashboardButton.setVisibility(View.GONE);
 
-        if(pref.getBoolean("show_background", true))
-            layout.setBackgroundColor(ContextCompat.getColor(this, R.color.translucent_gray));
+        layout.setBackgroundColor(pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray)));
+        layout.findViewById(R.id.divider).setBackgroundColor(pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white)));
+        button.setTextColor(pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white)));
 
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar();
@@ -1034,6 +1035,7 @@ public class TaskbarService extends Service {
         ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
         ImageView imageView2 = (ImageView) convertView.findViewById(R.id.shortcut_icon);
         imageView.setImageDrawable(entry.getIcon(this));
+        imageView2.setBackgroundColor(pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white)));
 
         String taskbarPosition = U.getTaskbarPosition(this);
         if(pref.getBoolean("shortcut_icon", true)) {

@@ -69,6 +69,8 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
+import yuku.ambilwarna.widget.AmbilWarnaPreference;
+
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
 
     boolean finishedLoadingPrefs;
@@ -93,9 +95,20 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
         // On smaller-screened devices, set "Grid" as the default start menu layout
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(getResources().getConfiguration().smallestScreenWidthDp < 600
+        if(getActivity().getApplicationContext().getResources().getConfiguration().smallestScreenWidthDp < 600
                 && pref.getString("start_menu_layout", "null").equals("null")) {
             pref.edit().putString("start_menu_layout", "grid").apply();
+        }
+
+        // Import old background tint preference
+        if(pref.contains("show_background")) {
+            SharedPreferences.Editor editor = pref.edit();
+
+            if(!pref.getBoolean("show_background", true))
+                editor.putInt("background_tint", 0).apply();
+
+            editor.remove("show_background");
+            editor.apply();
         }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -136,7 +149,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     getActivity().overridePendingTransition(0, 0);
                 }
 
-            } else if(!(preference instanceof CheckBoxPreference)) {
+            } else if(!(preference instanceof CheckBoxPreference || preference instanceof AmbilWarnaPreference)) {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
@@ -154,7 +167,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
         // Trigger the listener immediately with the preference's
         // current value.
-        if(!(preference instanceof CheckBoxPreference))
+        if(!(preference instanceof CheckBoxPreference || preference instanceof AmbilWarnaPreference))
             sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                     PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
     }
@@ -449,6 +462,30 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     }
                 });
 
+                break;
+            case "reset_colors":
+                AlertDialog.Builder builder5 = new AlertDialog.Builder(getActivity());
+                builder5.setTitle(R.string.reset_colors)
+                        .setMessage(R.string.are_you_sure)
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finishedLoadingPrefs = false;
+
+                                AmbilWarnaPreference backgroundTintPref = (AmbilWarnaPreference) findPreference("background_tint");
+                                backgroundTintPref.forceSetValue(getResources().getInteger(R.integer.translucent_gray));
+
+                                AmbilWarnaPreference accentColorPref = (AmbilWarnaPreference) findPreference("accent_color");
+                                accentColorPref.forceSetValue(getResources().getInteger(R.integer.translucent_white));
+
+                                finishedLoadingPrefs = true;
+                                restartTaskbar();
+                            }
+                        });
+
+                AlertDialog dialog5 = builder5.create();
+                dialog5.show();
                 break;
         }
 

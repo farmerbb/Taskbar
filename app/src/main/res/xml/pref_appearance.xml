@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
         android:defaultValue="light"
@@ -29,10 +30,17 @@
         android:key="icon_pack_list"
         android:title="@string/icon_pack" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="show_background"
-        android:title="@string/pref_title_background_tint"/>
+    <yuku.ambilwarna.widget.AmbilWarnaPreference
+        android:key="background_tint"
+        android:defaultValue="@integer/translucent_gray"
+        app:supportsAlpha="true"
+        android:title="@string/pref_title_background_tint" />
+
+    <yuku.ambilwarna.widget.AmbilWarnaPreference
+        android:key="accent_color"
+        android:defaultValue="@integer/translucent_white"
+        app:supportsAlpha="true"
+        android:title="@string/pref_title_accent_color" />
 
     <CheckBoxPreference
         android:defaultValue="false"
@@ -49,6 +57,10 @@
         android:key="icon_pack_use_mask"
         android:title="@string/pref_title_use_mask"
         android:summary="@string/pref_description_use_mask" />
+
+    <Preference
+        android:key="reset_colors"
+        android:title="@string/reset_colors" />
 
     <PreferenceCategory android:title="\n\n" />
 

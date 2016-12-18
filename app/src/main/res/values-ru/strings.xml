@@ -269,4 +269,7 @@
     <string name="error_loading_widget">Error loading widget</string>
     <string name="dashboard_tutorial">Click anywhere on screen to add a widget to the dashboard</string>
 
+    <string name="pref_title_accent_color">Accent color</string>
+    <string name="reset_colors">Reset colors to default</string>
+
 </resources>

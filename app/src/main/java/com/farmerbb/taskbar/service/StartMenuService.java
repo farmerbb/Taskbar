@@ -262,7 +262,11 @@ public class StartMenuService extends Service {
         startMenu.setScrollBarStyle(scrollbar ? View.SCROLLBARS_OUTSIDE_INSET : View.SCROLLBARS_INSIDE_OVERLAY);
 
         searchView = (SearchView) layout.findViewById(R.id.search);
+
+        FrameLayout startMenuFrame = (FrameLayout) layout.findViewById(R.id.start_menu_frame);
         FrameLayout searchViewLayout = (FrameLayout) layout.findViewById(R.id.search_view_layout);
+        startMenuFrame.setBackgroundColor(pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray)));
+        searchViewLayout.setBackgroundColor(pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray)));
 
         if(shouldShowSearchBox) {
             if(!hasHardwareKeyboard) searchView.setIconifiedByDefault(true);

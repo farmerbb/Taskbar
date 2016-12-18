@@ -289,6 +289,7 @@ public class DashboardService extends Service {
             for(int j = 0; j < rows; j++) {
                 FrameLayout cellLayout = (FrameLayout) View.inflate(this, R.layout.dashboard, null);
                 cellLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
+                cellLayout.setBackgroundColor(pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray)));
                 cellLayout.setOnClickListener(cellOcl);
 
                 Bundle bundle = new Bundle();

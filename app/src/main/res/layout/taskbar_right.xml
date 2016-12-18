@@ -21,7 +21,6 @@
         <Button
             android:layout_width="24dp"
             android:layout_height="@dimen/icon_size"
-            android:textColor="@color/translucent_white"
             android:textSize="20dp"
             android:background="@null"
             android:rotationY="180"
@@ -61,8 +60,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:layout_marginLeft="2dp"
-                            android:layout_marginRight="2dp"
-                            android:background="@color/translucent_white" />
+                            android:layout_marginRight="2dp" />
 
                 </LinearLayout>
 
@@ -89,7 +87,6 @@
         <Button
             android:layout_width="24dp"
             android:layout_height="@dimen/icon_size"
-            android:textColor="@color/translucent_white"
             android:textSize="20dp"
             android:background="@null"
             android:rotationY="180"

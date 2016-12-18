@@ -39,12 +39,14 @@ public class AppearanceFragment extends SettingsFragment {
 
         // Set OnClickListeners for certain preferences
         findPreference("icon_pack_list").setOnPreferenceClickListener(this);
+        findPreference("reset_colors").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("show_background"));
         bindPreferenceSummaryToValue(findPreference("theme"));
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
         bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
         bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
+        bindPreferenceSummaryToValue(findPreference("background_tint"));
+        bindPreferenceSummaryToValue(findPreference("accent_color"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_appearance);

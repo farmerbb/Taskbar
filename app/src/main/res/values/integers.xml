@@ -15,6 +15,8 @@
 -->
 
 <resources>
+    <integer name="translucent_gray">0x40000000</integer>
+    <integer name="translucent_white">0x99FFFFFF</integer>
     <integer name="dashboard_width">2</integer>
     <integer name="dashboard_height">2</integer>
 </resources>

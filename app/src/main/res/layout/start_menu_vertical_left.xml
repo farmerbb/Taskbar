@@ -24,10 +24,10 @@
     android:visibility="gone">
 
         <FrameLayout
+            android:id="@+id/start_menu_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="1dp"
-            android:background="@color/translucent_gray"
             android:layout_marginLeft="@dimen/icon_size" >
 
                 <GridView
@@ -57,7 +57,6 @@
             android:paddingLeft="1dp"
             android:paddingRight="1dp"
             android:paddingBottom="1dp"
-            android:background="@color/translucent_gray"
             android:layout_marginLeft="@dimen/icon_size" >
 
                 <LinearLayout
