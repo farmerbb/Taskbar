@@ -261,8 +261,8 @@ public class DashboardService extends Service {
         }
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        int width = pref.getInt("dashboard_width", getResources().getInteger(R.integer.dashboard_width));
-        int height = pref.getInt("dashboard_height", getResources().getInteger(R.integer.dashboard_height));
+        int width = pref.getInt("dashboard_width", getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
+        int height = pref.getInt("dashboard_height", getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
 
         boolean isPortrait = getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;

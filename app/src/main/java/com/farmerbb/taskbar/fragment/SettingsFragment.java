@@ -31,6 +31,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -434,11 +435,19 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         })
                         .setNegativeButton(R.string.action_cancel, null);
 
-                editText.setText(Integer.toString(pref.getInt("dashboard_width", getResources().getInteger(R.integer.dashboard_width))));
-                editText2.setText(Integer.toString(pref.getInt("dashboard_height", getResources().getInteger(R.integer.dashboard_height))));
+                editText.setText(Integer.toString(pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_width))));
+                editText2.setText(Integer.toString(pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_height))));
 
                 AlertDialog dialog4 = builder4.create();
                 dialog4.show();
+
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(editText2, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                });
 
                 break;
         }
@@ -506,8 +515,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
     protected void updateDashboardGridSize(boolean restartTaskbar) {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        int width = pref.getInt("dashboard_width", getResources().getInteger(R.integer.dashboard_width));
-        int height = pref.getInt("dashboard_height", getResources().getInteger(R.integer.dashboard_height));
+        int width = pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
+        int height = pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
 
         boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
