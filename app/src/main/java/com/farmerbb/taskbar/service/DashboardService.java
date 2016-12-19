@@ -23,6 +23,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Service;
+import android.appwidget.AppWidgetHost;
+import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.BroadcastReceiver;
@@ -39,6 +41,7 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.SparseArray;
 import android.view.MotionEvent;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -50,15 +53,13 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.activity.DashboardActivityDark;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.LauncherAppWidgetHost;
-import com.farmerbb.taskbar.util.LauncherAppWidgetHostView;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class DashboardService extends Service {
 
     private AppWidgetManager mAppWidgetManager;
-    private LauncherAppWidgetHost mAppWidgetHost;
+    private AppWidgetHost mAppWidgetHost;
 
     private WindowManager windowManager;
     private LinearLayout layout;
@@ -92,6 +93,10 @@ public class DashboardService extends Service {
         @Override
         public boolean onHover(View v, MotionEvent event) {
             cellClick(v, false);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                v.setPointerIcon(PointerIcon.getSystemIcon(DashboardService.this, PointerIcon.TYPE_DEFAULT));
+
             return false;
         }
     };
@@ -133,14 +138,15 @@ public class DashboardService extends Service {
 
                 AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 
-                LauncherAppWidgetHostView hostView = (LauncherAppWidgetHostView) mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
+                FrameLayout cellLayout = cells.get(cellId);
+                AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
                 hostView.setAppWidget(appWidgetId, appWidgetInfo);
+                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("cellId", cellId);
                 hostView.setTag(bundle);
 
-                FrameLayout cellLayout = cells.get(cellId);
                 cellLayout.findViewById(R.id.empty).setVisibility(View.GONE);
                 cellLayout.setOnLongClickListener(olcl);
                 cellLayout.setOnGenericMotionListener(ogml);
@@ -308,7 +314,7 @@ public class DashboardService extends Service {
         }
 
         mAppWidgetManager = AppWidgetManager.getInstance(this);
-        mAppWidgetHost = new LauncherAppWidgetHost(this, APPWIDGET_HOST_ID);
+        mAppWidgetHost = new AppWidgetHost(this, APPWIDGET_HOST_ID);
         mAppWidgetHost.stopListening();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);

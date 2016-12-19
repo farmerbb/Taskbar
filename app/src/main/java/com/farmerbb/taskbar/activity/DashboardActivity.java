@@ -20,6 +20,7 @@ package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.ActivityNotFoundException;
@@ -39,13 +40,12 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.LauncherAppWidgetHost;
 import com.farmerbb.taskbar.util.U;
 
 public class DashboardActivity extends Activity {
 
     private AppWidgetManager mAppWidgetManager;
-    private LauncherAppWidgetHost mAppWidgetHost;
+    private AppWidgetHost mAppWidgetHost;
 
     int REQUEST_PICK_APPWIDGET = 456;
     int REQUEST_CREATE_APPWIDGET = 789;
@@ -58,7 +58,7 @@ public class DashboardActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             mAppWidgetManager = AppWidgetManager.getInstance(context);
-            mAppWidgetHost = new LauncherAppWidgetHost(context, intent.getIntExtra("appWidgetId", -1));
+            mAppWidgetHost = new AppWidgetHost(context, intent.getIntExtra("appWidgetId", -1));
             cellId = intent.getIntExtra("cellId", -1);
 
             int appWidgetId = mAppWidgetHost.allocateAppWidgetId();
