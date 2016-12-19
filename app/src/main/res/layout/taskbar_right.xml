@@ -66,13 +66,72 @@
 
         </HorizontalScrollView>
 
-        <ImageView
+        <FrameLayout
+            android:orientation="vertical"
             android:id="@+id/dashboard_button"
             android:layout_width="40dp"
             android:layout_height="@dimen/icon_size"
-            android:layout_marginStart="8dp"
-            android:rotation="90"
-            android:src="@drawable/ic_view_module_black_24dp" />
+            android:layout_marginStart="8dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                                <View
+                                    android:id="@+id/square1"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square2"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square3"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                                <View
+                                    android:id="@+id/square4"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square5"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square6"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                        </LinearLayout>
+
+                </LinearLayout>
+
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/start_button"

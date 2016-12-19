@@ -91,7 +91,7 @@ public class TaskbarService extends Service {
     private FrameLayout scrollView;
     private Button button;
     private Space space;
-    private ImageView dashboardButton;
+    private FrameLayout dashboardButton;
 
     private Handler handler;
     private Handler handler2;
@@ -369,22 +369,32 @@ public class TaskbarService extends Service {
                 : R.id.hide_taskbar_button_layout_alt);
         if(buttonLayoutToHide != null) buttonLayoutToHide.setVisibility(View.GONE);
 
-        dashboardButton = (ImageView) layout.findViewById(R.id.dashboard_button);
+        int backgroundTint = pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray));
+        int accentColor = pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white));
+
+        dashboardButton = (FrameLayout) layout.findViewById(R.id.dashboard_button);
 
         dashboardEnabled = pref.getBoolean("dashboard", false);
-        if(dashboardEnabled)
+        if(dashboardEnabled) {
+            layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square3).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square4).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
+
             dashboardButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
                 }
             });
-        else
+        } else
             dashboardButton.setVisibility(View.GONE);
 
-        layout.setBackgroundColor(pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray)));
-        layout.findViewById(R.id.divider).setBackgroundColor(pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white)));
-        button.setTextColor(pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white)));
+        layout.setBackgroundColor(backgroundTint);
+        layout.findViewById(R.id.divider).setBackgroundColor(accentColor);
+        button.setTextColor(accentColor);
 
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar();

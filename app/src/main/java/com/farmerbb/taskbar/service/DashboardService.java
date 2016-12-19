@@ -18,6 +18,8 @@
 
 package com.farmerbb.taskbar.service;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Service;
@@ -41,6 +43,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
@@ -87,7 +90,7 @@ public class DashboardService extends Service {
             int currentlySelectedCell = appWidgetId == -1 ? cellId : -1;
 
             if(appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) {
-                layout.setVisibility(View.GONE);
+                fadeOut(false);
 
                 FrameLayout frameLayout = cells.get(currentlySelectedCell);
                 frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
@@ -110,7 +113,7 @@ public class DashboardService extends Service {
     private View.OnLongClickListener olcl = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            layout.setVisibility(View.GONE);
+            fadeOut(false);
 
             Bundle bundle = (Bundle) v.getTag();
             int cellId = bundle.getInt("cellId");
@@ -133,7 +136,7 @@ public class DashboardService extends Service {
     private BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            layout.setVisibility(View.VISIBLE);
+            fadeIn();
 
             if(intent.hasExtra("appWidgetId") && intent.hasExtra("cellId")) {
                 int appWidgetId = intent.getExtras().getInt("appWidgetId", -1);
@@ -166,7 +169,7 @@ public class DashboardService extends Service {
     private BroadcastReceiver removeWidgetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            layout.setVisibility(View.VISIBLE);
+            fadeIn();
 
             if(intent.hasExtra("cellId")) {
                 int cellId = intent.getExtras().getInt("cellId", -1);
@@ -238,6 +241,7 @@ public class DashboardService extends Service {
         layout = new LinearLayout(this);
         layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setVisibility(View.GONE);
+        layout.setAlpha(0);
 
         int paddingSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
 
@@ -279,6 +283,9 @@ public class DashboardService extends Service {
 
         maxSize = columns * rows;
 
+        int backgroundTint = pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray));
+        int accentColor = pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white));
+
         int cellCount = 0;
 
         for(int i = 0; i < columns; i++) {
@@ -289,8 +296,11 @@ public class DashboardService extends Service {
             for(int j = 0; j < rows; j++) {
                 FrameLayout cellLayout = (FrameLayout) View.inflate(this, R.layout.dashboard, null);
                 cellLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
-                cellLayout.setBackgroundColor(pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray)));
+                cellLayout.setBackgroundColor(backgroundTint);
                 cellLayout.setOnClickListener(cellOcl);
+
+                TextView empty = (TextView) cellLayout.findViewById(R.id.empty);
+                empty.setTextColor(accentColor);
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("cellId", cellCount);
@@ -333,7 +343,7 @@ public class DashboardService extends Service {
     @TargetApi(Build.VERSION_CODES.N)
     private void showDashboard() {
         layout.setOnClickListener(ocl);
-        layout.setVisibility(View.VISIBLE);
+        fadeIn();
 
         mAppWidgetHost.startListening();
 
@@ -371,7 +381,7 @@ public class DashboardService extends Service {
 
     private void hideDashboard() {
         layout.setOnClickListener(null);
-        layout.setVisibility(View.INVISIBLE);
+        fadeOut(true);
 
         mAppWidgetHost.stopListening();
 
@@ -381,15 +391,27 @@ public class DashboardService extends Service {
         }
 
         previouslySelectedCell = -1;
+    }
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+    private void fadeIn() {
+        layout.setVisibility(View.VISIBLE);
+        layout.animate()
+                .alpha(1)
+                .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+                .setListener(null);
+    }
 
-        layout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layout.setVisibility(View.GONE);
-            }
-        }, 250);
+    private void fadeOut(final boolean sendIntent) {
+        layout.animate()
+                .alpha(0)
+                .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        layout.setVisibility(View.GONE);
+                        if(sendIntent) LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+                    }
+                });
     }
 
     @TargetApi(Build.VERSION_CODES.M)
