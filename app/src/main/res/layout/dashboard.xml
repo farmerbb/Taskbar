@@ -31,11 +31,10 @@
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="6dp"
+        android:layout_margin="8dp"
         android:visibility="gone"
         android:gravity="center"
         android:fontFamily="sans-serif-light"
-        android:background="@drawable/cell_border"
         android:text="@string/click_to_add_widget"
         android:textSize="24sp" />
 

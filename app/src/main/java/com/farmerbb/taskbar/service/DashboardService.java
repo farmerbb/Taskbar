@@ -33,12 +33,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.graphics.ColorUtils;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.PointerIcon;
@@ -66,6 +68,7 @@ public class DashboardService extends Service {
     private LinearLayout layout;
 
     private SparseArray<DashboardCell> cells = new SparseArray<>();
+    private SparseArray<AppWidgetHostView> widgets = new SparseArray<>();
 
     private final int APPWIDGET_HOST_ID = 123;
 
@@ -255,6 +258,8 @@ public class DashboardService extends Service {
 
         int backgroundTint = U.getBackgroundTint(this);
         int accentColor = U.getAccentColor(this);
+        int accentColorAlt = accentColor;
+        accentColorAlt = ColorUtils.setAlphaComponent(accentColorAlt, Color.alpha(accentColorAlt) / 2);
 
         int cellCount = 0;
 
@@ -271,6 +276,7 @@ public class DashboardService extends Service {
                 cellLayout.setOnHoverListener(cellOhl);
 
                 TextView empty = (TextView) cellLayout.findViewById(R.id.empty);
+                empty.setBackgroundColor(accentColorAlt);
                 empty.setTextColor(accentColor);
 
                 Bundle bundle = new Bundle();
@@ -349,6 +355,14 @@ public class DashboardService extends Service {
             U.launchAppFullscreen(this, intent);
         } else
             startActivity(intent);
+
+        for(int i = 0; i < maxSize; i++) {
+            DashboardCell cellLayout = cells.get(i);
+            AppWidgetHostView hostView = widgets.get(i);
+
+            if(hostView != null)
+                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+        }
 
         if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
             U.showToastLong(this, R.string.dashboard_tutorial);
@@ -492,6 +506,8 @@ public class DashboardService extends Service {
         bundle2.putInt("appWidgetId", appWidgetId);
         cellLayout.setTag(bundle2);
 
+        widgets.put(cellId, hostView);
+
         if(shouldSave) {
             SharedPreferences pref = U.getSharedPreferences(this);
             pref.edit().putInt("dashboard_widget_" + Integer.toString(cellId), appWidgetId).apply();
@@ -499,6 +515,8 @@ public class DashboardService extends Service {
     }
 
     private void removeWidget(int cellId) {
+        widgets.remove(cellId);
+
         DashboardCell cellLayout = cells.get(cellId);
         Bundle bundle = (Bundle) cellLayout.getTag();
 
