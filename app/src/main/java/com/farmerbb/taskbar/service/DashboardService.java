@@ -38,6 +38,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -83,48 +84,34 @@ public class DashboardService extends Service {
     private View.OnClickListener cellOcl = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Bundle bundle = (Bundle) view.getTag();
-            int cellId = bundle.getInt("cellId");
-            int appWidgetId = bundle.getInt("appWidgetId", -1);
+            cellClick(view, true);
+        }
+    };
 
-            int currentlySelectedCell = appWidgetId == -1 ? cellId : -1;
-
-            if(appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) {
-                fadeOut(false);
-
-                FrameLayout frameLayout = cells.get(currentlySelectedCell);
-                frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
-
-                Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED");
-                intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
-                intent.putExtra("cellId", cellId);
-                LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
-
-                previouslySelectedCell = -1;
-            } else {
-                for(int i = 0; i < maxSize; i++) {
-                    FrameLayout frameLayout = cells.get(i);
-                    frameLayout.findViewById(R.id.empty).setVisibility(i == currentlySelectedCell ? View.VISIBLE : View.GONE);
-                }
-
-                previouslySelectedCell = currentlySelectedCell;
-            }
+    private View.OnHoverListener cellOhl = new View.OnHoverListener() {
+        @Override
+        public boolean onHover(View v, MotionEvent event) {
+            cellClick(v, false);
+            return false;
         }
     };
 
     private View.OnLongClickListener olcl = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            fadeOut(false);
-
-            Bundle bundle = (Bundle) v.getTag();
-            int cellId = bundle.getInt("cellId");
-
-            Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
-            intent.putExtra("cellId", cellId);
-            LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
-
+            cellLongClick(v);
             return true;
+        }
+    };
+
+    private View.OnGenericMotionListener ogml = new View.OnGenericMotionListener() {
+        @Override
+        public boolean onGenericMotion(View view, MotionEvent motionEvent) {
+            if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
+                cellLongClick(view);
+
+            return false;
         }
     };
 
@@ -149,6 +136,7 @@ public class DashboardService extends Service {
                 LauncherAppWidgetHostView hostView = (LauncherAppWidgetHostView) mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
                 hostView.setAppWidget(appWidgetId, appWidgetInfo);
                 hostView.setOnLongClickListener(olcl);
+                hostView.setOnGenericMotionListener(ogml);
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("cellId", cellId);
@@ -157,6 +145,7 @@ public class DashboardService extends Service {
                 FrameLayout cellLayout = cells.get(cellId);
                 cellLayout.findViewById(R.id.empty).setVisibility(View.GONE);
                 cellLayout.setOnLongClickListener(olcl);
+                cellLayout.setOnGenericMotionListener(ogml);
 
                 LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
                 linearLayout.addView(hostView);
@@ -187,7 +176,9 @@ public class DashboardService extends Service {
 
                 cellLayout.setTag(bundle);
                 cellLayout.setOnClickListener(cellOcl);
+                cellLayout.setOnHoverListener(cellOhl);
                 cellLayout.setOnLongClickListener(null);
+                cellLayout.setOnGenericMotionListener(null);
             }
         }
     };
@@ -300,6 +291,7 @@ public class DashboardService extends Service {
                 cellLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
                 cellLayout.setBackgroundColor(backgroundTint);
                 cellLayout.setOnClickListener(cellOcl);
+                cellLayout.setOnHoverListener(cellOhl);
 
                 TextView empty = (TextView) cellLayout.findViewById(R.id.empty);
                 empty.setTextColor(accentColor);
@@ -449,5 +441,45 @@ public class DashboardService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(addWidgetReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(removeWidgetReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+    }
+
+    private void cellClick(View view, boolean isActualClick) {
+        Bundle bundle = (Bundle) view.getTag();
+        int cellId = bundle.getInt("cellId");
+        int appWidgetId = bundle.getInt("appWidgetId", -1);
+
+        int currentlySelectedCell = appWidgetId == -1 ? cellId : -1;
+
+        if(isActualClick && appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) {
+            fadeOut(false);
+
+            FrameLayout frameLayout = cells.get(currentlySelectedCell);
+            frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
+
+            Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED");
+            intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
+            intent.putExtra("cellId", cellId);
+            LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
+
+            previouslySelectedCell = -1;
+        } else {
+            for(int i = 0; i < maxSize; i++) {
+                FrameLayout frameLayout = cells.get(i);
+                frameLayout.findViewById(R.id.empty).setVisibility(i == currentlySelectedCell ? View.VISIBLE : View.GONE);
+            }
+
+            previouslySelectedCell = currentlySelectedCell;
+        }
+    }
+
+    private void cellLongClick(View view) {
+        fadeOut(false);
+
+        Bundle bundle = (Bundle) view.getTag();
+        int cellId = bundle.getInt("cellId");
+
+        Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
+        intent.putExtra("cellId", cellId);
+        LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
     }
 }
