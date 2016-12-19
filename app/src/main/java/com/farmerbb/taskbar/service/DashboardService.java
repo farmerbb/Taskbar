@@ -74,8 +74,6 @@ public class DashboardService extends Service {
     private int maxSize;
     private int previouslySelectedCell = -1;
 
-    private boolean tutorialShown = false;
-
     private View.OnClickListener ocl = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -144,28 +142,7 @@ public class DashboardService extends Service {
                 int appWidgetId = intent.getExtras().getInt("appWidgetId", -1);
                 int cellId = intent.getExtras().getInt("cellId", -1);
 
-                AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
-
-                DashboardCell cellLayout = cells.get(cellId);
-                AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
-                hostView.setAppWidget(appWidgetId, appWidgetInfo);
-                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("cellId", cellId);
-                hostView.setTag(bundle);
-
-                cellLayout.findViewById(R.id.empty).setVisibility(View.GONE);
-                cellLayout.setOnLongClickListener(olcl);
-                cellLayout.setOnGenericMotionListener(ogml);
-                cellLayout.setOnInterceptedLongPressListener(listener);
-
-                LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
-                linearLayout.addView(hostView);
-
-                Bundle bundle2 = (Bundle) cellLayout.getTag();
-                bundle2.putInt("appWidgetId", appWidgetId);
-                cellLayout.setTag(bundle2);
+                addWidget(appWidgetId, cellId, true);
             }
         }
     };
@@ -178,21 +155,7 @@ public class DashboardService extends Service {
             if(intent.hasExtra("cellId")) {
                 int cellId = intent.getExtras().getInt("cellId", -1);
 
-                DashboardCell cellLayout = cells.get(cellId);
-                Bundle bundle = (Bundle) cellLayout.getTag();
-
-                mAppWidgetHost.deleteAppWidgetId(bundle.getInt("appWidgetId"));
-                bundle.remove("appWidgetId");
-
-                LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
-                linearLayout.removeAllViews();
-
-                cellLayout.setTag(bundle);
-                cellLayout.setOnClickListener(cellOcl);
-                cellLayout.setOnHoverListener(cellOhl);
-                cellLayout.setOnLongClickListener(null);
-                cellLayout.setOnGenericMotionListener(null);
-                cellLayout.setOnInterceptedLongPressListener(null);
+                removeWidget(cellId);
             }
         }
     };
@@ -325,6 +288,14 @@ public class DashboardService extends Service {
 
         mAppWidgetManager = AppWidgetManager.getInstance(this);
         mAppWidgetHost = new AppWidgetHost(this, APPWIDGET_HOST_ID);
+        mAppWidgetHost.startListening();
+
+        for(int i = 0; i < maxSize; i++) {
+            int appWidgetId = pref.getInt("dashboard_widget_" + Integer.toString(i), -1);
+            if(appWidgetId != -1)
+                addWidget(appWidgetId, i, false);
+        }
+
         mAppWidgetHost.stopListening();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
@@ -379,9 +350,9 @@ public class DashboardService extends Service {
         } else
             startActivity(intent);
 
-        if(!tutorialShown) {
-            U.showToast(this, R.string.dashboard_tutorial); // TODO if num of saved widgets == 0
-            tutorialShown = true;
+        if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
+            U.showToastLong(this, R.string.dashboard_tutorial);
+            pref.edit().putBoolean("dashboard_tutorial_shown", true).apply();
         }
     }
 
@@ -495,5 +466,56 @@ public class DashboardService extends Service {
         Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
         intent.putExtra("cellId", cellId);
         LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
+    }
+
+    private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {
+        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+
+        DashboardCell cellLayout = cells.get(cellId);
+        AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
+        hostView.setAppWidget(appWidgetId, appWidgetInfo);
+        hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("cellId", cellId);
+        hostView.setTag(bundle);
+
+        cellLayout.findViewById(R.id.empty).setVisibility(View.GONE);
+        cellLayout.setOnLongClickListener(olcl);
+        cellLayout.setOnGenericMotionListener(ogml);
+        cellLayout.setOnInterceptedLongPressListener(listener);
+
+        LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
+        linearLayout.addView(hostView);
+
+        Bundle bundle2 = (Bundle) cellLayout.getTag();
+        bundle2.putInt("appWidgetId", appWidgetId);
+        cellLayout.setTag(bundle2);
+
+        if(shouldSave) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putInt("dashboard_widget_" + Integer.toString(cellId), appWidgetId).apply();
+        }
+    }
+
+    private void removeWidget(int cellId) {
+        DashboardCell cellLayout = cells.get(cellId);
+        Bundle bundle = (Bundle) cellLayout.getTag();
+
+        mAppWidgetHost.deleteAppWidgetId(bundle.getInt("appWidgetId"));
+        bundle.remove("appWidgetId");
+
+        LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
+        linearLayout.removeAllViews();
+
+        cellLayout.setTag(bundle);
+        cellLayout.setOnClickListener(cellOcl);
+        cellLayout.setOnHoverListener(cellOhl);
+        cellLayout.setOnLongClickListener(null);
+        cellLayout.setOnGenericMotionListener(null);
+        cellLayout.setOnInterceptedLongPressListener(null);
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        pref.edit().remove("dashboard_widget_" + Integer.toString(cellId)).apply();
     }
 }
