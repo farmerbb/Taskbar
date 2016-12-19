@@ -30,18 +30,6 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-
-        // Import old background tint preference
-        if(pref.contains("show_background")) {
-            SharedPreferences.Editor editor = pref.edit();
-
-            if(!pref.getBoolean("show_background", true))
-                editor.putInt("background_tint", 0).apply();
-
-            editor.remove("show_background");
-            editor.apply();
-        }
-
         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
             context.startService(new Intent(context, TaskbarService.class));
             context.startService(new Intent(context, StartMenuService.class));

@@ -285,8 +285,8 @@ public class DashboardService extends Service {
 
         maxSize = columns * rows;
 
-        int backgroundTint = pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray));
-        int accentColor = pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white));
+        int backgroundTint = U.getBackgroundTint(this);
+        int accentColor = U.getAccentColor(this);
 
         int cellCount = 0;
 

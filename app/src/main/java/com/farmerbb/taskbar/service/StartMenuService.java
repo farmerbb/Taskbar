@@ -54,6 +54,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -263,7 +264,7 @@ public class StartMenuService extends Service {
 
         searchView = (SearchView) layout.findViewById(R.id.search);
 
-        int backgroundTint = pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray));
+        int backgroundTint = U.getBackgroundTint(this);
 
         FrameLayout startMenuFrame = (FrameLayout) layout.findViewById(R.id.start_menu_frame);
         FrameLayout searchViewLayout = (FrameLayout) layout.findViewById(R.id.search_view_layout);
@@ -394,7 +395,17 @@ public class StartMenuService extends Service {
                     public void onClick(View view) {
                         searchView.setIconified(false);
                     }
-                }); 
+                });
+
+            startMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    hideStartMenu();
+
+                    AppEntry entry = (AppEntry) parent.getAdapter().getItem(position);
+                    U.launchApp(StartMenuService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(StartMenuService.this), null, false, false);
+                }
+            });
         } else
             searchViewLayout.setVisibility(View.GONE);
         

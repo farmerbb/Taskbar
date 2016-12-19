@@ -272,4 +272,6 @@
     <string name="pref_title_accent_color">Accent color</string>
     <string name="reset_colors">Reset colors to default</string>
 
+    <string name="visual_feedback">Visual feedback when selecting icons</string>
+
 </resources>

@@ -33,6 +33,7 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -46,12 +47,14 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -369,8 +372,8 @@ public class TaskbarService extends Service {
                 : R.id.hide_taskbar_button_layout_alt);
         if(buttonLayoutToHide != null) buttonLayoutToHide.setVisibility(View.GONE);
 
-        int backgroundTint = pref.getInt("background_tint", getResources().getInteger(R.integer.translucent_gray));
-        int accentColor = pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white));
+        int backgroundTint = U.getBackgroundTint(this);
+        int accentColor = U.getAccentColor(this);
 
         dashboardButton = (FrameLayout) layout.findViewById(R.id.dashboard_button);
 
@@ -1094,6 +1097,35 @@ public class TaskbarService extends Service {
                 return false;
             }
         });
+
+        if(pref.getBoolean("visual_feedback", true)) {
+            layout.setOnHoverListener(new View.OnHoverListener() {
+                @Override
+                public boolean onHover(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
+                        int accentColor = U.getAccentColor(TaskbarService.this);
+                        accentColor = ColorUtils.setAlphaComponent(accentColor, Color.alpha(accentColor) / 2);
+                        v.setBackgroundColor(accentColor);
+                    }
+
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_EXIT)
+                        v.setBackgroundColor(0);
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        v.setPointerIcon(PointerIcon.getSystemIcon(TaskbarService.this, PointerIcon.TYPE_DEFAULT));
+
+                    return false;
+                }
+            });
+
+            layout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
+                    return false;
+                }
+            });
+        }
 
         return convertView;
     }

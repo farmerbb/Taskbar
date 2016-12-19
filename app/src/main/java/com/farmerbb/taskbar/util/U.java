@@ -789,4 +789,26 @@ public class U {
 
         return false;
     }
+
+    public static int getBackgroundTint(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+
+        // Import old background tint preference
+        if(pref.contains("show_background")) {
+            SharedPreferences.Editor editor = pref.edit();
+
+            if(!pref.getBoolean("show_background", true))
+                editor.putInt("background_tint", 0).apply();
+
+            editor.remove("show_background");
+            editor.apply();
+        }
+
+        return pref.getInt("background_tint", context.getResources().getInteger(R.integer.translucent_gray));
+    }
+
+    public static int getAccentColor(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
+    }
 }

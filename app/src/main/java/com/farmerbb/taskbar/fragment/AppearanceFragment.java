@@ -47,6 +47,7 @@ public class AppearanceFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
         bindPreferenceSummaryToValue(findPreference("background_tint"));
         bindPreferenceSummaryToValue(findPreference("accent_color"));
+        bindPreferenceSummaryToValue(findPreference("visual_feedback"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_appearance);

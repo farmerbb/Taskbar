@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
@@ -28,9 +29,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.graphics.ColorUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -120,6 +123,35 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 return false;
             }
         });
+
+        if(pref.getBoolean("visual_feedback", true)) {
+            layout.setOnHoverListener(new View.OnHoverListener() {
+                @Override
+                public boolean onHover(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
+                        int backgroundTint = U.getBackgroundTint(getContext());
+                        backgroundTint = ColorUtils.setAlphaComponent(backgroundTint, Color.alpha(backgroundTint) / 2);
+                        v.setBackgroundColor(backgroundTint);
+                    }
+
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_EXIT)
+                        v.setBackgroundColor(0);
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        v.setPointerIcon(PointerIcon.getSystemIcon(getContext(), PointerIcon.TYPE_DEFAULT));
+
+                    return false;
+                }
+            });
+
+            layout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
+                    return false;
+                }
+            });
+        }
 
         return convertView;
     }

@@ -100,17 +100,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
 
-        // Import old background tint preference
-        if(pref.contains("show_background")) {
-            SharedPreferences.Editor editor = pref.edit();
-
-            if(!pref.getBoolean("show_background", true))
-                editor.putInt("background_tint", 0).apply();
-
-            editor.remove("show_background");
-            editor.apply();
-        }
-
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()

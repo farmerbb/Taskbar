@@ -53,6 +53,11 @@
         android:title="@string/pref_title_app_drawer_icon"/>
 
     <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="visual_feedback"
+        android:title="@string/visual_feedback"/>
+
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="icon_pack_use_mask"
         android:title="@string/pref_title_use_mask"
