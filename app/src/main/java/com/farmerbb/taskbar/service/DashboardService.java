@@ -99,6 +99,8 @@ public class DashboardService extends Service {
                 intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
                 intent.putExtra("cellId", cellId);
                 LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
+
+                previouslySelectedCell = -1;
             } else {
                 for(int i = 0; i < maxSize; i++) {
                     FrameLayout frameLayout = cells.get(i);
@@ -345,8 +347,6 @@ public class DashboardService extends Service {
         layout.setOnClickListener(ocl);
         fadeIn();
 
-        mAppWidgetHost.startListening();
-
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
 
         boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
@@ -383,8 +383,6 @@ public class DashboardService extends Service {
         layout.setOnClickListener(null);
         fadeOut(true);
 
-        mAppWidgetHost.stopListening();
-
         for(int i = 0; i < maxSize; i++) {
             FrameLayout frameLayout = cells.get(i);
             frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
@@ -394,6 +392,8 @@ public class DashboardService extends Service {
     }
 
     private void fadeIn() {
+        mAppWidgetHost.startListening();
+
         layout.setVisibility(View.VISIBLE);
         layout.animate()
                 .alpha(1)
@@ -402,6 +402,8 @@ public class DashboardService extends Service {
     }
 
     private void fadeOut(final boolean sendIntent) {
+        mAppWidgetHost.stopListening();
+
         layout.animate()
                 .alpha(0)
                 .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
