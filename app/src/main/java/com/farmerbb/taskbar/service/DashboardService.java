@@ -52,6 +52,7 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.activity.DashboardActivityDark;
+import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -64,7 +65,7 @@ public class DashboardService extends Service {
     private WindowManager windowManager;
     private LinearLayout layout;
 
-    private SparseArray<FrameLayout> cells = new SparseArray<>();
+    private SparseArray<DashboardCell> cells = new SparseArray<>();
 
     private final int APPWIDGET_HOST_ID = 123;
 
@@ -120,6 +121,13 @@ public class DashboardService extends Service {
         }
     };
 
+    private DashboardCell.OnInterceptedLongPressListener listener = new DashboardCell.OnInterceptedLongPressListener() {
+        @Override
+        public void onInterceptedLongPress(DashboardCell cell) {
+            cellLongClick(cell);
+        }
+    };
+
     private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -138,7 +146,7 @@ public class DashboardService extends Service {
 
                 AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 
-                FrameLayout cellLayout = cells.get(cellId);
+                DashboardCell cellLayout = cells.get(cellId);
                 AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
                 hostView.setAppWidget(appWidgetId, appWidgetInfo);
                 hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
@@ -150,6 +158,7 @@ public class DashboardService extends Service {
                 cellLayout.findViewById(R.id.empty).setVisibility(View.GONE);
                 cellLayout.setOnLongClickListener(olcl);
                 cellLayout.setOnGenericMotionListener(ogml);
+                cellLayout.setOnInterceptedLongPressListener(listener);
 
                 LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
                 linearLayout.addView(hostView);
@@ -169,7 +178,7 @@ public class DashboardService extends Service {
             if(intent.hasExtra("cellId")) {
                 int cellId = intent.getExtras().getInt("cellId", -1);
 
-                FrameLayout cellLayout = cells.get(cellId);
+                DashboardCell cellLayout = cells.get(cellId);
                 Bundle bundle = (Bundle) cellLayout.getTag();
 
                 mAppWidgetHost.deleteAppWidgetId(bundle.getInt("appWidgetId"));
@@ -183,6 +192,7 @@ public class DashboardService extends Service {
                 cellLayout.setOnHoverListener(cellOhl);
                 cellLayout.setOnLongClickListener(null);
                 cellLayout.setOnGenericMotionListener(null);
+                cellLayout.setOnInterceptedLongPressListener(null);
             }
         }
     };
@@ -291,7 +301,7 @@ public class DashboardService extends Service {
             layout2.setOrientation(LinearLayout.VERTICAL);
 
             for(int j = 0; j < rows; j++) {
-                FrameLayout cellLayout = (FrameLayout) View.inflate(this, R.layout.dashboard, null);
+                DashboardCell cellLayout = (DashboardCell) View.inflate(this, R.layout.dashboard, null);
                 cellLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
                 cellLayout.setBackgroundColor(backgroundTint);
                 cellLayout.setOnClickListener(cellOcl);

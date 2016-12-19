@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.farmerbb.taskbar.widget.DashboardCell
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -38,4 +39,4 @@
         android:text="@string/click_to_add_widget"
         android:textSize="24sp" />
 
-</FrameLayout>
+</com.farmerbb.taskbar.widget.DashboardCell>
