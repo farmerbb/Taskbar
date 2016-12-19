@@ -69,6 +69,7 @@ public class DashboardActivity extends Activity {
                 startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
             } catch (ActivityNotFoundException e) {
                 U.showToast(DashboardActivity.this, R.string.lock_device_not_supported);
+                finish();
             }
 
             shouldFinish = false;
