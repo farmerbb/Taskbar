@@ -427,12 +427,17 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         .setTitle(R.string.dashboard_grid_size)
                         .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                SharedPreferences.Editor editor = pref.edit();
-                                editor.putInt("dashboard_width", Integer.parseInt(editText.getText().toString()));
-                                editor.putInt("dashboard_height", Integer.parseInt(editText2.getText().toString()));
-                                editor.apply();
+                                int width = Integer.parseInt(editText.getText().toString());
+                                int height = Integer.parseInt(editText2.getText().toString());
 
-                                updateDashboardGridSize(true);
+                                if(width > 0 && height > 0) {
+                                    SharedPreferences.Editor editor = pref.edit();
+                                    editor.putInt("dashboard_width", width);
+                                    editor.putInt("dashboard_height", height);
+                                    editor.apply();
+
+                                    updateDashboardGridSize(true);
+                                }
                             }
                         })
                         .setNegativeButton(R.string.action_cancel, null);
