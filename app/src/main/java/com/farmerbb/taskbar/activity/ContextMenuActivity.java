@@ -18,8 +18,11 @@ package com.farmerbb.taskbar.activity;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
@@ -67,6 +70,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean secondaryMenu = false;
 
     List<ShortcutInfo> shortcuts;
+
+    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
 
     @SuppressLint("RtlHardcoded")
     @SuppressWarnings("deprecation")
@@ -182,6 +192,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         if(view != null) view.setPadding(0, 0, 0, 0);
 
         generateMenu();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));
     }
 
     @SuppressWarnings("deprecation")
@@ -631,5 +643,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             generateMenu();
         } else
             super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
     }
 }
