@@ -135,8 +135,6 @@ public class DashboardService extends Service {
 
                 LauncherAppWidgetHostView hostView = (LauncherAppWidgetHostView) mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
                 hostView.setAppWidget(appWidgetId, appWidgetInfo);
-                hostView.setOnLongClickListener(olcl);
-                hostView.setOnGenericMotionListener(ogml);
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("cellId", cellId);
