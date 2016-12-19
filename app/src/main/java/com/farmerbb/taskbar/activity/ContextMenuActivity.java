@@ -50,6 +50,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
@@ -74,7 +75,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            finish();
+            if(LauncherHelper.getInstance().isOnHomeScreen()
+                    && !FreeformHackHelper.getInstance().isFreeformHackActive()
+                    && !showStartMenu)
+                finish();
         }
     };
 
