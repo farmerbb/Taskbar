@@ -26,7 +26,7 @@
     <string name="action_grant_permission">アクセス許可を付与</string>
 
     <string name="permission_dialog_title">アクセス許可が必要です</string>
-    <string name="permission_dialog_message">Taskbar は他のアプリの上に描画するため、アプリの開始前にアクセス許可が必要です。\n\n\'\'アクセス許可を付与\'\' を押して、Taskbar を \'\'はい\'\' に設定することを確認してください</string>
+    <string name="permission_dialog_message">Taskbar は他のアプリの上に描画するため、アプリの開始前にアクセス許可が必要です。\n\n\"アクセス許可を付与\" を押して、Taskbar を \"はい\" に設定することを確認してください</string>
 
     <string name="pref_header_general">全般</string>
     <string name="pref_title_start_menu_layout">スタートメニューのレイアウト</string>
@@ -128,12 +128,12 @@
     <string name="pref_title_shortcut_icon">ピン止めしたアプリのショートカットアイコンを表示</string>
 
     <string name="freeform_dialog_title">フリーフォームサポートを有効にする</string>
-    <string name="freeform_dialog_message">Taskbar がフリーフォーム ウインドウ モードでアプリを起動するために、次の手順に従ってください:\n\n&#8226; 開発者オプションに移動します\n\n&#8226; 最下部にスクロールして \'\'強制的にアクティビティをリサイズ可能にする\'\' をオンにします\n\n&#8226; お使いのデバイスを再起動します</string>
+    <string name="freeform_dialog_message">Taskbar がフリーフォーム ウインドウ モードでアプリを起動するために、次の手順に従ってください:\n\n&#8226; 開発者オプションに移動します\n\n&#8226; 最下部にスクロールして \"強制的にアクティビティをリサイズ可能にする\" をオンにします\n\n&#8226; お使いのデバイスを再起動します</string>
 
     <string name="pref_title_invisible_button">Taskbar を折りたたんでいるときボタンを非表示</string>
     <string name="pref_title_freeform_mode_help">ヘルプ &amp; フリーフォームモードの説明</string>
     <string name="freeform_help_dialog_title">ヘルプ &amp; 説明</string>
-    <string name="freeform_help_dialog_message"><b>フリーフォームモードについて</b>\n\nTaskbar は Android 7.0 Nougat 上でアプリをフリーフォーム フローティング ウインドウで起動することができます。ルート アクセス許可は必要がありません。フリーフォームモードでアプリを起動するには次の手順に従ってください:\n\n<b>1.</b> Taskbar アプリ内で \'\'フリーフォーム ウインドウ サポート\'\' のボックスをチェックします\n\n<b>2.</b> ポップアップで表示される向きに従って、お使いのデバイスに適切な設定を有効にします\n\n<b>3.</b> Taskbar をオンにして、お使いのデバイスの最近使用したアプリのページに移動します\n\n<b>4.</b> 最近使用したアプリをすべてクリアして、(空の) 最近使用したアプリのページに戻ります\n\n<b>5.</b> Taskbar の開始ボタンを押して、フリーフォーム ウインドウで起動するアプリを選択します\n\n<b>トラブルシューティング</b>\n\n<i>&#8226; アプリがまだ全画面モードで起動します</i>\n\n起動するアプリがすでにメモリにロードされている場合、Taskbar はそれをフォアグラウンドに移動します。フリーフォームモードでアプリを起動するため、新規の状態から起動する必要があります。\n\n最近使用したアプリからアプリをアプリを外にスワイプして、Taskbar を使用して最近使用したアプリのページから再起移動します。これが動作しない場合は、アプリのアイコンを長押しして、\'\'アプリ情報\'\' を選択し、アプリを強制的に停止します。\n\nTaskbar は、お使いのデバイスの最近使用したアプリから、ホーム画面から、フリーフォームワークスペース自身からのみアプリをフリーフォームモードで起動できることにご注意ください。別の全画面アプリからアプリを起動すると、同じく全画面モードで起動されます。\n\n<i>&#8226; 最大化されたアプリがウインドウに復元できません</i>\n\nアプリのタイトルバーで最大化ボタンを押した場合、Android はアプリをフリーフォームモードの外に出して、全画面モードに移動します。そのため、新規の状態から起動した場合のみ Taskbar はアプリをフリーフォームウインドウで起動することができます。\n\nこれを修正するために、アプリのウインドウ フレームの外側をクリックしてウインドウを最大化することができます。これによりフリーフォーム ウインドウ ワークスペースに残ったまま、利用可能なスペースすべてにウインドウを広げます。\n\n<b>完全にシステムレベルのフリーフォーム ウインドウ サポートを有効にする</b>\n\nAndroid SDK をインストールしたコンピュータが利用できる場合、次の adb シェルコマンドを実行して、システムレベルでフリーフォームモードのサポートを有効にすることができます:\n\nsettings put global enable_freeform_support 1\n\n上記のコマンドを実行した後、お使いのデバイスを再起動します。お使いのデバイスの最近使用したアプリのページで、アプリのエントリーに、指定したアプリをフリーフォームモードに入る/終了する新しいボタンが表示されます。</string>
+    <string name="freeform_help_dialog_message"><b>フリーフォームモードについて</b>\n\nTaskbar は Android 7.0 Nougat 上でアプリをフリーフォーム フローティング ウインドウで起動することができます。ルート アクセス許可は必要がありません。フリーフォームモードでアプリを起動するには次の手順に従ってください:\n\n<b>1.</b> Taskbar アプリ内で \"フリーフォーム ウインドウ サポート\" のボックスをチェックします\n\n<b>2.</b> ポップアップで表示される向きに従って、お使いのデバイスに適切な設定を有効にします\n\n<b>3.</b> Taskbar をオンにして、お使いのデバイスの最近使用したアプリのページに移動します\n\n<b>4.</b> 最近使用したアプリをすべてクリアして、(空の) 最近使用したアプリのページに戻ります\n\n<b>5.</b> Taskbar の開始ボタンを押して、フリーフォーム ウインドウで起動するアプリを選択します\n\n<b>トラブルシューティング</b>\n\n<i>&#8226; アプリがまだ全画面モードで起動します</i>\n\n起動するアプリがすでにメモリにロードされている場合、Taskbar はそれをフォアグラウンドに移動します。フリーフォームモードでアプリを起動するため、新規の状態から起動する必要があります。\n\n最近使用したアプリからアプリをアプリを外にスワイプして、Taskbar を使用して最近使用したアプリのページから再起移動します。これが動作しない場合は、アプリのアイコンを長押しして、\"アプリ情報\" を選択し、アプリを強制的に停止します。\n\nTaskbar は、お使いのデバイスの最近使用したアプリから、ホーム画面から、フリーフォームワークスペース自身からのみアプリをフリーフォームモードで起動できることにご注意ください。別の全画面アプリからアプリを起動すると、同じく全画面モードで起動されます。\n\n<i>&#8226; 最大化されたアプリがウインドウに復元できません</i>\n\nアプリのタイトルバーで最大化ボタンを押した場合、Android はアプリをフリーフォームモードの外に出して、全画面モードに移動します。そのため、新規の状態から起動した場合のみ Taskbar はアプリをフリーフォームウインドウで起動することができます。\n\nこれを修正するために、アプリのウインドウ フレームの外側をクリックしてウインドウを最大化することができます。これによりフリーフォーム ウインドウ ワークスペースに残ったまま、利用可能なスペースすべてにウインドウを広げます。\n\n<b>完全にシステムレベルのフリーフォーム ウインドウ サポートを有効にする</b>\n\nAndroid SDK をインストールしたコンピュータが利用できる場合、次の adb シェルコマンドを実行して、システムレベルでフリーフォームモードのサポートを有効にすることができます:\n\nsettings put global enable_freeform_support 1\n\n上記のコマンドを実行した後、お使いのデバイスを再起動します。お使いのデバイスの最近使用したアプリのページで、アプリのエントリーに、指定したアプリをフリーフォームモードに入る/終了する新しいボタンが表示されます。</string>
 
     <string name="action_developer_options">開発者オプションを開く</string>
     <string name="action_close">閉じる</string>
@@ -160,8 +160,8 @@
     <string name="start_menu_apps">Start menu apps</string>
 
     <string name="reboot_required">お使いのデバイスを再起動して、フリーフォームモードの設定を完了してください</string>
-    <string name="enable_force_activities_resizable">下部にスクロールして \'\'強制的にアクティビティをリサイズ可能にする\'\' をオンにします</string>
-    <string name="set_as_default_home">\'\'常に\'\' を押して、Taskbar をお使いのデフォルトのランチャーとして設定します</string>
+    <string name="enable_force_activities_resizable">下部にスクロールして \"強制的にアクティビティをリサイズ可能にする\" をオンにします</string>
+    <string name="set_as_default_home">\"常に\" を押して、Taskbar をお使いのデフォルトのランチャーとして設定します</string>
     <string name="enable_developer_options">ビルド番号を 7 回タップして、開発者オプションを有効にします</string>
 
     <string name="pref_title_anchor">画面の向きを変えたときに Taskbar を固定</string>
@@ -193,7 +193,7 @@
     <string name="no_icon_packs_installed">No icon packs installed</string>
 
     <string name="apply_icon_pack">Apply icon pack</string>
-    <string name="apply_icon_pack_description">Apply \'\'%1$s\'\' to Taskbar?</string>
+    <string name="apply_icon_pack_description">Apply \"%1$s\" to Taskbar?</string>
     <string name="must_specify_extra">Must specify Intent.EXTRA_PACKAGE_NAME</string>
     <string name="invalid_package_name">Invalid package name</string>
 
@@ -226,7 +226,7 @@
 
     <string name="app_shortcuts">More actions&#8230;</string>
 
-    <string name="usage_stats_message">Please ensure that Taskbar is set to \'\'On\'\'</string>
+    <string name="usage_stats_message">Please ensure that Taskbar is set to \"On\"</string>
 
     <string name="volume">Volume control</string>
     <string name="file_manager">File manager</string>
@@ -259,14 +259,13 @@
     <string name="notification_settings">System notification settings</string>
 
     <string name="pref_header_appearance">Appearance</string>
-    <string name="dashboard">Enable the dashboard (beta)</string>
+    <string name="dashboard">Enable the dashboard</string>
     <string name="dashboard_description">Adds a button to the Taskbar where widgets can be displayed</string>
     <string name="dashboard_grid_size">Dashboard grid size</string>
 
     <string name="click_to_add_widget">Click to add widget</string>
     <string name="remove_widget">Remove widget</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="error_loading_widget">Error loading widget</string>
     <string name="dashboard_tutorial">Click anywhere on screen to add a widget to the dashboard</string>
 
     <string name="pref_title_accent_color">Accent color</string>

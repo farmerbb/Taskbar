@@ -26,7 +26,7 @@
     <string name="action_grant_permission">Разрешить</string>
 
     <string name="permission_dialog_title">Необходимо разрешение</string>
-    <string name="permission_dialog_message">Taskbar требует разрешение "Показывать поверх других окон" для его запуска.\n\nПожалуйста, нажмите \'\'Разрешить\'\' и проверьте, что у Taskbar значение \'\'Да\'\'</string>
+    <string name="permission_dialog_message">Taskbar требует разрешение "Показывать поверх других окон" для его запуска.\n\nПожалуйста, нажмите \"Разрешить\" и проверьте, что у Taskbar значение \"Да\"</string>
 
     <string name="pref_header_general">Главные настройки</string>
     <string name="pref_title_start_menu_layout">Макет меню</string>
@@ -128,12 +128,12 @@
     <string name="pref_title_shortcut_icon">Показать значок ярлыка для закрепленных приложений</string>
 
     <string name="freeform_dialog_title">Включить Freeform</string>
-    <string name="freeform_dialog_message">Для запуска приложений в режиме Freeform:\n\n&#8226; Откройте Настройки Разработчика\n\n&#8226; Прокрутите вниз и включите \'\'Изменение размера в многооконном режиме\'\'\n\n&#8226; Перезагрузите устройство</string>
+    <string name="freeform_dialog_message">Для запуска приложений в режиме Freeform:\n\n&#8226; Откройте Настройки Разработчика\n\n&#8226; Прокрутите вниз и включите \"Изменение размера в многооконном режиме\"\n\n&#8226; Перезагрузите устройство</string>
 
     <string name="pref_title_invisible_button">Спрятать кнопку Taskbar при скрытии</string>
     <string name="pref_title_freeform_mode_help">Инструкции для режима Freeform</string>
     <string name="freeform_help_dialog_title">Инструкции</string>
-    <string name="freeform_help_dialog_message"><b>О режиме</b>\n\nTaskbar разрешает запуск приложений в режиме Freeform на Android 7.0+ без root-прав. Просто выполните следующие шаги:\n\n<b>1.</b> Проверьте настройку \'\'Включить Freeform\'\' внутри Taskbar.\n\n<b>2.</b> Следуйте указаниям в новом окне\n\n<b>3.</b> С включенным Taskbar, откройте список недавних приложений.\n\n<b>4.</b> Закройте все окна там и откройте список снова.\n\n<b>5.</b> Нажмите на меню Taskbar и нажмите на приложение, которое вы хотите запустить в режиме Freeform \n\n<b>Решение проблем</b>\n\n<i>&#8226; Приложения все равно запускаются в полноэкранном режиме</i>\n\nЕсли приложение уже запущено, Taskbar покажет его на переднем плане. Чтобы запустить приложение в режиме Freeform mode, оно должно запуститься заново.\n\n Если это не работает, остановите приложение.\n\nTaskbar может запускать программы в режиме Freeform только со списка недавних приложений, с домашнего экрана или с рабочего стола Freeform. Запуск приложения в полноэкранном приложении запустит его в полноэкранном режиме тоже.\n\n<i>&#8226; Развернутые приложения нельзя вернуть в нормальный размер</i>\n\nЕсли вы нажмете кнопку "Развернуть" на окне приложения, Android вернет приложение в полноэкранный режми. Как сказано выше, Taskbar может запускать приложения в Freeform только если их запускать остановленными.\n\nВы можете развернуть окна нажатием на место, не занятым приложениями.  Это расширит окно на весь экран не переходя в полноэкранный режим.\n\n<b>Включение полного режима Freeform</b>\n\nЕсли у вас есть доступ к компьютеру с установленным Android SDK, вы можете включить поддержку используя adb shell:\n\nsettings put global enable_freeform_support 1\n\nПерезагрузите устройство и новая кнопка появится в окне недавних приложений для переключения режима Freeform определенному приложению.</string>
+    <string name="freeform_help_dialog_message"><b>О режиме</b>\n\nTaskbar разрешает запуск приложений в режиме Freeform на Android 7.0+ без root-прав. Просто выполните следующие шаги:\n\n<b>1.</b> Проверьте настройку \"Включить Freeform\" внутри Taskbar.\n\n<b>2.</b> Следуйте указаниям в новом окне\n\n<b>3.</b> С включенным Taskbar, откройте список недавних приложений.\n\n<b>4.</b> Закройте все окна там и откройте список снова.\n\n<b>5.</b> Нажмите на меню Taskbar и нажмите на приложение, которое вы хотите запустить в режиме Freeform \n\n<b>Решение проблем</b>\n\n<i>&#8226; Приложения все равно запускаются в полноэкранном режиме</i>\n\nЕсли приложение уже запущено, Taskbar покажет его на переднем плане. Чтобы запустить приложение в режиме Freeform mode, оно должно запуститься заново.\n\n Если это не работает, остановите приложение.\n\nTaskbar может запускать программы в режиме Freeform только со списка недавних приложений, с домашнего экрана или с рабочего стола Freeform. Запуск приложения в полноэкранном приложении запустит его в полноэкранном режиме тоже.\n\n<i>&#8226; Развернутые приложения нельзя вернуть в нормальный размер</i>\n\nЕсли вы нажмете кнопку "Развернуть" на окне приложения, Android вернет приложение в полноэкранный режми. Как сказано выше, Taskbar может запускать приложения в Freeform только если их запускать остановленными.\n\nВы можете развернуть окна нажатием на место, не занятым приложениями.  Это расширит окно на весь экран не переходя в полноэкранный режим.\n\n<b>Включение полного режима Freeform</b>\n\nЕсли у вас есть доступ к компьютеру с установленным Android SDK, вы можете включить поддержку используя adb shell:\n\nsettings put global enable_freeform_support 1\n\nПерезагрузите устройство и новая кнопка появится в окне недавних приложений для переключения режима Freeform определенному приложению.</string>
 
     <string name="action_developer_options">Настройки Разработчика</string>
     <string name="action_close">Закрыть</string>
@@ -160,8 +160,8 @@
     <string name="start_menu_apps">Приложения в меню</string>
 
     <string name="reboot_required">Перезагрузите устройство для завершения операции</string>
-    <string name="enable_force_activities_resizable">Прокрутите вниз и включите \'\'Изменение размера в многооконном режиме\'\'\n\n</string>
-    <string name="set_as_default_home">Нажмите \'\'Всегда\'\' для применения Taskbar в качестве рабочего стола</string>
+    <string name="enable_force_activities_resizable">Прокрутите вниз и включите \"Изменение размера в многооконном режиме\"\n\n</string>
+    <string name="set_as_default_home">Нажмите \"Всегда\" для применения Taskbar в качестве рабочего стола</string>
     <string name="enable_developer_options">Включите Настройки Разработчика нажиманием на номер сборки 7 раз</string>
 
     <string name="pref_title_anchor">Привязать Taskbar к повороту экрана</string>
@@ -193,7 +193,7 @@
     <string name="no_icon_packs_installed">Не установлен пакет иконок</string>
 
     <string name="apply_icon_pack">Применить пакет иконок</string>
-    <string name="apply_icon_pack_description">Применить \'\'%1$s\'\'?</string>
+    <string name="apply_icon_pack_description">Применить \"%1$s\"?</string>
     <string name="must_specify_extra">Нужно указать Intent.EXTRA_PACKAGE_NAME</string>
     <string name="invalid_package_name">Неверное имя пакета</string>
 
@@ -259,14 +259,13 @@
     <string name="notification_settings">System notification settings</string>
 
     <string name="pref_header_appearance">Appearance</string>
-    <string name="dashboard">Enable the dashboard (beta)</string>
+    <string name="dashboard">Enable the dashboard</string>
     <string name="dashboard_description">Adds a button to the Taskbar where widgets can be displayed</string>
     <string name="dashboard_grid_size">Dashboard grid size</string>
 
     <string name="click_to_add_widget">Click to add widget</string>
     <string name="remove_widget">Remove widget</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="error_loading_widget">Error loading widget</string>
     <string name="dashboard_tutorial">Click anywhere on screen to add a widget to the dashboard</string>
 
     <string name="pref_title_accent_color">Accent color</string>
