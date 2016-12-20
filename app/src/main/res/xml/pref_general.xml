@@ -59,6 +59,12 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:key="hide_when_keyboard_shown"
+        android:title="@string/pref_title_hide_when_keyboard_shown"
+        android:summary="@string/pref_description_hide_when_keyboard_shown" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
         android:key="alt_button_config"
         android:title="@string/alt_button_config"/>
 

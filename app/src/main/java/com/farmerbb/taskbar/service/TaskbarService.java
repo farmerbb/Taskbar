@@ -83,6 +83,7 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
+import com.farmerbb.taskbar.util.StartMenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class TaskbarService extends Service {
@@ -426,8 +427,7 @@ public class TaskbarService extends Service {
         stopThread2 = true;
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        showHideAutomagically = pref.getBoolean("hide_when_keyboard_shown", false)
-                && !pref.getString("show_search_bar", "keyboard").equals("always");
+        showHideAutomagically = pref.getBoolean("hide_when_keyboard_shown", false);
 
         currentTaskbarIds.clear();
 
@@ -444,7 +444,7 @@ public class TaskbarService extends Service {
                         SystemClock.sleep(refreshInterval);
                         updateRecentApps(false);
 
-                        if(showHideAutomagically && !positionIsVertical)
+                        if(showHideAutomagically && !positionIsVertical && !StartMenuHelper.getInstance().isStartMenuOpen())
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {

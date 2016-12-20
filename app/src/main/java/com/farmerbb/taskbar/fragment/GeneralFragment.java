@@ -45,6 +45,7 @@ public class GeneralFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference("anchor"));
         bindPreferenceSummaryToValue(findPreference("alt_button_config"));
         bindPreferenceSummaryToValue(findPreference("show_search_bar"));
+        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_general);
