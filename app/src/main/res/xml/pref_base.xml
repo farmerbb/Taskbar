@@ -33,7 +33,7 @@
 
     <Preference
         android:key="pref_screen_advanced"
-        android:icon="@drawable/ic_warning_black_24dp"
+        android:icon="@drawable/ic_error_outline_black_24dp"
         android:title="@string/pref_header_advanced" />
 
 </PreferenceScreen>
