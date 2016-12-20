@@ -333,59 +333,63 @@ public class DashboardService extends Service {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private void showDashboard() {
-        layout.setOnClickListener(ocl);
-        fadeIn();
+        if(layout.getVisibility() == View.GONE) {
+            layout.setOnClickListener(ocl);
+            fadeIn();
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
 
-        boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
+            boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
-        final SharedPreferences pref = U.getSharedPreferences(this);
-        Intent intent = null;
+            final SharedPreferences pref = U.getSharedPreferences(this);
+            Intent intent = null;
 
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                intent = new Intent(this, DashboardActivity.class);
-                break;
-            case "dark":
-                intent = new Intent(this, DashboardActivityDark.class);
-                break;
-        }
+            switch(pref.getString("theme", "light")) {
+                case "light":
+                    intent = new Intent(this, DashboardActivity.class);
+                    break;
+                case "dark":
+                    intent = new Intent(this, DashboardActivityDark.class);
+                    break;
+            }
 
-        if(intent != null) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        }
+            if(intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            }
 
-        if(inFreeformMode) {
-            U.launchAppFullscreen(this, intent);
-        } else
-            startActivity(intent);
+            if(inFreeformMode) {
+                U.launchAppFullscreen(this, intent);
+            } else
+                startActivity(intent);
 
-        for(int i = 0; i < maxSize; i++) {
-            DashboardCell cellLayout = cells.get(i);
-            AppWidgetHostView hostView = widgets.get(i);
+            for(int i = 0; i < maxSize; i++) {
+                DashboardCell cellLayout = cells.get(i);
+                AppWidgetHostView hostView = widgets.get(i);
 
-            if(hostView != null)
-                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
-        }
+                if(hostView != null)
+                    hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+            }
 
-        if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
-            U.showToastLong(this, R.string.dashboard_tutorial);
-            pref.edit().putBoolean("dashboard_tutorial_shown", true).apply();
+            if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
+                U.showToastLong(this, R.string.dashboard_tutorial);
+                pref.edit().putBoolean("dashboard_tutorial_shown", true).apply();
+            }
         }
     }
 
     private void hideDashboard() {
-        layout.setOnClickListener(null);
-        fadeOut(true);
+        if(layout.getVisibility() == View.VISIBLE) {
+            layout.setOnClickListener(null);
+            fadeOut(true);
 
-        for(int i = 0; i < maxSize; i++) {
-            FrameLayout frameLayout = cells.get(i);
-            frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
+            for(int i = 0; i < maxSize; i++) {
+                FrameLayout frameLayout = cells.get(i);
+                frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
+            }
+
+            previouslySelectedCell = -1;
         }
-
-        previouslySelectedCell = -1;
     }
 
     private void fadeIn() {

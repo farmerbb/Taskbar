@@ -830,45 +830,49 @@ public class TaskbarService extends Service {
     }
 
     private void showTaskbar() {
-        startButton.setVisibility(View.VISIBLE);
-        space.setVisibility(View.VISIBLE);
+        if(startButton.getVisibility() == View.GONE) {
+            startButton.setVisibility(View.VISIBLE);
+            space.setVisibility(View.VISIBLE);
 
-        if(dashboardEnabled)
-            dashboardButton.setVisibility(View.VISIBLE);
+            if(dashboardEnabled)
+                dashboardButton.setVisibility(View.VISIBLE);
 
-        if(isShowingRecents && scrollView.getVisibility() == View.GONE)
-            scrollView.setVisibility(View.INVISIBLE);
+            if(isShowingRecents && scrollView.getVisibility() == View.GONE)
+                scrollView.setVisibility(View.INVISIBLE);
 
-        shouldRefreshRecents = true;
-        startRefreshingRecents();
+            shouldRefreshRecents = true;
+            startRefreshingRecents();
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("collapsed", true).apply();
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("collapsed", true).apply();
 
-        updateButton(false);
+            updateButton(false);
+        }
     }
 
     private void hideTaskbar() {
-        startButton.setVisibility(View.GONE);
-        space.setVisibility(View.GONE);
+        if(startButton.getVisibility() == View.VISIBLE) {
+            startButton.setVisibility(View.GONE);
+            space.setVisibility(View.GONE);
 
-        if(dashboardEnabled)
-            dashboardButton.setVisibility(View.GONE);
+            if(dashboardEnabled)
+                dashboardButton.setVisibility(View.GONE);
 
-        if(isShowingRecents) {
-            scrollView.setVisibility(View.GONE);
+            if(isShowingRecents) {
+                scrollView.setVisibility(View.GONE);
+            }
+
+            shouldRefreshRecents = false;
+            if(thread != null) thread.interrupt();
+
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("collapsed", false).apply();
+
+            updateButton(true);
+
+            Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
+            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
         }
-
-        shouldRefreshRecents = false;
-        if(thread != null) thread.interrupt();
-
-        SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("collapsed", false).apply();
-
-        updateButton(true);
-
-        Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
-        LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
     }
 
     private void tempShowTaskbar() {

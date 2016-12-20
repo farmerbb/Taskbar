@@ -72,6 +72,7 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.util.StartMenuHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
@@ -589,53 +590,61 @@ public class StartMenuService extends Service {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private void showStartMenu(boolean shouldReset) {
-        if(shouldReset) startMenu.setSelection(0);
+        if(layout.getVisibility() == View.GONE) {
+            if(shouldReset) startMenu.setSelection(0);
 
-        layout.setOnClickListener(ocl);
-        layout.setVisibility(View.VISIBLE);
+            layout.setOnClickListener(ocl);
+            layout.setVisibility(View.VISIBLE);
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
+            StartMenuHelper.getInstance().setStartMenuOpen(true);
 
-        boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
-        boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
 
-        if(!onHomeScreen || inFreeformMode) {
-            Intent intent = new Intent(this, InvisibleActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
+            boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
-            if(inFreeformMode) {
-                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+            if(!onHomeScreen || inFreeformMode) {
+                Intent intent = new Intent(this, InvisibleActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
-            } else
-                startActivity(intent);
+                if(inFreeformMode) {
+                    DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                    startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
+                } else
+                    startActivity(intent);
+            }
+
+            if(searchView.getVisibility() == View.VISIBLE) searchView.requestFocus();
+
+            refreshApps(false);
         }
-
-        if(searchView.getVisibility() == View.VISIBLE) searchView.requestFocus();
-
-        refreshApps(false);
     }
 
     private void hideStartMenu() {
-        layout.setOnClickListener(null);
-        layout.setVisibility(View.INVISIBLE);
+        if(layout.getVisibility() == View.VISIBLE) {
+            layout.setOnClickListener(null);
+            layout.setVisibility(View.INVISIBLE);
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+            StartMenuHelper.getInstance().setStartMenuOpen(false);
 
-        layout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layout.setVisibility(View.GONE);
-                searchView.setQuery(null, false);
-                searchView.setIconified(true);
-                hasSubmittedQuery = false;
-                
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
-            }
-        }, 250);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+
+            layout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    layout.setVisibility(View.GONE);
+                    searchView.setQuery(null, false);
+                    searchView.setIconified(true);
+                    hasSubmittedQuery = false;
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
+                }
+            }, 250);
+        }
     }
     
     @Override
