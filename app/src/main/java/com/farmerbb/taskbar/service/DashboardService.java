@@ -32,6 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -367,8 +368,14 @@ public class DashboardService extends Service {
                 DashboardCell cellLayout = cells.get(i);
                 AppWidgetHostView hostView = widgets.get(i);
 
-                if(hostView != null)
-                    hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+                if(hostView != null) {
+                    try {
+                        getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
+                        hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+                    } catch (PackageManager.NameNotFoundException e) {
+                        removeWidget(i);
+                    }
+                }
             }
 
             if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
