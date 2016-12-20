@@ -37,6 +37,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
@@ -216,27 +217,6 @@ public class DashboardService extends Service {
         layout.setVisibility(View.GONE);
         layout.setAlpha(0);
 
-        int paddingSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
-
-        switch(U.getTaskbarPosition(this)) {
-            case "top_vertical_left":
-            case "bottom_vertical_left":
-                layout.setPadding(paddingSize, 0, 0, 0);
-                break;
-            case "top_left":
-            case "top_right":
-                layout.setPadding(0, paddingSize, 0, 0);
-                break;
-            case "top_vertical_right":
-            case "bottom_vertical_right":
-                layout.setPadding(0, 0, paddingSize, 0);
-                break;
-            case "bottom_left":
-            case "bottom_right":
-                layout.setPadding(0, 0, 0, paddingSize);
-                break;
-        }
-
         SharedPreferences pref = U.getSharedPreferences(this);
         int width = pref.getInt("dashboard_width", getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
         int height = pref.getInt("dashboard_height", getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
@@ -315,6 +295,32 @@ public class DashboardService extends Service {
         LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
 
         windowManager.addView(layout, params);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int paddingSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
+
+                switch(U.getTaskbarPosition(DashboardService.this)) {
+                    case "top_vertical_left":
+                    case "bottom_vertical_left":
+                        layout.setPadding(paddingSize, 0, 0, 0);
+                        break;
+                    case "top_left":
+                    case "top_right":
+                        layout.setPadding(0, paddingSize, 0, 0);
+                        break;
+                    case "top_vertical_right":
+                    case "bottom_vertical_right":
+                        layout.setPadding(0, 0, paddingSize, 0);
+                        break;
+                    case "bottom_left":
+                    case "bottom_right":
+                        layout.setPadding(0, 0, 0, paddingSize);
+                        break;
+                }
+            }
+        }, 100);
     }
 
     private void toggleDashboard() {
