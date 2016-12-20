@@ -372,7 +372,7 @@ public class DashboardService extends Service {
                     try {
                         getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
                         hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
-                    } catch (PackageManager.NameNotFoundException e) {
+                    } catch (PackageManager.NameNotFoundException | NullPointerException e) {
                         removeWidget(i);
                     }
                 }
