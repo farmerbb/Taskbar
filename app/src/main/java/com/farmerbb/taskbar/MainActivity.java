@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                             boolean firstRun = pref.getBoolean("first_run", true);
                             startTaskbarService();
 
-                            if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp()) {
                                 ApplicationInfo applicationInfo = null;
                                 try {
                                     applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
@@ -401,5 +401,15 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("fragment_name", getFragmentManager().findFragmentById(R.id.fragmentContainer).getTag());
 
         super.onSaveInstanceState(outState);
+    }
+
+    private boolean isSystemApp() {
+        try {
+            ApplicationInfo info = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+            return (info.flags & mask) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }
