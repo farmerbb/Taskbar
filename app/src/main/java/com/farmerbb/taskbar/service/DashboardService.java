@@ -339,6 +339,7 @@ public class DashboardService extends Service {
             fadeIn();
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
