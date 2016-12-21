@@ -870,8 +870,8 @@ public class TaskbarService extends Service {
 
             updateButton(true);
 
-            Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
-            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
         }
     }
 

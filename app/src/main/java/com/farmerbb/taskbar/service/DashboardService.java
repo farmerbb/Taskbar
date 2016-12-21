@@ -366,13 +366,18 @@ public class DashboardService extends Service {
                 startActivity(intent);
 
             for(int i = 0; i < maxSize; i++) {
-                DashboardCell cellLayout = cells.get(i);
-                AppWidgetHostView hostView = widgets.get(i);
+                final DashboardCell cellLayout = cells.get(i);
+                final AppWidgetHostView hostView = widgets.get(i);
 
                 if(hostView != null) {
                     try {
                         getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
-                        hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+                        hostView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+                            }
+                        });
                     } catch (PackageManager.NameNotFoundException | NullPointerException e) {
                         removeWidget(i);
                     }

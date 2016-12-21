@@ -47,12 +47,11 @@ public class DashboardActivity extends Activity {
     private AppWidgetManager mAppWidgetManager;
     private AppWidgetHost mAppWidgetHost;
 
-    int REQUEST_PICK_APPWIDGET = 456;
-    int REQUEST_CREATE_APPWIDGET = 789;
+    private final int REQUEST_PICK_APPWIDGET = 456;
+    private final int REQUEST_CREATE_APPWIDGET = 789;
 
-    boolean shouldFinish = true;
-
-    int cellId = -1;
+    private boolean shouldFinish = true;
+    private int cellId = -1;
 
     private BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
         @Override
