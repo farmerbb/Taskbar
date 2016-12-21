@@ -274,12 +274,18 @@ public class MainActivity extends AppCompatActivity {
             if(!pref.getBoolean("uninstall_dialog_shown", false)) {
                 if(theSwitch != null) theSwitch.setChecked(false);
 
+                SharedPreferences.Editor editor = pref.edit();
+
                 String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
                 if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
-                    pref.edit().putString("icon_pack", BuildConfig.APPLICATION_ID).apply();
+                    editor.putString("icon_pack", BuildConfig.APPLICATION_ID);
                 } else {
                     U.refreshPinnedIcons(this);
                 }
+
+                editor.putBoolean("first_run", true);
+                editor.putBoolean("dashboard_tutorial_shown", false);
+                editor.apply();
             }
         }
 
