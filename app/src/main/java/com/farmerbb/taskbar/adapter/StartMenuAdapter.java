@@ -27,6 +27,7 @@ import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
@@ -61,12 +62,14 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
     }
 
     @Override
-    public View getView(int position, View convertView, final ViewGroup parent) {
+    public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
         if(convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(isGrid ? R.layout.row_alt : R.layout.row, parent, false);
 
         final AppEntry entry = getItem(position);
+        assert entry != null;
+
         final SharedPreferences pref = U.getSharedPreferences(getContext());
 
         TextView textView = (TextView) convertView.findViewById(R.id.name);

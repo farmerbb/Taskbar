@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 

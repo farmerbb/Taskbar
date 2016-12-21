@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -90,12 +91,13 @@ public class IconPackActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, final ViewGroup parent) {
+        public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
             // Check if an existing view is being reused, otherwise inflate the view
             if(convertView == null)
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, parent, false);
 
             final IconPack entry = getItem(position);
+            assert entry != null;
 
             TextView textView = (TextView) convertView.findViewById(R.id.name);
             textView.setText(entry.getName());
