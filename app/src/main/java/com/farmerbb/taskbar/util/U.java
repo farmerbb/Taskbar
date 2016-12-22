@@ -291,6 +291,9 @@ public class U {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+        if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+            intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+
         if(launchedFromTaskbar) {
             if(pref.getBoolean("disable_animations", false))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
