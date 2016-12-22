@@ -116,12 +116,17 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnGenericMotionListener(new View.OnGenericMotionListener() {
             @Override
             public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                int action = motionEvent.getAction();
+
+                if(action == MotionEvent.ACTION_BUTTON_PRESS
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     int[] location = new int[2];
                     view.getLocationOnScreen(location);
                     openContextMenu(entry, location);
                 }
+
+                if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean("visual_feedback", true))
+                    view.setBackgroundColor(0);
 
                 return false;
             }
