@@ -138,7 +138,7 @@ public class U {
                 PackageManager.DONT_KILL_APP);
 
         if(isAccessibilityServiceEnabled(context))
-            context.startService(new Intent(context, PowerMenuService.class));
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_POWER_MENU"));
         else {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -16,13 +16,25 @@
 package com.farmerbb.taskbar.service;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
 public class PowerMenuService extends AccessibilityService {
+
+    private BroadcastReceiver powerMenuReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(!performGlobalAction(GLOBAL_ACTION_POWER_DIALOG))
+                U.showToast(PowerMenuService.this, R.string.lock_device_not_supported);
+        }
+    };
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {}
@@ -31,10 +43,16 @@ public class PowerMenuService extends AccessibilityService {
     public void onInterrupt() {}
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if(!performGlobalAction(GLOBAL_ACTION_POWER_DIALOG))
-            U.showToast(this, R.string.lock_device_not_supported);
+    public void onCreate() {
+        super.onCreate();
 
-        return super.onStartCommand(intent, flags, startId);
+        LocalBroadcastManager.getInstance(this).registerReceiver(powerMenuReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_POWER_MENU"));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(powerMenuReceiver);
     }
 }
