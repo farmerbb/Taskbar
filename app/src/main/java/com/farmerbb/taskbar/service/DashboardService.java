@@ -372,11 +372,13 @@ public class DashboardService extends Service {
                 if(hostView != null) {
                     try {
                         getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
-                        hostView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
                         hostView.post(new Runnable() {
                             @Override
                             public void run() {
+                                ViewGroup.LayoutParams params = hostView.getLayoutParams();
+                                params.width = cellLayout.getWidth();
+                                params.height = cellLayout.getHeight();
+                                hostView.setLayoutParams(params);
                                 hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
                             }
                         });
@@ -510,11 +512,9 @@ public class DashboardService extends Service {
     private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 
-        DashboardCell cellLayout = cells.get(cellId);
-        AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
+        final DashboardCell cellLayout = cells.get(cellId);
+        final AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
-        hostView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
 
         Bundle bundle = new Bundle();
         bundle.putInt("cellId", cellId);
@@ -538,6 +538,17 @@ public class DashboardService extends Service {
             SharedPreferences pref = U.getSharedPreferences(this);
             pref.edit().putInt("dashboard_widget_" + Integer.toString(cellId), appWidgetId).apply();
         }
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.LayoutParams params = hostView.getLayoutParams();
+                params.width = cellLayout.getWidth();
+                params.height = cellLayout.getHeight();
+                hostView.setLayoutParams(params);
+                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
+            }
+        });
     }
 
     private void removeWidget(int cellId) {
