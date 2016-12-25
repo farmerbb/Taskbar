@@ -54,6 +54,11 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
+        android:key="shortcut_icon"
+        android:title="@string/pref_title_shortcut_icon"/>
+
+    <CheckBoxPreference
+        android:defaultValue="true"
         android:key="visual_feedback"
         android:title="@string/visual_feedback"/>
 

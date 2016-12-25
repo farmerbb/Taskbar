@@ -38,7 +38,6 @@ public class RecentAppsFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
         bindPreferenceSummaryToValue(findPreference("recents_amount"));
         bindPreferenceSummaryToValue(findPreference("sort_order"));
-        bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
         bindPreferenceSummaryToValue(findPreference("max_num_of_recents"));
         bindPreferenceSummaryToValue(findPreference("disable_scrolling_list"));
 
