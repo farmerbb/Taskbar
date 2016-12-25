@@ -372,6 +372,8 @@ public class DashboardService extends Service {
                 if(hostView != null) {
                     try {
                         getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
+                        hostView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
                         hostView.post(new Runnable() {
                             @Override
                             public void run() {
@@ -511,6 +513,7 @@ public class DashboardService extends Service {
         DashboardCell cellLayout = cells.get(cellId);
         AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
+        hostView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
 
         Bundle bundle = new Bundle();
