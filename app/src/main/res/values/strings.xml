@@ -179,12 +179,6 @@
     <string name="pref_description_hide_when_keyboard_shown">When the on-screen keyboard is shown</string>
 
     <string name="pref_max_num_of_recents">Maximum number of recent/pinned apps</string>
-    <string-array name="pref_max_num_of_recents_list">
-        <item>10 apps</item>
-        <item>15 apps</item>
-        <item>20 apps</item>
-        <item>Unlimited</item>
-    </string-array>
 
     <string name="show_window_sizes">New window&#8230;</string>
 
@@ -272,5 +266,10 @@
     <string name="reset_colors">Reset colors to default</string>
 
     <string name="visual_feedback">Visual feedback when selecting icons</string>
+
+    <string name="num_of_recents_blurb">Ensure that usage access is enabled before changing this setting.\n\nHigher values may reduce performance.</string>
+    <string name="max_num_of_recents">%1$d apps</string>
+    <string name="max_num_of_recents_singular">1 app</string>
+    <string name="max_num_of_recents_unlimited">Unlimited</string>
 
 </resources>

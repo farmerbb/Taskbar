@@ -179,12 +179,6 @@
     <string name="pref_description_hide_when_keyboard_shown">Когда появляется клавиатура и Taskbar в горинзонтальном режиме, спрятать Taskbar для показа текстовых полей</string>
 
     <string name="pref_max_num_of_recents">Максимальное количество закрепленных приложений</string>
-    <string-array name="pref_max_num_of_recents_list">
-        <item>10 приложений</item>
-        <item>15 приложений</item>
-        <item>20 приложений</item>
-        <item>Без ограничений</item>
-    </string-array>
 
     <string name="show_window_sizes">Новое окно&#8230;</string>
 
@@ -272,5 +266,10 @@
     <string name="reset_colors">Reset colors to default</string>
 
     <string name="visual_feedback">Visual feedback when selecting icons</string>
+
+    <string name="num_of_recents_blurb">Ensure that usage access is enabled before changing this setting.\n\nHigher values may reduce performance.</string>
+    <string name="max_num_of_recents">%1$d приложений</string>
+    <string name="max_num_of_recents_singular">1 приложений</string>
+    <string name="max_num_of_recents_unlimited">Без ограничений</string>
 
 </resources>

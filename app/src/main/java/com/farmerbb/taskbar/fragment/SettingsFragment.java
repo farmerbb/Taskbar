@@ -46,6 +46,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
@@ -481,6 +483,52 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 AlertDialog dialog5 = builder5.create();
                 dialog5.show();
                 break;
+            case "max_num_of_recents":
+                final int max = 26;
+
+                AlertDialog.Builder builder6 = new AlertDialog.Builder(getActivity());
+                LinearLayout dialogLayout2 = (LinearLayout) View.inflate(getActivity(), R.layout.max_num_of_recents, null);
+
+                String value = pref.getString("max_num_of_recents", "10");
+
+                final TextView textView = (TextView) dialogLayout2.findViewById(R.id.seekbar_value);
+                final SeekBar seekBar = (SeekBar) dialogLayout2.findViewById(R.id.seekbar);
+                seekBar.setMax(max);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if(progress == max)
+                            textView.setText(R.string.infinity);
+                        else
+                            textView.setText(Integer.toString(progress));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {}
+                });
+
+                seekBar.setProgress(Integer.parseInt(value));
+
+                builder6.setView(dialogLayout2)
+                        .setTitle(R.string.pref_max_num_of_recents)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                int progress = seekBar.getProgress();
+                                if(progress == max)
+                                    progress = Integer.MAX_VALUE;
+
+                                pref.edit().putString("max_num_of_recents", Integer.toString(progress)).apply();
+                                updateMaxNumOfRecents(true);
+                            }
+                        })
+                        .setNegativeButton(R.string.action_cancel, null);
+
+                AlertDialog dialog6 = builder6.create();
+                dialog6.show();
+                break;
         }
 
         return true;
@@ -566,6 +614,25 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
 
         findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
+
+        if(restartTaskbar) restartTaskbar();
+    }
+
+    protected void updateMaxNumOfRecents(boolean restartTaskbar) {
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        int value = Integer.parseInt(pref.getString("max_num_of_recents", "10"));
+
+        switch(value) {
+            case 1:
+                findPreference("max_num_of_recents").setSummary(R.string.max_num_of_recents_singular);
+                break;
+            case Integer.MAX_VALUE:
+                findPreference("max_num_of_recents").setSummary(R.string.max_num_of_recents_unlimited);
+                break;
+            default:
+                findPreference("max_num_of_recents").setSummary(getString(R.string.max_num_of_recents, value));
+                break;
+        }
 
         if(restartTaskbar) restartTaskbar();
     }

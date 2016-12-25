@@ -34,11 +34,11 @@ public class RecentAppsFragment extends SettingsFragment {
 
         // Set OnClickListeners for certain preferences
         findPreference("enable_recents").setOnPreferenceClickListener(this);
+        findPreference("max_num_of_recents").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
         bindPreferenceSummaryToValue(findPreference("recents_amount"));
         bindPreferenceSummaryToValue(findPreference("sort_order"));
-        bindPreferenceSummaryToValue(findPreference("max_num_of_recents"));
         bindPreferenceSummaryToValue(findPreference("disable_scrolling_list"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -46,6 +46,8 @@ public class RecentAppsFragment extends SettingsFragment {
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
+
+        updateMaxNumOfRecents(false);
 
         finishedLoadingPrefs = true;
     }

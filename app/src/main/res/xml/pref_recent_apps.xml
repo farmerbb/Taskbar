@@ -47,13 +47,8 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_sort_order"/>
 
-    <ListPreference
-        android:defaultValue="10"
-        android:entries="@array/pref_max_num_of_recents_list"
-        android:entryValues="@array/pref_max_num_of_recents_list_values"
+    <Preference
         android:key="max_num_of_recents"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
         android:title="@string/pref_max_num_of_recents"/>
 
     <CheckBoxPreference
