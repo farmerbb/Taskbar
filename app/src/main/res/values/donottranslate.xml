@@ -20,17 +20,11 @@
     <string name="right_arrow" translatable="false">&#10095;</string>
     <string name="x" translatable="false">&#215;</string>
     <string name="dashboard_grid_description" translatable="false">%1$d &#215; %2$d</string>
-    <string name="infinity">&#8734;</string>
+    <string name="infinity" translatable="false">&#8734;</string>
 
     <string-array name="pref_start_menu_list_values">
         <item>list</item>
         <item>grid</item>
-    </string-array>
-
-    <string-array name="pref_refresh_frequency_values">
-        <item>1</item>
-        <item>2</item>
-        <item>5</item>
     </string-array>
 
     <string-array name="pref_recents_amount_values">
@@ -77,13 +71,6 @@
         <item>half_left</item>
         <item>half_right</item>
         <item>phone_size</item>
-    </string-array>
-
-    <string-array name="pref_max_num_of_recents_list_values">
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-        <item>2147483647</item>
     </string-array>
 
     <string-array name="pref_show_search_bar_list_values">

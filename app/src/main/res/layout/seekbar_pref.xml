@@ -35,14 +35,13 @@
         <TextView
             android:id="@+id/seekbar_value"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/blurb"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/num_of_recents_blurb" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

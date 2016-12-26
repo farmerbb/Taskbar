@@ -43,11 +43,6 @@
 
     <string name="pref_title_enable_recents">Включить/выключить разрешение</string>
     <string name="pref_title_recents_refresh_interval">Обновлять список через</string>
-    <string-array name="pref_refresh_frequency">
-        <item>1 секунду</item>
-        <item>2 секунды</item>
-        <item>5 секунд</item>
-    </string-array>
 
     <string name="pref_title_amount_of_recents">Показывать список</string>
     <string-array name="pref_recents_amount">
@@ -271,5 +266,10 @@
     <string name="max_num_of_recents">%1$d приложений</string>
     <string name="max_num_of_recents_singular">1 приложений</string>
     <string name="max_num_of_recents_unlimited">Без ограничений</string>
+
+    <string name="refresh_frequency_blurb">Ensure that usage access is enabled before changing this setting.\n\nLower values will increase CPU usage and may decrease battery life.</string>
+    <string name="refresh_frequency">%1$s секунд</string>
+    <string name="refresh_frequency_singular">1 секунду</string>
+    <string name="refresh_frequency_continuous">Continuous</string>
 
 </resources>

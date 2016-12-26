@@ -42,12 +42,7 @@
     <string name="pref_header_recent_apps">Recent apps</string>
 
     <string name="pref_title_enable_recents">Enable/disable usage access</string>
-    <string name="pref_title_recents_refresh_interval">Refresh list every</string>
-    <string-array name="pref_refresh_frequency">
-        <item>1 second</item>
-        <item>2 seconds</item>
-        <item>5 seconds</item>
-    </string-array>
+    <string name="pref_title_recents_refresh_interval">Refresh rate</string>
 
     <string name="pref_title_amount_of_recents">Display apps launched</string>
     <string-array name="pref_recents_amount">
@@ -271,5 +266,10 @@
     <string name="max_num_of_recents">%1$d apps</string>
     <string name="max_num_of_recents_singular">1 app</string>
     <string name="max_num_of_recents_unlimited">Unlimited</string>
+
+    <string name="refresh_frequency_blurb">Ensure that usage access is enabled before changing this setting.\n\nLower values will increase CPU usage and may decrease battery life.</string>
+    <string name="refresh_frequency">%1$s seconds</string>
+    <string name="refresh_frequency_singular">1 second</string>
+    <string name="refresh_frequency_continuous">Continuous</string>
 
 </resources>

@@ -487,11 +487,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 final int max = 26;
 
                 AlertDialog.Builder builder6 = new AlertDialog.Builder(getActivity());
-                LinearLayout dialogLayout2 = (LinearLayout) View.inflate(getActivity(), R.layout.max_num_of_recents, null);
+                LinearLayout dialogLayout2 = (LinearLayout) View.inflate(getActivity(), R.layout.seekbar_pref, null);
 
                 String value = pref.getString("max_num_of_recents", "10");
 
                 final TextView textView = (TextView) dialogLayout2.findViewById(R.id.seekbar_value);
+                textView.setText("0");
+
                 final SeekBar seekBar = (SeekBar) dialogLayout2.findViewById(R.id.seekbar);
                 seekBar.setMax(max);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -512,6 +514,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
                 seekBar.setProgress(Integer.parseInt(value));
 
+                TextView blurb = (TextView) dialogLayout2.findViewById(R.id.blurb);
+                blurb.setText(R.string.num_of_recents_blurb);
+
                 builder6.setView(dialogLayout2)
                         .setTitle(R.string.pref_max_num_of_recents)
                         .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
@@ -528,6 +533,55 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
                 AlertDialog dialog6 = builder6.create();
                 dialog6.show();
+                break;
+            case "refresh_frequency":
+                final int max2 = 20;
+
+                AlertDialog.Builder builder7 = new AlertDialog.Builder(getActivity());
+                LinearLayout dialogLayout3 = (LinearLayout) View.inflate(getActivity(), R.layout.seekbar_pref, null);
+
+                String value2 = pref.getString("refresh_frequency", "2");
+
+                final TextView textView2 = (TextView) dialogLayout3.findViewById(R.id.seekbar_value);
+                textView2.setText(R.string.infinity);
+
+                final SeekBar seekBar2 = (SeekBar) dialogLayout3.findViewById(R.id.seekbar);
+                seekBar2.setMax(max2);
+                seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if(progress == 0)
+                            textView2.setText(R.string.infinity);
+                        else
+                            textView2.setText(Double.toString(progress * 0.5));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {}
+                });
+
+                seekBar2.setProgress((int) (Double.parseDouble(value2) * 2));
+
+                TextView blurb2 = (TextView) dialogLayout3.findViewById(R.id.blurb);
+                blurb2.setText(R.string.refresh_frequency_blurb);
+
+                builder7.setView(dialogLayout3)
+                        .setTitle(R.string.pref_title_recents_refresh_interval)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                double progress = seekBar2.getProgress() * 0.5;
+
+                                pref.edit().putString("refresh_frequency", Double.toString(progress)).apply();
+                                updateRefreshFrequency(true);
+                            }
+                        })
+                        .setNegativeButton(R.string.action_cancel, null);
+
+                AlertDialog dialog7 = builder7.create();
+                dialog7.show();
                 break;
         }
 
@@ -633,6 +687,24 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 findPreference("max_num_of_recents").setSummary(getString(R.string.max_num_of_recents, value));
                 break;
         }
+
+        if(restartTaskbar) restartTaskbar();
+    }
+
+    protected void updateRefreshFrequency(boolean restartTaskbar) {
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        String value = pref.getString("refresh_frequency", "2");
+        double doubleValue = Double.parseDouble(value);
+        int intValue = (int) doubleValue;
+
+        if(doubleValue == 0)
+            findPreference("refresh_frequency").setSummary(R.string.refresh_frequency_continuous);
+        else if(doubleValue == 1)
+            findPreference("refresh_frequency").setSummary(R.string.refresh_frequency_singular);
+        else if(doubleValue == (double) intValue)
+            findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, Integer.toString(intValue)));
+        else
+            findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, value));
 
         if(restartTaskbar) restartTaskbar();
     }

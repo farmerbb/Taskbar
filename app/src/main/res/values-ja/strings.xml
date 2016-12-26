@@ -43,11 +43,6 @@
 
     <string name="pref_title_enable_recents">使用状況アクセスを有効/無効にする</string>
     <string name="pref_title_recents_refresh_interval">リストのリフレッシュ間隔</string>
-    <string-array name="pref_refresh_frequency">
-        <item>1 秒</item>
-        <item>2 秒</item>
-        <item>5 秒</item>
-    </string-array>
 
     <string name="pref_title_amount_of_recents">起動したアプリの表示</string>
     <string-array name="pref_recents_amount">
@@ -271,5 +266,10 @@
     <string name="max_num_of_recents">%1$d apps</string>
     <string name="max_num_of_recents_singular">1 app</string>
     <string name="max_num_of_recents_unlimited">Unlimited</string>
+
+    <string name="refresh_frequency_blurb">Ensure that usage access is enabled before changing this setting.\n\nLower values will increase CPU usage and may decrease battery life.</string>
+    <string name="refresh_frequency">%1$s 秒</string>
+    <string name="refresh_frequency_singular">1 秒</string>
+    <string name="refresh_frequency_continuous">Continuous</string>
 
 </resources>
