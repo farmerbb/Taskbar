@@ -173,7 +173,7 @@
     <string name="pref_title_hide_when_keyboard_shown">Taskbar を自動的に折りたたむ</string>
     <string name="pref_description_hide_when_keyboard_shown">オンスクリーン キーボードが表示され、Taskbar が横向きのとき、テキストフィールドがブロックされるのを防止するため自動的に Taskbar を折りたたみます。 (実験的)</string>
 
-    <string name="pref_max_num_of_recents">Maximum number of recent/pinned apps</string>
+    <string name="pref_max_num_of_recents">Maximum number of recent apps</string>
 
     <string name="show_window_sizes">New window&#8230;</string>
 
