@@ -66,6 +66,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
+import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
@@ -604,16 +605,13 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!onHomeScreen || inFreeformMode) {
-                Intent intent = new Intent(this, InvisibleActivity.class);
+                Intent intent = new Intent(this, inFreeformMode ? InvisibleActivityAlt.class : InvisibleActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                if(inFreeformMode) {
-                    DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-                    startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(display.getWidth(), display.getHeight(), display.getWidth() + 1, display.getHeight() + 1)).toBundle());
-                } else
+                if(inFreeformMode)
+                    U.launchAppFullscreen(this, intent);
+                else
                     startActivity(intent);
             }
 

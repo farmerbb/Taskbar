@@ -67,6 +67,12 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity
+            android:name=".activity.InvisibleActivityAlt"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
