@@ -47,6 +47,7 @@ import android.support.v7.widget.SearchView;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -368,6 +369,17 @@ public class StartMenuService extends Service {
             });
 
             searchView.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
+            searchView.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                    System.out.println(keyCode);
+                    System.out.println(event.getAction());
+
+                    return false;
+                }
+            });
 
             LinearLayout powerButton = (LinearLayout) layout.findViewById(R.id.power_button);
             powerButton.setOnClickListener(new View.OnClickListener() {

@@ -49,6 +49,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.enrico.colorpicker.colorDialog;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
@@ -70,8 +71,6 @@ import com.farmerbb.taskbar.util.U;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
-
-import yuku.ambilwarna.widget.AmbilWarnaPreference;
 
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
 
@@ -140,7 +139,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     getActivity().overridePendingTransition(0, 0);
                 }
 
-            } else if(!(preference instanceof CheckBoxPreference || preference instanceof AmbilWarnaPreference)) {
+            } else if(!(preference instanceof CheckBoxPreference)) {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
@@ -158,7 +157,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
         // Trigger the listener immediately with the preference's
         // current value.
-        if(!(preference instanceof CheckBoxPreference || preference instanceof AmbilWarnaPreference))
+        if(!(preference instanceof CheckBoxPreference))
             sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                     PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
     }
@@ -469,11 +468,10 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                             public void onClick(DialogInterface dialog, int which) {
                                 finishedLoadingPrefs = false;
 
-                                AmbilWarnaPreference backgroundTintPref = (AmbilWarnaPreference) findPreference("background_tint");
-                                backgroundTintPref.forceSetValue(getResources().getInteger(R.integer.translucent_gray));
+                                pref.edit().remove("background_tint").remove("accent_color").apply();
 
-                                AmbilWarnaPreference accentColorPref = (AmbilWarnaPreference) findPreference("accent_color");
-                                accentColorPref.forceSetValue(getResources().getInteger(R.integer.translucent_white));
+                                colorDialog.setColorPreferenceSummary(findPreference("background_tint_pref"), U.getBackgroundTint(getActivity()), getActivity(), getResources());
+                                colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
 
                                 finishedLoadingPrefs = true;
                                 restartTaskbar();
@@ -583,6 +581,18 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 AlertDialog dialog7 = builder7.create();
                 dialog7.show();
                 break;
+            case "background_tint_pref":
+                MainActivity activity = (MainActivity) getActivity();
+
+                colorDialog.setPickerColor(activity, activity.BACKGROUND_TINT, U.getBackgroundTint(activity));
+                colorDialog.showColorPicker(activity, activity.BACKGROUND_TINT);
+                break;
+            case "accent_color_pref":
+                MainActivity activity2 = (MainActivity) getActivity();
+
+                colorDialog.setPickerColor(activity2, activity2.ACCENT_COLOR, U.getAccentColor(activity2));
+                colorDialog.showColorPicker(activity2, activity2.ACCENT_COLOR);
+                break;
         }
 
         return true;
@@ -602,7 +612,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         if(fullRestart) getActivity().stopService(new Intent(getActivity(), NotificationService.class));
     }
 
-    private void restartTaskbar() {
+    public void restartTaskbar() {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
             pref.edit().putBoolean("is_restarting", true).apply();

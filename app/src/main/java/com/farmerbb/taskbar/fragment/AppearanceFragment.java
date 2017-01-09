@@ -22,6 +22,7 @@ import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import com.enrico.colorpicker.colorDialog;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
@@ -40,13 +41,13 @@ public class AppearanceFragment extends SettingsFragment {
         // Set OnClickListeners for certain preferences
         findPreference("icon_pack_list").setOnPreferenceClickListener(this);
         findPreference("reset_colors").setOnPreferenceClickListener(this);
+        findPreference("background_tint_pref").setOnPreferenceClickListener(this);
+        findPreference("accent_color_pref").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("theme"));
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
         bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
         bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
-        bindPreferenceSummaryToValue(findPreference("background_tint"));
-        bindPreferenceSummaryToValue(findPreference("accent_color"));
         bindPreferenceSummaryToValue(findPreference("visual_feedback"));
         bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
 
@@ -55,6 +56,9 @@ public class AppearanceFragment extends SettingsFragment {
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
+
+        colorDialog.setColorPreferenceSummary(findPreference("background_tint_pref"), U.getBackgroundTint(getActivity()), getActivity(), getResources());
+        colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
 
         finishedLoadingPrefs = true;
     }

@@ -30,16 +30,14 @@
         android:key="icon_pack_list"
         android:title="@string/icon_pack" />
 
-    <yuku.ambilwarna.widget.AmbilWarnaPreference
-        android:key="background_tint"
+    <Preference
+        android:key="background_tint_pref"
         android:defaultValue="@integer/translucent_gray"
-        app:supportsAlpha="true"
         android:title="@string/pref_title_background_tint" />
 
-    <yuku.ambilwarna.widget.AmbilWarnaPreference
-        android:key="accent_color"
+    <Preference
+        android:key="accent_color_pref"
         android:defaultValue="@integer/translucent_white"
-        app:supportsAlpha="true"
         android:title="@string/pref_title_accent_color" />
 
     <CheckBoxPreference
