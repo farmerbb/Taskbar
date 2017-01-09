@@ -17,6 +17,7 @@
 <resources>
 
     <string name="app_name">Taskbar</string>
+    <string name="app_name_debug">Taskbar (Debug)</string>
 
     <string name="taskbar_is_active">Taskbar is active</string>
     <string name="click_to_open_settings">Click to open settings</string>
