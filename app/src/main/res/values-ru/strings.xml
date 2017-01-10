@@ -242,7 +242,7 @@
     <string name="enable_accessibility">Нужно включить службу Taskbar!</string>
     <string name="accessibility_service_description">Taskbar будет показывать меню питания.\n\n(Это больше нигде не используется)</string>
 
-    <string name="pref_title_force_new_window">Всегда открывать в новом окне<string>
+    <string name="pref_title_force_new_window">Всегда открывать в новом окне</string>
     <string name="pref_description_force_new_window">Всегда запускать приложение в новом окне (если можно)</string>
     <string name="change_wallpaper">Сменить обои</string>
 
