@@ -210,7 +210,7 @@
 
     <string name="disable_scrolling_list">Отключить список</string>
 
-    <string name="double_tap_to_sleep">Double tap to sleep</string>
+    <string name="double_tap_to_sleep">Двойной тап для сна</string>
     <string name="enable_double_tap_to_sleep">Включить DT2S?</string>
     <string name="action_dont_show_again">Не показывать снова</string>
 
@@ -218,59 +218,59 @@
 
     <string name="usage_stats_message">Проверьте, включен ли Taskbar</string>
 
-    <string name="volume">Volume control</string>
-    <string name="file_manager">File manager</string>
-    <string name="system_settings">System settings</string>
-    <string name="lock_device">Lock device</string>
-    <string name="power_menu">Power menu</string>
+    <string name="volume">Настройка громкости</string>
+    <string name="file_manager">Проводник</string>
+    <string name="system_settings">Системные настройки</string>
+    <string name="lock_device">Заблокировать устройство</string>
+    <string name="power_menu">Меню питания</string>
 
-    <string name="show_search_bar">Search bar visibility</string>
+    <string name="show_search_bar">Панель поиска</string>
     <string-array name="pref_show_search_bar_list">
-        <item>Hardware or software keyboard</item>
-        <item>Hardware keyboard only</item>
-        <item>Never show search bar</item>
+        <item>Включить</item>
+        <item>Аппаратная клавиатура</item>
+        <item>Отключить</item>
     </string-array>
 
-    <string name="clear_pba">Pinned/blocked recent apps</string>
-    <string name="clear_hidden_apps">Start menu &#8211; Hidden apps</string>
-    <string name="clear_top_apps">Start menu &#8211; Top apps</string>
-    <string name="clear_window_sizes">Saved window sizes</string>
-    <string name="action_reset">Reset</string>
+    <string name="clear_pba">Прикрепленные/заблокированные недавние приложения</string>
+    <string name="clear_hidden_apps">Меню &#8211; Спрятанные приложения</string>
+    <string name="clear_top_apps">Меню &#8211; Первые приложения</string>
+    <string name="clear_window_sizes">Сохраненные размеры окон</string>
+    <string name="action_reset">Сбросить</string>
     
-    <string name="tools">Tools</string>
+    <string name="tools">Инструменты</string>
 
-    <string name="enable_accessibility">Taskbar\'s accessibility service must be enabled to show the power menu</string>
-    <string name="accessibility_service_description">Allows Taskbar to show the device\'s power menu.\n\n(This service is not used for any other purpose)</string>
+    <string name="enable_accessibility">Нужно включить службу Taskbar!</string>
+    <string name="accessibility_service_description">Taskbar будет показывать меню питания.\n\n(Это больше нигде не используется)</string>
 
-    <string name="pref_title_force_new_window">Always open apps in new windows</string>
-    <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
-    <string name="change_wallpaper">Change wallpaper</string>
+    <string name="pref_title_force_new_window">Всегда открывать в новом окне<string>
+    <string name="pref_description_force_new_window">Всегда запускать приложение в новом окне (если можно)</string>
+    <string name="change_wallpaper">Сменить обои</string>
 
-    <string name="notification_settings">System notification settings</string>
+    <string name="notification_settings">Настройки уведомлений</string>
 
-    <string name="pref_header_appearance">Appearance</string>
-    <string name="dashboard">Enable the dashboard</string>
-    <string name="dashboard_description">Adds a button to the Taskbar where widgets can be displayed</string>
-    <string name="dashboard_grid_size">Dashboard grid size</string>
+    <string name="pref_header_appearance">Внешний вид</string>
+    <string name="dashboard">Панель виджетов</string>
+    <string name="dashboard_description">Добавляет кнопку, на которой размещаются виджеты.</string>
+    <string name="dashboard_grid_size">Размер панели виджетов</string>
 
-    <string name="click_to_add_widget">Click to add widget</string>
-    <string name="remove_widget">Remove widget</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="dashboard_tutorial">Click anywhere on screen to add a widget to the dashboard</string>
+    <string name="click_to_add_widget">Нажмите, чтобы добавить виджет</string>
+    <string name="remove_widget">Удаление</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="dashboard_tutorial">Нажмите на экран для добавления виджета</string>
 
-    <string name="pref_title_accent_color">Accent color</string>
-    <string name="reset_colors">Reset colors to default</string>
+    <string name="pref_title_accent_color">Акцент</string>
+    <string name="reset_colors">Сбросить цвета</string>
 
-    <string name="visual_feedback">Visual feedback when selecting icons</string>
+    <string name="visual_feedback">Вибрировать при выборе иконок</string>
 
-    <string name="num_of_recents_blurb">Ensure that usage access is enabled before changing this setting.\n\nHigher values may reduce performance.</string>
+    <string name="num_of_recents_blurb">Taskbar требует разрешение "Доступ к данным о использовании" для работы этой функции.\n\nВысокие значения могут замедлить работу.</string>
     <string name="max_num_of_recents">%1$d приложений</string>
     <string name="max_num_of_recents_singular">1 приложений</string>
     <string name="max_num_of_recents_unlimited">Без ограничений</string>
 
-    <string name="refresh_frequency_blurb">Ensure that usage access is enabled before changing this setting.\n\nLower values will increase CPU usage and may decrease battery life.</string>
+    <string name="refresh_frequency_blurb">Taskbar требует разрешение "Доступ к данным о использовании" для работы этой функции.\n\nНизкие значения могут увеличить потребление ЦП и потребление батареи.</string>
     <string name="refresh_frequency">%1$s секунд</string>
     <string name="refresh_frequency_singular">1 секунду</string>
-    <string name="refresh_frequency_continuous">Continuous</string>
+    <string name="refresh_frequency_continuous">Постоянно</string>
 
 </resources>
