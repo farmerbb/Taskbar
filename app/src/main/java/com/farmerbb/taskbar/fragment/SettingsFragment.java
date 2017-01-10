@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.fragment;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
@@ -28,9 +27,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -41,23 +42,30 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.enrico.colorpicker.colorDialog;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.ClearDataActivity;
+import com.farmerbb.taskbar.activity.ClearDataActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.activity.IconPackActivityDark;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 import com.farmerbb.taskbar.activity.SelectAppActivityDark;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.PinnedBlockedApps;
-import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
 import java.text.NumberFormat;
@@ -68,6 +76,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
     boolean finishedLoadingPrefs;
     boolean showReminderToast = false;
+    boolean restartNotificationService = false;
     int noThanksCount = 0;
 
     @Override
@@ -87,7 +96,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
         // On smaller-screened devices, set "Grid" as the default start menu layout
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(getResources().getConfiguration().smallestScreenWidthDp < 600
+        if(getActivity().getApplicationContext().getResources().getConfiguration().smallestScreenWidthDp < 600
                 && pref.getString("start_menu_layout", "null").equals("null")) {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
@@ -165,6 +174,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     @Override
@@ -173,20 +183,18 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
         switch(p.getKey()) {
             case "clear_pinned_apps":
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.clear_pinned_apps)
-                        .setMessage(R.string.are_you_sure)
-                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                PinnedBlockedApps.getInstance(getActivity()).clear(getActivity());
-                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                                    SavedWindowSizes.getInstance(getActivity()).clear(getActivity());
-                            }
-                        }).setNegativeButton(R.string.action_cancel, null);
+                Intent clearIntent = null;
 
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        clearIntent = new Intent(getActivity(), ClearDataActivity.class);
+                        break;
+                    case "dark":
+                        clearIntent = new Intent(getActivity(), ClearDataActivityDark.class);
+                        break;
+                }
+
+                startActivity(clearIntent);
                 break;
             case "enable_recents":
                 try {
@@ -197,7 +205,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 break;
             case "launcher":
                 if(canDrawOverlays()) {
-                    ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
+                    ComponentName component = new ComponentName(getActivity(), HomeActivity.class);
                     getActivity().getPackageManager().setComponentEnabledSetting(component,
                             ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);
@@ -210,7 +218,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
                 break;
             case "keyboard_shortcut":
-                ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, KeyboardShortcutActivity.class.getName());
+                ComponentName component = new ComponentName(getActivity(), KeyboardShortcutActivity.class);
                 getActivity().getPackageManager().setComponentEnabledSetting(component,
                         ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP);
@@ -264,6 +272,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 findPreference("save_window_sizes").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("window_size").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("add_shortcut").setEnabled(((CheckBoxPreference) p).isChecked());
+                findPreference("force_new_window").setEnabled(((CheckBoxPreference) p).isChecked());
 
                 break;
             case "freeform_mode_help":
@@ -330,6 +339,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;
+            case "pref_screen_appearance":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
             case "pref_screen_recent_apps":
                 getFragmentManager()
                         .beginTransaction()
@@ -374,6 +390,209 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
                 U.showToast(getActivity(), R.string.shortcut_created);
                 break;
+            case "notification_settings":
+                Intent intent4 = new Intent();
+                intent4.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                intent4.putExtra("app_package", BuildConfig.APPLICATION_ID);
+                intent4.putExtra("app_uid", getActivity().getApplicationInfo().uid);
+
+                try {
+                    startActivity(intent4);
+                    restartNotificationService = true;
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                break;
+            case "dashboard_grid_size":
+                AlertDialog.Builder builder4 = new AlertDialog.Builder(getActivity());
+                LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.dashboard_size_dialog, null);
+
+                boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+                boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+                int editTextId = -1;
+                int editText2Id = -1;
+
+                if(isPortrait) {
+                    editTextId = R.id.fragmentEditText2;
+                    editText2Id = R.id.fragmentEditText1;
+                }
+
+                if(isLandscape) {
+                    editTextId = R.id.fragmentEditText1;
+                    editText2Id = R.id.fragmentEditText2;
+                }
+
+                final EditText editText = (EditText) dialogLayout.findViewById(editTextId);
+                final EditText editText2 = (EditText) dialogLayout.findViewById(editText2Id);
+
+                builder4.setView(dialogLayout)
+                        .setTitle(R.string.dashboard_grid_size)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                int width = Integer.parseInt(editText.getText().toString());
+                                int height = Integer.parseInt(editText2.getText().toString());
+
+                                if(width > 0 && height > 0) {
+                                    SharedPreferences.Editor editor = pref.edit();
+                                    editor.putInt("dashboard_width", width);
+                                    editor.putInt("dashboard_height", height);
+                                    editor.apply();
+
+                                    updateDashboardGridSize(true);
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.action_cancel, null);
+
+                editText.setText(Integer.toString(pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_width))));
+                editText2.setText(Integer.toString(pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_height))));
+
+                AlertDialog dialog4 = builder4.create();
+                dialog4.show();
+
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(editText2, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                });
+
+                break;
+            case "reset_colors":
+                AlertDialog.Builder builder5 = new AlertDialog.Builder(getActivity());
+                builder5.setTitle(R.string.reset_colors)
+                        .setMessage(R.string.are_you_sure)
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finishedLoadingPrefs = false;
+
+                                pref.edit().remove("background_tint").remove("accent_color").apply();
+
+                                colorDialog.setColorPreferenceSummary(findPreference("background_tint_pref"), U.getBackgroundTint(getActivity()), getActivity(), getResources());
+                                colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
+
+                                finishedLoadingPrefs = true;
+                                restartTaskbar();
+                            }
+                        });
+
+                AlertDialog dialog5 = builder5.create();
+                dialog5.show();
+                break;
+            case "max_num_of_recents":
+                final int max = 26;
+
+                AlertDialog.Builder builder6 = new AlertDialog.Builder(getActivity());
+                LinearLayout dialogLayout2 = (LinearLayout) View.inflate(getActivity(), R.layout.seekbar_pref, null);
+
+                String value = pref.getString("max_num_of_recents", "10");
+
+                final TextView textView = (TextView) dialogLayout2.findViewById(R.id.seekbar_value);
+                textView.setText("0");
+
+                final SeekBar seekBar = (SeekBar) dialogLayout2.findViewById(R.id.seekbar);
+                seekBar.setMax(max);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if(progress == max)
+                            textView.setText(R.string.infinity);
+                        else
+                            textView.setText(Integer.toString(progress));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {}
+                });
+
+                seekBar.setProgress(Integer.parseInt(value));
+
+                TextView blurb = (TextView) dialogLayout2.findViewById(R.id.blurb);
+                blurb.setText(R.string.num_of_recents_blurb);
+
+                builder6.setView(dialogLayout2)
+                        .setTitle(R.string.pref_max_num_of_recents)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                int progress = seekBar.getProgress();
+                                if(progress == max)
+                                    progress = Integer.MAX_VALUE;
+
+                                pref.edit().putString("max_num_of_recents", Integer.toString(progress)).apply();
+                                updateMaxNumOfRecents(true);
+                            }
+                        })
+                        .setNegativeButton(R.string.action_cancel, null);
+
+                AlertDialog dialog6 = builder6.create();
+                dialog6.show();
+                break;
+            case "refresh_frequency":
+                final int max2 = 20;
+
+                AlertDialog.Builder builder7 = new AlertDialog.Builder(getActivity());
+                LinearLayout dialogLayout3 = (LinearLayout) View.inflate(getActivity(), R.layout.seekbar_pref, null);
+
+                String value2 = pref.getString("refresh_frequency", "2");
+
+                final TextView textView2 = (TextView) dialogLayout3.findViewById(R.id.seekbar_value);
+                textView2.setText(R.string.infinity);
+
+                final SeekBar seekBar2 = (SeekBar) dialogLayout3.findViewById(R.id.seekbar);
+                seekBar2.setMax(max2);
+                seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if(progress == 0)
+                            textView2.setText(R.string.infinity);
+                        else
+                            textView2.setText(Double.toString(progress * 0.5));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {}
+                });
+
+                seekBar2.setProgress((int) (Double.parseDouble(value2) * 2));
+
+                TextView blurb2 = (TextView) dialogLayout3.findViewById(R.id.blurb);
+                blurb2.setText(R.string.refresh_frequency_blurb);
+
+                builder7.setView(dialogLayout3)
+                        .setTitle(R.string.pref_title_recents_refresh_interval)
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                double progress = seekBar2.getProgress() * 0.5;
+
+                                pref.edit().putString("refresh_frequency", Double.toString(progress)).apply();
+                                updateRefreshFrequency(true);
+                            }
+                        })
+                        .setNegativeButton(R.string.action_cancel, null);
+
+                AlertDialog dialog7 = builder7.create();
+                dialog7.show();
+                break;
+            case "background_tint_pref":
+                MainActivity activity = (MainActivity) getActivity();
+
+                colorDialog.setPickerColor(activity, activity.BACKGROUND_TINT, U.getBackgroundTint(activity));
+                colorDialog.showColorPicker(activity, activity.BACKGROUND_TINT);
+                break;
+            case "accent_color_pref":
+                MainActivity activity2 = (MainActivity) getActivity();
+
+                colorDialog.setPickerColor(activity2, activity2.ACCENT_COLOR, U.getAccentColor(activity2));
+                colorDialog.showColorPicker(activity2, activity2.ACCENT_COLOR);
+                break;
         }
 
         return true;
@@ -382,23 +601,25 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
     private void startTaskbarService(boolean fullRestart) {
         getActivity().startService(new Intent(getActivity(), TaskbarService.class));
         getActivity().startService(new Intent(getActivity(), StartMenuService.class));
+        getActivity().startService(new Intent(getActivity(), DashboardService.class));
         if(fullRestart) getActivity().startService(new Intent(getActivity(), NotificationService.class));
     }
 
     private void stopTaskbarService(boolean fullRestart) {
         getActivity().stopService(new Intent(getActivity(), TaskbarService.class));
         getActivity().stopService(new Intent(getActivity(), StartMenuService.class));
+        getActivity().stopService(new Intent(getActivity(), DashboardService.class));
         if(fullRestart) getActivity().stopService(new Intent(getActivity(), NotificationService.class));
     }
 
-    private void restartTaskbar() {
+    public void restartTaskbar() {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
             pref.edit().putBoolean("is_restarting", true).apply();
 
             stopTaskbarService(true);
             startTaskbarService(true);
-        } else if(isServiceRunning()) {
+        } else if(U.isServiceRunning(getActivity(), StartMenuService.class)) {
             stopTaskbarService(false);
             startTaskbarService(false);
         }
@@ -409,21 +630,92 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(getActivity());
     }
 
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(StartMenuService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
             U.refreshPinnedIcons(getActivity());
             restartTaskbar();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(restartNotificationService) {
+            restartNotificationService = false;
+
+            if(U.isServiceRunning(getActivity(), NotificationService.class)) {
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                pref.edit().putBoolean("is_restarting", true).apply();
+
+                Intent intent = new Intent(getActivity(), NotificationService.class);
+                getActivity().stopService(intent);
+                getActivity().startService(intent);
+            }
+        }
+    }
+
+    protected void updateDashboardGridSize(boolean restartTaskbar) {
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        int width = pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
+        int height = pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
+
+        boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        int first = -1;
+        int second = -1;
+
+        if(isPortrait) {
+            first = height;
+            second = width;
+        }
+
+        if(isLandscape) {
+            first = width;
+            second = height;
+        }
+
+        findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
+
+        if(restartTaskbar) restartTaskbar();
+    }
+
+    protected void updateMaxNumOfRecents(boolean restartTaskbar) {
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        int value = Integer.parseInt(pref.getString("max_num_of_recents", "10"));
+
+        switch(value) {
+            case 1:
+                findPreference("max_num_of_recents").setSummary(R.string.max_num_of_recents_singular);
+                break;
+            case Integer.MAX_VALUE:
+                findPreference("max_num_of_recents").setSummary(R.string.max_num_of_recents_unlimited);
+                break;
+            default:
+                findPreference("max_num_of_recents").setSummary(getString(R.string.max_num_of_recents, value));
+                break;
+        }
+
+        if(restartTaskbar) restartTaskbar();
+    }
+
+    protected void updateRefreshFrequency(boolean restartTaskbar) {
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        String value = pref.getString("refresh_frequency", "2");
+        double doubleValue = Double.parseDouble(value);
+        int intValue = (int) doubleValue;
+
+        if(doubleValue == 0)
+            findPreference("refresh_frequency").setSummary(R.string.refresh_frequency_continuous);
+        else if(doubleValue == 1)
+            findPreference("refresh_frequency").setSummary(R.string.refresh_frequency_singular);
+        else if(doubleValue == (double) intValue)
+            findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, Integer.toString(intValue)));
+        else
+            findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, value));
+
+        if(restartTaskbar) restartTaskbar();
     }
 }

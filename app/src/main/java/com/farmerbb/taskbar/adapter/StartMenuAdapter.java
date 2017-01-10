@@ -21,15 +21,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.graphics.ColorUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -41,6 +46,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
@@ -56,12 +62,14 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
     }
 
     @Override
-    public View getView(int position, View convertView, final ViewGroup parent) {
+    public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
         if(convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(isGrid ? R.layout.row_alt : R.layout.row, parent, false);
 
         final AppEntry entry = getItem(position);
+        assert entry != null;
+
         final SharedPreferences pref = U.getSharedPreferences(getContext());
 
         TextView textView = (TextView) convertView.findViewById(R.id.name);
@@ -108,16 +116,50 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         layout.setOnGenericMotionListener(new View.OnGenericMotionListener() {
             @Override
             public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                int action = motionEvent.getAction();
+
+                if(action == MotionEvent.ACTION_BUTTON_PRESS
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     int[] location = new int[2];
                     view.getLocationOnScreen(location);
                     openContextMenu(entry, location);
                 }
 
+                if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean("visual_feedback", true))
+                    view.setBackgroundColor(0);
+
                 return false;
             }
         });
+
+        if(pref.getBoolean("visual_feedback", true)) {
+            layout.setOnHoverListener(new View.OnHoverListener() {
+                @Override
+                public boolean onHover(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
+                        int backgroundTint = U.getBackgroundTint(getContext());
+                        backgroundTint = ColorUtils.setAlphaComponent(backgroundTint, Color.alpha(backgroundTint) / 2);
+                        v.setBackgroundColor(backgroundTint);
+                    }
+
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_EXIT)
+                        v.setBackgroundColor(0);
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        v.setPointerIcon(PointerIcon.getSystemIcon(getContext(), PointerIcon.TYPE_DEFAULT));
+
+                    return false;
+                }
+            });
+
+            layout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
+                    return false;
+                }
+            });
+        }
 
         return convertView;
     }
@@ -128,38 +170,50 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
     }
 
     @SuppressWarnings("deprecation")
-    private void openContextMenu(AppEntry entry, int[] location) {
+    private void openContextMenu(final AppEntry entry, final int[] location) {
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences pref = U.getSharedPreferences(getContext());
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getContext(), ContextMenuActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getContext(), ContextMenuActivityDark.class);
+                        break;
+                }
+
+                if(intent != null) {
+                    intent.putExtra("package_name", entry.getPackageName());
+                    intent.putExtra("app_name", entry.getLabel());
+                    intent.putExtra("component_name", entry.getComponentName());
+                    intent.putExtra("user_id", entry.getUserId(getContext()));
+                    intent.putExtra("launched_from_start_menu", true);
+                    intent.putExtra("x", location[0]);
+                    intent.putExtra("y", location[1]);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                    DisplayManager dm = (DisplayManager) getContext().getSystemService(Context.DISPLAY_SERVICE);
+                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                    getContext().startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                } else
+                    getContext().startActivity(intent);
+            }
+        }, shouldDelay() ? 100 : 0);
+    }
+
+    private boolean shouldDelay() {
         SharedPreferences pref = U.getSharedPreferences(getContext());
-        Intent intent = null;
-
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                intent = new Intent(getContext(), ContextMenuActivity.class);
-                break;
-            case "dark":
-                intent = new Intent(getContext(), ContextMenuActivityDark.class);
-                break;
-        }
-
-        if(intent != null) {
-            intent.putExtra("package_name", entry.getPackageName());
-            intent.putExtra("app_name", entry.getLabel());
-            intent.putExtra("component_name", entry.getComponentName());
-            intent.putExtra("user_id", entry.getUserId(getContext()));
-            intent.putExtra("launched_from_start_menu", true);
-            intent.putExtra("x", location[0]);
-            intent.putExtra("y", location[1]);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
-            DisplayManager dm = (DisplayManager) getContext().getSystemService(Context.DISPLAY_SERVICE);
-            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-            getContext().startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
-        } else
-            getContext().startActivity(intent);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && pref.getBoolean("freeform_hack", false)
+                && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }
 }

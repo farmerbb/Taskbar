@@ -20,4 +20,8 @@
             android:key="open_taskbar_settings"
             android:title="@string/open_taskbar_settings" />
 
+        <Preference
+            android:key="start_menu_apps"
+            android:title="@string/start_menu_apps" />
+
 </PreferenceScreen>

@@ -20,13 +20,8 @@
         android:key="enable_recents"
         android:title="@string/pref_title_enable_recents"/>
 
-    <ListPreference
-        android:defaultValue="2"
-        android:entries="@array/pref_refresh_frequency"
-        android:entryValues="@array/pref_refresh_frequency_values"
+    <Preference
         android:key="refresh_frequency"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
         android:title="@string/pref_title_recents_refresh_interval"/>
 
     <ListPreference
@@ -47,13 +42,8 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_sort_order"/>
 
-    <ListPreference
-        android:defaultValue="10"
-        android:entries="@array/pref_max_num_of_recents_list"
-        android:entryValues="@array/pref_max_num_of_recents_list_values"
+    <Preference
         android:key="max_num_of_recents"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
         android:title="@string/pref_max_num_of_recents"/>
 
     <CheckBoxPreference
@@ -65,11 +55,6 @@
         android:defaultValue="false"
         android:key="disable_animations"
         android:title="@string/pref_disable_animations"/>
-
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="shortcut_icon"
-        android:title="@string/pref_title_shortcut_icon"/>
 
     <CheckBoxPreference
         android:defaultValue="false"

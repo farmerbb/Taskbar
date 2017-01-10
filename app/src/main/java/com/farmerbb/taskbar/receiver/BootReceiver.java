@@ -15,13 +15,13 @@
 
 package com.farmerbb.taskbar.receiver;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -46,22 +46,13 @@ public class BootReceiver extends BroadcastReceiver {
             if(!pref.getBoolean("is_hidden", false)) {
                 context.startService(new Intent(context, TaskbarService.class));
                 context.startService(new Intent(context, StartMenuService.class));
+                context.startService(new Intent(context, DashboardService.class));
             }
 
             context.startService(new Intent(context, NotificationService.class));
         } else {
-            editor.putBoolean("taskbar_active", isServiceRunning(context));
+            editor.putBoolean("taskbar_active", U.isServiceRunning(context, NotificationService.class));
             editor.apply();
         }
-    }
-
-    private boolean isServiceRunning(Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(NotificationService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 }

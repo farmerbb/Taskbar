@@ -17,6 +17,7 @@
 <resources>
     <dimen name="start_menu_width">280dp</dimen>
     <dimen name="start_menu_height">400dp</dimen>
+    <dimen name="start_menu_height_half">200dp</dimen>
     <dimen name="start_menu_grid_width">93.3333dp</dimen>
     <dimen name="start_menu_grid_text_size">13sp</dimen>
     <dimen name="start_menu_grid_padding">3dp</dimen>

@@ -28,6 +28,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
@@ -84,10 +85,18 @@ public class SelectAppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        boolean noShadow = getIntent().hasExtra("no_shadow");
+
         if(savedInstanceState == null) {
             setContentView(R.layout.configure_start_menu);
             setFinishOnTouchOutside(false);
             setTitle(R.string.start_menu_apps);
+
+            if(noShadow) {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.dimAmount = 0;
+                getWindow().setAttributes(params);
+            }
 
             progressBar = (ProgressBar) findViewById(R.id.progress_bar);
             appListGenerator = new AppListGenerator();
@@ -95,12 +104,14 @@ public class SelectAppActivity extends AppCompatActivity {
         } else {
             // Workaround for ViewPager disappearing on config change
             finish();
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(SelectAppActivity.this, SelectAppActivity.class));
-                }
-            });
+
+            if(!noShadow)
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(SelectAppActivity.this, SelectAppActivity.class));
+                    }
+                });
         }
     }
 

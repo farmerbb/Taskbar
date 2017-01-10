@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -32,6 +33,7 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
             context.startService(new Intent(context, TaskbarService.class));
             context.startService(new Intent(context, StartMenuService.class));
+            context.startService(new Intent(context, DashboardService.class));
         }
 
         if(pref.getBoolean("taskbar_active", false))

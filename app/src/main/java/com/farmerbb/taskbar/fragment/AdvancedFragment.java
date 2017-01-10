@@ -36,15 +36,17 @@ public class AdvancedFragment extends SettingsFragment {
         findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
         findPreference("launcher").setOnPreferenceClickListener(this);
         findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
+        findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
-        bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
+        bindPreferenceSummaryToValue(findPreference("dashboard"));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_advanced);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
+
+        updateDashboardGridSize(false);
 
         finishedLoadingPrefs = true;
     }

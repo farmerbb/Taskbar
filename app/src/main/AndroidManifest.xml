@@ -46,12 +46,12 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="${appName}"
         android:theme="@style/AppTheme" >
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:label="${appName}"
             android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -67,6 +67,12 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity
+            android:name=".activity.InvisibleActivityAlt"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
@@ -75,7 +81,7 @@
             android:theme="@style/AppTheme.InvisibleActivity"/>
         <activity
             android:name=".activity.HomeActivity"
-            android:label="@string/app_name"
+            android:label="${appName}"
             android:launchMode="singleTask"
             android:enabled="false"
             android:theme="@style/AppTheme.HomeActivity">
@@ -88,7 +94,7 @@
         </activity>
         <activity
             android:name=".activity.KeyboardShortcutActivity"
-            android:label="@string/app_name"
+            android:label="${appName}"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
@@ -123,7 +129,7 @@
             android:name=".activity.DummyActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.Dialog"/>
+            android:theme="@style/AppTheme.Incognito"/>
         <activity
             android:name=".activity.ImportSettingsActivity"
             android:theme="@style/AppTheme.Dialog"/>
@@ -167,10 +173,40 @@
             android:enabled="false"
             android:theme="@android:style/Theme.NoDisplay"
             android:exported="true" />
+        <activity
+            android:name=".activity.ClearDataActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.ClearDataActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.DashboardActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.DashboardActivityDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>
         <service android:name=".service.NotificationService"/>
+        <service android:name=".service.DashboardService"/>
+        <service
+            android:name=".service.PowerMenuService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice"
+                       android:resource="@xml/accessibility_service" />
+        </service>
 
         <receiver
             android:name=".receiver.ShowHideTaskbarReceiver"
@@ -214,7 +250,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.LockDeviceReceiver"
-                  android:label="@string/app_name"
+                  android:label="${appName}"
                   android:enabled="false"
                   android:exported="true"
                   android:description="@string/device_admin_description_short"
@@ -241,6 +277,15 @@
             android:permission="com.farmerbb.taskbar.SEND_RECEIVE_SETTINGS" >
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.SEND_SETTINGS"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.UninstallReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 

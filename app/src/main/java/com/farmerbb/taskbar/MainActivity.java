@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.FragmentTransaction;
@@ -38,12 +37,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.CompoundButton;
 
+import com.enrico.colorpicker.colorDialog;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.ImportSettingsActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
@@ -51,9 +52,12 @@ import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
+import com.farmerbb.taskbar.fragment.AppearanceFragment;
 import com.farmerbb.taskbar.fragment.FreeformModeFragment;
 import com.farmerbb.taskbar.fragment.GeneralFragment;
 import com.farmerbb.taskbar.fragment.RecentAppsFragment;
+import com.farmerbb.taskbar.fragment.SettingsFragment;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -65,7 +69,7 @@ import com.farmerbb.taskbar.util.U;
 import java.io.File;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements colorDialog.ColorSelectedListener {
 
     private SwitchCompat theSwitch;
 
@@ -75,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
             updateSwitch();
         }
     };
+
+    public final int BACKGROUND_TINT = 1;
+    public final int ACCENT_COLOR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        if(pref.getBoolean("taskbar_active", false) && !isServiceRunning())
+        if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
             editor.putBoolean("taskbar_active", false);
 
         // Ensure that components that should be enabled are enabled properly
@@ -103,22 +110,22 @@ public class MainActivity extends AppCompatActivity {
 
         editor.apply();
 
-        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, HomeActivity.class.getName());
+        ComponentName component = new ComponentName(this, HomeActivity.class);
         getPackageManager().setComponentEnabledSetting(component,
                 launcherEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
-        ComponentName component2 = new ComponentName(BuildConfig.APPLICATION_ID, KeyboardShortcutActivity.class.getName());
+        ComponentName component2 = new ComponentName(this, KeyboardShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component2,
                 pref.getBoolean("keyboard_shortcut", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
-        ComponentName component3 = new ComponentName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+        ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component3,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
-        ComponentName component4 = new ComponentName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
+        ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
         getPackageManager().setComponentEnabledSetting(component4,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
@@ -170,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                             boolean firstRun = pref.getBoolean("first_run", true);
                             startTaskbarService();
 
-                            if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp()) {
                                 ApplicationInfo applicationInfo = null;
                                 try {
                                     applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
@@ -215,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             if(!getIntent().hasExtra("theme_change"))
                 getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment").commit();
             else
-                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new GeneralFragment(), "GeneralFragment").commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment").commit();
         } else {
             String fragmentName = savedInstanceState.getString("fragment_name");
             if(fragmentName != null) switch(fragmentName) {
@@ -234,34 +241,57 @@ public class MainActivity extends AppCompatActivity {
                 case "RecentAppsFragment":
                     getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new RecentAppsFragment(), fragmentName).commit();
                     break;
+                case "AppearanceFragment":
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), fragmentName).commit();
+                    break;
             }
         }
 
         if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.settings_imported_successfully)
-                    .setMessage(R.string.import_dialog_message)
-                    .setPositiveButton(R.string.action_uninstall, new DialogInterface.OnClickListener() {
+            final SharedPreferences pref = U.getSharedPreferences(this);
+            if(!pref.getBoolean("dont_show_uninstall_dialog", false)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.settings_imported_successfully)
+                        .setMessage(R.string.import_dialog_message)
+                        .setPositiveButton(R.string.action_uninstall, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                pref.edit().putBoolean("uninstall_dialog_shown", true).apply();
+
+                                try {
+                                    startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
+                                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                            }
+                        });
+
+                if(pref.getBoolean("uninstall_dialog_shown", false))
+                    builder.setNegativeButton(R.string.action_dont_show_again, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
-                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            pref.edit().putBoolean("dont_show_uninstall_dialog", true).apply();
                         }
                     });
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.setCancelable(false);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCancelable(false);
+            }
 
-            if(theSwitch != null) theSwitch.setChecked(false);
+            if(!pref.getBoolean("uninstall_dialog_shown", false)) {
+                if(theSwitch != null) theSwitch.setChecked(false);
 
-            SharedPreferences pref = U.getSharedPreferences(this);
-            String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
-            if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
-                pref.edit().putString("icon_pack", BuildConfig.APPLICATION_ID).apply();
-            } else {
-                U.refreshPinnedIcons(this);
+                SharedPreferences.Editor editor = pref.edit();
+
+                String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
+                if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
+                    editor.putString("icon_pack", BuildConfig.APPLICATION_ID);
+                } else {
+                    U.refreshPinnedIcons(this);
+                }
+
+                editor.putBoolean("first_run", true);
+                editor.putBoolean("dashboard_tutorial_shown", false);
+                editor.apply();
             }
         }
 
@@ -270,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(shortcutManager.getDynamicShortcuts().size() == 0) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setClassName(BuildConfig.APPLICATION_ID, StartTaskbarActivity.class.getName());
+                intent.setClass(this, StartTaskbarActivity.class);
                 intent.putExtra("is_launching_shortcut", true);
 
                 ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
@@ -280,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
                 Intent intent2 = new Intent(Intent.ACTION_MAIN);
-                intent2.setClassName(BuildConfig.APPLICATION_ID, ShortcutActivity.class.getName());
+                intent2.setClass(this, ShortcutActivity.class);
                 intent2.putExtra("is_launching_shortcut", true);
 
                 ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
@@ -333,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
 
         startService(new Intent(this, TaskbarService.class));
         startService(new Intent(this, StartMenuService.class));
+        startService(new Intent(this, DashboardService.class));
         startService(new Intent(this, NotificationService.class));
     }
 
@@ -343,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
         if(!LauncherHelper.getInstance().isOnHomeScreen()) {
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
+            stopService(new Intent(this, DashboardService.class));
 
             IconCache.getInstance(this).clearCache();
 
@@ -350,16 +382,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         stopService(new Intent(this, NotificationService.class));
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(NotificationService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -391,5 +413,37 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("fragment_name", getFragmentManager().findFragmentById(R.id.fragmentContainer).getTag());
 
         super.onSaveInstanceState(outState);
+    }
+
+    private boolean isSystemApp() {
+        try {
+            ApplicationInfo info = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+            return (info.flags & mask) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void onColorSelection(DialogFragment dialogFragment, int color) {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        String preferenceId = null;
+
+        switch(Integer.parseInt(dialogFragment.getTag())) {
+            case BACKGROUND_TINT:
+                preferenceId = "background_tint";
+                break;
+            case ACCENT_COLOR:
+                preferenceId = "accent_color";
+                break;
+        }
+
+        pref.edit().putInt(preferenceId, color).apply();
+
+        SettingsFragment fragment = (SettingsFragment) getFragmentManager().findFragmentById(R.id.fragmentContainer);
+        colorDialog.setColorPreferenceSummary(fragment.findPreference(preferenceId + "_pref"), color, this, getResources());
+
+        fragment.restartTaskbar();
     }
 }

@@ -18,6 +18,7 @@
     <dimen name="icon_size">60dp</dimen>
     <dimen name="start_menu_width">180dp</dimen>
     <dimen name="start_menu_height">240dp</dimen>
+    <dimen name="start_menu_height_half">120dp</dimen>
     <dimen name="start_menu_grid_width">60dp</dimen>
     <dimen name="start_menu_grid_text_size">11sp</dimen>
     <dimen name="start_menu_grid_padding">1dp</dimen>
@@ -25,11 +26,13 @@
     <dimen name="start_menu_no_apps_found_text">10sp</dimen>
     <dimen name="context_menu_width">240dp</dimen>
     <dimen name="context_menu_offset">48dp</dimen>
+    <dimen name="context_menu_offset_overflow">24dp</dimen>
     <dimen name="phone_size_width">320dp</dimen>
     <dimen name="phone_size_height">480dp</dimen>
     <dimen name="max_width">@dimen/match_parent</dimen>
     <dimen name="app_drawer_icon_padding">4dp</dimen>
     <dimen name="app_drawer_icon_padding_alt">7dp</dimen>
     <dimen name="base_taskbar_size">93dp</dimen>
+    <dimen name="base_taskbar_size_dashboard">141dp</dimen>
     <dimen name="divider_size">5dp</dimen>
 </resources>

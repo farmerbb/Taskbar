@@ -17,9 +17,7 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -93,12 +92,14 @@ public class IconPackApplyActivity extends Activity {
     private void startTaskbarService(boolean fullRestart) {
         startService(new Intent(this, TaskbarService.class));
         startService(new Intent(this, StartMenuService.class));
+        startService(new Intent(this, DashboardService.class));
         if(fullRestart) startService(new Intent(this, NotificationService.class));
     }
 
     private void stopTaskbarService(boolean fullRestart) {
         stopService(new Intent(this, TaskbarService.class));
         stopService(new Intent(this, StartMenuService.class));
+        stopService(new Intent(this, DashboardService.class));
         if(fullRestart) stopService(new Intent(this, NotificationService.class));
     }
 
@@ -109,19 +110,9 @@ public class IconPackApplyActivity extends Activity {
 
             stopTaskbarService(true);
             startTaskbarService(true);
-        } else if(isServiceRunning()) {
+        } else if(U.isServiceRunning(this, StartMenuService.class)) {
             stopTaskbarService(false);
             startTaskbarService(false);
         }
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(StartMenuService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 }

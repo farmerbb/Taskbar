@@ -24,10 +24,10 @@
     android:visibility="gone">
 
         <FrameLayout
+            android:id="@+id/start_menu_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:background="@color/translucent_gray" >
+            android:padding="1dp" >
 
                 <GridView
                     android:id="@+id/start_menu"
@@ -55,8 +55,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="1dp"
             android:paddingRight="1dp"
-            android:paddingBottom="1dp"
-            android:background="@color/translucent_gray" >
+            android:paddingBottom="1dp" >
 
                 <LinearLayout
                     android:layout_width="@dimen/start_menu_width"
@@ -81,7 +80,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:src="@drawable/ic_power_settings_new_black_24dp" />
+                                    android:src="@drawable/ic_more_vert_black_24dp" />
 
                         </LinearLayout>
 

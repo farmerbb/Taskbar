@@ -16,8 +16,10 @@
 package com.farmerbb.taskbar.util;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -56,16 +58,18 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.service.PowerMenuService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import moe.banana.support.ToastCompat;
 
 public class U {
 
     private U() {}
 
     private static SharedPreferences pref;
-    private static Toast toast;
     private static Integer cachedRotation;
 
     private static final int FULLSCREEN = 0;
@@ -113,7 +117,7 @@ public class U {
     }
 
     public static void lockDevice(Context context) {
-        ComponentName component = new ComponentName(BuildConfig.APPLICATION_ID, LockDeviceReceiver.class.getName());
+        ComponentName component = new ComponentName(context, LockDeviceReceiver.class);
         context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
@@ -128,6 +132,35 @@ public class U {
         }
     }
 
+    public static void showPowerMenu(Context context) {
+        ComponentName component = new ComponentName(context, PowerMenuService.class);
+        context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        if(isAccessibilityServiceEnabled(context))
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_POWER_MENU"));
+        else {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            try {
+                context.startActivity(intent);
+                showToastLong(context, R.string.enable_accessibility);
+            } catch (ActivityNotFoundException e) {
+                showToast(context, R.string.lock_device_not_supported);
+            }
+        }
+    }
+
+    private static boolean isAccessibilityServiceEnabled(Context context) {
+        String accessibilityServices = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        ComponentName component = new ComponentName(context, PowerMenuService.class);
+
+        return accessibilityServices != null
+                && (accessibilityServices.contains(component.flattenToString())
+                || accessibilityServices.contains(component.flattenToShortString()));
+    }
+
     public static void showToast(Context context, int message) {
         showToast(context, context.getString(message), Toast.LENGTH_SHORT);
     }
@@ -137,10 +170,7 @@ public class U {
     }
 
     public static void showToast(Context context, String message, int length) {
-        if(toast != null) toast.cancel();
-
-        toast = Toast.makeText(context, message, length);
-        toast.show();
+        ToastCompat.makeText(context, message, length).show();
     }
 
     public static void startShortcut(Context context, String packageName, String componentName, ShortcutInfo shortcut) {
@@ -261,12 +291,15 @@ public class U {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+        if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+            intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+
         if(launchedFromTaskbar) {
             if(pref.getBoolean("disable_animations", false))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
-        if(openInNewWindow) {
+        if(openInNewWindow || pref.getBoolean("force_new_window", false)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
             ActivityInfo activityInfo = intent.resolveActivityInfo(context.getPackageManager(), 0);
@@ -484,6 +517,13 @@ public class U {
         } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
     }
 
+    public static void launchAppFullscreen(Context context, Intent intent) {
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
+
+        launchMode2(context, intent, FULLSCREEN, userId, null);
+    }
+
     public static void checkForUpdates(Context context) {
         String url;
         try {
@@ -626,8 +666,9 @@ public class U {
     }
 
     private static int getMaxNumOfColumns(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float baseTaskbarSize = context.getResources().getDimension(R.dimen.base_taskbar_size) / metrics.density;
+        float baseTaskbarSize = context.getResources().getDimension(pref.getBoolean("dashboard", false) ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size) / metrics.density;
         int numOfColumns = 0;
 
         float maxScreenSize = getTaskbarPosition(context).contains("vertical")
@@ -636,7 +677,6 @@ public class U {
 
         float iconSize = context.getResources().getDimension(R.dimen.icon_size) / metrics.density;
 
-        SharedPreferences pref = getSharedPreferences(context);
         int userMaxNumOfColumns = Integer.valueOf(pref.getString("max_num_of_recents", "10"));
 
         while(baseTaskbarSize + iconSize < maxScreenSize
@@ -741,5 +781,37 @@ public class U {
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
                 || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", -1) == 1
                 || Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", -1) == 1);
+    }
+
+    public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if(cls.getName().equals(service.service.getClassName()))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static int getBackgroundTint(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+
+        // Import old background tint preference
+        if(pref.contains("show_background")) {
+            SharedPreferences.Editor editor = pref.edit();
+
+            if(!pref.getBoolean("show_background", true))
+                editor.putInt("background_tint", 0).apply();
+
+            editor.remove("show_background");
+            editor.apply();
+        }
+
+        return pref.getInt("background_tint", context.getResources().getInteger(R.integer.translucent_gray));
+    }
+
+    public static int getAccentColor(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
     }
 }

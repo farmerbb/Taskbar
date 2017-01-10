@@ -16,9 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -62,31 +60,29 @@ public class KeyboardShortcutActivity extends Activity {
 
                 break;
             case Intent.ACTION_ASSIST:
-                if(getIntent().hasExtra(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD) && isServiceRunning()) {
+                if(getIntent().hasExtra(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD) && U.isServiceRunning(this, StartMenuService.class)) {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
                 } else {
                     Intent intent = new Intent("com.google.android.googlequicksearchbox.TEXT_ASSIST");
                     if(intent.resolveActivity(getPackageManager()) == null)
                         intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
 
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    if(intent.resolveActivity(getPackageManager()) != null)
-                        startActivity(intent);
+                    if(intent.resolveActivity(getPackageManager()) != null) {
+                        SharedPreferences pref = U.getSharedPreferences(this);
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                                && pref.getBoolean("freeform_hack", false)
+                                && isInMultiWindowMode()) {
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                            U.launchAppFullscreen(getApplicationContext(), intent);
+                        } else {
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                    }
                 }
                 break;
         }
 
         finish();
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(StartMenuService.class.getName().equals(service.service.getClassName()))
-                return true;
-        }
-
-        return false;
     }
 }

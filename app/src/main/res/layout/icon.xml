@@ -35,7 +35,6 @@
         android:layout_height="12dp"
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/translucent_white"
         android:layout_gravity="bottom|left"
         android:src="@drawable/ic_reply_black_24dp"
         android:scaleX="-1"

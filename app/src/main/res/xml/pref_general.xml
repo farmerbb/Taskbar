@@ -35,26 +35,17 @@
         android:title="@string/pref_title_position"/>
 
     <ListPreference
-        android:defaultValue="light"
-        android:entries="@array/pref_theme_list"
-        android:entryValues="@array/pref_theme_list_values"
-        android:key="theme"
+        android:defaultValue="keyboard"
+        android:entries="@array/pref_show_search_bar_list"
+        android:entryValues="@array/pref_show_search_bar_list_values"
+        android:key="show_search_bar"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_theme"/>
-
-    <Preference
-        android:key="icon_pack_list"
-        android:title="@string/icon_pack" />
+        android:title="@string/show_search_bar" />
 
     <Preference
         android:key="blacklist"
         android:title="@string/pref_title_blacklist" />
-
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="show_background"
-        android:title="@string/pref_title_background_tint"/>
 
     <CheckBoxPreference
         android:defaultValue="false"
@@ -68,8 +59,9 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="invisible_button"
-        android:title="@string/pref_title_invisible_button"/>
+        android:key="hide_when_keyboard_shown"
+        android:title="@string/pref_title_hide_when_keyboard_shown"
+        android:summary="@string/pref_description_hide_when_keyboard_shown" />
 
     <CheckBoxPreference
         android:defaultValue="false"
@@ -83,13 +75,12 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="app_drawer_icon"
-        android:title="@string/pref_title_app_drawer_icon"/>
-
-    <CheckBoxPreference
-        android:defaultValue="false"
         android:key="start_on_boot"
         android:title="@string/pref_title_start_on_boot"/>
+
+    <Preference
+        android:key="notification_settings"
+        android:title="@string/notification_settings"/>
 
     <PreferenceCategory android:title="\n\n" />
 

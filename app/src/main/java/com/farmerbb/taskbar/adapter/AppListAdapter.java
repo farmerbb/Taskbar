@@ -1,6 +1,7 @@
 package com.farmerbb.taskbar.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
     }
 
     @Override
-    public View getView(int position, View convertView, final ViewGroup parent) {
+    public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
         if(convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_blacklist, parent, false);
@@ -50,6 +51,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
 
     private void setupHidden(int position, View convertView) {
         final BlacklistEntry entry = getItem(position);
+        assert entry != null;
 
         final String componentName = entry.getPackageName();
         final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;
@@ -84,6 +86,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
 
     private void setupTopApps(int position, View convertView) {
         final BlacklistEntry entry = getItem(position);
+        assert entry != null;
 
         final String componentName = entry.getPackageName();
         final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;

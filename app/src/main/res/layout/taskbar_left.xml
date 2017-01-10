@@ -21,7 +21,6 @@
         <Button
             android:layout_width="24dp"
             android:layout_height="@dimen/icon_size"
-            android:textColor="@color/translucent_white"
             android:textSize="20dp"
             android:background="@null"
             android:id="@+id/hide_taskbar_button_alt" />
@@ -35,6 +34,73 @@
             android:id="@+id/start_button"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size" />
+
+        <FrameLayout
+            android:orientation="vertical"
+            android:id="@+id/dashboard_button"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginEnd="8dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                                <View
+                                    android:id="@+id/square1"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square2"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square3"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                                <View
+                                    android:id="@+id/square4"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square5"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                                <View
+                                    android:id="@+id/square6"
+                                    android:layout_width="12dp"
+                                    android:layout_height="8dp"
+                                    android:layout_margin="1dp"/>
+
+                        </LinearLayout>
+
+                </LinearLayout>
+
+        </FrameLayout>
 
         <HorizontalScrollView
             android:id="@+id/taskbar_scrollview"
@@ -57,8 +123,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:layout_marginLeft="2dp"
-                            android:layout_marginRight="2dp"
-                            android:background="@color/translucent_white" />
+                            android:layout_marginRight="2dp" />
 
                         <LinearLayout
                             android:id="@+id/taskbar"
@@ -79,7 +144,6 @@
         <Button
             android:layout_width="24dp"
             android:layout_height="@dimen/icon_size"
-            android:textColor="@color/translucent_white"
             android:textSize="20dp"
             android:background="@null"
             android:id="@+id/hide_taskbar_button" />

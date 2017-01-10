@@ -33,9 +33,11 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
@@ -45,12 +47,14 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -79,6 +83,7 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
+import com.farmerbb.taskbar.util.StartMenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class TaskbarService extends Service {
@@ -90,6 +95,7 @@ public class TaskbarService extends Service {
     private FrameLayout scrollView;
     private Button button;
     private Space space;
+    private FrameLayout dashboardButton;
 
     private Handler handler;
     private Handler handler2;
@@ -114,6 +120,7 @@ public class TaskbarService extends Service {
     private int currentTaskbarPosition = 0;
     private boolean showHideAutomagically = false;
     private boolean positionIsVertical = false;
+    private boolean dashboardEnabled = false;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
@@ -311,7 +318,10 @@ public class TaskbarService extends Service {
             }
         });
 
-        refreshInterval = Integer.parseInt(pref.getString("refresh_frequency", "2")) * 1000;
+        refreshInterval = (int) (Float.parseFloat(pref.getString("refresh_frequency", "2")) * 1000);
+        if(refreshInterval == 0)
+            refreshInterval = 100;
+
         sortOrder = pref.getString("sort_order", "false");
 
         switch(pref.getString("recents_amount", "past_day")) {
@@ -339,6 +349,10 @@ public class TaskbarService extends Service {
             layout.findViewById(R.id.hide_taskbar_button_alt).setVisibility(View.GONE);
         }
 
+        try {
+            button.setTypeface(Typeface.createFromFile("/system/fonts/Roboto-Regular.ttf"));
+        } catch (RuntimeException e) { /* Gracefully fail */ }
+
         updateButton(false);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -362,8 +376,32 @@ public class TaskbarService extends Service {
                 : R.id.hide_taskbar_button_layout_alt);
         if(buttonLayoutToHide != null) buttonLayoutToHide.setVisibility(View.GONE);
 
-        if(pref.getBoolean("show_background", true))
-            layout.setBackgroundColor(ContextCompat.getColor(this, R.color.translucent_gray));
+        int backgroundTint = U.getBackgroundTint(this);
+        int accentColor = U.getAccentColor(this);
+
+        dashboardButton = (FrameLayout) layout.findViewById(R.id.dashboard_button);
+
+        dashboardEnabled = pref.getBoolean("dashboard", false);
+        if(dashboardEnabled) {
+            layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square3).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square4).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
+
+            dashboardButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
+                }
+            });
+        } else
+            dashboardButton.setVisibility(View.GONE);
+
+        layout.setBackgroundColor(backgroundTint);
+        layout.findViewById(R.id.divider).setBackgroundColor(accentColor);
+        button.setTextColor(accentColor);
 
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar();
@@ -409,7 +447,7 @@ public class TaskbarService extends Service {
                         SystemClock.sleep(refreshInterval);
                         updateRecentApps(false);
 
-                        if(showHideAutomagically && !positionIsVertical)
+                        if(showHideAutomagically && !positionIsVertical && !StartMenuHelper.getInstance().isStartMenuOpen())
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -449,12 +487,11 @@ public class TaskbarService extends Service {
         final List<AppEntry> entries = new ArrayList<>();
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(this);
+        int realNumOfPinnedApps = 0;
         
         if(pba.getPinnedApps().size() > 0) {
             UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
             LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
-
-            List<String> pinnedAppsToRemove = new ArrayList<>();
 
             for(AppEntry entry : pba.getPinnedApps()) {
                 boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
@@ -463,22 +500,20 @@ public class TaskbarService extends Service {
                 if(packageEnabled)
                     entries.add(entry);
                 else
-                    pinnedAppsToRemove.add(entry.getComponentName());
+                    realNumOfPinnedApps--;
             }
-
-            for(String component : pinnedAppsToRemove) {
-                pba.removePinnedApp(this, component);
-            }
+            
+            realNumOfPinnedApps = realNumOfPinnedApps + pba.getPinnedApps().size();
         }
 
         // Get list of all recently used apps
         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        List<UsageStats> usageStatsList = pba.getPinnedApps().size() < maxNumOfEntries
+        List<UsageStats> usageStatsList = realNumOfPinnedApps < maxNumOfEntries
                 ? mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis())
                 : new ArrayList<UsageStats>();
 
-        if(usageStatsList.size() > 0 || pba.getPinnedApps().size() > 0) {
-            if(pba.getPinnedApps().size() < maxNumOfEntries) {
+        if(usageStatsList.size() > 0 || realNumOfPinnedApps > 0) {
+            if(realNumOfPinnedApps < maxNumOfEntries) {
                 List<UsageStats> usageStatsList2 = new ArrayList<>();
                 List<UsageStats> usageStatsList3 = new ArrayList<>();
                 List<UsageStats> usageStatsList4 = new ArrayList<>();
@@ -594,7 +629,7 @@ public class TaskbarService extends Service {
 
                 // Generate the AppEntries for TaskbarAdapter
                 int number = usageStatsList6.size() == maxNumOfEntries
-                        ? usageStatsList6.size() - pba.getPinnedApps().size()
+                        ? usageStatsList6.size() - realNumOfPinnedApps
                         : usageStatsList6.size();
 
                 UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
@@ -662,7 +697,7 @@ public class TaskbarService extends Service {
             }
 
             if(finalApplicationIds.size() != currentTaskbarIds.size()
-                    || numOfPinnedApps != pba.getPinnedApps().size())
+                    || numOfPinnedApps != realNumOfPinnedApps)
                 shouldRedrawTaskbar = true;
             else {
                 for(int i = 0; i < finalApplicationIds.size(); i++) {
@@ -675,7 +710,7 @@ public class TaskbarService extends Service {
 
             if(shouldRedrawTaskbar) {
                 currentTaskbarIds = finalApplicationIds;
-                numOfPinnedApps = pba.getPinnedApps().size();
+                numOfPinnedApps = realNumOfPinnedApps;
 
                 UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
 
@@ -713,13 +748,13 @@ public class TaskbarService extends Service {
                                 float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
 
                                 params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                        maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size))
+                                        maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
                                         + getResources().getDimensionPixelSize(R.dimen.divider_size);
                             } else {
                                 float maxScreenSize = metrics.widthPixels;
 
                                 params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                        maxScreenSize - getResources().getDimensionPixelSize(R.dimen.base_taskbar_size))
+                                        maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
                                         + getResources().getDimensionPixelSize(R.dimen.divider_size);
                             }
 
@@ -798,39 +833,49 @@ public class TaskbarService extends Service {
     }
 
     private void showTaskbar() {
-        startButton.setVisibility(View.VISIBLE);
-        space.setVisibility(View.VISIBLE);
+        if(startButton.getVisibility() == View.GONE) {
+            startButton.setVisibility(View.VISIBLE);
+            space.setVisibility(View.VISIBLE);
 
-        if(isShowingRecents && scrollView.getVisibility() == View.GONE)
-            scrollView.setVisibility(View.INVISIBLE);
+            if(dashboardEnabled)
+                dashboardButton.setVisibility(View.VISIBLE);
 
-        shouldRefreshRecents = true;
-        startRefreshingRecents();
+            if(isShowingRecents && scrollView.getVisibility() == View.GONE)
+                scrollView.setVisibility(View.INVISIBLE);
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("collapsed", true).apply();
+            shouldRefreshRecents = true;
+            startRefreshingRecents();
 
-        updateButton(false);
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("collapsed", true).apply();
+
+            updateButton(false);
+        }
     }
 
     private void hideTaskbar() {
-        startButton.setVisibility(View.GONE);
-        space.setVisibility(View.GONE);
+        if(startButton.getVisibility() == View.VISIBLE) {
+            startButton.setVisibility(View.GONE);
+            space.setVisibility(View.GONE);
 
-        if(isShowingRecents) {
-            scrollView.setVisibility(View.GONE);
+            if(dashboardEnabled)
+                dashboardButton.setVisibility(View.GONE);
+
+            if(isShowingRecents) {
+                scrollView.setVisibility(View.GONE);
+            }
+
+            shouldRefreshRecents = false;
+            if(thread != null) thread.interrupt();
+
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putBoolean("collapsed", false).apply();
+
+            updateButton(true);
+
+            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
         }
-
-        shouldRefreshRecents = false;
-        if(thread != null) thread.interrupt();
-
-        SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("collapsed", false).apply();
-
-        updateButton(true);
-
-        Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
-        LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
     }
 
     private void tempShowTaskbar() {
@@ -957,6 +1002,7 @@ public class TaskbarService extends Service {
 
         if(intent != null) {
             intent.putExtra("dont_show_quit", LauncherHelper.getInstance().isOnHomeScreen() && !pref.getBoolean("taskbar_active", false));
+            intent.putExtra("is_start_button", true);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 
@@ -1009,6 +1055,7 @@ public class TaskbarService extends Service {
         ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
         ImageView imageView2 = (ImageView) convertView.findViewById(R.id.shortcut_icon);
         imageView.setImageDrawable(entry.getIcon(this));
+        imageView2.setBackgroundColor(pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white)));
 
         String taskbarPosition = U.getTaskbarPosition(this);
         if(pref.getBoolean("shortcut_icon", true)) {
@@ -1047,16 +1094,50 @@ public class TaskbarService extends Service {
         layout.setOnGenericMotionListener(new View.OnGenericMotionListener() {
             @Override
             public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                int action = motionEvent.getAction();
+
+                if(action == MotionEvent.ACTION_BUTTON_PRESS
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     int[] location = new int[2];
                     view.getLocationOnScreen(location);
                     openContextMenu(entry, location);
                 }
 
+                if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean("visual_feedback", true))
+                    view.setBackgroundColor(0);
+
                 return false;
             }
         });
+
+        if(pref.getBoolean("visual_feedback", true)) {
+            layout.setOnHoverListener(new View.OnHoverListener() {
+                @Override
+                public boolean onHover(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
+                        int accentColor = U.getAccentColor(TaskbarService.this);
+                        accentColor = ColorUtils.setAlphaComponent(accentColor, Color.alpha(accentColor) / 2);
+                        v.setBackgroundColor(accentColor);
+                    }
+
+                    if(event.getAction() == MotionEvent.ACTION_HOVER_EXIT)
+                        v.setBackgroundColor(0);
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        v.setPointerIcon(PointerIcon.getSystemIcon(TaskbarService.this, PointerIcon.TYPE_DEFAULT));
+
+                    return false;
+                }
+            });
+
+            layout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
+                    return false;
+                }
+            });
+        }
 
         return convertView;
     }
