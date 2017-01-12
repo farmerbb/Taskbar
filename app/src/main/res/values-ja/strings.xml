@@ -140,20 +140,20 @@
     <string name="window_size_standard">標準</string>
     <string name="window_size_fullscreen">全画面</string>
     <string name="window_size_phone_size">電話サイズ</string>
-    <string name="window_size_large">Large</string>
+    <string name="window_size_large">大</string>
     <string name="window_size_half_left">@string/window_size_half_left_alt</string>
-    <string name="window_size_half_left_alt">Half screen (left/top)</string>
+    <string name="window_size_half_left_alt">ハーフ画面 (左/上)</string>
     <string name="window_size_half_right">@string/window_size_half_right_alt</string>
-    <string name="window_size_half_right_alt">Half screen (right/bottom)</string>
+    <string name="window_size_half_right_alt">ハーフ画面 (右/下)</string>
 
     <string name="pref_title_blacklist">スタートメニューからアプリを非表示</string>
     <string name="app_hidden">1 非表示アプリ</string>
     <string name="apps_hidden">%1$d 非表示アプリ</string>
     <string name="blacklist_dialog_title">非表示のアプリ</string>
-    <string name="top_app">1 top app</string>
-    <string name="top_apps">%1$d top apps</string>
-    <string name="top_apps_dialog_title">Top apps</string>
-    <string name="start_menu_apps">Start menu apps</string>
+    <string name="top_app">1 トップアプリ</string>
+    <string name="top_apps">%1$d トップアプリ</string>
+    <string name="top_apps_dialog_title">トップアプリ</string>
+    <string name="start_menu_apps">スタートメニューアプリ</string>
 
     <string name="reboot_required">お使いのデバイスを再起動して、フリーフォームモードの設定を完了してください</string>
     <string name="enable_force_activities_resizable">下部にスクロールして \"強制的にアクティビティをリサイズ可能にする\" をオンにします</string>
@@ -174,103 +174,103 @@
     <string name="pref_title_hide_when_keyboard_shown">Taskbar を自動的に折りたたむ</string>
     <string name="pref_description_hide_when_keyboard_shown">オンスクリーン キーボードが表示され、Taskbar が横向きのとき、テキストフィールドがブロックされるのを防止するため自動的に Taskbar を折りたたみます。 (実験的)</string>
 
-    <string name="pref_max_num_of_recents">Maximum number of recent apps</string>
+    <string name="pref_max_num_of_recents">最近使用したアプリの最大数</string>
 
-    <string name="show_window_sizes">New window&#8230;</string>
+    <string name="show_window_sizes">新しいウインドウ&#8230;</string>
 
-    <string name="icon_pack">Icon pack</string>
-    <string name="icon_pack_none">None</string>
-    <string name="no_icon_packs_installed">No icon packs installed</string>
+    <string name="icon_pack">アイコンパック</string>
+    <string name="icon_pack_none">なし</string>
+    <string name="no_icon_packs_installed">アイコンパックはインストールされていません</string>
 
-    <string name="apply_icon_pack">Apply icon pack</string>
-    <string name="apply_icon_pack_description">Apply \"%1$s\" to Taskbar?</string>
-    <string name="must_specify_extra">Must specify Intent.EXTRA_PACKAGE_NAME</string>
-    <string name="invalid_package_name">Invalid package name</string>
+    <string name="apply_icon_pack">アイコンパックを適用</string>
+    <string name="apply_icon_pack_description">\"%1$s\" を Taskbar に適用しますか?</string>
+    <string name="must_specify_extra">Intent.EXTRA_PACKAGE_NAME を指定する必要があります</string>
+    <string name="invalid_package_name">パッケージ名が正しくありません</string>
 
-    <string name="pref_title_use_mask">Use masks for unthemed icons</string>
-    <string name="pref_description_use_mask">May reduce performance when an icon pack is set</string>
+    <string name="pref_title_use_mask">テーマではないアイコンにマスクを使用する</string>
+    <string name="pref_description_use_mask">アイコンパックが設定されているとパフォーマンスが低下することがあります</string>
 
-    <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
+    <string name="pref_title_app_drawer_icon">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
 
-    <string name="already_blacklisted">%1$s can\'t be selected because it is on the hidden apps list</string>
-    <string name="already_top_app">%1$s can\'t be selected because it is on the top apps list</string>
+    <string name="already_blacklisted">非表示アプリリストにあるため %1$s は選択できません</string>
+    <string name="already_top_app">トップアプリリストにあるため %1$s は選択できません</string>
 
-    <string name="alt_button_config">Alternative position for collapse button</string>
-    <string name="pref_title_open_in_fullscreen">Open windows from fullscreen apps</string>
-    <string name="pref_description_open_in_fullscreen">Requires freeform mode to be initiated at least once after Taskbar starts. When unchecked, freeform windows will only open while in the freeform workspace.</string>
-    <string name="pref_title_save_window_sizes">Save window sizes for apps</string>
-    <string name="pref_description_save_window_sizes">When opening new windows from the context menu</string>
+    <string name="alt_button_config">折りたたみボタンの代わりの位置</string>
+    <string name="pref_title_open_in_fullscreen">全画面アプリからウインドウを開く</string>
+    <string name="pref_description_open_in_fullscreen">Taskbar が起動した後、少なくとも 1 回フリーフォームモードを開始する必要があります。 このチェックボックスをオフにすると、フリーフォームワークスペースの間だけフリーフォームウィンドウが開きます。</string>
+    <string name="pref_title_save_window_sizes">アプリのウインドウサイズを保存</string>
+    <string name="pref_description_save_window_sizes">コンテキストメニューから新しいウインドウを開くとき</string>
 
-    <string name="add_shortcut">Add shortcut to home screen</string>
-    <string name="shortcut_created">Freeform mode shortcut created</string>
+    <string name="add_shortcut">ホーム画面にショートカットを追加</string>
+    <string name="shortcut_created">フリーフォームモードのショートカットを作成しました</string>
 
-    <string name="start_taskbar">Start Taskbar</string>
-    <string name="no_freeform_support">Freeform mode is not enabled on your device &#8211; open Taskbar and enable it first</string>
-    <string name="enable_recent_apps">Taskbar can optionally show icons for your most recently used apps along the edge of your screen.  To do this, Taskbar requires usage access permissions.\n\nEnable support for recent apps?</string>
+    <string name="start_taskbar">Taskbar を開始</string>
+    <string name="no_freeform_support">お使いのデバイスでフリーフォームモードは有効ではありません &#8211; Taskbar を開いて最初に有効にしてください</string>
+    <string name="enable_recent_apps">Taskbar は、オプションで画面の端に最近使用したアプリのアイコンを表示することができます。 これを行うには、Taskbar は使用状況のアクセス許可が必要です。\n\n最近使用したアプリのサポートを有効にしますか?</string>
 
-    <string name="disable_scrolling_list">Disable scrolling list</string>
+    <string name="disable_scrolling_list">リストのスクロールを無効にする</string>
 
-    <string name="double_tap_to_sleep">Double tap to sleep</string>
-    <string name="enable_double_tap_to_sleep">Enable double tap to sleep?</string>
-    <string name="action_dont_show_again">Don\'t show again</string>
+    <string name="double_tap_to_sleep">ダブルタップしてスリープ</string>
+    <string name="enable_double_tap_to_sleep">ダブルタップしてスリープを有効にしますか?</string>
+    <string name="action_dont_show_again">今後表示しない</string>
 
-    <string name="app_shortcuts">More actions&#8230;</string>
+    <string name="app_shortcuts">追加の操作&#8230;</string>
 
-    <string name="usage_stats_message">Please ensure that Taskbar is set to \"On\"</string>
+    <string name="usage_stats_message">Taskbar が \"オン\" に設定されていることを確認してください</string>
 
-    <string name="volume">Volume control</string>
-    <string name="file_manager">File manager</string>
-    <string name="system_settings">System settings</string>
-    <string name="lock_device">Lock device</string>
-    <string name="power_menu">Power menu</string>
+    <string name="volume">ボリュームコントロール</string>
+    <string name="file_manager">ファイルマネージャー</string>
+    <string name="system_settings">システム設定</string>
+    <string name="lock_device">デバイスをロック</string>
+    <string name="power_menu">電源メニュー</string>
 
-    <string name="show_search_bar">Search bar visibility</string>
+    <string name="show_search_bar">検索バーの表示</string>
     <string-array name="pref_show_search_bar_list">
-        <item>Hardware or software keyboard</item>
-        <item>Hardware keyboard only</item>
-        <item>Never show search bar</item>
+        <item>ハードウェアまたはソフトウェアキーボード</item>
+        <item>ハードウェアキーボードのみ</item>
+        <item>検索バーを表示しない</item>
     </string-array>
 
-    <string name="clear_pba">Pinned/blocked recent apps</string>
-    <string name="clear_hidden_apps">Start menu &#8211; Hidden apps</string>
-    <string name="clear_top_apps">Start menu &#8211; Top apps</string>
-    <string name="clear_window_sizes">Saved window sizes</string>
-    <string name="action_reset">Reset</string>
+    <string name="clear_pba">ピン止め/ブロックした最近使用したアプリ</string>
+    <string name="clear_hidden_apps">スタートメニュー &#8211; 非表示アプリ</string>
+    <string name="clear_top_apps">スタートメニュー &#8211; トップアプリ</string>
+    <string name="clear_window_sizes">保存したウインドウサイズ</string>
+    <string name="action_reset">リセット</string>
 
-    <string name="tools">Tools</string>
+    <string name="tools">ツール</string>
 
-    <string name="enable_accessibility">Taskbar\'s accessibility service must be enabled to show the power menu</string>
-    <string name="accessibility_service_description">Allows Taskbar to show the device\'s power menu.\n\n(This service is not used for any other purpose)</string>
+    <string name="enable_accessibility">電源メニューを表示するには Taskbar のアクセシビリティサービスを有効にする必要があります</string>
+    <string name="accessibility_service_description">Taskbar がデバイスの電源メニューを表示できるようにします。\n\n(このサービスは他の目的には使用されません)</string>
 
-    <string name="pref_title_force_new_window">Always open apps in new windows</string>
-    <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
-    <string name="change_wallpaper">Change wallpaper</string>
+    <string name="pref_title_force_new_window">新しいウインドウでアプリを開くことを許可</string>
+    <string name="pref_description_force_new_window">スタートメニューまたは最近使用したアプリから選択されるたびに、強制的に新しいウインドウでアプリを開きます (アプリがマルチウインドウを許可する場合)</string>
+    <string name="change_wallpaper">壁紙を変更</string>
 
-    <string name="notification_settings">System notification settings</string>
+    <string name="notification_settings">システム通知設定</string>
 
-    <string name="pref_header_appearance">Appearance</string>
-    <string name="dashboard">Enable the dashboard</string>
-    <string name="dashboard_description">Adds a button to the Taskbar where widgets can be displayed</string>
-    <string name="dashboard_grid_size">Dashboard grid size</string>
+    <string name="pref_header_appearance">外観</string>
+    <string name="dashboard">ダッシュボードを有効にする</string>
+    <string name="dashboard_description">Taskbar に、ウィジェットが表示されるボタンを追加します</string>
+    <string name="dashboard_grid_size">ダッシュボードのグリッドサイズ</string>
 
-    <string name="click_to_add_widget">Click to add widget</string>
-    <string name="remove_widget">Remove widget</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="dashboard_tutorial">Click anywhere on screen to add a widget to the dashboard</string>
+    <string name="click_to_add_widget">クリックしてウィジェットを追加</string>
+    <string name="remove_widget">ウィジェットを削除</string>
+    <string name="are_you_sure">よろしいですか?</string>
+    <string name="dashboard_tutorial">画面のどこかをクリックすると、ダッシュボードにウィジェットを追加します</string>
 
-    <string name="pref_title_accent_color">Accent color</string>
-    <string name="reset_colors">Reset colors to default</string>
+    <string name="pref_title_accent_color">アクセント色</string>
+    <string name="reset_colors">色をデフォルトにリセット</string>
 
-    <string name="visual_feedback">Visual feedback when selecting icons</string>
+    <string name="visual_feedback">アイコンの選択時にビジュアルフィードバック</string>
 
-    <string name="num_of_recents_blurb">Ensure that usage access is enabled before changing this setting.\n\nHigher values may reduce performance.</string>
-    <string name="max_num_of_recents">%1$d apps</string>
-    <string name="max_num_of_recents_singular">1 app</string>
-    <string name="max_num_of_recents_unlimited">Unlimited</string>
+    <string name="num_of_recents_blurb">この設定を変更する前に、使用状況のアクセスを有効になっていることを確認してください。\n\n値を大きくするほどパフォーマンスが低下する可能性があります。</string>
+    <string name="max_num_of_recents">%1$d アプリ</string>
+    <string name="max_num_of_recents_singular">1 アプリ</string>
+    <string name="max_num_of_recents_unlimited">無制限</string>
 
-    <string name="refresh_frequency_blurb">Ensure that usage access is enabled before changing this setting.\n\nLower values will increase CPU usage and may decrease battery life.</string>
+    <string name="refresh_frequency_blurb">この設定を変更する前に、使用状況のアクセスを有効になっていることを確認してください。\n\n値を小さくすると CPU 使用率が高くなり、バッテリ寿命が短くなる可能性があります。</string>
     <string name="refresh_frequency">%1$s 秒</string>
     <string name="refresh_frequency_singular">1 秒</string>
-    <string name="refresh_frequency_continuous">Continuous</string>
+    <string name="refresh_frequency_continuous">連続</string>
 
 </resources>
