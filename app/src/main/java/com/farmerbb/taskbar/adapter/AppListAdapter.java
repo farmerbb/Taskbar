@@ -63,23 +63,20 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         checkBox.setChecked(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt));
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
-                    U.showToast(getContext(),
-                            getContext().getString(R.string.already_top_app, entry.getLabel()),
-                            Toast.LENGTH_LONG);
-                } else if(blacklist.isBlocked(componentName)) {
-                    blacklist.removeBlockedApp(getContext(), componentName);
-                    checkBox.setChecked(false);
-                } else if(blacklist.isBlocked(componentNameAlt)) {
-                    blacklist.removeBlockedApp(getContext(), componentNameAlt);
-                    checkBox.setChecked(false);
-                } else {
-                    blacklist.addBlockedApp(getContext(), entry);
-                    checkBox.setChecked(true);
-                }
+        layout.setOnClickListener(view -> {
+            if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
+                U.showToast(getContext(),
+                        getContext().getString(R.string.already_top_app, entry.getLabel()),
+                        Toast.LENGTH_LONG);
+            } else if(blacklist.isBlocked(componentName)) {
+                blacklist.removeBlockedApp(getContext(), componentName);
+                checkBox.setChecked(false);
+            } else if(blacklist.isBlocked(componentNameAlt)) {
+                blacklist.removeBlockedApp(getContext(), componentNameAlt);
+                checkBox.setChecked(false);
+            } else {
+                blacklist.addBlockedApp(getContext(), entry);
+                checkBox.setChecked(true);
             }
         });
     }
@@ -98,23 +95,20 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         checkBox.setChecked(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt));
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
-                    U.showToast(getContext(),
-                            getContext().getString(R.string.already_blacklisted, entry.getLabel()),
-                            Toast.LENGTH_LONG);
-                } else if(topApps.isTopApp(componentName)) {
-                    topApps.removeTopApp(getContext(), componentName);
-                    checkBox.setChecked(false);
-                } else if(topApps.isTopApp(componentNameAlt)) {
-                    topApps.removeTopApp(getContext(), componentNameAlt);
-                    checkBox.setChecked(false);
-                } else {
-                    topApps.addTopApp(getContext(), entry);
-                    checkBox.setChecked(true);
-                }
+        layout.setOnClickListener(view -> {
+            if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
+                U.showToast(getContext(),
+                        getContext().getString(R.string.already_blacklisted, entry.getLabel()),
+                        Toast.LENGTH_LONG);
+            } else if(topApps.isTopApp(componentName)) {
+                topApps.removeTopApp(getContext(), componentName);
+                checkBox.setChecked(false);
+            } else if(topApps.isTopApp(componentNameAlt)) {
+                topApps.removeTopApp(getContext(), componentNameAlt);
+                checkBox.setChecked(false);
+            } else {
+                topApps.addTopApp(getContext(), entry);
+                checkBox.setChecked(true);
             }
         });
     }

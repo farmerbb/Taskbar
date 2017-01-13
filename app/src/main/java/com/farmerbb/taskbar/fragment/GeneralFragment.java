@@ -15,16 +15,23 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.SelectAppActivity;
+import com.farmerbb.taskbar.activity.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.TopApps;
+import com.farmerbb.taskbar.util.U;
 
-public class GeneralFragment extends SettingsFragment {
+public class GeneralFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -70,5 +77,40 @@ public class GeneralFragment extends SettingsFragment {
         if(blacklistPref != null) {
             blacklistPref.setSummary(summary);
         }
+    }
+
+    @Override
+    public boolean onPreferenceClick(final Preference p) {
+        final SharedPreferences pref = U.getSharedPreferences(getActivity());
+
+        switch(p.getKey()) {
+            case "blacklist":
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getActivity(), SelectAppActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getActivity(), SelectAppActivityDark.class);
+                        break;
+                }
+
+                startActivity(intent);
+                break;
+            case "notification_settings":
+                Intent intent2 = new Intent();
+                intent2.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                intent2.putExtra("app_package", BuildConfig.APPLICATION_ID);
+                intent2.putExtra("app_uid", getActivity().getApplicationInfo().uid);
+
+                try {
+                    startActivity(intent2);
+                    restartNotificationService = true;
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                break;
+        }
+
+        return true;
     }
 }

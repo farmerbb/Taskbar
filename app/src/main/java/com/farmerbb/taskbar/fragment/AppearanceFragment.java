@@ -15,19 +15,24 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.enrico.colorpicker.colorDialog;
 import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.IconPackActivity;
+import com.farmerbb.taskbar.activity.IconPackActivityDark;
 import com.farmerbb.taskbar.util.U;
 
-public class AppearanceFragment extends SettingsFragment {
+public class AppearanceFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -88,5 +93,61 @@ public class AppearanceFragment extends SettingsFragment {
                 } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
             }
         }
+    }
+
+    @Override
+    public boolean onPreferenceClick(final Preference p) {
+        final SharedPreferences pref = U.getSharedPreferences(getActivity());
+
+        switch(p.getKey()) {
+            case "icon_pack_list":
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getActivity(), IconPackActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getActivity(), IconPackActivityDark.class);
+                        break;
+                }
+
+                startActivityForResult(intent, 123);
+                break;
+            case "reset_colors":
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.reset_colors)
+                        .setMessage(R.string.are_you_sure)
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                            finishedLoadingPrefs = false;
+
+                            pref.edit().remove("background_tint").remove("accent_color").apply();
+
+                            colorDialog.setColorPreferenceSummary(findPreference("background_tint_pref"), U.getBackgroundTint(getActivity()), getActivity(), getResources());
+                            colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
+
+                            finishedLoadingPrefs = true;
+                            restartTaskbar();
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+            case "background_tint_pref":
+                MainActivity activity = (MainActivity) getActivity();
+
+                colorDialog.setPickerColor(activity, activity.BACKGROUND_TINT, U.getBackgroundTint(activity));
+                colorDialog.showColorPicker(activity, activity.BACKGROUND_TINT);
+                break;
+            case "accent_color_pref":
+                MainActivity activity2 = (MainActivity) getActivity();
+
+                colorDialog.setPickerColor(activity2, activity2.ACCENT_COLOR, U.getAccentColor(activity2));
+                colorDialog.showColorPicker(activity2, activity2.ACCENT_COLOR);
+                break;
+        }
+
+        return true;
     }
 }

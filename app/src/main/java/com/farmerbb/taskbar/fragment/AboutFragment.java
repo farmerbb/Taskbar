@@ -15,19 +15,30 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.app.FragmentTransaction;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.Preference;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
-public class AboutFragment extends SettingsFragment implements OnPreferenceClickListener {
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
+
+public class AboutFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+
+    private int noThanksCount = 0;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -72,5 +83,81 @@ public class AboutFragment extends SettingsFragment implements OnPreferenceClick
             actionBar.setDisplayHomeAsUpEnabled(false);
 
         finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public boolean onPreferenceClick(final Preference p) {
+        final SharedPreferences pref = U.getSharedPreferences(getActivity());
+
+        switch(p.getKey()) {
+            case "about":
+                U.checkForUpdates(getActivity());
+                break;
+            case "donate":
+                NumberFormat format = NumberFormat.getCurrencyInstance();
+                format.setCurrency(Currency.getInstance(Locale.US));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.pref_title_donate)
+                        .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
+                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.BASE_APPLICATION_ID + ".paid"));
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                            try {
+                                startActivity(intent);
+                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                        })
+                        .setNegativeButton(R.string.action_no_thanks, (dialog, which) -> {
+                            noThanksCount++;
+
+                            if(noThanksCount == 3) {
+                                pref.edit().putBoolean("hide_donate", true).apply();
+                                findPreference("donate").setEnabled(false);
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+            case "pref_screen_general":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new GeneralFragment(), "GeneralFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_appearance":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_recent_apps":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new RecentAppsFragment(), "RecentAppsFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_freeform":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new FreeformModeFragment(), "FreeformModeFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_advanced":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new AdvancedFragment(), "AdvancedFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+        }
+
+        return true;
     }
 }

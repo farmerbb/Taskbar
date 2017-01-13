@@ -19,6 +19,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.farmerbb.taskbar.service.NotificationService;
+import com.farmerbb.taskbar.util.U;
+
 public class StartTaskbarActivity extends Activity {
 
     @Override
@@ -26,8 +29,10 @@ public class StartTaskbarActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if(getIntent().hasExtra("is_launching_shortcut")) {
-            sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
-        }
+            sendBroadcast(new Intent("com.farmerbb.taskbar."
+                    + (U.isServiceRunning(this, NotificationService.class) ? "QUIT" : "START")));
+        } else
+            setResult(RESULT_OK, U.getStartStopIntent(this));
 
         finish();
     }

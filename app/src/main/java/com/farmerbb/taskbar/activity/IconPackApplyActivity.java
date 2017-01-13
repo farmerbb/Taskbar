@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -52,23 +51,15 @@ public class IconPackApplyActivity extends Activity {
             if(iconPackValid) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.apply_icon_pack)
-                        .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences pref = U.getSharedPreferences(IconPackApplyActivity.this);
-                                pref.edit().putString("icon_pack", iconPackPackage).apply();
+                        .setNegativeButton(R.string.action_cancel, (dialog, which) -> finish())
+                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                            SharedPreferences pref = U.getSharedPreferences(IconPackApplyActivity.this);
+                            pref.edit().putString("icon_pack", iconPackPackage).apply();
 
-                                U.refreshPinnedIcons(IconPackApplyActivity.this);
-                                restartTaskbar();
+                            U.refreshPinnedIcons(IconPackApplyActivity.this);
+                            restartTaskbar();
 
-                                finish();
-                            }
+                            finish();
                         });
 
                 try {

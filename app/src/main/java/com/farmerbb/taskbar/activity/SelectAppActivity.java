@@ -42,7 +42,6 @@ import com.farmerbb.taskbar.util.U;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class SelectAppActivity extends AppCompatActivity {
@@ -106,12 +105,7 @@ public class SelectAppActivity extends AppCompatActivity {
             finish();
 
             if(!noShadow)
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(SelectAppActivity.this, SelectAppActivity.class));
-                    }
-                });
+                new Handler().post(() -> startActivity(new Intent(SelectAppActivity.this, SelectAppActivity.class)));
         }
     }
 
@@ -174,24 +168,21 @@ public class SelectAppActivity extends AppCompatActivity {
                     topApps.removeTopApp(SelectAppActivity.this, packageName);
             }
 
-            Collections.sort(list, new Comparator<ResolveInfo>() {
-                @Override
-                public int compare(ResolveInfo ai1, ResolveInfo ai2) {
-                    String label1;
-                    String label2;
+            Collections.sort(list, (ai1, ai2) -> {
+                String label1;
+                String label2;
 
-                    try {
-                        label1 = ai1.activityInfo.loadLabel(pm).toString();
-                        label2 = ai2.activityInfo.loadLabel(pm).toString();
-                    } catch (OutOfMemoryError e) {
-                        System.gc();
+                try {
+                    label1 = ai1.activityInfo.loadLabel(pm).toString();
+                    label2 = ai2.activityInfo.loadLabel(pm).toString();
+                } catch (OutOfMemoryError e) {
+                    System.gc();
 
-                        label1 = ai1.activityInfo.packageName;
-                        label2 = ai2.activityInfo.packageName;
-                    }
-
-                    return Collator.getInstance().compare(label1, label2);
+                    label1 = ai1.activityInfo.packageName;
+                    label2 = ai2.activityInfo.packageName;
                 }
+
+                return Collator.getInstance().compare(label1, label2);
             });
 
             final List<BlacklistEntry> entries = new ArrayList<>();

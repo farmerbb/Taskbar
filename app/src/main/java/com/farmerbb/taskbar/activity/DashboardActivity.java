@@ -26,7 +26,6 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
@@ -83,23 +82,17 @@ public class DashboardActivity extends Activity {
             AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
             builder.setTitle(R.string.remove_widget)
                     .setMessage(R.string.are_you_sure)
-                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+                    .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
+                        LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
 
-                            shouldFinish = true;
-                        }
+                        shouldFinish = true;
                     })
-                    .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
-                            intent.putExtra("cellId", cellId);
-                            LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent);
+                    .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                        Intent intent1 = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
+                        intent1.putExtra("cellId", cellId);
+                        LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent1);
 
-                            shouldFinish = true;
-                        }
+                        shouldFinish = true;
                     });
 
             AlertDialog dialog = builder.create();

@@ -54,7 +54,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -95,18 +94,14 @@ public class StartMenuService extends Service {
     private Handler handler;
     private Thread thread;
 
+    private boolean shouldShowSearchBox = false;
     private boolean hasSubmittedQuery = false;
 
     private int layoutId = R.layout.start_menu_left;
 
     private List<String> currentStartMenuIds = new ArrayList<>();
 
-    private View.OnClickListener ocl = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            toggleStartMenu(true);
-        }
-    };
+    private View.OnClickListener ocl = view -> toggleStartMenu(true);
     
     private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
@@ -129,24 +124,21 @@ public class StartMenuService extends Service {
         }
     };
 
-    private Comparator<LauncherActivityInfo> comparator = new Comparator<LauncherActivityInfo>() {
-        @Override
-        public int compare(LauncherActivityInfo ai1, LauncherActivityInfo ai2) {
-            String label1;
-            String label2;
+    private Comparator<LauncherActivityInfo> comparator = (ai1, ai2) -> {
+        String label1;
+        String label2;
 
-            try {
-                label1 = ai1.getLabel().toString();
-                label2 = ai2.getLabel().toString();
-            } catch (OutOfMemoryError e) {
-                System.gc();
+        try {
+            label1 = ai1.getLabel().toString();
+            label2 = ai2.getLabel().toString();
+        } catch (OutOfMemoryError e) {
+            System.gc();
 
-                label1 = ai1.getApplicationInfo().packageName;
-                label2 = ai2.getApplicationInfo().packageName;
-            }
-
-            return Collator.getInstance().compare(label1, label2);
+            label1 = ai1.getApplicationInfo().packageName;
+            label2 = ai2.getApplicationInfo().packageName;
         }
+
+        return Collator.getInstance().compare(label1, label2);
     };
     
     @Override
@@ -182,7 +174,6 @@ public class StartMenuService extends Service {
 
         final SharedPreferences pref = U.getSharedPreferences(this);
         final boolean hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
-        boolean shouldShowSearchBox = false;
 
         switch(pref.getString("show_search_bar", "keyboard")) {
             case "always":
@@ -331,14 +322,11 @@ public class StartMenuService extends Service {
                     refreshApps(newText, false);
 
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                EditText editText = (EditText) searchView.findViewById(R.id.search_src_text);
-                                if(editText != null) {
-                                    editText.requestFocus();
-                                    editText.setSelection(editText.getText().length());
-                                }
+                        new Handler().postDelayed(() -> {
+                            EditText editText = (EditText) searchView.findViewById(R.id.search_src_text);
+                            if(editText != null) {
+                                editText.requestFocus();
+                                editText.setSelection(editText.getText().length());
                             }
                         }, 50);
                     }
@@ -347,22 +335,19 @@ public class StartMenuService extends Service {
                 }
             });
 
-            searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    if(!hasHardwareKeyboard) {
-                        ViewGroup.LayoutParams params = startMenu.getLayoutParams();
-                        params.height = getResources().getDimensionPixelSize(b ? R.dimen.start_menu_height_half : R.dimen.start_menu_height);
-                        startMenu.setLayoutParams(params);
-                    }
-                    
-                    if(!b) {
-                        if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-                            LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                        else {
-                            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);          
-                        }        
+            searchView.setOnQueryTextFocusChangeListener((view, b) -> {
+                if(!hasHardwareKeyboard) {
+                    ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
+                    params1.height = getResources().getDimensionPixelSize(b ? R.dimen.start_menu_height_half : R.dimen.start_menu_height);
+                    startMenu.setLayoutParams(params1);
+                }
+
+                if(!b) {
+                    if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                        LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                    else {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
             });
@@ -370,43 +355,29 @@ public class StartMenuService extends Service {
             searchView.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
             LinearLayout powerButton = (LinearLayout) layout.findViewById(R.id.power_button);
-            powerButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            powerButton.setOnClickListener(view -> {
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                openContextMenu(location);
+            });
+
+            powerButton.setOnGenericMotionListener((view, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     int[] location = new int[2];
                     view.getLocationOnScreen(location);
                     openContextMenu(location);
                 }
-            });
-
-            powerButton.setOnGenericMotionListener(new View.OnGenericMotionListener() {
-                @Override
-                public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                        int[] location = new int[2];
-                        view.getLocationOnScreen(location);
-                        openContextMenu(location);
-                    }
-                    return false;
-                }
+                return false;
             });
             
-            searchViewLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        searchView.setIconified(false);
-                    }
-                });
+            searchViewLayout.setOnClickListener(view -> searchView.setIconified(false));
 
-            startMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    hideStartMenu();
+            startMenu.setOnItemClickListener((parent, view, position, id) -> {
+                hideStartMenu();
 
-                    AppEntry entry = (AppEntry) parent.getAdapter().getItem(position);
-                    U.launchApp(StartMenuService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(StartMenuService.this), null, false, false);
-                }
+                AppEntry entry = (AppEntry) parent.getAdapter().getItem(position);
+                U.launchApp(StartMenuService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(StartMenuService.this), null, false, false);
             });
         } else
             searchViewLayout.setVisibility(View.GONE);
@@ -547,31 +518,28 @@ public class StartMenuService extends Service {
                         entries.add(newEntry);
                     }
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            String queryText = searchView.getQuery().toString();
-                            if(query == null && queryText.length() == 0
-                                    || query != null && query.equals(queryText)) {
-                                StartMenuAdapter adapter;
-                                SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
-                                if(pref.getString("start_menu_layout", "list").equals("grid")) {
-                                    startMenu.setNumColumns(3);
-                                    adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
-                                } else
-                                    adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
+                    handler.post(() -> {
+                        String queryText = searchView.getQuery().toString();
+                        if(query == null && queryText.length() == 0
+                                || query != null && query.equals(queryText)) {
+                            StartMenuAdapter adapter;
+                            SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+                            if(pref.getString("start_menu_layout", "list").equals("grid")) {
+                                startMenu.setNumColumns(3);
+                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
+                            } else
+                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
 
-                                int position = startMenu.getFirstVisiblePosition();
-                                startMenu.setAdapter(adapter);
-                                startMenu.setSelection(position);
+                            int position = startMenu.getFirstVisiblePosition();
+                            startMenu.setAdapter(adapter);
+                            startMenu.setSelection(position);
 
-                                if(adapter.getCount() > 0)
-                                    textView.setText(null);
-                                else if(query != null)
-                                    textView.setText(getString(R.string.press_enter));
-                                else
-                                    textView.setText(getString(R.string.nothing_to_see_here));
-                            }
+                            if(adapter.getCount() > 0)
+                                textView.setText(null);
+                            else if(query != null)
+                                textView.setText(getString(R.string.press_enter));
+                            else
+                                textView.setText(getString(R.string.nothing_to_see_here));
                         }
                     });
                 }
@@ -608,7 +576,7 @@ public class StartMenuService extends Service {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 boolean forceFreeformMode = FreeformHackHelper.getInstance().isFreeformHackActive() && !pref.getBoolean("open_in_fullscreen", true);
 
-                Intent intent = new Intent(this, inFreeformMode ? InvisibleActivityAlt.class : InvisibleActivity.class);
+                Intent intent = new Intent(this, inFreeformMode && !shouldShowSearchBox ? InvisibleActivityAlt.class : InvisibleActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
@@ -633,17 +601,14 @@ public class StartMenuService extends Service {
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
 
-            layout.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    layout.setVisibility(View.GONE);
-                    searchView.setQuery(null, false);
-                    searchView.setIconified(true);
-                    hasSubmittedQuery = false;
+            layout.postDelayed(() -> {
+                layout.setVisibility(View.GONE);
+                searchView.setQuery(null, false);
+                searchView.setIconified(true);
+                hasSubmittedQuery = false;
 
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
-                }
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
             }, 250);
         }
     }
@@ -686,37 +651,34 @@ public class StartMenuService extends Service {
     private void openContextMenu(final int[] location) {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
-                Intent intent = null;
+        new Handler().postDelayed(() -> {
+            SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+            Intent intent = null;
 
-                switch(pref.getString("theme", "light")) {
-                    case "light":
-                        intent = new Intent(StartMenuService.this, ContextMenuActivity.class);
-                        break;
-                    case "dark":
-                        intent = new Intent(StartMenuService.this, ContextMenuActivityDark.class);
-                        break;
-                }
-
-                if(intent != null) {
-                    intent.putExtra("launched_from_start_menu", true);
-                    intent.putExtra("is_overflow_menu", true);
-                    intent.putExtra("x", location[0]);
-                    intent.putExtra("y", location[1]);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                }
-
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
-                    DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                    Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
-                    startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
-                } else
-                    startActivity(intent);
+            switch(pref.getString("theme", "light")) {
+                case "light":
+                    intent = new Intent(StartMenuService.this, ContextMenuActivity.class);
+                    break;
+                case "dark":
+                    intent = new Intent(StartMenuService.this, ContextMenuActivityDark.class);
+                    break;
             }
+
+            if(intent != null) {
+                intent.putExtra("launched_from_start_menu", true);
+                intent.putExtra("is_overflow_menu", true);
+                intent.putExtra("x", location[0]);
+                intent.putExtra("y", location[1]);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+
+                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+            } else
+                startActivity(intent);
         }, shouldDelay() ? 100 : 0);
     }
 

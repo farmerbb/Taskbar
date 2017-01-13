@@ -24,7 +24,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -57,6 +56,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
+import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 import com.farmerbb.taskbar.service.PowerMenuService;
 
@@ -89,15 +89,12 @@ public class U {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.permission_dialog_title)
                 .setMessage(R.string.permission_dialog_message)
-                .setPositiveButton(R.string.action_grant_permission, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
-                        } catch (ActivityNotFoundException e) {
-                            showErrorDialog(context, "SYSTEM_ALERT_WINDOW");
-                        }
+                .setPositiveButton(R.string.action_grant_permission, (dialog, which) -> {
+                    try {
+                        context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+                    } catch (ActivityNotFoundException e) {
+                        showErrorDialog(context, "SYSTEM_ALERT_WINDOW");
                     }
                 });
 
@@ -222,19 +219,11 @@ public class U {
                 && !freeformHackActive) {
             shouldDelay = true;
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startFreeformHack(context, true, launchedFromTaskbar);
+            new Handler().postDelayed(() -> {
+                startFreeformHack(context, true, launchedFromTaskbar);
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            continueLaunchingApp(context, packageName, componentName, userId,
-                                    windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
-                        }
-                    }, 100);
-                }
+                new Handler().postDelayed(() -> continueLaunchingApp(context, packageName, componentName, userId,
+                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut), 100);
             }, launchedFromTaskbar ? 0 : 100);
         }
 
@@ -776,6 +765,21 @@ public class U {
         return intent;
     }
 
+    public static Intent getStartStopIntent(Context context) {
+        Intent shortcutIntent = new Intent(context, StartTaskbarActivity.class);
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+        shortcutIntent.putExtra("is_launching_shortcut", true);
+
+        BitmapDrawable drawable = (BitmapDrawable) context.getDrawable(R.mipmap.ic_launcher);
+
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        if(drawable != null) intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, drawable.getBitmap());
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.start_taskbar));
+
+        return intent;
+    }
+
     public static boolean hasFreeformSupport(Context context) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
@@ -813,5 +817,10 @@ public class U {
     public static int getAccentColor(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static boolean canDrawOverlays(Context context) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 }

@@ -24,6 +24,9 @@
     <permission android:name="${applicationId}.SEND_RECEIVE_SETTINGS"
         android:protectionLevel="signature" />
 
+    <permission android:name="${applicationId}.ENABLE_DISABLE_HOME"
+        android:protectionLevel="signatureOrSystem" />
+
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -168,11 +171,19 @@
         </activity>
         <activity
             android:name=".activity.StartTaskbarActivity"
+            android:label="@string/start_taskbar"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:enabled="false"
+            android:enabled="true"
             android:theme="@android:style/Theme.NoDisplay"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.ClearDataActivity"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
@@ -286,6 +297,24 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
                 <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.EnableHomeReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="${applicationId}.ENABLE_DISABLE_HOME" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.ENABLE_HOME"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.DisableHomeReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="${applicationId}.ENABLE_DISABLE_HOME" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.DISABLE_HOME"/>
             </intent-filter>
         </receiver>
 

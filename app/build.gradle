@@ -1,9 +1,20 @@
-apply plugin: 'android-sdk-manager'
-apply plugin: 'com.android.application'
-
 ext {
     SUPPORT_LIBRARY_VERSION = "25.1.0"
 }
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
+    }
+}
+
+apply plugin: 'android-sdk-manager'
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     maven {
@@ -20,12 +31,17 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
 
-        versionCode 107
-        versionName "3.0.2"
+        versionCode 108
+        versionName "3.0.3"
 
         resConfigs "en", "ja", "ru"
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {

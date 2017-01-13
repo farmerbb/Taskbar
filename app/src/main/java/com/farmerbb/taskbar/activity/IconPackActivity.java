@@ -44,7 +44,6 @@ import com.farmerbb.taskbar.util.U;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class IconPackActivity extends AppCompatActivity {
@@ -116,33 +115,24 @@ public class IconPackActivity extends AppCompatActivity {
             }
 
             LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
-            layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    SharedPreferences pref = U.getSharedPreferences(IconPackActivity.this);
-                    pref.edit().putString("icon_pack", entry.getPackageName()).apply();
-                    setResult(RESULT_OK);
-                    finish();
-                }
+            layout.setOnClickListener(view -> {
+                SharedPreferences pref = U.getSharedPreferences(IconPackActivity.this);
+                pref.edit().putString("icon_pack", entry.getPackageName()).apply();
+                setResult(RESULT_OK);
+                finish();
             });
 
-            layout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
+            layout.setOnLongClickListener(v -> {
+                openIconPackActivity(entry.getPackageName());
+                return false;
+            });
+
+            layout.setOnGenericMotionListener((view, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     openIconPackActivity(entry.getPackageName());
-                    return false;
                 }
-            });
-
-            layout.setOnGenericMotionListener(new View.OnGenericMotionListener() {
-                @Override
-                public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                        openIconPackActivity(entry.getPackageName());
-                    }
-                    return false;
-                }
+                return false;
             });
 
             return convertView;
@@ -161,12 +151,7 @@ public class IconPackActivity extends AppCompatActivity {
                 dummyIconPack.setPackageName(BuildConfig.APPLICATION_ID);
                 dummyIconPack.setName(getString(R.string.icon_pack_none));
 
-                Collections.sort(list, new Comparator<IconPack>() {
-                    @Override
-                    public int compare(IconPack ip1, IconPack ip2) {
-                        return Collator.getInstance().compare(ip1.getName(), ip2.getName());
-                    }
-                });
+                Collections.sort(list, (ip1, ip2) -> Collator.getInstance().compare(ip1.getName(), ip2.getName()));
 
                 finalList.add(dummyIconPack);
                 finalList.addAll(list);

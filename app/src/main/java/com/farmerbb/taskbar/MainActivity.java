@@ -23,7 +23,6 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -42,7 +41,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.widget.CompoundButton;
 
 import com.enrico.colorpicker.colorDialog;
 import com.farmerbb.taskbar.activity.HomeActivity;
@@ -127,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
 
         ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
         getPackageManager().setComponentEnabledSetting(component4,
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
@@ -169,52 +167,46 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
             final SharedPreferences pref = U.getSharedPreferences(this);
             theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
 
-            theSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b) {
-                        if(canDrawOverlays()) {
-                            boolean firstRun = pref.getBoolean("first_run", true);
-                            startTaskbarService();
+            theSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
+                if(b) {
+                    if(canDrawOverlays()) {
+                        boolean firstRun = pref.getBoolean("first_run", true);
+                        startTaskbarService();
 
-                            if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp()) {
-                                ApplicationInfo applicationInfo = null;
-                                try {
-                                    applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
-                                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp()) {
+                            ApplicationInfo applicationInfo = null;
+                            try {
+                                applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+                            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
 
-                                if(applicationInfo != null) {
-                                    AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-                                    int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+                            if(applicationInfo != null) {
+                                AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+                                int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
 
-                                    if(mode != AppOpsManager.MODE_ALLOWED) {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                        builder.setTitle(R.string.pref_header_recent_apps)
-                                                .setMessage(R.string.enable_recent_apps)
-                                                .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        try {
-                                                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                                                            U.showToastLong(MainActivity.this, R.string.usage_stats_message);
-                                                        } catch (ActivityNotFoundException e) {
-                                                            U.showErrorDialog(MainActivity.this, "GET_USAGE_STATS");
-                                                        }
-                                                    }
-                                                }).setNegativeButton(R.string.action_cancel, null);
+                                if(mode != AppOpsManager.MODE_ALLOWED) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setTitle(R.string.pref_header_recent_apps)
+                                            .setMessage(R.string.enable_recent_apps)
+                                            .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                                                try {
+                                                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                                                    U.showToastLong(MainActivity.this, R.string.usage_stats_message);
+                                                } catch (ActivityNotFoundException e) {
+                                                    U.showErrorDialog(MainActivity.this, "GET_USAGE_STATS");
+                                                }
+                                            }).setNegativeButton(R.string.action_cancel, null);
 
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
-                                    }
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
                                 }
                             }
-                        } else {
-                            U.showPermissionDialog(MainActivity.this);
-                            compoundButton.setChecked(false);
                         }
-                    } else
-                        stopTaskbarService();
-                }
+                    } else {
+                        U.showPermissionDialog(MainActivity.this);
+                        compoundButton.setChecked(false);
+                    }
+                } else
+                    stopTaskbarService();
             });
         }
 
@@ -253,24 +245,16 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.settings_imported_successfully)
                         .setMessage(R.string.import_dialog_message)
-                        .setPositiveButton(R.string.action_uninstall, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                pref.edit().putBoolean("uninstall_dialog_shown", true).apply();
+                        .setPositiveButton(R.string.action_uninstall, (dialog, which) -> {
+                            pref.edit().putBoolean("uninstall_dialog_shown", true).apply();
 
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
-                                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-                            }
+                            try {
+                                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
+                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         });
 
                 if(pref.getBoolean("uninstall_dialog_shown", false))
-                    builder.setNegativeButton(R.string.action_dont_show_again, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            pref.edit().putBoolean("dont_show_uninstall_dialog", true).apply();
-                        }
-                    });
+                    builder.setNegativeButton(R.string.action_dont_show_again, (dialogInterface, i) -> pref.edit().putBoolean("dont_show_uninstall_dialog", true).apply());
 
                 AlertDialog dialog = builder.create();
                 dialog.show();

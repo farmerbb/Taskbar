@@ -169,12 +169,9 @@ public class InvisibleActivityFreeform extends Activity {
                 startService(new Intent(this, NotificationService.class));
 
             // Show the taskbar when activity is started
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(showTaskbar)
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-                }
+            new Handler().postDelayed(() -> {
+                if(showTaskbar)
+                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
             }, 100);
         }
 
@@ -212,18 +209,15 @@ public class InvisibleActivityFreeform extends Activity {
     public void finish() {}
 
     private void possiblyHideTaskbar() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(!doNotHide) {
-                    SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
-                    if(pref.getBoolean("hide_taskbar", true)
-                            && !FreeformHackHelper.getInstance().isInFreeformWorkspace()
-                            && !LauncherHelper.getInstance().isOnHomeScreen())
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                    else
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                }
+        new Handler().postDelayed(() -> {
+            if(!doNotHide) {
+                SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
+                if(pref.getBoolean("hide_taskbar", true)
+                        && !FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                        && !LauncherHelper.getInstance().isOnHomeScreen())
+                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                else
+                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             }
         }, 100);
     }

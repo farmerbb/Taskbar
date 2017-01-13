@@ -35,12 +35,7 @@ public class ShortcutActivity extends Activity {
             if(pref.getBoolean("freeform_hack", false) && U.hasFreeformSupport(this)) {
                 sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        U.startFreeformHack(ShortcutActivity.this, true, false);
-                    }
-                }, 100);
+                new Handler().postDelayed(() -> U.startFreeformHack(ShortcutActivity.this, true, false), 100);
             } else
                 U.showToastLong(this, R.string.no_freeform_support);
         } else
