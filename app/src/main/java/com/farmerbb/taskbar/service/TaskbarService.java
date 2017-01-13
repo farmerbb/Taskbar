@@ -305,7 +305,7 @@ public class TaskbarService extends Service {
 
         refreshInterval = (int) (Float.parseFloat(pref.getString("refresh_frequency", "2")) * 1000);
         if(refreshInterval == 0)
-            refreshInterval++;
+            refreshInterval = 100;
 
         sortOrder = pref.getString("sort_order", "false");
 
