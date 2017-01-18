@@ -44,7 +44,7 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
+import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;

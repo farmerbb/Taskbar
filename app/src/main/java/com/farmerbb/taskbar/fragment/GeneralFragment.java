@@ -26,7 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
-import com.farmerbb.taskbar.activity.SelectAppActivityDark;
+import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;

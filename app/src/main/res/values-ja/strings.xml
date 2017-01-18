@@ -273,4 +273,8 @@
     <string name="refresh_frequency_singular">1 秒</string>
     <string name="refresh_frequency_continuous">連続</string>
 
+    <string name="power_button_warning_title">Caution</string>
+    <string name="power_button_warning_message">Custom ROMs based on CyanogenMod / LineageOS have an issue where the power button does not work while the device is in freeform mode.\n\nPlease test your power button now.  If it does not work, then exercise caution when using freeform mode as you may lose the ability to wake the device from sleep if the screen times out.</string>
+    <string name="action_i_understand">I understand</string>
+
 </resources>

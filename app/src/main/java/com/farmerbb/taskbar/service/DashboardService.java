@@ -55,7 +55,7 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
-import com.farmerbb.taskbar.activity.DashboardActivityDark;
+import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
 import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;

@@ -1,4 +1,4 @@
-/* Copyright 2016 Braden Farmer
+/* Copyright 2017 Braden Farmer
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.activity;
+package com.farmerbb.taskbar.activity.dark;
 
-public class ContextMenuActivityDark extends ContextMenuActivity {}
+import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
+
+public class InvisibleActivityAltDark extends InvisibleActivityAlt {}

@@ -47,6 +47,7 @@ import android.view.WindowManager;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;

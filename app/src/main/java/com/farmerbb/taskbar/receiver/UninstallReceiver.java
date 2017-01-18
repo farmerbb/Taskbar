@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UninstallReceiver extends BroadcastReceiver {
+    @SuppressWarnings("Convert2streamapi")
     @Override
     public void onReceive(Context context, Intent intent) {
         String packageName = intent.getData().getEncodedSchemeSpecificPart();

@@ -63,7 +63,7 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
+import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
@@ -407,6 +407,7 @@ public class StartMenuService extends Service {
 
         handler = new Handler();
         thread = new Thread() {
+            @SuppressWarnings("Convert2streamapi")
             @Override
             public void run() {
                 if(pm == null) pm = getPackageManager();

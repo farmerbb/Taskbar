@@ -74,7 +74,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
+import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
@@ -447,6 +447,7 @@ public class TaskbarService extends Service {
         thread.start();
     }
 
+    @SuppressWarnings("Convert2streamapi")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private void updateRecentApps(final boolean firstRefresh) {
         final PackageManager pm = getPackageManager();

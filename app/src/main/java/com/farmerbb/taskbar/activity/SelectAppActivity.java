@@ -129,6 +129,7 @@ public class SelectAppActivity extends AppCompatActivity {
     }
 
     private final class AppListGenerator extends AsyncTask<Void, Void, AppListAdapter[]> {
+        @SuppressWarnings("Convert2streamapi")
         @Override
         protected AppListAdapter[] doInBackground(Void... params) {
             final PackageManager pm = getPackageManager();

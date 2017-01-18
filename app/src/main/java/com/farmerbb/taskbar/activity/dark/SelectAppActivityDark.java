@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.activity;
+package com.farmerbb.taskbar.activity.dark;
 
-public class IconPackActivityDark extends IconPackActivity {}
+import com.farmerbb.taskbar.activity.SelectAppActivity;
+
+public class SelectAppActivityDark extends SelectAppActivity {}

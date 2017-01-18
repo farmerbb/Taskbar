@@ -76,6 +76,12 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Incognito"/>
         <activity
+            android:name=".activity.dark.InvisibleActivityAltDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
+        <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
@@ -118,7 +124,7 @@
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Dialog"/>
         <activity
-            android:name=".activity.ContextMenuActivityDark"
+            android:name=".activity.dark.ContextMenuActivityDark"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Dialog.Dark"/>
@@ -126,7 +132,7 @@
             android:name=".activity.SelectAppActivity"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
         <activity
-            android:name=".activity.SelectAppActivityDark"
+            android:name=".activity.dark.SelectAppActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DummyActivity"
@@ -140,7 +146,7 @@
             android:name=".activity.IconPackActivity"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
         <activity
-            android:name=".activity.IconPackActivityDark"
+            android:name=".activity.dark.IconPackActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.IconPackApplyActivity"
@@ -188,7 +194,7 @@
             android:name=".activity.ClearDataActivity"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
         <activity
-            android:name=".activity.ClearDataActivityDark"
+            android:name=".activity.dark.ClearDataActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DashboardActivity"
@@ -197,7 +203,7 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Incognito"/>
         <activity
-            android:name=".activity.DashboardActivityDark"
+            android:name=".activity.dark.DashboardActivityDark"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"

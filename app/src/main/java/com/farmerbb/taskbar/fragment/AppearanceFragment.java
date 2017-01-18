@@ -29,7 +29,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.IconPackActivity;
-import com.farmerbb.taskbar.activity.IconPackActivityDark;
+import com.farmerbb.taskbar.activity.dark.IconPackActivityDark;
 import com.farmerbb.taskbar.util.U;
 
 public class AppearanceFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {

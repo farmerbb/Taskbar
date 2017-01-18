@@ -37,7 +37,7 @@ import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
-import com.farmerbb.taskbar.activity.ClearDataActivityDark;
+import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.util.U;
