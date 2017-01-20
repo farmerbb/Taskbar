@@ -28,6 +28,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -39,6 +40,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class DashboardActivity extends Activity {
@@ -50,6 +52,7 @@ public class DashboardActivity extends Activity {
     private final int REQUEST_CREATE_APPWIDGET = 789;
 
     private boolean shouldFinish = true;
+    private boolean shouldCollapse = true;
     private int cellId = -1;
 
     private BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
@@ -106,6 +109,7 @@ public class DashboardActivity extends Activity {
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            shouldCollapse = false;
             finish();
         }
     };
@@ -157,8 +161,17 @@ public class DashboardActivity extends Activity {
     protected void onPause() {
         super.onPause();
 
-        if(shouldFinish)
+        if(shouldFinish) {
+            if(shouldCollapse) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                else
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            }
+
             onBackPressed();
+        }
     }
 
     @Override
