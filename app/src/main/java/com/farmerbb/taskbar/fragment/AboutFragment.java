@@ -46,35 +46,37 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         super.onActivityCreated(savedInstanceState);
 
-        // Add preferences
-        addPreferencesFromResource(R.xml.pref_base);
+        if(savedInstanceState == null) {
+            // Add preferences
+            addPreferencesFromResource(R.xml.pref_base);
 
-        boolean playStoreInstalled = true;
-        try {
-            getActivity().getPackageManager().getPackageInfo("com.android.vending", 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            playStoreInstalled = false;
+            boolean playStoreInstalled = true;
+            try {
+                getActivity().getPackageManager().getPackageInfo("com.android.vending", 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                playStoreInstalled = false;
+            }
+
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+                    && playStoreInstalled
+                    && !pref.getBoolean("hide_donate", false)) {
+                addPreferencesFromResource(R.xml.pref_about_donate);
+                findPreference("donate").setOnPreferenceClickListener(this);
+            } else
+                addPreferencesFromResource(R.xml.pref_about);
+
+            // Set OnClickListeners for certain preferences
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
+
+            findPreference("pref_screen_general").setOnPreferenceClickListener(this);
+            findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
+            findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
+            findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
+            findPreference("about").setOnPreferenceClickListener(this);
+            findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
         }
-
-        SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
-                && playStoreInstalled
-                && !pref.getBoolean("hide_donate", false)) {
-            addPreferencesFromResource(R.xml.pref_about_donate);
-            findPreference("donate").setOnPreferenceClickListener(this);
-        } else
-            addPreferencesFromResource(R.xml.pref_about);
-
-        // Set OnClickListeners for certain preferences
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
-
-        findPreference("pref_screen_general").setOnPreferenceClickListener(this);
-        findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
-        findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
-        findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
-        findPreference("about").setOnPreferenceClickListener(this);
-        findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.app_name);

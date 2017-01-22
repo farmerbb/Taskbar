@@ -41,26 +41,28 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
         super.onActivityCreated(savedInstanceState);
 
-        // Add preferences
-        addPreferencesFromResource(R.xml.pref_recent_apps);
+        if(savedInstanceState == null) {
+            // Add preferences
+            addPreferencesFromResource(R.xml.pref_recent_apps);
 
-        // Set OnClickListeners for certain preferences
-        findPreference("enable_recents").setOnPreferenceClickListener(this);
-        findPreference("max_num_of_recents").setOnPreferenceClickListener(this);
-        findPreference("refresh_frequency").setOnPreferenceClickListener(this);
+            // Set OnClickListeners for certain preferences
+            findPreference("enable_recents").setOnPreferenceClickListener(this);
+            findPreference("max_num_of_recents").setOnPreferenceClickListener(this);
+            findPreference("refresh_frequency").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("recents_amount"));
-        bindPreferenceSummaryToValue(findPreference("sort_order"));
-        bindPreferenceSummaryToValue(findPreference("disable_scrolling_list"));
+            bindPreferenceSummaryToValue(findPreference("recents_amount"));
+            bindPreferenceSummaryToValue(findPreference("sort_order"));
+            bindPreferenceSummaryToValue(findPreference("disable_scrolling_list"));
+
+            updateMaxNumOfRecents(false);
+            updateRefreshFrequency(false);
+        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_recent_apps);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        updateMaxNumOfRecents(false);
-        updateRefreshFrequency(false);
 
         finishedLoadingPrefs = true;
     }

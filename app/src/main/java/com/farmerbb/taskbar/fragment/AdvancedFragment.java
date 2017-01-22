@@ -50,24 +50,26 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         super.onActivityCreated(savedInstanceState);
 
-        // Add preferences
-        addPreferencesFromResource(R.xml.pref_advanced);
+        if(savedInstanceState == null) {
+            // Add preferences
+            addPreferencesFromResource(R.xml.pref_advanced);
 
-        // Set OnClickListeners for certain preferences
-        findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
-        findPreference("launcher").setOnPreferenceClickListener(this);
-        findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
-        findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
+            // Set OnClickListeners for certain preferences
+            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
+            findPreference("launcher").setOnPreferenceClickListener(this);
+            findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
+            findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("dashboard"));
+            bindPreferenceSummaryToValue(findPreference("dashboard"));
+
+            updateDashboardGridSize(false);
+        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_advanced);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        updateDashboardGridSize(false);
 
         finishedLoadingPrefs = true;
     }

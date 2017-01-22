@@ -39,20 +39,22 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
 
         super.onActivityCreated(savedInstanceState);
 
-        // Add preferences
-        addPreferencesFromResource(R.xml.pref_general);
+        if(savedInstanceState == null) {
+            // Add preferences
+            addPreferencesFromResource(R.xml.pref_general);
 
-        // Set OnClickListeners for certain preferences
-        findPreference("blacklist").setOnPreferenceClickListener(this);
-        findPreference("notification_settings").setOnPreferenceClickListener(this);
+            // Set OnClickListeners for certain preferences
+            findPreference("blacklist").setOnPreferenceClickListener(this);
+            findPreference("notification_settings").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
-        bindPreferenceSummaryToValue(findPreference("scrollbar"));
-        bindPreferenceSummaryToValue(findPreference("position"));
-        bindPreferenceSummaryToValue(findPreference("anchor"));
-        bindPreferenceSummaryToValue(findPreference("alt_button_config"));
-        bindPreferenceSummaryToValue(findPreference("show_search_bar"));
-        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
+            bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
+            bindPreferenceSummaryToValue(findPreference("scrollbar"));
+            bindPreferenceSummaryToValue(findPreference("position"));
+            bindPreferenceSummaryToValue(findPreference("anchor"));
+            bindPreferenceSummaryToValue(findPreference("alt_button_config"));
+            bindPreferenceSummaryToValue(findPreference("show_search_bar"));
+            bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
+        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_general);

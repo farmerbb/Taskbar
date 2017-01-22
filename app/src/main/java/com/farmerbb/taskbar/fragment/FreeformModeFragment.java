@@ -42,22 +42,24 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
 
         super.onActivityCreated(savedInstanceState);
 
-        // Add preferences
-        addPreferencesFromResource(R.xml.pref_freeform_hack);
+        if(savedInstanceState == null) {
+            // Add preferences
+            addPreferencesFromResource(R.xml.pref_freeform_hack);
 
-        findPreference("freeform_hack").setOnPreferenceClickListener(this);
-        findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
-        findPreference("add_shortcut").setOnPreferenceClickListener(this);
+            findPreference("freeform_hack").setOnPreferenceClickListener(this);
+            findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
+            findPreference("add_shortcut").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("window_size"));
+            bindPreferenceSummaryToValue(findPreference("window_size"));
 
-        SharedPreferences pref = U.getSharedPreferences(getActivity());
-        boolean freeformHackEnabled = pref.getBoolean("freeform_hack", false);
-        findPreference("open_in_fullscreen").setEnabled(freeformHackEnabled);
-        findPreference("save_window_sizes").setEnabled(freeformHackEnabled);
-        findPreference("window_size").setEnabled(freeformHackEnabled);
-        findPreference("add_shortcut").setEnabled(freeformHackEnabled);
-        findPreference("force_new_window").setEnabled(freeformHackEnabled);
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            boolean freeformHackEnabled = pref.getBoolean("freeform_hack", false);
+            findPreference("open_in_fullscreen").setEnabled(freeformHackEnabled);
+            findPreference("save_window_sizes").setEnabled(freeformHackEnabled);
+            findPreference("window_size").setEnabled(freeformHackEnabled);
+            findPreference("add_shortcut").setEnabled(freeformHackEnabled);
+            findPreference("force_new_window").setEnabled(freeformHackEnabled);
+        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_freeform);

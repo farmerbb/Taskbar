@@ -49,11 +49,7 @@ import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.fragment.AboutFragment;
-import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;
-import com.farmerbb.taskbar.fragment.FreeformModeFragment;
-import com.farmerbb.taskbar.fragment.GeneralFragment;
-import com.farmerbb.taskbar.fragment.RecentAppsFragment;
 import com.farmerbb.taskbar.fragment.SettingsFragment;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -215,28 +211,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                 getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment").commit();
             else
                 getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment").commit();
-        } else {
-            String fragmentName = savedInstanceState.getString("fragment_name");
-            if(fragmentName != null) switch(fragmentName) {
-                case "AboutFragment":
-                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), fragmentName).commit();
-                    break;
-                case "AdvancedFragment":
-                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AdvancedFragment(), fragmentName).commit();
-                    break;
-                case "FreeformModeFragment":
-                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FreeformModeFragment(), fragmentName).commit();
-                    break;
-                case "GeneralFragment":
-                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new GeneralFragment(), fragmentName).commit();
-                    break;
-                case "RecentAppsFragment":
-                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new RecentAppsFragment(), fragmentName).commit();
-                    break;
-                case "AppearanceFragment":
-                    getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), fragmentName).commit();
-                    break;
-            }
         }
 
         if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
@@ -390,13 +364,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                     .replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .commit();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString("fragment_name", getFragmentManager().findFragmentById(R.id.fragmentContainer).getTag());
-
-        super.onSaveInstanceState(outState);
     }
 
     private boolean isSystemApp() {

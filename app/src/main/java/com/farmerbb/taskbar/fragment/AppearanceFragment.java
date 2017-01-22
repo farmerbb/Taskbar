@@ -40,30 +40,32 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
         super.onActivityCreated(savedInstanceState);
 
-        // Add preferences
-        addPreferencesFromResource(R.xml.pref_appearance);
+        if(savedInstanceState == null) {
+            // Add preferences
+            addPreferencesFromResource(R.xml.pref_appearance);
 
-        // Set OnClickListeners for certain preferences
-        findPreference("icon_pack_list").setOnPreferenceClickListener(this);
-        findPreference("reset_colors").setOnPreferenceClickListener(this);
-        findPreference("background_tint_pref").setOnPreferenceClickListener(this);
-        findPreference("accent_color_pref").setOnPreferenceClickListener(this);
+            // Set OnClickListeners for certain preferences
+            findPreference("icon_pack_list").setOnPreferenceClickListener(this);
+            findPreference("reset_colors").setOnPreferenceClickListener(this);
+            findPreference("background_tint_pref").setOnPreferenceClickListener(this);
+            findPreference("accent_color_pref").setOnPreferenceClickListener(this);
 
-        bindPreferenceSummaryToValue(findPreference("theme"));
-        bindPreferenceSummaryToValue(findPreference("invisible_button"));
-        bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
-        bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
-        bindPreferenceSummaryToValue(findPreference("visual_feedback"));
-        bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
+            bindPreferenceSummaryToValue(findPreference("theme"));
+            bindPreferenceSummaryToValue(findPreference("invisible_button"));
+            bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
+            bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
+            bindPreferenceSummaryToValue(findPreference("visual_feedback"));
+            bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
+
+            colorDialog.setColorPreferenceSummary(findPreference("background_tint_pref"), U.getBackgroundTint(getActivity()), getActivity(), getResources());
+            colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
+        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_appearance);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        colorDialog.setColorPreferenceSummary(findPreference("background_tint_pref"), U.getBackgroundTint(getActivity()), getActivity(), getResources());
-        colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
 
         finishedLoadingPrefs = true;
     }
