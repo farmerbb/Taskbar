@@ -75,6 +75,7 @@ import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.StartMenuHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
+import com.farmerbb.taskbar.widget.StartMenuLayout;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ import java.util.List;
 public class StartMenuService extends Service {
 
     private WindowManager windowManager;
-    private LinearLayout layout;
+    private StartMenuLayout layout;
     private GridView startMenu;
     private SearchView searchView;
     private TextView textView;
@@ -247,8 +248,11 @@ public class StartMenuService extends Service {
         }
 
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
-        layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
+        layout = (StartMenuLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
         startMenu = (GridView) layout.findViewById(R.id.start_menu);
+
+        if(shouldShowSearchBox && !hasHardwareKeyboard)
+            layout.viewHandlesBackButton();
 
         boolean scrollbar = pref.getBoolean("scrollbar", false);
         startMenu.setFastScrollEnabled(scrollbar);

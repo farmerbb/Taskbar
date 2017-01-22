@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.farmerbb.taskbar.widget.StartMenuLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/start_menu_layout"
     android:layout_width="wrap_content"
@@ -92,4 +93,4 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/icon_size" />
 
-</LinearLayout>
+</com.farmerbb.taskbar.widget.StartMenuLayout>
