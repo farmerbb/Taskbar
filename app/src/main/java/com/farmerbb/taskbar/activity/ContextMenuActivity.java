@@ -234,7 +234,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("lock_device").setOnPreferenceClickListener(this);
             findPreference("power_menu").setOnPreferenceClickListener(this);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 findPreference("file_manager").setOnPreferenceClickListener(this);
         } else {
             appName = getIntent().getStringExtra("app_name");
@@ -524,9 +524,16 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 shouldHideTaskbar = true;
                 break;
             case "file_manager":
-                startFreeformActivity();
+                Intent fileManagerIntent;
 
-                Intent fileManagerIntent = new Intent("android.provider.action.BROWSE");
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    startFreeformActivity();
+                    fileManagerIntent = new Intent("android.provider.action.BROWSE");
+                } else {
+                    fileManagerIntent = new Intent("android.provider.action.BROWSE_DOCUMENT_ROOT");
+                    fileManagerIntent.setComponent(ComponentName.unflattenFromString("com.android.documentsui/.DocumentsActivity"));
+                }
+
                 fileManagerIntent.addCategory(Intent.CATEGORY_DEFAULT);
                 fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
