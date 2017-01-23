@@ -251,7 +251,7 @@ public class StartMenuService extends Service {
         layout = (StartMenuLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
         startMenu = (GridView) layout.findViewById(R.id.start_menu);
 
-        if(shouldShowSearchBox && !hasHardwareKeyboard)
+        if((shouldShowSearchBox && !hasHardwareKeyboard) || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             layout.viewHandlesBackButton();
 
         boolean scrollbar = pref.getBoolean("scrollbar", false);
