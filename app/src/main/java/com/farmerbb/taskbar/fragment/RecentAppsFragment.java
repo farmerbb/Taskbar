@@ -41,7 +41,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
         super.onActivityCreated(savedInstanceState);
 
-        if(savedInstanceState == null) {
+        if(findPreference("dummy") == null) {
             // Add preferences
             addPreferencesFromResource(R.xml.pref_recent_apps);
 

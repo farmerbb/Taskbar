@@ -42,7 +42,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
 
         super.onActivityCreated(savedInstanceState);
 
-        if(savedInstanceState == null) {
+        if(findPreference("dummy") == null) {
             // Add preferences
             addPreferencesFromResource(R.xml.pref_freeform_hack);
 

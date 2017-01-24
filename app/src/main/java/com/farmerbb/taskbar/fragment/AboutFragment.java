@@ -46,7 +46,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         super.onActivityCreated(savedInstanceState);
 
-        if(savedInstanceState == null) {
+        if(findPreference("dummy") == null) {
             // Add preferences
             addPreferencesFromResource(R.xml.pref_base);
 

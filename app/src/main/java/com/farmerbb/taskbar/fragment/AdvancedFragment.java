@@ -50,7 +50,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         super.onActivityCreated(savedInstanceState);
 
-        if(savedInstanceState == null) {
+        if(findPreference("dummy") == null) {
             // Add preferences
             addPreferencesFromResource(R.xml.pref_advanced);
 

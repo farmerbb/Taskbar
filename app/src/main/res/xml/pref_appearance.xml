@@ -70,6 +70,6 @@
         android:key="reset_colors"
         android:title="@string/reset_colors" />
 
-    <PreferenceCategory android:title="\n\n" />
+    <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

@@ -39,7 +39,7 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
 
         super.onActivityCreated(savedInstanceState);
 
-        if(savedInstanceState == null) {
+        if(findPreference("dummy") == null) {
             // Add preferences
             addPreferencesFromResource(R.xml.pref_general);
 
