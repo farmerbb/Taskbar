@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
@@ -32,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.adapter.AppListAdapter;
 import com.farmerbb.taskbar.fragment.SelectAppFragment;
 import com.farmerbb.taskbar.util.Blacklist;
@@ -105,7 +107,21 @@ public class SelectAppActivity extends AppCompatActivity {
             finish();
 
             if(!noShadow)
-                new Handler().post(() -> startActivity(new Intent(SelectAppActivity.this, SelectAppActivity.class)));
+                new Handler().post(() -> {
+                    Intent intent = null;
+                    SharedPreferences pref3 = U.getSharedPreferences(SelectAppActivity.this);
+
+                    switch(pref3.getString("theme", "light")) {
+                        case "light":
+                            intent = new Intent(SelectAppActivity.this, SelectAppActivity.class);
+                            break;
+                        case "dark":
+                            intent = new Intent(SelectAppActivity.this, SelectAppActivityDark.class);
+                            break;
+                    }
+
+                    startActivity(intent);
+                });
         }
     }
 
