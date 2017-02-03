@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
@@ -46,6 +47,9 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
             // Set OnClickListeners for certain preferences
             findPreference("blacklist").setOnPreferenceClickListener(this);
             findPreference("notification_settings").setOnPreferenceClickListener(this);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                findPreference("hide_taskbar").setSummary(R.string.hide_taskbar_disclaimer);
 
             bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
             bindPreferenceSummaryToValue(findPreference("scrollbar"));

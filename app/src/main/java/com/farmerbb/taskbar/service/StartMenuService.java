@@ -581,13 +581,17 @@ public class StartMenuService extends Service {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 boolean forceFreeformMode = FreeformHackHelper.getInstance().isFreeformHackActive() && !pref.getBoolean("open_in_fullscreen", true);
 
-                Intent intent = new Intent(this, inFreeformMode && !shouldShowSearchBox ? InvisibleActivityAlt.class : InvisibleActivity.class);
+                Class clazz = inFreeformMode && !shouldShowSearchBox ? InvisibleActivityAlt.class : InvisibleActivity.class;
+                Intent intent = new Intent(this, clazz);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                if(inFreeformMode || forceFreeformMode)
-                    U.launchAppFullscreen(this, intent);
-                else
+                if(inFreeformMode || forceFreeformMode) {
+                    if(clazz.equals(InvisibleActivity.class))
+                        U.launchAppLowerRight(this, intent);
+                    else if(clazz.equals(InvisibleActivityAlt.class))
+                        U.launchAppFullscreen(this, intent);
+                } else
                     startActivity(intent);
             }
 

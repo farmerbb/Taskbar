@@ -198,8 +198,8 @@ public class InvisibleActivityFreeform extends Activity {
             startService(new Intent(this, DashboardService.class));
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("taskbar_active", false))
-                startService(new Intent(this, NotificationService.class));
+            if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
+                pref.edit().putBoolean("taskbar_active", false).apply();
 
             // Show the taskbar when activity is started
             new Handler().postDelayed(() -> {

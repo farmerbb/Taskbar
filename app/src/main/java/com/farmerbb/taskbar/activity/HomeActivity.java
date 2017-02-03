@@ -267,8 +267,8 @@ public class HomeActivity extends Activity {
         startService(new Intent(this, DashboardService.class));
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("taskbar_active", false))
-            startService(new Intent(this, NotificationService.class));
+        if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
+            pref.edit().putBoolean("taskbar_active", false).apply();
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
         new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR")), 100);

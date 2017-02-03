@@ -37,6 +37,10 @@ public class IconPackApplyActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if(getIntent().hasExtra(Intent.EXTRA_PACKAGE_NAME)) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(pref.getString("theme", "light").equals("dark"))
+                setTheme(R.style.AppTheme_Dialog_Dark);
+
             @SuppressLint("InlinedApi")
             final String iconPackPackage = getIntent().getStringExtra(Intent.EXTRA_PACKAGE_NAME);
             PackageManager pm = getPackageManager();
@@ -53,7 +57,6 @@ public class IconPackApplyActivity extends Activity {
                 builder.setTitle(R.string.apply_icon_pack)
                         .setNegativeButton(R.string.action_cancel, (dialog, which) -> finish())
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> {
-                            SharedPreferences pref = U.getSharedPreferences(IconPackApplyActivity.this);
                             pref.edit().putString("icon_pack", iconPackPackage).apply();
 
                             U.refreshPinnedIcons(IconPackApplyActivity.this);

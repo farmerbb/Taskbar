@@ -207,12 +207,13 @@ public class U {
         boolean shouldDelay = false;
 
         SharedPreferences pref = getSharedPreferences(context);
+        FreeformHackHelper helper = FreeformHackHelper.getInstance();
         boolean openInFullscreen = pref.getBoolean("open_in_fullscreen", true);
         boolean freeformHackActive = openInNewWindow
-                ? FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                ? helper.isInFreeformWorkspace()
                 : (openInFullscreen
-                    ? FreeformHackHelper.getInstance().isInFreeformWorkspace()
-                    : FreeformHackHelper.getInstance().isFreeformHackActive());
+                    ? helper.isInFreeformWorkspace()
+                    : helper.isFreeformHackActive());
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
@@ -227,11 +228,11 @@ public class U {
             }, launchedFromTaskbar ? 0 : 100);
         }
 
-        if(!FreeformHackHelper.getInstance().isFreeformHackActive()) {
+        if(!helper.isFreeformHackActive()) {
             if(!shouldDelay)
                 continueLaunchingApp(context, packageName, componentName, userId,
                         windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
-        } else if(FreeformHackHelper.getInstance().isInFreeformWorkspace() || !openInFullscreen)
+        } else if(helper.isInFreeformWorkspace() || !openInFullscreen)
             continueLaunchingApp(context, packageName, componentName, userId,
                     windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
     }
@@ -251,16 +252,7 @@ public class U {
                 freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
-        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-        try {
-            context.startActivity(freeformHackIntent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
-                    display.getWidth(),
-                    display.getHeight(),
-                    display.getWidth() + 1,
-                    display.getHeight() + 1
-            )).toBundle());
-        } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+        launchAppLowerRight(context, freeformHackIntent);
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -511,6 +503,21 @@ public class U {
         long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
 
         launchMode2(context, intent, FULLSCREEN, userId, null);
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
+    public static void launchAppLowerRight(Context context, Intent intent) {
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+        try {
+            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+                    display.getWidth(),
+                    display.getHeight(),
+                    display.getWidth() + 1,
+                    display.getHeight() + 1
+            )).toBundle());
+        } catch (IllegalArgumentException e) { /* Gracefully fail */ }
     }
 
     public static void checkForUpdates(Context context) {

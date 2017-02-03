@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -81,7 +80,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @SuppressLint("CommitPrefEdits")
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
