@@ -40,6 +40,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -134,6 +135,8 @@ public class DashboardActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED"));
         LocalBroadcastManager.getInstance(this).registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED"));
         LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+
+        if(!DashboardHelper.getInstance().isDashboardOpen()) finish();
     }
 
     @Override

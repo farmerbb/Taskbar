@@ -56,6 +56,7 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
+import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -382,6 +383,8 @@ public class DashboardService extends Service {
     private void fadeIn() {
         mAppWidgetHost.startListening();
 
+        DashboardHelper.getInstance().setDashboardOpen(true);
+
         layout.setVisibility(View.VISIBLE);
         layout.animate()
                 .alpha(1)
@@ -391,6 +394,8 @@ public class DashboardService extends Service {
 
     private void fadeOut(final boolean sendIntent) {
         mAppWidgetHost.stopListening();
+
+        DashboardHelper.getInstance().setDashboardOpen(false);
 
         layout.animate()
                 .alpha(0)
