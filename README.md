@@ -45,3 +45,4 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
 * Mark Morilla (app logo) (https://plus.google.com/106169552593075739372)
 * naofum (Japanese translation)
 * HardSer (Russian translation)
+* OfficialMITX (German translation)
