@@ -19,15 +19,18 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.service.quicksettings.TileService;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
@@ -77,6 +80,9 @@ public class NotificationService extends Service {
                 startForeground(8675309, mBuilder.build());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
             } else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
@@ -92,6 +98,9 @@ public class NotificationService extends Service {
             pref.edit().remove("is_restarting").apply();
         else {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
 
             if(!U.launcherIsDefault(this))
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
