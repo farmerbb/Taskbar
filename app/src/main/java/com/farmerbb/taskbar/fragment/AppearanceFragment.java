@@ -56,6 +56,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
             bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
             bindPreferenceSummaryToValue(findPreference("visual_feedback"));
             bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
+            bindPreferenceSummaryToValue(findPreference("transparent_start_menu"));
 
             colorDialog.setColorPreferenceSummary(findPreference("background_tint_pref"), U.getBackgroundTint(getActivity()), getActivity(), getResources());
             colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());

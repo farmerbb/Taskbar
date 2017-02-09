@@ -279,5 +279,6 @@
     <string name="action_i_understand">I understand</string>
 
     <string name="hide_taskbar_disclaimer">Does not apply to apps in freeform mode</string>
+    <string name="transparent_start_menu">Transparent start menu</string>
 
 </resources>

@@ -14,8 +14,7 @@
      limitations under the License.
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:defaultValue="light"
@@ -59,6 +58,11 @@
         android:defaultValue="true"
         android:key="visual_feedback"
         android:title="@string/visual_feedback"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="transparent_start_menu"
+        android:title="@string/transparent_start_menu"/>
 
     <CheckBoxPreference
         android:defaultValue="false"

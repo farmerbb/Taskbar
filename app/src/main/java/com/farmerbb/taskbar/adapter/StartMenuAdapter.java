@@ -126,7 +126,11 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         if(pref.getBoolean("visual_feedback", true)) {
             layout.setOnHoverListener((v, event) -> {
                 if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
-                    int backgroundTint = U.getBackgroundTint(getContext());
+                    int backgroundTint = pref.getBoolean("transparent_start_menu", false)
+                            ? U.getAccentColor(getContext())
+                            : U.getBackgroundTint(getContext());
+
+                    //noinspection ResourceAsColor
                     backgroundTint = ColorUtils.setAlphaComponent(backgroundTint, Color.alpha(backgroundTint) / 2);
                     v.setBackgroundColor(backgroundTint);
                 }

@@ -259,6 +259,9 @@ public class StartMenuService extends Service {
         startMenu.setFastScrollAlwaysVisible(scrollbar);
         startMenu.setScrollBarStyle(scrollbar ? View.SCROLLBARS_OUTSIDE_INSET : View.SCROLLBARS_INSIDE_OVERLAY);
 
+        if(pref.getBoolean("transparent_start_menu", false))
+            startMenu.setBackgroundColor(0);
+
         searchView = (SearchView) layout.findViewById(R.id.search);
 
         int backgroundTint = U.getBackgroundTint(this);
@@ -383,6 +386,9 @@ public class StartMenuService extends Service {
                 AppEntry entry = (AppEntry) parent.getAdapter().getItem(position);
                 U.launchApp(StartMenuService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(StartMenuService.this), null, false, false);
             });
+
+            if(pref.getBoolean("transparent_start_menu", false))
+                layout.findViewById(R.id.search_view_child_layout).setBackgroundColor(0);
         } else
             searchViewLayout.setVisibility(View.GONE);
         

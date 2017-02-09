@@ -61,6 +61,7 @@
             android:layout_marginLeft="@dimen/icon_size" >
 
                 <LinearLayout
+                    android:id="@+id/search_view_child_layout"
                     android:layout_width="@dimen/start_menu_width"
                     android:layout_height="wrap_content"
                     android:background="?start_menu_background" >
