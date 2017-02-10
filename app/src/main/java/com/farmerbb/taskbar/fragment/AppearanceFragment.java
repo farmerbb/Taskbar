@@ -138,12 +138,16 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
                 dialog.show();
                 break;
             case "background_tint_pref":
+                U.cancelToast();
+
                 MainActivity activity = (MainActivity) getActivity();
 
                 colorDialog.setPickerColor(activity, activity.BACKGROUND_TINT, U.getBackgroundTint(activity));
                 colorDialog.showColorPicker(activity, activity.BACKGROUND_TINT);
                 break;
             case "accent_color_pref":
+                U.cancelToast();
+
                 MainActivity activity2 = (MainActivity) getActivity();
 
                 colorDialog.setPickerColor(activity2, activity2.ACCENT_COLOR, U.getAccentColor(activity2));

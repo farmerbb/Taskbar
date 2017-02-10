@@ -71,6 +71,7 @@ public class U {
 
     private static SharedPreferences pref;
     private static Integer cachedRotation;
+    private static ToastCompat toast;
 
     private static final int FULLSCREEN = 0;
     private static final int LEFT = -1;
@@ -167,7 +168,14 @@ public class U {
     }
 
     public static void showToast(Context context, String message, int length) {
-        ToastCompat.makeText(context, message, length).show();
+        cancelToast();
+
+        toast = ToastCompat.makeText(context, message, length);
+        toast.show();
+    }
+
+    public static void cancelToast() {
+        if(toast != null) toast.cancel();
     }
 
     public static void startShortcut(Context context, String packageName, String componentName, ShortcutInfo shortcut) {
