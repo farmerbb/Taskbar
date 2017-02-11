@@ -71,7 +71,6 @@ public class U {
 
     private static SharedPreferences pref;
     private static Integer cachedRotation;
-    private static ToastCompat toast;
 
     private static final int FULLSCREEN = 0;
     private static final int LEFT = -1;
@@ -170,11 +169,14 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        toast = ToastCompat.makeText(context, message, length);
+        ToastCompat toast = ToastCompat.makeText(context, message, length);
         toast.show();
+
+        ToastHelper.getInstance().setLastToast(toast);
     }
 
     public static void cancelToast() {
+        ToastCompat toast = ToastHelper.getInstance().getLastToast();
         if(toast != null) toast.cancel();
     }
 
