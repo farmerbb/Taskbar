@@ -169,7 +169,7 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        ToastCompat toast = ToastCompat.makeText(context, message, length);
+        ToastCompat toast = ToastCompat.makeText(context.getApplicationContext(), message, length);
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);
