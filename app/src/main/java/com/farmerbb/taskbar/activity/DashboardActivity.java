@@ -194,10 +194,12 @@ public class DashboardActivity extends Activity {
             } else if(requestCode == REQUEST_CREATE_APPWIDGET) {
                 createWidget(data);
             }
-        } else if(resultCode == RESULT_CANCELED && data != null) {
-            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            if(appWidgetId != -1) {
-                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+        } else if(resultCode == RESULT_CANCELED) {
+            if(data != null) {
+                int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+                if(appWidgetId != -1) {
+                    mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+                }
             }
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
