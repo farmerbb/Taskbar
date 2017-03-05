@@ -274,11 +274,11 @@
     <string name="refresh_frequency_singular">1 секунду</string>
     <string name="refresh_frequency_continuous">Постоянно</string>
 
-    <string name="power_button_warning_title">Caution</string>
-    <string name="power_button_warning_message">Custom ROMs based on CyanogenMod / LineageOS have an issue where the power button does not work while the device is in freeform mode.\n\nPlease test your power button now.  If it does not work, then exercise caution when using freeform mode as you may lose the ability to wake the device from sleep if the screen times out.</string>
-    <string name="action_i_understand">I understand</string>
+    <string name="power_button_warning_title">Внимание</string>
+    <string name="power_button_warning_message">Прошивки на основе CyanogenMod / LineageOS имеют проблему с выключением экрана. Проверьте это сейчас. Если не сработает, то помните, что вы не сможеье разблокировать устройство в режмие Freeform!</string>
+    <string name="action_i_understand">Понял!</string>
 
-    <string name="hide_taskbar_disclaimer">Does not apply to apps in freeform mode</string>
-    <string name="transparent_start_menu">Transparent start menu</string>
+    <string name="hide_taskbar_disclaimer">Не применяется к приложениям в режмие Freeform</string>
+    <string name="transparent_start_menu">Прозрачное меню запуска</string>
 
 </resources>
