@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.activity;
+package com.farmerbb.taskbar.activity.dark;
 
-public class DashboardActivityDark extends DashboardActivity {}
+import com.farmerbb.taskbar.activity.ClearDataActivity;
+
+public class ClearDataActivityDark extends ClearDataActivity {}

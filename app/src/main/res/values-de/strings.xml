@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Taskbar</string>
+    <string name="app_name_debug">Taskbar (Debug)</string>
+    <string name="debug_build">Debug build</string>
+
+    <string name="taskbar_is_active">Taskbar ist aktiv</string>
+    <string name="click_to_open_settings">Klocken, um Einstellungen zu öffnen</string>
+    <string name="action_show">Taskbar anzeigen</string>
+    <string name="action_hide">Taskbar verstecken</string>
+    <string name="action_quit">Beenden</string>
+    <string name="action_grant_permission">Zugriff erlauben</string>
+
+    <string name="permission_dialog_title">Zugriff nötig</string>
+    <string name="permission_dialog_message">Taskbar braucht die Berechtigung, über anderen Apps einblenden, um zu starten.\n\nBitte drücken Sie \"Zugriff erlauben\" und stellen Sie sicher, dass \"Über anderen Apps einblenden\" freigeschaltet ist.</string>
+
+    <string name="pref_header_general">Allgemeine Einstellungen</string>
+    <string name="pref_title_start_menu_layout">Startmenüansicht</string>
+    <string name="pref_title_background_tint">Hintrgrundfarbe</string>
+    <string name="pref_title_scrollbar">Scrollbar im Menü anzeigen</string>
+    <string name="pref_title_start_on_boot">Beim Hochfahren starten</string>
+
+    <string-array name="pref_start_menu_list">
+        <item>Liste</item>
+        <item>Gitter</item>
+    </string-array>
+
+    <string name="pref_header_recent_apps">Letzte Apps</string>
+
+    <string name="pref_title_enable_recents">Nutzungsdatenzugriff (de)aktivieren</string>
+    <string name="pref_title_recents_refresh_interval">Aktualisierungsrate</string>
+
+    <string name="pref_title_amount_of_recents">Anzahl der anzuzeigenden laufenden Apps</string>
+    <string-array name="pref_recents_amount">
+        <item>Seit dem letzten Tag</item>
+        <item>Nach dem Start von Taskbar</item>
+    </string-array>
+
+    <string name="pref_title_sort_order">Sortierungsreinfolge</string>
+    <string-array name="pref_sort_order">
+        <item>Zuletzt benutzt (absteigend)</item>
+        <item>Zuletzt genutzt (aufsteigend)</item>
+        <item>Am meisten genutzt</item>
+        <item>Am wenigsten genutzt</item>
+    </string-array>
+
+    <string name="pref_header_advanced">Fortgeschrittene Optionen</string>
+
+    <string name="pref_title_freeform_hack">Unterstützung des Freiform Modus</string>
+    <string name="pref_description_freeform_hack">Erlaubt Taskbar, Apps im Freifenstermodus zu starten, für ein Desktop-ähnlicheres Erlebnis.\n\nDiese Funktion ist experemintell und kann u.U. Probleme mit standart Split-Screen Multitasking veraursachen.</string>
+
+    <string name="pref_header_about">Über Taskbar</string>
+    <string name="pref_about_description">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; 2017 Braden Farmer\nApps Logo von Mark Morilla\n\nKlicken Sie hier um auf Updates zu überprüfen oder eine Bewertung geben! %1$s</string>
+
+    <string name="pref_title_hide_taskbar">Taskbar nach dem Auswählen der App verbergen</string>
+
+    <string name="pref_title_launcher">Launcher ersetzen</string>
+    <string name="pref_description_launcher">Taskbar als Homescreen verwenden</string>
+
+    <string name="set_wallpaper">Hintergrundbild festlegen mit&#8230;</string>
+    <string name="pref_disable_animations">Schnellerer Appwechsel</string>
+
+    <string name="pref_title_position">Position auf dem Bildschirm</string>
+    <string-array name="pref_position_list">
+        <item>Unten links (horizontal)</item>
+        <item>Unten links (vertikal)</item>
+        <item>Unten rechts (horizontal)</item>
+        <item>Unten rechts (vertikal)</item>
+        <item>Oben rechts (horizontal)</item>
+        <item>Oben links (vertikal)</item>
+        <item>Oben rechts (horizontal)</item>
+        <item>Oben rechts (vertikal)</item>
+    </string-array>
+
+    <string name="app_info">Infos zur App</string>
+    <string name="uninstall">Deinstallieren</string>
+    <string name="open_taskbar_settings">Einstellungen öffnen</string>
+    <string name="quit_taskbar">Beenden</string>
+
+    <string name="pref_title_keyboard_shortcut">Tastaturkürzel aktivieren</string>
+    <string name="pref_description_keyboard_shortcut">Taskbar starten / anhalten\n - Super + M / Suche + M\n\nGerät sperren\n - Super + L / Suche + L\n\nStartmenü anzeigen\n - Super / Suche\n(Muss in den Einstellungen als Suchassistent festgelegt werden)</string>
+    <string name="loading_apps">Apps werden geladen&#8230;</string>
+    <string name="press_enter">Keine Apps gefunden\n\nDrücken Sie Enter, um mit Google zu suchen</string>
+    <string name="nothing_to_see_here">Nichts zu sehen hier, gehen Sie weiter&#8230;</string>
+
+    <string name="error_dialog_title">Fehler</string>
+    <string name="error_dialog_message">Leider kann diese Option auf Ihrem Gerät wegen OEM Restriktionen nicht freigeschaltet werden.\n\nVielleicht können Sie aber sie durch folgenden den folgenden Befehl freigeben:\n\nappops set %1$s %2$s allow</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Abbruch</string>
+
+    <string name="pin_app">Zu Liste der letzten Apps anheften.</string>
+    <string name="unpin_app">Von der Liste der letzten Apps entfestigen</string>
+    <string name="block_app">Von der Liste der vorherigen Anwendungen fernhalten?</string>
+    <string name="unblock_app">In der Liste der letzten Apps freischalten</string>
+    <string name="clear_pinned_apps">Appeinstellungen zurücksetzen</string>
+
+    <string name="pref_title_hide_foreground">Symbol für Fordergrundapp verstecken</string>
+
+    <string name="pref_title_theme">Thema</string>
+    <string-array name="pref_theme_list">
+        <item>Hell</item>
+        <item>Dunkel</item>
+    </string-array>
+
+    <string name="device_admin_description_short">Erlaubt Taskbar den Bildschirm zu sperren</string>
+    <string name="device_admin_description">Erlaubt Taskbar den Bildschirm zu sperren.\n\nSie müssen Taskbar die Administratorrechte entziehen, um es deinstallieren zu können.</string>
+    <string name="lock_device_not_supported">Nicht auf diesem Gerät unterstützt</string>
+
+    <string name="pref_title_shortcut_icon">Kürzelsymbol für angeheftete Apps anzeigen</string>
+
+    <string name="freeform_dialog_title">Freiformunterstützung aktivieren</string>
+    <string name="freeform_dialog_message">Um Taskbar zu erlauben, Apps im Freiform Fenstermodus laufen zu lassen, befolgen Sie die folgenden Schritte:\n\n* Gehen Sie in die Enwickleroptionen\n\n* Scrollen Sie bis ganz nach unten und aktivieren Sie \"Applikatione  Zwingen, skalierbar zu sein\"\n\n* Starten Sie ihr Gerät neu.</string>
+
+    <string name="pref_title_invisible_button">Knopf ausblenden, wenn Taskbar versteckt ist</string>
+    <string name="pref_title_freeform_mode_help">Hilfe und Anleitung zum Frriform Modus</string>
+    <string name="freeform_help_dialog_title">Hilfe und Anleitungen</string>
+    <string name="freeform_help_dialog_message"><b>Über den Freiform Modus</b>\n\nMit Taskbar kannst du in Android 7.0 Apps in schwebenden Fenstern aufrufen, ganz ohne Root-Zugriff. Folgen Sie einfach den folgenden Anweisungen, um diesen freizuschalten:\n\n<b>1.</b> Überprüfen Sie, ob /\"Freiformfrnster/\" in Taskbar aktiviert ist.\n\n<b>2.</b> Folgen Sie den Anweisungen, die in dem Popup Fenster erscheinen, um die Option auf Ihrem Gerät zu aktivieren.\n\n<b>3.</b> Gehen Sie mit offenem Taskbar zu der Liste der letzten Apps.\n\n<b>4.</b> Leeren Sie alles und gehen Sie zurück zu der (leeren) Liste.\n\n<b>5.</b> Gehen Sie auf Taskbars Startknopf und wählen Sie eine App, um diese im Freiform Modus laufen zu lassen.\n\n<i>Bei Problemen gehen Sie auf die Hilfsseite.</i></string>
+
+    <string name="action_developer_options">Entwickleroptionen anzeigen</string>
+    <string name="action_close">Schließen</string>
+
+    <string name="pref_header_freeform">Freiform Modus</string>
+    <string name="pref_title_window_size">Standartfenstergröße</string>
+
+    <string name="window_size_standard">Standart</string>
+    <string name="window_size_fullscreen">Fullscreen</string>
+    <string name="window_size_phone_size">Größe des Geräts</string>
+    <string name="window_size_large">Groß</string>
+    <string name="window_size_half_left">@string/window_size_half_left_alt</string>
+    <string name="window_size_half_left_alt">Halber Bildschirm (links/oben)</string>
+    <string name="window_size_half_right">@string/window_size_half_right_alt</string>
+    <string name="window_size_half_right_alt">Halber Bildschirm (rechts/unten)</string>
+
+    <string name="pref_title_blacklist">Apps im Startmenü konfigurieren</string>
+    <string name="app_hidden">1 App versteckt</string>
+    <string name="apps_hidden">%1$d Apps versteckt</string>
+    <string name="blacklist_dialog_title">Versteckt</string>
+    <string name="top_app">Eine Top App</string>
+    <string name="top_apps">%1$d Top apps</string>
+    <string name="top_apps_dialog_title">Top Apps</string>
+    <string name="start_menu_apps">Apps im Startmenü</string>
+
+    <string name="reboot_required">Starten Sie Ihr Gerät neu, um den Freiform Modus abzuschließen</string>
+    <string name="enable_force_activities_resizable">Scrollen Sie auf zum Ende und aktivieren Sie \"Apps zwingen, skalierbar zu sein"</string>
+    <string name="set_as_default_home">Drücken Sie \"Immer\", um Taskbar als Ihren Standartlauncher festzulegen</string>
+    <string name="enable_developer_options">Aktivieren Sie die Entwickleroptionen, indem Sie sieben mal auf die build Nummer tippen</string>
+
+    <string name="pref_title_anchor">Taskbar bei Bildschirmrotationen anheften</string>
+    <string name="pref_title_donate">Spenden</string>
+    <string name="pref_summary_donate">Unterstützen Sie Taskbar, indem Sie auf die Spezialversion upgraten</string>
+    <string name="dialog_donate_message">Unterstützen Sie Taskbar, indem Sie zur Spezialversion für %1$s wechseln!\n\nDie Spezialversion ist identisch zu der, die Sie gerade benutzen und Ihre Einstellungen werden automatisch übernommen.\n\nTaskbar ist und wird auch immer 100%%ig frei, quelloffen und ohne Werbung sein. Deshalb ist Ihre Unterstützung sehr willkommen.</string>
+    <string name="action_no_thanks">Nein, danke</string>
+
+    <string name="importing_settings">Einstellungen werden importiert, bitte warten.</string>
+    <string name="settings_imported_successfully">Einstellungen erfolgreich importiert</string>
+    <string name="import_dialog_message">Danke für das Upgraten zu der Spezialversion von Taskbar!\n\nIhre Einstellungen wurden importiert und Sie können jetzt die freie Version deinstallieren.</string>
+    <string name="action_uninstall">Deinstallieren</string>
+
+    <string name="pref_title_hide_when_keyboard_shown">Taskbar automatisch verbergen</string>
+    <string name="pref_description_hide_when_keyboard_shown">Wen die Softwatetastatur aktiv ist</string>
+
+    <string name="pref_max_num_of_recents">Maximale Anzahl an den anzuzeigenden letzten Apps</string>
+
+    <string name="show_window_sizes">Neues Fenster&#8230;</string>
+
+    <string name="icon_pack">Icon Pack</string>
+    <string name="icon_pack_none">Nichts</string>
+    <string name="no_icon_packs_installed">Keine Iconpakete installiert</string>
+
+    <string name="apply_icon_pack">Iconpaket annehmen</string>
+    <string name="apply_icon_pack_description">"%1$s\" bei Taskbar annehmen?</string>
+    <string name="must_specify_extra">Intent.EXTRA_PACKAGE_NAME muss spezifiziert werden</string>
+    <string name="invalid_package_name">Ungültiger Paketname</string>
+
+    <string name="pref_title_use_mask">Masken für Themenlose icons anzeigen</string>
+    <string name="pref_description_use_mask">Kann die Leistung reduzieren, falls ein Icon Paket gesetzt ist.</string>
+
+    <string name="pref_title_app_drawer_icon">Das Logo von Taskbar als Menüknopf verwenden</string>
+
+    <string name="already_blacklisted">%1$s kann nicht ausgewählt werden, da es auf der Liste der verborgenen Apps ist.</string>
+    <string name="already_top_app">%1$s kann nicht ausgewählt werden, da es auf der Liste der top Apps ist.</string>
+
+    <string name="alt_button_config">Alternative Position für den Versteckknopf</string>
+    <string name="pref_title_open_in_fullscreen">Aus Fullscreenapps Fenster öffnen</string>
+    <string name="pref_description_open_in_fullscreen">Dazu muss der Freiform Modus mindestens ein mal initialisiert werden, nach dem Start von Taskbar. Wenn nicht aktiviert, werden freie Fenster nur im Freiform Desktop aufgerufen.</string>
+    <string name="pref_title_save_window_sizes">Fenstergrößen der Apps speichern</string>
+    <string name="pref_description_save_window_sizes">Wenn neue Fenster aus dem Kontextmenü geöffnet werden</string>
+
+    <string name="add_shortcut">Kürzel zum Hauptbildschirm hinzufügen</string>
+    <string name="shortcut_created">Freiform Modus Kürzel erstellt</string>
+
+    <string name="start_taskbar">Taskbar starten</string>
+    <string name="no_freeform_support">Freiform ist auf diesem Gerät nicht aktiviert - öffnen Sie Taskbar und aktivieren Sie es zuerst.</string>
+    <string name="enable_recent_apps">Taskbar kann optional die letzten Apps entlang der Kante ihres Bildschirms anzeigen. Dafür braucht Taskbar Nutzungsdatenzugriff.\n\nUnterstützung für letzte Apps aktivieren?</string>
+
+    <string name="disable_scrolling_list">Listenscrollen deaktivieren</string>
+
+    <string name="double_tap_to_sleep">Doppelklick zum Schlafen</string>
+    <string name="enable_double_tap_to_sleep">Doppelklick zum Schlafen aktivieren?</string>
+    <string name="action_dont_show_again">Nicht wieder anzeigen</string>
+
+    <string name="app_shortcuts">Mehr Optionen</string>
+
+    <string name="usage_stats_message">Bitte stellen Sie sicher, dass Taskbar auf \"An\" eingestellt ist</string>
+
+    <string name="volume">Lautstärke</string>
+    <string name="file_manager">Dateimanager</string>
+    <string name="system_settings">Systemeinstellungen</string>
+    <string name="lock_device">Gerät sperren</string>
+    <string name="power_menu">Energiemenü</string>
+
+    <string name="show_search_bar">Sichtbarkeit der Suchzeile</string>
+    <string-array name="pref_show_search_bar_list">
+        <item>Hardware- oder Bildschirmtastatur</item>
+        <item>Nur Hardwaretastatur</item>
+        <item>Nie die Suchleiste anzeigen</item>
+    </string-array>
+
+    <string name="clear_pba">Top/versteckte letzte Apps</string>
+    <string name="clear_hidden_apps">Startmenü - versteckte Apps</string>
+    <string name="clear_top_apps">Startmenü - Top Apps</string>
+    <string name="clear_window_sizes">Gespeicherte Fenstergrößen</string>
+    <string name="action_reset">Zurückseten</string>
+
+    <string name="tools">Werkzeuge</string>
+
+    <string name="enable_accessibility">Taskbar muss als Zugangshilfe akriviert werden, um das Powermenü anzuzeigen</string>
+    <string name="accessibility_service_description">Erlaubt, Taskbar das Ausschaltmenü anzuzeigen. \n\n(wird nicht für einen anderen Zweck verwendet)</string>
+
+    <string name="pref_title_force_new_window">Apps immer in neuen Fenstern öffnen</string>
+    <string name="pref_description_force_new_window">Erzwingt, wenn durch Taskbar aufgerufen, eine App in einem neuen Fenster zu öffnen (wenn diese es zulässt).</string>
+    <string name="change_wallpaper">Hintergrundbild ändern</string>
+
+    <string name="notification_settings">Systembenachrichtigungseinstellungen</string>
+
+    <string name="pref_header_appearance">Aussehen</string>
+    <string name="dashboard">Dashboard anzeigen</string>
+    <string name="dashboard_description">Fügt ein Knopf zu Taskbar hinzu, mit dem Widgets angezeigt werden können</string>
+    <string name="dashboard_grid_size">Dashboard Gittergröße</string>
+
+    <string name="click_to_add_widget">Klicken, um ein Widget hinzuzufügen</string>
+    <string name="remove_widget">Widget entfernen</string>
+    <string name="are_you_sure">Sind Sie sich sicher?</string>
+    <string name="dashboard_tutorial">Irgendwo klicken, um ein Widget zum Dashboard hinzuzufügen</string>
+
+    <string name="pref_title_accent_color">Hervorhebungsfarbe</string>
+    <string name="reset_colors">Farben zurücksetzen</string>
+
+    <string name="visual_feedback">Visuelle Rückmeldung, wenn ein Symbol gewählt wird</string>
+
+    <string name="num_of_recents_blurb">Überprüfen Sie, ob Datennutzungszugriff eingeschaltet ist, bevor Sie diese Einstellung aktivieren.\n\nHöhere Zahlen könnten die Leistung senken.</string>
+    <string name="max_num_of_recents">%1$d Apps</string>
+    <string name="max_num_of_recents_singular">Eine App</string>
+    <string name="max_num_of_recents_unlimited">Unbegrentzt</string>
+
+    <string name="refresh_frequency_blurb">Stellen Sie sicher, dass Nutzungsdatenzugriff aktiviert ist, bevor Sie diese Einstellung ändern.\n\nNiedige Werte werden die Auslastung erhöhen und die Batterielaufzeit senken.</string>
+    <string name="refresh_frequency">%1$s Sekunden</string>
+    <string name="refresh_frequency_singular">Eine Sekunde</string>
+    <string name="refresh_frequency_continuous">Kontinuierlich</string>
+
+    <string name="power_button_warning_title">Caution</string>
+    <string name="power_button_warning_message">Custom ROMs based on CyanogenMod / LineageOS have an issue where the power button does not work while the device is in freeform mode.\n\nPlease test your power button now.  If it does not work, then exercise caution when using freeform mode as you may lose the ability to wake the device from sleep if the screen times out.</string>
+    <string name="action_i_understand">I understand</string>
+
+    <string name="hide_taskbar_disclaimer">Does not apply to apps in freeform mode</string>
+    <string name="transparent_start_menu">Transparent start menu</string>
+
+</resources>

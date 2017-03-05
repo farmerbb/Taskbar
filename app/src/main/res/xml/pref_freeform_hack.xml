@@ -57,6 +57,6 @@
         android:key="freeform_mode_help"
         android:title="@string/pref_title_freeform_mode_help" />
 
-    <PreferenceCategory android:title="\n\n" />
+    <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

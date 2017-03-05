@@ -55,7 +55,8 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
-import com.farmerbb.taskbar.activity.DashboardActivityDark;
+import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
+import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -79,57 +80,33 @@ public class DashboardService extends Service {
     private int maxSize;
     private int previouslySelectedCell = -1;
 
-    private View.OnClickListener ocl = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            toggleDashboard();
-        }
+    private View.OnClickListener ocl = view -> toggleDashboard();
+
+    private View.OnClickListener cellOcl = view -> cellClick(view, true);
+
+    private View.OnHoverListener cellOhl = (v, event) -> {
+        cellClick(v, false);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            v.setPointerIcon(PointerIcon.getSystemIcon(DashboardService.this, PointerIcon.TYPE_DEFAULT));
+
+        return false;
     };
 
-    private View.OnClickListener cellOcl = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            cellClick(view, true);
-        }
+    private View.OnLongClickListener olcl = v -> {
+        cellLongClick(v);
+        return true;
     };
 
-    private View.OnHoverListener cellOhl = new View.OnHoverListener() {
-        @Override
-        public boolean onHover(View v, MotionEvent event) {
-            cellClick(v, false);
+    private View.OnGenericMotionListener ogml = (view, motionEvent) -> {
+        if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
+            cellLongClick(view);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                v.setPointerIcon(PointerIcon.getSystemIcon(DashboardService.this, PointerIcon.TYPE_DEFAULT));
-
-            return false;
-        }
+        return false;
     };
 
-    private View.OnLongClickListener olcl = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            cellLongClick(v);
-            return true;
-        }
-    };
-
-    private View.OnGenericMotionListener ogml = new View.OnGenericMotionListener() {
-        @Override
-        public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-            if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
-                cellLongClick(view);
-
-            return false;
-        }
-    };
-
-    private DashboardCell.OnInterceptedLongPressListener listener = new DashboardCell.OnInterceptedLongPressListener() {
-        @Override
-        public void onInterceptedLongPress(DashboardCell cell) {
-            cellLongClick(cell);
-        }
-    };
+    private DashboardCell.OnInterceptedLongPressListener listener = this::cellLongClick;
 
     private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
@@ -297,29 +274,26 @@ public class DashboardService extends Service {
 
         windowManager.addView(layout, params);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int paddingSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
+        new Handler().postDelayed(() -> {
+            int paddingSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
 
-                switch(U.getTaskbarPosition(DashboardService.this)) {
-                    case "top_vertical_left":
-                    case "bottom_vertical_left":
-                        layout.setPadding(paddingSize, 0, 0, 0);
-                        break;
-                    case "top_left":
-                    case "top_right":
-                        layout.setPadding(0, paddingSize, 0, 0);
-                        break;
-                    case "top_vertical_right":
-                    case "bottom_vertical_right":
-                        layout.setPadding(0, 0, paddingSize, 0);
-                        break;
-                    case "bottom_left":
-                    case "bottom_right":
-                        layout.setPadding(0, 0, 0, paddingSize);
-                        break;
-                }
+            switch(U.getTaskbarPosition(DashboardService.this)) {
+                case "top_vertical_left":
+                case "bottom_vertical_left":
+                    layout.setPadding(paddingSize, 0, 0, 0);
+                    break;
+                case "top_left":
+                case "top_right":
+                    layout.setPadding(0, paddingSize, 0, 0);
+                    break;
+                case "top_vertical_right":
+                case "bottom_vertical_right":
+                    layout.setPadding(0, 0, paddingSize, 0);
+                    break;
+                case "bottom_left":
+                case "bottom_right":
+                    layout.setPadding(0, 0, 0, paddingSize);
+                    break;
             }
         }, 100);
     }
@@ -372,15 +346,12 @@ public class DashboardService extends Service {
                 if(hostView != null) {
                     try {
                         getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
-                        hostView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ViewGroup.LayoutParams params = hostView.getLayoutParams();
-                                params.width = cellLayout.getWidth();
-                                params.height = cellLayout.getHeight();
-                                hostView.setLayoutParams(params);
-                                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
-                            }
+                        hostView.post(() -> {
+                            ViewGroup.LayoutParams params = hostView.getLayoutParams();
+                            params.width = cellLayout.getWidth();
+                            params.height = cellLayout.getHeight();
+                            hostView.setLayoutParams(params);
+                            hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
                         });
                     } catch (PackageManager.NameNotFoundException | NullPointerException e) {
                         removeWidget(i);
@@ -412,6 +383,8 @@ public class DashboardService extends Service {
     private void fadeIn() {
         mAppWidgetHost.startListening();
 
+        DashboardHelper.getInstance().setDashboardOpen(true);
+
         layout.setVisibility(View.VISIBLE);
         layout.animate()
                 .alpha(1)
@@ -421,6 +394,8 @@ public class DashboardService extends Service {
 
     private void fadeOut(final boolean sendIntent) {
         mAppWidgetHost.stopListening();
+
+        DashboardHelper.getInstance().setDashboardOpen(false);
 
         layout.animate()
                 .alpha(0)
@@ -539,15 +514,12 @@ public class DashboardService extends Service {
             pref.edit().putInt("dashboard_widget_" + Integer.toString(cellId), appWidgetId).apply();
         }
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.LayoutParams params = hostView.getLayoutParams();
-                params.width = cellLayout.getWidth();
-                params.height = cellLayout.getHeight();
-                hostView.setLayoutParams(params);
-                hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
-            }
+        new Handler().post(() -> {
+            ViewGroup.LayoutParams params = hostView.getLayoutParams();
+            params.width = cellLayout.getWidth();
+            params.height = cellLayout.getHeight();
+            hostView.setLayoutParams(params);
+            hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
         });
     }
 

@@ -47,10 +47,10 @@ import android.view.WindowManager;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
-import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
@@ -69,16 +69,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean isStartButton = false;
     boolean isOverflowMenu = false;
     boolean secondaryMenu = false;
+    boolean dashboardOrStartMenuAppearing = false;
 
     List<ShortcutInfo> shortcuts;
 
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(LauncherHelper.getInstance().isOnHomeScreen()
-                    && !FreeformHackHelper.getInstance().isFreeformHackActive()
-                    && !showStartMenu)
-                finish();
+            dashboardOrStartMenuAppearing = true;
+            finish();
         }
     };
 
@@ -197,7 +196,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         generateMenu();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
+        intentFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, intentFilter);
     }
 
     @SuppressWarnings("deprecation")
@@ -231,7 +234,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("lock_device").setOnPreferenceClickListener(this);
             findPreference("power_menu").setOnPreferenceClickListener(this);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 findPreference("file_manager").setOnPreferenceClickListener(this);
         } else {
             appName = getIntent().getStringExtra("app_name");
@@ -521,9 +524,16 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 shouldHideTaskbar = true;
                 break;
             case "file_manager":
-                startFreeformActivity();
+                Intent fileManagerIntent;
 
-                Intent fileManagerIntent = new Intent("android.provider.action.BROWSE");
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    startFreeformActivity();
+                    fileManagerIntent = new Intent("android.provider.action.BROWSE");
+                } else {
+                    fileManagerIntent = new Intent("android.provider.action.BROWSE_DOCUMENT_ROOT");
+                    fileManagerIntent.setComponent(ComponentName.unflattenFromString("com.android.documentsui/.DocumentsActivity"));
+                }
+
                 fileManagerIntent.addCategory(Intent.CATEGORY_DEFAULT);
                 fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
@@ -586,12 +596,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     public void finish() {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING"));
 
-        if(showStartMenu)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
-        else if(shouldHideTaskbar) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+        if(!dashboardOrStartMenuAppearing) {
+            if(showStartMenu)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
+            else if(shouldHideTaskbar) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+            }
         }
 
         super.finish();

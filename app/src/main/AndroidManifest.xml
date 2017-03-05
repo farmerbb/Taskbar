@@ -24,6 +24,9 @@
     <permission android:name="${applicationId}.SEND_RECEIVE_SETTINGS"
         android:protectionLevel="signature" />
 
+    <permission android:name="${applicationId}.ENABLE_DISABLE_HOME"
+        android:protectionLevel="signatureOrSystem" />
+
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -73,6 +76,12 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Incognito"/>
         <activity
+            android:name=".activity.dark.InvisibleActivityAltDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
+        <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
@@ -115,7 +124,7 @@
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Dialog"/>
         <activity
-            android:name=".activity.ContextMenuActivityDark"
+            android:name=".activity.dark.ContextMenuActivityDark"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Dialog.Dark"/>
@@ -123,7 +132,7 @@
             android:name=".activity.SelectAppActivity"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
         <activity
-            android:name=".activity.SelectAppActivityDark"
+            android:name=".activity.dark.SelectAppActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DummyActivity"
@@ -137,7 +146,7 @@
             android:name=".activity.IconPackActivity"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
         <activity
-            android:name=".activity.IconPackActivityDark"
+            android:name=".activity.dark.IconPackActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.IconPackApplyActivity"
@@ -168,16 +177,24 @@
         </activity>
         <activity
             android:name=".activity.StartTaskbarActivity"
+            android:label="@string/start_taskbar"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:enabled="false"
+            android:enabled="true"
             android:theme="@android:style/Theme.NoDisplay"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.ClearDataActivity"
             android:theme="@style/AppTheme.Dialog.Blacklist"/>
         <activity
-            android:name=".activity.ClearDataActivityDark"
+            android:name=".activity.dark.ClearDataActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DashboardActivity"
@@ -186,7 +203,7 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Incognito"/>
         <activity
-            android:name=".activity.DashboardActivityDark"
+            android:name=".activity.dark.DashboardActivityDark"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
@@ -206,6 +223,17 @@
             </intent-filter>
             <meta-data android:name="android.accessibilityservice"
                        android:resource="@xml/accessibility_service" />
+        </service>
+        <service
+            android:name=".service.QuickSettingsTileService"
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_allapps"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+                       android:value="true" />
         </service>
 
         <receiver
@@ -286,6 +314,24 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
                 <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.EnableHomeReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="${applicationId}.ENABLE_DISABLE_HOME" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.ENABLE_HOME"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.DisableHomeReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="${applicationId}.ENABLE_DISABLE_HOME" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.DISABLE_HOME"/>
             </intent-filter>
         </receiver>
 

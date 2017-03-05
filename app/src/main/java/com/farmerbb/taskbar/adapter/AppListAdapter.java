@@ -1,3 +1,18 @@
+/* Copyright 2016 Braden Farmer
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.farmerbb.taskbar.adapter;
 
 import android.content.Context;
@@ -63,23 +78,20 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         checkBox.setChecked(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt));
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
-                    U.showToast(getContext(),
-                            getContext().getString(R.string.already_top_app, entry.getLabel()),
-                            Toast.LENGTH_LONG);
-                } else if(blacklist.isBlocked(componentName)) {
-                    blacklist.removeBlockedApp(getContext(), componentName);
-                    checkBox.setChecked(false);
-                } else if(blacklist.isBlocked(componentNameAlt)) {
-                    blacklist.removeBlockedApp(getContext(), componentNameAlt);
-                    checkBox.setChecked(false);
-                } else {
-                    blacklist.addBlockedApp(getContext(), entry);
-                    checkBox.setChecked(true);
-                }
+        layout.setOnClickListener(view -> {
+            if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
+                U.showToast(getContext(),
+                        getContext().getString(R.string.already_top_app, entry.getLabel()),
+                        Toast.LENGTH_LONG);
+            } else if(blacklist.isBlocked(componentName)) {
+                blacklist.removeBlockedApp(getContext(), componentName);
+                checkBox.setChecked(false);
+            } else if(blacklist.isBlocked(componentNameAlt)) {
+                blacklist.removeBlockedApp(getContext(), componentNameAlt);
+                checkBox.setChecked(false);
+            } else {
+                blacklist.addBlockedApp(getContext(), entry);
+                checkBox.setChecked(true);
             }
         });
     }
@@ -98,23 +110,20 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         checkBox.setChecked(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt));
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
-                    U.showToast(getContext(),
-                            getContext().getString(R.string.already_blacklisted, entry.getLabel()),
-                            Toast.LENGTH_LONG);
-                } else if(topApps.isTopApp(componentName)) {
-                    topApps.removeTopApp(getContext(), componentName);
-                    checkBox.setChecked(false);
-                } else if(topApps.isTopApp(componentNameAlt)) {
-                    topApps.removeTopApp(getContext(), componentNameAlt);
-                    checkBox.setChecked(false);
-                } else {
-                    topApps.addTopApp(getContext(), entry);
-                    checkBox.setChecked(true);
-                }
+        layout.setOnClickListener(view -> {
+            if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
+                U.showToast(getContext(),
+                        getContext().getString(R.string.already_blacklisted, entry.getLabel()),
+                        Toast.LENGTH_LONG);
+            } else if(topApps.isTopApp(componentName)) {
+                topApps.removeTopApp(getContext(), componentName);
+                checkBox.setChecked(false);
+            } else if(topApps.isTopApp(componentNameAlt)) {
+                topApps.removeTopApp(getContext(), componentNameAlt);
+                checkBox.setChecked(false);
+            } else {
+                topApps.addTopApp(getContext(), entry);
+                checkBox.setChecked(true);
             }
         });
     }

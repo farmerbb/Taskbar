@@ -1,4 +1,4 @@
-﻿Taskbar puts a start menu and recent apps tray on top of your screen that's accessible at any time, increasing your productivity and turning your Android tablet (or phone) into a real multitasking machine!<br><br>On devices running Android 7.0 Nougat, Taskbar can also launch apps in freeform windows for a PC-like experience!  No root required!  (see below for instructions)<br><br>Also works great as an Android app launcher for Chromebooks! (Be sure to set your Chrome OS shelf to autohide)
+﻿Taskbar puts a start menu and recent apps tray on top of your screen that's accessible at any time, increasing your productivity and turning your Android tablet (or phone) into a real multitasking machine!<br><br>On devices running Android 7.0+ (Nougat), Taskbar can also launch apps in freeform windows for a PC-like experience!  No root required!  (see below for instructions)<br><br>Also works great as an Android app launcher for Chromebooks! (Be sure to set your Chrome OS shelf to autohide)
 
 ## Features
 * Start menu - shows you all applications installed on the device, configurable as a list or as a grid
@@ -9,9 +9,9 @@
 * Designed with keyboard and mouse in mind
 * 100% free, open source, and no ads
 
-#### Freeform window mode (Android 7.0 Nougat)
+#### Freeform window mode (Android 7.0+)
 
-Taskbar lets you launch apps in freeform floating windows on Android 7.0 Nougat.  No root access is required.  Simply follow these steps to configure your device for launching apps in freeform mode:
+Taskbar lets you launch apps in freeform floating windows on Android 7.0+ (Nougat).  No root access is required.  Simply follow these steps to configure your device for launching apps in freeform mode:
 
 1. Check the box for "Freeform window support" inside the Taskbar app
 2. Follow the directions that appear in the pop-up to enable the proper settings on your device
@@ -32,7 +32,7 @@ Prerequisites:
 * JDK 8
 * Internet connection (to download dependencies)
 
-Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK files "app-free-debug.apk" and "app-paid-debug.apk", ready to install on your Android device.
+Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK file "app-free-debug.apk", ready to install on your Android device.
 
 ## Icon Pack Support
 Taskbar includes support for ADW-style icon packs.  If you are an icon pack developer and would like to include support for applying the icon pack from within your app, simply use the following code:
@@ -45,3 +45,4 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
 * Mark Morilla (app logo) (https://plus.google.com/106169552593075739372)
 * naofum (Japanese translation)
 * HardSer (Russian translation)
+* OfficialMITX (German translation)

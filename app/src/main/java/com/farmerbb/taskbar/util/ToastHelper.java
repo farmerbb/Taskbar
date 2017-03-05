@@ -1,4 +1,4 @@
-/* Copyright 2016 Braden Farmer
+/* Copyright 2017 Braden Farmer
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,29 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.activity;
+package com.farmerbb.taskbar.util;
 
-public class SelectAppActivityDark extends SelectAppActivity {}
+import moe.banana.support.ToastCompat;
+
+class ToastHelper {
+
+    private ToastCompat lastToast;
+
+    private static ToastHelper theInstance;
+
+    private ToastHelper() {}
+
+    public static ToastHelper getInstance() {
+        if(theInstance == null) theInstance = new ToastHelper();
+
+        return theInstance;
+    }
+
+    ToastCompat getLastToast() {
+        return lastToast;
+    }
+
+    void setLastToast(ToastCompat lastToast) {
+        this.lastToast = lastToast;
+    }
+}

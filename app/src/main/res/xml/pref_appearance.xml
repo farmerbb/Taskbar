@@ -14,8 +14,7 @@
      limitations under the License.
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:defaultValue="light"
@@ -62,6 +61,11 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:key="transparent_start_menu"
+        android:title="@string/transparent_start_menu"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
         android:key="icon_pack_use_mask"
         android:title="@string/pref_title_use_mask"
         android:summary="@string/pref_description_use_mask" />
@@ -70,6 +74,6 @@
         android:key="reset_colors"
         android:title="@string/reset_colors" />
 
-    <PreferenceCategory android:title="\n\n" />
+    <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

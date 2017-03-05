@@ -5,3 +5,5 @@
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
 }
+
+-dontwarn java.lang.invoke.*

@@ -64,7 +64,6 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import android.support.v4.content.LocalBroadcastManager;
@@ -75,7 +74,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.ContextMenuActivityDark;
+import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
@@ -125,12 +124,9 @@ public class TaskbarService extends Service {
     private List<String> currentTaskbarIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
 
-    private View.OnClickListener ocl = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
-            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
-        }
+    private View.OnClickListener ocl = view -> {
+        Intent intent = new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
+        LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
     };
 
     private BroadcastReceiver showReceiver = new BroadcastReceiver() {
@@ -279,12 +275,7 @@ public class TaskbarService extends Service {
             layout.findViewById(R.id.space_alt).setVisibility(View.GONE);
         }
 
-        space.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleTaskbar();
-            }
-        });
+        space.setOnClickListener(v -> toggleTaskbar());
 
         startButton = (ImageView) layout.findViewById(R.id.start_button);
         int padding;
@@ -299,23 +290,17 @@ public class TaskbarService extends Service {
 
         startButton.setPadding(padding, padding, padding, padding);
         startButton.setOnClickListener(ocl);
-        startButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                openContextMenu();
-                return true;
-            }
+        startButton.setOnLongClickListener(view -> {
+            openContextMenu();
+            return true;
         });
 
-        startButton.setOnGenericMotionListener(new View.OnGenericMotionListener() {
-            @Override
-            public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
-                    openContextMenu();
+        startButton.setOnGenericMotionListener((view, motionEvent) -> {
+            if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
+                openContextMenu();
 
-                return false;
-            }
+            return false;
         });
 
         refreshInterval = (int) (Float.parseFloat(pref.getString("refresh_frequency", "2")) * 1000);
@@ -354,22 +339,12 @@ public class TaskbarService extends Service {
         } catch (RuntimeException e) { /* Gracefully fail */ }
 
         updateButton(false);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleTaskbar();
-            }
-        });
+        button.setOnClickListener(v -> toggleTaskbar());
 
         LinearLayout buttonLayout = (LinearLayout) layout.findViewById(altButtonConfig
                 ? R.id.hide_taskbar_button_layout_alt
                 : R.id.hide_taskbar_button_layout);
-        if(buttonLayout != null) buttonLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleTaskbar();
-            }
-        });
+        if(buttonLayout != null) buttonLayout.setOnClickListener(v -> toggleTaskbar());
 
         LinearLayout buttonLayoutToHide = (LinearLayout) layout.findViewById(altButtonConfig
                 ? R.id.hide_taskbar_button_layout
@@ -390,12 +365,7 @@ public class TaskbarService extends Service {
             layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
-            dashboardButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
-                }
-            });
+            dashboardButton.setOnClickListener(v -> LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD")));
         } else
             dashboardButton.setVisibility(View.GONE);
 
@@ -448,23 +418,20 @@ public class TaskbarService extends Service {
                         updateRecentApps(false);
 
                         if(showHideAutomagically && !positionIsVertical && !StartMenuHelper.getInstance().isStartMenuOpen())
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(layout != null) {
-                                        int[] location = new int[2];
-                                        layout.getLocationOnScreen(location);
+                            handler.post(() -> {
+                                if(layout != null) {
+                                    int[] location = new int[2];
+                                    layout.getLocationOnScreen(location);
 
-                                        if(location[1] != 0) {
-                                            if(location[1] > currentTaskbarPosition) {
+                                    if(location[1] != 0) {
+                                        if(location[1] > currentTaskbarPosition) {
+                                            currentTaskbarPosition = location[1];
+                                        } else if(location[1] < currentTaskbarPosition) {
+                                            if(currentTaskbarPosition - location[1] == getNavBarSize())
                                                 currentTaskbarPosition = location[1];
-                                            } else if(location[1] < currentTaskbarPosition) {
-                                                if(currentTaskbarPosition - location[1] == getNavBarSize())
-                                                    currentTaskbarPosition = location[1];
-                                                else if(!startThread2) {
-                                                    startThread2 = true;
-                                                    tempHideTaskbar(true);
-                                                }
+                                            else if(!startThread2) {
+                                                startThread2 = true;
+                                                tempHideTaskbar(true);
                                             }
                                         }
                                     }
@@ -480,6 +447,7 @@ public class TaskbarService extends Service {
         thread.start();
     }
 
+    @SuppressWarnings("Convert2streamapi")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private void updateRecentApps(final boolean firstRefresh) {
         final PackageManager pm = getPackageManager();
@@ -510,7 +478,7 @@ public class TaskbarService extends Service {
         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         List<UsageStats> usageStatsList = realNumOfPinnedApps < maxNumOfEntries
                 ? mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis())
-                : new ArrayList<UsageStats>();
+                : new ArrayList<>();
 
         if(usageStatsList.size() > 0 || realNumOfPinnedApps > 0) {
             if(realNumOfPinnedApps < maxNumOfEntries) {
@@ -541,19 +509,9 @@ public class TaskbarService extends Service {
 
                 // Sort apps by either most recently used, or most time used
                 if(sortOrder.contains("most_used")) {
-                    Collections.sort(usageStatsList3, new Comparator<UsageStats>() {
-                        @Override
-                        public int compare(UsageStats us1, UsageStats us2) {
-                            return Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground());
-                        }
-                    });
+                    Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground()));
                 } else {
-                    Collections.sort(usageStatsList3, new Comparator<UsageStats>() {
-                        @Override
-                        public int compare(UsageStats us1, UsageStats us2) {
-                            return Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed());
-                        }
-                    });
+                    Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed()));
                 }
 
                 // Filter out any duplicate entries
@@ -737,87 +695,78 @@ public class TaskbarService extends Service {
 
                 final int numOfEntries = Math.min(entries.size(), maxNumOfEntries);
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(numOfEntries > 0) {
-                            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-                            DisplayMetrics metrics = getResources().getDisplayMetrics();
+                handler.post(() -> {
+                    if(numOfEntries > 0) {
+                        ViewGroup.LayoutParams params = scrollView.getLayoutParams();
+                        DisplayMetrics metrics = getResources().getDisplayMetrics();
 
-                            if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
-                                float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
+                        if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
+                            float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
 
-                                params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                        maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
-                                        + getResources().getDimensionPixelSize(R.dimen.divider_size);
-                            } else {
-                                float maxScreenSize = metrics.widthPixels;
-
-                                params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                        maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
-                                        + getResources().getDimensionPixelSize(R.dimen.divider_size);
-                            }
-
-                            scrollView.setLayoutParams(params);
-
-                            taskbar.removeAllViews();
-                            for(int i = 0; i < entries.size(); i++) {
-                                taskbar.addView(getView(entries, i));
-                            }
-
-                            isShowingRecents = true;
-                            if(shouldRefreshRecents && scrollView.getVisibility() != View.VISIBLE) {
-                                if(firstRefresh)
-                                    scrollView.setVisibility(View.INVISIBLE);
-                                else
-                                    scrollView.setVisibility(View.VISIBLE);
-                            }
-
-                            if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
-                                new Handler().post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        switch(U.getTaskbarPosition(TaskbarService.this)) {
-                                            case "bottom_left":
-                                            case "bottom_right":
-                                            case "top_left":
-                                            case "top_right":
-                                                if(sortOrder.contains("false"))
-                                                    scrollView.scrollTo(0, 0);
-                                                else if(sortOrder.contains("true"))
-                                                    scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
-                                                break;
-                                            case "bottom_vertical_left":
-                                            case "bottom_vertical_right":
-                                            case "top_vertical_left":
-                                            case "top_vertical_right":
-                                                if(sortOrder.contains("false"))
-                                                    scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
-                                                else if(sortOrder.contains("true"))
-                                                    scrollView.scrollTo(0, 0);
-                                                break;
-                                        }
-
-                                        if(shouldRefreshRecents) {
-                                            scrollView.setVisibility(View.VISIBLE);
-                                        }
-                                    }
-                                });
+                            params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
+                                    maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
+                                    + getResources().getDimensionPixelSize(R.dimen.divider_size);
                         } else {
-                            isShowingRecents = false;
-                            scrollView.setVisibility(View.GONE);
+                            float maxScreenSize = metrics.widthPixels;
+
+                            params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
+                                    maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
+                                    + getResources().getDimensionPixelSize(R.dimen.divider_size);
                         }
+
+                        scrollView.setLayoutParams(params);
+
+                        taskbar.removeAllViews();
+                        for(int i = 0; i < entries.size(); i++) {
+                            taskbar.addView(getView(entries, i));
+                        }
+
+                        isShowingRecents = true;
+                        if(shouldRefreshRecents && scrollView.getVisibility() != View.VISIBLE) {
+                            if(firstRefresh)
+                                scrollView.setVisibility(View.INVISIBLE);
+                            else
+                                scrollView.setVisibility(View.VISIBLE);
+                        }
+
+                        if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
+                            new Handler().post(() -> {
+                                switch(U.getTaskbarPosition(TaskbarService.this)) {
+                                    case "bottom_left":
+                                    case "bottom_right":
+                                    case "top_left":
+                                    case "top_right":
+                                        if(sortOrder.contains("false"))
+                                            scrollView.scrollTo(0, 0);
+                                        else if(sortOrder.contains("true"))
+                                            scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
+                                        break;
+                                    case "bottom_vertical_left":
+                                    case "bottom_vertical_right":
+                                    case "top_vertical_left":
+                                    case "top_vertical_right":
+                                        if(sortOrder.contains("false"))
+                                            scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
+                                        else if(sortOrder.contains("true"))
+                                            scrollView.scrollTo(0, 0);
+                                        break;
+                                }
+
+                                if(shouldRefreshRecents) {
+                                    scrollView.setVisibility(View.VISIBLE);
+                                }
+                            });
+                    } else {
+                        isShowingRecents = false;
+                        scrollView.setVisibility(View.GONE);
                     }
                 });
             }
         } else if(firstRefresh || currentTaskbarIds.size() > 0) {
             currentTaskbarIds.clear();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    isShowingRecents = false;
-                    scrollView.setVisibility(View.GONE);
-                }
+            handler.post(() -> {
+                isShowingRecents = false;
+                scrollView.setVisibility(View.GONE);
             });
         }
     }
@@ -913,12 +862,7 @@ public class TaskbarService extends Service {
                     while(!stopThread2) {
                         SystemClock.sleep(refreshInterval);
 
-                        handler2.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                stopThread2 = checkPositionChange();
-                            }
-                        });
+                        handler2.post(() -> stopThread2 = checkPositionChange());
                     }
 
                     startThread2 = false;
@@ -1074,68 +1018,51 @@ public class TaskbarService extends Service {
         }
 
         FrameLayout layout = (FrameLayout) convertView.findViewById(R.id.entry);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(TaskbarService.this), null, true, false);
-            }
+        layout.setOnClickListener(view -> U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(TaskbarService.this), null, true, false));
+
+        layout.setOnLongClickListener(view -> {
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            openContextMenu(entry, location);
+            return true;
         });
 
-        layout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
+        layout.setOnGenericMotionListener((view, motionEvent) -> {
+            int action = motionEvent.getAction();
+
+            if(action == MotionEvent.ACTION_BUTTON_PRESS
+                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                 int[] location = new int[2];
                 view.getLocationOnScreen(location);
                 openContextMenu(entry, location);
-                return true;
             }
-        });
 
-        layout.setOnGenericMotionListener(new View.OnGenericMotionListener() {
-            @Override
-            public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                int action = motionEvent.getAction();
+            if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean("visual_feedback", true))
+                view.setBackgroundColor(0);
 
-                if(action == MotionEvent.ACTION_BUTTON_PRESS
-                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                    int[] location = new int[2];
-                    view.getLocationOnScreen(location);
-                    openContextMenu(entry, location);
-                }
-
-                if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean("visual_feedback", true))
-                    view.setBackgroundColor(0);
-
-                return false;
-            }
+            return false;
         });
 
         if(pref.getBoolean("visual_feedback", true)) {
-            layout.setOnHoverListener(new View.OnHoverListener() {
-                @Override
-                public boolean onHover(View v, MotionEvent event) {
-                    if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
-                        int accentColor = U.getAccentColor(TaskbarService.this);
-                        accentColor = ColorUtils.setAlphaComponent(accentColor, Color.alpha(accentColor) / 2);
-                        v.setBackgroundColor(accentColor);
-                    }
-
-                    if(event.getAction() == MotionEvent.ACTION_HOVER_EXIT)
-                        v.setBackgroundColor(0);
-
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                        v.setPointerIcon(PointerIcon.getSystemIcon(TaskbarService.this, PointerIcon.TYPE_DEFAULT));
-
-                    return false;
+            layout.setOnHoverListener((v, event) -> {
+                if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
+                    int accentColor = U.getAccentColor(TaskbarService.this);
+                    accentColor = ColorUtils.setAlphaComponent(accentColor, Color.alpha(accentColor) / 2);
+                    v.setBackgroundColor(accentColor);
                 }
+
+                if(event.getAction() == MotionEvent.ACTION_HOVER_EXIT)
+                    v.setBackgroundColor(0);
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    v.setPointerIcon(PointerIcon.getSystemIcon(TaskbarService.this, PointerIcon.TYPE_DEFAULT));
+
+                return false;
             });
 
-            layout.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
-                    return false;
-                }
+            layout.setOnTouchListener((v, event) -> {
+                v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
+                return false;
             });
         }
 

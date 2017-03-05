@@ -42,6 +42,6 @@
         android:key="clear_pinned_apps"
         android:title="@string/clear_pinned_apps"/>
 
-    <PreferenceCategory android:title="\n\n" />
+    <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

@@ -26,9 +26,9 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -40,6 +40,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.DashboardHelper;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class DashboardActivity extends Activity {
@@ -51,6 +53,7 @@ public class DashboardActivity extends Activity {
     private final int REQUEST_CREATE_APPWIDGET = 789;
 
     private boolean shouldFinish = true;
+    private boolean shouldCollapse = true;
     private int cellId = -1;
 
     private BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
@@ -83,23 +86,17 @@ public class DashboardActivity extends Activity {
             AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
             builder.setTitle(R.string.remove_widget)
                     .setMessage(R.string.are_you_sure)
-                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+                    .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
+                        LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
 
-                            shouldFinish = true;
-                        }
+                        shouldFinish = true;
                     })
-                    .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
-                            intent.putExtra("cellId", cellId);
-                            LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent);
+                    .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                        Intent intent1 = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
+                        intent1.putExtra("cellId", cellId);
+                        LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent1);
 
-                            shouldFinish = true;
-                        }
+                        shouldFinish = true;
                     });
 
             AlertDialog dialog = builder.create();
@@ -113,6 +110,7 @@ public class DashboardActivity extends Activity {
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            shouldCollapse = false;
             finish();
         }
     };
@@ -137,6 +135,8 @@ public class DashboardActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED"));
         LocalBroadcastManager.getInstance(this).registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED"));
         LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+
+        if(!DashboardHelper.getInstance().isDashboardOpen()) finish();
     }
 
     @Override
@@ -164,8 +164,17 @@ public class DashboardActivity extends Activity {
     protected void onPause() {
         super.onPause();
 
-        if(shouldFinish)
+        if(shouldFinish) {
+            if(shouldCollapse) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                else
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            }
+
             onBackPressed();
+        }
     }
 
     @Override
@@ -185,10 +194,12 @@ public class DashboardActivity extends Activity {
             } else if(requestCode == REQUEST_CREATE_APPWIDGET) {
                 createWidget(data);
             }
-        } else if(resultCode == RESULT_CANCELED && data != null) {
-            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            if(appWidgetId != -1) {
-                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+        } else if(resultCode == RESULT_CANCELED) {
+            if(data != null) {
+                int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+                if(appWidgetId != -1) {
+                    mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+                }
             }
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));

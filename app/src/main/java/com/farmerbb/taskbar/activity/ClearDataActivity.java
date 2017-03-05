@@ -71,23 +71,20 @@ public class ClearDataActivity extends AppCompatActivity {
         
         button = (Button) findViewById(R.id.button);
         button.setText(getResources().getString(R.string.action_close).toUpperCase());
-        button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(pba.isChecked())
-                        PinnedBlockedApps.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
+        button.setOnClickListener(view -> {
+            if(pba.isChecked())
+                PinnedBlockedApps.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
 
-                    if(hiddenApps.isChecked())
-                        Blacklist.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
-                        
-                    if(topApps.isChecked())
-                        TopApps.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
-                   
-                    if(savedWindowSizes.isChecked())
-                        SavedWindowSizes.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
-                        
-                    finish();
-                }
-            });
+            if(hiddenApps.isChecked())
+                Blacklist.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
+
+            if(topApps.isChecked())
+                TopApps.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
+
+            if(savedWindowSizes.isChecked())
+                SavedWindowSizes.getInstance(ClearDataActivity.this).clear(ClearDataActivity.this);
+
+            finish();
+        });
     }
 }

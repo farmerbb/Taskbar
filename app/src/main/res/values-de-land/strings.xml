@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2016 Braden Farmer
+<!-- Copyright 2017 Braden Farmer
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 <resources>
 
-    <string name="window_size_half_left">ハーフ画面 (左)</string>
-    <string name="window_size_half_right">ハーフ画面 (右)</string>
+    <string name="window_size_half_left">@string/window_size_half_left_alt</string>
+    <string name="window_size_half_right">@string/window_size_half_right_alt</string>
 
 </resources>

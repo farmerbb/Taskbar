@@ -21,7 +21,6 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -85,30 +84,19 @@ public class HomeActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         View view = new View(this);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-            }
+        view.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
+
+        view.setOnLongClickListener(view12 -> {
+            setWallpaper();
+            return false;
         });
 
-        view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
+        view.setOnGenericMotionListener((view13, motionEvent) -> {
+            if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                 setWallpaper();
-                return false;
             }
-        });
-
-        view.setOnGenericMotionListener(new View.OnGenericMotionListener() {
-            @Override
-            public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                    setWallpaper();
-                }
-                return false;
-            }
+            return false;
         });
 
         final GestureDetector detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
@@ -162,20 +150,12 @@ public class HomeActivity extends Activity {
                                 .setMessage(R.string.enable_double_tap_to_sleep)
                                 .setNegativeButton(pref.getBoolean("double_tap_dialog_shown", false)
                                         ? R.string.action_dont_show_again
-                                        : R.string.action_cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        pref.edit().putBoolean(pref.getBoolean("double_tap_dialog_shown", false)
+                                        : R.string.action_cancel, (dialog, which) -> pref.edit().putBoolean(pref.getBoolean("double_tap_dialog_shown", false)
                                                 ? "dont_show_double_tap_dialog"
-                                                : "double_tap_dialog_shown", true).apply();
-                                    }
-                                })
-                                .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        pref.edit().putBoolean("double_tap_to_sleep", true).apply();
-                                        U.lockDevice(HomeActivity.this);
-                                    }
+                                                : "double_tap_dialog_shown", true).apply())
+                                .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                                    pref.edit().putBoolean("double_tap_to_sleep", true).apply();
+                                    U.lockDevice(HomeActivity.this);
                                 });
 
                         AlertDialog dialog = builder.create();
@@ -198,12 +178,9 @@ public class HomeActivity extends Activity {
 
         });
 
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                detector.onTouchEvent(event);
-                return false;
-            }
+        view.setOnTouchListener((v, event) -> {
+            detector.onTouchEvent(event);
+            return false;
         });
 
         setContentView(view);
@@ -259,12 +236,9 @@ public class HomeActivity extends Activity {
 
                 if(forceTaskbarStart) {
                     forceTaskbarStart = false;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            helper.setOnHomeScreen(true);
-                            startTaskbar();
-                        }
+                    new Handler().postDelayed(() -> {
+                        helper.setOnHomeScreen(true);
+                        startTaskbar();
                     }, 250);
                 } else
                     startTaskbar();
@@ -293,16 +267,11 @@ public class HomeActivity extends Activity {
         startService(new Intent(this, DashboardService.class));
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("taskbar_active", false))
-            startService(new Intent(this, NotificationService.class));
+        if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
+            pref.edit().putBoolean("taskbar_active", false).apply();
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
-            }
-        }, 100);
+        new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR")), 100);
     }
 
     @Override

@@ -82,6 +82,6 @@
         android:key="notification_settings"
         android:title="@string/notification_settings"/>
 
-    <PreferenceCategory android:title="\n\n" />
+    <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

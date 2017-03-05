@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -25,9 +26,11 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
+import com.farmerbb.taskbar.activity.dark.InvisibleActivityAltDark;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -66,6 +69,7 @@ public class InvisibleActivityFreeform extends Activity {
         }
     };
 
+    @SuppressLint("HardwareIds")
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,36 @@ public class InvisibleActivityFreeform extends Activity {
             LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);
             LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
 
-            FreeformHackHelper.getInstance().setFreeformHackActive(true);
+            FreeformHackHelper helper = FreeformHackHelper.getInstance();
+            helper.setFreeformHackActive(true);
+
+            // Show power button warning on CyanogenMod / LineageOS devices
+            if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(!pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
+                    new Handler().postDelayed(() -> {
+                        if(helper.isInFreeformWorkspace()) {
+                            Intent intent = null;
+
+                            switch(pref.getString("theme", "light")) {
+                                case "light":
+                                    intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAlt.class);
+                                    break;
+                                case "dark":
+                                    intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAltDark.class);
+                                    break;
+                            }
+
+                            if(intent != null) {
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("power_button_warning", true);
+                            }
+
+                            U.launchAppFullscreen(getApplicationContext(), intent);
+                        }
+                    }, 100);
+                }
+            }
 
             showTaskbar = true;
         }
@@ -165,16 +198,13 @@ public class InvisibleActivityFreeform extends Activity {
             startService(new Intent(this, DashboardService.class));
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("taskbar_active", false))
-                startService(new Intent(this, NotificationService.class));
+            if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
+                pref.edit().putBoolean("taskbar_active", false).apply();
 
             // Show the taskbar when activity is started
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(showTaskbar)
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-                }
+            new Handler().postDelayed(() -> {
+                if(showTaskbar)
+                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
             }, 100);
         }
 
@@ -212,18 +242,15 @@ public class InvisibleActivityFreeform extends Activity {
     public void finish() {}
 
     private void possiblyHideTaskbar() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(!doNotHide) {
-                    SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
-                    if(pref.getBoolean("hide_taskbar", true)
-                            && !FreeformHackHelper.getInstance().isInFreeformWorkspace()
-                            && !LauncherHelper.getInstance().isOnHomeScreen())
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                    else
-                        LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                }
+        new Handler().postDelayed(() -> {
+            if(!doNotHide) {
+                SharedPreferences pref = U.getSharedPreferences(InvisibleActivityFreeform.this);
+                if(pref.getBoolean("hide_taskbar", true)
+                        && !FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                        && !LauncherHelper.getInstance().isOnHomeScreen())
+                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                else
+                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             }
         }, 100);
     }
