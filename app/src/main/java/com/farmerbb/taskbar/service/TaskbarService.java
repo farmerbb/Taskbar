@@ -451,17 +451,22 @@ public class TaskbarService extends Service {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private void updateRecentApps(final boolean firstRefresh) {
         final PackageManager pm = getPackageManager();
-        PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
         final List<AppEntry> entries = new ArrayList<>();
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(this);
         int realNumOfPinnedApps = 0;
-        
-        if(pba.getPinnedApps().size() > 0) {
+
+        PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
+        List<AppEntry> pinnedApps = pba.getPinnedApps();
+        List<AppEntry> blockedApps = pba.getBlockedApps();
+        List<String> applicationIdsToRemove = new ArrayList<>();
+
+        // Filter out anything on the pinned/blocked apps lists
+        if(pinnedApps.size() > 0) {
             UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
             LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
 
-            for(AppEntry entry : pba.getPinnedApps()) {
+            for(AppEntry entry : pinnedApps) {
                 boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
                         userManager.getUserForSerialNumber(entry.getUserId(this)));
 
@@ -469,9 +474,17 @@ public class TaskbarService extends Service {
                     entries.add(entry);
                 else
                     realNumOfPinnedApps--;
+
+                applicationIdsToRemove.add(entry.getPackageName());
             }
             
-            realNumOfPinnedApps = realNumOfPinnedApps + pba.getPinnedApps().size();
+            realNumOfPinnedApps = realNumOfPinnedApps + pinnedApps.size();
+        }
+
+        if(blockedApps.size() > 0) {
+            for(AppEntry entry : blockedApps) {
+                applicationIdsToRemove.add(entry.getPackageName());
+            }
         }
 
         // Get list of all recently used apps
@@ -521,17 +534,6 @@ public class TaskbarService extends Service {
                         usageStatsList4.add(stats);
                         applicationIds.add(stats.getPackageName());
                     }
-                }
-
-                // Filter out anything on the pinned/blocked apps lists
-                List<String> applicationIdsToRemove = new ArrayList<>();
-
-                for(AppEntry entry : pba.getPinnedApps()) {
-                    applicationIdsToRemove.add(entry.getPackageName());
-                }
-
-                for(AppEntry entry : pba.getBlockedApps()) {
-                    applicationIdsToRemove.add(entry.getPackageName());
                 }
 
                 // Filter out the currently running foreground app, if requested by the user
