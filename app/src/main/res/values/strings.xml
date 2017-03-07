@@ -139,7 +139,7 @@
     <string name="pref_title_window_size">Default window size</string>
 
     <string name="window_size_standard">Standard</string>
-    <string name="window_size_fullscreen">Fullscreen</string>
+    <string name="window_size_fullscreen">Maximized</string>
     <string name="window_size_phone_size">Phone size</string>
     <string name="window_size_large">Large</string>
     <string name="window_size_half_left">@string/window_size_half_left_alt</string>
