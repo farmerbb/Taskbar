@@ -29,6 +29,7 @@ For more information and detailed instructions, click "Help & instructions for f
 Prerequisites:
 * Windows, Mac, or Linux machine
 * JDK 8
+* Android SDK
 * Internet connection (to download dependencies)
 
 Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK file "app-free-debug.apk", ready to install on your Android device.
