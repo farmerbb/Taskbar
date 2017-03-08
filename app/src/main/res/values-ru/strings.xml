@@ -197,8 +197,6 @@
     <string name="already_top_app">%1$s нельзя выбрать, он уже в списке</string>
 
     <string name="alt_button_config">Другая позиция кнопки скрытия</string>
-    <string name="pref_title_open_in_fullscreen">Открывать в полноэкранном режиме</string>
-    <string name="pref_description_open_in_fullscreen">Требует настройки Freeform. Когда не выбран, окна будут открыватся только в рабочем столе режима Freeform.</string>
     <string name="pref_title_save_window_sizes">Сохранять размеры окон</string>
     <string name="pref_description_save_window_sizes">при открытии окон с контекстного меню</string>
 
@@ -280,5 +278,8 @@
 
     <string name="hide_taskbar_disclaimer">Не применяется к приложениям в режмие Freeform</string>
     <string name="transparent_start_menu">Прозрачное меню запуска</string>
+
+    <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
+    <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
 
 </resources>

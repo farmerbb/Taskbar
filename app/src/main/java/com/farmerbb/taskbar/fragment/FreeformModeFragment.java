@@ -54,7 +54,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
 
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             boolean freeformHackEnabled = pref.getBoolean("freeform_hack", false);
-            findPreference("open_in_fullscreen").setEnabled(freeformHackEnabled);
+            findPreference("launch_games_fullscreen").setEnabled(freeformHackEnabled);
             findPreference("save_window_sizes").setEnabled(freeformHackEnabled);
             findPreference("window_size").setEnabled(freeformHackEnabled);
             findPreference("add_shortcut").setEnabled(freeformHackEnabled);
@@ -79,7 +79,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
 
             ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
 
-            findPreference("open_in_fullscreen").setEnabled(U.hasFreeformSupport(getActivity()));
+            findPreference("launch_games_fullscreen").setEnabled(U.hasFreeformSupport(getActivity()));
             findPreference("save_window_sizes").setEnabled(U.hasFreeformSupport(getActivity()));
             findPreference("window_size").setEnabled(U.hasFreeformSupport(getActivity()));
             findPreference("add_shortcut").setEnabled(U.hasFreeformSupport(getActivity()));
@@ -139,7 +139,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
                 }
 
-                findPreference("open_in_fullscreen").setEnabled(((CheckBoxPreference) p).isChecked());
+                findPreference("launch_games_fullscreen").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("save_window_sizes").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("window_size").setEnabled(((CheckBoxPreference) p).isChecked());
                 findPreference("add_shortcut").setEnabled(((CheckBoxPreference) p).isChecked());

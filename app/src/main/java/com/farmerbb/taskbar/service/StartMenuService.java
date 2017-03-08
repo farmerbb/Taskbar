@@ -584,8 +584,7 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!onHomeScreen || inFreeformMode) {
-                SharedPreferences pref = U.getSharedPreferences(this);
-                boolean forceFreeformMode = FreeformHackHelper.getInstance().isFreeformHackActive() && !pref.getBoolean("open_in_fullscreen", true);
+                boolean forceFreeformMode = FreeformHackHelper.getInstance().isFreeformHackActive();
 
                 Class clazz = inFreeformMode && !shouldShowSearchBox ? InvisibleActivityAlt.class : InvisibleActivity.class;
                 Intent intent = new Intent(this, clazz);

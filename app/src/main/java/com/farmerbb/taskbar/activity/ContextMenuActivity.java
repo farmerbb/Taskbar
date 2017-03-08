@@ -253,7 +253,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             SharedPreferences pref = U.getSharedPreferences(this);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
-                    && (FreeformHackHelper.getInstance().isFreeformHackActive() || isInMultiWindowMode())) {
+                    && !U.isGame(this, packageName)) {
                 addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
             }

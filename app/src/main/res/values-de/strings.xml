@@ -197,8 +197,6 @@
     <string name="already_top_app">%1$s kann nicht ausgewählt werden, da es auf der Liste der top Apps ist.</string>
 
     <string name="alt_button_config">Alternative Position für den Versteckknopf</string>
-    <string name="pref_title_open_in_fullscreen">Aus Fullscreenapps Fenster öffnen</string>
-    <string name="pref_description_open_in_fullscreen">Dazu muss der Freiform Modus mindestens ein mal initialisiert werden, nach dem Start von Taskbar. Wenn nicht aktiviert, werden freie Fenster nur im Freiform Desktop aufgerufen.</string>
     <string name="pref_title_save_window_sizes">Fenstergrößen der Apps speichern</string>
     <string name="pref_description_save_window_sizes">Wenn neue Fenster aus dem Kontextmenü geöffnet werden</string>
 
@@ -280,5 +278,8 @@
 
     <string name="hide_taskbar_disclaimer">Does not apply to apps in freeform mode</string>
     <string name="transparent_start_menu">Transparent start menu</string>
+
+    <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
+    <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
 
 </resources>

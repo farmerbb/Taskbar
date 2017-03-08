@@ -197,8 +197,6 @@
     <string name="already_top_app">トップアプリリストにあるため %1$s は選択できません</string>
 
     <string name="alt_button_config">折りたたみボタンの代わりの位置</string>
-    <string name="pref_title_open_in_fullscreen">全画面アプリからウインドウを開く</string>
-    <string name="pref_description_open_in_fullscreen">Taskbar が起動した後、少なくとも 1 回フリーフォームモードを開始する必要があります。 このチェックボックスをオフにすると、フリーフォームワークスペースの間だけフリーフォームウィンドウが開きます。</string>
     <string name="pref_title_save_window_sizes">アプリのウインドウサイズを保存</string>
     <string name="pref_description_save_window_sizes">コンテキストメニューから新しいウインドウを開くとき</string>
 
@@ -280,5 +278,8 @@
 
     <string name="hide_taskbar_disclaimer">Does not apply to apps in freeform mode</string>
     <string name="transparent_start_menu">Transparent start menu</string>
+
+    <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
+    <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
 
 </resources>

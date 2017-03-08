@@ -24,12 +24,6 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="open_in_fullscreen"
-        android:title="@string/pref_title_open_in_fullscreen"
-        android:summary="@string/pref_description_open_in_fullscreen" />
-
-    <CheckBoxPreference
-        android:defaultValue="true"
         android:key="save_window_sizes"
         android:title="@string/pref_title_save_window_sizes"
         android:summary="@string/pref_description_save_window_sizes" />
@@ -39,6 +33,12 @@
         android:key="force_new_window"
         android:title="@string/pref_title_force_new_window"
         android:summary="@string/pref_description_force_new_window" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="launch_games_fullscreen"
+        android:title="@string/launch_games_fullscreen_title"
+        android:summary="@string/launch_games_fullscreen_message" />
 
     <ListPreference
         android:defaultValue="standard"

@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
@@ -60,6 +61,7 @@ import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 import com.farmerbb.taskbar.service.PowerMenuService;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +80,10 @@ public class U {
 
     public static final int HIDDEN = 0;
     public static final int TOP_APPS = 1;
+
+    // From android.app.ActivityManager.StackId
+    private static final int FULLSCREEN_WORKSPACE_STACK_ID = 1;
+    private static final int FREEFORM_WORKSPACE_STACK_ID = 2;
 
     public static SharedPreferences getSharedPreferences(Context context) {
         if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
@@ -218,12 +224,9 @@ public class U {
 
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
-        boolean openInFullscreen = pref.getBoolean("open_in_fullscreen", true);
         boolean freeformHackActive = openInNewWindow
                 ? helper.isInFreeformWorkspace()
-                : (openInFullscreen
-                    ? helper.isInFreeformWorkspace()
-                    : helper.isFreeformHackActive());
+                : helper.isFreeformHackActive();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
@@ -242,7 +245,7 @@ public class U {
             if(!shouldDelay)
                 continueLaunchingApp(context, packageName, componentName, userId,
                         windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
-        } else if(helper.isInFreeformWorkspace() || !openInFullscreen)
+        } else
             continueLaunchingApp(context, packageName, componentName, userId,
                     windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
     }
@@ -327,35 +330,36 @@ public class U {
         } else switch(windowSize) {
             case "standard":
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+                    Bundle bundle = getActivityOptions(isGame(context, packageName)).toBundle();
                     if(shortcut == null) {
                         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
                         if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                             try {
-                                context.startActivity(intent);
+                                context.startActivity(intent, bundle);
                             } catch (ActivityNotFoundException e) {
-                                launchAndroidForWork(context, intent.getComponent(), null, userId);
+                                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                         } else
-                            launchAndroidForWork(context, intent.getComponent(), null, userId);
+                            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                     } else
-                        launchShortcut(context, shortcut, null);
+                        launchShortcut(context, shortcut, bundle);
                 } else
-                    launchMode1(context, intent, 1, userId, shortcut);
+                    launchMode1(context, intent, 1, userId, shortcut, isGame(context, packageName));
                 break;
             case "large":
-                launchMode1(context, intent, 2, userId, shortcut);
+                launchMode1(context, intent, 2, userId, shortcut, isGame(context, packageName));
                 break;
             case "fullscreen":
-                launchMode2(context, intent, FULLSCREEN, userId, shortcut);
+                launchMode2(context, intent, FULLSCREEN, userId, shortcut, isGame(context, packageName));
                 break;
             case "half_left":
-                launchMode2(context, intent, LEFT, userId, shortcut);
+                launchMode2(context, intent, LEFT, userId, shortcut, isGame(context, packageName));
                 break;
             case "half_right":
-                launchMode2(context, intent, RIGHT, userId, shortcut);
+                launchMode2(context, intent, RIGHT, userId, shortcut, isGame(context, packageName));
                 break;
             case "phone_size":
-                launchMode3(context, intent, userId, shortcut);
+                launchMode3(context, intent, userId, shortcut, isGame(context, packageName));
                 break;
         }
 
@@ -367,7 +371,7 @@ public class U {
     
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut) {
+    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut, Boolean isGame) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -376,7 +380,7 @@ public class U {
         int height1 = display.getHeight() / (4 * factor);
         int height2 = display.getHeight() - height1;
 
-        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(isGame).setLaunchBounds(new Rect(
                 width1,
                 height1,
                 width2,
@@ -399,7 +403,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut) {
+    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, Boolean isGame) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -437,7 +441,7 @@ public class U {
         } else if(isLandscape || (launchType != RIGHT && isPortrait))
             top = top + iconSize;
 
-        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(isGame).setLaunchBounds(new Rect(
                 left,
                 top,
                 right,
@@ -460,7 +464,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut) {
+    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut, Boolean isGame) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -469,7 +473,7 @@ public class U {
         int height1 = display.getHeight() / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
-        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(isGame).setLaunchBounds(new Rect(
                 width1 - width2,
                 height1 - height2,
                 width1 + width2,
@@ -512,7 +516,7 @@ public class U {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
 
-        launchMode2(context, intent, FULLSCREEN, userId, null);
+        launchMode2(context, intent, FULLSCREEN, userId, null, null);
     }
 
     @SuppressWarnings("deprecation")
@@ -521,7 +525,7 @@ public class U {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
         try {
-            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+            context.startActivity(intent, getActivityOptions(false).setLaunchBounds(new Rect(
                     display.getWidth(),
                     display.getHeight(),
                     display.getWidth() + 1,
@@ -842,5 +846,34 @@ public class U {
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean canDrawOverlays(Context context) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+    }
+
+    public static boolean isGame(Context context, String packageName) {
+        SharedPreferences pref = getSharedPreferences(context);
+        if(pref.getBoolean("launch_games_fullscreen", true)) {
+            PackageManager pm = context.getPackageManager();
+
+            try {
+                ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
+                return (info.flags & ApplicationInfo.FLAG_IS_GAME) != 0;
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+        } else
+            return false;
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private static ActivityOptions getActivityOptions(Boolean isGame) {
+        ActivityOptions options = ActivityOptions.makeBasic();
+
+        if(isGame != null) {
+            try {
+                Method method = ActivityOptions.class.getMethod("setLaunchStackId", int.class);
+                method.invoke(options, isGame ? FULLSCREEN_WORKSPACE_STACK_ID : FREEFORM_WORKSPACE_STACK_ID);
+            } catch (Exception e) { /* Gracefully fail */ }
+        }
+
+        return options;
     }
 }
