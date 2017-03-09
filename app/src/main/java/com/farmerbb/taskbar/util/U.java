@@ -812,9 +812,13 @@ public class U {
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
+        return isServiceRunning(context, cls.getName());
+    }
+
+    public static boolean isServiceRunning(Context context, String className) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(cls.getName().equals(service.service.getClassName()))
+            if(className.equals(service.service.getClassName()))
                 return true;
         }
 
