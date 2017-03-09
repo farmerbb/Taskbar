@@ -335,7 +335,7 @@ public class DashboardService extends Service {
             }
 
             if(inFreeformMode) {
-                U.launchAppFullscreen(this, intent);
+                U.launchAppMaximized(this, intent);
             } else
                 startActivity(intent);
 

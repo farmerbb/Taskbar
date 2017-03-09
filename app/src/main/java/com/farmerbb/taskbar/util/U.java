@@ -74,7 +74,7 @@ public class U {
     private static SharedPreferences pref;
     private static Integer cachedRotation;
 
-    private static final int FULLSCREEN = 0;
+    private static final int MAXIMIZED = 0;
     private static final int LEFT = -1;
     private static final int RIGHT = 1;
 
@@ -350,7 +350,7 @@ public class U {
                 launchMode1(context, intent, 2, userId, shortcut, isGame(context, packageName));
                 break;
             case "fullscreen":
-                launchMode2(context, intent, FULLSCREEN, userId, shortcut, isGame(context, packageName));
+                launchMode2(context, intent, MAXIMIZED, userId, shortcut, isGame(context, packageName));
                 break;
             case "half_left":
                 launchMode2(context, intent, LEFT, userId, shortcut, isGame(context, packageName));
@@ -512,11 +512,11 @@ public class U {
         } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
     }
 
-    public static void launchAppFullscreen(Context context, Intent intent) {
+    public static void launchAppMaximized(Context context, Intent intent) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
 
-        launchMode2(context, intent, FULLSCREEN, userId, null, null);
+        launchMode2(context, intent, MAXIMIZED, userId, null, null);
     }
 
     @SuppressWarnings("deprecation")

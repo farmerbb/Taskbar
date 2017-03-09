@@ -593,7 +593,7 @@ public class StartMenuService extends Service {
                     if(clazz.equals(InvisibleActivity.class))
                         U.launchAppLowerRight(this, intent);
                     else if(clazz.equals(InvisibleActivityAlt.class))
-                        U.launchAppFullscreen(this, intent);
+                        U.launchAppMaximized(this, intent);
                 } else
                     startActivity(intent);
             }

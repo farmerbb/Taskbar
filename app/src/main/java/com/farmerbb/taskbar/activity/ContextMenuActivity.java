@@ -509,7 +509,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent.putExtra("no_shadow", true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
-                    U.launchAppFullscreen(getApplicationContext(), intent);
+                    U.launchAppMaximized(getApplicationContext(), intent);
                 } else
                     startActivity(intent);
 
@@ -575,7 +575,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "change_wallpaper":
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                U.launchAppFullscreen(getApplicationContext(), intent3);
+                U.launchAppMaximized(getApplicationContext(), intent3);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
