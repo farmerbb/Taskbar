@@ -634,7 +634,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     | LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED);
 
             shortcuts = launcherApps.getShortcuts(query, userManager.getUserForSerialNumber(userId));
-            return shortcuts.size();
+            if(shortcuts != null)
+                return shortcuts.size();
         }
 
         return 0;
