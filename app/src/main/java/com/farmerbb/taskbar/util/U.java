@@ -507,9 +507,11 @@ public class U {
     private static void launchShortcut(Context context, ShortcutInfo shortcut, Bundle bundle) {
         LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-        try {
-            launcherApps.startShortcut(shortcut, null, bundle);
-        } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
+        if(launcherApps.hasShortcutHostPermission()) {
+            try {
+                launcherApps.startShortcut(shortcut, null, bundle);
+            } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
+        }
     }
 
     public static void launchAppMaximized(Context context, Intent intent) {
