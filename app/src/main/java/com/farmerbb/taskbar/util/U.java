@@ -224,13 +224,10 @@ public class U {
 
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
-        boolean freeformHackActive = openInNewWindow
-                ? helper.isInFreeformWorkspace()
-                : helper.isFreeformHackActive();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
-                && !freeformHackActive) {
+                && !helper.isFreeformHackActive()) {
             shouldDelay = true;
 
             new Handler().postDelayed(() -> {
