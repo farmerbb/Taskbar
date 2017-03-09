@@ -584,14 +584,12 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!onHomeScreen || inFreeformMode) {
-                boolean forceFreeformMode = FreeformHackHelper.getInstance().isFreeformHackActive();
-
                 Class clazz = inFreeformMode && !shouldShowSearchBox ? InvisibleActivityAlt.class : InvisibleActivity.class;
                 Intent intent = new Intent(this, clazz);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                if(inFreeformMode || forceFreeformMode) {
+                if(inFreeformMode) {
                     if(clazz.equals(InvisibleActivity.class))
                         U.launchAppLowerRight(this, intent);
                     else if(clazz.equals(InvisibleActivityAlt.class))
