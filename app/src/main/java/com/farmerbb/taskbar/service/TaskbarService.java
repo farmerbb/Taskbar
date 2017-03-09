@@ -952,7 +952,7 @@ public class TaskbarService extends Service {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
             Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -1095,7 +1095,7 @@ public class TaskbarService extends Service {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
             Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
