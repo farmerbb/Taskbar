@@ -238,11 +238,7 @@ public class U {
             }, launchedFromTaskbar ? 0 : 100);
         }
 
-        if(!helper.isFreeformHackActive()) {
-            if(!shouldDelay)
-                continueLaunchingApp(context, packageName, componentName, userId,
-                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
-        } else
+        if(!shouldDelay)
             continueLaunchingApp(context, packageName, componentName, userId,
                     windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
     }
