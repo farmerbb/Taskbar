@@ -854,8 +854,8 @@ public class U {
             PackageManager pm = context.getPackageManager();
 
             try {
-                ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
-                return (info.flags & ApplicationInfo.FLAG_IS_GAME) != 0;
+                ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+                return (info.flags & ApplicationInfo.FLAG_IS_GAME) != 0 || (info.metaData != null && info.metaData.getBoolean("isGame", false));
             } catch (PackageManager.NameNotFoundException e) {
                 return false;
             }
