@@ -511,7 +511,10 @@ public class DashboardService extends Service {
 
         if(shouldSave) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            pref.edit().putInt("dashboard_widget_" + Integer.toString(cellId), appWidgetId).apply();
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putInt("dashboard_widget_" + Integer.toString(cellId), appWidgetId);
+            editor.putString("dashboard_widget_" + Integer.toString(cellId) + "_provider", appWidgetInfo.provider.flattenToString());
+            editor.apply();
         }
 
         new Handler().post(() -> {
@@ -543,6 +546,9 @@ public class DashboardService extends Service {
         cellLayout.setOnInterceptedLongPressListener(null);
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().remove("dashboard_widget_" + Integer.toString(cellId)).apply();
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("dashboard_widget_" + Integer.toString(cellId));
+        editor.remove("dashboard_widget_" + Integer.toString(cellId) + "_provider");
+        editor.apply();
     }
 }
