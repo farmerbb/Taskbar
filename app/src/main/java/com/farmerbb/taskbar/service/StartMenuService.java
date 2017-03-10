@@ -343,9 +343,12 @@ public class StartMenuService extends Service {
             });
 
             searchView.setOnQueryTextFocusChangeListener((view, b) -> {
-                if(!hasHardwareKeyboard && !U.isServiceRunning(this, "com.farmerbb.secondscreen.service.DisableKeyboardService")) {
+                if(!hasHardwareKeyboard) {
                     ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
-                    params1.height = getResources().getDimensionPixelSize(b ? R.dimen.start_menu_height_half : R.dimen.start_menu_height);
+                    params1.height = getResources().getDimensionPixelSize(
+                            b && !U.isServiceRunning(this, "com.farmerbb.secondscreen.service.DisableKeyboardService")
+                                    ? R.dimen.start_menu_height_half
+                                    : R.dimen.start_menu_height);
                     startMenu.setLayoutParams(params1);
                 }
 
