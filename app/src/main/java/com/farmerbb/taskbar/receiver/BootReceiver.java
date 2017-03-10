@@ -32,7 +32,6 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("reboot_required", false);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && !U.hasFreeformSupport(context))

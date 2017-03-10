@@ -87,9 +87,6 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
 
             if(U.hasFreeformSupport(getActivity())) {
                 U.showToastLong(getActivity(), R.string.reboot_required);
-
-                SharedPreferences pref = U.getSharedPreferences(getActivity());
-                pref.edit().putBoolean("reboot_required", true).apply();
             }
         }
     }
