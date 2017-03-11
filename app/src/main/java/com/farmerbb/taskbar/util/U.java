@@ -227,7 +227,7 @@ public class U {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
-                && !helper.isFreeformHackActive()) {
+                && !helper.isInFreeformWorkspace()) {
             shouldDelay = true;
 
             new Handler().postDelayed(() -> {
@@ -323,7 +323,7 @@ public class U {
         } else switch(windowSize) {
             case "standard":
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-                    Bundle bundle = getActivityOptions(isGame(context, packageName)).toBundle();
+                    Bundle bundle = getActivityOptions(getApplicationType(isGame(context, packageName))).toBundle();
                     if(shortcut == null) {
                         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
                         if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
@@ -364,7 +364,7 @@ public class U {
     
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut, Boolean isGame) {
+    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut, boolean isGame) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -373,7 +373,7 @@ public class U {
         int height1 = display.getHeight() / (4 * factor);
         int height2 = display.getHeight() - height1;
 
-        Bundle bundle = getActivityOptions(isGame).setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(getApplicationType(isGame)).setLaunchBounds(new Rect(
                 width1,
                 height1,
                 width2,
@@ -396,7 +396,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, Boolean isGame) {
+    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, boolean isGame) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -434,7 +434,7 @@ public class U {
         } else if(isLandscape || (launchType != RIGHT && isPortrait))
             top = top + iconSize;
 
-        Bundle bundle = getActivityOptions(isGame).setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(getApplicationType(isGame)).setLaunchBounds(new Rect(
                 left,
                 top,
                 right,
@@ -457,7 +457,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut, Boolean isGame) {
+    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut, boolean isGame) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -466,7 +466,7 @@ public class U {
         int height1 = display.getHeight() / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
-        Bundle bundle = getActivityOptions(isGame).setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(getApplicationType(isGame)).setLaunchBounds(new Rect(
                 width1 - width2,
                 height1 - height2,
                 width1 + width2,
@@ -511,7 +511,7 @@ public class U {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
 
-        launchMode2(context, intent, MAXIMIZED, userId, null, null);
+        launchMode2(context, intent, MAXIMIZED, userId, null, false);
     }
 
     @SuppressWarnings("deprecation")
@@ -520,7 +520,7 @@ public class U {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
         try {
-            context.startActivity(intent, getActivityOptions(false).setLaunchBounds(new Rect(
+            context.startActivity(intent, getActivityOptions(ApplicationType.FREEFORM_HACK).setLaunchBounds(new Rect(
                     display.getWidth(),
                     display.getHeight(),
                     display.getWidth() + 1,
@@ -862,17 +862,36 @@ public class U {
             return false;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private static ActivityOptions getActivityOptions(Boolean isGame) {
-        ActivityOptions options = ActivityOptions.makeBasic();
+    private enum ApplicationType { APPLICATION, GAME, FREEFORM_HACK }
 
-        if(isGame != null) {
+    @TargetApi(Build.VERSION_CODES.M)
+    private static ActivityOptions getActivityOptions(ApplicationType applicationType) {
+        ActivityOptions options = ActivityOptions.makeBasic();
+        Integer stackId = null;
+
+        switch(applicationType) {
+            case APPLICATION:
+                // Let the system determine the stack id;
+                break;
+            case GAME:
+                stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                break;
+            case FREEFORM_HACK:
+                stackId = FREEFORM_WORKSPACE_STACK_ID;
+                break;
+        }
+
+        if(stackId != null) {
             try {
                 Method method = ActivityOptions.class.getMethod("setLaunchStackId", int.class);
-                method.invoke(options, isGame ? FULLSCREEN_WORKSPACE_STACK_ID : FREEFORM_WORKSPACE_STACK_ID);
+                method.invoke(options, stackId);
             } catch (Exception e) { /* Gracefully fail */ }
         }
 
         return options;
+    }
+
+    private static ApplicationType getApplicationType(boolean isGame) {
+        return isGame ? ApplicationType.GAME : ApplicationType.APPLICATION;
     }
 }
