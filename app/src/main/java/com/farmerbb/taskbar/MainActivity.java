@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
+        if(!launcherEnabled)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
             proceedWithAppLaunch(savedInstanceState);
         else {
