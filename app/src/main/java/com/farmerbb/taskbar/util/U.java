@@ -220,25 +220,19 @@ public class U {
                                  final boolean launchedFromTaskbar,
                                  final boolean openInNewWindow,
                                  final ShortcutInfo shortcut) {
-        boolean shouldDelay = false;
-
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
                 && !helper.isInFreeformWorkspace()) {
-            shouldDelay = true;
-
             new Handler().postDelayed(() -> {
                 startFreeformHack(context, true, launchedFromTaskbar);
 
                 new Handler().postDelayed(() -> continueLaunchingApp(context, packageName, componentName, userId,
-                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut), 100);
+                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut), helper.isFreeformHackActive() ? 0 : 100);
             }, launchedFromTaskbar ? 0 : 100);
-        }
-
-        if(!shouldDelay)
+        } else
             continueLaunchingApp(context, packageName, componentName, userId,
                     windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
     }
@@ -871,7 +865,7 @@ public class U {
 
         switch(applicationType) {
             case APPLICATION:
-                // Let the system determine the stack id;
+                // Let the system determine the stack id
                 break;
             case GAME:
                 stackId = FULLSCREEN_WORKSPACE_STACK_ID;

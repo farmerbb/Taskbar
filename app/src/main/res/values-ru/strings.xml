@@ -282,4 +282,6 @@
     <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
     <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
 
+    <string name="invalid_grid_size">Invalid grid size</string>
+
 </resources>

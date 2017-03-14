@@ -140,17 +140,28 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 builder.setView(dialogLayout)
                         .setTitle(R.string.dashboard_grid_size)
                         .setPositiveButton(R.string.action_ok, (dialog, id) -> {
-                            int width = Integer.parseInt(editText.getText().toString());
-                            int height = Integer.parseInt(editText2.getText().toString());
+                            boolean successfullyUpdated = false;
 
-                            if(width > 0 && height > 0) {
-                                SharedPreferences.Editor editor = pref.edit();
-                                editor.putInt("dashboard_width", width);
-                                editor.putInt("dashboard_height", height);
-                                editor.apply();
+                            String widthString = editText.getText().toString();
+                            String heightString = editText2.getText().toString();
 
-                                updateDashboardGridSize(true);
+                            if(widthString.length() > 0 && heightString.length() > 0) {
+                                int width = Integer.parseInt(widthString);
+                                int height = Integer.parseInt(heightString);
+
+                                if(width > 0 && height > 0) {
+                                    SharedPreferences.Editor editor = pref.edit();
+                                    editor.putInt("dashboard_width", width);
+                                    editor.putInt("dashboard_height", height);
+                                    editor.apply();
+
+                                    updateDashboardGridSize(true);
+                                    successfullyUpdated = true;
+                                }
                             }
+
+                            if(!successfullyUpdated)
+                                U.showToast(getActivity(), R.string.invalid_grid_size);
                         })
                         .setNegativeButton(R.string.action_cancel, null);
 

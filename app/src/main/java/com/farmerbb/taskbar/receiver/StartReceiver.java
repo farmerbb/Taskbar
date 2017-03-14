@@ -19,7 +19,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 
+import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -30,18 +32,36 @@ public class StartReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(!pref.getBoolean("taskbar_active", false)) {
+
+        boolean taskbarNotActive = !pref.getBoolean("taskbar_active", false);
+        boolean taskbarActiveButHidden = pref.getBoolean("taskbar_active", false) && pref.getBoolean("is_hidden", false);
+
+        if(taskbarNotActive || taskbarActiveButHidden) {
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("is_hidden", false);
 
-            if(pref.getBoolean("first_run", true)) {
-                editor.putBoolean("first_run", false);
-                editor.putBoolean("collapsed", true);
+            if(taskbarNotActive) {
+                if(pref.getBoolean("first_run", true)) {
+                    editor.putBoolean("first_run", false);
+                    editor.putBoolean("collapsed", true);
+                }
+
+                editor.putBoolean("taskbar_active", true);
+                editor.putLong("time_of_service_start", System.currentTimeMillis());
             }
 
-            editor.putBoolean("taskbar_active", true);
-            editor.putLong("time_of_service_start", System.currentTimeMillis());
             editor.apply();
+
+            if(taskbarActiveButHidden)
+                context.stopService(new Intent(context, NotificationService.class));
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                Intent intent2 = new Intent(context, DummyActivity.class);
+                intent2.putExtra("start_freeform_hack", true);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(intent2);
+            }
 
             context.startService(new Intent(context, TaskbarService.class));
             context.startService(new Intent(context, StartMenuService.class));

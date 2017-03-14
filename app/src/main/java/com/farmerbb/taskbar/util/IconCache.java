@@ -88,16 +88,16 @@ public class IconCache {
         }
 
         if(iconPackPackage.equals(BuildConfig.APPLICATION_ID))
-            return appInfo.getBadgedIcon(0);
+            return getIcon(pm, appInfo);
         else {
             IconPack iconPack = iconPackManager.getIconPack(iconPackPackage);
             String componentName = new ComponentName(appInfo.getApplicationInfo().packageName, appInfo.getName()).toString();
 
             if(!useMask) {
                 Drawable icon = iconPack.getDrawableIconForPackage(context, componentName);
-                return icon == null ? appInfo.getBadgedIcon(0) : icon;
+                return icon == null ? getIcon(pm, appInfo) : icon;
             } else {
-                Drawable drawable = appInfo.getBadgedIcon(0);
+                Drawable drawable = getIcon(pm, appInfo);
                 if(drawable instanceof BitmapDrawable) {
                     return new BitmapDrawable(context.getResources(),
                             iconPack.getIconForPackage(context, componentName, ((BitmapDrawable) drawable).getBitmap()));
@@ -113,5 +113,13 @@ public class IconCache {
         drawables.evictAll();
         IconPackManager.getInstance().nullify();
         System.gc();
+    }
+
+    private Drawable getIcon(PackageManager pm, LauncherActivityInfo appInfo) {
+        try {
+            return appInfo.getBadgedIcon(0);
+        } catch (NullPointerException e) {
+            return pm.getDefaultActivityIcon();
+        }
     }
 }
