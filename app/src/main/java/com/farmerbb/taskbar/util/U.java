@@ -252,7 +252,8 @@ public class U {
                 freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
-        launchAppLowerRight(context, freeformHackIntent);
+        if(U.canDrawOverlays(context))
+            launchAppLowerRight(context, freeformHackIntent);
     }
 
     @TargetApi(Build.VERSION_CODES.N)
