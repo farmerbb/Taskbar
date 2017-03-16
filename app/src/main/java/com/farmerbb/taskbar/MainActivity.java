@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.FragmentTransaction;
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
             editor.putBoolean("taskbar_active", false);
 
         // Ensure that components that should be enabled are enabled properly
-        boolean launcherEnabled = pref.getBoolean("launcher", false) && canDrawOverlays();
+        boolean launcherEnabled = pref.getBoolean("launcher", false) && U.canDrawOverlays(this);
         editor.putBoolean("launcher", launcherEnabled);
 
         editor.apply();
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
 
             theSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
                 if(b) {
-                    if(canDrawOverlays()) {
+                    if(U.canDrawOverlays(this)) {
                         boolean firstRun = pref.getBoolean("first_run", true);
                         startTaskbarService();
 
@@ -343,11 +342,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
         }
 
         stopService(new Intent(this, NotificationService.class));
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean canDrawOverlays() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this);
     }
 
     private void updateSwitch() {

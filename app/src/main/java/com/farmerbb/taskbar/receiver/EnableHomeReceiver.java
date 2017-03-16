@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import com.farmerbb.taskbar.activity.HomeActivity;
@@ -28,6 +29,9 @@ public class EnableHomeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(U.canDrawOverlays(context)) {
+            SharedPreferences pref = U.getSharedPreferences(context);
+            pref.edit().putBoolean("launcher", true).apply();
+
             ComponentName component = new ComponentName(context, HomeActivity.class);
             context.getPackageManager().setComponentEnabledSetting(component,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,

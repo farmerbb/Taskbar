@@ -28,7 +28,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
@@ -229,7 +228,7 @@ public class HomeActivity extends Activity {
 
         LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-        if(canDrawOverlays()) {
+        if(U.canDrawOverlays(this)) {
             if(!bootToFreeform()) {
                 final LauncherHelper helper = LauncherHelper.getInstance();
                 helper.setOnHomeScreen(true);
@@ -306,10 +305,5 @@ public class HomeActivity extends Activity {
     @Override
     public void onBackPressed() {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean canDrawOverlays() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this);
     }
 }

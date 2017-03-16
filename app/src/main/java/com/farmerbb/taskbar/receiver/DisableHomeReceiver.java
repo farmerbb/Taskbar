@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -28,12 +29,13 @@ import com.farmerbb.taskbar.util.U;
 public class DisableHomeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(U.canDrawOverlays(context)) {
-            ComponentName component = new ComponentName(context, HomeActivity.class);
-            context.getPackageManager().setComponentEnabledSetting(component,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
+        SharedPreferences pref = U.getSharedPreferences(context);
+        pref.edit().putBoolean("launcher", false).apply();
+
+        ComponentName component = new ComponentName(context, HomeActivity.class);
+        context.getPackageManager().setComponentEnabledSetting(component,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
     }
