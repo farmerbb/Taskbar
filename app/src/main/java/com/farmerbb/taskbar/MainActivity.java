@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                         boolean firstRun = pref.getBoolean("first_run", true);
                         startTaskbarService();
 
-                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp()) {
+                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !U.isSystemApp(this)) {
                             ApplicationInfo applicationInfo = null;
                             try {
                                 applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
@@ -361,16 +361,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                     .replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .commit();
-    }
-
-    private boolean isSystemApp() {
-        try {
-            ApplicationInfo info = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
-            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-            return (info.flags & mask) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
     @Override

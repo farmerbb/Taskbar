@@ -60,6 +60,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                     && playStoreInstalled
+                    && !U.isSystemApp(getActivity())
                     && !pref.getBoolean("hide_donate", false)) {
                 addPreferencesFromResource(R.xml.pref_about_donate);
                 findPreference("donate").setOnPreferenceClickListener(this);

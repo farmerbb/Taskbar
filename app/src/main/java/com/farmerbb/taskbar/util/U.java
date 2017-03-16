@@ -889,4 +889,14 @@ public class U {
     private static ApplicationType getApplicationType(boolean isGame) {
         return isGame ? ApplicationType.GAME : ApplicationType.APPLICATION;
     }
+
+    public static boolean isSystemApp(Context context) {
+        try {
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+            return (info.flags & mask) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
 }
