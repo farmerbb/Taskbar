@@ -30,7 +30,14 @@ public class EnableHomeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(U.canDrawOverlays(context)) {
             SharedPreferences pref = U.getSharedPreferences(context);
-            pref.edit().putBoolean("launcher", true).apply();
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("launcher", true);
+
+            if(intent.hasExtra("enable_freeform_hack") && U.hasFreeformSupport(context)) {
+                editor.putBoolean("freeform_hack", true);
+            }
+
+            editor.apply();
 
             ComponentName component = new ComponentName(context, HomeActivity.class);
             context.getPackageManager().setComponentEnabledSetting(component,
