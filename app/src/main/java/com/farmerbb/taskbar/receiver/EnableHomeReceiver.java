@@ -41,6 +41,7 @@ public class EnableHomeReceiver extends BroadcastReceiver {
             if(intent.hasExtra("enable_running_apps_only") && U.isSystemApp(context)) {
                 editor.putString("recents_amount", "running_apps_only");
                 editor.putString("refresh_frequency", "0");
+                editor.putString("max_num_of_recents", "2147483647");
             }
 
             editor.apply();
