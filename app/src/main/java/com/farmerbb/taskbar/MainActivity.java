@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
             editor.putBoolean("taskbar_active", false);
 
         // Ensure that components that should be enabled are enabled properly
-        boolean launcherEnabled = pref.getBoolean("launcher", false) && U.canDrawOverlays(this);
+        boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this)) || U.hasSupportLibrary(this);
         editor.putBoolean("launcher", launcherEnabled);
 
         editor.apply();

@@ -4,6 +4,8 @@ com.farmerbb.taskbar.util.AppEntry -> com.farmerbb.taskbar.c.a:
     java.lang.String componentName -> b
     java.lang.String label -> c
     java.lang.Long userId -> f
+    java.lang.Long lastTimeUsed -> g
+    java.lang.Long totalTimeInForeground -> h
     android.graphics.drawable.Drawable icon -> d
     byte[] iconByteArray -> e
     void <init>(java.lang.String,java.lang.String,java.lang.String,android.graphics.drawable.Drawable,boolean) -> <init>
@@ -13,6 +15,10 @@ com.farmerbb.taskbar.util.AppEntry -> com.farmerbb.taskbar.c.a:
     void setUserId(long) -> a
     long getUserId(android.content.Context) -> b
     android.graphics.drawable.Drawable getIcon(android.content.Context) -> a
+    long getLastTimeUsed() -> d
+    void setLastTimeUsed(long) -> b
+    long getTotalTimeInForeground() -> e
+    void setTotalTimeInForeground(java.lang.Long) -> a
 com.farmerbb.taskbar.util.Blacklist -> com.farmerbb.taskbar.c.b:
     long serialVersionUID -> serialVersionUID
     java.util.List blockedApps -> a
