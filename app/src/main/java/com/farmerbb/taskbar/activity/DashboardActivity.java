@@ -54,6 +54,7 @@ public class DashboardActivity extends Activity {
 
     private boolean shouldFinish = true;
     private boolean shouldCollapse = true;
+    private boolean contextMenuFix = false;
     private int cellId = -1;
 
     private BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
@@ -120,6 +121,8 @@ public class DashboardActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        contextMenuFix = getIntent().hasExtra("context_menu_fix");
+
         // Detect outside touches, and finish the activity when one is detected
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
@@ -147,6 +150,9 @@ public class DashboardActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        if(contextMenuFix)
+            U.startFreeformHack(this, false, false);
+
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
     }
 

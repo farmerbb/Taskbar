@@ -53,6 +53,7 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
+import com.farmerbb.taskbar.util.StartMenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
@@ -70,6 +71,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean isOverflowMenu = false;
     boolean secondaryMenu = false;
     boolean dashboardOrStartMenuAppearing = false;
+    boolean contextMenuFix = false;
 
     List<ShortcutInfo> shortcuts;
 
@@ -93,6 +95,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
         isStartButton = isNonAppMenu && getIntent().getBooleanExtra("is_start_button", false);
         isOverflowMenu = isNonAppMenu && getIntent().getBooleanExtra("is_overflow_menu", false);
+        contextMenuFix = getIntent().hasExtra("context_menu_fix");
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -236,6 +239,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 findPreference("file_manager").setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference("file_manager"));
         } else {
             appName = getIntent().getStringExtra("app_name");
             packageName = getIntent().getStringExtra("package_name");
@@ -451,6 +456,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
                 }
 
+                if(U.isOPreview()) {
+                    U.showToast(this, R.string.window_sizes_not_available);
+                }
+
                 secondaryMenu = true;
                 break;
             case "window_size_standard":
@@ -658,8 +667,16 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getPreferenceScreen().removeAll();
             generateMenu();
-        } else
+        } else {
+            if(contextMenuFix) {
+                if(showStartMenu)
+                    StartMenuHelper.getInstance().setContextMenuFix(true);
+                else
+                    U.startFreeformHack(this, false, false);
+            }
+
             super.onBackPressed();
+        }
     }
 
     @Override

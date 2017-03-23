@@ -51,6 +51,11 @@
         <item>経過日内</item>
         <item>Taskbar 開始後</item>
     </string-array>
+    <string-array name="pref_recents_amount_alt">
+        <item>経過日内</item>
+        <item>Taskbar 開始後</item>
+        <item>Running apps only</item>
+    </string-array>
 
     <string name="pref_title_sort_order">並び順</string>
     <string-array name="pref_sort_order">
@@ -58,6 +63,10 @@
         <item>最近使用した (昇順)</item>
         <item>長時間使用した (降順)</item>
         <item>長時間使用した (昇順)</item>
+    </string-array>
+    <string-array name="pref_sort_order_alt">
+        <item>最近使用した (降順)</item>
+        <item>最近使用した (昇順)</item>
     </string-array>
 
     <string name="pref_header_advanced">詳細</string>
@@ -283,5 +292,7 @@
     <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
 
     <string name="invalid_grid_size">Invalid grid size</string>
+
+    <string name="window_sizes_not_available">Window sizes currently don\'t work on Android O</string>
 
 </resources>

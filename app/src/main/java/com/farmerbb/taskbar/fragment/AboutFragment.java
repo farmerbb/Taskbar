@@ -58,18 +58,21 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             }
 
             SharedPreferences pref = U.getSharedPreferences(getActivity());
+            addPreferencesFromResource(R.xml.pref_about);
+
             if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                     && playStoreInstalled
                     && !U.isSystemApp(getActivity())
                     && !pref.getBoolean("hide_donate", false)) {
-                addPreferencesFromResource(R.xml.pref_about_donate);
                 findPreference("donate").setOnPreferenceClickListener(this);
             } else
-                addPreferencesFromResource(R.xml.pref_about);
+                getPreferenceScreen().removePreference(findPreference("donate_category"));
 
             // Set OnClickListeners for certain preferences
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));
 
             findPreference("pref_screen_general").setOnPreferenceClickListener(this);
             findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
@@ -117,7 +120,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
                             if(noThanksCount == 3) {
                                 pref.edit().putBoolean("hide_donate", true).apply();
-                                findPreference("donate").setEnabled(false);
+                                getPreferenceScreen().removePreference(findPreference("donate_category"));
                             }
                         });
 

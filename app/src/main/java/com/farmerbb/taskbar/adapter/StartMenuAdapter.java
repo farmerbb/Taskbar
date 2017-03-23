@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.adapter;
 
-import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +45,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
@@ -190,7 +190,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 DisplayManager dm = (DisplayManager) getContext().getSystemService(Context.DISPLAY_SERVICE);
                 Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-                getContext().startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                if(intent != null && U.isOPreview())
+                    intent.putExtra("context_menu_fix", true);
+
+                getContext().startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
             } else
                 getContext().startActivity(intent);
         }, shouldDelay() ? 100 : 0);

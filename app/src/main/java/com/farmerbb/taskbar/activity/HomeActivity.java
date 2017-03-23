@@ -19,12 +19,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -242,14 +240,8 @@ public class HomeActivity extends Activity {
                 } else
                     startTaskbar();
             }
-        } else {
-            ComponentName component = new ComponentName(this, HomeActivity.class);
-            getPackageManager().setComponentEnabledSetting(component,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-
-            finish();
-        }
+        } else
+            U.showPermissionDialog(this);
     }
 
     private boolean bootToFreeform() {

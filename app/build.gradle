@@ -30,12 +30,13 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
 
-        versionCode 131
-        versionName "3.1.1"
+        versionCode 132
+        versionName "3.2"
 
         resConfigs "en", "ja", "ru", "de"
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
+        buildConfigField "String", "SUPPORT_APPLICATION_ID", "\"com.farmerbb.taskbar.support\""
     }
 
     compileOptions {

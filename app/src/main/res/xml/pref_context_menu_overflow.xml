@@ -25,6 +25,10 @@
         android:title="@string/lock_device" />
 
     <Preference
+        android:key="file_manager"
+        android:title="@string/file_manager" />
+
+    <Preference
         android:key="system_settings"
         android:title="@string/system_settings" />
 

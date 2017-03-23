@@ -51,6 +51,11 @@
         <item>Within the past day</item>
         <item>After Taskbar start</item>
     </string-array>
+    <string-array name="pref_recents_amount_alt">
+        <item>Within the past day</item>
+        <item>After Taskbar start</item>
+        <item>Running apps only</item>
+    </string-array>
 
     <string name="pref_title_sort_order">Sort order</string>
     <string-array name="pref_sort_order">
@@ -58,6 +63,10 @@
         <item>Recently used (ascending)</item>
         <item>Most time used (descending)</item>
         <item>Most time used (ascending)</item>
+    </string-array>
+    <string-array name="pref_sort_order_alt">
+        <item>Recently used (descending)</item>
+        <item>Recently used (ascending)</item>
     </string-array>
 
     <string name="pref_header_advanced">Advanced features</string>
@@ -283,5 +292,7 @@
     <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
 
     <string name="invalid_grid_size">Invalid grid size</string>
+
+    <string name="window_sizes_not_available">Window sizes currently don\'t work on Android O</string>
 
 </resources>

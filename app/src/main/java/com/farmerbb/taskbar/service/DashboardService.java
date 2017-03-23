@@ -335,6 +335,9 @@ public class DashboardService extends Service {
             }
 
             if(inFreeformMode) {
+                if(intent != null && U.isOPreview())
+                    intent.putExtra("context_menu_fix", true);
+
                 U.launchAppMaximized(this, intent);
             } else
                 startActivity(intent);

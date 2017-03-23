@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.service;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.app.Service;
 import android.content.ActivityNotFoundException;
@@ -68,6 +67,7 @@ import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
@@ -587,7 +587,7 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!onHomeScreen || inFreeformMode) {
-                Class clazz = inFreeformMode && !shouldShowSearchBox ? InvisibleActivityAlt.class : InvisibleActivity.class;
+                Class clazz = inFreeformMode && !shouldShowSearchBox && !U.isOPreview() ? InvisibleActivityAlt.class : InvisibleActivity.class;
                 Intent intent = new Intent(this, clazz);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -612,7 +612,13 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(null);
             layout.setVisibility(View.INVISIBLE);
 
-            StartMenuHelper.getInstance().setStartMenuOpen(false);
+            StartMenuHelper helper = StartMenuHelper.getInstance();
+            helper.setStartMenuOpen(false);
+
+            if(helper.getContextMenuFix()) {
+                helper.setContextMenuFix(false);
+                U.startFreeformHack(this, false, false);
+            }
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
 
@@ -664,6 +670,8 @@ public class StartMenuService extends Service {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu(final int[] location) {
+        StartMenuHelper.getInstance().setContextMenuFix(false);
+
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         new Handler().postDelayed(() -> {
@@ -691,7 +699,10 @@ public class StartMenuService extends Service {
                 DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
                 Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-                startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                if(intent != null && U.isOPreview())
+                    intent.putExtra("context_menu_fix", true);
+
+                startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
             } else
                 startActivity(intent);
         }, shouldDelay() ? 100 : 0);

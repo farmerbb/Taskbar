@@ -33,8 +33,14 @@ public class EnableHomeReceiver extends BroadcastReceiver {
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("launcher", true);
 
+            // Customizations for Bliss-x86
             if(intent.hasExtra("enable_freeform_hack") && U.hasFreeformSupport(context)) {
                 editor.putBoolean("freeform_hack", true);
+            }
+
+            if(intent.hasExtra("enable_running_apps_only") && U.isSystemApp(context)) {
+                editor.putString("recents_amount", "running_apps_only");
+                editor.putString("refresh_frequency", "0");
             }
 
             editor.apply();

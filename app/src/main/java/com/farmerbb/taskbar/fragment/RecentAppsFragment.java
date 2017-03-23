@@ -19,8 +19,11 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -33,7 +36,7 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
-public class RecentAppsFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+public class RecentAppsFragment extends SettingsFragment implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -49,6 +52,19 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
             findPreference("enable_recents").setOnPreferenceClickListener(this);
             findPreference("max_num_of_recents").setOnPreferenceClickListener(this);
             findPreference("refresh_frequency").setOnPreferenceClickListener(this);
+
+            if(showRunningAppsOnly()) {
+                ListPreference recentsAmountPref = ((ListPreference) findPreference("recents_amount"));
+                recentsAmountPref.setEntries(getResources().getStringArray(R.array.pref_recents_amount_alt));
+                recentsAmountPref.setEntryValues(getResources().getStringArray(R.array.pref_recents_amount_values_alt));
+
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                if(pref.getString("recents_amount", "past_day").equals("running_apps_only")) {
+                    ListPreference sortOrderPref = ((ListPreference) findPreference("sort_order"));
+                    sortOrderPref.setEntries(getResources().getStringArray(R.array.pref_sort_order_alt));
+                    sortOrderPref.setEntryValues(getResources().getStringArray(R.array.pref_sort_order_values_alt));
+                }
+            }
 
             bindPreferenceSummaryToValue(findPreference("recents_amount"));
             bindPreferenceSummaryToValue(findPreference("sort_order"));
@@ -216,5 +232,42 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
             findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, value));
 
         if(restartTaskbar) restartTaskbar();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Register listener to check for changed preferences
+        if(showRunningAppsOnly())
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Unregister listener
+        if(showRunningAppsOnly())
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals("recents_amount")) {
+            boolean useAlt = sharedPreferences.getString(key, "past_day").equals("running_apps_only");
+
+            ListPreference sortOrderPref = ((ListPreference) findPreference("sort_order"));
+            sortOrderPref.setEntries(getResources().getStringArray(useAlt ? R.array.pref_sort_order_alt : R.array.pref_sort_order));
+            sortOrderPref.setEntryValues(getResources().getStringArray(useAlt ? R.array.pref_sort_order_values_alt : R.array.pref_sort_order_values));
+
+            String sortOrderValue = sharedPreferences.getString("sort_order", "false");
+            if(useAlt && sortOrderValue.startsWith("most_used_"))
+                sharedPreferences.edit().putString("sort_order", sortOrderValue.replace("most_used_", "")).apply();
+        }
+    }
+
+    private boolean showRunningAppsOnly() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && U.isSystemApp(getActivity());
     }
 }

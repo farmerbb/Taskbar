@@ -17,7 +17,7 @@ package com.farmerbb.taskbar.service;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Service;
 import android.app.usage.UsageEvents;
@@ -78,6 +78,7 @@ import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -114,6 +115,7 @@ public class TaskbarService extends Service {
     private int refreshInterval = -1;
     private long searchInterval = -1;
     private String sortOrder = "false";
+    private boolean runningAppsOnly = false;
 
     private int layoutId = R.layout.taskbar_left;
     private int currentTaskbarPosition = 0;
@@ -308,6 +310,7 @@ public class TaskbarService extends Service {
             refreshInterval = 100;
 
         sortOrder = pref.getString("sort_order", "false");
+        runningAppsOnly = pref.getString("recents_amount", "past_day").equals("running_apps_only");
 
         switch(pref.getString("recents_amount", "past_day")) {
             case "past_day":
@@ -488,18 +491,14 @@ public class TaskbarService extends Service {
         }
 
         // Get list of all recently used apps
-        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        List<UsageStats> usageStatsList = realNumOfPinnedApps < maxNumOfEntries
-                ? mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis())
-                : new ArrayList<>();
-
+        List<AppEntry> usageStatsList = realNumOfPinnedApps < maxNumOfEntries ? getAppEntries() : new ArrayList<>();
         if(usageStatsList.size() > 0 || realNumOfPinnedApps > 0) {
             if(realNumOfPinnedApps < maxNumOfEntries) {
-                List<UsageStats> usageStatsList2 = new ArrayList<>();
-                List<UsageStats> usageStatsList3 = new ArrayList<>();
-                List<UsageStats> usageStatsList4 = new ArrayList<>();
-                List<UsageStats> usageStatsList5 = new ArrayList<>();
-                List<UsageStats> usageStatsList6;
+                List<AppEntry> usageStatsList2 = new ArrayList<>();
+                List<AppEntry> usageStatsList3 = new ArrayList<>();
+                List<AppEntry> usageStatsList4 = new ArrayList<>();
+                List<AppEntry> usageStatsList5 = new ArrayList<>();
+                List<AppEntry> usageStatsList6;
 
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                 homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -507,7 +506,7 @@ public class TaskbarService extends Service {
 
                 // Filter out apps without a launcher intent
                 // Also filter out the current launcher, and Taskbar itself
-                for(UsageStats packageInfo : usageStatsList) {
+                for(AppEntry packageInfo : usageStatsList) {
                     if(pm.getLaunchIntentForPackage(packageInfo.getPackageName()) != null
                             && !packageInfo.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                             && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName))
@@ -515,21 +514,23 @@ public class TaskbarService extends Service {
                 }
 
                 // Filter out apps that don't fall within our current search interval
-                for(UsageStats stats : usageStatsList2) {
-                    if(stats.getLastTimeUsed() > searchInterval)
+                for(AppEntry stats : usageStatsList2) {
+                    if(stats.getLastTimeUsed() > searchInterval || runningAppsOnly)
                         usageStatsList3.add(stats);
                 }
 
                 // Sort apps by either most recently used, or most time used
-                if(sortOrder.contains("most_used")) {
-                    Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground()));
-                } else {
-                    Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed()));
+                if(!runningAppsOnly) {
+                    if(sortOrder.contains("most_used")) {
+                        Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground()));
+                    } else {
+                        Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed()));
+                    }
                 }
 
                 // Filter out any duplicate entries
                 List<String> applicationIds = new ArrayList<>();
-                for(UsageStats stats : usageStatsList3) {
+                for(AppEntry stats : usageStatsList3) {
                     if(!applicationIds.contains(stats.getPackageName())) {
                         usageStatsList4.add(stats);
                         applicationIds.add(stats.getPackageName());
@@ -539,6 +540,7 @@ public class TaskbarService extends Service {
                 // Filter out the currently running foreground app, if requested by the user
                 SharedPreferences pref = U.getSharedPreferences(this);
                 if(pref.getBoolean("hide_foreground", false)) {
+                    UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                     UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
                     UsageEvents.Event eventCache = new UsageEvents.Event();
                     String currentForegroundApp = null;
@@ -559,7 +561,7 @@ public class TaskbarService extends Service {
                         applicationIdsToRemove.add(currentForegroundApp);
                 }
 
-                for(UsageStats stats : usageStatsList4) {
+                for(AppEntry stats : usageStatsList4) {
                     if(!applicationIdsToRemove.contains(stats.getPackageName())) {
                         usageStatsList5.add(stats);
                     }
@@ -956,7 +958,10 @@ public class TaskbarService extends Service {
             DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
             Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+            if(intent != null && U.isOPreview())
+                intent.putExtra("context_menu_fix", true);
+
+            startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
         } else
             startActivity(intent);
     }
@@ -1099,8 +1104,63 @@ public class TaskbarService extends Service {
             DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
             Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-            startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+            if(intent != null && U.isOPreview())
+                intent.putExtra("context_menu_fix", true);
+
+            startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
         } else
             startActivity(intent);
+    }
+
+    private List<AppEntry> getAppEntries() {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(runningAppsOnly)
+            return getAppEntriesUsingActivityManager(Integer.parseInt(pref.getString("max_num_of_recents", "10")));
+        else
+            return getAppEntriesUsingUsageStats();
+    }
+
+    @SuppressWarnings("deprecation")
+    private List<AppEntry> getAppEntriesUsingActivityManager(int maxNum) {
+        ActivityManager mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> usageStatsList = mActivityManager.getRunningTasks(maxNum);
+        List<AppEntry> entries = new ArrayList<>();
+
+        for(ActivityManager.RunningTaskInfo usageStats : usageStatsList) {
+            AppEntry newEntry = new AppEntry(
+                    usageStats.baseActivity.getPackageName(),
+                    null,
+                    null,
+                    null,
+                    false
+            );
+
+            entries.add(newEntry);
+        }
+
+        return entries;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+    private List<AppEntry> getAppEntriesUsingUsageStats() {
+        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+        List<UsageStats> usageStatsList = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis());
+        List<AppEntry> entries = new ArrayList<>();
+
+        for(UsageStats usageStats : usageStatsList) {
+            AppEntry newEntry = new AppEntry(
+                    usageStats.getPackageName(),
+                    null,
+                    null,
+                    null,
+                    false
+            );
+
+            newEntry.setTotalTimeInForeground(usageStats.getTotalTimeInForeground());
+            newEntry.setLastTimeUsed(usageStats.getLastTimeUsed());
+            entries.add(newEntry);
+        }
+
+        return entries;
     }
 }
