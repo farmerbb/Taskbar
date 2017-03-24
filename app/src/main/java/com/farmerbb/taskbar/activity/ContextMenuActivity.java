@@ -364,6 +364,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "uninstall":
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode()) {
@@ -386,6 +387,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "open_taskbar_settings":
                 startFreeformActivity();
@@ -396,12 +398,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "quit_taskbar":
                 sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "pin_app":
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
@@ -480,6 +484,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "app_shortcuts":
                 getPreferenceScreen().removeAll();
@@ -496,6 +501,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "start_menu_apps":
                 startFreeformActivity();
@@ -524,6 +530,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "volume":
                 AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -531,6 +538,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "file_manager":
                 Intent fileManagerIntent;
@@ -554,6 +562,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "system_settings":
                 startFreeformActivity();
@@ -568,18 +577,21 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "lock_device":
                 U.lockDevice(this);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "power_menu":
                 U.showPowerMenu(this);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "change_wallpaper":
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
@@ -588,6 +600,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
         }
 
@@ -613,6 +626,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
             }
+        }
+
+        if(contextMenuFix) {
+            if(showStartMenu)
+                StartMenuHelper.getInstance().setContextMenuFix(true);
+            else
+                U.startFreeformHack(this, false, false);
         }
 
         super.finish();
@@ -667,16 +687,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getPreferenceScreen().removeAll();
             generateMenu();
-        } else {
-            if(contextMenuFix) {
-                if(showStartMenu)
-                    StartMenuHelper.getInstance().setContextMenuFix(true);
-                else
-                    U.startFreeformHack(this, false, false);
-            }
-
+        } else
             super.onBackPressed();
-        }
     }
 
     @Override

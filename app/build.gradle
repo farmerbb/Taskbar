@@ -30,7 +30,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
 
-        versionCode 134
+        versionCode 135
         versionName "3.2"
 
         resConfigs "en", "ja", "ru", "de"
