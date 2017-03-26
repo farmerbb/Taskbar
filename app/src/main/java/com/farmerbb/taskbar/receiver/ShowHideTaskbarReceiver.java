@@ -19,8 +19,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -42,6 +44,15 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
             pref.edit().putBoolean("is_hidden", false).apply();
 
             context.stopService(notificationIntent);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                Intent intent2 = new Intent(context, DummyActivity.class);
+                intent2.putExtra("start_freeform_hack", true);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(intent2);
+            }
+
             context.startService(taskbarIntent);
             context.startService(startMenuIntent);
             context.startService(dashboardIntent);

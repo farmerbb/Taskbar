@@ -19,7 +19,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 
+import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -31,6 +33,14 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                Intent intent2 = new Intent(context, DummyActivity.class);
+                intent2.putExtra("start_freeform_hack", true);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(intent2);
+            }
+
             context.startService(new Intent(context, TaskbarService.class));
             context.startService(new Intent(context, StartMenuService.class));
             context.startService(new Intent(context, DashboardService.class));
