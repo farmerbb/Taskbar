@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.util;
 public class StartMenuHelper {
 
     private boolean startMenuOpen = false;
-    private boolean contextMenuFix = false;
 
     private static StartMenuHelper theInstance;
 
@@ -36,13 +35,5 @@ public class StartMenuHelper {
 
     public void setStartMenuOpen(boolean value) {
         startMenuOpen = value;
-    }
-
-    public boolean getContextMenuFix() {
-        return U.isOPreview() && contextMenuFix;
-    }
-
-    public void setContextMenuFix(boolean value) {
-        contextMenuFix = value;
     }
 }

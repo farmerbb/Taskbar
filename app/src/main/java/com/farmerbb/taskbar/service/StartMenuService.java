@@ -612,13 +612,7 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(null);
             layout.setVisibility(View.INVISIBLE);
 
-            StartMenuHelper helper = StartMenuHelper.getInstance();
-            helper.setStartMenuOpen(false);
-
-            if(helper.getContextMenuFix()) {
-                helper.setContextMenuFix(false);
-                U.startFreeformHack(this, false, false);
-            }
+            StartMenuHelper.getInstance().setStartMenuOpen(false);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
 
@@ -670,8 +664,6 @@ public class StartMenuService extends Service {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu(final int[] location) {
-        StartMenuHelper.getInstance().setContextMenuFix(false);
-
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         new Handler().postDelayed(() -> {

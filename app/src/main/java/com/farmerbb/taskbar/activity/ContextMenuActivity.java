@@ -53,7 +53,6 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
-import com.farmerbb.taskbar.util.StartMenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
@@ -628,13 +627,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             }
         }
 
-        if(contextMenuFix) {
-            if(showStartMenu)
-                StartMenuHelper.getInstance().setContextMenuFix(true);
-            else
-                U.startFreeformHack(this, false, false);
-        }
-
         super.finish();
     }
 
@@ -687,8 +679,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getPreferenceScreen().removeAll();
             generateMenu();
-        } else
+        } else {
+            if(contextMenuFix && !showStartMenu)
+                U.startFreeformHack(this, false, false);
+
             super.onBackPressed();
+        }
     }
 
     @Override

@@ -18,7 +18,7 @@ com.farmerbb.taskbar.util.AppEntry -> com.farmerbb.taskbar.c.a:
     long getLastTimeUsed() -> d
     void setLastTimeUsed(long) -> b
     long getTotalTimeInForeground() -> e
-    void setTotalTimeInForeground(java.lang.Long) -> a
+    void setTotalTimeInForeground(long) -> c
 com.farmerbb.taskbar.util.Blacklist -> com.farmerbb.taskbar.c.b:
     long serialVersionUID -> serialVersionUID
     java.util.List blockedApps -> a

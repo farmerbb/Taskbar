@@ -101,7 +101,7 @@ public class AppEntry implements Serializable {
         return totalTimeInForeground == null ? 0 : totalTimeInForeground;
     }
 
-    public void setTotalTimeInForeground(Long totalTimeInForeground) {
+    public void setTotalTimeInForeground(long totalTimeInForeground) {
         this.totalTimeInForeground = totalTimeInForeground;
     }
 }
