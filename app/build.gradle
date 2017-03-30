@@ -44,6 +44,15 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KSTOREFILE"))
+            storePassword System.getenv("KSTOREPWD")
+            keyAlias System.getenv("KEYALIAS")
+            keyPassword System.getenv("KEYPWD")
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
