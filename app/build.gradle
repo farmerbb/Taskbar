@@ -46,7 +46,9 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(System.getenv("KSTOREFILE"))
+            if(System.getenv("KSTOREFILE") != null)
+                storeFile file(System.getenv("KSTOREFILE"))
+
             storePassword System.getenv("KSTOREPWD")
             keyAlias System.getenv("KEYALIAS")
             keyPassword System.getenv("KEYPWD")
@@ -63,6 +65,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
             manifestPlaceholders = [appName: "@string/app_name"]
         }
     }
