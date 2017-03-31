@@ -299,10 +299,17 @@ public class DashboardService extends Service {
     }
 
     private void toggleDashboard() {
-        if(layout.getVisibility() == View.GONE)
-            showDashboard();
-        else
-            hideDashboard();
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if (pref.getBoolean("dashboard_home", false)) {
+            Intent i = new Intent(Intent.ACTION_MAIN);
+            i.addCategory(Intent.CATEGORY_HOME);
+            startActivity(i);
+        } else {
+            if (layout.getVisibility() == View.GONE)
+                showDashboard();
+            else
+                hideDashboard();
+        }
     }
 
     @SuppressWarnings("deprecation")
