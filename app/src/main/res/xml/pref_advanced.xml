@@ -34,6 +34,12 @@
         android:title="@string/dashboard"
         android:summary="@string/dashboard_description" />
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="dashboard_home"
+        android:title="@string/dashboard_home"
+        android:summary="@string/dashboard_home_description" />
+
     <Preference
         android:key="dashboard_grid_size"
         android:title="@string/dashboard_grid_size" />

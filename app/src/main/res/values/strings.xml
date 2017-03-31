@@ -259,6 +259,8 @@
     <string name="pref_header_appearance">Appearance</string>
     <string name="dashboard">Enable the dashboard</string>
     <string name="dashboard_description">Adds a button to the Taskbar where widgets can be displayed</string>
+    <string name="dashboard_home">Dashboard button mimics home</string>
+    <string name="dashboard_home_description">Tap on dashboard button minimzes active app and revealse home screen</string>
     <string name="dashboard_grid_size">Dashboard grid size</string>
 
     <string name="click_to_add_widget">Click to add widget</string>
