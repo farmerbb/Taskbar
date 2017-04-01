@@ -209,6 +209,12 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Incognito.Dark"/>
+        <activity
+            android:name=".activity.NavigationBarButtonsActivity"
+            android:theme="@style/AppTheme.Dialog"/>
+        <activity
+            android:name=".activity.dark.NavigationBarButtonsActivityDark"
+            android:theme="@style/AppTheme.Dialog.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

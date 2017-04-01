@@ -295,4 +295,10 @@
 
     <string name="window_sizes_not_available">Window sizes currently don\'t work on Android O</string>
 
+    <string name="navigation_bar_buttons">Navigation bar buttons</string>
+    <string name="navigation_bar_buttons_description">Add additional buttons to the Taskbar that perform navigation bar actions</string>
+    <string name="button_back">Back</string>
+    <string name="button_home">Home</string>
+    <string name="button_recents">Recents</string>
+
 </resources>

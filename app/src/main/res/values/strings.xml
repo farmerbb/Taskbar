@@ -258,7 +258,7 @@
 
     <string name="pref_header_appearance">Appearance</string>
     <string name="dashboard">Enable widget support</string>
-    <string name="dashboard_description">Adds a button to the Taskbar that displays a grid of widgets</string>
+    <string name="dashboard_description">Adds a button to the Taskbar that displays widgets when pressed</string>
     <string name="dashboard_grid_size">Widget dashboard grid size</string>
 
     <string name="click_to_add_widget">Click to add widget</string>
@@ -294,5 +294,11 @@
     <string name="invalid_grid_size">Invalid grid size</string>
 
     <string name="window_sizes_not_available">Window sizes currently don\'t work on Android O</string>
+
+    <string name="navigation_bar_buttons">Navigation bar buttons</string>
+    <string name="navigation_bar_buttons_description">Add additional buttons to the Taskbar that perform navigation bar actions</string>
+    <string name="button_back">Back</string>
+    <string name="button_home">Home</string>
+    <string name="button_recents">Recents</string>
 
 </resources>

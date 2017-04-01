@@ -420,7 +420,7 @@ public class TaskbarService extends Service {
         if(dashboardEnabled && navbarButtonsEnabled) {
             LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams) dashboardButton.getLayoutParams();
             params2.setMargins(0, 0, 0, 0);
-            dashboardButton.setLayoutParams(params);
+            dashboardButton.setLayoutParams(params2);
         }
 
         layout.setBackgroundColor(backgroundTint);

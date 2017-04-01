@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -37,9 +38,11 @@ import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
+import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
 import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
+import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.U;
 
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
@@ -59,6 +62,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             findPreference("launcher").setOnPreferenceClickListener(this);
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
+            findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
 
             bindPreferenceSummaryToValue(findPreference("dashboard"));
 
@@ -182,6 +186,20 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 });
 
                 break;
+            case "navigation_bar_buttons":
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getActivity(), NavigationBarButtonsActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getActivity(), NavigationBarButtonsActivityDark.class);
+                        break;
+                }
+
+                startActivityForResult(intent, 123);
+                break;
         }
 
         return true;
@@ -211,5 +229,12 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
 
         if(restartTaskbar) restartTaskbar();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
+            restartTaskbar();
+        }
     }
 }
