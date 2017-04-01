@@ -31,7 +31,7 @@ public class PowerMenuService extends AccessibilityService {
     private BroadcastReceiver powerMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(!performGlobalAction(GLOBAL_ACTION_POWER_DIALOG))
+            if(!performGlobalAction(intent.getIntExtra("action", -1)))
                 U.showToast(PowerMenuService.this, R.string.lock_device_not_supported);
         }
     };
@@ -46,7 +46,7 @@ public class PowerMenuService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(powerMenuReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_POWER_MENU"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(powerMenuReceiver, new IntentFilter("com.farmerbb.taskbar.ACCESSIBILITY_ACTION"));
     }
 
     @Override

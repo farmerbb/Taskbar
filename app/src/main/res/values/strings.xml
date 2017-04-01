@@ -247,8 +247,8 @@
 
     <string name="tools">Tools</string>
 
-    <string name="enable_accessibility">Taskbar\'s accessibility service must be enabled to show the power menu</string>
-    <string name="accessibility_service_description">Allows Taskbar to show the device\'s power menu.\n\n(This service is not used for any other purpose)</string>
+    <string name="enable_accessibility">Taskbar\'s accessibility service must be enabled to perform this action</string>
+    <string name="accessibility_service_description">Allows Taskbar to show the device\'s power menu and perform navigation bar button actions.\n\n(This service is not used for any other purpose)</string>
     
     <string name="pref_title_force_new_window">Always open apps in new windows</string>
     <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
@@ -257,9 +257,9 @@
     <string name="notification_settings">System notification settings</string>
 
     <string name="pref_header_appearance">Appearance</string>
-    <string name="dashboard">Enable the dashboard</string>
-    <string name="dashboard_description">Adds a button to the Taskbar where widgets can be displayed</string>
-    <string name="dashboard_grid_size">Dashboard grid size</string>
+    <string name="dashboard">Enable widget support</string>
+    <string name="dashboard_description">Adds a button to the Taskbar that displays a grid of widgets</string>
+    <string name="dashboard_grid_size">Widget dashboard grid size</string>
 
     <string name="click_to_add_widget">Click to add widget</string>
     <string name="remove_widget">Remove widget</string>

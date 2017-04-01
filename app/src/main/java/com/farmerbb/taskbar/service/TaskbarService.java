@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.service;
 
+import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
@@ -96,6 +97,7 @@ public class TaskbarService extends Service {
     private Button button;
     private Space space;
     private FrameLayout dashboardButton;
+    private LinearLayout navbarButtons;
 
     private Handler handler;
     private Handler handler2;
@@ -358,6 +360,7 @@ public class TaskbarService extends Service {
         int accentColor = U.getAccentColor(this);
 
         dashboardButton = (FrameLayout) layout.findViewById(R.id.dashboard_button);
+        navbarButtons = (LinearLayout) layout.findViewById(R.id.navbar_buttons);
 
         dashboardEnabled = pref.getBoolean("dashboard", false);
         if(dashboardEnabled) {
@@ -371,6 +374,54 @@ public class TaskbarService extends Service {
             dashboardButton.setOnClickListener(v -> LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD")));
         } else
             dashboardButton.setVisibility(View.GONE);
+
+
+        boolean navbarButtonsEnabled = false;
+
+        if(pref.getBoolean("button_back", false)) {
+            navbarButtonsEnabled = true;
+
+            ImageView backButton = (ImageView) layout.findViewById(R.id.button_back);
+            backButton.setVisibility(View.VISIBLE);
+            backButton.setOnClickListener(v -> U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK));
+        }
+
+        if(pref.getBoolean("button_home", false)) {
+            navbarButtonsEnabled = true;
+
+            ImageView homeButton = (ImageView) layout.findViewById(R.id.button_home);
+            homeButton.setVisibility(View.VISIBLE);
+            homeButton.setOnClickListener(v -> U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_HOME));
+        }
+
+        if(pref.getBoolean("button_recents", false)) {
+            navbarButtonsEnabled = true;
+
+            ImageView recentsButton = (ImageView) layout.findViewById(R.id.button_recents);
+            recentsButton.setVisibility(View.VISIBLE);
+            recentsButton.setOnClickListener(v -> U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_RECENTS));
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                recentsButton.setOnLongClickListener(v -> {
+                    U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                    return false;
+                });
+
+                recentsButton.setOnGenericMotionListener((view13, motionEvent) -> {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                        U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                    }
+                    return false;
+                });
+            }
+        }
+
+        if(dashboardEnabled && navbarButtonsEnabled) {
+            LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams) dashboardButton.getLayoutParams();
+            params2.setMargins(0, 0, 0, 0);
+            dashboardButton.setLayoutParams(params);
+        }
 
         layout.setBackgroundColor(backgroundTint);
         layout.findViewById(R.id.divider).setBackgroundColor(accentColor);
@@ -789,6 +840,7 @@ public class TaskbarService extends Service {
         if(startButton.getVisibility() == View.GONE) {
             startButton.setVisibility(View.VISIBLE);
             space.setVisibility(View.VISIBLE);
+            navbarButtons.setVisibility(View.VISIBLE);
 
             if(dashboardEnabled)
                 dashboardButton.setVisibility(View.VISIBLE);
@@ -810,6 +862,7 @@ public class TaskbarService extends Service {
         if(startButton.getVisibility() == View.VISIBLE) {
             startButton.setVisibility(View.GONE);
             space.setVisibility(View.GONE);
+            navbarButtons.setVisibility(View.GONE);
 
             if(dashboardEnabled)
                 dashboardButton.setVisibility(View.GONE);

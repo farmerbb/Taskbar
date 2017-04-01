@@ -66,6 +66,38 @@
 
         </HorizontalScrollView>
 
+        <LinearLayout
+            android:id="@+id/navbar_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/button_back"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_sysbar_back"
+                    android:scaleType="center"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/button_home"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_sysbar_home"
+                    android:scaleType="center"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/button_recents"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_sysbar_recent"
+                    android:scaleType="center"
+                    android:visibility="gone" />
+
+        </LinearLayout>
+
         <FrameLayout
             android:orientation="vertical"
             android:id="@+id/dashboard_button"

@@ -135,14 +135,16 @@ public class U {
         }
     }
 
-    public static void showPowerMenu(Context context) {
+    public static void sendAccessibilityAction(Context context, int action) {
         ComponentName component = new ComponentName(context, PowerMenuService.class);
         context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
-        if(isAccessibilityServiceEnabled(context))
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_POWER_MENU"));
-        else {
+        if(isAccessibilityServiceEnabled(context)) {
+            Intent intent = new Intent("com.farmerbb.taskbar.ACCESSIBILITY_ACTION");
+            intent.putExtra("action", action);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        } else {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

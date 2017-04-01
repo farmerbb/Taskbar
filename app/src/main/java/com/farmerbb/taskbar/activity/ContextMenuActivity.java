@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
@@ -586,7 +587,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "power_menu":
-                U.showPowerMenu(this);
+                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
