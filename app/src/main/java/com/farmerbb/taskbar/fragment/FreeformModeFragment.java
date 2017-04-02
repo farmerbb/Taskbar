@@ -49,6 +49,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             findPreference("freeform_hack").setOnPreferenceClickListener(this);
             findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
             findPreference("add_shortcut").setOnPreferenceClickListener(this);
+            findPreference("window_size").setOnPreferenceClickListener(this);
 
             bindPreferenceSummaryToValue(findPreference("window_size"));
 
@@ -160,6 +161,12 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 getActivity().sendBroadcast(intent);
 
                 U.showToast(getActivity(), R.string.shortcut_created);
+                break;
+            case "window_size":
+                if(U.isOPreview()) {
+                    U.showToast(getActivity(), R.string.window_sizes_not_available);
+                }
+
                 break;
         }
 
