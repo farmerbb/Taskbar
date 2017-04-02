@@ -211,10 +211,10 @@
             android:theme="@style/AppTheme.Incognito.Dark"/>
         <activity
             android:name=".activity.NavigationBarButtonsActivity"
-            android:theme="@style/AppTheme.Dialog"/>
+            android:theme="@style/AppTheme.Dialog.Preference"/>
         <activity
             android:name=".activity.dark.NavigationBarButtonsActivityDark"
-            android:theme="@style/AppTheme.Dialog.Dark"/>
+            android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

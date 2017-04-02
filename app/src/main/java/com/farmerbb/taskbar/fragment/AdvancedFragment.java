@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -198,7 +197,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                         break;
                 }
 
-                startActivityForResult(intent, 123);
+                startActivity(intent);
                 break;
         }
 
@@ -228,13 +227,6 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
 
-        if(restartTaskbar) restartTaskbar();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
-            restartTaskbar();
-        }
+        if(restartTaskbar) U.restartTaskbar(getActivity());
     }
 }

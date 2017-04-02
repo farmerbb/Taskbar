@@ -382,6 +382,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
         SettingsFragment fragment = (SettingsFragment) getFragmentManager().findFragmentById(R.id.fragmentContainer);
         colorDialog.setColorPreferenceSummary(fragment.findPreference(preferenceId + "_pref"), color, this, getResources());
 
-        fragment.restartTaskbar();
+        U.restartTaskbar(this);
     }
 }

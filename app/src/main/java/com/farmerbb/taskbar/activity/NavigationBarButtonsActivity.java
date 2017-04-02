@@ -20,6 +20,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.U;
 
 public class NavigationBarButtonsActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 
@@ -40,7 +41,7 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        setResult(RESULT_OK);
+        U.restartTaskbar(this);
         return true;
     }
 }

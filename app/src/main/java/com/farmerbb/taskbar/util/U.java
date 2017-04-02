@@ -59,7 +59,11 @@ import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.service.DashboardService;
+import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
+import com.farmerbb.taskbar.service.StartMenuService;
+import com.farmerbb.taskbar.service.TaskbarService;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -957,5 +961,32 @@ public class U {
             baseTaskbarSize += context.getResources().getDimension(R.dimen.navbar_buttons_margin);
 
         return baseTaskbarSize;
+    }
+
+    private static void startTaskbarService(Context context, boolean fullRestart) {
+        context.startService(new Intent(context, TaskbarService.class));
+        context.startService(new Intent(context, StartMenuService.class));
+        context.startService(new Intent(context, DashboardService.class));
+        if(fullRestart) context.startService(new Intent(context, NotificationService.class));
+    }
+
+    private static void stopTaskbarService(Context context, boolean fullRestart) {
+        context.stopService(new Intent(context, TaskbarService.class));
+        context.stopService(new Intent(context, StartMenuService.class));
+        context.stopService(new Intent(context, DashboardService.class));
+        if(fullRestart) context.stopService(new Intent(context, NotificationService.class));
+    }
+
+    public static void restartTaskbar(Context context) {
+        SharedPreferences pref = U.getSharedPreferences(context);
+        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+            pref.edit().putBoolean("is_restarting", true).apply();
+
+            stopTaskbarService(context, true);
+            startTaskbarService(context, true);
+        } else if(U.isServiceRunning(context, StartMenuService.class)) {
+            stopTaskbarService(context, false);
+            startTaskbarService(context, false);
+        }
     }
 }

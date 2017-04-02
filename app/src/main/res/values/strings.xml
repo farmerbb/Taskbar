@@ -258,7 +258,7 @@
 
     <string name="pref_header_appearance">Appearance</string>
     <string name="dashboard">Enable widget support</string>
-    <string name="dashboard_description">Adds a button to the Taskbar that displays widgets when pressed</string>
+    <string name="dashboard_description">Add a button to the Taskbar that displays widgets when pressed</string>
     <string name="dashboard_grid_size">Widget dashboard grid size</string>
 
     <string name="click_to_add_widget">Click to add widget</string>

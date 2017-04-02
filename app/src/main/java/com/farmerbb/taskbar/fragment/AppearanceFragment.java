@@ -132,7 +132,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
                             colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
 
                             finishedLoadingPrefs = true;
-                            restartTaskbar();
+                            U.restartTaskbar(getActivity());
                         });
 
                 AlertDialog dialog = builder.create();
@@ -163,7 +163,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
             U.refreshPinnedIcons(getActivity());
-            restartTaskbar();
+            U.restartTaskbar(getActivity());
         }
     }
 }

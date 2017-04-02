@@ -213,7 +213,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                 break;
         }
 
-        if(restartTaskbar) restartTaskbar();
+        if(restartTaskbar) U.restartTaskbar(getActivity());
     }
 
     private void updateRefreshFrequency(boolean restartTaskbar) {
@@ -231,7 +231,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
         else
             findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, value));
 
-        if(restartTaskbar) restartTaskbar();
+        if(restartTaskbar) U.restartTaskbar(getActivity());
     }
 
     @Override
