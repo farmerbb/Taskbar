@@ -137,18 +137,14 @@ public class TaskbarService extends Service {
     private BroadcastReceiver showReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            taskbarShownTemporarily = false;
-            taskbarHiddenTemporarily = false;
-            showTaskbar();
+            showTaskbar(true);
         }
     };
 
     private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            taskbarShownTemporarily = false;
-            taskbarHiddenTemporarily = false;
-            hideTaskbar();
+            hideTaskbar(true);
         }
     };
 
@@ -381,7 +377,11 @@ public class TaskbarService extends Service {
 
             ImageView backButton = (ImageView) layout.findViewById(R.id.button_back);
             backButton.setVisibility(View.VISIBLE);
-            backButton.setOnClickListener(v -> U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK));
+            backButton.setOnClickListener(v -> {
+                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK);
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    hideTaskbar(true);
+            });
         }
 
         if(pref.getBoolean("button_home", false)) {
@@ -389,7 +389,11 @@ public class TaskbarService extends Service {
 
             ImageView homeButton = (ImageView) layout.findViewById(R.id.button_home);
             homeButton.setVisibility(View.VISIBLE);
-            homeButton.setOnClickListener(v -> U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_HOME));
+            homeButton.setOnClickListener(v -> {
+                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_HOME);
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    hideTaskbar(true);
+            });
         }
 
         if(pref.getBoolean("button_recents", false)) {
@@ -397,11 +401,18 @@ public class TaskbarService extends Service {
 
             ImageView recentsButton = (ImageView) layout.findViewById(R.id.button_recents);
             recentsButton.setVisibility(View.VISIBLE);
-            recentsButton.setOnClickListener(v -> U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_RECENTS));
+            recentsButton.setOnClickListener(v -> {
+                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_RECENTS);
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    hideTaskbar(true);
+            });
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 recentsButton.setOnLongClickListener(v -> {
                     U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                    if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                        hideTaskbar(true);
+
                     return true;
                 });
 
@@ -409,6 +420,8 @@ public class TaskbarService extends Service {
                     if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                             && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                         U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                        if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                            hideTaskbar(true);
                     }
                     return true;
                 });
@@ -423,7 +436,7 @@ public class TaskbarService extends Service {
         button.setTextColor(accentColor);
 
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
-            showTaskbar();
+            showTaskbar(false);
         else if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false))
             toggleTaskbar();
 
@@ -822,16 +835,18 @@ public class TaskbarService extends Service {
     }
 
     private void toggleTaskbar() {
-        taskbarShownTemporarily = false;
-        taskbarHiddenTemporarily = false;
-
         if(startButton.getVisibility() == View.GONE)
-            showTaskbar();
+            showTaskbar(true);
         else
-            hideTaskbar();
+            hideTaskbar(true);
     }
 
-    private void showTaskbar() {
+    private void showTaskbar(boolean clearVariables) {
+        if(clearVariables) {
+            taskbarShownTemporarily = false;
+            taskbarHiddenTemporarily = false;
+        }
+
         if(startButton.getVisibility() == View.GONE) {
             startButton.setVisibility(View.VISIBLE);
             space.setVisibility(View.VISIBLE);
@@ -855,7 +870,12 @@ public class TaskbarService extends Service {
         }
     }
 
-    private void hideTaskbar() {
+    private void hideTaskbar(boolean clearVariables) {
+        if(clearVariables) {
+            taskbarShownTemporarily = false;
+            taskbarHiddenTemporarily = false;
+        }
+
         if(startButton.getVisibility() == View.VISIBLE) {
             startButton.setVisibility(View.GONE);
             space.setVisibility(View.GONE);
@@ -889,7 +909,7 @@ public class TaskbarService extends Service {
             if(!pref.getBoolean("collapsed", false)) taskbarShownTemporarily = true;
         }
 
-        showTaskbar();
+        showTaskbar(false);
 
         if(taskbarHiddenTemporarily)
             taskbarHiddenTemporarily = false;
@@ -901,7 +921,7 @@ public class TaskbarService extends Service {
             if(pref.getBoolean("collapsed", false)) taskbarHiddenTemporarily = true;
         }
 
-        hideTaskbar();
+        hideTaskbar(false);
 
         if(taskbarShownTemporarily)
             taskbarShownTemporarily = false;
