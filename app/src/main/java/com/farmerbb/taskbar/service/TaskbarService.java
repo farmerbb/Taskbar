@@ -404,7 +404,7 @@ public class TaskbarService extends Service {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 recentsButton.setOnLongClickListener(v -> {
                     U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
-                    return false;
+                    return true;
                 });
 
                 recentsButton.setOnGenericMotionListener((view13, motionEvent) -> {
@@ -412,7 +412,7 @@ public class TaskbarService extends Service {
                             && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                         U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
                     }
-                    return false;
+                    return true;
                 });
             }
         }
