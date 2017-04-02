@@ -40,6 +40,8 @@ import com.farmerbb.taskbar.util.U;
 
 public class NotificationService extends Service {
 
+    private boolean isHidden = true;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -76,7 +78,7 @@ public class NotificationService extends Service {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false)) {
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
-                boolean isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
+                isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
                 String label = getString(isHidden ? R.string.action_show : R.string.action_hide);
 
                 Intent intent = new Intent(this, MainActivity.class);
@@ -134,7 +136,9 @@ public class NotificationService extends Service {
 
         super.onDestroy();
 
-        unregisterReceiver(userForegroundReceiver);
-        unregisterReceiver(userBackgroundReceiver);
+        if(!isHidden) {
+            unregisterReceiver(userForegroundReceiver);
+            unregisterReceiver(userBackgroundReceiver);
+        }
     }
 }
