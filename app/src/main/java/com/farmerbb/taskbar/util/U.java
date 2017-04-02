@@ -279,6 +279,11 @@ public class U {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+        if(FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
+                && !isOPreview())
+            intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+
         if(launchedFromTaskbar) {
             if(pref.getBoolean("disable_animations", false))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -907,7 +912,7 @@ public class U {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean isOPreview() {
-        return Build.VERSION.RELEASE.equals("O") && Build.VERSION.PREVIEW_SDK_INT == 1;
+        return Build.VERSION.RELEASE.equals("O") && Build.VERSION.PREVIEW_SDK_INT > 0;
     }
 
     public static boolean hasSupportLibrary(Context context) {
