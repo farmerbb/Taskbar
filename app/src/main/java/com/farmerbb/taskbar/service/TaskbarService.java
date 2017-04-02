@@ -124,6 +124,7 @@ public class TaskbarService extends Service {
     private boolean showHideAutomagically = false;
     private boolean positionIsVertical = false;
     private boolean dashboardEnabled = false;
+    private boolean navbarButtonsEnabled = false;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
@@ -375,9 +376,6 @@ public class TaskbarService extends Service {
         } else
             dashboardButton.setVisibility(View.GONE);
 
-
-        boolean navbarButtonsEnabled = false;
-
         if(pref.getBoolean("button_back", false)) {
             navbarButtonsEnabled = true;
 
@@ -417,11 +415,8 @@ public class TaskbarService extends Service {
             }
         }
 
-        if(dashboardEnabled && navbarButtonsEnabled) {
-            LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams) dashboardButton.getLayoutParams();
-            params2.setMargins(0, 0, 0, 0);
-            dashboardButton.setLayoutParams(params2);
-        }
+        if(!navbarButtonsEnabled)
+            navbarButtons.setVisibility(View.GONE);
 
         layout.setBackgroundColor(backgroundTint);
         layout.findViewById(R.id.divider).setBackgroundColor(accentColor);
@@ -759,13 +754,13 @@ public class TaskbarService extends Service {
                             float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
 
                             params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                    maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
+                                    maxScreenSize - U.getBaseTaskbarSize(TaskbarService.this))
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
                         } else {
                             float maxScreenSize = metrics.widthPixels;
 
                             params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
-                                    maxScreenSize - getResources().getDimensionPixelSize(dashboardEnabled ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size))
+                                    maxScreenSize - U.getBaseTaskbarSize(TaskbarService.this))
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
                         }
 
@@ -840,10 +835,12 @@ public class TaskbarService extends Service {
         if(startButton.getVisibility() == View.GONE) {
             startButton.setVisibility(View.VISIBLE);
             space.setVisibility(View.VISIBLE);
-            navbarButtons.setVisibility(View.VISIBLE);
 
             if(dashboardEnabled)
                 dashboardButton.setVisibility(View.VISIBLE);
+
+            if(navbarButtonsEnabled)
+                navbarButtons.setVisibility(View.VISIBLE);
 
             if(isShowingRecents && scrollView.getVisibility() == View.GONE)
                 scrollView.setVisibility(View.INVISIBLE);
@@ -862,10 +859,12 @@ public class TaskbarService extends Service {
         if(startButton.getVisibility() == View.VISIBLE) {
             startButton.setVisibility(View.GONE);
             space.setVisibility(View.GONE);
-            navbarButtons.setVisibility(View.GONE);
 
             if(dashboardEnabled)
                 dashboardButton.setVisibility(View.GONE);
+
+            if(navbarButtonsEnabled)
+                navbarButtons.setVisibility(View.GONE);
 
             if(isShowingRecents) {
                 scrollView.setVisibility(View.GONE);

@@ -672,7 +672,7 @@ public class U {
     private static int getMaxNumOfColumns(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float baseTaskbarSize = context.getResources().getDimension(pref.getBoolean("dashboard", false) ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size) / metrics.density;
+        float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / metrics.density;
         int numOfColumns = 0;
 
         float maxScreenSize = getTaskbarPosition(context).contains("vertical")
@@ -924,5 +924,38 @@ public class U {
             new Handler().post(() -> context.startActivity(intent, options));
         } else
             context.startActivity(intent, options);
+    }
+
+    public static int getBaseTaskbarSize(Context context) {
+        return Math.round(getBaseTaskbarSizeFloat(context));
+    }
+
+    private static float getBaseTaskbarSizeFloat(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        float baseTaskbarSize = context.getResources().getDimension(R.dimen.base_taskbar_size);
+        boolean navbarButtonsEnabled = false;
+
+        if(pref.getBoolean("dashboard", false))
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.dashboard_button_size);
+
+        if(pref.getBoolean("button_back", false)) {
+            navbarButtonsEnabled = true;
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+        }
+
+        if(pref.getBoolean("button_home", false)) {
+            navbarButtonsEnabled = true;
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+        }
+
+        if(pref.getBoolean("button_recents", false)) {
+            navbarButtonsEnabled = true;
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+        }
+
+        if(navbarButtonsEnabled)
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.navbar_buttons_margin);
+
+        return baseTaskbarSize;
     }
 }
