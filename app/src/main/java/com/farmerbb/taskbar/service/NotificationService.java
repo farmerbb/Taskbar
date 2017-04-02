@@ -53,24 +53,18 @@ public class NotificationService extends Service {
     BroadcastReceiver userForegroundReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isHidden = U.getSharedPreferences(context).getBoolean("is_hidden", false);
-            if(!isHidden) {
-                startService(new Intent(context, TaskbarService.class));
-                startService(new Intent(context, StartMenuService.class));
-                startService(new Intent(context, DashboardService.class));
-            }
+            startService(new Intent(context, TaskbarService.class));
+            startService(new Intent(context, StartMenuService.class));
+            startService(new Intent(context, DashboardService.class));
         }
     };
 
     BroadcastReceiver userBackgroundReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isHidden = U.getSharedPreferences(context).getBoolean("is_hidden", false);
-            if(!isHidden) {
-                stopService(new Intent(context, TaskbarService.class));
-                stopService(new Intent(context, StartMenuService.class));
-                stopService(new Intent(context, DashboardService.class));
-            }
+            stopService(new Intent(context, TaskbarService.class));
+            stopService(new Intent(context, StartMenuService.class));
+            stopService(new Intent(context, DashboardService.class));
         }
     };
 
@@ -111,8 +105,10 @@ public class NotificationService extends Service {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
 
-                registerReceiver(userForegroundReceiver, new IntentFilter(Intent.ACTION_USER_FOREGROUND));
-                registerReceiver(userBackgroundReceiver, new IntentFilter(Intent.ACTION_USER_BACKGROUND));
+                if(!isHidden) {
+                    registerReceiver(userForegroundReceiver, new IntentFilter(Intent.ACTION_USER_FOREGROUND));
+                    registerReceiver(userBackgroundReceiver, new IntentFilter(Intent.ACTION_USER_BACKGROUND));
+                }
             } else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
