@@ -115,7 +115,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                                 startActivity(intent);
                             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         })
-                        .setNegativeButton(R.string.action_no_thanks, (dialog, which) -> {
+                        .setNegativeButton(noThanksCount == 2 ? R.string.action_dont_show_again : R.string.action_no_thanks, (dialog, which) -> {
                             noThanksCount++;
 
                             if(noThanksCount == 3) {
