@@ -30,13 +30,11 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
         super.onPostCreate(savedInstanceState);
         setTitle(R.string.navigation_bar_buttons);
 
-        if(savedInstanceState == null) {
-            addPreferencesFromResource(R.xml.pref_navigation_bar_buttons);
+        addPreferencesFromResource(R.xml.pref_navigation_bar_buttons);
 
-            findPreference("button_back").setOnPreferenceClickListener(this);
-            findPreference("button_home").setOnPreferenceClickListener(this);
-            findPreference("button_recents").setOnPreferenceClickListener(this);
-        }
+        findPreference("button_back").setOnPreferenceClickListener(this);
+        findPreference("button_home").setOnPreferenceClickListener(this);
+        findPreference("button_recents").setOnPreferenceClickListener(this);
     }
 
     @Override
