@@ -45,6 +45,11 @@
                     android:orientation="horizontal"
                     android:clickable="false">
 
+                        <Space
+                            android:id="@+id/whitespace"
+                            android:layout_height="0dp"
+                            android:layout_width="0dp" />
+
                         <LinearLayout
                             android:id="@+id/taskbar"
                             android:layout_width="wrap_content"

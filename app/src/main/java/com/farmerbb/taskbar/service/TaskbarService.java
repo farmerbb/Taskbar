@@ -763,22 +763,40 @@ public class TaskbarService extends Service {
                     if(numOfEntries > 0 || fullLength) {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                         DisplayMetrics metrics = getResources().getDisplayMetrics();
-                        float maxRecentsSize = fullLength
-                                ? Float.MAX_VALUE
-                                : (getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries);
+                        int recentsSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
+                        float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
                         if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
-                            float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
+                            int maxScreenSize = metrics.heightPixels
+                                    - U.getStatusBarHeight(TaskbarService.this)
+                                    - U.getBaseTaskbarSize(TaskbarService.this);
 
-                            params.height = (int) Math.min(maxRecentsSize,
-                                    maxScreenSize - U.getBaseTaskbarSize(TaskbarService.this))
+                            params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
+
+                            if(fullLength && U.getTaskbarPosition(this).contains("bottom")) {
+                                Space whitespace = (Space) layout.findViewById(R.id.whitespace);
+                                ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
+                                if(params2 != null) {
+                                    params2.height = maxScreenSize - recentsSize;
+                                    whitespace.setLayoutParams(params2);
+                                }
+                            }
                         } else {
-                            float maxScreenSize = metrics.widthPixels;
+                            int maxScreenSize = metrics.widthPixels
+                                    - U.getBaseTaskbarSize(TaskbarService.this);
 
-                            params.width = (int) Math.min(maxRecentsSize,
-                                    maxScreenSize - U.getBaseTaskbarSize(TaskbarService.this))
+                            params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
+
+                            if(fullLength && U.getTaskbarPosition(this).contains("right")) {
+                                Space whitespace = (Space) layout.findViewById(R.id.whitespace);
+                                ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
+                                if(params2 != null) {
+                                    params2.width = maxScreenSize - recentsSize;
+                                    whitespace.setLayoutParams(params2);
+                                }
+                            }
                         }
 
                         scrollView.setLayoutParams(params);

@@ -678,7 +678,7 @@ public class U {
         return position;
     }
 
-    private static int getMaxNumOfColumns(Context context) {
+    public static int getMaxNumOfColumns(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / metrics.density;
