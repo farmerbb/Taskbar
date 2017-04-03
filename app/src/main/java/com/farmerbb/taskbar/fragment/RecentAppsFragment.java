@@ -69,6 +69,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
             bindPreferenceSummaryToValue(findPreference("recents_amount"));
             bindPreferenceSummaryToValue(findPreference("sort_order"));
             bindPreferenceSummaryToValue(findPreference("disable_scrolling_list"));
+            bindPreferenceSummaryToValue(findPreference("full_length"));
 
             updateMaxNumOfRecents(false);
             updateRefreshFrequency(false);

@@ -512,11 +512,13 @@ public class TaskbarService extends Service {
     @SuppressWarnings("Convert2streamapi")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private void updateRecentApps(final boolean firstRefresh) {
+        SharedPreferences pref = U.getSharedPreferences(this);
         final PackageManager pm = getPackageManager();
         final List<AppEntry> entries = new ArrayList<>();
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(this);
         int realNumOfPinnedApps = 0;
+        boolean fullLength = pref.getBoolean("full_length", false);
 
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
         List<AppEntry> pinnedApps = pba.getPinnedApps();
@@ -551,7 +553,7 @@ public class TaskbarService extends Service {
 
         // Get list of all recently used apps
         List<AppEntry> usageStatsList = realNumOfPinnedApps < maxNumOfEntries ? getAppEntries() : new ArrayList<>();
-        if(usageStatsList.size() > 0 || realNumOfPinnedApps > 0) {
+        if(usageStatsList.size() > 0 || realNumOfPinnedApps > 0 || fullLength) {
             if(realNumOfPinnedApps < maxNumOfEntries) {
                 List<AppEntry> usageStatsList2 = new ArrayList<>();
                 List<AppEntry> usageStatsList3 = new ArrayList<>();
@@ -597,7 +599,6 @@ public class TaskbarService extends Service {
                 }
 
                 // Filter out the currently running foreground app, if requested by the user
-                SharedPreferences pref = U.getSharedPreferences(this);
                 if(pref.getBoolean("hide_foreground", false)) {
                     UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                     UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
@@ -759,20 +760,23 @@ public class TaskbarService extends Service {
                 final int numOfEntries = Math.min(entries.size(), maxNumOfEntries);
 
                 handler.post(() -> {
-                    if(numOfEntries > 0) {
+                    if(numOfEntries > 0 || fullLength) {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                         DisplayMetrics metrics = getResources().getDisplayMetrics();
+                        float maxRecentsSize = fullLength
+                                ? Float.MAX_VALUE
+                                : (getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries);
 
                         if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
                             float maxScreenSize = metrics.heightPixels - U.getStatusBarHeight(TaskbarService.this);
 
-                            params.height = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
+                            params.height = (int) Math.min(maxRecentsSize,
                                     maxScreenSize - U.getBaseTaskbarSize(TaskbarService.this))
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
                         } else {
                             float maxScreenSize = metrics.widthPixels;
 
-                            params.width = (int) Math.min(getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries,
+                            params.width = (int) Math.min(maxRecentsSize,
                                     maxScreenSize - U.getBaseTaskbarSize(TaskbarService.this))
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
                         }
