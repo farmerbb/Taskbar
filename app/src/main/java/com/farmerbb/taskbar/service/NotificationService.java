@@ -36,6 +36,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
 public class NotificationService extends Service {
@@ -67,6 +68,8 @@ public class NotificationService extends Service {
             stopService(new Intent(context, TaskbarService.class));
             stopService(new Intent(context, StartMenuService.class));
             stopService(new Intent(context, DashboardService.class));
+
+            IconCache.getInstance(context).clearCache();
         }
     };
 
