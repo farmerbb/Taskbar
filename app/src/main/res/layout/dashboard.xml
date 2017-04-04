@@ -38,4 +38,30 @@
         android:text="@string/click_to_add_widget"
         android:textSize="24sp" />
 
+    <FrameLayout
+        android:id="@+id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/placeholder_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:alpha="0.5"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/placeholder_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:text="@string/restore_widget"/>
+
+    </FrameLayout>
+
 </com.farmerbb.taskbar.widget.DashboardCell>

@@ -250,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                 }
 
                 editor.putBoolean("first_run", true);
-                editor.putBoolean("dashboard_tutorial_shown", false);
                 editor.apply();
             }
         }

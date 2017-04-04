@@ -303,4 +303,6 @@
 
     <string name="full_length">Expand area with whitespace</string>
 
+    <string name="restore_widget">Restore widget</string>
+
 </resources>
