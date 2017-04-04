@@ -36,6 +36,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -576,29 +578,30 @@ public class DashboardService extends Service {
     }
 
     private void addPlaceholder(int cellId) {
+        FrameLayout placeholder = (FrameLayout) cells.get(cellId).findViewById(R.id.placeholder);
         SharedPreferences pref = U.getSharedPreferences(this);
         String providerName = pref.getString("dashboard_widget_" + Integer.toString(cellId) + "_provider", "null");
 
         if(!providerName.equals("null")) {
-            ComponentName componentName = ComponentName.unflattenFromString(providerName);
-            boolean validComponent = false;
-
-            FrameLayout placeholder = (FrameLayout) cells.get(cellId).findViewById(R.id.placeholder);
             ImageView imageView = (ImageView) placeholder.findViewById(R.id.placeholder_image);
+            ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
             List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
             for(AppWidgetProviderInfo info : providerInfoList) {
                 if(info.provider.equals(componentName)) {
                     Drawable drawable = info.loadPreviewImage(this, -1);
                     if(drawable == null) drawable = info.loadIcon(this, -1);
-                    imageView.setImageDrawable(drawable);
 
-                    validComponent = true;
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation(0);
+
+                    imageView.setImageDrawable(drawable);
+                    imageView.setColorFilter(new ColorMatrixColorFilter(matrix));
                     break;
                 }
             }
-
-            if(validComponent) placeholder.setVisibility(View.VISIBLE);
         }
+
+        placeholder.setVisibility(View.VISIBLE);
     }
 }

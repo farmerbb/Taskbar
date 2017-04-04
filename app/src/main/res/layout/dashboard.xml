@@ -49,8 +49,9 @@
             android:id="@+id/placeholder_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="8dp"
             android:scaleType="fitCenter"
-            android:alpha="0.5"
+            android:alpha="0.9"
             android:layout_gravity="center" />
 
         <TextView
@@ -58,8 +59,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="8dp"
             android:textStyle="bold"
-            android:textSize="24sp"
+            android:textSize="22sp"
+            android:textColor="@android:color/white"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="4"
             android:text="@string/restore_widget"/>
 
     </FrameLayout>
