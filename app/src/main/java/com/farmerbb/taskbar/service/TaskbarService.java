@@ -775,12 +775,12 @@ public class TaskbarService extends Service {
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
 
                             if(fullLength && U.getTaskbarPosition(this).contains("bottom")) {
-                                Space whitespace = (Space) layout.findViewById(R.id.whitespace);
-                                ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
-                                if(params2 != null) {
+                                try {
+                                    Space whitespace = (Space) layout.findViewById(R.id.whitespace);
+                                    ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
                                     params2.height = maxScreenSize - recentsSize;
                                     whitespace.setLayoutParams(params2);
-                                }
+                                } catch (NullPointerException e) { /* Gracefully fail */ }
                             }
                         } else {
                             int maxScreenSize = metrics.widthPixels
@@ -790,12 +790,12 @@ public class TaskbarService extends Service {
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
 
                             if(fullLength && U.getTaskbarPosition(this).contains("right")) {
-                                Space whitespace = (Space) layout.findViewById(R.id.whitespace);
-                                ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
-                                if(params2 != null) {
+                                try {
+                                    Space whitespace = (Space) layout.findViewById(R.id.whitespace);
+                                    ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
                                     params2.width = maxScreenSize - recentsSize;
                                     whitespace.setLayoutParams(params2);
-                                }
+                                } catch (NullPointerException e) { /* Gracefully fail */ }
                             }
                         }
 
