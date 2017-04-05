@@ -42,6 +42,7 @@ public class EnableHomeReceiver extends BroadcastReceiver {
                 editor.putString("recents_amount", "running_apps_only");
                 editor.putString("refresh_frequency", "0");
                 editor.putString("max_num_of_recents", "2147483647");
+                editor.putBoolean("full_length", true);
             }
 
             editor.apply();
