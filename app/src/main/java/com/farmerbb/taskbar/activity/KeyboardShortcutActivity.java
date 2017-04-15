@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
@@ -51,10 +52,15 @@ public class KeyboardShortcutActivity extends Activity {
                         U.startFreeformHack(this, false, false);
                     }
 
+                    Intent startStopIntent;
+
                     if(pref.getBoolean("taskbar_active", false))
-                        sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
+                        startStopIntent = new Intent("com.farmerbb.taskbar.QUIT");
                     else
-                        sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
+                        startStopIntent = new Intent("com.farmerbb.taskbar.START");
+
+                    startStopIntent.setPackage(BuildConfig.APPLICATION_ID);
+                    sendBroadcast(startStopIntent);
                 } else if(categories.contains(Intent.CATEGORY_APP_CALENDAR))
                     U.lockDevice(this);
 

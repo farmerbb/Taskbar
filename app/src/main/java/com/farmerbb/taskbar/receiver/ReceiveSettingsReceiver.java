@@ -42,7 +42,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Ignore this broadcast if this is the free version
-        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)) {
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.PAID_APPLICATION_ID)) {
             // Get pinned and blocked apps
             PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
             pba.clear(context);

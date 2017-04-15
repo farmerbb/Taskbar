@@ -19,6 +19,8 @@ import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -30,7 +32,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -158,6 +162,11 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
                 intent.putExtra("duplicate", false);
 
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory(Intent.CATEGORY_HOME);
+                ResolveInfo defaultLauncher = getActivity().getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+                intent.setPackage(defaultLauncher.activityInfo.packageName);
                 getActivity().sendBroadcast(intent);
 
                 U.showToast(getActivity(), R.string.shortcut_created);

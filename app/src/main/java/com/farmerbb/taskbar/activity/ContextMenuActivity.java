@@ -401,7 +401,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "quit_taskbar":
-                sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
+                Intent quitIntent = new Intent("com.farmerbb.taskbar.QUIT");
+                quitIntent.setPackage(BuildConfig.APPLICATION_ID);
+                sendBroadcast(quitIntent);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

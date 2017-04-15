@@ -108,7 +108,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                         .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.BASE_APPLICATION_ID + ".paid"));
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.PAID_APPLICATION_ID));
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             try {

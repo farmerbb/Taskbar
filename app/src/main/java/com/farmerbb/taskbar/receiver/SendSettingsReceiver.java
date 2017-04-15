@@ -42,6 +42,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
         // Ignore this broadcast if this is the paid version
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)) {
             Intent sendSettingsIntent = new Intent("com.farmerbb.taskbar.SEND_SETTINGS");
+            sendSettingsIntent.setPackage(BuildConfig.PAID_APPLICATION_ID);
 
             // Get pinned and blocked apps
             PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
