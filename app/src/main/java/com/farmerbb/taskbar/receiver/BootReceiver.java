@@ -31,36 +31,38 @@ import com.farmerbb.taskbar.util.U;
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences pref = U.getSharedPreferences(context);
-        SharedPreferences.Editor editor = pref.edit();
+        if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+            SharedPreferences pref = U.getSharedPreferences(context);
+            SharedPreferences.Editor editor = pref.edit();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && !U.hasFreeformSupport(context))
-            editor.putBoolean("freeform_hack", false);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && !U.hasFreeformSupport(context))
+                editor.putBoolean("freeform_hack", false);
 
-        if(pref.getBoolean("start_on_boot", false)) {
-            editor.putBoolean("taskbar_active", true);
-            editor.putLong("time_of_service_start", System.currentTimeMillis());
-            editor.apply();
+            if(pref.getBoolean("start_on_boot", false)) {
+                editor.putBoolean("taskbar_active", true);
+                editor.putLong("time_of_service_start", System.currentTimeMillis());
+                editor.apply();
 
-            if(!pref.getBoolean("is_hidden", false)) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
-                    Intent intent2 = new Intent(context, DummyActivity.class);
-                    intent2.putExtra("start_freeform_hack", true);
-                    intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if(!pref.getBoolean("is_hidden", false)) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+                        Intent intent2 = new Intent(context, DummyActivity.class);
+                        intent2.putExtra("start_freeform_hack", true);
+                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    context.startActivity(intent2);
+                        context.startActivity(intent2);
+                    }
+
+                    context.startService(new Intent(context, TaskbarService.class));
+                    context.startService(new Intent(context, StartMenuService.class));
+                    context.startService(new Intent(context, DashboardService.class));
                 }
 
-                context.startService(new Intent(context, TaskbarService.class));
-                context.startService(new Intent(context, StartMenuService.class));
-                context.startService(new Intent(context, DashboardService.class));
+                context.startService(new Intent(context, NotificationService.class));
+            } else {
+                editor.putBoolean("taskbar_active", U.isServiceRunning(context, NotificationService.class));
+                editor.apply();
             }
-
-            context.startService(new Intent(context, NotificationService.class));
-        } else {
-            editor.putBoolean("taskbar_active", U.isServiceRunning(context, NotificationService.class));
-            editor.apply();
         }
     }
 }

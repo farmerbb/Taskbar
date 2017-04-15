@@ -142,7 +142,7 @@ public class IconPackActivity extends AppCompatActivity {
     private final class AppListGenerator extends AsyncTask<Void, Void, AppListAdapter> {
         @Override
         protected AppListAdapter doInBackground(Void... params) {
-            List<IconPack> list = IconPackManager.getInstance().getAvailableIconPacks(IconPackActivity.this, true);
+            List<IconPack> list = IconPackManager.getInstance().getAvailableIconPacks(IconPackActivity.this);
             if(list.isEmpty())
                 return null;
             else {

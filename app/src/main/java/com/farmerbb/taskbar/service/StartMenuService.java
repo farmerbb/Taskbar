@@ -419,146 +419,142 @@ public class StartMenuService extends Service {
         if(thread != null) thread.interrupt();
 
         handler = new Handler();
-        thread = new Thread() {
-            @SuppressWarnings("Convert2streamapi")
-            @Override
-            public void run() {
-                if(pm == null) pm = getPackageManager();
+        thread = new Thread(() -> {
+            if(pm == null) pm = getPackageManager();
 
-                UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
-                LauncherApps launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
+            UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
+            LauncherApps launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-                final List<UserHandle> userHandles = userManager.getUserProfiles();
-                final List<LauncherActivityInfo> unfilteredList = new ArrayList<>();
+            final List<UserHandle> userHandles = userManager.getUserProfiles();
+            final List<LauncherActivityInfo> unfilteredList = new ArrayList<>();
 
-                for(UserHandle handle : userHandles) {
-                    unfilteredList.addAll(launcherApps.getActivityList(null, handle));
-                }
+            for(UserHandle handle : userHandles) {
+                unfilteredList.addAll(launcherApps.getActivityList(null, handle));
+            }
 
-                final List<LauncherActivityInfo> topAppsList = new ArrayList<>();
-                final List<LauncherActivityInfo> allAppsList = new ArrayList<>();
-                final List<LauncherActivityInfo> list = new ArrayList<>();
+            final List<LauncherActivityInfo> topAppsList = new ArrayList<>();
+            final List<LauncherActivityInfo> allAppsList = new ArrayList<>();
+            final List<LauncherActivityInfo> list = new ArrayList<>();
 
-                TopApps topApps = TopApps.getInstance(StartMenuService.this);
-                for(LauncherActivityInfo appInfo : unfilteredList) {
-                    if(topApps.isTopApp(appInfo.getComponentName().flattenToString())
-                            || topApps.isTopApp(appInfo.getName()))
-                        topAppsList.add(appInfo);
-                }
+            TopApps topApps = TopApps.getInstance(StartMenuService.this);
+            for(LauncherActivityInfo appInfo : unfilteredList) {
+                if(topApps.isTopApp(appInfo.getComponentName().flattenToString())
+                        || topApps.isTopApp(appInfo.getName()))
+                    topAppsList.add(appInfo);
+            }
 
-                Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
-                for(LauncherActivityInfo appInfo : unfilteredList) {
-                    if(!(blacklist.isBlocked(appInfo.getComponentName().flattenToString())
-                            || blacklist.isBlocked(appInfo.getName()))
-                            && !(topApps.isTopApp(appInfo.getComponentName().flattenToString())
-                            || topApps.isTopApp(appInfo.getName())))
-                        allAppsList.add(appInfo);
-                }
+            Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
+            for(LauncherActivityInfo appInfo : unfilteredList) {
+                if(!(blacklist.isBlocked(appInfo.getComponentName().flattenToString())
+                        || blacklist.isBlocked(appInfo.getName()))
+                        && !(topApps.isTopApp(appInfo.getComponentName().flattenToString())
+                        || topApps.isTopApp(appInfo.getName())))
+                    allAppsList.add(appInfo);
+            }
 
-                Collections.sort(topAppsList, comparator);
-                Collections.sort(allAppsList, comparator);
+            Collections.sort(topAppsList, comparator);
+            Collections.sort(allAppsList, comparator);
 
-                list.addAll(topAppsList);
-                list.addAll(allAppsList);
+            list.addAll(topAppsList);
+            list.addAll(allAppsList);
 
-                topAppsList.clear();
-                allAppsList.clear();
+            topAppsList.clear();
+            allAppsList.clear();
 
-                List<LauncherActivityInfo> queryList;
-                if(query == null)
-                    queryList = list;
-                else {
-                    queryList = new ArrayList<>();
-                    for(LauncherActivityInfo appInfo : list) {
-                        if(appInfo.getLabel().toString().toLowerCase().contains(query.toLowerCase()))
-                            queryList.add(appInfo);
-                    }
-                }
-
-                // Now that we've generated the list of apps,
-                // we need to determine if we need to redraw the start menu or not
-                boolean shouldRedrawStartMenu = false;
-                List<String> finalApplicationIds = new ArrayList<>();
-
-                if(query == null && !firstDraw) {
-                    for(LauncherActivityInfo appInfo : queryList) {
-                        finalApplicationIds.add(appInfo.getApplicationInfo().packageName);
-                    }
-
-                    if(finalApplicationIds.size() != currentStartMenuIds.size())
-                        shouldRedrawStartMenu = true;
-                    else {
-                        for(int i = 0; i < finalApplicationIds.size(); i++) {
-                            if(!finalApplicationIds.get(i).equals(currentStartMenuIds.get(i))) {
-                                shouldRedrawStartMenu = true;
-                                break;
-                            }
-                        }
-                    }
-                } else shouldRedrawStartMenu = true;
-
-                if(shouldRedrawStartMenu) {
-                    if(query == null) currentStartMenuIds = finalApplicationIds;
-
-                    Drawable defaultIcon = pm.getDefaultActivityIcon();
-
-                    final List<AppEntry> entries = new ArrayList<>();
-                    for(LauncherActivityInfo appInfo : queryList) {
-
-                        // Attempt to work around frequently reported OutOfMemoryErrors
-                        String label;
-                        Drawable icon;
-
-                        try {
-                            label = appInfo.getLabel().toString();
-                            icon = IconCache.getInstance(StartMenuService.this).getIcon(StartMenuService.this, pm, appInfo);
-                        } catch (OutOfMemoryError e) {
-                            System.gc();
-
-                            label = appInfo.getApplicationInfo().packageName;
-                            icon = defaultIcon;
-                        }
-
-                        AppEntry newEntry = new AppEntry(
-                                appInfo.getApplicationInfo().packageName,
-                                new ComponentName(
-                                        appInfo.getApplicationInfo().packageName,
-                                        appInfo.getName()).flattenToString(),
-                                label,
-                                icon,
-                                false);
-
-                        newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
-                        entries.add(newEntry);
-                    }
-
-                    handler.post(() -> {
-                        String queryText = searchView.getQuery().toString();
-                        if(query == null && queryText.length() == 0
-                                || query != null && query.equals(queryText)) {
-                            StartMenuAdapter adapter;
-                            SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
-                            if(pref.getString("start_menu_layout", "list").equals("grid")) {
-                                startMenu.setNumColumns(3);
-                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
-                            } else
-                                adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
-
-                            int position = startMenu.getFirstVisiblePosition();
-                            startMenu.setAdapter(adapter);
-                            startMenu.setSelection(position);
-
-                            if(adapter.getCount() > 0)
-                                textView.setText(null);
-                            else if(query != null)
-                                textView.setText(getString(R.string.press_enter));
-                            else
-                                textView.setText(getString(R.string.nothing_to_see_here));
-                        }
-                    });
+            List<LauncherActivityInfo> queryList;
+            if(query == null)
+                queryList = list;
+            else {
+                queryList = new ArrayList<>();
+                for(LauncherActivityInfo appInfo : list) {
+                    if(appInfo.getLabel().toString().toLowerCase().contains(query.toLowerCase()))
+                        queryList.add(appInfo);
                 }
             }
-        };
+
+            // Now that we've generated the list of apps,
+            // we need to determine if we need to redraw the start menu or not
+            boolean shouldRedrawStartMenu = false;
+            List<String> finalApplicationIds = new ArrayList<>();
+
+            if(query == null && !firstDraw) {
+                for(LauncherActivityInfo appInfo : queryList) {
+                    finalApplicationIds.add(appInfo.getApplicationInfo().packageName);
+                }
+
+                if(finalApplicationIds.size() != currentStartMenuIds.size())
+                    shouldRedrawStartMenu = true;
+                else {
+                    for(int i = 0; i < finalApplicationIds.size(); i++) {
+                        if(!finalApplicationIds.get(i).equals(currentStartMenuIds.get(i))) {
+                            shouldRedrawStartMenu = true;
+                            break;
+                        }
+                    }
+                }
+            } else shouldRedrawStartMenu = true;
+
+            if(shouldRedrawStartMenu) {
+                if(query == null) currentStartMenuIds = finalApplicationIds;
+
+                Drawable defaultIcon = pm.getDefaultActivityIcon();
+
+                final List<AppEntry> entries = new ArrayList<>();
+                for(LauncherActivityInfo appInfo : queryList) {
+
+                    // Attempt to work around frequently reported OutOfMemoryErrors
+                    String label;
+                    Drawable icon;
+
+                    try {
+                        label = appInfo.getLabel().toString();
+                        icon = IconCache.getInstance(StartMenuService.this).getIcon(StartMenuService.this, pm, appInfo);
+                    } catch (OutOfMemoryError e) {
+                        System.gc();
+
+                        label = appInfo.getApplicationInfo().packageName;
+                        icon = defaultIcon;
+                    }
+
+                    AppEntry newEntry = new AppEntry(
+                            appInfo.getApplicationInfo().packageName,
+                            new ComponentName(
+                                    appInfo.getApplicationInfo().packageName,
+                                    appInfo.getName()).flattenToString(),
+                            label,
+                            icon,
+                            false);
+
+                    newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
+                    entries.add(newEntry);
+                }
+
+                handler.post(() -> {
+                    String queryText = searchView.getQuery().toString();
+                    if(query == null && queryText.length() == 0
+                            || query != null && query.equals(queryText)) {
+                        StartMenuAdapter adapter;
+                        SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+                        if(pref.getString("start_menu_layout", "list").equals("grid")) {
+                            startMenu.setNumColumns(3);
+                            adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
+                        } else
+                            adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
+
+                        int position = startMenu.getFirstVisiblePosition();
+                        startMenu.setAdapter(adapter);
+                        startMenu.setSelection(position);
+
+                        if(adapter.getCount() > 0)
+                            textView.setText(null);
+                        else if(query != null)
+                            textView.setText(getString(R.string.press_enter));
+                        else
+                            textView.setText(getString(R.string.nothing_to_see_here));
+                    }
+                });
+            }
+        });
 
         thread.start();
     }

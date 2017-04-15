@@ -499,44 +499,41 @@ public class TaskbarService extends Service {
         currentTaskbarIds.clear();
 
         handler = new Handler();
-        thread = new Thread() {
-            @Override
-            public void run() {
-                updateRecentApps(true);
+        thread = new Thread(() -> {
+            updateRecentApps(true);
 
-                if(!isRefreshingRecents) {
-                    isRefreshingRecents = true;
+            if(!isRefreshingRecents) {
+                isRefreshingRecents = true;
 
-                    while(shouldRefreshRecents) {
-                        SystemClock.sleep(refreshInterval);
-                        updateRecentApps(false);
+                while(shouldRefreshRecents) {
+                    SystemClock.sleep(refreshInterval);
+                    updateRecentApps(false);
 
-                        if(showHideAutomagically && !positionIsVertical && !StartMenuHelper.getInstance().isStartMenuOpen())
-                            handler.post(() -> {
-                                if(layout != null) {
-                                    int[] location = new int[2];
-                                    layout.getLocationOnScreen(location);
+                    if(showHideAutomagically && !positionIsVertical && !StartMenuHelper.getInstance().isStartMenuOpen())
+                        handler.post(() -> {
+                            if(layout != null) {
+                                int[] location = new int[2];
+                                layout.getLocationOnScreen(location);
 
-                                    if(location[1] != 0) {
-                                        if(location[1] > currentTaskbarPosition) {
+                                if(location[1] != 0) {
+                                    if(location[1] > currentTaskbarPosition) {
+                                        currentTaskbarPosition = location[1];
+                                    } else if(location[1] < currentTaskbarPosition) {
+                                        if(currentTaskbarPosition - location[1] == getNavBarSize())
                                             currentTaskbarPosition = location[1];
-                                        } else if(location[1] < currentTaskbarPosition) {
-                                            if(currentTaskbarPosition - location[1] == getNavBarSize())
-                                                currentTaskbarPosition = location[1];
-                                            else if(!startThread2) {
-                                                startThread2 = true;
-                                                tempHideTaskbar(true);
-                                            }
+                                        else if(!startThread2) {
+                                            startThread2 = true;
+                                            tempHideTaskbar(true);
                                         }
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
+                    }
 
-                    isRefreshingRecents = false;
-                }
+                isRefreshingRecents = false;
             }
-        };
+        });
 
         thread.start();
     }
@@ -984,20 +981,17 @@ public class TaskbarService extends Service {
             if(thread2 != null) thread2.interrupt();
 
             handler2 = new Handler();
-            thread2 = new Thread() {
-                @Override
-                public void run() {
-                    stopThread2 = false;
+            thread2 = new Thread(() -> {
+                stopThread2 = false;
 
-                    while(!stopThread2) {
-                        SystemClock.sleep(refreshInterval);
+                while(!stopThread2) {
+                    SystemClock.sleep(refreshInterval);
 
-                        handler2.post(() -> stopThread2 = checkPositionChange());
-                    }
-
-                    startThread2 = false;
+                    handler2.post(() -> stopThread2 = checkPositionChange());
                 }
-            };
+
+                startThread2 = false;
+            });
 
             thread2.start();
         }
