@@ -24,6 +24,7 @@ import android.app.Service;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +48,7 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.speech.RecognizerIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
@@ -393,6 +395,36 @@ public class TaskbarService extends Service {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_HOME);
                 if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     hideTaskbar(true);
+            });
+
+            homeButton.setOnLongClickListener(v -> {
+                Intent voiceSearchIntent = new Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE);
+                voiceSearchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                try {
+                    startActivity(voiceSearchIntent);
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    hideTaskbar(true);
+
+                return true;
+            });
+
+            homeButton.setOnGenericMotionListener((view13, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    Intent voiceSearchIntent = new Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE);
+                    voiceSearchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        startActivity(voiceSearchIntent);
+                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+
+                    if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                        hideTaskbar(true);
+                }
+                return true;
             });
         }
 
