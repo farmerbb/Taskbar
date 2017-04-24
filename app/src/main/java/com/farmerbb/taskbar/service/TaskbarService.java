@@ -529,7 +529,7 @@ public class TaskbarService extends Service {
                                 }
                             }
                         });
-                    }
+                }
 
                 isRefreshingRecents = false;
             }
@@ -597,7 +597,7 @@ public class TaskbarService extends Service {
                 // Filter out apps without a launcher intent
                 // Also filter out the current launcher, and Taskbar itself
                 for(AppEntry packageInfo : usageStatsList) {
-                    if(pm.getLaunchIntentForPackage(packageInfo.getPackageName()) != null
+                    if(hasLauncherIntent(packageInfo.getPackageName())
                             && !packageInfo.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                             && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName))
                         usageStatsList2.add(packageInfo);
@@ -1282,5 +1282,14 @@ public class TaskbarService extends Service {
         }
 
         return entries;
+    }
+
+    private boolean hasLauncherIntent(String packageName) {
+        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
+        intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
+        intentToResolve.setPackage(packageName);
+
+        List<ResolveInfo> ris = getPackageManager().queryIntentActivities(intentToResolve, 0);
+        return ris != null && ris.size() > 0;
     }
 }

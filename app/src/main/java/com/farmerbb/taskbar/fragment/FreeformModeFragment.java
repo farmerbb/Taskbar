@@ -54,14 +54,6 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             findPreference("window_size").setOnPreferenceClickListener(this);
 
             bindPreferenceSummaryToValue(findPreference("window_size"));
-
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
-            boolean freeformHackEnabled = pref.getBoolean("freeform_hack", false);
-            findPreference("launch_games_fullscreen").setEnabled(freeformHackEnabled);
-            findPreference("save_window_sizes").setEnabled(freeformHackEnabled);
-            findPreference("window_size").setEnabled(freeformHackEnabled);
-            findPreference("add_shortcut").setEnabled(freeformHackEnabled);
-            findPreference("force_new_window").setEnabled(freeformHackEnabled);
         }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -69,6 +61,21 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
+
+        // Dialog shown on Samsung devices, which seem to not work with freeform mode
+        if(Build.MANUFACTURER.equalsIgnoreCase("Samsung")) {
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            if(!pref.getBoolean("samsung_dialog_shown", false)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.samsung_freeform_title)
+                        .setMessage(R.string.samsung_freeform_message)
+                        .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCancelable(false);
+            }
+        }
 
         finishedLoadingPrefs = true;
     }
@@ -81,12 +88,6 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             showReminderToast = false;
 
             ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
-
-            findPreference("launch_games_fullscreen").setEnabled(U.hasFreeformSupport(getActivity()));
-            findPreference("save_window_sizes").setEnabled(U.hasFreeformSupport(getActivity()));
-            findPreference("window_size").setEnabled(U.hasFreeformSupport(getActivity()));
-            findPreference("add_shortcut").setEnabled(U.hasFreeformSupport(getActivity()));
-            findPreference("force_new_window").setEnabled(U.hasFreeformSupport(getActivity()));
 
             if(U.hasFreeformSupport(getActivity())) {
                 U.showToastLong(getActivity(), R.string.reboot_required);
@@ -138,12 +139,6 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
                 }
-
-                findPreference("launch_games_fullscreen").setEnabled(((CheckBoxPreference) p).isChecked());
-                findPreference("save_window_sizes").setEnabled(((CheckBoxPreference) p).isChecked());
-                findPreference("window_size").setEnabled(((CheckBoxPreference) p).isChecked());
-                findPreference("add_shortcut").setEnabled(((CheckBoxPreference) p).isChecked());
-                findPreference("force_new_window").setEnabled(((CheckBoxPreference) p).isChecked());
 
                 break;
             case "freeform_mode_help":

@@ -305,4 +305,7 @@
 
     <string name="restore_widget">Restore widget</string>
 
+    <string name="samsung_freeform_title">Note</string>
+    <string name="samsung_freeform_message">Freeform mode may not work on Samsung devices, due to system changes made for DeX support.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
+
 </resources>
