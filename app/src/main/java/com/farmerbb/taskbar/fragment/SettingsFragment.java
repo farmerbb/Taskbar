@@ -61,7 +61,7 @@ public class SettingsFragment extends PreferenceFragment {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !Build.MANUFACTURER.equalsIgnoreCase("Samsung")) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
                         .putBoolean("freeform_hack", U.hasFreeformSupport(getActivity()))
