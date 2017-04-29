@@ -288,24 +288,24 @@
     <string name="hide_taskbar_disclaimer">Не применяется к приложениям в режмие Freeform</string>
     <string name="transparent_start_menu">Прозрачное меню запуска</string>
 
-    <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
-    <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
+    <string name="launch_games_fullscreen_title">Открывать игры в полный экран</string>
+    <string name="launch_games_fullscreen_message">Если приложение является игрой, не запускать его в режиме Freeform</string>
 
-    <string name="invalid_grid_size">Invalid grid size</string>
+    <string name="invalid_grid_size">Неверный размер сетки</string>
 
-    <string name="window_sizes_not_available">Window sizes currently don\'t work on Android O</string>
+    <string name="window_sizes_not_available">Размер окна не работает (пока что) в Android O</string>
 
-    <string name="navigation_bar_buttons">Navigation bar buttons</string>
-    <string name="navigation_bar_buttons_description">Add additional buttons to the Taskbar that perform navigation bar actions</string>
-    <string name="button_back">Back</string>
-    <string name="button_home">Home</string>
-    <string name="button_recents">Recents</string>
+    <string name="navigation_bar_buttons">Кнопки навигации</string>
+    <string name="navigation_bar_buttons_description">Добавить кнопки в Taskbar для управлением устройством</string>
+    <string name="button_back">Назад</string>
+    <string name="button_home">Домой</string>
+    <string name="button_recents">Недавние</string>
 
-    <string name="full_length">Expand area with whitespace</string>
+    <string name="full_length">Расширить область пустым местом</string>
 
-    <string name="restore_widget">Restore widget</string>
+    <string name="restore_widget">Сбросить виджет</string>
 
-    <string name="samsung_freeform_title">Note</string>
-    <string name="samsung_freeform_message">Freeform mode may not work on Samsung devices, due to system changes made to multi-window mode.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
+    <string name="samsung_freeform_title">Внимание</string>
+    <string name="samsung_freeform_message">Freeform имеет проблемы с устройствами Samsung из-за изменений в работе мультизадачности.\n\nВам потребуеться прошить сторонее ПО для работы Freeform.</string>
 
 </resources>
