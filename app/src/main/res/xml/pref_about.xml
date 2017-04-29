@@ -22,6 +22,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="donate_category"
+        android:title="@string/pref_title_donate">
+
+        <Preference
+            android:key="donate"
+            android:summary="@string/pref_summary_donate"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

@@ -29,20 +29,22 @@ public class UninstallReceiver extends BroadcastReceiver {
     @SuppressWarnings("Convert2streamapi")
     @Override
     public void onReceive(Context context, Intent intent) {
-        String packageName = intent.getData().getEncodedSchemeSpecificPart();
+        if(intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED)) {
+            String packageName = intent.getData().getEncodedSchemeSpecificPart();
 
-        PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
-        List<AppEntry> pinnedApps = pba.getPinnedApps();
-        List<String> componentNames = new ArrayList<>();
+            PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
+            List<AppEntry> pinnedApps = pba.getPinnedApps();
+            List<String> componentNames = new ArrayList<>();
 
-        for(AppEntry entry : pinnedApps) {
-            if(entry.getPackageName().equals(packageName)) {
-                componentNames.add(entry.getComponentName());
+            for(AppEntry entry : pinnedApps) {
+                if(entry.getPackageName().equals(packageName)) {
+                    componentNames.add(entry.getComponentName());
+                }
             }
-        }
 
-        for(String componentName : componentNames) {
-            pba.removePinnedApp(context, componentName);
+            for(String componentName : componentNames) {
+                pba.removePinnedApp(context, componentName);
+            }
         }
     }
 }

@@ -61,6 +61,11 @@
         android:key="disable_scrolling_list"
         android:title="@string/disable_scrolling_list"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="full_length"
+        android:title="@string/full_length"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

@@ -41,27 +41,23 @@ public class IconPackManager {
         return theInstance;
     }
 
-    private List<IconPack> iconPacks = null;
+    public List<IconPack> getAvailableIconPacks(Context mContext) {
+        PackageManager pm = mContext.getPackageManager();
+        List<ResolveInfo> rinfo = pm.queryIntentActivities(new Intent("org.adw.launcher.THEMES"), PackageManager.GET_META_DATA);
+        List<IconPack> iconPacks = new ArrayList<>();
 
-    public List<IconPack> getAvailableIconPacks(Context mContext, boolean forceReload) {
-        if(iconPacks == null || forceReload) {
-            iconPacks = new ArrayList<>();
+        for(ResolveInfo ri : rinfo) {
+            IconPack ip = new IconPack();
+            ip.setPackageName(ri.activityInfo.packageName);
 
-            PackageManager pm = mContext.getPackageManager();
-            List<ResolveInfo> rinfo = pm.queryIntentActivities(new Intent("org.adw.launcher.THEMES"), PackageManager.GET_META_DATA);
-
-            for(ResolveInfo ri : rinfo) {
-                IconPack ip = new IconPack();
-                ip.setPackageName(ri.activityInfo.packageName);
-
-                ApplicationInfo ai;
-                try {
-                    ai = pm.getApplicationInfo(ip.getPackageName(), PackageManager.GET_META_DATA);
-                    ip.setName(mContext.getPackageManager().getApplicationLabel(ai).toString());
-                    iconPacks.add(ip);
-                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
-            }
+            ApplicationInfo ai;
+            try {
+                ai = pm.getApplicationInfo(ip.getPackageName(), PackageManager.GET_META_DATA);
+                ip.setName(mContext.getPackageManager().getApplicationLabel(ai).toString());
+                iconPacks.add(ip);
+            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
         }
+
         return iconPacks;
     }
 

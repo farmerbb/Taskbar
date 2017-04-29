@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2016 Braden Farmer
+<!-- Copyright 2017 Braden Farmer
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,20 +16,19 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_header_about">
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="button_back"
+        android:title="@string/button_back" />
 
-        <Preference android:key="about" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="button_home"
+        android:title="@string/button_home" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/pref_title_donate">
-
-        <Preference
-            android:key="donate"
-            android:summary="@string/pref_summary_donate"/>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:key="dummy" android:title="\n\n" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="button_recents"
+        android:title="@string/button_recents" />
 
 </PreferenceScreen>

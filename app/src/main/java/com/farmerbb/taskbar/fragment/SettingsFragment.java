@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -31,10 +30,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.farmerbb.taskbar.MainActivity;
-import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.service.StartMenuService;
-import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.U;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -65,7 +61,7 @@ public class SettingsFragment extends PreferenceFragment {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !Build.MANUFACTURER.equalsIgnoreCase("Samsung")) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
                         .putBoolean("freeform_hack", U.hasFreeformSupport(getActivity()))
@@ -108,7 +104,7 @@ public class SettingsFragment extends PreferenceFragment {
                 preference.setSummary(stringValue);
             }
 
-            if(finishedLoadingPrefs) restartTaskbar();
+            if(finishedLoadingPrefs) U.restartTaskbar(getActivity());
 
             return true;
         }
@@ -134,41 +130,6 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void startTaskbarService(boolean fullRestart) {
-        getActivity().startService(new Intent(getActivity(), TaskbarService.class));
-        getActivity().startService(new Intent(getActivity(), StartMenuService.class));
-        getActivity().startService(new Intent(getActivity(), DashboardService.class));
-        if(fullRestart) getActivity().startService(new Intent(getActivity(), NotificationService.class));
-    }
-
-    private void stopTaskbarService(boolean fullRestart) {
-        getActivity().stopService(new Intent(getActivity(), TaskbarService.class));
-        getActivity().stopService(new Intent(getActivity(), StartMenuService.class));
-        getActivity().stopService(new Intent(getActivity(), DashboardService.class));
-        if(fullRestart) getActivity().stopService(new Intent(getActivity(), NotificationService.class));
-    }
-
-    public void restartTaskbar() {
-        SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
-            pref.edit().putBoolean("is_restarting", true).apply();
-
-            stopTaskbarService(true);
-            startTaskbarService(true);
-        } else if(U.isServiceRunning(getActivity(), StartMenuService.class)) {
-            stopTaskbarService(false);
-            startTaskbarService(false);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
-            U.refreshPinnedIcons(getActivity());
-            restartTaskbar();
         }
     }
 

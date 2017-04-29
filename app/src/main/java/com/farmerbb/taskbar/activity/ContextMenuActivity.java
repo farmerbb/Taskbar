@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
@@ -70,6 +71,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean isOverflowMenu = false;
     boolean secondaryMenu = false;
     boolean dashboardOrStartMenuAppearing = false;
+    boolean contextMenuFix = false;
 
     List<ShortcutInfo> shortcuts;
 
@@ -93,6 +95,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
         isStartButton = isNonAppMenu && getIntent().getBooleanExtra("is_start_button", false);
         isOverflowMenu = isNonAppMenu && getIntent().getBooleanExtra("is_overflow_menu", false);
+        contextMenuFix = getIntent().hasExtra("context_menu_fix");
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -236,6 +239,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 findPreference("file_manager").setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference("file_manager"));
         } else {
             appName = getIntent().getStringExtra("app_name");
             packageName = getIntent().getStringExtra("package_name");
@@ -253,7 +258,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             SharedPreferences pref = U.getSharedPreferences(this);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && pref.getBoolean("freeform_hack", false)
-                    && (FreeformHackHelper.getInstance().isFreeformHackActive() || isInMultiWindowMode())) {
+                    && !U.isGame(this, packageName)) {
                 addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
             }
@@ -359,6 +364,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "uninstall":
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode()) {
@@ -381,6 +387,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "open_taskbar_settings":
                 startFreeformActivity();
@@ -391,12 +398,16 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "quit_taskbar":
-                sendBroadcast(new Intent("com.farmerbb.taskbar.QUIT"));
+                Intent quitIntent = new Intent("com.farmerbb.taskbar.QUIT");
+                quitIntent.setPackage(BuildConfig.APPLICATION_ID);
+                sendBroadcast(quitIntent);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "pin_app":
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
@@ -451,6 +462,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
                 }
 
+                if(U.isOPreview()) {
+                    U.showToast(this, R.string.window_sizes_not_available);
+                }
+
                 secondaryMenu = true;
                 break;
             case "window_size_standard":
@@ -471,6 +486,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "app_shortcuts":
                 getPreferenceScreen().removeAll();
@@ -487,6 +503,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "start_menu_apps":
                 startFreeformActivity();
@@ -509,12 +526,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent.putExtra("no_shadow", true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
-                    U.launchAppFullscreen(getApplicationContext(), intent);
+                    U.launchAppMaximized(getApplicationContext(), intent);
                 } else
                     startActivity(intent);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "volume":
                 AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -522,6 +540,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "file_manager":
                 Intent fileManagerIntent;
@@ -545,6 +564,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "system_settings":
                 startFreeformActivity();
@@ -559,26 +579,30 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "lock_device":
                 U.lockDevice(this);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "power_menu":
-                U.showPowerMenu(this);
+                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
             case "change_wallpaper":
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                U.launchAppFullscreen(getApplicationContext(), intent3);
+                U.launchAppMaximized(getApplicationContext(), intent3);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
+                contextMenuFix = false;
                 break;
         }
 
@@ -634,7 +658,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     | LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED);
 
             shortcuts = launcherApps.getShortcuts(query, userManager.getUserForSerialNumber(userId));
-            return shortcuts.size();
+            if(shortcuts != null)
+                return shortcuts.size();
         }
 
         return 0;
@@ -657,8 +682,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getPreferenceScreen().removeAll();
             generateMenu();
-        } else
+        } else {
+            if(contextMenuFix && !showStartMenu)
+                U.startFreeformHack(this, false, false);
+
             super.onBackPressed();
+        }
     }
 
     @Override

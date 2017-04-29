@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
@@ -33,7 +34,9 @@ public class ShortcutActivity extends Activity {
         if(getIntent().hasExtra("is_launching_shortcut")) {
             SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getBoolean("freeform_hack", false) && U.hasFreeformSupport(this)) {
-                sendBroadcast(new Intent("com.farmerbb.taskbar.START"));
+                Intent intent = new Intent("com.farmerbb.taskbar.START");
+                intent.setPackage(BuildConfig.APPLICATION_ID);
+                sendBroadcast(intent);
 
                 new Handler().postDelayed(() -> U.startFreeformHack(ShortcutActivity.this, true, false), 100);
             } else

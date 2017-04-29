@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -131,7 +132,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
                             colorDialog.setColorPreferenceSummary(findPreference("accent_color_pref"), U.getAccentColor(getActivity()), getActivity(), getResources());
 
                             finishedLoadingPrefs = true;
-                            restartTaskbar();
+                            U.restartTaskbar(getActivity());
                         });
 
                 AlertDialog dialog = builder.create();
@@ -156,5 +157,13 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         }
 
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
+            U.refreshPinnedIcons(getActivity());
+            U.restartTaskbar(getActivity());
+        }
     }
 }

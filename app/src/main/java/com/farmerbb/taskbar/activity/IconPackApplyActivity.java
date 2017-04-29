@@ -24,10 +24,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.service.DashboardService;
-import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.service.StartMenuService;
-import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.U;
 
 public class IconPackApplyActivity extends Activity {
@@ -60,7 +56,7 @@ public class IconPackApplyActivity extends Activity {
                             pref.edit().putString("icon_pack", iconPackPackage).apply();
 
                             U.refreshPinnedIcons(IconPackApplyActivity.this);
-                            restartTaskbar();
+                            U.restartTaskbar(this);
 
                             finish();
                         });
@@ -80,33 +76,6 @@ public class IconPackApplyActivity extends Activity {
         } else {
             U.showToast(this, R.string.must_specify_extra);
             finish();
-        }
-    }
-
-    private void startTaskbarService(boolean fullRestart) {
-        startService(new Intent(this, TaskbarService.class));
-        startService(new Intent(this, StartMenuService.class));
-        startService(new Intent(this, DashboardService.class));
-        if(fullRestart) startService(new Intent(this, NotificationService.class));
-    }
-
-    private void stopTaskbarService(boolean fullRestart) {
-        stopService(new Intent(this, TaskbarService.class));
-        stopService(new Intent(this, StartMenuService.class));
-        stopService(new Intent(this, DashboardService.class));
-        if(fullRestart) stopService(new Intent(this, NotificationService.class));
-    }
-
-    private void restartTaskbar() {
-        SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
-            pref.edit().putBoolean("is_restarting", true).apply();
-
-            stopTaskbarService(true);
-            startTaskbarService(true);
-        } else if(U.isServiceRunning(this, StartMenuService.class)) {
-            stopTaskbarService(false);
-            startTaskbarService(false);
         }
     }
 }

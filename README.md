@@ -15,9 +15,8 @@ Taskbar lets you launch apps in freeform floating windows on Android 7.0+ (Nouga
 
 1. Check the box for "Freeform window support" inside the Taskbar app
 2. Follow the directions that appear in the pop-up to enable the proper settings on your device
-3. With Taskbar turned on, go to your device's recent apps page
-4. Clear all recent apps, then go back to the (empty) recent apps page
-5. Press Taskbar's start button and select an app to launch it in a freeform window
+3. Go to your device's recent apps page and clear all recent apps
+4. Select an app using Taskbar to launch it in a freeform window
 
 For more information and detailed instructions, click "Help & instructions for freeform mode" inside the Taskbar app.
 
@@ -30,6 +29,7 @@ For more information and detailed instructions, click "Help & instructions for f
 Prerequisites:
 * Windows, Mac, or Linux machine
 * JDK 8
+* Android SDK
 * Internet connection (to download dependencies)
 
 Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK file "app-free-debug.apk", ready to install on your Android device.

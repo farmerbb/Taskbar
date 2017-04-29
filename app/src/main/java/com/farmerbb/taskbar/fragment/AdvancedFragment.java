@@ -37,9 +37,11 @@ import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
+import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
 import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
+import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.U;
 
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
@@ -59,8 +61,14 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             findPreference("launcher").setOnPreferenceClickListener(this);
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
+            findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
 
             bindPreferenceSummaryToValue(findPreference("dashboard"));
+
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            boolean lockHomeToggle = U.hasSupportLibrary(getActivity()) && pref.getBoolean("launcher", false);
+
+            findPreference("launcher").setEnabled(!lockHomeToggle);
 
             updateDashboardGridSize(false);
         }
@@ -140,17 +148,28 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 builder.setView(dialogLayout)
                         .setTitle(R.string.dashboard_grid_size)
                         .setPositiveButton(R.string.action_ok, (dialog, id) -> {
-                            int width = Integer.parseInt(editText.getText().toString());
-                            int height = Integer.parseInt(editText2.getText().toString());
+                            boolean successfullyUpdated = false;
 
-                            if(width > 0 && height > 0) {
-                                SharedPreferences.Editor editor = pref.edit();
-                                editor.putInt("dashboard_width", width);
-                                editor.putInt("dashboard_height", height);
-                                editor.apply();
+                            String widthString = editText.getText().toString();
+                            String heightString = editText2.getText().toString();
 
-                                updateDashboardGridSize(true);
+                            if(widthString.length() > 0 && heightString.length() > 0) {
+                                int width = Integer.parseInt(widthString);
+                                int height = Integer.parseInt(heightString);
+
+                                if(width > 0 && height > 0) {
+                                    SharedPreferences.Editor editor = pref.edit();
+                                    editor.putInt("dashboard_width", width);
+                                    editor.putInt("dashboard_height", height);
+                                    editor.apply();
+
+                                    updateDashboardGridSize(true);
+                                    successfullyUpdated = true;
+                                }
                             }
+
+                            if(!successfullyUpdated)
+                                U.showToast(getActivity(), R.string.invalid_grid_size);
                         })
                         .setNegativeButton(R.string.action_cancel, null);
 
@@ -165,6 +184,20 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                     imm.showSoftInput(editText2, InputMethodManager.SHOW_IMPLICIT);
                 });
 
+                break;
+            case "navigation_bar_buttons":
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getActivity(), NavigationBarButtonsActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getActivity(), NavigationBarButtonsActivityDark.class);
+                        break;
+                }
+
+                startActivity(intent);
                 break;
         }
 
@@ -194,6 +227,6 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
 
-        if(restartTaskbar) restartTaskbar();
+        if(restartTaskbar) U.restartTaskbar(getActivity());
     }
 }

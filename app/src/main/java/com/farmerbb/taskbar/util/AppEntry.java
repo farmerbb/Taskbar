@@ -35,6 +35,8 @@ public class AppEntry implements Serializable {
     private String componentName;
     private String label;
     private Long userId;
+    private Long lastTimeUsed;
+    private Long totalTimeInForeground;
     private transient Drawable icon;
     private byte[] iconByteArray;
 
@@ -85,5 +87,21 @@ public class AppEntry implements Serializable {
             } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
         }
         return icon;
+    }
+
+    public long getLastTimeUsed() {
+        return lastTimeUsed == null ? 0 : lastTimeUsed;
+    }
+
+    public void setLastTimeUsed(long lastTimeUsed) {
+        this.lastTimeUsed = lastTimeUsed;
+    }
+
+    public long getTotalTimeInForeground() {
+        return totalTimeInForeground == null ? 0 : totalTimeInForeground;
+    }
+
+    public void setTotalTimeInForeground(long totalTimeInForeground) {
+        this.totalTimeInForeground = totalTimeInForeground;
     }
 }

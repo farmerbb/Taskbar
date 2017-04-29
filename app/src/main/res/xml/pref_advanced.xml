@@ -39,6 +39,11 @@
         android:title="@string/dashboard_grid_size" />
 
     <Preference
+        android:key="navigation_bar_buttons"
+        android:title="@string/navigation_bar_buttons"
+        android:summary="@string/navigation_bar_buttons_description" />
+
+    <Preference
         android:key="clear_pinned_apps"
         android:title="@string/clear_pinned_apps"/>
 

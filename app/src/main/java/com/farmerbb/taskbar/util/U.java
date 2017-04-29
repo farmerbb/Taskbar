@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
@@ -58,8 +59,13 @@ import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.service.DashboardService;
+import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
+import com.farmerbb.taskbar.service.StartMenuService;
+import com.farmerbb.taskbar.service.TaskbarService;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,12 +78,16 @@ public class U {
     private static SharedPreferences pref;
     private static Integer cachedRotation;
 
-    private static final int FULLSCREEN = 0;
+    private static final int MAXIMIZED = 0;
     private static final int LEFT = -1;
     private static final int RIGHT = 1;
 
     public static final int HIDDEN = 0;
     public static final int TOP_APPS = 1;
+
+    // From android.app.ActivityManager.StackId
+    private static final int FULLSCREEN_WORKSPACE_STACK_ID = 1;
+    private static final int FREEFORM_WORKSPACE_STACK_ID = 2;
 
     public static SharedPreferences getSharedPreferences(Context context) {
         if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
@@ -129,14 +139,16 @@ public class U {
         }
     }
 
-    public static void showPowerMenu(Context context) {
+    public static void sendAccessibilityAction(Context context, int action) {
         ComponentName component = new ComponentName(context, PowerMenuService.class);
         context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
-        if(isAccessibilityServiceEnabled(context))
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_POWER_MENU"));
-        else {
+        if(isAccessibilityServiceEnabled(context)) {
+            Intent intent = new Intent("com.farmerbb.taskbar.ACCESSIBILITY_ACTION");
+            intent.putExtra("action", action);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        } else {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -214,35 +226,19 @@ public class U {
                                  final boolean launchedFromTaskbar,
                                  final boolean openInNewWindow,
                                  final ShortcutInfo shortcut) {
-        boolean shouldDelay = false;
-
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
-        boolean openInFullscreen = pref.getBoolean("open_in_fullscreen", true);
-        boolean freeformHackActive = openInNewWindow
-                ? helper.isInFreeformWorkspace()
-                : (openInFullscreen
-                    ? helper.isInFreeformWorkspace()
-                    : helper.isFreeformHackActive());
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
-                && !freeformHackActive) {
-            shouldDelay = true;
-
+                && !helper.isInFreeformWorkspace()) {
             new Handler().postDelayed(() -> {
                 startFreeformHack(context, true, launchedFromTaskbar);
 
                 new Handler().postDelayed(() -> continueLaunchingApp(context, packageName, componentName, userId,
-                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut), 100);
+                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut), helper.isFreeformHackActive() ? 0 : 100);
             }, launchedFromTaskbar ? 0 : 100);
-        }
-
-        if(!helper.isFreeformHackActive()) {
-            if(!shouldDelay)
-                continueLaunchingApp(context, packageName, componentName, userId,
-                        windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
-        } else if(helper.isInFreeformWorkspace() || !openInFullscreen)
+        } else
             continueLaunchingApp(context, packageName, componentName, userId,
                     windowSize, launchedFromTaskbar, openInNewWindow, shortcut);
     }
@@ -262,7 +258,8 @@ public class U {
                 freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
-        launchAppLowerRight(context, freeformHackIntent);
+        if(U.canDrawOverlays(context))
+            launchAppLowerRight(context, freeformHackIntent);
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -282,7 +279,9 @@ public class U {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+        if(FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
+                && !isOPreview())
             intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
 
         if(launchedFromTaskbar) {
@@ -303,6 +302,8 @@ public class U {
                 }
             }
         }
+
+        boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isFreeformHackActive() && openInNewWindow;
 
         if(windowSize == null) {
             if(pref.getBoolean("save_window_sizes", true))
@@ -326,36 +327,37 @@ public class U {
                 launchShortcut(context, shortcut, null);
         } else switch(windowSize) {
             case "standard":
-                if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+                if(FreeformHackHelper.getInstance().isInFreeformWorkspace() && !specialLaunch) {
+                    Bundle bundle = getActivityOptions(getApplicationType(context, packageName)).toBundle();
                     if(shortcut == null) {
                         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
                         if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                             try {
-                                context.startActivity(intent);
+                                context.startActivity(intent, bundle);
                             } catch (ActivityNotFoundException e) {
-                                launchAndroidForWork(context, intent.getComponent(), null, userId);
+                                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                         } else
-                            launchAndroidForWork(context, intent.getComponent(), null, userId);
+                            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                     } else
-                        launchShortcut(context, shortcut, null);
+                        launchShortcut(context, shortcut, bundle);
                 } else
-                    launchMode1(context, intent, 1, userId, shortcut);
+                    launchMode1(context, intent, 1, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
                 break;
             case "large":
-                launchMode1(context, intent, 2, userId, shortcut);
+                launchMode1(context, intent, 2, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
                 break;
             case "fullscreen":
-                launchMode2(context, intent, FULLSCREEN, userId, shortcut);
+                launchMode2(context, intent, MAXIMIZED, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
                 break;
             case "half_left":
-                launchMode2(context, intent, LEFT, userId, shortcut);
+                launchMode2(context, intent, LEFT, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
                 break;
             case "half_right":
-                launchMode2(context, intent, RIGHT, userId, shortcut);
+                launchMode2(context, intent, RIGHT, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
                 break;
             case "phone_size":
-                launchMode3(context, intent, userId, shortcut);
+                launchMode3(context, intent, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
                 break;
         }
 
@@ -367,7 +369,7 @@ public class U {
     
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut) {
+    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut, ApplicationType type, boolean specialLaunch) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -376,7 +378,7 @@ public class U {
         int height1 = display.getHeight() / (4 * factor);
         int height2 = display.getHeight() - height1;
 
-        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
                 width1,
                 height1,
                 width2,
@@ -387,7 +389,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    context.startActivity(intent, bundle);
+                    startActivity(context, intent, bundle, specialLaunch);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -399,7 +401,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut) {
+    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, ApplicationType type, boolean specialLaunch) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -437,7 +439,7 @@ public class U {
         } else if(isLandscape || (launchType != RIGHT && isPortrait))
             top = top + iconSize;
 
-        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
                 left,
                 top,
                 right,
@@ -448,7 +450,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    context.startActivity(intent, bundle);
+                    startActivity(context, intent, bundle, specialLaunch);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -460,7 +462,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut) {
+    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type, boolean specialLaunch) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -469,7 +471,7 @@ public class U {
         int height1 = display.getHeight() / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
-        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
                 width1 - width2,
                 height1 - height2,
                 width1 + width2,
@@ -480,7 +482,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    context.startActivity(intent, bundle);
+                    startActivity(context, intent, bundle, specialLaunch);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -503,16 +505,18 @@ public class U {
     private static void launchShortcut(Context context, ShortcutInfo shortcut, Bundle bundle) {
         LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-        try {
-            launcherApps.startShortcut(shortcut, null, bundle);
-        } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
+        if(launcherApps.hasShortcutHostPermission()) {
+            try {
+                launcherApps.startShortcut(shortcut, null, bundle);
+            } catch (ActivityNotFoundException | NullPointerException e) { /* Gracefully fail */ }
+        }
     }
 
-    public static void launchAppFullscreen(Context context, Intent intent) {
+    public static void launchAppMaximized(Context context, Intent intent) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
 
-        launchMode2(context, intent, FULLSCREEN, userId, null);
+        launchMode2(context, intent, MAXIMIZED, userId, null, ApplicationType.CONTEXT_MENU, false);
     }
 
     @SuppressWarnings("deprecation")
@@ -521,7 +525,7 @@ public class U {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
         try {
-            context.startActivity(intent, ActivityOptions.makeBasic().setLaunchBounds(new Rect(
+            context.startActivity(intent, getActivityOptions(ApplicationType.FREEFORM_HACK).setLaunchBounds(new Rect(
                     display.getWidth(),
                     display.getHeight(),
                     display.getWidth() + 1,
@@ -677,7 +681,7 @@ public class U {
     private static int getMaxNumOfColumns(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float baseTaskbarSize = context.getResources().getDimension(pref.getBoolean("dashboard", false) ? R.dimen.base_taskbar_size_dashboard : R.dimen.base_taskbar_size) / metrics.density;
+        float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / metrics.density;
         int numOfColumns = 0;
 
         float maxScreenSize = getTaskbarPosition(context).contains("vertical")
@@ -808,9 +812,13 @@ public class U {
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
+        return isServiceRunning(context, cls.getName());
+    }
+
+    public static boolean isServiceRunning(Context context, String className) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if(cls.getName().equals(service.service.getClassName()))
+            if(className.equals(service.service.getClassName()))
                 return true;
         }
 
@@ -842,5 +850,148 @@ public class U {
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean canDrawOverlays(Context context) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+    }
+
+    public static boolean isGame(Context context, String packageName) {
+        SharedPreferences pref = getSharedPreferences(context);
+        if(pref.getBoolean("launch_games_fullscreen", true)) {
+            PackageManager pm = context.getPackageManager();
+
+            try {
+                ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+                return (info.flags & ApplicationInfo.FLAG_IS_GAME) != 0 || (info.metaData != null && info.metaData.getBoolean("isGame", false));
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+        } else
+            return false;
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static ActivityOptions getActivityOptions(ApplicationType applicationType) {
+        ActivityOptions options = ActivityOptions.makeBasic();
+        Integer stackId = null;
+
+        switch(applicationType) {
+            case APPLICATION:
+                // Let the system determine the stack id
+                break;
+            case GAME:
+                stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                break;
+            case FREEFORM_HACK:
+                stackId = FREEFORM_WORKSPACE_STACK_ID;
+                break;
+            case CONTEXT_MENU:
+                if(isOPreview()) stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+        }
+
+        if(stackId != null) {
+            try {
+                Method method = ActivityOptions.class.getMethod("setLaunchStackId", int.class);
+                method.invoke(options, stackId);
+            } catch (Exception e) { /* Gracefully fail */ }
+        }
+
+        return options;
+    }
+
+    private static ApplicationType getApplicationType(Context context, String packageName) {
+        return isGame(context, packageName) ? ApplicationType.GAME : ApplicationType.APPLICATION;
+    }
+
+    public static boolean isSystemApp(Context context) {
+        try {
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+            return (info.flags & mask) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static boolean isOPreview() {
+        return Build.VERSION.RELEASE.equals("O") && Build.VERSION.PREVIEW_SDK_INT > 0;
+    }
+
+    public static boolean hasSupportLibrary(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
+            return pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, BuildConfig.APPLICATION_ID) == PackageManager.SIGNATURE_MATCH
+                    && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+                    && isSystemApp(context);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    private static void startActivity(Context context, Intent intent, Bundle options, boolean specialLaunch) {
+        if(specialLaunch) {
+            startFreeformHack(context, true, false);
+            new Handler().post(() -> context.startActivity(intent, options));
+        } else
+            context.startActivity(intent, options);
+    }
+
+    public static int getBaseTaskbarSize(Context context) {
+        return Math.round(getBaseTaskbarSizeFloat(context));
+    }
+
+    private static float getBaseTaskbarSizeFloat(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        float baseTaskbarSize = context.getResources().getDimension(R.dimen.base_taskbar_size);
+        boolean navbarButtonsEnabled = false;
+
+        if(pref.getBoolean("dashboard", false))
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.dashboard_button_size);
+
+        if(pref.getBoolean("button_back", false)) {
+            navbarButtonsEnabled = true;
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+        }
+
+        if(pref.getBoolean("button_home", false)) {
+            navbarButtonsEnabled = true;
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+        }
+
+        if(pref.getBoolean("button_recents", false)) {
+            navbarButtonsEnabled = true;
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+        }
+
+        if(navbarButtonsEnabled)
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.navbar_buttons_margin);
+
+        return baseTaskbarSize;
+    }
+
+    private static void startTaskbarService(Context context, boolean fullRestart) {
+        context.startService(new Intent(context, TaskbarService.class));
+        context.startService(new Intent(context, StartMenuService.class));
+        context.startService(new Intent(context, DashboardService.class));
+        if(fullRestart) context.startService(new Intent(context, NotificationService.class));
+    }
+
+    private static void stopTaskbarService(Context context, boolean fullRestart) {
+        context.stopService(new Intent(context, TaskbarService.class));
+        context.stopService(new Intent(context, StartMenuService.class));
+        context.stopService(new Intent(context, DashboardService.class));
+        if(fullRestart) context.stopService(new Intent(context, NotificationService.class));
+    }
+
+    public static void restartTaskbar(Context context) {
+        SharedPreferences pref = U.getSharedPreferences(context);
+        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+            pref.edit().putBoolean("is_restarting", true).apply();
+
+            stopTaskbarService(context, true);
+            startTaskbarService(context, true);
+        } else if(U.isServiceRunning(context, StartMenuService.class)) {
+            stopTaskbarService(context, false);
+            startTaskbarService(context, false);
+        }
     }
 }

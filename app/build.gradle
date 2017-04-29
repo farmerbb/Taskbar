@@ -1,5 +1,5 @@
 ext {
-    SUPPORT_LIBRARY_VERSION = "25.1.1"
+    SUPPORT_LIBRARY_VERSION = "25.3.1"
 }
 
 buildscript {
@@ -8,11 +8,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.6.0'
     }
 }
 
-apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -31,17 +30,30 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
 
-        versionCode 122
-        versionName "3.0.7"
+        versionCode 141
+        versionName "3.3.2"
 
         resConfigs "en", "ja", "ru", "de"
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
+        buildConfigField "String", "PAID_APPLICATION_ID", "\"com.farmerbb.taskbar.paid\""
+        buildConfigField "String", "SUPPORT_APPLICATION_ID", "\"com.farmerbb.taskbar.support\""
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        release {
+            if(System.getenv("KSTOREFILE") != null)
+                storeFile file(System.getenv("KSTOREFILE"))
+
+            storePassword System.getenv("KSTOREPWD")
+            keyAlias System.getenv("KEYALIAS")
+            keyPassword System.getenv("KEYPWD")
+        }
     }
 
     buildTypes {
@@ -53,7 +65,8 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles 'proguard-android.txt', 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
             manifestPlaceholders = [appName: "@string/app_name"]
         }
     }

@@ -51,6 +51,11 @@
         <item>В течение дня</item>
         <item>После запуска Taskbar</item>
     </string-array>
+    <string-array name="pref_recents_amount_alt">
+        <item>В течение дня</item>
+        <item>После запуска Taskbar</item>
+        <item>Running apps only</item>
+    </string-array>
 
     <string name="pref_title_sort_order">Сортировка за</string>
     <string-array name="pref_sort_order">
@@ -58,6 +63,10 @@
         <item>частотой использования (по возрастанию)</item>
         <item>временем использования (по убыванию)</item>
         <item>временем использования (по возрастанию)</item>
+    </string-array>
+    <string-array name="pref_sort_order_alt">
+        <item>частотой использования (по убыванию)</item>
+        <item>частотой использования (по возрастанию)</item>
     </string-array>
 
     <string name="pref_header_advanced">Расширенные настройки</string>
@@ -197,8 +206,6 @@
     <string name="already_top_app">%1$s нельзя выбрать, он уже в списке</string>
 
     <string name="alt_button_config">Другая позиция кнопки скрытия</string>
-    <string name="pref_title_open_in_fullscreen">Открывать в полноэкранном режиме</string>
-    <string name="pref_description_open_in_fullscreen">Требует настройки Freeform. Когда не выбран, окна будут открыватся только в рабочем столе режима Freeform.</string>
     <string name="pref_title_save_window_sizes">Сохранять размеры окон</string>
     <string name="pref_description_save_window_sizes">при открытии окон с контекстного меню</string>
 
@@ -280,5 +287,25 @@
 
     <string name="hide_taskbar_disclaimer">Не применяется к приложениям в режмие Freeform</string>
     <string name="transparent_start_menu">Прозрачное меню запуска</string>
+
+    <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
+    <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
+
+    <string name="invalid_grid_size">Invalid grid size</string>
+
+    <string name="window_sizes_not_available">Window sizes currently don\'t work on Android O</string>
+
+    <string name="navigation_bar_buttons">Navigation bar buttons</string>
+    <string name="navigation_bar_buttons_description">Add additional buttons to the Taskbar that perform navigation bar actions</string>
+    <string name="button_back">Back</string>
+    <string name="button_home">Home</string>
+    <string name="button_recents">Recents</string>
+
+    <string name="full_length">Expand area with whitespace</string>
+
+    <string name="restore_widget">Restore widget</string>
+
+    <string name="samsung_freeform_title">Note</string>
+    <string name="samsung_freeform_message">Freeform mode may not work on Samsung devices, due to system changes made to multi-window mode.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
 
 </resources>

@@ -19,8 +19,11 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
@@ -33,9 +36,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
 public class NotificationService extends Service {
+
+    private boolean isHidden = true;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -47,6 +53,26 @@ public class NotificationService extends Service {
         return START_STICKY;
     }
 
+    BroadcastReceiver userForegroundReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            startService(new Intent(context, TaskbarService.class));
+            startService(new Intent(context, StartMenuService.class));
+            startService(new Intent(context, DashboardService.class));
+        }
+    };
+
+    BroadcastReceiver userBackgroundReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopService(new Intent(context, TaskbarService.class));
+            stopService(new Intent(context, StartMenuService.class));
+            stopService(new Intent(context, DashboardService.class));
+
+            IconCache.getInstance(context).clearCache();
+        }
+    };
+
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCreate() {
@@ -55,7 +81,7 @@ public class NotificationService extends Service {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false)) {
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
-                boolean isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
+                isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
                 String label = getString(isHidden ? R.string.action_show : R.string.action_hide);
 
                 Intent intent = new Intent(this, MainActivity.class);
@@ -83,6 +109,11 @@ public class NotificationService extends Service {
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
+
+                if(!isHidden) {
+                    registerReceiver(userForegroundReceiver, new IntentFilter(Intent.ACTION_USER_FOREGROUND));
+                    registerReceiver(userBackgroundReceiver, new IntentFilter(Intent.ACTION_USER_BACKGROUND));
+                }
             } else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
@@ -107,5 +138,10 @@ public class NotificationService extends Service {
         }
 
         super.onDestroy();
+
+        if(!isHidden) {
+            unregisterReceiver(userForegroundReceiver);
+            unregisterReceiver(userBackgroundReceiver);
+        }
     }
 }

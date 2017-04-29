@@ -31,12 +31,21 @@
         <item>past_day</item>
         <item>app_start</item>
     </string-array>
+    <string-array name="pref_recents_amount_values_alt">
+        <item>past_day</item>
+        <item>app_start</item>
+        <item>running_apps_only</item>
+    </string-array>
 
     <string-array name="pref_sort_order_values">
         <item>false</item>
         <item>true</item>
         <item>most_used_false</item>
         <item>most_used_true</item>
+    </string-array>
+    <string-array name="pref_sort_order_values_alt">
+        <item>false</item>
+        <item>true</item>
     </string-array>
 
     <string-array name="pref_position_list_values">

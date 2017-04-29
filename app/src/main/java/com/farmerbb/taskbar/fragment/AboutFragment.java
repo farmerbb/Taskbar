@@ -58,17 +58,21 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             }
 
             SharedPreferences pref = U.getSharedPreferences(getActivity());
+            addPreferencesFromResource(R.xml.pref_about);
+
             if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                     && playStoreInstalled
+                    && !U.isSystemApp(getActivity())
                     && !pref.getBoolean("hide_donate", false)) {
-                addPreferencesFromResource(R.xml.pref_about_donate);
                 findPreference("donate").setOnPreferenceClickListener(this);
             } else
-                addPreferencesFromResource(R.xml.pref_about);
+                getPreferenceScreen().removePreference(findPreference("donate_category"));
 
             // Set OnClickListeners for certain preferences
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));
 
             findPreference("pref_screen_general").setOnPreferenceClickListener(this);
             findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
@@ -104,19 +108,19 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                         .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.BASE_APPLICATION_ID + ".paid"));
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.PAID_APPLICATION_ID));
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             try {
                                 startActivity(intent);
                             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         })
-                        .setNegativeButton(R.string.action_no_thanks, (dialog, which) -> {
+                        .setNegativeButton(noThanksCount == 2 ? R.string.action_dont_show_again : R.string.action_no_thanks, (dialog, which) -> {
                             noThanksCount++;
 
                             if(noThanksCount == 3) {
                                 pref.edit().putBoolean("hide_donate", true).apply();
-                                findPreference("donate").setEnabled(false);
+                                getPreferenceScreen().removePreference(findPreference("donate_category"));
                             }
                         });
 

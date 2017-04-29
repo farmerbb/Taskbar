@@ -19,16 +19,13 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
@@ -42,6 +39,7 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -190,7 +188,11 @@ public class HomeActivity extends Activity {
     }
 
     private void setWallpaper() {
-        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+        else
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         try {
             startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper)));
@@ -229,7 +231,7 @@ public class HomeActivity extends Activity {
 
         LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-        if(canDrawOverlays()) {
+        if(U.canDrawOverlays(this)) {
             if(!bootToFreeform()) {
                 final LauncherHelper helper = LauncherHelper.getInstance();
                 helper.setOnHomeScreen(true);
@@ -243,14 +245,8 @@ public class HomeActivity extends Activity {
                 } else
                     startTaskbar();
             }
-        } else {
-            ComponentName component = new ComponentName(this, HomeActivity.class);
-            getPackageManager().setComponentEnabledSetting(component,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-
-            finish();
-        }
+        } else
+            U.showPermissionDialog(this);
     }
 
     private boolean bootToFreeform() {
@@ -282,7 +278,10 @@ public class HomeActivity extends Activity {
         if(!bootToFreeform()) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
 
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+            if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+            else
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
             // Stop the Taskbar and Start Menu services if they should normally not be active
             if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
@@ -306,10 +305,5 @@ public class HomeActivity extends Activity {
     @Override
     public void onBackPressed() {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean canDrawOverlays() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this);
     }
 }

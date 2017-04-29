@@ -1,5 +1,7 @@
 # Add project specific ProGuard rules here
 
+-keepattributes LineNumberTable,SourceFile
+
 -applymapping mapping.txt
 
 -keepclassmembers class * implements java.io.Serializable {

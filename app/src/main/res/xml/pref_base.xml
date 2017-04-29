@@ -32,6 +32,11 @@
         android:title="@string/pref_header_recent_apps" />
 
     <Preference
+        android:key="pref_screen_freeform"
+        android:icon="@drawable/ic_web_asset_black_24dp"
+        android:title="@string/pref_header_freeform" />
+
+    <Preference
         android:key="pref_screen_advanced"
         android:icon="@drawable/ic_error_outline_black_24dp"
         android:title="@string/pref_header_advanced" />

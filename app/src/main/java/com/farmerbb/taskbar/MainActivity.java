@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.FragmentTransaction;
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
             editor.putBoolean("taskbar_active", false);
 
         // Ensure that components that should be enabled are enabled properly
-        boolean launcherEnabled = pref.getBoolean("launcher", false) && canDrawOverlays();
+        boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this)) || U.hasSupportLibrary(this);
         editor.putBoolean("launcher", launcherEnabled);
 
         editor.apply();
@@ -123,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
         getPackageManager().setComponentEnabledSetting(component4,
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
+
+        if(!launcherEnabled)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
             proceedWithAppLaunch(savedInstanceState);
@@ -165,11 +167,11 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
 
             theSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
                 if(b) {
-                    if(canDrawOverlays()) {
+                    if(U.canDrawOverlays(this)) {
                         boolean firstRun = pref.getBoolean("first_run", true);
                         startTaskbarService();
 
-                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp()) {
+                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !U.isSystemApp(this)) {
                             ApplicationInfo applicationInfo = null;
                             try {
                                 applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
@@ -248,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                 }
 
                 editor.putBoolean("first_run", true);
-                editor.putBoolean("dashboard_tutorial_shown", false);
                 editor.apply();
             }
         }
@@ -342,11 +343,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
         stopService(new Intent(this, NotificationService.class));
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean canDrawOverlays() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this);
-    }
-
     private void updateSwitch() {
         if(theSwitch != null) {
             SharedPreferences pref = U.getSharedPreferences(this);
@@ -364,16 +360,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                     .replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .commit();
-    }
-
-    private boolean isSystemApp() {
-        try {
-            ApplicationInfo info = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
-            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-            return (info.flags & mask) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
     @Override
@@ -395,6 +381,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
         SettingsFragment fragment = (SettingsFragment) getFragmentManager().findFragmentById(R.id.fragmentContainer);
         colorDialog.setColorPreferenceSummary(fragment.findPreference(preferenceId + "_pref"), color, this, getResources());
 
-        fragment.restartTaskbar();
+        U.restartTaskbar(this);
     }
 }

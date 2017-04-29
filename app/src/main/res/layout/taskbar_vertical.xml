@@ -56,6 +56,11 @@
             android:orientation="vertical"
             android:clickable="false">
 
+            <Space
+                android:id="@+id/whitespace"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
             <LinearLayout
                 android:id="@+id/taskbar"
                 android:layout_width="wrap_content"
@@ -75,6 +80,39 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/navbar_buttons"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/button_recents"
+            android:layout_height="@dimen/icon_size"
+            android:layout_width="match_parent"
+            android:src="@drawable/ic_sysbar_recent"
+            android:scaleType="center"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/button_home"
+            android:layout_height="@dimen/icon_size"
+            android:layout_width="match_parent"
+            android:src="@drawable/ic_sysbar_home"
+            android:scaleType="center"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_height="@dimen/icon_size"
+            android:layout_width="match_parent"
+            android:src="@drawable/ic_sysbar_back"
+            android:scaleType="center"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <FrameLayout
         android:orientation="vertical"

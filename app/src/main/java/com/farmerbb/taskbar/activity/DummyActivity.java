@@ -20,13 +20,16 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.UserManager;
 import android.view.View;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class DummyActivity extends Activity {
@@ -68,6 +71,16 @@ public class DummyActivity extends Activity {
 
                     finish();
                 }
+            } else if(getIntent().hasExtra("start_freeform_hack")) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                        && pref.getBoolean("freeform_hack", false)
+                        && isInMultiWindowMode()
+                        && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                    U.startFreeformHack(this, false, false);
+                }
+
+                finish();
             } else finish();
         }
     }

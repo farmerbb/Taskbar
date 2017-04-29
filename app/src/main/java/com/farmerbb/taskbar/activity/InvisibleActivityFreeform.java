@@ -47,6 +47,7 @@ public class InvisibleActivityFreeform extends Activity {
     boolean proceedWithOnCreate = true;
     boolean finish = false;
     boolean bootToFreeform = false;
+    boolean initialLaunch = true;
 
     private BroadcastReceiver appearingReceiver = new BroadcastReceiver() {
         @Override
@@ -131,7 +132,7 @@ public class InvisibleActivityFreeform extends Activity {
                                 intent.putExtra("power_button_warning", true);
                             }
 
-                            U.launchAppFullscreen(getApplicationContext(), intent);
+                            U.launchAppMaximized(getApplicationContext(), intent);
                         }
                     }, 100);
                 }
@@ -150,11 +151,10 @@ public class InvisibleActivityFreeform extends Activity {
         if(showTaskbar)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
 
-        if(!isInMultiWindowMode()) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            if(!pref.getBoolean("reboot_required", false))
-                reallyFinish();
-        }
+        if(!isInMultiWindowMode() && !initialLaunch)
+            reallyFinish();
+
+        initialLaunch = false;
     }
 
     @Override

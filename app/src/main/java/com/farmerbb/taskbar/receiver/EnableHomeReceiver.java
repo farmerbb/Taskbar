@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import com.farmerbb.taskbar.activity.HomeActivity;
@@ -28,6 +29,24 @@ public class EnableHomeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(U.canDrawOverlays(context)) {
+            SharedPreferences pref = U.getSharedPreferences(context);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("launcher", true);
+
+            // Customizations for Bliss-x86
+            if(intent.hasExtra("enable_freeform_hack") && U.hasFreeformSupport(context)) {
+                editor.putBoolean("freeform_hack", true);
+            }
+
+            if(intent.hasExtra("enable_running_apps_only") && U.isSystemApp(context)) {
+                editor.putString("recents_amount", "running_apps_only");
+                editor.putString("refresh_frequency", "0");
+                editor.putString("max_num_of_recents", "2147483647");
+                editor.putBoolean("full_length", true);
+            }
+
+            editor.apply();
+
             ComponentName component = new ComponentName(context, HomeActivity.class);
             context.getPackageManager().setComponentEnabledSetting(component,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
