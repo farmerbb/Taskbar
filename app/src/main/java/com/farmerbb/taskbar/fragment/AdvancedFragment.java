@@ -43,6 +43,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.U;
+import com.mikepenz.iconics.Iconics;
 
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
@@ -62,6 +63,11 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
             findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
+            findPreference("keyboard_shortcut").setSummary(
+                    new Iconics.IconicsBuilder()
+                            .ctx(getActivity())
+                            .on(getString(R.string.pref_description_keyboard_shortcut))
+                            .build());
 
             bindPreferenceSummaryToValue(findPreference("dashboard"));
 

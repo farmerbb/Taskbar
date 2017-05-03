@@ -58,7 +58,6 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
-import com.mikepenz.iconics.context.IconicsContextWrapper;
 
 import java.io.File;
 import java.util.Arrays;
@@ -76,11 +75,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
 
     public final int BACKGROUND_TINT = 1;
     public final int ACCENT_COLOR = 2;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
