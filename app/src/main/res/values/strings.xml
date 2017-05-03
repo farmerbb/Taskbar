@@ -103,7 +103,7 @@
     <string name="quit_taskbar">Quit</string>
 
     <string name="pref_title_keyboard_shortcut">Enable keyboard shortcuts</string>
-    <string name="pref_description_keyboard_shortcut">Start/stop Taskbar\n&#8226; WinKey+M / Search+M\n\nLock device\n&#8226; WinKey+L / Search+L\n\nShow start menu\n&#8226; WinKey / Search\n(requires Taskbar to be set as the search assistant in Settings)</string>
+    <string name="pref_description_keyboard_shortcut">Start/stop Taskbar: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nLock device: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\nShow start menu: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(requires Taskbar to be set as the assist app in Settings)</string>
     <string name="loading_apps">Loading apps&#8230;</string>
     <string name="press_enter">No apps found\n\nPress Enter to search using Google</string>
     <string name="nothing_to_see_here">Nothing to see here, move along&#8230;</string>
@@ -307,5 +307,7 @@
 
     <string name="samsung_freeform_title">Note</string>
     <string name="samsung_freeform_message">Freeform mode may not work on Samsung devices, due to system changes made to multi-window mode.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
+
+    <string name="widget_restore_toast">Select \"%1$s\" to restore this widget</string>
 
 </resources>

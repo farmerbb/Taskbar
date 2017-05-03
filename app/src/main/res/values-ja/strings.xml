@@ -308,4 +308,6 @@
     <string name="samsung_freeform_title">Note</string>
     <string name="samsung_freeform_message">Freeform mode may not work on Samsung devices, due to system changes made to multi-window mode.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
 
+    <string name="widget_restore_toast">Select \"%1$s\" to restore this widget</string>
+
 </resources>

@@ -308,4 +308,6 @@
     <string name="samsung_freeform_title">Внимание</string>
     <string name="samsung_freeform_message">Freeform имеет проблемы с устройствами Samsung из-за изменений в работе мультизадачности.\n\nВам потребуеться прошить сторонее ПО для работы Freeform.</string>
 
+    <string name="widget_restore_toast">Select \"%1$s\" to restore this widget</string>
+
 </resources>
