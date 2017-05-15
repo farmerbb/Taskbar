@@ -25,7 +25,7 @@
         android:protectionLevel="signature" />
 
     <permission android:name="${applicationId}.ENABLE_DISABLE_HOME"
-        android:protectionLevel="signatureOrSystem" />
+        android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -182,8 +182,7 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:enabled="true"
-            android:theme="@android:style/Theme.NoDisplay"
-            android:exported="true" >
+            android:theme="@android:style/Theme.NoDisplay" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
