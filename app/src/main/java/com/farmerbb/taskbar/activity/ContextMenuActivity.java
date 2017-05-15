@@ -631,6 +631,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         }
 
         super.finish();
+        if(showStartMenu)
+            overridePendingTransition(0, 0);
     }
 
     @SuppressWarnings("deprecation")
@@ -687,6 +689,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.startFreeformHack(this, false, false);
 
             super.onBackPressed();
+            if(FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                overridePendingTransition(0, 0);
         }
     }
 

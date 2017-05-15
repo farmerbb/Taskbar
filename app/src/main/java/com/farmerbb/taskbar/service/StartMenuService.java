@@ -583,7 +583,7 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!onHomeScreen || inFreeformMode) {
-                Class clazz = inFreeformMode && !shouldShowSearchBox && !U.isOPreview() ? InvisibleActivityAlt.class : InvisibleActivity.class;
+                Class clazz = inFreeformMode && !U.isOPreview() ? InvisibleActivityAlt.class : InvisibleActivity.class;
                 Intent intent = new Intent(this, clazz);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
