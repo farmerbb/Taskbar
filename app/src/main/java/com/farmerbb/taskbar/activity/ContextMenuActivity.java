@@ -348,6 +348,23 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     }
 
     @SuppressWarnings("deprecation")
+    private void generateWindowSizes() {
+        getPreferenceScreen().removeAll();
+
+        addPreferencesFromResource(R.xml.pref_context_menu_window_size_list);
+        findPreference("window_size_standard").setOnPreferenceClickListener(this);
+        findPreference("window_size_large").setOnPreferenceClickListener(this);
+        findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
+        findPreference("window_size_half_left").setOnPreferenceClickListener(this);
+        findPreference("window_size_half_right").setOnPreferenceClickListener(this);
+        findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
+
+        String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
+        CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
+        findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
+    }
+
+    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N_MR1)
     @Override
     public boolean onPreferenceClick(Preference p) {
@@ -445,26 +462,20 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 }
                 break;
             case "show_window_sizes":
-                getPreferenceScreen().removeAll();
-
-                addPreferencesFromResource(R.xml.pref_context_menu_window_size_list);
-                findPreference("window_size_standard").setOnPreferenceClickListener(this);
-                findPreference("window_size_large").setOnPreferenceClickListener(this);
-                findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
-                findPreference("window_size_half_left").setOnPreferenceClickListener(this);
-                findPreference("window_size_half_right").setOnPreferenceClickListener(this);
-                findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
-
-                SharedPreferences pref = U.getSharedPreferences(this);
-                if(pref.getBoolean("save_window_sizes", true)) {
-                    String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
-                    CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
-                    findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
-                }
+                generateWindowSizes();
 
                 if(U.isOPreview()) {
                     U.showToast(this, R.string.window_sizes_not_available);
                 }
+
+                getListView().setOnItemLongClickListener((parent, view, position, id) -> {
+                    String[] windowSizes = { "standard", "large", "fullscreen", "half_left", "half_right", "phone_size" };
+
+                    SavedWindowSizes.getInstance(ContextMenuActivity.this).setWindowSize(ContextMenuActivity.this, packageName, windowSizes[position]);
+
+                    generateWindowSizes();
+                    return true;
+                });
 
                 secondaryMenu = true;
                 break;
@@ -684,6 +695,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getPreferenceScreen().removeAll();
             generateMenu();
+
+            getListView().setOnItemLongClickListener(null);
         } else {
             if(contextMenuFix && !showStartMenu)
                 U.startFreeformHack(this, false, false);
