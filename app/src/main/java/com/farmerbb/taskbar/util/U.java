@@ -811,6 +811,10 @@ public class U {
                 || Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", -1) == 1);
     }
 
+    public static boolean hasPartialFreeformSupport() {
+         return Build.MANUFACTURER.equalsIgnoreCase("Samsung") || isOPreview();
+    }
+
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
         return isServiceRunning(context, cls.getName());
     }

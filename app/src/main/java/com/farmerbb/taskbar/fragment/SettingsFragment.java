@@ -61,10 +61,11 @@ public class SettingsFragment extends PreferenceFragment {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !Build.MANUFACTURER.equalsIgnoreCase("Samsung")) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
-                        .putBoolean("freeform_hack", U.hasFreeformSupport(getActivity()))
+                        .putBoolean("freeform_hack", U.hasFreeformSupport(getActivity()) && !U.hasPartialFreeformSupport())
+                        .putBoolean("save_window_sizes", false)
                         .putBoolean("freeform_hack_override", true)
                         .apply();
             } else if(!U.hasFreeformSupport(getActivity())) {

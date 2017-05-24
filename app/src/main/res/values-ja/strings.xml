@@ -307,6 +307,7 @@
 
     <string name="samsung_freeform_title">注意</string>
     <string name="samsung_freeform_message">マルチウィンドウモードのシステム変更により、フリーフォームモードが Samsung デバイスで動作しない可能性があります。\n\nこのデバイスでフリーフォームモードを使用するにはカスタム ROM をフラッシュする必要があります。</string>
+    <string name="o_preview_freeform_message">Freeform mode does not work correctly on devices with Android O, due to system changes made to multi-window mode.\n\nFor maximum compatibility, please clear all fullscreen apps from recents before opening any freeform windows.</string>
 
     <string name="widget_restore_toast">\"%1$s\" を選択してこのウィジェットを復元します</string>
 

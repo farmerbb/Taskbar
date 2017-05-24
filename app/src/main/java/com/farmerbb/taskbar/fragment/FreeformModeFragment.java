@@ -62,13 +62,13 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        // Dialog shown on Samsung devices, which seem to not work with freeform mode
-        if(Build.MANUFACTURER.equalsIgnoreCase("Samsung")) {
+        // Dialog shown on devices which seem to not work correctly with freeform mode
+        if(U.hasPartialFreeformSupport()) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             if(!pref.getBoolean("samsung_dialog_shown", false)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.samsung_freeform_title)
-                        .setMessage(R.string.samsung_freeform_message)
+                        .setMessage(U.isOPreview() ? R.string.o_preview_freeform_message : R.string.samsung_freeform_message)
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
 
                 AlertDialog dialog = builder.create();
