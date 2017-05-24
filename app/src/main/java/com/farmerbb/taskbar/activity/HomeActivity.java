@@ -205,6 +205,8 @@ public class HomeActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+
         if(bootToFreeform()) {
             if(U.launcherIsDefault(this)) {
                 U.startFreeformHack(this, false, false);
@@ -228,8 +230,6 @@ public class HomeActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         if(U.canDrawOverlays(this)) {
             if(!bootToFreeform()) {
