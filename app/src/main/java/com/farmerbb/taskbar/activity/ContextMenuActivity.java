@@ -187,6 +187,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     params.y = isStartButton ? 0 : y - statusBarHeight;
                     break;
             }
+
+            if(!U.getTaskbarPosition(this).contains("vertical") && (params.x > display.getWidth() / 2))
+                params.x = params.x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset;
         }
 
         params.width = getResources().getDimensionPixelSize(R.dimen.context_menu_width);
