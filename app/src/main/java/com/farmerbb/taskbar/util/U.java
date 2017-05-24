@@ -305,12 +305,8 @@ public class U {
 
         boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isFreeformHackActive() && openInNewWindow;
 
-        if(windowSize == null) {
-            if(pref.getBoolean("save_window_sizes", true))
-                windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, packageName);
-            else
-                windowSize = pref.getString("window_size", "standard");
-        }
+        if(windowSize == null)
+            windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, packageName);
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
             Bundle bundle = Build.VERSION.SDK_INT < Build.VERSION_CODES.N ? null : getActivityOptions(getApplicationType(context, packageName)).toBundle();
