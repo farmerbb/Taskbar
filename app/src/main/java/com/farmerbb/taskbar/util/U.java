@@ -258,7 +258,7 @@ public class U {
                 freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         }
 
-        if(U.canDrawOverlays(context))
+        if(canDrawOverlays(context))
             launchAppLowerRight(context, freeformHackIntent);
     }
 
@@ -914,7 +914,7 @@ public class U {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean isOPreview() {
-        return Build.VERSION.RELEASE.equals("O") && Build.VERSION.PREVIEW_SDK_INT > 0;
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) || (Build.VERSION.RELEASE.equals("O") && Build.VERSION.PREVIEW_SDK_INT > 0);
     }
 
     public static boolean hasSupportLibrary(Context context) {
@@ -985,15 +985,26 @@ public class U {
     }
 
     public static void restartTaskbar(Context context) {
-        SharedPreferences pref = U.getSharedPreferences(context);
+        SharedPreferences pref = getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
             pref.edit().putBoolean("is_restarting", true).apply();
 
             stopTaskbarService(context, true);
             startTaskbarService(context, true);
-        } else if(U.isServiceRunning(context, StartMenuService.class)) {
+        } else if(isServiceRunning(context, StartMenuService.class)) {
             stopTaskbarService(context, false);
             startTaskbarService(context, false);
+        }
+    }
+
+    public static void restartNotificationService(Context context) {
+        if(isServiceRunning(context, NotificationService.class)) {
+            SharedPreferences pref = getSharedPreferences(context);
+            pref.edit().putBoolean("is_restarting", true).apply();
+
+            Intent intent = new Intent(context, NotificationService.class);
+            context.stopService(intent);
+            context.startService(intent);
         }
     }
 }

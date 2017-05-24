@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.farmerbb.taskbar.MainActivity;
-import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.U;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -141,18 +140,7 @@ public class SettingsFragment extends PreferenceFragment {
         if(restartNotificationService) {
             restartNotificationService = false;
 
-            restartNotificationService();
-        }
-    }
-
-    protected void restartNotificationService() {
-        if(U.isServiceRunning(getActivity(), NotificationService.class)) {
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
-            pref.edit().putBoolean("is_restarting", true).apply();
-
-            Intent intent = new Intent(getActivity(), NotificationService.class);
-            getActivity().stopService(intent);
-            getActivity().startService(intent);
+            U.restartNotificationService(getActivity());
         }
     }
 }

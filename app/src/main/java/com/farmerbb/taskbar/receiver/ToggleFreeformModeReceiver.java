@@ -36,9 +36,6 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
             pref.edit().putBoolean("freeform_hack", false).apply();
 
             context.stopService(notificationIntent);
-
-            pref.edit().putBoolean("is_restarting", true).apply();
-
             context.startService(notificationIntent);
 
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
@@ -48,14 +45,11 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
 
             context.stopService(notificationIntent);
 
-            pref.edit().putBoolean("is_restarting", true).apply();
-
             Intent intent2 = new Intent(context, DummyActivity.class);
             intent2.putExtra("start_freeform_hack", true);
             intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             context.startActivity(intent2);
-
             context.startService(notificationIntent);
 
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
