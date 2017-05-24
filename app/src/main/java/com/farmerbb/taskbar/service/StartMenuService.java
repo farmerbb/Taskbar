@@ -117,6 +117,20 @@ public class StartMenuService extends Service {
             toggleStartMenu(false);
         }
     };
+
+    private BroadcastReceiver showSpaceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            layout.findViewById(R.id.start_menu_space).setVisibility(View.VISIBLE);
+        }
+    };
+
+    private BroadcastReceiver hideSpaceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            layout.findViewById(R.id.start_menu_space).setVisibility(View.GONE);
+        }
+    };
     
     private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
@@ -397,13 +411,19 @@ public class StartMenuService extends Service {
         
         textView = (TextView) layout.findViewById(R.id.no_apps_found);
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(toggleReceiverAlt);
+        lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(showSpaceReceiver);
+        lbm.unregisterReceiver(hideSpaceReceiver);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiverAlt, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
+        lbm.registerReceiver(toggleReceiverAlt, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
+        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.registerReceiver(showSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_START_MENU_SPACE"));
+        lbm.registerReceiver(hideSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_SPACE"));
 
         handler = new Handler();
         refreshApps(true);
@@ -632,9 +652,13 @@ public class StartMenuService extends Service {
                 windowManager.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(toggleReceiverAlt);
+        lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(showSpaceReceiver);
+        lbm.unregisterReceiver(hideSpaceReceiver);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
