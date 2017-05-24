@@ -313,18 +313,19 @@ public class U {
         }
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
+            Bundle bundle = Build.VERSION.SDK_INT < Build.VERSION_CODES.N ? null : getActivityOptions(getApplicationType(context, packageName)).toBundle();
             if(shortcut == null) {
                 UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
                 if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                     try {
-                        context.startActivity(intent, null);
+                        context.startActivity(intent, bundle);
                     } catch (ActivityNotFoundException e) {
-                        launchAndroidForWork(context, intent.getComponent(), null, userId);
+                        launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 } else
-                    launchAndroidForWork(context, intent.getComponent(), null, userId);
+                    launchAndroidForWork(context, intent.getComponent(), bundle, userId);
             } else
-                launchShortcut(context, shortcut, null);
+                launchShortcut(context, shortcut, bundle);
         } else switch(windowSize) {
             case "standard":
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace() && !specialLaunch) {
@@ -878,7 +879,8 @@ public class U {
 
         switch(applicationType) {
             case APPLICATION:
-                // Let the system determine the stack id
+                if(!FreeformHackHelper.getInstance().isFreeformHackActive())
+                    stackId = FULLSCREEN_WORKSPACE_STACK_ID;
                 break;
             case GAME:
                 stackId = FULLSCREEN_WORKSPACE_STACK_ID;

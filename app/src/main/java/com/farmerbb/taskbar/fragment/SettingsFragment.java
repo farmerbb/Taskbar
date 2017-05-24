@@ -141,14 +141,18 @@ public class SettingsFragment extends PreferenceFragment {
         if(restartNotificationService) {
             restartNotificationService = false;
 
-            if(U.isServiceRunning(getActivity(), NotificationService.class)) {
-                SharedPreferences pref = U.getSharedPreferences(getActivity());
-                pref.edit().putBoolean("is_restarting", true).apply();
+            restartNotificationService();
+        }
+    }
 
-                Intent intent = new Intent(getActivity(), NotificationService.class);
-                getActivity().stopService(intent);
-                getActivity().startService(intent);
-            }
+    protected void restartNotificationService() {
+        if(U.isServiceRunning(getActivity(), NotificationService.class)) {
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            pref.edit().putBoolean("is_restarting", true).apply();
+
+            Intent intent = new Intent(getActivity(), NotificationService.class);
+            getActivity().stopService(intent);
+            getActivity().startService(intent);
         }
     }
 }

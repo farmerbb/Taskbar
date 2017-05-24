@@ -340,6 +340,13 @@
                 <action android:name="com.farmerbb.taskbar.DISABLE_HOME"/>
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receiver.ToggleFreeformModeReceiver"
+            android:permission="${applicationId}.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

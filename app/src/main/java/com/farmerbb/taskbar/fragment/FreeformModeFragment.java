@@ -17,7 +17,10 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -37,6 +40,17 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class FreeformModeFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+
+    private BroadcastReceiver checkBoxReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            CheckBoxPreference preference = (CheckBoxPreference) findPreference("freeform_hack");
+            if(preference != null) {
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                preference.setChecked(pref.getBoolean("freeform_hack", false));
+            }
+        }
+    };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -77,6 +91,8 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             }
         }
 
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(checkBoxReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+
         finishedLoadingPrefs = true;
     }
 
@@ -93,6 +109,13 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 U.showToastLong(getActivity(), R.string.reboot_required);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(checkBoxReceiver);
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -140,6 +163,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
                 }
 
+                restartNotificationService();
                 break;
             case "freeform_mode_help":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -311,4 +311,7 @@
 
     <string name="widget_restore_toast">\"%1$s\" を選択してこのウィジェットを復元します</string>
 
+    <string name="freeform_on">Freeform on</string>
+    <string name="freeform_off">Freeform off</string>
+
 </resources>
