@@ -987,11 +987,16 @@ public class U {
     public static void restartTaskbar(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
-            pref.edit().putBoolean("is_restarting", true).apply();
+            pref.edit()
+                    .putBoolean("is_restarting", true)
+                    .putBoolean("skip_auto_hide_navbar", true)
+                    .apply();
 
             stopTaskbarService(context, true);
             startTaskbarService(context, true);
         } else if(isServiceRunning(context, StartMenuService.class)) {
+            pref.edit().putBoolean("skip_auto_hide_navbar", true).apply();
+
             stopTaskbarService(context, false);
             startTaskbarService(context, false);
         }

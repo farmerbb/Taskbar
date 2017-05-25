@@ -488,6 +488,11 @@ public class TaskbarService extends Service {
         else if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false))
             toggleTaskbar();
 
+        if(pref.getBoolean("auto_hide_navbar", false))
+            try {
+                Settings.System.putInt(getContentResolver(), "navigation_bar_show", 0);
+            } catch (Exception e) { /* Gracefully fail */ }
+
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         
         lbm.unregisterReceiver(showReceiver);
@@ -1071,6 +1076,14 @@ public class TaskbarService extends Service {
             try {
                 windowManager.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("skip_auto_hide_navbar", false)) {
+            pref.edit().remove("skip_auto_hide_navbar").apply();
+        } else if(pref.getBoolean("auto_hide_navbar", false))
+            try {
+                Settings.System.putInt(getContentResolver(), "navigation_bar_show", 1);
+            } catch (Exception e) { /* Gracefully fail */ }
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
 

@@ -314,4 +314,7 @@
     <string name="freeform_on">Freeform on</string>
     <string name="freeform_off">Freeform off</string>
 
+    <string name="auto_hide_navbar">Automatically control the system navigation bar</string>
+    <string name="auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
+
 </resources>

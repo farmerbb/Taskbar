@@ -45,11 +45,12 @@ public class EnableHomeReceiver extends BroadcastReceiver {
                 editor.putBoolean("full_length", true);
             }
 
-            if(intent.hasExtra("enable_navigation_bar_buttons")) {
+            if(intent.hasExtra("enable_navigation_bar_buttons") && U.isSystemApp(context)) {
                 editor.putBoolean("dashboard", true);
                 editor.putBoolean("button_back", true);
                 editor.putBoolean("button_home", true);
                 editor.putBoolean("button_recents", true);
+                editor.putBoolean("auto_hide_navbar", true);
             }
 
             editor.apply();
