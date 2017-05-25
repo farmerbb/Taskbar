@@ -61,6 +61,7 @@ import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -400,6 +401,22 @@ public class TaskbarService extends Service {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK);
                 if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     hideTaskbar(true);
+            });
+
+            backButton.setOnLongClickListener(v -> {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.showInputMethodPicker();
+
+                return true;
+            });
+
+            backButton.setOnGenericMotionListener((view13, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.showInputMethodPicker();
+                }
+                return true;
             });
         }
 
