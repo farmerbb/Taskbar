@@ -167,7 +167,8 @@ public class TaskbarService extends Service {
     private BroadcastReceiver startMenuAppearReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(startButton.getVisibility() == View.GONE)
+            if(startButton.getVisibility() == View.GONE
+                    && (!LauncherHelper.getInstance().isOnHomeScreen() || FreeformHackHelper.getInstance().isInFreeformWorkspace()))
                 layout.setVisibility(View.GONE);
         }
     };
@@ -489,9 +490,7 @@ public class TaskbarService extends Service {
             toggleTaskbar();
 
         if(pref.getBoolean("auto_hide_navbar", false))
-            try {
-                Settings.System.putInt(getContentResolver(), "navigation_bar_show", 0);
-            } catch (Exception e) { /* Gracefully fail */ }
+            U.showHideNavigationBar(this, false);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         
@@ -1081,9 +1080,7 @@ public class TaskbarService extends Service {
         if(pref.getBoolean("skip_auto_hide_navbar", false)) {
             pref.edit().remove("skip_auto_hide_navbar").apply();
         } else if(pref.getBoolean("auto_hide_navbar", false))
-            try {
-                Settings.System.putInt(getContentResolver(), "navigation_bar_show", 1);
-            } catch (Exception e) { /* Gracefully fail */ }
+            U.showHideNavigationBar(this, true);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
 

@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.provider.Settings;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -49,13 +48,9 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
     public boolean onPreferenceClick(Preference preference) {
         switch(preference.getKey()) {
             case "auto_hide_navbar":
-                if(U.isServiceRunning(this, TaskbarService.class)) {
-                    boolean isChecked = ((CheckBoxPreference) preference).isChecked();
+                if(U.isServiceRunning(this, TaskbarService.class))
+                    U.showHideNavigationBar(this, !((CheckBoxPreference) preference).isChecked());
 
-                    try {
-                        Settings.System.putInt(getContentResolver(), "navigation_bar_show", isChecked ? 0 : 1);
-                    } catch (Exception e) { /* Gracefully fail */ }
-                }
                 break;
             default:
                 U.restartTaskbar(this);

@@ -1012,4 +1012,11 @@ public class U {
             context.startService(intent);
         }
     }
+
+    public static void showHideNavigationBar(Context context, boolean show) {
+        // Show or hide the system navigation bar on Bliss-x86
+        try {
+            Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", show ? 1 : 0);
+        } catch (Exception e) { /* Gracefully fail */ }
+    }
 }
