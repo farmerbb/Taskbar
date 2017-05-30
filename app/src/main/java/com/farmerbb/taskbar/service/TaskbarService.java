@@ -407,6 +407,9 @@ public class TaskbarService extends Service {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.showInputMethodPicker();
 
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    hideTaskbar(true);
+
                 return true;
             });
 
@@ -415,6 +418,9 @@ public class TaskbarService extends Service {
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.showInputMethodPicker();
+
+                    if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                        hideTaskbar(true);
                 }
                 return true;
             });
