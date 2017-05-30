@@ -317,4 +317,6 @@
     <string name="auto_hide_navbar">Automatically control the system navigation bar</string>
     <string name="auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
 
+    <string name="press_enter_alt">No apps found\n\nPress Enter to open in browser</string>
+
 </resources>

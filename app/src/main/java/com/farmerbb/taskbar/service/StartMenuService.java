@@ -43,6 +43,7 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.SearchView;
+import android.util.Patterns;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
@@ -53,6 +54,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -306,9 +308,18 @@ public class StartMenuService extends Service {
                                 else
                                     LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-                                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                                intent.putExtra(SearchManager.QUERY, query);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                Intent intent;
+
+                                if(Patterns.WEB_URL.matcher(query).matches()) {
+                                    intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(URLUtil.guessUrl(query)));
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                } else {
+                                    intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                                    intent.putExtra(SearchManager.QUERY, query);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                }
+
                                 if(intent.resolveActivity(getPackageManager()) != null)
                                     startActivity(intent);
                                 else {
@@ -568,7 +579,7 @@ public class StartMenuService extends Service {
                         if(adapter.getCount() > 0)
                             textView.setText(null);
                         else if(query != null)
-                            textView.setText(getString(R.string.press_enter));
+                            textView.setText(getString(Patterns.WEB_URL.matcher(query).matches() ? R.string.press_enter_alt : R.string.press_enter));
                         else
                             textView.setText(getString(R.string.nothing_to_see_here));
                     }
