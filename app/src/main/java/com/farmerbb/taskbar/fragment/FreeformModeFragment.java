@@ -127,30 +127,35 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             case "freeform_hack":
                 if(((CheckBoxPreference) p).isChecked()) {
                     if(!U.hasFreeformSupport(getActivity())) {
-                        ((CheckBoxPreference) p).setChecked(false);
+                        try {
+                            Settings.Global.putInt(getActivity().getContentResolver(), "enable_freeform_support", 1);
+                            U.showToastLong(getActivity(), R.string.reboot_required);
+                        } catch (Exception e) {
+                            ((CheckBoxPreference) p).setChecked(false);
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(R.string.freeform_dialog_title)
-                                .setMessage(R.string.freeform_dialog_message)
-                                .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
-                                    showReminderToast = true;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle(R.string.freeform_dialog_title)
+                                    .setMessage(R.string.freeform_dialog_message)
+                                    .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
+                                        showReminderToast = true;
 
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
-                                    try {
-                                        startActivity(intent);
-                                        U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
-                                    } catch (ActivityNotFoundException e) {
-                                        intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
                                         try {
                                             startActivity(intent);
-                                            U.showToastLong(getActivity(), R.string.enable_developer_options);
-                                        } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
-                                    }
-                                });
+                                            U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
+                                        } catch (ActivityNotFoundException e1) {
+                                            intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                                            try {
+                                                startActivity(intent);
+                                                U.showToastLong(getActivity(), R.string.enable_developer_options);
+                                            } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
+                                        }
+                                    });
 
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                        dialog.setCancelable(false);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                            dialog.setCancelable(false);
+                        }
                     }
 
                     if(pref.getBoolean("taskbar_active", false)
