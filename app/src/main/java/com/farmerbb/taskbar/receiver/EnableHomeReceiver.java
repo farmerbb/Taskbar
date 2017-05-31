@@ -54,7 +54,6 @@ public class EnableHomeReceiver extends BroadcastReceiver {
                     editor.putBoolean("button_home", true);
                     editor.putBoolean("button_recents", true);
                     editor.putBoolean("auto_hide_navbar", true);
-                    editor.putBoolean("hide_taskbar", false);
 
                     try {
                         Settings.Secure.putString(context.getContentResolver(),
