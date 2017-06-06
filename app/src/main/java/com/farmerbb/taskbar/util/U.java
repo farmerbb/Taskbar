@@ -303,58 +303,28 @@ public class U {
             }
         }
 
-        boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isFreeformHackActive() && openInNewWindow;
-
         if(windowSize == null)
             windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, packageName);
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !pref.getBoolean("freeform_hack", false)) {
-            Bundle bundle = Build.VERSION.SDK_INT < Build.VERSION_CODES.N ? null : getActivityOptions(getApplicationType(context, packageName)).toBundle();
-            if(shortcut == null) {
-                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-                if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-                    try {
-                        context.startActivity(intent, bundle);
-                    } catch (ActivityNotFoundException e) {
-                        launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
-                } else
-                    launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-            } else
-                launchShortcut(context, shortcut, bundle);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+                || !pref.getBoolean("freeform_hack", false)
+                || windowSize.equals("standard")) {
+            launchStandard(context, intent, userId, shortcut, getApplicationType(context, packageName));
         } else switch(windowSize) {
-            case "standard":
-                if(FreeformHackHelper.getInstance().isInFreeformWorkspace() && !specialLaunch) {
-                    Bundle bundle = getActivityOptions(getApplicationType(context, packageName)).toBundle();
-                    if(shortcut == null) {
-                        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-                        if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-                            try {
-                                context.startActivity(intent, bundle);
-                            } catch (ActivityNotFoundException e) {
-                                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
-                        } else
-                            launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                    } else
-                        launchShortcut(context, shortcut, bundle);
-                } else
-                    launchMode1(context, intent, 1, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
-                break;
             case "large":
-                launchMode1(context, intent, 2, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
+                launchMode1(context, intent, userId, shortcut, getApplicationType(context, packageName));
                 break;
             case "fullscreen":
-                launchMode2(context, intent, MAXIMIZED, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
+                launchMode2(context, intent, MAXIMIZED, userId, shortcut, getApplicationType(context, packageName));
                 break;
             case "half_left":
-                launchMode2(context, intent, LEFT, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
+                launchMode2(context, intent, LEFT, userId, shortcut, getApplicationType(context, packageName));
                 break;
             case "half_right":
-                launchMode2(context, intent, RIGHT, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
+                launchMode2(context, intent, RIGHT, userId, shortcut, getApplicationType(context, packageName));
                 break;
             case "phone_size":
-                launchMode3(context, intent, userId, shortcut, getApplicationType(context, packageName), specialLaunch);
+                launchMode3(context, intent, userId, shortcut, getApplicationType(context, packageName));
                 break;
         }
 
@@ -364,15 +334,31 @@ public class U {
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
     }
     
+    private static void launchStandard(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type) {
+        Bundle bundle = Build.VERSION.SDK_INT < Build.VERSION_CODES.N ? null : getActivityOptions(type).toBundle();
+        if(shortcut == null) {
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                try {
+                    context.startActivity(intent, bundle);
+                } catch (ActivityNotFoundException e) {
+                    launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } else
+                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+        } else
+            launchShortcut(context, shortcut, bundle);
+    }
+
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode1(Context context, Intent intent, int factor, long userId, ShortcutInfo shortcut, ApplicationType type, boolean specialLaunch) {
+    private static void launchMode1(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
-        int width1 = display.getWidth() / (4 * factor);
+        int width1 = display.getWidth() / 8;
         int width2 = display.getWidth() - width1;
-        int height1 = display.getHeight() / (4 * factor);
+        int height1 = display.getHeight() / 8;
         int height2 = display.getHeight() - height1;
 
         Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
@@ -386,7 +372,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    startActivity(context, intent, bundle, specialLaunch);
+                    context.startActivity(intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -398,7 +384,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, ApplicationType type, boolean specialLaunch) {
+    private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, ApplicationType type) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -447,7 +433,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    startActivity(context, intent, bundle, specialLaunch);
+                    context.startActivity(intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -459,7 +445,7 @@ public class U {
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type, boolean specialLaunch) {
+    private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
@@ -479,7 +465,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    startActivity(context, intent, bundle, specialLaunch);
+                    context.startActivity(intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -513,7 +499,7 @@ public class U {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
 
-        launchMode2(context, intent, MAXIMIZED, userId, null, ApplicationType.CONTEXT_MENU, false);
+        launchMode2(context, intent, MAXIMIZED, userId, null, ApplicationType.CONTEXT_MENU);
     }
 
     @SuppressWarnings("deprecation")
@@ -927,14 +913,6 @@ public class U {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    private static void startActivity(Context context, Intent intent, Bundle options, boolean specialLaunch) {
-        if(specialLaunch) {
-            startFreeformHack(context, true, false);
-            new Handler().post(() -> context.startActivity(intent, options));
-        } else
-            context.startActivity(intent, options);
     }
 
     public static int getBaseTaskbarSize(Context context) {
