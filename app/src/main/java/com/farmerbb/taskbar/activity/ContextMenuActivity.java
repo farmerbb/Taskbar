@@ -379,8 +379,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         if(appIsValid) switch(p.getKey()) {
             case "app_info":
-                startFreeformActivity();
-                launcherApps.startAppDetailsActivity(ComponentName.unflattenFromString(componentName), userManager.getUserForSerialNumber(userId), null, null);
+                U.launchApp(this, () -> launcherApps.startAppDetailsActivity(ComponentName.unflattenFromString(componentName), userManager.getUserForSerialNumber(userId), null, null));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -392,11 +391,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.putExtra("uninstall", packageName);
                     intent2.putExtra("user_id", userId);
 
-                    startFreeformActivity();
                     startActivity(intent2);
                 } else {
-                    startFreeformActivity();
-
                     Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName));
                     intent2.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(userId));
 
@@ -410,11 +406,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "open_taskbar_settings":
-                startFreeformActivity();
-
-                Intent intent2 = new Intent(this, MainActivity.class);
-                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent2);
+                U.launchApp(this, () -> {
+                    Intent intent2 = new Intent(this, MainActivity.class);
+                    intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent2);
+                });
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -495,7 +491,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, windowSize);
                 }
 
-                startFreeformActivity();
                 U.launchApp(getApplicationContext(), packageName, componentName, userId, windowSize, false, true);
 
                 showStartMenu = false;
@@ -520,8 +515,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "start_menu_apps":
-                startFreeformActivity();
-
                 Intent intent = null;
 
                 SharedPreferences pref3 = U.getSharedPreferences(this);
@@ -557,39 +550,40 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "file_manager":
-                Intent fileManagerIntent;
+                U.launchApp(this, () -> {
+                    Intent fileManagerIntent;
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    startFreeformActivity();
-                    fileManagerIntent = new Intent("android.provider.action.BROWSE");
-                } else {
-                    fileManagerIntent = new Intent("android.provider.action.BROWSE_DOCUMENT_ROOT");
-                    fileManagerIntent.setComponent(ComponentName.unflattenFromString("com.android.documentsui/.DocumentsActivity"));
-                }
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        fileManagerIntent = new Intent("android.provider.action.BROWSE");
+                    else {
+                        fileManagerIntent = new Intent("android.provider.action.BROWSE_DOCUMENT_ROOT");
+                        fileManagerIntent.setComponent(ComponentName.unflattenFromString("com.android.documentsui/.DocumentsActivity"));
+                    }
 
-                fileManagerIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
+                    fileManagerIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
-                try {
-                    startActivity(fileManagerIntent);
-                } catch (ActivityNotFoundException e) {
-                    U.showToast(this, R.string.lock_device_not_supported);
-                }
+                    try {
+                        startActivity(fileManagerIntent);
+                    } catch (ActivityNotFoundException e) {
+                        U.showToast(this, R.string.lock_device_not_supported);
+                    }
+                });
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 contextMenuFix = false;
                 break;
             case "system_settings":
-                startFreeformActivity();
+                U.launchApp(this, () -> {
+                    Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
 
-                Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
-
-                try {
-                    startActivity(settingsIntent);
-                } catch (ActivityNotFoundException e) {
-                    U.showToast(this, R.string.lock_device_not_supported);
-                }
+                    try {
+                        startActivity(settingsIntent);
+                    } catch (ActivityNotFoundException e) {
+                        U.showToast(this, R.string.lock_device_not_supported);
+                    }
+                });
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -647,18 +641,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         super.finish();
         if(showStartMenu)
             overridePendingTransition(0, 0);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void startFreeformActivity() {
-        SharedPreferences pref = U.getSharedPreferences(this);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && pref.getBoolean("taskbar_active", false)
-                && pref.getBoolean("freeform_hack", false)
-                && isInMultiWindowMode()
-                && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-            U.startFreeformHack(this, false, false);
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
