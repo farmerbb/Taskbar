@@ -561,6 +561,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     }
 
                     fileManagerIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    fileManagerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
                     try {
@@ -577,6 +578,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "system_settings":
                 U.launchApp(this, () -> {
                     Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
+                    settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     try {
                         startActivity(settingsIntent);

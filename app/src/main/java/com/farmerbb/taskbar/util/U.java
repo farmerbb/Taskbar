@@ -132,10 +132,12 @@ public class U {
         if(mDevicePolicyManager.isAdminActive(component))
             mDevicePolicyManager.lockNow();
         else {
-            Intent intent = new Intent(context, DummyActivity.class);
-            intent.putExtra("device_admin", true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            launchApp(context, () -> {
+                Intent intent = new Intent(context, DummyActivity.class);
+                intent.putExtra("device_admin", true);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            });
         }
     }
 
@@ -149,15 +151,17 @@ public class U {
             intent.putExtra("action", action);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         } else {
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchApp(context, () -> {
+                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            try {
-                context.startActivity(intent);
-                showToastLong(context, R.string.enable_accessibility);
-            } catch (ActivityNotFoundException e) {
-                showToast(context, R.string.lock_device_not_supported);
-            }
+                try {
+                    context.startActivity(intent);
+                    showToastLong(context, R.string.enable_accessibility);
+                } catch (ActivityNotFoundException e) {
+                    showToast(context, R.string.lock_device_not_supported);
+                }
+            });
         }
     }
 
