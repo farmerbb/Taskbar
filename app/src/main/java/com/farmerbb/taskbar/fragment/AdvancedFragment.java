@@ -75,8 +75,6 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             boolean lockHomeToggle = U.hasSupportLibrary(getActivity()) && pref.getBoolean("launcher", false);
 
             findPreference("launcher").setEnabled(!lockHomeToggle);
-
-            updateDashboardGridSize(false);
         }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -86,6 +84,13 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateDashboardGridSize(false);
     }
 
     @SuppressLint("SetTextI18n")
