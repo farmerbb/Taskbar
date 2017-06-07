@@ -304,7 +304,7 @@ public class U {
         }
 
         ApplicationType type = getApplicationType(context, packageName);
-        boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isFreeformHackActive() && openInNewWindow;
+        boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isInFreeformWorkspace() && openInNewWindow;
 
         if(windowSize == null)
             windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, packageName);
