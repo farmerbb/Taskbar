@@ -186,6 +186,8 @@ public class HomeActivity extends Activity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+
+        U.initPrefs(this);
     }
 
     private void setWallpaper() {

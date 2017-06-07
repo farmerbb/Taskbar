@@ -1015,4 +1015,27 @@ public class U {
             Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", show ? 1 : 0);
         } catch (Exception e) { /* Gracefully fail */ }
     }
+
+    public static void initPrefs(Context context) {
+        // On smaller-screened devices, set "Grid" as the default start menu layout
+        SharedPreferences pref = getSharedPreferences(context);
+        if(context.getApplicationContext().getResources().getConfiguration().smallestScreenWidthDp < 600
+                && pref.getString("start_menu_layout", "null").equals("null")) {
+            pref.edit().putString("start_menu_layout", "grid").apply();
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if(!pref.getBoolean("freeform_hack_override", false)) {
+                pref.edit()
+                        .putBoolean("freeform_hack", hasFreeformSupport(context) && !hasPartialFreeformSupport())
+                        .putBoolean("save_window_sizes", false)
+                        .putBoolean("freeform_hack_override", true)
+                        .apply();
+            } else if(!hasFreeformSupport(context)) {
+                pref.edit().putBoolean("freeform_hack", false).apply();
+
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+            }
+        }
+    }
 }
