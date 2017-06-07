@@ -95,7 +95,7 @@ public class U {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    public static void showPermissionDialog(final Context context) {
+    public static AlertDialog showPermissionDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.permission_dialog_title)
                 .setMessage(R.string.permission_dialog_message)
@@ -111,6 +111,8 @@ public class U {
         AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCancelable(false);
+
+        return dialog;
     }
 
     public static void showErrorDialog(final Context context, String appopCmd) {
