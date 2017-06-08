@@ -670,6 +670,8 @@ public class StartMenuService extends Service {
         lbm.unregisterReceiver(hideReceiver);
         lbm.unregisterReceiver(showSpaceReceiver);
         lbm.unregisterReceiver(hideSpaceReceiver);
+
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
     }
 
     @TargetApi(Build.VERSION_CODES.M)

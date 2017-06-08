@@ -273,15 +273,17 @@ public class DashboardService extends Service {
 
         mAppWidgetHost.stopListening();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(addWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(removeWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(addWidgetReceiver);
+        lbm.unregisterReceiver(removeWidgetReceiver);
+        lbm.unregisterReceiver(hideReceiver);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+        lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
+        lbm.registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
+        lbm.registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
 
         windowManager.addView(layout, params);
 
@@ -454,10 +456,14 @@ public class DashboardService extends Service {
                 windowManager.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(addWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(removeWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(addWidgetReceiver);
+        lbm.unregisterReceiver(removeWidgetReceiver);
+        lbm.unregisterReceiver(hideReceiver);
+
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
     }
 
     private void cellClick(View view, boolean isActualClick) {
