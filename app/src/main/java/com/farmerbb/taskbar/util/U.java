@@ -809,7 +809,8 @@ public class U {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
                 || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", -1) == 1
-                || Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", -1) == 1);
+                || (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
+                && Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", -1) == 1));
     }
 
     public static boolean hasPartialFreeformSupport() {
