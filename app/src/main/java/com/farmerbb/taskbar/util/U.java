@@ -232,20 +232,20 @@ public class U {
                                  final boolean launchedFromTaskbar,
                                  final boolean openInNewWindow,
                                  final ShortcutInfo shortcut) {
-        boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isInFreeformWorkspace()
-                && (openInNewWindow || shortcut != null);
-
-        launchApp(context, launchedFromTaskbar, specialLaunch, () -> continueLaunchingApp(context, packageName, componentName, userId,
+        launchApp(context, launchedFromTaskbar, () -> continueLaunchingApp(context, packageName, componentName, userId,
                 windowSize, launchedFromTaskbar, openInNewWindow, shortcut));
     }
 
     public static void launchApp(Context context, Runnable runnable) {
-        launchApp(context, true, true, runnable);
+        launchApp(context, true, runnable);
     }
 
-    private static void launchApp(Context context, boolean launchedFromTaskbar, boolean specialLaunch, Runnable runnable) {
+    private static void launchApp(Context context, boolean launchedFromTaskbar, Runnable runnable) {
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
+
+        boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                && MenuHelper.getInstance().isContextMenuOpen();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)

@@ -74,7 +74,7 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
-import com.farmerbb.taskbar.util.StartMenuHelper;
+import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 import com.farmerbb.taskbar.widget.StartMenuLayout;
@@ -606,7 +606,7 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
-            StartMenuHelper.getInstance().setStartMenuOpen(true);
+            MenuHelper.getInstance().setStartMenuOpen(true);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
 
@@ -639,7 +639,7 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(null);
             layout.setVisibility(View.INVISIBLE);
 
-            StartMenuHelper.getInstance().setStartMenuOpen(false);
+            MenuHelper.getInstance().setStartMenuOpen(false);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
 

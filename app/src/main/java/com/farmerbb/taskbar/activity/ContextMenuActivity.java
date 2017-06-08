@@ -52,6 +52,7 @@ import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
+import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
@@ -90,6 +91,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         super.onPostCreate(savedInstanceState);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
+        MenuHelper.getInstance().setContextMenuOpen(true);
 
         boolean isNonAppMenu = !getIntent().hasExtra("package_name") && !getIntent().hasExtra("app_name");
         showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
@@ -629,6 +631,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     @Override
     public void finish() {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING"));
+        MenuHelper.getInstance().setContextMenuOpen(false);
 
         if(!dashboardOrStartMenuAppearing) {
             if(showStartMenu)

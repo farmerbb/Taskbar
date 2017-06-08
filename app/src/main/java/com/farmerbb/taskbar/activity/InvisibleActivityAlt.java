@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.StartMenuHelper;
+import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class InvisibleActivityAlt extends InvisibleActivity {
@@ -49,7 +49,7 @@ public class InvisibleActivityAlt extends InvisibleActivity {
         LinearLayout layout = (LinearLayout) findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.getWidth(), display.getHeight()));
 
-        if(!StartMenuHelper.getInstance().isStartMenuOpen() && !powerButtonWarning) finish();
+        if(!MenuHelper.getInstance().isStartMenuOpen() && !powerButtonWarning) finish();
 
         if(powerButtonWarning)
             new Handler().postDelayed(() -> {
