@@ -107,8 +107,13 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
             case "notification_settings":
                 Intent intent2 = new Intent();
                 intent2.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-                intent2.putExtra("app_package", BuildConfig.APPLICATION_ID);
-                intent2.putExtra("app_uid", getActivity().getApplicationInfo().uid);
+
+                if(U.isOPreview())
+                    intent2.putExtra("android.provider.extra.APP_PACKAGE", BuildConfig.APPLICATION_ID);
+                else {
+                    intent2.putExtra("app_package", BuildConfig.APPLICATION_ID);
+                    intent2.putExtra("app_uid", getActivity().getApplicationInfo().uid);
+                }
 
                 try {
                     startActivity(intent2);
