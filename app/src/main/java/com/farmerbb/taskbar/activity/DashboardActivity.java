@@ -112,6 +112,10 @@ public class DashboardActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             shouldCollapse = false;
+
+            if(contextMenuFix)
+                U.startFreeformHack(DashboardActivity.this, false, false);
+
             finish();
         }
     };
@@ -179,6 +183,7 @@ public class DashboardActivity extends Activity {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             }
 
+            contextMenuFix = false;
             onBackPressed();
         }
     }
