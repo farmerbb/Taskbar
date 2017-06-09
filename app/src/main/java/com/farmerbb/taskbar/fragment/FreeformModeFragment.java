@@ -82,7 +82,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             if(!pref.getBoolean("samsung_dialog_shown", false)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.samsung_freeform_title)
-                        .setMessage(U.isOPreview() ? R.string.o_preview_freeform_message : R.string.samsung_freeform_message)
+                        .setMessage(R.string.samsung_freeform_message)
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
 
                 AlertDialog dialog = builder.create();
@@ -103,11 +103,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         if(showReminderToast) {
             showReminderToast = false;
 
-            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
-
-            if(U.hasFreeformSupport(getActivity())) {
-                U.showToastLong(getActivity(), R.string.reboot_required);
-            }
+            freeformSetupComplete();
         }
     }
 
@@ -134,23 +130,29 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                             ((CheckBoxPreference) p).setChecked(false);
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setTitle(R.string.freeform_dialog_title)
-                                    .setMessage(R.string.freeform_dialog_message)
-                                    .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
-                                        showReminderToast = true;
+                            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+                                builder.setTitle(R.string.freeform_dialog_title)
+                                        .setMessage(R.string.freeform_dialog_message_alt)
+                                        .setPositiveButton(R.string.action_ok, (dialogInterface, i) -> freeformSetupComplete());
+                            } else {
+                                builder.setTitle(R.string.freeform_dialog_title)
+                                        .setMessage(R.string.freeform_dialog_message)
+                                        .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
+                                            showReminderToast = true;
 
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
-                                        try {
-                                            startActivity(intent);
-                                            U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
-                                        } catch (ActivityNotFoundException e1) {
-                                            intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
                                             try {
                                                 startActivity(intent);
-                                                U.showToastLong(getActivity(), R.string.enable_developer_options);
-                                            } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
-                                        }
-                                    });
+                                                U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
+                                            } catch (ActivityNotFoundException e1) {
+                                                intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                                                try {
+                                                    startActivity(intent);
+                                                    U.showToastLong(getActivity(), R.string.enable_developer_options);
+                                                } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
+                                            }
+                                        });
+                            }
 
                             AlertDialog dialog = builder.create();
                             dialog.show();
@@ -202,5 +204,13 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         }
 
         return true;
+    }
+
+    private void freeformSetupComplete() {
+        ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
+
+        if(U.hasFreeformSupport(getActivity())) {
+            U.showToastLong(getActivity(), R.string.reboot_required);
+        }
     }
 }

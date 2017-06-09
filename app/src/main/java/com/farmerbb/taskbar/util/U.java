@@ -814,7 +814,7 @@ public class U {
     }
 
     public static boolean hasPartialFreeformSupport() {
-         return Build.MANUFACTURER.equalsIgnoreCase("Samsung") || isOPreview();
+         return Build.MANUFACTURER.equalsIgnoreCase("Samsung");
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
