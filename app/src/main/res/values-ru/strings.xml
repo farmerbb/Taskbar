@@ -308,16 +308,16 @@
     <string name="samsung_freeform_title">Внимание</string>
     <string name="samsung_freeform_message">Freeform имеет проблемы с устройствами Samsung из-за изменений в работе мультизадачности.\n\nВам потребуеться прошить сторонее ПО для работы Freeform.</string>
 
-    <string name="widget_restore_toast">Select \"%1$s\" to restore this widget</string>
+    <string name="widget_restore_toast">Выберите  \"%1$s\" для восстановления виджета</string>
 
-    <string name="freeform_on">Freeform on</string>
-    <string name="freeform_off">Freeform off</string>
+    <string name="freeform_on">Freeform включен</string>
+    <string name="freeform_off">Freeform выключен</string>
 
-    <string name="auto_hide_navbar">Automatically control the system navigation bar</string>
-    <string name="auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
+    <string name="auto_hide_navbar">Автоматически управлять панелью навигации</string>
+    <string name="auto_hide_navbar_description">Спрятать панель когда Taskbar активен, и показать ее когда Taskbar не активен</string>
 
     <string name="press_enter_alt">@string/press_enter</string>
 
-    <string name="freeform_dialog_message_alt">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options and enable USB debugging\n\n&#8226; Connect your device to a computer with the Android SDK installed, and run the following adb shell command:\n\nsettings put global enable_freeform_support 1\n\n&#8226; Reboot your device</string>
+    <string name="freeform_dialog_message_alt">Для того, чтобы Taskbar запускал приложения в режиме Freeform, выполните следующее:\n\n&#8226; Зайдите в настройки для разработчиков и включите отладку по USB.\n\n&#8226;Подключите устройство к компьютеру, а затем выполните adb shell и\n\nsettings put global enable_freeform_support 1\n\n&#8226;После этого перезагрузите устройство.</string>
 
 </resources>
