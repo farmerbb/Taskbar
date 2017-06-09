@@ -16,10 +16,12 @@
 package com.farmerbb.taskbar.activity;
 
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.U;
 
 public class NavigationBarButtonsActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
@@ -35,11 +37,25 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
         findPreference("button_back").setOnPreferenceClickListener(this);
         findPreference("button_home").setOnPreferenceClickListener(this);
         findPreference("button_recents").setOnPreferenceClickListener(this);
+
+        if(U.hasSupportLibrary(this))
+            findPreference("auto_hide_navbar").setOnPreferenceClickListener(this);
+        else
+            getPreferenceScreen().removePreference(findPreference("auto_hide_navbar_category"));
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        U.restartTaskbar(this);
+        switch(preference.getKey()) {
+            case "auto_hide_navbar":
+                if(U.isServiceRunning(this, TaskbarService.class))
+                    U.showHideNavigationBar(this, !((CheckBoxPreference) preference).isChecked());
+
+                break;
+            default:
+                U.restartTaskbar(this);
+                break;
+        }
         return true;
     }
 }

@@ -17,8 +17,8 @@
 <resources>
 
     <string name="app_name">Taskbar</string>
-    <string name="app_name_debug">Taskbar (Debug)</string>
-    <string name="debug_build">Debug build</string>
+    <string name="app_name_debug">Taskbar (デバッグ)</string>
+    <string name="debug_build">デバッグビルド</string>
 
     <string name="taskbar_is_active">Taskbar はアクティブです</string>
     <string name="click_to_open_settings">クリックすると設定を開きます</string>
@@ -281,31 +281,43 @@
     <string name="refresh_frequency_singular">1 秒</string>
     <string name="refresh_frequency_continuous">連続</string>
 
-    <string name="power_button_warning_title">Caution</string>
-    <string name="power_button_warning_message">Custom ROMs based on CyanogenMod / LineageOS have an issue where the power button does not work while the device is in freeform mode.\n\nPlease test your power button now.  If it does not work, then exercise caution when using freeform mode as you may lose the ability to wake the device from sleep if the screen times out.</string>
-    <string name="action_i_understand">I understand</string>
+    <string name="power_button_warning_title">注意</string>
+    <string name="power_button_warning_message">CyanogenMod / LineageOS をベースにしたカスタム ROM は、デバイスがフリーフォームモードの間に電源ボタンが機能しない問題があります。\n\n今すぐ電源ボタンをテストしてください。 それが機能しない場合は、画面がタイムアウトした場合にデバイスをスリープ状態から復帰させる機能が失われる可能性があるため、フリーフォームモードを使用する場合は注意が必要です。</string>
+    <string name="action_i_understand">理解しました</string>
 
-    <string name="hide_taskbar_disclaimer">Does not apply to apps in freeform mode</string>
-    <string name="transparent_start_menu">Transparent start menu</string>
+    <string name="hide_taskbar_disclaimer">フリーフォームモードのアプリには適用しないでください</string>
+    <string name="transparent_start_menu">透明なスタートメニュー</string>
 
-    <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
-    <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
+    <string name="launch_games_fullscreen_title">ゲームを全画面で起動</string>
+    <string name="launch_games_fullscreen_message">アプリケーションがゲームであると宣言した場合、フリーフォームモードで起動できないようにします</string>
 
-    <string name="invalid_grid_size">Invalid grid size</string>
+    <string name="invalid_grid_size">グリッドサイズが無効です</string>
 
-    <string name="window_sizes_not_available">Window sizes currently don\'t work on Android O</string>
+    <string name="window_sizes_not_available">ウィンドウサイズは現在、Android O で動作ません</string>
 
-    <string name="navigation_bar_buttons">Navigation bar buttons</string>
-    <string name="navigation_bar_buttons_description">Add additional buttons to the Taskbar that perform navigation bar actions</string>
-    <string name="button_back">Back</string>
-    <string name="button_home">Home</string>
-    <string name="button_recents">Recents</string>
+    <string name="navigation_bar_buttons">ナビゲーションバーボタン</string>
+    <string name="navigation_bar_buttons_description">ナビゲーションバーの操作を実行する追加のボタンをタスクバーに追加します</string>
+    <string name="button_back">戻る</string>
+    <string name="button_home">ホーム</string>
+    <string name="button_recents">最近使用した</string>
 
-    <string name="full_length">Expand area with whitespace</string>
+    <string name="full_length">領域を空白で拡張する</string>
 
-    <string name="restore_widget">Restore widget</string>
+    <string name="restore_widget">ウィジェットを復元</string>
 
-    <string name="samsung_freeform_title">Note</string>
-    <string name="samsung_freeform_message">Freeform mode may not work on Samsung devices, due to system changes made to multi-window mode.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
+    <string name="samsung_freeform_title">注意</string>
+    <string name="samsung_freeform_message">マルチウィンドウモードのシステム変更により、フリーフォームモードが Samsung デバイスで動作しない可能性があります。\n\nこのデバイスでフリーフォームモードを使用するにはカスタム ROM をフラッシュする必要があります。</string>
+
+    <string name="widget_restore_toast">\"%1$s\" を選択してこのウィジェットを復元します</string>
+
+    <string name="freeform_on">Freeform on</string>
+    <string name="freeform_off">Freeform off</string>
+
+    <string name="auto_hide_navbar">Automatically control the system navigation bar</string>
+    <string name="auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
+
+    <string name="press_enter_alt">@string/press_enter</string>
+
+    <string name="freeform_dialog_message_alt">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options and enable USB debugging\n\n&#8226; Connect your device to a computer with the Android SDK installed, and run the following adb shell command:\n\nsettings put global enable_freeform_support 1\n\n&#8226; Reboot your device</string>
 
 </resources>

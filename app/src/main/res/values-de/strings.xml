@@ -306,6 +306,18 @@
     <string name="restore_widget">Restore widget</string>
 
     <string name="samsung_freeform_title">Note</string>
-    <string name="samsung_freeform_message">Freeform mode may not work on Samsung devices, due to system changes made to multi-window mode.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
+    <string name="samsung_freeform_message">Freeform mode does not work on Samsung devices, due to system changes made to multi-window mode.\n\nYou may need to flash a custom ROM in order to use freeform mode on this device.</string>
+
+    <string name="widget_restore_toast">Select \"%1$s\" to restore this widget</string>
+
+    <string name="freeform_on">Freeform on</string>
+    <string name="freeform_off">Freeform off</string>
+
+    <string name="auto_hide_navbar">Automatically control the system navigation bar</string>
+    <string name="auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
+
+    <string name="press_enter_alt">@string/press_enter</string>
+
+    <string name="freeform_dialog_message_alt">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options and enable USB debugging\n\n&#8226; Connect your device to a computer with the Android SDK installed, and run the following adb shell command:\n\nsettings put global enable_freeform_support 1\n\n&#8226; Reboot your device</string>
 
 </resources>

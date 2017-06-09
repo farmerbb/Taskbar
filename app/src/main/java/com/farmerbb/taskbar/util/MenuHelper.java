@@ -15,16 +15,17 @@
 
 package com.farmerbb.taskbar.util;
 
-public class StartMenuHelper {
+public class MenuHelper {
 
     private boolean startMenuOpen = false;
+    private boolean contextMenuOpen = false;
 
-    private static StartMenuHelper theInstance;
+    private static MenuHelper theInstance;
 
-    private StartMenuHelper() {}
+    private MenuHelper() {}
 
-    public static StartMenuHelper getInstance() {
-        if(theInstance == null) theInstance = new StartMenuHelper();
+    public static MenuHelper getInstance() {
+        if(theInstance == null) theInstance = new MenuHelper();
 
         return theInstance;
     }
@@ -35,5 +36,13 @@ public class StartMenuHelper {
 
     public void setStartMenuOpen(boolean value) {
         startMenuOpen = value;
+    }
+
+    public boolean isContextMenuOpen() {
+        return contextMenuOpen;
+    }
+
+    public void setContextMenuOpen(boolean value) {
+        contextMenuOpen = value;
     }
 }

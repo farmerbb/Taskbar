@@ -43,6 +43,7 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.SearchView;
+import android.util.Patterns;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
@@ -53,6 +54,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -72,7 +74,7 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
-import com.farmerbb.taskbar.util.StartMenuHelper;
+import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 import com.farmerbb.taskbar.widget.StartMenuLayout;
@@ -115,6 +117,20 @@ public class StartMenuService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             toggleStartMenu(false);
+        }
+    };
+
+    private BroadcastReceiver showSpaceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            layout.findViewById(R.id.start_menu_space).setVisibility(View.VISIBLE);
+        }
+    };
+
+    private BroadcastReceiver hideSpaceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            layout.findViewById(R.id.start_menu_space).setVisibility(View.GONE);
         }
     };
     
@@ -292,9 +308,18 @@ public class StartMenuService extends Service {
                                 else
                                     LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-                                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                                intent.putExtra(SearchManager.QUERY, query);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                Intent intent;
+
+                                if(Patterns.WEB_URL.matcher(query).matches()) {
+                                    intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(URLUtil.guessUrl(query)));
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                } else {
+                                    intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                                    intent.putExtra(SearchManager.QUERY, query);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                }
+
                                 if(intent.resolveActivity(getPackageManager()) != null)
                                     startActivity(intent);
                                 else {
@@ -397,13 +422,19 @@ public class StartMenuService extends Service {
         
         textView = (TextView) layout.findViewById(R.id.no_apps_found);
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(toggleReceiverAlt);
+        lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(showSpaceReceiver);
+        lbm.unregisterReceiver(hideSpaceReceiver);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiverAlt, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
+        lbm.registerReceiver(toggleReceiverAlt, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
+        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.registerReceiver(showSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_START_MENU_SPACE"));
+        lbm.registerReceiver(hideSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_SPACE"));
 
         handler = new Handler();
         refreshApps(true);
@@ -548,7 +579,7 @@ public class StartMenuService extends Service {
                         if(adapter.getCount() > 0)
                             textView.setText(null);
                         else if(query != null)
-                            textView.setText(getString(R.string.press_enter));
+                            textView.setText(getString(Patterns.WEB_URL.matcher(query).matches() ? R.string.press_enter_alt : R.string.press_enter));
                         else
                             textView.setText(getString(R.string.nothing_to_see_here));
                     }
@@ -575,7 +606,7 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
-            StartMenuHelper.getInstance().setStartMenuOpen(true);
+            MenuHelper.getInstance().setStartMenuOpen(true);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
 
@@ -583,7 +614,7 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!onHomeScreen || inFreeformMode) {
-                Class clazz = inFreeformMode && !shouldShowSearchBox && !U.isOPreview() ? InvisibleActivityAlt.class : InvisibleActivity.class;
+                Class clazz = inFreeformMode && !U.isOPreview() ? InvisibleActivityAlt.class : InvisibleActivity.class;
                 Intent intent = new Intent(this, clazz);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -608,7 +639,7 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(null);
             layout.setVisibility(View.INVISIBLE);
 
-            StartMenuHelper.getInstance().setStartMenuOpen(false);
+            MenuHelper.getInstance().setStartMenuOpen(false);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
 
@@ -632,9 +663,15 @@ public class StartMenuService extends Service {
                 windowManager.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiverAlt);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(toggleReceiverAlt);
+        lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(showSpaceReceiver);
+        lbm.unregisterReceiver(hideSpaceReceiver);
+
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
     }
 
     @TargetApi(Build.VERSION_CODES.M)

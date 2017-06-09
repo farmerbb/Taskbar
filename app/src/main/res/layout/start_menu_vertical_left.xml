@@ -20,76 +20,86 @@
     android:id="@+id/start_menu_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:clickable="true"
     android:visibility="gone">
 
-        <FrameLayout
-            android:id="@+id/start_menu_frame"
+        <Space
+            android:id="@+id/start_menu_space"
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_size" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:layout_marginLeft="@dimen/icon_size" >
+            android:orientation="vertical">
 
-                <GridView
-                    android:id="@+id/start_menu"
-                    android:layout_width="@dimen/start_menu_width"
-                    android:layout_height="@dimen/start_menu_height"
-                    android:background="?start_menu_background"
-                    android:listSelector="@null"
-                    android:clickable="false" />
-
-                <TextView
-                    android:id="@+id/no_apps_found"
+                <FrameLayout
+                    android:id="@+id/start_menu_frame"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="@dimen/start_menu_no_apps_found_text"
-                    android:textColor="?text_color"
-                    android:text="@string/loading_apps" />
+                    android:padding="1dp" >
 
-        </FrameLayout>
+                        <GridView
+                            android:id="@+id/start_menu"
+                            android:layout_width="@dimen/start_menu_width"
+                            android:layout_height="@dimen/start_menu_height"
+                            android:background="?start_menu_background"
+                            android:listSelector="@null"
+                            android:clickable="false" />
 
-        <FrameLayout
-            android:id="@+id/search_view_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="1dp"
-            android:paddingRight="1dp"
-            android:paddingBottom="1dp"
-            android:layout_marginLeft="@dimen/icon_size" >
-
-                <LinearLayout
-                    android:id="@+id/search_view_child_layout"
-                    android:layout_width="@dimen/start_menu_width"
-                    android:layout_height="wrap_content"
-                    android:background="?start_menu_background" >
-
-                        <android.support.v7.widget.SearchView
-                            android:id="@+id/search"
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/no_apps_found"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:queryBackground="@android:color/transparent"
-                            app:iconifiedByDefault="false" />
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/start_menu_no_apps_found_text"
+                            android:textColor="?text_color"
+                            android:text="@string/loading_apps" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/search_view_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="1dp"
+                    android:paddingBottom="1dp" >
 
                         <LinearLayout
-                            android:id="@+id/power_button"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:clickable="true" >
+                            android:id="@+id/search_view_child_layout"
+                            android:layout_width="@dimen/start_menu_width"
+                            android:layout_height="wrap_content"
+                            android:background="?start_menu_background" >
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
+                                <android.support.v7.widget.SearchView
+                                    android:id="@+id/search"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_more_vert_black_24dp" />
+                                    android:layout_weight="1"
+                                    app:queryBackground="@android:color/transparent"
+                                    app:iconifiedByDefault="false" />
+
+                                <LinearLayout
+                                    android:id="@+id/power_button"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:clickable="true" >
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:src="@drawable/ic_more_vert_black_24dp" />
+
+                                </LinearLayout>
 
                         </LinearLayout>
 
-                </LinearLayout>
+                </FrameLayout>
 
-        </FrameLayout>
+        </LinearLayout>
 
 </com.farmerbb.taskbar.widget.StartMenuLayout>

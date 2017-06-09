@@ -25,6 +25,7 @@
     android:visibility="gone">
 
     <Space
+        android:id="@+id/start_menu_space"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/icon_size" />
 

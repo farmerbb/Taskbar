@@ -17,7 +17,10 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -37,6 +40,17 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class FreeformModeFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+
+    private BroadcastReceiver checkBoxReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            CheckBoxPreference preference = (CheckBoxPreference) findPreference("freeform_hack");
+            if(preference != null) {
+                SharedPreferences pref = U.getSharedPreferences(getActivity());
+                preference.setChecked(pref.getBoolean("freeform_hack", false));
+            }
+        }
+    };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -62,8 +76,8 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        // Dialog shown on Samsung devices, which seem to not work with freeform mode
-        if(Build.MANUFACTURER.equalsIgnoreCase("Samsung")) {
+        // Dialog shown on devices which seem to not work correctly with freeform mode
+        if(U.hasPartialFreeformSupport()) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             if(!pref.getBoolean("samsung_dialog_shown", false)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -77,6 +91,8 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             }
         }
 
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(checkBoxReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+
         finishedLoadingPrefs = true;
     }
 
@@ -87,12 +103,15 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         if(showReminderToast) {
             showReminderToast = false;
 
-            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
-
-            if(U.hasFreeformSupport(getActivity())) {
-                U.showToastLong(getActivity(), R.string.reboot_required);
-            }
+            freeformSetupComplete();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(checkBoxReceiver);
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -104,30 +123,41 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             case "freeform_hack":
                 if(((CheckBoxPreference) p).isChecked()) {
                     if(!U.hasFreeformSupport(getActivity())) {
-                        ((CheckBoxPreference) p).setChecked(false);
+                        try {
+                            Settings.Global.putInt(getActivity().getContentResolver(), "enable_freeform_support", 1);
+                            U.showToastLong(getActivity(), R.string.reboot_required);
+                        } catch (Exception e) {
+                            ((CheckBoxPreference) p).setChecked(false);
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(R.string.freeform_dialog_title)
-                                .setMessage(R.string.freeform_dialog_message)
-                                .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
-                                    showReminderToast = true;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+                                builder.setTitle(R.string.freeform_dialog_title)
+                                        .setMessage(R.string.freeform_dialog_message_alt)
+                                        .setPositiveButton(R.string.action_ok, (dialogInterface, i) -> freeformSetupComplete());
+                            } else {
+                                builder.setTitle(R.string.freeform_dialog_title)
+                                        .setMessage(R.string.freeform_dialog_message)
+                                        .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
+                                            showReminderToast = true;
 
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
-                                    try {
-                                        startActivity(intent);
-                                        U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
-                                    } catch (ActivityNotFoundException e) {
-                                        intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
-                                        try {
-                                            startActivity(intent);
-                                            U.showToastLong(getActivity(), R.string.enable_developer_options);
-                                        } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
-                                    }
-                                });
+                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+                                            try {
+                                                startActivity(intent);
+                                                U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
+                                            } catch (ActivityNotFoundException e1) {
+                                                intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                                                try {
+                                                    startActivity(intent);
+                                                    U.showToastLong(getActivity(), R.string.enable_developer_options);
+                                                } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
+                                            }
+                                        });
+                            }
 
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                        dialog.setCancelable(false);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                            dialog.setCancelable(false);
+                        }
                     }
 
                     if(pref.getBoolean("taskbar_active", false)
@@ -140,6 +170,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
                 }
 
+                U.restartNotificationService(getActivity());
                 break;
             case "freeform_mode_help":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -173,5 +204,13 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         }
 
         return true;
+    }
+
+    private void freeformSetupComplete() {
+        ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
+
+        if(U.hasFreeformSupport(getActivity())) {
+            U.showToastLong(getActivity(), R.string.reboot_required);
+        }
     }
 }

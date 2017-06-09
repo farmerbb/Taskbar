@@ -9,3 +9,5 @@
 }
 
 -dontwarn java.lang.invoke.*
+
+-keep class **.R$string

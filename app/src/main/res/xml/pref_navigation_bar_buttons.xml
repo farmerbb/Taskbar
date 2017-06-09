@@ -31,4 +31,14 @@
         android:key="button_recents"
         android:title="@string/button_recents" />
 
+    <PreferenceCategory android:key="auto_hide_navbar_category" >
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="auto_hide_navbar"
+            android:title="@string/auto_hide_navbar"
+            android:summary="@string/auto_hide_navbar_description" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

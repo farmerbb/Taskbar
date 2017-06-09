@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
@@ -32,8 +33,16 @@ public class ShortcutActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if(getIntent().hasExtra("is_launching_shortcut")) {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("freeform_hack", false) && U.hasFreeformSupport(this)) {
+            if(U.hasFreeformSupport(this)) {
+                U.restartNotificationService(this);
+
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(!pref.getBoolean("freeform_hack", false)) {
+                    pref.edit().putBoolean("freeform_hack", true).apply();
+
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+                }
+
                 Intent intent = new Intent("com.farmerbb.taskbar.START");
                 intent.setPackage(BuildConfig.APPLICATION_ID);
                 sendBroadcast(intent);

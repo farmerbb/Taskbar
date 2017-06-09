@@ -87,9 +87,15 @@ public class NotificationService extends Service {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
+                Intent receiverIntent = new Intent("com.farmerbb.taskbar.SHOW_HIDE_TASKBAR");
+                receiverIntent.setPackage(BuildConfig.APPLICATION_ID);
+
+                Intent receiverIntent2 = new Intent("com.farmerbb.taskbar.QUIT");
+                receiverIntent.setPackage(BuildConfig.APPLICATION_ID);
+
                 PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-                PendingIntent receiverIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.farmerbb.taskbar.SHOW_HIDE_TASKBAR"), PendingIntent.FLAG_UPDATE_CURRENT);
-                PendingIntent receiverIntent2 = PendingIntent.getBroadcast(this, 0, new Intent("com.farmerbb.taskbar.QUIT"), PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent receiverPendingIntent2 = PendingIntent.getBroadcast(this, 0, receiverIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                         .setSmallIcon(pref.getBoolean("app_drawer_icon", false) ? R.drawable.ic_system : R.drawable.ic_allapps)
@@ -97,11 +103,23 @@ public class NotificationService extends Service {
                         .setContentTitle(getString(R.string.taskbar_is_active))
                         .setContentText(getString(R.string.click_to_open_settings))
                         .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                        .addAction(0, label, receiverIntent)
-                        .addAction(0, getString(R.string.action_quit), receiverIntent2)
                         .setPriority(Notification.PRIORITY_MIN)
                         .setShowWhen(false)
                         .setOngoing(true);
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.freeform_off : R.string.freeform_on);
+
+                    Intent freeformIntent = new Intent("com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE");
+                    freeformIntent.setPackage(BuildConfig.APPLICATION_ID);
+
+                    PendingIntent freeformPendingIntent = PendingIntent.getBroadcast(this, 0, freeformIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    mBuilder.addAction(0, freeformLabel, freeformPendingIntent);
+                }
+
+                mBuilder.addAction(0, label, receiverPendingIntent)
+                        .addAction(0, getString(R.string.action_quit), receiverPendingIntent2);
 
                 startForeground(8675309, mBuilder.build());
 

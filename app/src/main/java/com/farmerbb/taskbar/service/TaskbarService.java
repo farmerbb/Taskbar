@@ -61,6 +61,7 @@ import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -86,7 +87,7 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
-import com.farmerbb.taskbar.util.StartMenuHelper;
+import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class TaskbarService extends Service {
@@ -164,6 +165,23 @@ public class TaskbarService extends Service {
         }
     };
 
+    private BroadcastReceiver startMenuAppearReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(startButton.getVisibility() == View.GONE
+                    && (!LauncherHelper.getInstance().isOnHomeScreen() || FreeformHackHelper.getInstance().isInFreeformWorkspace()))
+                layout.setVisibility(View.GONE);
+        }
+    };
+
+    private BroadcastReceiver startMenuDisappearReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(startButton.getVisibility() == View.GONE)
+                layout.setVisibility(View.VISIBLE);
+        }
+    };
+    
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -384,6 +402,28 @@ public class TaskbarService extends Service {
                 if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     hideTaskbar(true);
             });
+
+            backButton.setOnLongClickListener(v -> {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.showInputMethodPicker();
+
+                if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    hideTaskbar(true);
+
+                return true;
+            });
+
+            backButton.setOnGenericMotionListener((view13, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.showInputMethodPicker();
+
+                    if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                        hideTaskbar(true);
+                }
+                return true;
+            });
         }
 
         if(pref.getBoolean("button_home", false)) {
@@ -472,16 +512,25 @@ public class TaskbarService extends Service {
         else if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false))
             toggleTaskbar();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(showReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(tempShowReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(tempHideReceiver);
+        if(pref.getBoolean("auto_hide_navbar", false))
+            U.showHideNavigationBar(this, false);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(showReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_TASKBAR"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_TASKBAR"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(tempShowReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(tempHideReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        
+        lbm.unregisterReceiver(showReceiver);
+        lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(tempShowReceiver);
+        lbm.unregisterReceiver(tempHideReceiver);
+        lbm.unregisterReceiver(startMenuAppearReceiver);
+        lbm.unregisterReceiver(startMenuDisappearReceiver);
 
+        lbm.registerReceiver(showReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_TASKBAR"));
+        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_TASKBAR"));
+        lbm.registerReceiver(tempShowReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        lbm.registerReceiver(tempHideReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+        lbm.registerReceiver(startMenuAppearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));
+        lbm.registerReceiver(startMenuDisappearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        
         startRefreshingRecents();
 
         windowManager.addView(layout, params);
@@ -509,7 +558,7 @@ public class TaskbarService extends Service {
                     SystemClock.sleep(refreshInterval);
                     updateRecentApps(false);
 
-                    if(showHideAutomagically && !positionIsVertical && !StartMenuHelper.getInstance().isStartMenuOpen())
+                    if(showHideAutomagically && !positionIsVertical && !MenuHelper.getInstance().isStartMenuOpen())
                         handler.post(() -> {
                             if(layout != null) {
                                 int[] location = new int[2];
@@ -918,6 +967,8 @@ public class TaskbarService extends Service {
             pref.edit().putBoolean("collapsed", true).apply();
 
             updateButton(false);
+
+            new Handler().post(() -> LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_START_MENU_SPACE")));
         }
     }
 
@@ -951,6 +1002,8 @@ public class TaskbarService extends Service {
 
             LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+
+            new Handler().post(() -> LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_SPACE")));
         }
     }
 
@@ -1046,10 +1099,20 @@ public class TaskbarService extends Service {
                 windowManager.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(showReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(tempShowReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(tempHideReceiver);
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("skip_auto_hide_navbar", false)) {
+            pref.edit().remove("skip_auto_hide_navbar").apply();
+        } else if(pref.getBoolean("auto_hide_navbar", false))
+            U.showHideNavigationBar(this, true);
+
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+
+        lbm.unregisterReceiver(showReceiver);
+        lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(tempShowReceiver);
+        lbm.unregisterReceiver(tempHideReceiver);
+        lbm.unregisterReceiver(startMenuAppearReceiver);
+        lbm.unregisterReceiver(startMenuDisappearReceiver);
 
         isFirstStart = true;
     }

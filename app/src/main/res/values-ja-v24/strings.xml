@@ -16,4 +16,6 @@
 
 <resources>
     <string name="pref_description_launcher">Taskbar をホーム画面の置き換えとして使用します</string>
+    <string name="action_show">Taskbar を表示</string>
+    <string name="action_hide">Taskbar を非表示</string>
 </resources>

@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,7 +28,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -47,6 +47,7 @@ import com.farmerbb.taskbar.util.U;
 public class HomeActivity extends Activity {
 
     private boolean forceTaskbarStart = false;
+    private AlertDialog dialog;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
@@ -185,6 +186,8 @@ public class HomeActivity extends Activity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+
+        U.initPrefs(this);
     }
 
     private void setWallpaper() {
@@ -246,7 +249,7 @@ public class HomeActivity extends Activity {
                     startTaskbar();
             }
         } else
-            U.showPermissionDialog(this);
+            dialog = U.showPermissionDialog(this);
     }
 
     private boolean bootToFreeform() {
@@ -291,6 +294,11 @@ public class HomeActivity extends Activity {
 
                 IconCache.getInstance(this).clearCache();
             }
+        }
+
+        if(dialog != null) {
+            dialog.dismiss();
+            dialog = null;
         }
     }
 

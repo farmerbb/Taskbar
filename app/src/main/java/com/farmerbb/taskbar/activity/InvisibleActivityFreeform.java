@@ -98,10 +98,12 @@ public class InvisibleActivityFreeform extends Activity {
             IntentFilter appearingReceiverFilter = new IntentFilter();
             appearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
             appearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING");
+            appearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
             IntentFilter disappearingReceiverFilter = new IntentFilter();
             disappearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_DISAPPEARING");
             disappearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING");
+            disappearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING");
 
             LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, appearingReceiverFilter);
             LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);

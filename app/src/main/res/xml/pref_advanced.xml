@@ -25,8 +25,7 @@
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="keyboard_shortcut"
-        android:title="@string/pref_title_keyboard_shortcut"
-        android:summary="@string/pref_description_keyboard_shortcut" />
+        android:title="@string/pref_title_keyboard_shortcut" />
 
     <CheckBoxPreference
         android:defaultValue="false"

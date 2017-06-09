@@ -58,6 +58,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
@@ -272,15 +273,17 @@ public class DashboardService extends Service {
 
         mAppWidgetHost.stopListening();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(addWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(removeWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(addWidgetReceiver);
+        lbm.unregisterReceiver(removeWidgetReceiver);
+        lbm.unregisterReceiver(hideReceiver);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+        lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
+        lbm.registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
+        lbm.registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
 
         windowManager.addView(layout, params);
 
@@ -453,10 +456,14 @@ public class DashboardService extends Service {
                 windowManager.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(toggleReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(addWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(removeWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hideReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+
+        lbm.unregisterReceiver(toggleReceiver);
+        lbm.unregisterReceiver(addWidgetReceiver);
+        lbm.unregisterReceiver(removeWidgetReceiver);
+        lbm.unregisterReceiver(hideReceiver);
+
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
     }
 
     private void cellClick(View view, boolean isActualClick) {
@@ -467,8 +474,8 @@ public class DashboardService extends Service {
         int currentlySelectedCell = appWidgetId == -1 ? cellId : -1;
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if((isActualClick && appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell)
-                || pref.getBoolean("dashboard_widget_" + Integer.toString(cellId) + "_placeholder", false)) {
+        boolean shouldShowPlaceholder = pref.getBoolean("dashboard_widget_" + Integer.toString(cellId) + "_placeholder", false);
+        if(isActualClick && ((appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) || shouldShowPlaceholder)) {
             fadeOut(false);
 
             FrameLayout frameLayout = cells.get(currentlySelectedCell);
@@ -479,11 +486,26 @@ public class DashboardService extends Service {
             intent.putExtra("cellId", cellId);
             LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
 
+            if(shouldShowPlaceholder) {
+                String providerName = pref.getString("dashboard_widget_" + Integer.toString(cellId) + "_provider", "null");
+                if(!providerName.equals("null")) {
+                    ComponentName componentName = ComponentName.unflattenFromString(providerName);
+
+                    List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
+                    for(AppWidgetProviderInfo info : providerInfoList) {
+                        if(info.provider.equals(componentName)) {
+                            U.showToast(this, getString(R.string.widget_restore_toast, info.loadLabel(getPackageManager())), Toast.LENGTH_SHORT);
+                            break;
+                        }
+                    }
+                }
+            }
+
             previouslySelectedCell = -1;
         } else {
             for(int i = 0; i < maxSize; i++) {
                 FrameLayout frameLayout = cells.get(i);
-                frameLayout.findViewById(R.id.empty).setVisibility(i == currentlySelectedCell ? View.VISIBLE : View.GONE);
+                frameLayout.findViewById(R.id.empty).setVisibility(i == currentlySelectedCell && !shouldShowPlaceholder ? View.VISIBLE : View.GONE);
             }
 
             previouslySelectedCell = currentlySelectedCell;
