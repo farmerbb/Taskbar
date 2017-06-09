@@ -108,7 +108,7 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
                 Intent intent2 = new Intent();
                 intent2.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
 
-                if(U.isOPreview())
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     intent2.putExtra("android.provider.extra.APP_PACKAGE", BuildConfig.APPLICATION_ID);
                 else {
                     intent2.putExtra("app_package", BuildConfig.APPLICATION_ID);
