@@ -320,4 +320,9 @@
 
     <string name="freeform_dialog_message_alt">Для того, чтобы Taskbar запускал приложения в режиме Freeform, выполните следующее:\n\n&#8226; Зайдите в настройки для разработчиков и включите отладку по USB.\n\n&#8226;Подключите устройство к компьютеру, а затем выполните adb shell и\n\nsettings put global enable_freeform_support 1\n\n&#8226;После этого перезагрузите устройство.</string>
 
+    <string name="color_picker_alpha">Alpha</string>
+    <string name="color_picker_red">Red</string>
+    <string name="color_picker_green">Green</string>
+    <string name="color_picker_blue">Blue</string>
+
 </resources>
