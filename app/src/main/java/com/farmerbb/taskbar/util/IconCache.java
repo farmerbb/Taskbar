@@ -26,8 +26,6 @@ import android.graphics.drawable.Drawable;
 import android.os.UserManager;
 import android.util.LruCache;
 
-import com.farmerbb.taskbar.BuildConfig;
-
 public class IconCache {
 
     private final LruCache<String, BitmapDrawable> drawables;
@@ -75,19 +73,19 @@ public class IconCache {
 
     private Drawable loadIcon(Context context, PackageManager pm, LauncherActivityInfo appInfo) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        String iconPackPackage = pref.getString("icon_pack", BuildConfig.APPLICATION_ID);
+        String iconPackPackage = pref.getString("icon_pack", context.getPackageName());
         boolean useMask = pref.getBoolean("icon_pack_use_mask", false);
         IconPackManager iconPackManager = IconPackManager.getInstance();
 
         try {
             pm.getPackageInfo(iconPackPackage, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            iconPackPackage = BuildConfig.APPLICATION_ID;
+            iconPackPackage = context.getPackageName();
             pref.edit().putString("icon_pack", iconPackPackage).apply();
             U.refreshPinnedIcons(context);
         }
 
-        if(iconPackPackage.equals(BuildConfig.APPLICATION_ID))
+        if(iconPackPackage.equals(context.getPackageName()))
             return getIcon(pm, appInfo);
         else {
             IconPack iconPack = iconPackManager.getIconPack(iconPackPackage);

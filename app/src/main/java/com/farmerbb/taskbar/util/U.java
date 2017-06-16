@@ -84,12 +84,17 @@ public class U {
     public static final int HIDDEN = 0;
     public static final int TOP_APPS = 1;
 
+    public static final String BASE_APPLICATION_ID = "com.farmerbb.taskbar";
+    public static final String PAID_APPLICATION_ID = "com.farmerbb.taskbar.paid";
+    private static final String SUPPORT_APPLICATION_ID = "com.farmerbb.taskbar.support";
+    public static final String ANDROIDX86_APPLICATION_ID = "com.farmerbb.taskbar.androidx86";
+
     // From android.app.ActivityManager.StackId
     private static final int FULLSCREEN_WORKSPACE_STACK_ID = 1;
     private static final int FREEFORM_WORKSPACE_STACK_ID = 2;
 
     public static SharedPreferences getSharedPreferences(Context context) {
-        if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
+        if(pref == null) pref = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_PRIVATE);
         return pref;
     }
 
@@ -101,7 +106,7 @@ public class U {
                 .setPositiveButton(R.string.action_grant_permission, (dialog, which) -> {
                     try {
                         context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+                                Uri.parse("package:" + context.getPackageName())));
                     } catch (ActivityNotFoundException e) {
                         showErrorDialog(context, "SYSTEM_ALERT_WINDOW");
                     }
@@ -117,7 +122,7 @@ public class U {
     public static void showErrorDialog(final Context context, String appopCmd) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.error_dialog_title)
-                .setMessage(context.getString(R.string.error_dialog_message, BuildConfig.APPLICATION_ID, appopCmd))
+                .setMessage(context.getString(R.string.error_dialog_message, context.getPackageName(), appopCmd))
                 .setPositiveButton(R.string.action_ok, null);
 
         AlertDialog dialog = builder.create();
@@ -545,9 +550,9 @@ public class U {
             String url;
             try {
                 context.getPackageManager().getPackageInfo("com.android.vending", 0);
-                url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                url = "https://play.google.com/store/apps/details?id=" + context.getPackageName();
             } catch (PackageManager.NameNotFoundException e) {
-                url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.BASE_APPLICATION_ID;
+                url = "https://f-droid.org/repository/browse/?fdid=" + BASE_APPLICATION_ID;
             }
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -566,7 +571,7 @@ public class U {
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-        return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
+        return defaultLauncher.activityInfo.packageName.equals(context.getPackageName());
     }
 
     public static void setCachedRotation(int cachedRotation) {
@@ -914,7 +919,7 @@ public class U {
 
     public static boolean isSystemApp(Context context) {
         try {
-            ApplicationInfo info = context.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
             int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
             return (info.flags & mask) != 0;
         } catch (PackageManager.NameNotFoundException e) {
@@ -930,9 +935,9 @@ public class U {
     public static boolean hasSupportLibrary(Context context) {
         PackageManager pm = context.getPackageManager();
         try {
-            pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
-            return pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, BuildConfig.APPLICATION_ID) == PackageManager.SIGNATURE_MATCH
-                    && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+            pm.getPackageInfo(SUPPORT_APPLICATION_ID, 0);
+            return pm.checkSignatures(SUPPORT_APPLICATION_ID, context.getPackageName()) == PackageManager.SIGNATURE_MATCH
+                    && context.getPackageName().equals(BASE_APPLICATION_ID)
                     && isSystemApp(context);
         } catch (PackageManager.NameNotFoundException e) {
             return false;

@@ -31,7 +31,6 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.activity.dark.IconPackActivityDark;
@@ -86,7 +85,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         Preference iconPackListPref = findPreference("icon_pack_list");
         if(iconPackListPref != null) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
-            String iconPackPackage = pref.getString("icon_pack", BuildConfig.APPLICATION_ID);
+            String iconPackPackage = pref.getString("icon_pack", getActivity().getPackageName());
             PackageManager pm = getActivity().getPackageManager();
 
             boolean iconPackValid = true;
@@ -96,7 +95,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
                 iconPackValid = false;
             }
 
-            if(!iconPackValid || iconPackPackage.equals(BuildConfig.APPLICATION_ID)) {
+            if(!iconPackValid || iconPackPackage.equals(getActivity().getPackageName())) {
                 iconPackListPref.setSummary(getString(R.string.icon_pack_none));
             } else {
                 try {

@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         if(!launcherEnabled)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
 
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
+        if(getPackageName().equals(U.BASE_APPLICATION_ID))
             proceedWithAppLaunch(savedInstanceState);
         else {
             File file = new File(getFilesDir() + File.separator + "imported_successfully");
@@ -136,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean freeVersionInstalled() {
         PackageManager pm = getPackageManager();
         try {
-            PackageInfo pInfo = pm.getPackageInfo(BuildConfig.BASE_APPLICATION_ID, 0);
+            PackageInfo pInfo = pm.getPackageInfo(U.BASE_APPLICATION_ID, 0);
             return pInfo.versionCode >= 68
-                    && pm.checkSignatures(BuildConfig.BASE_APPLICATION_ID, BuildConfig.APPLICATION_ID)
+                    && pm.checkSignatures(U.BASE_APPLICATION_ID, getPackageName())
                     == PackageManager.SIGNATURE_MATCH;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !U.isSystemApp(this)) {
                             ApplicationInfo applicationInfo = null;
                             try {
-                                applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+                                applicationInfo = getPackageManager().getApplicationInfo(getPackageName(), 0);
                             } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
 
                             if(applicationInfo != null) {
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment").commit();
         }
 
-        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
+        if(!getPackageName().equals(U.BASE_APPLICATION_ID) && freeVersionInstalled()) {
             final SharedPreferences pref = U.getSharedPreferences(this);
             if(!pref.getBoolean("dont_show_uninstall_dialog", false)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                             pref.edit().putBoolean("uninstall_dialog_shown", true).apply();
 
                             try {
-                                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
+                                startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + U.BASE_APPLICATION_ID)));
                             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         });
 
@@ -236,9 +236,9 @@ public class MainActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = pref.edit();
 
-                String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
-                if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
-                    editor.putString("icon_pack", BuildConfig.APPLICATION_ID);
+                String iconPack = pref.getString("icon_pack", U.BASE_APPLICATION_ID);
+                if(iconPack.contains(U.BASE_APPLICATION_ID)) {
+                    editor.putString("icon_pack", getPackageName());
                 } else {
                     U.refreshPinnedIcons(this);
                 }

@@ -38,10 +38,6 @@ android {
         versionName "3.5"
 
         resConfigs "en", "ja", "ru", "de"
-
-        buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
-        buildConfigField "String", "PAID_APPLICATION_ID", "\"com.farmerbb.taskbar.paid\""
-        buildConfigField "String", "SUPPORT_APPLICATION_ID", "\"com.farmerbb.taskbar.support\""
     }
 
     compileOptions {

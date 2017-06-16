@@ -28,7 +28,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
@@ -60,7 +59,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             addPreferencesFromResource(R.xml.pref_about);
 
-            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+            if(getActivity().getPackageName().equals(U.BASE_APPLICATION_ID)
                     && playStoreInstalled
                     && !U.isSystemApp(getActivity())
                     && !pref.getBoolean("hide_donate", false)) {
@@ -108,7 +107,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                         .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.PAID_APPLICATION_ID));
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + U.PAID_APPLICATION_ID));
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             try {

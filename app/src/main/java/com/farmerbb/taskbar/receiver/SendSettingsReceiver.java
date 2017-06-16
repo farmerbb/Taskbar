@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.BlacklistEntry;
@@ -28,6 +27,7 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.SavedWindowSizesEntry;
 import com.farmerbb.taskbar.util.TopApps;
+import com.farmerbb.taskbar.util.U;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,9 +40,9 @@ public class SendSettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Ignore this broadcast if this is the paid version
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)) {
+        if(context.getPackageName().equals(U.BASE_APPLICATION_ID)) {
             Intent sendSettingsIntent = new Intent("com.farmerbb.taskbar.SEND_SETTINGS");
-            sendSettingsIntent.setPackage(BuildConfig.PAID_APPLICATION_ID);
+            sendSettingsIntent.setPackage(U.PAID_APPLICATION_ID);
 
             // Get pinned and blocked apps
             PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
@@ -137,7 +137,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             StringBuilder preferences = new StringBuilder("");
 
             try {
-                File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + BuildConfig.APPLICATION_ID + "_preferences.xml");
+                File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
                 FileInputStream input = new FileInputStream(file);
                 InputStreamReader reader = new InputStreamReader(input);
                 BufferedReader buffer = new BufferedReader(reader);
