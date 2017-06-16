@@ -320,4 +320,9 @@
 
     <string name="freeform_dialog_message_alt">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options and enable USB debugging\n\n&#8226; Connect your device to a computer with the Android SDK installed, and run the following adb shell command:\n\nsettings put global enable_freeform_support 1\n\n&#8226; Reboot your device</string>
 
+    <string name="color_picker_alpha">Alpha</string>
+    <string name="color_picker_red">Red</string>
+    <string name="color_picker_green">Green</string>
+    <string name="color_picker_blue">Blue</string>
+
 </resources>

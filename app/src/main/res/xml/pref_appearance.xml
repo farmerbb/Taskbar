@@ -31,12 +31,10 @@
 
     <Preference
         android:key="background_tint_pref"
-        android:defaultValue="@integer/translucent_gray"
         android:title="@string/pref_title_background_tint" />
 
     <Preference
         android:key="accent_color_pref"
-        android:defaultValue="@integer/translucent_white"
         android:title="@string/pref_title_accent_color" />
 
     <CheckBoxPreference

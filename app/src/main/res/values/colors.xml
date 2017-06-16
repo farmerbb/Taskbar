@@ -27,4 +27,9 @@
     <color name="main_activity_background_dark">#252525</color>
     <color name="settings_icon_color">#000000</color>
     <color name="settings_icon_color_dark">#FFFFFF</color>
+
+    <color name="red">#FF0000</color>
+    <color name="green">#00FF00</color>
+    <color name="blue">#0000FF</color>
+    <color name="alpha">#40000000</color>
 </resources>

@@ -35,13 +35,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 
-import com.enrico.colorpicker.colorDialog;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.ImportSettingsActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
@@ -49,7 +47,6 @@ import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;
-import com.farmerbb.taskbar.fragment.SettingsFragment;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -62,7 +59,7 @@ import com.farmerbb.taskbar.util.U;
 import java.io.File;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements colorDialog.ColorSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private SwitchCompat theSwitch;
 
@@ -72,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
             updateSwitch();
         }
     };
-
-    public final int BACKGROUND_TINT = 1;
-    public final int ACCENT_COLOR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -360,27 +354,5 @@ public class MainActivity extends AppCompatActivity implements colorDialog.Color
                     .replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .commit();
-    }
-
-    @Override
-    public void onColorSelection(DialogFragment dialogFragment, int color) {
-        SharedPreferences pref = U.getSharedPreferences(this);
-        String preferenceId = null;
-
-        switch(Integer.parseInt(dialogFragment.getTag())) {
-            case BACKGROUND_TINT:
-                preferenceId = "background_tint";
-                break;
-            case ACCENT_COLOR:
-                preferenceId = "accent_color";
-                break;
-        }
-
-        pref.edit().putInt(preferenceId, color).apply();
-
-        SettingsFragment fragment = (SettingsFragment) getFragmentManager().findFragmentById(R.id.fragmentContainer);
-        colorDialog.setColorPreferenceSummary(fragment.findPreference(preferenceId + "_pref"), color, this, getResources());
-
-        U.restartTaskbar(this);
     }
 }

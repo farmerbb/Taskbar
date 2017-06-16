@@ -34,6 +34,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.display.DisplayManager;
@@ -193,7 +194,7 @@ public class U {
         ToastHelper.getInstance().setLastToast(toast);
     }
 
-    public static void cancelToast() {
+    private static void cancelToast() {
         ToastCompat toast = ToastHelper.getInstance().getLastToast();
         if(toast != null) toast.cancel();
     }
@@ -839,7 +840,7 @@ public class U {
             SharedPreferences.Editor editor = pref.edit();
 
             if(!pref.getBoolean("show_background", true))
-                editor.putInt("background_tint", 0).apply();
+                editor.putInt("background_tint", Color.TRANSPARENT).apply();
 
             editor.remove("show_background");
             editor.apply();
