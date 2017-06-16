@@ -104,6 +104,7 @@
 
     <string name="pref_title_keyboard_shortcut">キーボードショートカットを有効にする</string>
     <string name="pref_description_keyboard_shortcut">Taskbar の開始/停止\n&#8226; Winキー+M, 検索+M\n\nデバイスのロック\n&#8226; Winキー+L, 検索+L\n\nスタートメニューを表示\n&#8226; Winキー, 検索\n(設定で Taskbar を検索アシスタントとして設定が必要)</string>
+    <string name="pref_description_keyboard_shortcut_alt">@string/pref_description_keyboard_shortcut</string>
     <string name="loading_apps">アプリのロード中&#8230;</string>
     <string name="press_enter">アプリが見つかりません\n\nEnter を押すと Google で検索します</string>
     <string name="nothing_to_see_here">ここには何もありません&#8230;</string>

@@ -15,25 +15,7 @@
 
 package com.farmerbb.taskbar.util;
 
-class ToastHelper {
-
-    private ToastInterface lastToast;
-
-    private static ToastHelper theInstance;
-
-    private ToastHelper() {}
-
-    public static ToastHelper getInstance() {
-        if(theInstance == null) theInstance = new ToastHelper();
-
-        return theInstance;
-    }
-
-    ToastInterface getLastToast() {
-        return lastToast;
-    }
-
-    void setLastToast(ToastInterface lastToast) {
-        this.lastToast = lastToast;
-    }
+interface ToastInterface {
+    void show();
+    void cancel();
 }

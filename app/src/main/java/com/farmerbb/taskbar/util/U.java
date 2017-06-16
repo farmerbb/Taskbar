@@ -70,8 +70,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import moe.banana.support.ToastCompat;
-
 public class U {
 
     private U() {}
@@ -188,14 +186,20 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        ToastCompat toast = ToastCompat.makeText(context.getApplicationContext(), message, length);
+        ToastInterface toast;
+        try {
+            toast = new ToastCompatImpl(context.getApplicationContext(), message, length);
+        } catch (Exception e) {
+            toast = new ToastFrameworkImpl(context.getApplicationContext(), message, length);
+        }
+
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);
     }
 
     private static void cancelToast() {
-        ToastCompat toast = ToastHelper.getInstance().getLastToast();
+        ToastInterface toast = ToastHelper.getInstance().getLastToast();
         if(toast != null) toast.cancel();
     }
 

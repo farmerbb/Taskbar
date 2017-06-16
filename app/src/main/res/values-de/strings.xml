@@ -104,6 +104,7 @@
 
     <string name="pref_title_keyboard_shortcut">Tastaturkürzel aktivieren</string>
     <string name="pref_description_keyboard_shortcut">Taskbar starten / anhalten\n - Super + M / Suche + M\n\nGerät sperren\n - Super + L / Suche + L\n\nStartmenü anzeigen\n - Super / Suche\n(Muss in den Einstellungen als Suchassistent festgelegt werden)</string>
+    <string name="pref_description_keyboard_shortcut_alt">@string/pref_description_keyboard_shortcut</string>
     <string name="loading_apps">Apps werden geladen&#8230;</string>
     <string name="press_enter">Keine Apps gefunden\n\nDrücken Sie Enter, um mit Google zu suchen</string>
     <string name="nothing_to_see_here">Nichts zu sehen hier, gehen Sie weiter&#8230;</string>

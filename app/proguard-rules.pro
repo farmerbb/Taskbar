@@ -11,3 +11,7 @@
 -dontwarn java.lang.invoke.*
 
 -keep class **.R$string
+
+-keep class moe.banana.support.ToastCompat { *; }
+-keep class com.mikepenz.iconics.Iconics$IconicsBuilder { *; }
+-keep class com.mikepenz.iconics.Iconics$IconicsBuilderString { *; }

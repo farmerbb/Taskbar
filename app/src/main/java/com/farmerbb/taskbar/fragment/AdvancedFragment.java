@@ -30,6 +30,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -43,7 +44,8 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.U;
-import com.mikepenz.iconics.Iconics;
+
+import java.lang.reflect.Method;
 
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
@@ -63,11 +65,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
             findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
-            findPreference("keyboard_shortcut").setSummary(
-                    new Iconics.IconicsBuilder()
-                            .ctx(getActivity())
-                            .on(getString(R.string.pref_description_keyboard_shortcut))
-                            .build());
+            findPreference("keyboard_shortcut").setSummary(getKeyboardShortcutSummary());
 
             bindPreferenceSummaryToValue(findPreference("dashboard"));
 
@@ -239,5 +237,23 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
+    }
+
+    private CharSequence getKeyboardShortcutSummary() {
+        try {
+            Class iconicsClass = Class.forName("com.mikepenz.iconics.Iconics$IconicsBuilder");
+            Class iconicsViewClass = Class.forName("com.mikepenz.iconics.Iconics$IconicsBuilderString");
+            Method method = iconicsClass.getMethod("ctx", Context.class);
+            Method method2 = iconicsClass.getMethod("on", String.class);
+            Method method3 = iconicsViewClass.getMethod("build");
+
+            Object iconicsBuilder = iconicsClass.newInstance();
+            method.invoke(iconicsBuilder, getActivity());
+
+            Object iconicsView = method2.invoke(iconicsBuilder, getString(R.string.pref_description_keyboard_shortcut));
+            return (Spannable) method3.invoke(iconicsView);
+        } catch (Exception e) {
+            return getString(R.string.pref_description_keyboard_shortcut_alt);
+        }
     }
 }

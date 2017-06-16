@@ -15,25 +15,25 @@
 
 package com.farmerbb.taskbar.util;
 
-class ToastHelper {
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.widget.Toast;
 
-    private ToastInterface lastToast;
+class ToastFrameworkImpl implements ToastInterface {
+    private Toast toast;
 
-    private static ToastHelper theInstance;
-
-    private ToastHelper() {}
-
-    public static ToastHelper getInstance() {
-        if(theInstance == null) theInstance = new ToastHelper();
-
-        return theInstance;
+    @SuppressLint("ShowToast")
+    ToastFrameworkImpl(Context context, String message, int length) {
+        toast = Toast.makeText(context, message, length);
     }
 
-    ToastInterface getLastToast() {
-        return lastToast;
+    @Override
+    public void show() {
+        toast.show();
     }
 
-    void setLastToast(ToastInterface lastToast) {
-        this.lastToast = lastToast;
+    @Override
+    public void cancel() {
+        toast.cancel();
     }
 }
