@@ -78,7 +78,11 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
             findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
             findPreference("about").setOnPreferenceClickListener(this);
-            findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+
+            if(getActivity().getPackageName().contains(U.ANDROIDX86_APPLICATION_ID))
+                findPreference("about").setSummary(R.string.pref_about_description_alt);
+            else
+                findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
         }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();

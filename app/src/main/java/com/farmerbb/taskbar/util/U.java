@@ -53,7 +53,6 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
@@ -547,24 +546,27 @@ public class U {
     }
 
     public static void checkForUpdates(Context context) {
-        if(!BuildConfig.DEBUG) {
-            String url;
-            try {
-                context.getPackageManager().getPackageInfo("com.android.vending", 0);
-                url = "https://play.google.com/store/apps/details?id=" + context.getPackageName();
-            } catch (PackageManager.NameNotFoundException e) {
-                url = "https://f-droid.org/repository/browse/?fdid=" + BASE_APPLICATION_ID;
-            }
+        if(!context.getPackageName().equals(ANDROIDX86_APPLICATION_ID)) {
+            ApplicationInfo info = context.getApplicationInfo();
+            if((info.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
+                String url;
+                try {
+                    context.getPackageManager().getPackageInfo("com.android.vending", 0);
+                    url = "https://play.google.com/store/apps/details?id=" + context.getPackageName();
+                } catch (PackageManager.NameNotFoundException e) {
+                    url = "https://f-droid.org/repository/browse/?fdid=" + BASE_APPLICATION_ID;
+                }
 
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            try {
-                context.startActivity(intent);
-            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-        } else
-            showToast(context, R.string.debug_build);
+                try {
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+            } else
+                showToast(context, R.string.debug_build);
+        }
     }
 
     public static boolean launcherIsDefault(Context context) {
