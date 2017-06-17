@@ -87,21 +87,16 @@ android {
 
     sourceSets {
         paid {
-            java {
-                srcDirs('src/main/java')
-            }
+            manifest.srcFile 'src/main/AndroidManifest-standalone.xml'
         }
 
         free {
-            java {
-                srcDirs('src/main/java')
-            }
+            manifest.srcFile 'src/main/AndroidManifest-standalone.xml'
         }
 
         androidx86 {
-            java {
-                srcDirs('src/main/java', 'src/androidx86-stubs/java')
-            }
+            java.srcDirs = ['src/main/java', 'src/androidx86-stubs/java']
+            manifest.srcFile 'src/main/AndroidManifest-androidx86.xml'
         }
     }
 }
