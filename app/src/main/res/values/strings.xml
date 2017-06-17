@@ -76,6 +76,7 @@
 
     <string name="pref_header_about">About Taskbar</string>
     <string name="pref_about_description">Taskbar: start menu and recent apps at your fingertips\n\n&#169; 2017 Braden Farmer\nApp logo by Mark Morilla\n\nClick here to check for updates or leave a rating! %1$s</string>
+    <string name="pref_about_description_alt">Taskbar: start menu and recent apps at your fingertips\n\n&#169; 2017 Braden Farmer\nApp logo by Mark Morilla</string>
 
     <string name="pref_title_hide_taskbar">Collapse Taskbar when selecting items</string>
 

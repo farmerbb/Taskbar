@@ -192,7 +192,6 @@ public class U {
         else
             toast = new ToastCompatImpl(context, message, length);
 
-
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);
@@ -541,24 +540,26 @@ public class U {
     }
 
     public static void checkForUpdates(Context context) {
-        if(!BuildConfig.DEBUG) {
-            String url;
-            try {
-                context.getPackageManager().getPackageInfo("com.android.vending", 0);
-                url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
-            } catch (PackageManager.NameNotFoundException e) {
-                url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.BASE_APPLICATION_ID;
-            }
+        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
+            if(!BuildConfig.DEBUG) {
+                String url;
+                try {
+                    context.getPackageManager().getPackageInfo("com.android.vending", 0);
+                    url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                } catch (PackageManager.NameNotFoundException e) {
+                    url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.BASE_APPLICATION_ID;
+                }
 
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            try {
-                context.startActivity(intent);
-            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-        } else
-            showToast(context, R.string.debug_build);
+                try {
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+            } else
+                showToast(context, R.string.debug_build);
+        }
     }
 
     public static boolean launcherIsDefault(Context context) {
