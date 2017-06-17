@@ -17,32 +17,22 @@ package com.farmerbb.taskbar.util;
 
 import android.content.Context;
 
-import java.lang.reflect.Method;
+import moe.banana.support.ToastCompat;
 
 class ToastCompatImpl implements ToastInterface {
-    private Class toastCompatClass;
-    private Object toast;
+    private ToastCompat toast;
 
-    ToastCompatImpl(Context context, String message, int length) throws Exception {
-        toastCompatClass = Class.forName("moe.banana.support.ToastCompat");
-
-        Method method = toastCompatClass.getMethod("makeText", Context.class, CharSequence.class, int.class);
-        toast = method.invoke(null, context, message, length);
+    ToastCompatImpl(Context context, String message, int length) {
+        toast = ToastCompat.makeText(context, message, length);
     }
 
     @Override
     public void show() {
-        try {
-            Method method = toastCompatClass.getMethod("show");
-            method.invoke(toast);
-        } catch (Exception e) { /* Gracefully fail */ }
+        toast.show();
     }
 
     @Override
     public void cancel() {
-        try {
-            Method method = toastCompatClass.getMethod("cancel");
-            method.invoke(toast);
-        } catch (Exception e) { /* Gracefully fail */ }
+        toast.cancel();
     }
 }

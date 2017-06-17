@@ -84,10 +84,12 @@ public class U {
     public static final int HIDDEN = 0;
     public static final int TOP_APPS = 1;
 
+    // Package names of various Taskbar builds
     public static final String BASE_APPLICATION_ID = "com.farmerbb.taskbar";
     public static final String PAID_APPLICATION_ID = "com.farmerbb.taskbar.paid";
-    private static final String SUPPORT_APPLICATION_ID = "com.farmerbb.taskbar.support";
     public static final String ANDROIDX86_APPLICATION_ID = "com.farmerbb.taskbar.androidx86";
+
+    private static final String SUPPORT_APPLICATION_ID = "com.farmerbb.taskbar.support";
 
     // From android.app.ActivityManager.StackId
     private static final int FULLSCREEN_WORKSPACE_STACK_ID = 1;
@@ -192,11 +194,10 @@ public class U {
         cancelToast();
 
         ToastInterface toast;
-        try {
-            toast = new ToastCompatImpl(context.getApplicationContext(), message, length);
-        } catch (Exception e) {
-            toast = new ToastFrameworkImpl(context.getApplicationContext(), message, length);
-        }
+        if(context.getPackageName().equals(ANDROIDX86_APPLICATION_ID))
+            toast = new ToastFrameworkImpl(context, message, length);
+        else
+            toast = new ToastCompatImpl(context, message, length);
 
         toast.show();
 
