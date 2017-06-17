@@ -30,12 +30,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
@@ -44,8 +44,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.U;
-
-import java.lang.reflect.Method;
+import com.mikepenz.iconics.Iconics;
 
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
@@ -240,20 +239,13 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
     }
 
     private CharSequence getKeyboardShortcutSummary() {
-        try {
-            Class iconicsClass = Class.forName("com.mikepenz.iconics.Iconics$IconicsBuilder");
-            Class iconicsViewClass = Class.forName("com.mikepenz.iconics.Iconics$IconicsBuilderString");
-            Method method = iconicsClass.getMethod("ctx", Context.class);
-            Method method2 = iconicsClass.getMethod("on", String.class);
-            Method method3 = iconicsViewClass.getMethod("build");
-
-            Object iconicsBuilder = iconicsClass.newInstance();
-            method.invoke(iconicsBuilder, getActivity());
-
-            Object iconicsView = method2.invoke(iconicsBuilder, getString(R.string.pref_description_keyboard_shortcut));
-            return (Spannable) method3.invoke(iconicsView);
-        } catch (Exception e) {
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
             return getString(R.string.pref_description_keyboard_shortcut_alt);
+        } else {
+            return new Iconics.IconicsBuilder()
+                    .ctx(getActivity())
+                    .on(getString(R.string.pref_description_keyboard_shortcut))
+                    .build();
         }
     }
 }

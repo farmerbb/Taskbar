@@ -187,11 +187,11 @@ public class U {
         cancelToast();
 
         ToastInterface toast;
-        try {
-            toast = new ToastCompatImpl(context.getApplicationContext(), message, length);
-        } catch (Exception e) {
-            toast = new ToastFrameworkImpl(context.getApplicationContext(), message, length);
-        }
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
+            toast = new ToastFrameworkImpl(context, message, length);
+        else
+            toast = new ToastCompatImpl(context, message, length);
+
 
         toast.show();
 
