@@ -1031,6 +1031,7 @@ public class U {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
 
+        // Enable freeform hack automatically on supported devices
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
@@ -1043,6 +1044,20 @@ public class U {
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
             }
+        }
+
+        // Customizations for Android-x86 devices (non-Bliss)
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
+                && isSystemApp(context)
+                && !pref.getBoolean("android_x86_prefs", false)) {
+            pref.edit()
+                    .putString("recents_amount", "running_apps_only")
+                    .putString("refresh_frequency", "0")
+                    .putString("max_num_of_recents", "2147483647")
+                    .putBoolean("full_length", true)
+                    .putBoolean("dashboard", true)
+                    .putBoolean("android_x86_prefs", true)
+                    .apply();
         }
     }
 }

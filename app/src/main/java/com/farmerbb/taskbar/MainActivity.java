@@ -92,9 +92,11 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("taskbar_active", false);
 
         // Ensure that components that should be enabled are enabled properly
-        boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this)) || U.hasSupportLibrary(this);
-        editor.putBoolean("launcher", launcherEnabled);
+        boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this))
+                || U.hasSupportLibrary(this)
+                || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
 
+        editor.putBoolean("launcher", launcherEnabled);
         editor.apply();
 
         ComponentName component = new ComponentName(this, HomeActivity.class);
@@ -120,17 +122,15 @@ public class MainActivity extends AppCompatActivity {
         if(!launcherEnabled)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
 
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID))
-            proceedWithAppLaunch(savedInstanceState);
-        else {
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.PAID_APPLICATION_ID)) {
             File file = new File(getFilesDir() + File.separator + "imported_successfully");
             if(freeVersionInstalled() && !file.exists()) {
                 startActivity(new Intent(this, ImportSettingsActivity.class));
                 finish();
-            } else {
+            } else
                 proceedWithAppLaunch(savedInstanceState);
-            }
-        }
+        } else
+            proceedWithAppLaunch(savedInstanceState);
     }
 
     private boolean freeVersionInstalled() {
