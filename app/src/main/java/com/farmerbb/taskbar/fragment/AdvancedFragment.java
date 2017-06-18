@@ -68,7 +68,9 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             bindPreferenceSummaryToValue(findPreference("dashboard"));
 
             SharedPreferences pref = U.getSharedPreferences(getActivity());
-            boolean lockHomeToggle = U.hasSupportLibrary(getActivity()) && pref.getBoolean("launcher", false);
+            boolean lockHomeToggle = pref.getBoolean("launcher", false)
+                    && (U.hasSupportLibrary(getActivity())
+                    || getActivity().getPackageName().contains(U.ANDROIDX86_APPLICATION_ID));
 
             findPreference("launcher").setEnabled(!lockHomeToggle);
         }
