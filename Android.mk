@@ -13,7 +13,7 @@ LOCAL_SRC_FILES := \
         $(call all-java-files-under, app/src/main/java) \
         $(call all-java-files-under, app/src/androidx86/java)
 
-LOCAL_MANIFEST_FILE := app/src/main/androidx86/AndroidManifest.xml
+LOCAL_MANIFEST_FILE := app/src/androidx86/AndroidManifest.xml
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
         android-support-v4 \
