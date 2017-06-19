@@ -84,30 +84,6 @@ android {
         free {
             applicationId "com.farmerbb.taskbar"
         }
-
-        androidx86 {
-            applicationId "com.farmerbb.taskbar.androidx86"
-        }
-    }
-
-    sourceSets {
-        paid {
-            java {
-                srcDirs('src/main/java')
-            }
-        }
-
-        free {
-            java {
-                srcDirs('src/main/java')
-            }
-        }
-
-        androidx86 {
-            java {
-                srcDirs('src/main/java', 'src/androidx86-stubs/java')
-            }
-        }
     }
 }
 
@@ -115,13 +91,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-
-    paidCompile 'com.mikepenz:iconics-core:2.8.6@aar'
-    paidCompile 'com.mikepenz:foundation-icons-typeface:3.0.0.2@aar'
-    paidCompile 'moe.banana:toast-compat:1.0.5'
-
-    freeCompile 'com.mikepenz:iconics-core:2.8.6@aar'
-    freeCompile 'com.mikepenz:foundation-icons-typeface:3.0.0.2@aar'
-    freeCompile 'moe.banana:toast-compat:1.0.5'
+    compile 'com.mikepenz:iconics-core:2.8.6@aar'
+    compile 'com.mikepenz:foundation-icons-typeface:3.0.0.2@aar'
+    compile 'moe.banana:toast-compat:1.0.5'
 }
 

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- Manifest used for Android-x86 builds of Taskbar, with the following changes:
+
+     * HomeActivity is enabled by default
+     * SendSettingsReceiver and ReceiveSettingsReceiver are not exposed
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.farmerbb.taskbar" >
+          android:versionCode="1"
+          android:versionName="3.6-androidx86" >
+
+    <uses-sdk
+        android:minSdkVersion="25"
+        android:targetSdkVersion="25" />
+
+    <permission android:name="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
+        android:protectionLevel="signature" />
+
+    <permission android:name="com.farmerbb.taskbar.androidx86.ENABLE_DISABLE_HOME"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false"/>
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.InvisibleActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.InvisibleActivity"/>
+        <activity
+            android:name=".activity.InvisibleActivityAlt"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.dark.InvisibleActivityAltDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
+        <activity
+            android:name=".activity.InvisibleActivityFreeform"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:theme="@style/AppTheme.InvisibleActivity"/>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:enabled="true"
+            android:theme="@style/AppTheme.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.KeyboardShortcutActivity"
+            android:label="@string/app_name"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:enabled="false"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.ASSIST" />
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.APP_MAPS" />
+                <category android:name="android.intent.category.APP_CALENDAR" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ContextMenuActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Dialog"/>
+        <activity
+            android:name=".activity.dark.ContextMenuActivityDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Dialog.Dark"/>
+        <activity
+            android:name=".activity.SelectAppActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.dark.SelectAppActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.DummyActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.ImportSettingsActivity"
+            android:theme="@style/AppTheme.Dialog"/>
+        <activity
+            android:name=".activity.IconPackActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.dark.IconPackActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.IconPackApplyActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Dialog"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="com.farmerbb.taskbar.APPLY_ICON_PACK"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ShortcutActivity"
+            android:icon="@mipmap/ic_freeform_mode"
+            android:label="@string/pref_header_freeform"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:enabled="false"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.StartTaskbarActivity"
+            android:label="@string/start_taskbar"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:enabled="true"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ClearDataActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.dark.ClearDataActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.DashboardActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.dark.DashboardActivityDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
+        <activity
+            android:name=".activity.NavigationBarButtonsActivity"
+            android:theme="@style/AppTheme.Dialog.Preference"/>
+        <activity
+            android:name=".activity.dark.NavigationBarButtonsActivityDark"
+            android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
+
+        <service android:name=".service.TaskbarService"/>
+        <service android:name=".service.StartMenuService"/>
+        <service android:name=".service.NotificationService"/>
+        <service android:name=".service.DashboardService"/>
+        <service
+            android:name=".service.PowerMenuService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice"
+                       android:resource="@xml/accessibility_service" />
+        </service>
+        <service
+            android:name=".service.QuickSettingsTileService"
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_allapps"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+                       android:value="true" />
+        </service>
+
+        <receiver
+            android:name=".receiver.ShowHideTaskbarReceiver"
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.SHOW_HIDE_TASKBAR"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.StartReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.START"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.QuitReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.QUIT"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.PackageUpgradeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.LockDeviceReceiver"
+                  android:label="@string/app_name"
+                  android:enabled="false"
+                  android:exported="true"
+                  android:description="@string/device_admin_description_short"
+                  android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data android:name="android.app.device_admin"
+                       android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.UninstallReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.EnableHomeReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.androidx86.ENABLE_DISABLE_HOME" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.ENABLE_HOME"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.DisableHomeReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.farmerbb.taskbar.androidx86.ENABLE_DISABLE_HOME" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.DISABLE_HOME"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.ToggleFreeformModeReceiver"
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE"/>
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

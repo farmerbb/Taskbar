@@ -80,7 +80,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
             findPreference("about").setOnPreferenceClickListener(this);
 
-            if(getActivity().getPackageName().contains(U.ANDROIDX86_APPLICATION_ID))
+            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
                 findPreference("about").setSummary(R.string.pref_about_description_alt);
             else
                 findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
