@@ -28,6 +28,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
@@ -59,7 +60,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             addPreferencesFromResource(R.xml.pref_about);
 
-            if(getActivity().getPackageName().equals(U.BASE_APPLICATION_ID)
+            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                     && playStoreInstalled
                     && !U.isSystemApp(getActivity())
                     && !pref.getBoolean("hide_donate", false)) {
@@ -79,7 +80,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
             findPreference("about").setOnPreferenceClickListener(this);
 
-            if(getActivity().getPackageName().contains(U.ANDROIDX86_APPLICATION_ID))
+            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
                 findPreference("about").setSummary(R.string.pref_about_description_alt);
             else
                 findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
@@ -111,7 +112,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                         .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + U.PAID_APPLICATION_ID));
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.PAID_APPLICATION_ID));
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             try {

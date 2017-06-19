@@ -35,6 +35,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
@@ -70,7 +71,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             boolean lockHomeToggle = pref.getBoolean("launcher", false)
                     && (U.hasSupportLibrary(getActivity())
-                    || getActivity().getPackageName().contains(U.ANDROIDX86_APPLICATION_ID));
+                    || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID));
 
             findPreference("launcher").setEnabled(!lockHomeToggle);
         }
@@ -240,7 +241,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
     }
 
     private CharSequence getKeyboardShortcutSummary() {
-        if(getActivity().getPackageName().equals(U.ANDROIDX86_APPLICATION_ID)) {
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
             return getString(R.string.pref_description_keyboard_shortcut_alt);
         } else {
             return new Iconics.IconicsBuilder()
