@@ -45,6 +45,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
@@ -282,7 +283,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             ResolveInfo defaultLauncher = pm.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-            if(!packageName.contains(U.BASE_APPLICATION_ID)
+            if(!packageName.contains(BuildConfig.BASE_APPLICATION_ID)
                     && !packageName.equals(defaultLauncher.activityInfo.packageName)) {
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
 

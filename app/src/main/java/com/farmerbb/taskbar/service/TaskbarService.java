@@ -74,6 +74,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.LinearLayout;
 import android.widget.Space;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
@@ -646,7 +647,7 @@ public class TaskbarService extends Service {
                 // Also filter out the current launcher, and Taskbar itself
                 for(AppEntry packageInfo : usageStatsList) {
                     if(hasLauncherIntent(packageInfo.getPackageName())
-                            && !packageInfo.getPackageName().contains(U.BASE_APPLICATION_ID)
+                            && !packageInfo.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                             && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName))
                         usageStatsList2.add(packageInfo);
                 }
@@ -686,7 +687,7 @@ public class TaskbarService extends Service {
                         events.getNextEvent(eventCache);
 
                         if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-                            if(!(eventCache.getPackageName().contains(U.BASE_APPLICATION_ID)
+                            if(!(eventCache.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                                     && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())
                                     && !eventCache.getClassName().equals(HomeActivity.class.getCanonicalName())
                                     && !eventCache.getClassName().equals(InvisibleActivityFreeform.class.getCanonicalName())))

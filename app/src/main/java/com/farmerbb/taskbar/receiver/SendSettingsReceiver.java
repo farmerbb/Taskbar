@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.BlacklistEntry;
@@ -40,9 +41,9 @@ public class SendSettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Ignore this broadcast if this is the paid version
-        if(context.getPackageName().equals(U.BASE_APPLICATION_ID)) {
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)) {
             Intent sendSettingsIntent = new Intent("com.farmerbb.taskbar.SEND_SETTINGS");
-            sendSettingsIntent.setPackage(U.PAID_APPLICATION_ID);
+            sendSettingsIntent.setPackage(BuildConfig.PAID_APPLICATION_ID);
 
             // Get pinned and blocked apps
             PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);

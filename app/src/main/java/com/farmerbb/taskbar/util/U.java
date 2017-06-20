@@ -74,9 +74,6 @@ public class U {
 
     private U() {}
 
-    public static final String BASE_APPLICATION_ID = BuildConfig.BASE_APPLICATION_ID;
-    public static final String PAID_APPLICATION_ID = BuildConfig.PAID_APPLICATION_ID;
-
     private static SharedPreferences pref;
     private static Integer cachedRotation;
 

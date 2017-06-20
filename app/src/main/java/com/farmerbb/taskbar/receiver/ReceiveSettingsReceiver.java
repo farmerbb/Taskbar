@@ -25,6 +25,7 @@ import android.os.Process;
 import android.os.UserManager;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.BlacklistEntry;
@@ -32,7 +33,6 @@ import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.TopApps;
-import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,7 +42,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Ignore this broadcast if this is the free version
-        if(context.getPackageName().equals(U.PAID_APPLICATION_ID)) {
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.PAID_APPLICATION_ID)) {
             // Get pinned and blocked apps
             PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
             pba.clear(context);
