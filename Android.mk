@@ -28,7 +28,7 @@ LOCAL_PACKAGE_NAME := Taskbar
 LOCAL_JAVA_LANGUAGE_VERSION := 1.8
 
 LOCAL_AAPT_FLAGS := \
-        --auto-add-overlay
+        --auto-add-overlay \
         --rename-manifest-package com.farmerbb.taskbar.androidx86 \
         --extra-packages android.support.v7.appcompat \
         --extra-packages android.support.v7.recyclerview \
