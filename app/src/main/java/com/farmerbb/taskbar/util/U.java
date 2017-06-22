@@ -928,6 +928,10 @@ public class U {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) || (Build.VERSION.RELEASE.equals("O") && Build.VERSION.PREVIEW_SDK_INT > 0);
     }
 
+    public static boolean isChromeOs(Context context) {
+        return context.getPackageManager().hasSystemFeature("org.chromium.arc");
+    }
+
     public static boolean hasSupportLibrary(Context context) {
         PackageManager pm = context.getPackageManager();
         try {

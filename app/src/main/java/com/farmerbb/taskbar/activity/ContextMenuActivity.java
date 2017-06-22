@@ -199,6 +199,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         getWindow().setAttributes(params);
 
+        if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+            getWindow().setElevation(0);
+
         View view = findViewById(android.R.id.list);
         if(view != null) view.setPadding(0, 0, 0, 0);
 
