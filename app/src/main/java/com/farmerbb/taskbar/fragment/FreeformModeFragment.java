@@ -68,6 +68,20 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             findPreference("window_size").setOnPreferenceClickListener(this);
 
             bindPreferenceSummaryToValue(findPreference("window_size"));
+
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            boolean lockFreeformToggle = pref.getBoolean("freeform_hack", false)
+                    && U.isChromeOs(getActivity());
+
+            if(!lockFreeformToggle) {
+                findPreference("save_window_sizes").setDependency("freeform_hack");
+                findPreference("force_new_window").setDependency("freeform_hack");
+                findPreference("launch_games_fullscreen").setDependency("freeform_hack");
+                findPreference("window_size").setDependency("freeform_hack");
+                findPreference("add_shortcut").setDependency("freeform_hack");
+            }
+
+            findPreference("freeform_hack").setEnabled(!lockFreeformToggle);
         }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
