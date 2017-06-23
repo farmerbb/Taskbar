@@ -1064,7 +1064,11 @@ public class U {
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display disp = wm.getDefaultDisplay();
-        disp.getRealMetrics(metrics);
+
+        if(isChromeOs(context))
+            disp.getRealMetrics(metrics);
+        else
+            disp.getMetrics(metrics);
 
         return metrics;
     }
