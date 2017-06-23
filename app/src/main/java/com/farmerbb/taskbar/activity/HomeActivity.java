@@ -182,7 +182,10 @@ public class HomeActivity extends Activity {
             return false;
         });
 
-        setContentView(view);
+        if(U.isChromeOs(this))
+            finish();
+        else
+            setContentView(view);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
