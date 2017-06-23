@@ -40,7 +40,6 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -840,7 +839,7 @@ public class TaskbarService extends Service {
                 handler.post(() -> {
                     if(numOfEntries > 0 || fullLength) {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-                        DisplayMetrics metrics = getResources().getDisplayMetrics();
+                        DisplayMetrics metrics = U.getRealDisplayMetrics(this);
                         int recentsSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
@@ -1138,13 +1137,12 @@ public class TaskbarService extends Service {
         }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+            DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
             if(intent != null && U.isOPreview())
                 intent.putExtra("context_menu_fix", true);
 
-            startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+            startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
         } else
             startActivity(intent);
     }
@@ -1284,13 +1282,12 @@ public class TaskbarService extends Service {
         }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-            DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-            Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+            DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
             if(intent != null && U.isOPreview())
                 intent.putExtra("context_menu_fix", true);
 
-            startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+            startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
         } else
             startActivity(intent);
     }

@@ -33,7 +33,6 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -43,9 +42,9 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.SearchView;
+import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.ContextThemeWrapper;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -721,13 +720,12 @@ public class StartMenuService extends Service {
             }
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-                DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+                DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
                 if(intent != null && U.isOPreview())
                     intent.putExtra("context_menu_fix", true);
 
-                startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
             } else
                 startActivity(intent);
         }, shouldDelay() ? 100 : 0);

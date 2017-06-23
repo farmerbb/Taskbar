@@ -18,11 +18,10 @@ package com.farmerbb.taskbar.activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
-import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -41,13 +40,12 @@ public class InvisibleActivityAlt extends InvisibleActivity {
 
         boolean powerButtonWarning = getIntent().hasExtra("power_button_warning");
 
-        DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+        DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
         setContentView(R.layout.incognito);
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.incognitoLayout);
-        layout.setLayoutParams(new FrameLayout.LayoutParams(display.getWidth(), display.getHeight()));
+        layout.setLayoutParams(new FrameLayout.LayoutParams(metrics.widthPixels, metrics.heightPixels));
 
         if(!MenuHelper.getInstance().isStartMenuOpen() && !powerButtonWarning) finish();
 

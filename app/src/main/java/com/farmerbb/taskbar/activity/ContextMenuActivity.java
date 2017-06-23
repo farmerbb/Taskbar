@@ -30,7 +30,6 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
-import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -40,7 +39,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -101,8 +100,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        DisplayManager dm = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+        DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
         int statusBarHeight = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -119,13 +117,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = x;
-                    params.y = display.getHeight() - y - offset;
+                    params.y = metrics.heightPixels - y - offset;
                     break;
                 case "bottom_right":
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
-                    params.y = display.getHeight() - y - offset;
+                    params.y = metrics.heightPixels - y - offset;
                     break;
                 case "top_left":
                 case "top_vertical_left":
@@ -143,8 +141,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         } else {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-            int x = getIntent().getIntExtra("x", display.getWidth());
-            int y = getIntent().getIntExtra("y", display.getHeight());
+            int x = getIntent().getIntExtra("x", metrics.widthPixels);
+            int y = getIntent().getIntExtra("y", metrics.heightPixels);
             int offset = getResources().getDimensionPixelSize(R.dimen.icon_size);
 
             switch(U.getTaskbarPosition(this)) {
@@ -156,17 +154,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = offset;
-                    params.y = display.getHeight() - y - (isStartButton ? 0 : offset);
+                    params.y = metrics.heightPixels - y - (isStartButton ? 0 : offset);
                     break;
                 case "bottom_right":
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                    params.x = display.getWidth() - x;
+                    params.x = metrics.widthPixels - x;
                     params.y = offset;
                     break;
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                     params.x = offset;
-                    params.y = display.getHeight() - y - (isStartButton ? 0 : offset);
+                    params.y = metrics.heightPixels - y - (isStartButton ? 0 : offset);
                     break;
                 case "top_left":
                     params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -180,7 +178,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
                 case "top_right":
                     params.gravity = Gravity.TOP | Gravity.RIGHT;
-                    params.x = display.getWidth() - x;
+                    params.x = metrics.widthPixels - x;
                     params.y = offset;
                     break;
                 case "top_vertical_right":
@@ -190,7 +188,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
 
-            if(!U.getTaskbarPosition(this).contains("vertical") && (params.x > display.getWidth() / 2))
+            if(!U.getTaskbarPosition(this).contains("vertical") && (params.x > metrics.widthPixels / 2))
                 params.x = params.x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset;
         }
 

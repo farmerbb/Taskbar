@@ -37,7 +37,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -375,13 +374,12 @@ public class U {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static void launchMode1(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type) {
-        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+        DisplayMetrics metrics = getRealDisplayMetrics(context);
 
-        int width1 = display.getWidth() / 8;
-        int width2 = display.getWidth() - width1;
-        int height1 = display.getHeight() / 8;
-        int height2 = display.getHeight() - height1;
+        int width1 = metrics.widthPixels / 8;
+        int width2 = metrics.widthPixels - width1;
+        int height1 = metrics.heightPixels / 8;
+        int height2 = metrics.heightPixels - height1;
 
         Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
                 width1,
@@ -407,9 +405,8 @@ public class U {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, ApplicationType type) {
-        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
-
+        DisplayMetrics metrics = getRealDisplayMetrics(context);
+        
         int statusBarHeight = getStatusBarHeight(context);
         String position = getTaskbarPosition(context);
 
@@ -417,20 +414,20 @@ public class U {
         boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         int left = launchType == RIGHT && isLandscape
-                ? display.getWidth() / 2
+                ? metrics.widthPixels / 2
                 : 0;
 
         int top = launchType == RIGHT && isPortrait
-                ? display.getHeight() / 2
+                ? metrics.heightPixels / 2
                 : statusBarHeight;
 
         int right = launchType == LEFT && isLandscape
-                ? display.getWidth() / 2
-                : display.getWidth();
+                ? metrics.widthPixels / 2
+                : metrics.widthPixels;
 
         int bottom = launchType == LEFT && isPortrait
-                ? display.getHeight() / 2
-                : display.getHeight();
+                ? metrics.heightPixels / 2
+                : metrics.heightPixels;
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
@@ -468,12 +465,11 @@ public class U {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static void launchMode3(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type) {
-        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+        DisplayMetrics metrics = getRealDisplayMetrics(context);
 
-        int width1 = display.getWidth() / 2;
+        int width1 = metrics.widthPixels / 2;
         int width2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_width) / 2;
-        int height1 = display.getHeight() / 2;
+        int height1 = metrics.heightPixels / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
         Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
@@ -527,14 +523,13 @@ public class U {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     public static void launchAppLowerRight(Context context, Intent intent) {
-        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-        Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+        DisplayMetrics metrics = getRealDisplayMetrics(context);
         try {
             context.startActivity(intent, getActivityOptions(ApplicationType.FREEFORM_HACK).setLaunchBounds(new Rect(
-                    display.getWidth(),
-                    display.getHeight(),
-                    display.getWidth() + 1,
-                    display.getHeight() + 1
+                    metrics.widthPixels,
+                    metrics.heightPixels,
+                    metrics.widthPixels + 1,
+                    metrics.heightPixels + 1
             )).toBundle());
         } catch (IllegalArgumentException e) { /* Gracefully fail */ }
     }
@@ -687,7 +682,7 @@ public class U {
 
     private static int getMaxNumOfColumns(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        DisplayMetrics metrics = getRealDisplayMetrics(context);
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / metrics.density;
         int numOfColumns = 0;
 
@@ -1063,5 +1058,14 @@ public class U {
                     .putBoolean("android_x86_prefs", true)
                     .apply();
         }
+    }
+
+    public static DisplayMetrics getRealDisplayMetrics(Context context) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display disp = wm.getDefaultDisplay();
+        disp.getRealMetrics(metrics);
+
+        return metrics;
     }
 }

@@ -23,14 +23,13 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.PointerIcon;
@@ -187,13 +186,12 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             }
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-                DisplayManager dm = (DisplayManager) getContext().getSystemService(Context.DISPLAY_SERVICE);
-                Display display = dm.getDisplay(Display.DEFAULT_DISPLAY);
+                DisplayMetrics metrics = U.getRealDisplayMetrics(getContext());
 
                 if(intent != null && U.isOPreview())
                     intent.putExtra("context_menu_fix", true);
 
-                getContext().startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, display.getWidth(), display.getHeight())).toBundle());
+                getContext().startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
             } else
                 getContext().startActivity(intent);
         }, shouldDelay() ? 100 : 0);
