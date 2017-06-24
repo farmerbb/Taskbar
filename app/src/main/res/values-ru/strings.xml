@@ -295,7 +295,7 @@
 
     <string name="invalid_grid_size">Неверный размер сетки</string>
 
-    <string name="window_sizes_not_available">Размер окна не работает (пока что) в Android O</string>
+    <string name="window_sizes_not_available">Размер окна не работает (пока что) в Android 8.0</string>
 
     <string name="navigation_bar_buttons">Кнопки навигации</string>
     <string name="navigation_bar_buttons_description">Добавить кнопки в Taskbar для управлением устройством</string>

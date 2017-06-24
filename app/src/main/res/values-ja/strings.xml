@@ -295,7 +295,7 @@
 
     <string name="invalid_grid_size">グリッドサイズが無効です</string>
 
-    <string name="window_sizes_not_available">ウィンドウサイズは現在、Android O で動作ません</string>
+    <string name="window_sizes_not_available">ウィンドウサイズは現在、Android 8.0 で動作ません</string>
 
     <string name="navigation_bar_buttons">ナビゲーションバーボタン</string>
     <string name="navigation_bar_buttons_description">ナビゲーションバーの操作を実行する追加のボタンをタスクバーに追加します</string>
