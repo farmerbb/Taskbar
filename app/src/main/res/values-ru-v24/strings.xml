@@ -16,6 +16,4 @@
 
 <resources>
     <string name="pref_description_launcher">Использовать Taskbar как замену главного экрана\n\nКогда режим Freeform включен, это позволит Taskbar всегда запускать приложения в этом режиме.</string>
-    <string name="action_show">Показать</string>
-    <string name="action_hide">Скрыть</string>
 </resources>

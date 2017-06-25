@@ -24,6 +24,8 @@
     <string name="click_to_open_settings">Нажмите для запуска настроек</string>
     <string name="action_show">Показать</string>
     <string name="action_hide">Скрыть</string>
+    <string name="action_show_alt">@string/action_show</string>
+    <string name="action_hide_alt">@string/action_hide</string>
     <string name="action_quit">Выйти</string>
     <string name="action_grant_permission">Разрешить</string>
 

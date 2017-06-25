@@ -81,7 +81,6 @@ public class NotificationService extends Service {
         if(pref.getBoolean("taskbar_active", false)) {
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
                 isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
-                String label = getString(isHidden ? R.string.action_show : R.string.action_hide);
 
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -106,7 +105,9 @@ public class NotificationService extends Service {
                         .setShowWhen(false)
                         .setOngoing(true);
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                String showHideLabel;
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !U.isChromeOs(this)) {
                     String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.freeform_off : R.string.freeform_on);
 
                     Intent freeformIntent = new Intent("com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE");
@@ -115,9 +116,12 @@ public class NotificationService extends Service {
                     PendingIntent freeformPendingIntent = PendingIntent.getBroadcast(this, 0, freeformIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     mBuilder.addAction(0, freeformLabel, freeformPendingIntent);
-                }
 
-                mBuilder.addAction(0, label, receiverPendingIntent)
+                    showHideLabel = getString(isHidden ? R.string.action_show_alt : R.string.action_hide_alt);
+                } else
+                    showHideLabel = getString(isHidden ? R.string.action_show : R.string.action_hide);
+
+                mBuilder.addAction(0, showHideLabel, receiverPendingIntent)
                         .addAction(0, getString(R.string.action_quit), receiverPendingIntent2);
 
                 startForeground(8675309, mBuilder.build());

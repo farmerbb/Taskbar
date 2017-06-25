@@ -24,6 +24,8 @@
     <string name="click_to_open_settings">Click to open settings</string>
     <string name="action_show">Show Taskbar</string>
     <string name="action_hide">Hide Taskbar</string>
+    <string name="action_show_alt">Show</string>
+    <string name="action_hide_alt">Hide</string>
     <string name="action_quit">Quit</string>
     <string name="action_grant_permission">Grant permission</string>
 

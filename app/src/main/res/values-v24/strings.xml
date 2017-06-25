@@ -16,6 +16,4 @@
 
 <resources>
     <string name="pref_description_launcher">Use Taskbar as a home screen replacement\n\nWhen freeform window support is also enabled, this will allow Taskbar to always launch apps in freeform mode.</string>
-    <string name="action_show">Show</string>
-    <string name="action_hide">Hide</string>
 </resources>

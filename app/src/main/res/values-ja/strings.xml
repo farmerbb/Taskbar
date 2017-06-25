@@ -24,6 +24,8 @@
     <string name="click_to_open_settings">クリックすると設定を開きます</string>
     <string name="action_show">Taskbar を表示</string>
     <string name="action_hide">Taskbar を非表示</string>
+    <string name="action_show_alt">@string/action_show</string>
+    <string name="action_hide_alt">@string/action_hide</string>
     <string name="action_quit">終了</string>
     <string name="action_grant_permission">アクセス許可を付与</string>
 

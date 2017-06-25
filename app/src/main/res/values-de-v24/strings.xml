@@ -16,6 +16,4 @@
 
 <resources>
     <string name="pref_description_launcher">Taskbar als Homescreen verwenden</string>
-    <string name="action_show">Taskbar anzeigen</string>
-    <string name="action_hide">Taskbar verstecken</string>
 </resources>
