@@ -327,4 +327,7 @@
     <string name="color_picker_green">Green</string>
     <string name="color_picker_blue">Blue</string>
 
+    <string name="chromebook_dialog_title">@string/samsung_freeform_title</string>
+    <string name="chromebook_dialog_message">On Chromebooks, Taskbar may be hidden or overlapped by the Chrome OS shelf.\n\nIf this is the case, either right-click the shelf and select \"Autohide shelf\", or swipe away the shelf as needed using the touchscreen in order to access Taskbar.</string>
+
 </resources>

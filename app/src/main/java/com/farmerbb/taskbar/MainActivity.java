@@ -166,32 +166,17 @@ public class MainActivity extends AppCompatActivity {
                         startTaskbarService();
 
                         if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !U.isSystemApp(this)) {
-                            ApplicationInfo applicationInfo = null;
-                            try {
-                                applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
-                            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+                            if(U.isChromeOs(this)) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                builder.setTitle(R.string.chromebook_dialog_title)
+                                        .setMessage(R.string.chromebook_dialog_message)
+                                        .setPositiveButton(R.string.action_ok, (dialogInterface, i) -> showRecentAppsDialog());
 
-                            if(applicationInfo != null) {
-                                AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-                                int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
-
-                                if(mode != AppOpsManager.MODE_ALLOWED) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                    builder.setTitle(R.string.pref_header_recent_apps)
-                                            .setMessage(R.string.enable_recent_apps)
-                                            .setPositiveButton(R.string.action_ok, (dialog, which) -> {
-                                                try {
-                                                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                                                    U.showToastLong(MainActivity.this, R.string.usage_stats_message);
-                                                } catch (ActivityNotFoundException e) {
-                                                    U.showErrorDialog(MainActivity.this, "GET_USAGE_STATS");
-                                                }
-                                            }).setNegativeButton(R.string.action_cancel, null);
-
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
-                                }
-                            }
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                                dialog.setCancelable(false);
+                            } else
+                                showRecentAppsDialog();
                         }
                     } else {
                         U.showPermissionDialog(MainActivity.this);
@@ -273,6 +258,36 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
                 shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut2));
+            }
+        }
+    }
+
+    private void showRecentAppsDialog() {
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+        } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+
+        if(applicationInfo != null) {
+            AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+
+            if(mode != AppOpsManager.MODE_ALLOWED) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.pref_header_recent_apps)
+                        .setMessage(R.string.enable_recent_apps)
+                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                            try {
+                                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                                U.showToastLong(this, R.string.usage_stats_message);
+                            } catch (ActivityNotFoundException e) {
+                                U.showErrorDialog(this, "GET_USAGE_STATS");
+                            }
+                        }).setNegativeButton(R.string.action_cancel, null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCancelable(false);
             }
         }
     }
