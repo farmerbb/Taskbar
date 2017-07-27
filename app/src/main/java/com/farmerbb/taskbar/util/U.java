@@ -1065,7 +1065,8 @@ public class U {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display disp = wm.getDefaultDisplay();
 
-        if(isChromeOs(context))
+        SharedPreferences pref = getSharedPreferences(context);
+        if(isChromeOs(context) && !pref.getBoolean("chrome_os_context_menu_fix", false))
             disp.getRealMetrics(metrics);
         else
             disp.getMetrics(metrics);

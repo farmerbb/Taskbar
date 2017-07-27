@@ -82,6 +82,12 @@
         android:key="notification_settings"
         android:title="@string/notification_settings"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="chrome_os_context_menu_fix"
+        android:title="@string/pref_title_chrome_os_context_menu_fix"
+        android:summary="@string/pref_description_chrome_os_context_menu_fix"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>
