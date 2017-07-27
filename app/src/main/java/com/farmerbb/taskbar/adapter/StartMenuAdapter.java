@@ -116,13 +116,13 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 openContextMenu(entry, location);
             }
 
-            if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean("visual_feedback", true))
+            if(action == MotionEvent.ACTION_SCROLL && visualFeedbackEnabled())
                 view.setBackgroundColor(0);
 
             return false;
         });
 
-        if(pref.getBoolean("visual_feedback", true)) {
+        if(visualFeedbackEnabled()) {
             layout.setOnHoverListener((v, event) -> {
                 if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
                     int backgroundTint = pref.getBoolean("transparent_start_menu", false)
@@ -202,5 +202,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
+    }
+
+    private boolean visualFeedbackEnabled() {
+        SharedPreferences pref = U.getSharedPreferences(getContext());
+        return !U.isOPreview() && pref.getBoolean("visual_feedback", true);
     }
 }

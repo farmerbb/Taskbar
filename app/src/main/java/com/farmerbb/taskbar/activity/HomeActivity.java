@@ -250,6 +250,8 @@ public class HomeActivity extends Activity {
                     }, 250);
                 } else
                     startTaskbar();
+            } else if(U.launcherIsDefault(this)) {
+                U.startFreeformHack(this, false, false);
             }
         } else
             dialog = U.showPermissionDialog(this);
