@@ -17,6 +17,8 @@ package com.farmerbb.taskbar.service;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -89,13 +91,23 @@ public class NotificationService extends Service {
                 receiverIntent.setPackage(getPackageName());
 
                 Intent receiverIntent2 = new Intent("com.farmerbb.taskbar.QUIT");
-                receiverIntent.setPackage(getPackageName());
+                receiverIntent2.setPackage(getPackageName());
 
                 PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                 PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 PendingIntent receiverPendingIntent2 = PendingIntent.getBroadcast(this, 0, receiverIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                String id = "taskbar_notification_channel";
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    CharSequence name = getString(R.string.app_name);
+                    int importance = NotificationManager.IMPORTANCE_MIN;
+
+                    mNotificationManager.createNotificationChannel(new NotificationChannel(id, name, importance));
+                }
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, id)
                         .setSmallIcon(pref.getBoolean("app_drawer_icon", false) ? R.drawable.ic_system : R.drawable.ic_allapps)
                         .setContentIntent(contentIntent)
                         .setContentTitle(getString(R.string.taskbar_is_active))

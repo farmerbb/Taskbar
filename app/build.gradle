@@ -1,5 +1,5 @@
 ext {
-    SUPPORT_LIBRARY_VERSION = "25.4.0"
+    SUPPORT_LIBRARY_VERSION = "26.0.0"
 }
 
 buildscript {
@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
+        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
     }
 }
 
@@ -26,13 +26,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
 
         versionCode 155
         versionName "3.6"
@@ -91,8 +91,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    compile 'com.mikepenz:iconics-core:2.8.6@aar'
-    compile 'com.mikepenz:foundation-icons-typeface:3.0.0.2@aar'
+    compile 'com.mikepenz:iconics-core:2.9.0@aar'
+    compile 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
     compile 'moe.banana:toast-compat:1.0.5'
 }
 
