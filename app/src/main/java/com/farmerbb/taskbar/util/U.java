@@ -364,7 +364,7 @@ public class U {
                     context.startActivity(intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             } else
                 launchAndroidForWork(context, intent.getComponent(), bundle, userId);
         } else
@@ -395,7 +395,7 @@ public class U {
                     context.startActivity(intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             } else
                 launchAndroidForWork(context, intent.getComponent(), bundle, userId);
         } else
@@ -455,7 +455,7 @@ public class U {
                     context.startActivity(intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             } else
                 launchAndroidForWork(context, intent.getComponent(), bundle, userId);
         } else
@@ -486,7 +486,7 @@ public class U {
                     context.startActivity(intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             } else
                 launchAndroidForWork(context, intent.getComponent(), bundle, userId);
         } else
@@ -531,7 +531,7 @@ public class U {
                     metrics.widthPixels + 1,
                     metrics.heightPixels + 1
             )).toBundle());
-        } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+        } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
     }
 
     public static void checkForUpdates(Context context) {
