@@ -466,7 +466,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "show_window_sizes":
                 generateWindowSizes();
 
-                if(U.isOPreview()) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     U.showToast(this, R.string.window_sizes_not_available);
                 }
 

@@ -190,7 +190,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                 DisplayMetrics metrics = U.getRealDisplayMetrics(getContext());
 
-                if(intent != null && U.isOPreview())
+                if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     intent.putExtra("context_menu_fix", true);
 
                 getContext().startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
@@ -208,6 +208,6 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
     private boolean visualFeedbackEnabled() {
         SharedPreferences pref = U.getSharedPreferences(getContext());
-        return !U.isOPreview() && pref.getBoolean("visual_feedback", true);
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O && pref.getBoolean("visual_feedback", true);
     }
 }

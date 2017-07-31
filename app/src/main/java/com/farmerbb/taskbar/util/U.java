@@ -248,7 +248,8 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
 
-        boolean specialLaunch = isOPreview() && FreeformHackHelper.getInstance().isInFreeformWorkspace()
+        boolean specialLaunch = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                && FreeformHackHelper.getInstance().isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
@@ -300,8 +301,7 @@ public class U {
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         if(FreeformHackHelper.getInstance().isInFreeformWorkspace()
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
-                && !isOPreview())
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
             intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
 
         if(launchedFromTaskbar) {
@@ -892,7 +892,8 @@ public class U {
                 stackId = FREEFORM_WORKSPACE_STACK_ID;
                 break;
             case CONTEXT_MENU:
-                if(isOPreview()) stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    stackId = FULLSCREEN_WORKSPACE_STACK_ID;
         }
 
         if(stackId != null) {
@@ -917,11 +918,6 @@ public class U {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public static boolean isOPreview() {
-        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) || (Build.VERSION.RELEASE.equals("O") && Build.VERSION.PREVIEW_SDK_INT > 0);
     }
 
     public static boolean isChromeOs(Context context) {

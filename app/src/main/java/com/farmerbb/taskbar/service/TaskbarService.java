@@ -1139,7 +1139,7 @@ public class TaskbarService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-            if(intent != null && U.isOPreview())
+            if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 intent.putExtra("context_menu_fix", true);
 
             startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
@@ -1284,7 +1284,7 @@ public class TaskbarService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-            if(intent != null && U.isOPreview())
+            if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 intent.putExtra("context_menu_fix", true);
 
             startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());

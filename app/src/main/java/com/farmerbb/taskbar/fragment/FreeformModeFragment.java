@@ -222,7 +222,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 }
                 break;
             case "window_size":
-                if(U.isOPreview()) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     U.showToast(getActivity(), R.string.window_sizes_not_available);
                 }
 
