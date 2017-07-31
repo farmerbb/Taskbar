@@ -142,7 +142,9 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
                 return false;
             });
+        }
 
+        if(pref.getBoolean("visual_feedback", true)) {
             layout.setOnTouchListener((v, event) -> {
                 v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
                 return false;
