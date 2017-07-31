@@ -59,8 +59,8 @@ public class IconPackActivity extends AppCompatActivity {
         setFinishOnTouchOutside(false);
         setTitle(R.string.icon_pack);
 
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        appList = (ListView) findViewById(R.id.list);
+        progressBar = findViewById(R.id.progress_bar);
+        appList = findViewById(R.id.list);
 
         appListGenerator = new AppListGenerator();
         appListGenerator.execute();
@@ -97,11 +97,11 @@ public class IconPackActivity extends AppCompatActivity {
             final IconPack entry = getItem(position);
             assert entry != null;
 
-            TextView textView = (TextView) convertView.findViewById(R.id.name);
+            TextView textView = convertView.findViewById(R.id.name);
             textView.setText(entry.getName());
 
             PackageManager pm = getPackageManager();
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
+            ImageView imageView = convertView.findViewById(R.id.icon);
 
             if(entry.getPackageName().equals(getPackageName())) {
                 imageView.setImageDrawable(null);
@@ -113,7 +113,7 @@ public class IconPackActivity extends AppCompatActivity {
                 }
             }
 
-            LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
+            LinearLayout layout = convertView.findViewById(R.id.entry);
             layout.setOnClickListener(view -> {
                 SharedPreferences pref = U.getSharedPreferences(IconPackActivity.this);
                 pref.edit().putString("icon_pack", entry.getPackageName()).apply();

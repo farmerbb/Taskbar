@@ -264,7 +264,7 @@ public class StartMenuService extends Service {
 
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (StartMenuLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
-        startMenu = (GridView) layout.findViewById(R.id.start_menu);
+        startMenu = layout.findViewById(R.id.start_menu);
 
         if((shouldShowSearchBox && !hasHardwareKeyboard) || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             layout.viewHandlesBackButton();
@@ -277,12 +277,12 @@ public class StartMenuService extends Service {
         if(pref.getBoolean("transparent_start_menu", false))
             startMenu.setBackgroundColor(0);
 
-        searchView = (SearchView) layout.findViewById(R.id.search);
+        searchView = layout.findViewById(R.id.search);
 
         int backgroundTint = U.getBackgroundTint(this);
 
-        FrameLayout startMenuFrame = (FrameLayout) layout.findViewById(R.id.start_menu_frame);
-        FrameLayout searchViewLayout = (FrameLayout) layout.findViewById(R.id.search_view_layout);
+        FrameLayout startMenuFrame = layout.findViewById(R.id.start_menu_frame);
+        FrameLayout searchViewLayout = layout.findViewById(R.id.search_view_layout);
         startMenuFrame.setBackgroundColor(backgroundTint);
         searchViewLayout.setBackgroundColor(backgroundTint);
 
@@ -299,7 +299,7 @@ public class StartMenuService extends Service {
 
                             if(adapter.getCount() > 0) {
                                 View view = adapter.getView(0, null, startMenu);
-                                LinearLayout layout = (LinearLayout) view.findViewById(R.id.entry);
+                                LinearLayout layout = view.findViewById(R.id.entry);
                                 layout.performClick();
                             } else {
                                 if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
@@ -354,7 +354,7 @@ public class StartMenuService extends Service {
 
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                         new Handler().postDelayed(() -> {
-                            EditText editText = (EditText) searchView.findViewById(R.id.search_src_text);
+                            EditText editText = searchView.findViewById(R.id.search_src_text);
                             if(editText != null) {
                                 editText.requestFocus();
                                 editText.setSelection(editText.getText().length());
@@ -388,7 +388,7 @@ public class StartMenuService extends Service {
 
             searchView.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-            LinearLayout powerButton = (LinearLayout) layout.findViewById(R.id.power_button);
+            LinearLayout powerButton = layout.findViewById(R.id.power_button);
             powerButton.setOnClickListener(view -> {
                 int[] location = new int[2];
                 view.getLocationOnScreen(location);
@@ -419,7 +419,7 @@ public class StartMenuService extends Service {
         } else
             searchViewLayout.setVisibility(View.GONE);
         
-        textView = (TextView) layout.findViewById(R.id.no_apps_found);
+        textView = layout.findViewById(R.id.no_apps_found);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         

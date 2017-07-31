@@ -71,7 +71,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
         final SharedPreferences pref = U.getSharedPreferences(getContext());
 
-        TextView textView = (TextView) convertView.findViewById(R.id.name);
+        TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
         Intent intent = new Intent();
@@ -90,10 +90,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 break;
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
+        ImageView imageView = convertView.findViewById(R.id.icon);
         imageView.setImageDrawable(entry.getIcon(getContext()));
 
-        LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
+        LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), entry.getUserId(getContext()), null, false, false);

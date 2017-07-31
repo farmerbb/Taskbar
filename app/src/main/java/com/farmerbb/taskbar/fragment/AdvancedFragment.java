@@ -152,8 +152,8 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                     editText2Id = R.id.fragmentEditText2;
                 }
 
-                final EditText editText = (EditText) dialogLayout.findViewById(editTextId);
-                final EditText editText2 = (EditText) dialogLayout.findViewById(editText2Id);
+                final EditText editText = dialogLayout.findViewById(editTextId);
+                final EditText editText2 = dialogLayout.findViewById(editText2Id);
 
                 builder.setView(dialogLayout)
                         .setTitle(R.string.dashboard_grid_size)

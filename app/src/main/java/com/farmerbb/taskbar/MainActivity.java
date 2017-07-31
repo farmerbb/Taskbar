@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
         }
 
-        theSwitch = (SwitchCompat) findViewById(R.id.the_switch);
+        theSwitch = findViewById(R.id.the_switch);
         if(theSwitch != null) {
             final SharedPreferences pref = U.getSharedPreferences(this);
             theSwitch.setChecked(pref.getBoolean("taskbar_active", false));

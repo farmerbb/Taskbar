@@ -242,7 +242,7 @@ public class DashboardService extends Service {
                 cellLayout.setOnClickListener(cellOcl);
                 cellLayout.setOnHoverListener(cellOhl);
 
-                TextView empty = (TextView) cellLayout.findViewById(R.id.empty);
+                TextView empty = cellLayout.findViewById(R.id.empty);
                 empty.setBackgroundColor(accentColorAlt);
                 empty.setTextColor(accentColor);
 
@@ -540,7 +540,7 @@ public class DashboardService extends Service {
         cellLayout.setOnGenericMotionListener(ogml);
         cellLayout.setOnInterceptedLongPressListener(listener);
 
-        LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
+        LinearLayout linearLayout = cellLayout.findViewById(R.id.dashboard);
         linearLayout.addView(hostView);
 
         Bundle bundle2 = (Bundle) cellLayout.getTag();
@@ -576,7 +576,7 @@ public class DashboardService extends Service {
         mAppWidgetHost.deleteAppWidgetId(bundle.getInt("appWidgetId"));
         bundle.remove("appWidgetId");
 
-        LinearLayout linearLayout = (LinearLayout) cellLayout.findViewById(R.id.dashboard);
+        LinearLayout linearLayout = cellLayout.findViewById(R.id.dashboard);
         linearLayout.removeAllViews();
 
         cellLayout.setTag(bundle);
@@ -600,12 +600,12 @@ public class DashboardService extends Service {
     }
 
     private void addPlaceholder(int cellId) {
-        FrameLayout placeholder = (FrameLayout) cells.get(cellId).findViewById(R.id.placeholder);
+        FrameLayout placeholder = cells.get(cellId).findViewById(R.id.placeholder);
         SharedPreferences pref = U.getSharedPreferences(this);
         String providerName = pref.getString("dashboard_widget_" + Integer.toString(cellId) + "_provider", "null");
 
         if(!providerName.equals("null")) {
-            ImageView imageView = (ImageView) placeholder.findViewById(R.id.placeholder_image);
+            ImageView imageView = placeholder.findViewById(R.id.placeholder_image);
             ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
             List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());

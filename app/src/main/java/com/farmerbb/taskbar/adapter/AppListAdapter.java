@@ -71,13 +71,13 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         final String componentName = entry.getPackageName();
         final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;
 
-        TextView textView = (TextView) convertView.findViewById(R.id.name);
+        TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
-        final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+        final CheckBox checkBox = convertView.findViewById(R.id.checkbox);
         checkBox.setChecked(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt));
 
-        LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
+        LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
             if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
                 U.showToast(getContext(),
@@ -103,13 +103,13 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         final String componentName = entry.getPackageName();
         final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;
 
-        TextView textView = (TextView) convertView.findViewById(R.id.name);
+        TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
-        final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+        final CheckBox checkBox = convertView.findViewById(R.id.checkbox);
         checkBox.setChecked(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt));
 
-        LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.entry);
+        LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
             if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
                 U.showToast(getContext(),
