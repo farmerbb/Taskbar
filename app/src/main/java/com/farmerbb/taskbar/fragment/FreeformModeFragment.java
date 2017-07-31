@@ -24,6 +24,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -196,18 +198,28 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 dialog.show();
                 break;
             case "add_shortcut":
-                Intent intent = U.getShortcutIntent(getActivity());
-                intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-                intent.putExtra("duplicate", false);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getActivity().getSystemService(ShortcutManager.class);
 
-                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                homeIntent.addCategory(Intent.CATEGORY_HOME);
-                ResolveInfo defaultLauncher = getActivity().getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                    if(mShortcutManager.isRequestPinShortcutSupported()) {
+                        ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(getActivity(), "freeform_mode").build();
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    } else
+                        U.showToastLong(getActivity(), R.string.pin_shortcut_not_supported);
+                } else {
+                    Intent intent = U.getShortcutIntent(getActivity());
+                    intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+                    intent.putExtra("duplicate", false);
 
-                intent.setPackage(defaultLauncher.activityInfo.packageName);
-                getActivity().sendBroadcast(intent);
+                    Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                    homeIntent.addCategory(Intent.CATEGORY_HOME);
+                    ResolveInfo defaultLauncher = getActivity().getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-                U.showToast(getActivity(), R.string.shortcut_created);
+                    intent.setPackage(defaultLauncher.activityInfo.packageName);
+                    getActivity().sendBroadcast(intent);
+
+                    U.showToast(getActivity(), R.string.shortcut_created);
+                }
                 break;
             case "window_size":
                 if(U.isOPreview()) {
