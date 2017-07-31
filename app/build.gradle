@@ -34,7 +34,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
 
-        versionCode 159
+        versionCode 160
         versionName "3.6.2"
 
         resConfigs "en", "ja", "ru", "de"

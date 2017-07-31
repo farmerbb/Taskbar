@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
@@ -53,10 +54,16 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 context.startActivity(intent2);
             }
 
-            context.startService(taskbarIntent);
-            context.startService(startMenuIntent);
-            context.startService(dashboardIntent);
-            context.startService(notificationIntent);
+            new Handler().postDelayed(() -> {
+                context.startService(taskbarIntent);
+                context.startService(startMenuIntent);
+                context.startService(dashboardIntent);
+            }, Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 100);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                context.startForegroundService(notificationIntent);
+            else
+                context.startService(notificationIntent);
 
         } else {
             pref.edit().putBoolean("is_hidden", true).apply();
@@ -73,7 +80,11 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
             }
 
-            context.startService(notificationIntent);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                context.startForegroundService(notificationIntent);
+            else
+                context.startService(notificationIntent);
+
         }
     }
 }
