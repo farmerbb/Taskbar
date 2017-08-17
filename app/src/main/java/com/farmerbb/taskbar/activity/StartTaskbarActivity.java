@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.U;
 
@@ -32,7 +33,7 @@ public class StartTaskbarActivity extends Activity {
             Intent intent = new Intent("com.farmerbb.taskbar."
                     + (U.isServiceRunning(this, NotificationService.class) ? "QUIT" : "START"));
 
-            intent.setPackage(getPackageName());
+            intent.setPackage(BuildConfig.APPLICATION_ID);
             sendBroadcast(intent);
         } else
             setResult(RESULT_OK, U.getStartStopIntent(this));

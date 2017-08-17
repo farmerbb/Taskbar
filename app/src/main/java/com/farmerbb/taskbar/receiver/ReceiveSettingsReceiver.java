@@ -147,7 +147,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
             String contents = intent.getStringExtra("preferences");
             if(contents.length() > 0)
                 try {
-                    File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
+                    File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + BuildConfig.APPLICATION_ID + "_preferences.xml");
                     FileOutputStream output = new FileOutputStream(file);
                     output.write(contents.getBytes());
                     output.close();

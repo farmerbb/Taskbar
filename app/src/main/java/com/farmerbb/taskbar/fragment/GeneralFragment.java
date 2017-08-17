@@ -26,6 +26,7 @@ import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
@@ -114,9 +115,9 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
                 intent2.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
 
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
-                    intent2.putExtra(Settings.EXTRA_APP_PACKAGE, getActivity().getPackageName());
+                    intent2.putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID);
                 else {
-                    intent2.putExtra("app_package", getActivity().getPackageName());
+                    intent2.putExtra("app_package", BuildConfig.APPLICATION_ID);
                     intent2.putExtra("app_uid", getActivity().getApplicationInfo().uid);
                 }
 

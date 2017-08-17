@@ -35,6 +35,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.IconPack;
 import com.farmerbb.taskbar.util.IconPackManager;
@@ -103,7 +104,7 @@ public class IconPackActivity extends AppCompatActivity {
             PackageManager pm = getPackageManager();
             ImageView imageView = convertView.findViewById(R.id.icon);
 
-            if(entry.getPackageName().equals(getPackageName())) {
+            if(entry.getPackageName().equals(BuildConfig.APPLICATION_ID)) {
                 imageView.setImageDrawable(null);
             } else {
                 try {
@@ -147,7 +148,7 @@ public class IconPackActivity extends AppCompatActivity {
             else {
                 List<IconPack> finalList = new ArrayList<>();
                 IconPack dummyIconPack = new IconPack();
-                dummyIconPack.setPackageName(getPackageName());
+                dummyIconPack.setPackageName(BuildConfig.APPLICATION_ID);
                 dummyIconPack.setName(getString(R.string.icon_pack_none));
 
                 Collections.sort(list, (ip1, ip2) -> Collator.getInstance().compare(ip1.getName(), ip2.getName()));

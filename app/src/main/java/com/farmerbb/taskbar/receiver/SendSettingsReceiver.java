@@ -138,7 +138,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             StringBuilder preferences = new StringBuilder("");
 
             try {
-                File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
+                File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + BuildConfig.APPLICATION_ID + "_preferences.xml");
                 FileInputStream input = new FileInputStream(file);
                 InputStreamReader reader = new InputStreamReader(input);
                 BufferedReader buffer = new BufferedReader(reader);
