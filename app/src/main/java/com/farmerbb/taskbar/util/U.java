@@ -186,7 +186,7 @@ public class U {
         cancelToast();
 
         ToastInterface toast;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
                 || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
             toast = new ToastFrameworkImpl(context, message, length);
         else
