@@ -165,19 +165,8 @@ public class MainActivity extends AppCompatActivity {
                         boolean firstRun = pref.getBoolean("first_run", true);
                         startTaskbarService();
 
-                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !U.isSystemApp(this)) {
-                            if(U.isChromeOs(this)) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                                builder.setTitle(R.string.chromebook_dialog_title)
-                                        .setMessage(R.string.chromebook_dialog_message)
-                                        .setPositiveButton(R.string.action_ok, (dialogInterface, i) -> showRecentAppsDialog());
-
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                                dialog.setCancelable(false);
-                            } else
-                                showRecentAppsDialog();
-                        }
+                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !U.isSystemApp(this))
+                            showRecentAppsDialog();
                     } else {
                         U.showPermissionDialog(MainActivity.this);
                         compoundButton.setChecked(false);

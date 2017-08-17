@@ -1063,7 +1063,7 @@ public class U {
         Display disp = wm.getDefaultDisplay();
 
         SharedPreferences pref = getSharedPreferences(context);
-        if(isChromeOs(context) && !pref.getBoolean("chrome_os_context_menu_fix", false))
+        if(isChromeOs(context) && !pref.getBoolean("chrome_os_context_menu_fix", true))
             disp.getRealMetrics(metrics);
         else
             disp.getMetrics(metrics);
