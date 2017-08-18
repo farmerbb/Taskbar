@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -24,7 +25,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.UserManager;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 
 import com.farmerbb.taskbar.R;
@@ -60,17 +63,39 @@ public class DummyActivity extends Activity {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             } else if(getIntent().hasExtra("device_admin")) {
-                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, new ComponentName(this, LockDeviceReceiver.class));
-                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.device_admin_description));
+                SharedPreferences pref = U.getSharedPreferences(this);
 
-                try {
-                    startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    U.showToast(this, R.string.lock_device_not_supported);
-
-                    finish();
+                int theme = -1;
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        theme = R.style.AppTheme;
+                        break;
+                    case "dark":
+                        theme = R.style.AppTheme_Dark;
+                        break;
                 }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, theme));
+                builder.setTitle(R.string.permission_dialog_title)
+                        .setMessage(R.string.device_admin_disclosure)
+                        .setNegativeButton(R.string.action_cancel, (dialog, which) -> new Handler().post(this::finish))
+                        .setPositiveButton(R.string.action_activate, (dialog, which) -> {
+                            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, new ComponentName(this, LockDeviceReceiver.class));
+                            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.device_admin_description));
+
+                            try {
+                                startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                U.showToast(this, R.string.lock_device_not_supported);
+
+                                finish();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCancelable(false);
             } else if(getIntent().hasExtra("start_freeform_hack")) {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N

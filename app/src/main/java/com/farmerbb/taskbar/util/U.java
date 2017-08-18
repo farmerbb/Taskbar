@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.util;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -137,6 +138,9 @@ public class U {
                 intent.putExtra("device_admin", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
+
+                if(context instanceof Activity)
+                    ((Activity) context).overridePendingTransition(0, 0);
             });
         }
     }
