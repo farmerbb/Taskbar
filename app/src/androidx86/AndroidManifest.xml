@@ -22,11 +22,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.farmerbb.taskbar" >
           android:versionCode="1"
-          android:versionName="3.6-androidx86" >
+          android:versionName="3.6.3-androidx86" >
 
     <uses-sdk
-        android:minSdkVersion="25"
-        android:targetSdkVersion="25" />
+        android:minSdkVersion="26"
+        android:targetSdkVersion="26" />
 
     <permission android:name="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
         android:protectionLevel="signature" />

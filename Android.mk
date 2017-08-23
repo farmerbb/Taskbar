@@ -19,6 +19,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
         android-support-v4 \
         android-support-v7-appcompat \
         android-support-v7-recyclerview \
+        android-support-transition \
         android-support-design
 
 LOCAL_PROGUARD_ENABLED := disabled
@@ -32,6 +33,7 @@ LOCAL_AAPT_FLAGS := \
         --rename-manifest-package com.farmerbb.taskbar.androidx86 \
         --extra-packages android.support.v7.appcompat \
         --extra-packages android.support.v7.recyclerview \
+        --extra-packages android.support.transition \
         --extra-packages android.support.design
 
 include $(BUILD_PACKAGE)
