@@ -590,7 +590,8 @@ public class StartMenuService extends Service {
     }
     
     private void toggleStartMenu(boolean shouldReset) {
-        if(shouldReset) startMenu.setSelection(0);
+        if(shouldReset)
+            new Handler().post(() -> startMenu.setSelection(0));
         
         if(layout.getVisibility() == View.GONE)
             showStartMenu();
