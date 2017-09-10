@@ -161,7 +161,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu(final AppEntry entry, final int[] location) {
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 
         new Handler().postDelayed(() -> {
             SharedPreferences pref = U.getSharedPreferences(getContext());

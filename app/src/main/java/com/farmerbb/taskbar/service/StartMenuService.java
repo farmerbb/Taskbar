@@ -103,19 +103,12 @@ public class StartMenuService extends Service {
 
     private List<String> currentStartMenuIds = new ArrayList<>();
 
-    private View.OnClickListener ocl = view -> toggleStartMenu(true);
+    private View.OnClickListener ocl = view -> toggleStartMenu();
     
     private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            toggleStartMenu(true);
-        }
-    };
-
-    private BroadcastReceiver toggleReceiverAlt = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            toggleStartMenu(false);
+            toggleStartMenu();
         }
     };
 
@@ -136,7 +129,21 @@ public class StartMenuService extends Service {
     private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            hideStartMenu();
+            hideStartMenu(true);
+        }
+    };
+
+    private BroadcastReceiver hideReceiverNoReset = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            hideStartMenu(false);
+        }
+    };
+
+    private BroadcastReceiver resetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            startMenu.setSelection(0);
         }
     };
 
@@ -408,7 +415,7 @@ public class StartMenuService extends Service {
             searchViewLayout.setOnClickListener(view -> searchView.setIconified(false));
 
             startMenu.setOnItemClickListener((parent, view, position, id) -> {
-                hideStartMenu();
+                hideStartMenu(true);
 
                 AppEntry entry = (AppEntry) parent.getAdapter().getItem(position);
                 U.launchApp(StartMenuService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(StartMenuService.this), null, false, false);
@@ -424,16 +431,18 @@ public class StartMenuService extends Service {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         
         lbm.unregisterReceiver(toggleReceiver);
-        lbm.unregisterReceiver(toggleReceiverAlt);
         lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(hideReceiverNoReset);
         lbm.unregisterReceiver(showSpaceReceiver);
         lbm.unregisterReceiver(hideSpaceReceiver);
+        lbm.unregisterReceiver(resetReceiver);
 
         lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
-        lbm.registerReceiver(toggleReceiverAlt, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU_ALT"));
         lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.registerReceiver(hideReceiverNoReset, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
         lbm.registerReceiver(showSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_START_MENU_SPACE"));
         lbm.registerReceiver(hideSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_SPACE"));
+        lbm.registerReceiver(resetReceiver, new IntentFilter("com.farmerbb.taskbar.RESET_START_MENU"));
 
         handler = new Handler();
         refreshApps(true);
@@ -589,14 +598,11 @@ public class StartMenuService extends Service {
         thread.start();
     }
     
-    private void toggleStartMenu(boolean shouldReset) {
-        if(shouldReset)
-            new Handler().post(() -> startMenu.setSelection(0));
-        
+    private void toggleStartMenu() {
         if(layout.getVisibility() == View.GONE)
             showStartMenu();
         else
-            hideStartMenu();
+            hideStartMenu(true);
     }
 
     @SuppressWarnings("deprecation")
@@ -634,13 +640,15 @@ public class StartMenuService extends Service {
             if(searchView.getVisibility() == View.VISIBLE) searchView.requestFocus();
 
             refreshApps(false);
+
+            new Handler().postDelayed(() -> layout.setAlpha(1), 100);
         }
     }
 
-    private void hideStartMenu() {
+    private void hideStartMenu(boolean shouldReset) {
         if(layout.getVisibility() == View.VISIBLE) {
             layout.setOnClickListener(null);
-            layout.setVisibility(View.INVISIBLE);
+            layout.setAlpha(0);
 
             MenuHelper.getInstance().setStartMenuOpen(false);
 
@@ -652,9 +660,12 @@ public class StartMenuService extends Service {
                 searchView.setIconified(true);
                 hasSubmittedQuery = false;
 
+                if(shouldReset)
+                    startMenu.setSelection(0);
+
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
-            }, 250);
+            }, 100);
         }
     }
     
@@ -669,10 +680,11 @@ public class StartMenuService extends Service {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
 
         lbm.unregisterReceiver(toggleReceiver);
-        lbm.unregisterReceiver(toggleReceiverAlt);
         lbm.unregisterReceiver(hideReceiver);
+        lbm.unregisterReceiver(hideReceiverNoReset);
         lbm.unregisterReceiver(showSpaceReceiver);
         lbm.unregisterReceiver(hideSpaceReceiver);
+        lbm.unregisterReceiver(resetReceiver);
 
         lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
     }
@@ -700,7 +712,7 @@ public class StartMenuService extends Service {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu(final int[] location) {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 
         new Handler().postDelayed(() -> {
             SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
