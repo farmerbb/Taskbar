@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.UserManager;
@@ -57,20 +59,33 @@ public class IconCache {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         String name = appInfo.getComponentName().flattenToString() + ":" + userManager.getSerialNumberForUser(appInfo.getUser());
 
-        Drawable drawable;
-        Drawable loadedIcon = null;
+        BitmapDrawable drawable;
 
         synchronized (drawables) {
             drawable = drawables.get(name);
             if(drawable == null) {
-                loadedIcon = loadIcon(context, pm, appInfo);
+                Drawable loadedIcon = loadIcon(context, pm, appInfo);
 
                 if(loadedIcon instanceof BitmapDrawable)
-                    drawables.put(name, (BitmapDrawable) loadedIcon);
+                    drawable = (BitmapDrawable) loadedIcon;
+                else {
+                    int width = Math.max(loadedIcon.getIntrinsicWidth(), 1);
+                    int height = Math.max(loadedIcon.getIntrinsicHeight(), 1);
+
+                    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+
+                    loadedIcon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                    loadedIcon.draw(canvas);
+
+                    drawable = new BitmapDrawable(context.getResources(), bitmap);
+                }
+
+                drawables.put(name, drawable);
             }
         }
 
-        return drawable == null ? loadedIcon : drawable;
+        return drawable;
     }
 
     private Drawable loadIcon(Context context, PackageManager pm, LauncherActivityInfo appInfo) {
