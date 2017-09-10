@@ -590,18 +590,18 @@ public class StartMenuService extends Service {
     }
     
     private void toggleStartMenu(boolean shouldReset) {
+        if(shouldReset) startMenu.setSelection(0);
+        
         if(layout.getVisibility() == View.GONE)
-            showStartMenu(shouldReset);
+            showStartMenu();
         else
             hideStartMenu();
     }
 
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    private void showStartMenu(boolean shouldReset) {
+    private void showStartMenu() {
         if(layout.getVisibility() == View.GONE) {
-            if(shouldReset) startMenu.setSelection(0);
-
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
