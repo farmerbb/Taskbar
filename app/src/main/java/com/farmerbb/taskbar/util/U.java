@@ -1083,7 +1083,14 @@ public class U {
 
     public static boolean shouldCollapse(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getBoolean("hide_taskbar", true)
-                && (isChromeOs(context) || !FreeformHackHelper.getInstance().isInFreeformWorkspace());
+        if(pref.getBoolean("hide_taskbar", true)) {
+            if(isChromeOs(context))
+                return true;
+            else {
+                FreeformHackHelper helper = FreeformHackHelper.getInstance();
+                return !helper.isInFreeformWorkspace();
+            }
+        } else
+            return false;
     }
 }
