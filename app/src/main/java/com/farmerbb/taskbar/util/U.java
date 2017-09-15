@@ -1088,7 +1088,7 @@ public class U {
                 return true;
             else {
                 FreeformHackHelper helper = FreeformHackHelper.getInstance();
-                return !helper.isInFreeformWorkspace();
+                return !helper.isFreeformHackActive();
             }
         } else
             return false;
