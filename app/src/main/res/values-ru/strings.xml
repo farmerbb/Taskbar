@@ -329,8 +329,8 @@
     <string name="color_picker_green">Green</string>
     <string name="color_picker_blue">Blue</string>
 
-    <string name="pref_title_chrome_os_context_menu_fix">Chrome OS context menu fix</string>
-    <string name="pref_description_chrome_os_context_menu_fix">Toggle this setting if context menus look out of place (for example, when using Taskbar alongside the Chrome OS dock)</string>
+    <string name="pref_title_chrome_os_context_menu_fix">Chrome OS dock compatibility fix</string>
+    <string name="pref_description_chrome_os_context_menu_fix">Enable this if using Taskbar alongside the Chrome OS dock</string>
 
     <string name="pin_shortcut_not_supported">Your launcher doesn\'t support adding shortcuts from other apps.\n\nPlease manually add the shortcut from your launcher\'s \"Widgets\" menu.</string>
 
