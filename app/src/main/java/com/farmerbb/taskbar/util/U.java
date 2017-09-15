@@ -354,7 +354,7 @@ public class U {
                 break;
         }
 
-        if(pref.getBoolean("hide_taskbar", true) && !FreeformHackHelper.getInstance().isInFreeformWorkspace())
+        if(shouldCollapse(context))
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
         else
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
@@ -1079,5 +1079,11 @@ public class U {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_PHONE;
+    }
+
+    public static boolean shouldCollapse(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getBoolean("hide_taskbar", true)
+                && (isChromeOs(context) || !FreeformHackHelper.getInstance().isInFreeformWorkspace());
     }
 }
