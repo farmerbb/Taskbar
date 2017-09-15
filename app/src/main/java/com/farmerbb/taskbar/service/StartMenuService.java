@@ -641,7 +641,14 @@ public class StartMenuService extends Service {
 
             refreshApps(false);
 
-            new Handler().postDelayed(() -> layout.setAlpha(1), 100);
+            new Handler().postDelayed(() -> {
+                layout.setAlpha(1);
+
+                if(U.isChromeOs(this)) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
+                }
+            }, 100);
         }
     }
 
