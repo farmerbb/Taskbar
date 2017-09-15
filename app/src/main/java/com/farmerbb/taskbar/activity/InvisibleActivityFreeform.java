@@ -90,6 +90,15 @@ public class InvisibleActivityFreeform extends Activity {
             }
         }
 
+        if(U.isChromeOs(this)) {
+            FreeformHackHelper helper = FreeformHackHelper.getInstance();
+            helper.setFreeformHackActive(true);
+            helper.setInFreeformWorkspace(true);
+            
+            proceedWithOnCreate = false;
+            super.finish();
+        }
+
         if(proceedWithOnCreate) {
             // Detect outside touches, and pass them through to the underlying activity
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
