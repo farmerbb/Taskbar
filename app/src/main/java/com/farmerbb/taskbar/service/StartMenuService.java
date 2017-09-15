@@ -619,7 +619,7 @@ public class StartMenuService extends Service {
             boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
-            if(!onHomeScreen || inFreeformMode) {
+            if(!U.isChromeOs(this) && (!onHomeScreen || inFreeformMode)) {
                 Class clazz = inFreeformMode && Build.VERSION.SDK_INT < Build.VERSION_CODES.O
                         ? InvisibleActivityAlt.class
                         : InvisibleActivity.class;
