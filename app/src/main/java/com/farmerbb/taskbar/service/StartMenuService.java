@@ -612,6 +612,9 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+                layout.setAlpha(1);
+
             MenuHelper.getInstance().setStartMenuOpen(true);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
@@ -642,12 +645,11 @@ public class StartMenuService extends Service {
             refreshApps(false);
 
             new Handler().postDelayed(() -> {
-                layout.setAlpha(1);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    layout.setAlpha(1);
 
-                if(U.isChromeOs(this)) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
-                }
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
             }, 100);
         }
     }
