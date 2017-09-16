@@ -640,7 +640,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             else {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.RESET_START_MENU"));
 
-                if(shouldHideTaskbar && U.shouldCollapse(this))
+                if(shouldHideTaskbar && U.shouldCollapse(this, true))
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
             }
         }

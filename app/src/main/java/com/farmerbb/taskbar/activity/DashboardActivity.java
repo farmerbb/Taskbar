@@ -172,7 +172,7 @@ public class DashboardActivity extends Activity {
 
         if(shouldFinish) {
             if(shouldCollapse) {
-                if(U.shouldCollapse(this))
+                if(U.shouldCollapse(this, true))
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                 else
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

@@ -219,6 +219,13 @@ public class InvisibleActivityFreeform extends Activity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        possiblyHideTaskbar();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
 
@@ -249,8 +256,7 @@ public class InvisibleActivityFreeform extends Activity {
     private void possiblyHideTaskbar() {
         new Handler().postDelayed(() -> {
             if(!doNotHide) {
-                SharedPreferences pref = U.getSharedPreferences(this);
-                if(pref.getBoolean("hide_taskbar", true) && !LauncherHelper.getInstance().isOnHomeScreen())
+                if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen())
                     LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                 else
                     LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

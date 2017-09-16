@@ -398,7 +398,7 @@ public class TaskbarService extends Service {
             backButton.setVisibility(View.VISIBLE);
             backButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK);
-                if(U.shouldCollapse(this))
+                if(U.shouldCollapse(this, false))
                     hideTaskbar(true);
             });
 
@@ -406,7 +406,7 @@ public class TaskbarService extends Service {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.showInputMethodPicker();
 
-                if(U.shouldCollapse(this))
+                if(U.shouldCollapse(this, false))
                     hideTaskbar(true);
 
                 return true;
@@ -418,7 +418,7 @@ public class TaskbarService extends Service {
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.showInputMethodPicker();
 
-                    if(U.shouldCollapse(this))
+                    if(U.shouldCollapse(this, false))
                         hideTaskbar(true);
                 }
                 return true;
@@ -432,7 +432,7 @@ public class TaskbarService extends Service {
             homeButton.setVisibility(View.VISIBLE);
             homeButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_HOME);
-                if(U.shouldCollapse(this))
+                if(U.shouldCollapse(this, false))
                     hideTaskbar(true);
             });
 
@@ -444,7 +444,7 @@ public class TaskbarService extends Service {
                     startActivity(voiceSearchIntent);
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
 
-                if(U.shouldCollapse(this))
+                if(U.shouldCollapse(this, false))
                     hideTaskbar(true);
 
                 return true;
@@ -460,7 +460,7 @@ public class TaskbarService extends Service {
                         startActivity(voiceSearchIntent);
                     } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
 
-                    if(U.shouldCollapse(this))
+                    if(U.shouldCollapse(this, false))
                         hideTaskbar(true);
                 }
                 return true;
@@ -474,14 +474,14 @@ public class TaskbarService extends Service {
             recentsButton.setVisibility(View.VISIBLE);
             recentsButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_RECENTS);
-                if(U.shouldCollapse(this))
+                if(U.shouldCollapse(this, false))
                     hideTaskbar(true);
             });
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 recentsButton.setOnLongClickListener(v -> {
                     U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
-                    if(U.shouldCollapse(this))
+                    if(U.shouldCollapse(this, false))
                         hideTaskbar(true);
 
                     return true;
@@ -491,7 +491,7 @@ public class TaskbarService extends Service {
                     if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                             && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                         U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
-                        if(U.shouldCollapse(this))
+                        if(U.shouldCollapse(this, false))
                             hideTaskbar(true);
                     }
                     return true;

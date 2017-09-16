@@ -193,7 +193,7 @@ public class HomeActivity extends Activity {
     }
 
     private void setWallpaper() {
-        if(U.shouldCollapse(this))
+        if(U.shouldCollapse(this, true))
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
         else
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
@@ -284,7 +284,7 @@ public class HomeActivity extends Activity {
         if(!bootToFreeform()) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
 
-            if(U.shouldCollapse(this))
+            if(U.shouldCollapse(this, true))
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
             else
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));

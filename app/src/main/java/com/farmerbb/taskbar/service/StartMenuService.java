@@ -309,7 +309,7 @@ public class StartMenuService extends Service {
                                 LinearLayout layout = view.findViewById(R.id.entry);
                                 layout.performClick();
                             } else {
-                                if(U.shouldCollapse(StartMenuService.this))
+                                if(U.shouldCollapse(StartMenuService.this, true))
                                     LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                                 else
                                     LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
