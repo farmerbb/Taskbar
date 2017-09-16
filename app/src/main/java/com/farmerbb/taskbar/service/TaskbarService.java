@@ -65,6 +65,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -658,12 +659,10 @@ public class TaskbarService extends Service {
                 }
 
                 // Sort apps by either most recently used, or most time used
-                if(!runningAppsOnly) {
-                    if(sortOrder.contains("most_used")) {
-                        Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground()));
-                    } else {
-                        Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed()));
-                    }
+                if(!runningAppsOnly && sortOrder.contains("most_used")) {
+                    Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getTotalTimeInForeground(), us1.getTotalTimeInForeground()));
+                } else {
+                    Collections.sort(usageStatsList3, (us1, us2) -> Long.compare(us2.getLastTimeUsed(), us1.getLastTimeUsed()));
                 }
 
                 // Filter out any duplicate entries
@@ -1301,21 +1300,33 @@ public class TaskbarService extends Service {
     }
 
     @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.M)
     private List<AppEntry> getAppEntriesUsingActivityManager(int maxNum) {
         ActivityManager mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> usageStatsList = mActivityManager.getRunningTasks(maxNum);
+        List<ActivityManager.RecentTaskInfo> usageStatsList = mActivityManager.getRecentTasks(maxNum, 0);
         List<AppEntry> entries = new ArrayList<>();
 
-        for(ActivityManager.RunningTaskInfo usageStats : usageStatsList) {
-            AppEntry newEntry = new AppEntry(
-                    usageStats.baseActivity.getPackageName(),
-                    null,
-                    null,
-                    null,
-                    false
-            );
+        for(int i = 0; i < usageStatsList.size(); i++) {
+            ActivityManager.RecentTaskInfo recentTaskInfo = usageStatsList.get(i);
+            if(recentTaskInfo.id != -1) {
+                String packageName = recentTaskInfo.baseActivity.getPackageName();
+                AppEntry newEntry = new AppEntry(
+                        packageName,
+                        null,
+                        null,
+                        null,
+                        false
+                );
 
-            entries.add(newEntry);
+                try {
+                    Field field = ActivityManager.RecentTaskInfo.class.getField("firstActiveTime");
+                    newEntry.setLastTimeUsed(field.getLong(recentTaskInfo));
+                } catch (Exception e) {
+                    newEntry.setLastTimeUsed(i);
+                }
+
+                entries.add(newEntry);
+            }
         }
 
         return entries;
