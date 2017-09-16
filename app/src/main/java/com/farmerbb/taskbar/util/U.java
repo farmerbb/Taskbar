@@ -1060,6 +1060,7 @@ public class U {
                     .putString("recents_amount", "running_apps_only")
                     .putString("refresh_frequency", "0")
                     .putString("max_num_of_recents", "2147483647")
+                    .putString("sort_order", "true")
                     .putBoolean("full_length", true)
                     .putBoolean("dashboard", true)
                     .putBoolean("android_x86_prefs", true)
