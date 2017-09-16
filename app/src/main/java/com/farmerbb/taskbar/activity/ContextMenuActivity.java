@@ -467,7 +467,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 generateWindowSizes();
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    U.showToast(this, R.string.window_sizes_not_available);
+                    U.showToastLong(this, R.string.window_sizes_not_available);
                 }
 
                 getListView().setOnItemLongClickListener((parent, view, position, id) -> {

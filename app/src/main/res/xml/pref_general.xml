@@ -78,15 +78,15 @@
         android:key="start_on_boot"
         android:title="@string/pref_title_start_on_boot"/>
 
-    <Preference
-        android:key="notification_settings"
-        android:title="@string/notification_settings"/>
-
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="chrome_os_context_menu_fix"
         android:title="@string/pref_title_chrome_os_context_menu_fix"
         android:summary="@string/pref_description_chrome_os_context_menu_fix"/>
+
+    <Preference
+        android:key="notification_settings"
+        android:title="@string/notification_settings"/>
 
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
