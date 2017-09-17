@@ -669,8 +669,10 @@ public class StartMenuService extends Service {
                 searchView.setIconified(true);
                 hasSubmittedQuery = false;
 
-                if(shouldReset)
+                if(shouldReset) {
+                    startMenu.smoothScrollBy(0, 0);
                     startMenu.setSelection(0);
+                }
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
