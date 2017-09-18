@@ -689,6 +689,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             generateMenu();
 
             getListView().setOnItemLongClickListener(null);
+
+            U.cancelToast();
         } else {
             if(contextMenuFix && !showStartMenu)
                 U.startFreeformHack(this, false, false);

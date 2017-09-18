@@ -67,8 +67,8 @@
         <item>Most time used (ascending)</item>
     </string-array>
     <string-array name="pref_sort_order_alt">
-        <item>Recently used (descending)</item>
-        <item>Recently used (ascending)</item>
+        <item>Recently launched (descending)</item>
+        <item>Recently launched (ascending)</item>
     </string-array>
 
     <string name="pref_header_advanced">Advanced features</string>

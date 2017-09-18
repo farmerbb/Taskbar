@@ -201,7 +201,7 @@ public class U {
         ToastHelper.getInstance().setLastToast(toast);
     }
 
-    private static void cancelToast() {
+    public static void cancelToast() {
         ToastInterface toast = ToastHelper.getInstance().getLastToast();
         if(toast != null) toast.cancel();
     }
