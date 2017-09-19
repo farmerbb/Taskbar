@@ -496,6 +496,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 U.launchApp(getApplicationContext(), packageName, componentName, userId, windowSize, false, true);
 
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    U.cancelToast();
+
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 contextMenuFix = false;
@@ -690,7 +693,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getListView().setOnItemLongClickListener(null);
 
-            U.cancelToast();
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                U.cancelToast();
         } else {
             if(contextMenuFix && !showStartMenu)
                 U.startFreeformHack(this, false, false);
