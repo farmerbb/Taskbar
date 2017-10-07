@@ -113,6 +113,7 @@ public class TaskbarService extends Service {
     private boolean taskbarHiddenTemporarily = false;
     private boolean isRefreshingRecents = false;
     private boolean isFirstStart = true;
+    private boolean isScreenOff = false;
 
     private boolean startThread2 = false;
     private boolean stopThread2 = false;
@@ -179,6 +180,20 @@ public class TaskbarService extends Service {
         public void onReceive(Context context, Intent intent) {
             if(startButton.getVisibility() == View.GONE)
                 layout.setVisibility(View.VISIBLE);
+        }
+    };
+    
+    private BroadcastReceiver screenOffReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            isScreenOff = true;
+        }
+    };
+
+    private BroadcastReceiver screenOnReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            isScreenOff = false;
         }
     };
     
@@ -524,12 +539,18 @@ public class TaskbarService extends Service {
         lbm.unregisterReceiver(startMenuAppearReceiver);
         lbm.unregisterReceiver(startMenuDisappearReceiver);
 
+        safelyUnregisterReceiver(screenOffReceiver);
+        safelyUnregisterReceiver(screenOnReceiver);
+
         lbm.registerReceiver(showReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_TASKBAR"));
         lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_TASKBAR"));
         lbm.registerReceiver(tempShowReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
         lbm.registerReceiver(tempHideReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
         lbm.registerReceiver(startMenuAppearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));
         lbm.registerReceiver(startMenuDisappearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        
+        registerReceiver(screenOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+        registerReceiver(screenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
         
         startRefreshingRecents();
 
@@ -590,6 +611,8 @@ public class TaskbarService extends Service {
     @SuppressWarnings("Convert2streamapi")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private void updateRecentApps(final boolean firstRefresh) {
+        if(isScreenOff) return;
+
         SharedPreferences pref = U.getSharedPreferences(this);
         final PackageManager pm = getPackageManager();
         final List<AppEntry> entries = new ArrayList<>();
@@ -1049,7 +1072,7 @@ public class TaskbarService extends Service {
     }
 
     private boolean checkPositionChange() {
-        if(layout != null) {
+        if(!isScreenOff && layout != null) {
             int[] location = new int[2];
             layout.getLocationOnScreen(location);
 
@@ -1111,6 +1134,9 @@ public class TaskbarService extends Service {
         lbm.unregisterReceiver(tempHideReceiver);
         lbm.unregisterReceiver(startMenuAppearReceiver);
         lbm.unregisterReceiver(startMenuDisappearReceiver);
+
+        safelyUnregisterReceiver(screenOffReceiver);
+        safelyUnregisterReceiver(screenOnReceiver);
 
         isFirstStart = true;
     }
@@ -1362,5 +1388,11 @@ public class TaskbarService extends Service {
 
         List<ResolveInfo> ris = getPackageManager().queryIntentActivities(intentToResolve, 0);
         return ris != null && ris.size() > 0;
+    }
+    
+    private void safelyUnregisterReceiver(BroadcastReceiver receiver) {
+        try {
+            unregisterReceiver(receiver);
+        } catch (IllegalArgumentException e) { /* Gracefully fail */ }
     }
 }
