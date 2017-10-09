@@ -32,4 +32,7 @@
     <color name="green">#00FF00</color>
     <color name="blue">#0000FF</color>
     <color name="alpha">#80808080</color>
+
+    <color name="ic_launcher_adaptive_bg">#4557A6</color>
+    <color name="ic_freeform_mode_adaptive_bg">#4790CD</color>
 </resources>
