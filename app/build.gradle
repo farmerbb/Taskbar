@@ -27,15 +27,15 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
         minSdkVersion 21
         targetSdkVersion 26
 
-        versionCode 166
-        versionName "3.7"
+        versionCode 167
+        versionName "3.7.1"
 
         resConfigs "en", "ja", "ru", "de"
 
