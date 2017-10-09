@@ -37,7 +37,6 @@ import android.content.pm.ShortcutInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -792,11 +791,9 @@ public class U {
         shortcutIntent.setAction(Intent.ACTION_MAIN);
         shortcutIntent.putExtra("is_launching_shortcut", true);
 
-        BitmapDrawable drawable = (BitmapDrawable) context.getDrawable(R.mipmap.ic_freeform_mode);
-
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        if(drawable != null) intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, drawable.getBitmap());
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_freeform_mode));
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.pref_header_freeform));
 
         return intent;
@@ -807,11 +804,9 @@ public class U {
         shortcutIntent.setAction(Intent.ACTION_MAIN);
         shortcutIntent.putExtra("is_launching_shortcut", true);
 
-        BitmapDrawable drawable = (BitmapDrawable) context.getDrawable(R.mipmap.ic_launcher);
-
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        if(drawable != null) intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, drawable.getBitmap());
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_launcher));
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.start_taskbar));
 
         return intent;
