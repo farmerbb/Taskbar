@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">任务栏</string>
+    <string name="app_name_debug">任务栏 (Debug)</string>
+    <string name="debug_build">Debug build</string>
+
+    <string name="taskbar_is_active">任务栏正在运行</string>
+    <string name="click_to_open_settings">点击打开设置</string>
+    <string name="action_show">显示任务栏</string>
+    <string name="action_hide">隐藏任务栏</string>
+    <string name="action_show_alt">显示</string>
+    <string name="action_hide_alt">隐藏</string>
+    <string name="action_quit">退出</string>
+    <string name="action_grant_permission">授予权限</string>
+
+    <string name="permission_dialog_title">需要权限</string>
+    <string name="permission_dialog_message">任务栏需要在其他应用之上显示的权限才能开始。\n\n请点击 \"授予权限\" 并确保 \"允许在其他应用之上显示\" 已启用。</string>
+
+    <string name="pref_header_general">常规设置</string>
+    <string name="pref_title_start_menu_layout">开始菜单布局</string>
+    <string name="pref_title_background_tint">背景颜色</string>
+    <string name="pref_title_scrollbar">在开始菜单显示滚动栏</string>
+    <string name="pref_title_start_on_boot">开机自启</string>
+
+    <string-array name="pref_start_menu_list">
+        <item>列表</item>
+        <item>网格</item>
+    </string-array>
+
+    <string name="pref_header_recent_apps">最近应用</string>
+
+    <string name="pref_title_enable_recents">启用/停用使用情况访问</string>
+    <string name="pref_title_recents_refresh_interval">刷新率</string>
+
+    <string name="pref_title_amount_of_recents">显示已启动的应用</string>
+    <string-array name="pref_recents_amount">
+        <item>过去一天内</item>
+        <item>启动任务栏后</item>
+    </string-array>
+    <string-array name="pref_recents_amount_alt">
+        <item>过去一天内</item>
+        <item>启动任务栏后</item>
+        <item>仅限运行中的应用</item>
+    </string-array>
+
+    <string name="pref_title_sort_order">排列顺序</string>
+    <string-array name="pref_sort_order">
+        <item>最近使用 (降序)</item>
+        <item>最近使用 (升序)</item>
+        <item>最常使用 (降序)</item>
+        <item>最常使用 (升序)</item>
+    </string-array>
+    <string-array name="pref_sort_order_alt">
+        <item>最近启动 (降序)</item>
+        <item>最近启动 (升序)</item>
+    </string-array>
+
+    <string name="pref_header_advanced">高级功能</string>
+
+    <string name="pref_title_freeform_hack">自由式窗口支持</string>
+    <string name="pref_description_freeform_hack">允许任务栏在自由式窗口模式启动应用，带来更逼真的电脑桌面体验。\n\n这个功能还在试验阶段，可能会与标准分屏多任务发生冲突。</string>
+
+    <string name="pref_header_about">关于任务栏</string>
+    <string name="pref_about_description">任务栏: Android 上 PC 风格的高效率工具\n\n&#169; 2017 Braden Farmer\nApp logo by Mark Morilla\n\n点击此处检查更新或者留下评价! %1$s</string>
+    <string name="pref_about_description_alt">任务栏: Android 上 PC 风格的高效率工具\n\n&#169; 2017 Braden Farmer\nApp logo by Mark Morilla</string>
+
+    <string name="pref_title_hide_taskbar">选择项目时收起任务栏</string>
+
+    <string name="pref_title_launcher">替换主屏幕</string>
+    <string name="pref_description_launcher">使用任务栏作为主屏幕替换</string>
+
+    <string name="set_wallpaper">使用&#8230;设置壁纸</string>
+    <string name="pref_disable_animations">更快速地切换应用</string>
+
+    <string name="pref_title_position">在屏幕上的位置</string>
+    <string-array name="pref_position_list">
+        <item>左下 (横向)</item>
+        <item>左下 (纵向)</item>
+        <item>右下 (横向)</item>
+        <item>右下 (纵向)</item>
+        <item>左上 (横向)</item>
+        <item>左上 (纵向)</item>
+        <item>右上 (横向)</item>
+        <item>右上 (纵向)</item>
+    </string-array>
+
+    <string name="app_info">应用信息</string>
+    <string name="uninstall">卸载</string>
+    <string name="open_taskbar_settings">打开设置</string>
+    <string name="quit_taskbar">退出</string>
+
+    <string name="pref_title_keyboard_shortcut">启用键盘快捷方式</string>
+    <string name="pref_description_keyboard_shortcut">开始/停止任务栏: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\n锁定设备: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\n显示开始菜单: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(需要在设置中将任务栏设为辅助应用)</string>
+    <string name="pref_description_keyboard_shortcut_alt">开始/停止任务栏\n&#8226; WinKey+M / Search+M\n\n锁定设备\n&#8226; WinKey+L / Search+L\n\n显示开始菜单\n&#8226; WinKey / Search\n(requires Taskbar to be set as the assist app in Settings)</string>
+    <string name="loading_apps">正在载入应用&#8230;</string>
+    <string name="press_enter">未找到应用\n\n点按 Enter 使用 Google 搜索</string>
+    <string name="nothing_to_see_here">空空如也, 向前移动&#8230;</string>
+
+    <string name="error_dialog_title">出错</string>
+    <string name="error_dialog_message">不幸的是，由于OEM 的限制，该功能不能在你的设备上启用。\n\n你仍然可以使用这个 adb shell 命令启用它:\n\nappops set %1$s %2$s allow</string>
+    <string name="action_ok">确定</string>
+    <string name="action_cancel">取消</string>
+
+    <string name="pin_app">置顶到最近</string>
+    <string name="unpin_app">从最近取消置顶</string>
+    <string name="block_app">从最近中拦截</string>
+    <string name="unblock_app">从最近中取消拦截</string>
+    <string name="clear_pinned_apps">重置各个应用的首选项</string>
+
+    <string name="pref_title_hide_foreground">隐藏前台应用程序的图标</string>
+
+    <string name="pref_title_theme">主题</string>
+    <string-array name="pref_theme_list">
+        <item>亮色</item>
+        <item>暗色</item>
+    </string-array>
+
+    <string name="device_admin_description_short">允许任务栏关闭设备屏幕</string>
+    <string name="device_admin_description">允许任务栏关闭设备屏幕。\n\n这个需要你在设备管理器中将任务栏取消激活后才能卸载。</string>
+    <string name="lock_device_not_supported">不支持这台设备</string>
+
+    <string name="pref_title_shortcut_icon">显示置顶应用的快捷方式图标</string>
+
+    <string name="freeform_dialog_title">启用自由式支持</string>
+    <string name="freeform_dialog_message">为了任务栏能够在自由式窗口模式中启动应用，请遵循以下步骤:\n\n&#8226; 前往开发者选项\n\n&#8226; 滑动到底部并打开 \"强制将活动设为可调整大小\"\n\n&#8226; 重新开机</string>
+
+    <string name="pref_title_invisible_button">任务栏收起时隐藏按钮</string>
+    <string name="pref_title_freeform_mode_help">自由式模式的帮助 &amp; 使用方法</string>
+    <string name="freeform_help_dialog_title">帮助 &amp; 使用方法</string>
+    <string name="freeform_help_dialog_message"><b>关于自由式模式</b>\n\n任务栏能让你在 Android 7.0 (Nougat) 上在自由式窗口中启动应用。无需 Root 权限。 Android 8.0 (Oreo) 也可以通过 adb shell 命令实现\n\n遵循以下步骤让你的设备可以在自由式模式中启动应用:\n\n<b>1.</b> 在任务栏应用中的勾选方框 \"自由式窗口支持\" \n\n<b>2.</b> 遵循弹窗中出现的指示来启用设备上适当的设置\n\n<b>3.</b> 前往你的设备的最近应用页面并清除所有最近应用\n\n<b>4.</b> 选择要使用任务栏在自由式窗口启动的应用\n\n<b>窗口大小预设</b>\n\n任务栏可在多个预设大小中启动应用窗口。你可以通过长按或者右击应用图标选择窗口大小，然后选择\"新窗口\"\n\n要保存特定应用的窗口大小预设，只需长按预设，出现勾号就表明已设为默认。任务栏 将会在下次启动时使用所选的大小启动应用。\n\n谨记: 窗口大小不能在 Android 8.0 上正常使用。然而，你可以通过启动应用，立即关闭然后从 Android 的概览菜单中再次启动暂时解决这个问题。\n\n<b>问题排查</b>\n\n<i>&#8226; 应用仍然以全屏模式启动</i>\n\n如果应用已经在内存中载入，任务栏 会将其置于前台运行。为了在自由式模式中启动应用，必须将其在全新状态下启动。\n\n从最近中清除应用，然后使用 任务栏 从最近应用页面将其重新启动。如果不可行，然后长按应用图标，选择 \"应用信息，\" 然后强制停止这个应用。\n\n<i>&#8226; 最大化的应用无法还原为窗口</i>\n\n如果你点按应用的标题栏上的最大化按钮，Android 会将应用移出自由式模式，而后进入全屏模式。如以上提到的，如果这些应用以全新的状态启动，任务栏 仅能在自由式窗口中启动应用。\n\nTo fix this, you要修复这个问题，你可以通过在应用窗口画面外轻按或者点击即可最大化窗口。在保持自由式窗口工作空间的同时扩大窗口至所有可用空间。\n\n<b>启用完整的系统级自由式窗口支持</b>\n\n如果你有已安装 Android SDK 的电脑的访问权，你可以通过运行如下 adb shell 命令在系统层面下启用对自由式模式的支持::\n\nsettings put global enable_freeform_support 1\n\n运行以上命令后，重启你的设备，将会在设备的最近应用页面中出现一个新按钮可用于进入/退出所选应用的自由式模式。 (谨记: 这个按钮目前在 Android 7.1.2 上不可用)</string>
+
+    <string name="action_developer_options">打开开发者选项</string>
+    <string name="action_close">关闭</string>
+
+    <string name="pref_header_freeform">自由式模式</string>
+    <string name="pref_title_window_size">默认窗口大小</string>
+
+    <string name="window_size_standard">标准</string>
+    <string name="window_size_fullscreen">最大化</string>
+    <string name="window_size_phone_size">手机大小</string>
+    <string name="window_size_large">大</string>
+    <string name="window_size_half_left">@string/window_size_half_left_alt</string>
+    <string name="window_size_half_left_alt">半屏 (左/上)</string>
+    <string name="window_size_half_right">@string/window_size_half_right_alt</string>
+    <string name="window_size_half_right_alt">半屏 (右/下)</string>
+
+    <string name="pref_title_blacklist">配置开始菜单中的应用</string>
+    <string name="app_hidden">1款应用已隐藏</string>
+    <string name="apps_hidden">%1$d款应用已隐藏</string>
+    <string name="blacklist_dialog_title">已隐藏</string>
+    <string name="top_app">1个置顶应用</string>
+    <string name="top_apps">%1$d个置顶应用</string>
+    <string name="top_apps_dialog_title">置顶应用</string>
+    <string name="start_menu_apps">开始菜单应用</string>
+
+    <string name="reboot_required">重启你的设备以完成自由式模式设定</string>
+    <string name="enable_force_activities_resizable">滚动到底部并打开 \"强制将活动设为可调整大小\"</string>
+    <string name="set_as_default_home">点击 \"始终\" 将 任务栏 设为你的默认启动器</string>
+    <string name="enable_developer_options">点击版本号7次即可开启开发者选项</string>
+
+    <string name="pref_title_anchor">屏幕旋转时固定任务栏</string>
+    <string name="pref_title_donate">捐赠</string>
+    <string name="pref_summary_donate">升级到捐赠版以支持 任务栏 的开发</string>
+    <string name="dialog_donate_message">升级到 %1$s 的捐赠版以支持 任务栏 的开发！\n\n捐赠版与免费版其实别无两样，你的首选项会自动转移过去。\n\n 任务栏 永久并完全免费 、开源、绝无广告。然而，你的支持会非常感激！</string>
+    <string name="action_no_thanks">不，谢谢</string>
+
+    <string name="importing_settings">正在导入设置&#8230; 请稍等</string>
+    <string name="settings_imported_successfully">设置导入成功</string>
+    <string name="import_dialog_message">谢谢你购买了 任务栏 的捐赠版！\n\n你的设置已成功导入，你现在需要卸载应用的免费版。</string>
+    <string name="action_uninstall">卸载</string>
+
+    <string name="pref_title_hide_when_keyboard_shown">自动收起任务栏</string>
+    <string name="pref_description_hide_when_keyboard_shown">当显示屏幕键盘时</string>
+
+    <string name="pref_max_num_of_recents">最近/置顶应用的最大数</string>
+
+    <string name="show_window_sizes">新窗口&#8230;</string>
+
+    <string name="icon_pack">图标包</string>
+    <string name="icon_pack_none">无</string>
+    <string name="no_icon_packs_installed">未安装图标包</string>
+
+    <string name="apply_icon_pack">应用图标包</string>
+    <string name="apply_icon_pack_description">应用 \"%1$s\" 到任务栏?</string>
+    <string name="must_specify_extra">必须指定 Intent.EXTRA_PACKAGE_NAME</string>
+    <string name="invalid_package_name">无效包名</string>
+
+    <string name="pref_title_use_mask">未适配的图标使用遮罩</string>
+    <string name="pref_description_use_mask">设置图标包时可能会降低性能</string>
+
+    <string name="pref_title_app_drawer_icon">使用 任务栏 徽标作为开始菜单图标</string>
+
+    <string name="already_blacklisted">%1$s 无法选中，因为在隐藏应用列表中</string>
+    <string name="already_top_app">%1$s 无法选中，因为在置顶应用列表中</string>
+
+    <string name="alt_button_config">收起按钮的可选位置</string>
+    <string name="pref_title_save_window_sizes">始终保存应用的窗口大小</string>
+    <string name="pref_description_save_window_sizes">从上下文菜单打开新窗口时</string>
+
+    <string name="add_shortcut">添加快捷方式到主屏幕</string>
+    <string name="shortcut_created">自由式模式快捷方式已创建</string>
+
+    <string name="start_taskbar">开始/停止 任务栏 </string>
+    <string name="no_freeform_support">自由式模式未在你的设备上启用 &#8211; 请先打开 任务栏 并启用</string>
+    <string name="enable_recent_apps">任务栏 可以选择在屏幕边缘显示最常用应用的图标。要做到这个，任务栏 需要使用情况访问权限。\n\n启用对最近应用的支持?</string>
+
+    <string name="disable_scrolling_list">停用滚动列表</string>
+
+    <string name="double_tap_to_sleep">双击休眠</string>
+    <string name="enable_double_tap_to_sleep">启用双击休眠?</string>
+    <string name="action_dont_show_again">不再显示</string>
+
+    <string name="app_shortcuts">更多操作&#8230;</string>
+
+    <string name="usage_stats_message">请确保 任务栏 已设为 \"开启\"</string>
+
+    <string name="volume">音量控制</string>
+    <string name="file_manager">文件管理器</string>
+    <string name="system_settings">系统设置</string>
+    <string name="lock_device">锁定设备</string>
+    <string name="power_menu">电源菜单</string>
+
+    <string name="show_search_bar">搜索栏可见性</string>
+    <string-array name="pref_show_search_bar_list">
+        <item>物理或者虚拟键盘</item>
+        <item>仅限物理键盘</item>
+        <item>永不显示搜索栏</item>
+    </string-array>
+
+    <string name="clear_pba">已置顶/拦截的最近应用</string>
+    <string name="clear_hidden_apps">开始菜单 &#8211; 隐藏应用</string>
+    <string name="clear_top_apps">开始菜单 &#8211; 置顶应用</string>
+    <string name="clear_window_sizes">窗口大小已保存</string>
+    <string name="action_reset">重置</string>
+
+    <string name="tools">工具</string>
+
+    <string name="enable_accessibility">必须启用 任务栏 的无障碍服务才能执行这个操作</string>
+    <string name="accessibility_service_description">允许 任务栏 显示设备的电源菜单并执行导航栏按钮操作。\n\n(此服务不用于任何其他用途)</string>
+    
+    <string name="pref_title_force_new_window">始终在新窗口打开应用</string>
+    <string name="pref_description_force_new_window">每次从开始菜单或者最近应用中选择时强制应用打开新窗口 (如果应用允许多窗口)</string>
+    <string name="change_wallpaper">更换壁纸</string>
+
+    <string name="notification_settings">系统通知设置</string>
+
+    <string name="pref_header_appearance">外观</string>
+    <string name="dashboard">启用小部件支持</string>
+    <string name="dashboard_description">添加小部件按钮以便点按时显示任务栏</string>
+    <string name="dashboard_grid_size">小部件面板网格大小</string>
+
+    <string name="click_to_add_widget">点击添加小部件</string>
+    <string name="remove_widget">移除小部件</string>
+    <string name="are_you_sure">你确定吗?</string>
+    <string name="dashboard_tutorial">点击屏幕任意处添加小部件到面板</string>
+
+    <string name="pref_title_accent_color">强调色</string>
+    <string name="reset_colors">恢复默认颜色</string>
+
+    <string name="visual_feedback">选择图标时的视觉反馈</string>
+
+    <string name="num_of_recents_blurb">在更改此设置之前，请确保使用情况访问已启用。\n\n较高的值可能会降低性能。</string>
+    <string name="max_num_of_recents">%1$d款应用</string>
+    <string name="max_num_of_recents_singular">1款应用</string>
+    <string name="max_num_of_recents_unlimited">无限制</string>
+
+    <string name="refresh_frequency_blurb">在更改此设置之前，请确保使用情况访问已启用。\n\n较低的值会增加 CPU 的用量及减少电池寿命。</string>
+    <string name="refresh_frequency">%1$s秒</string>
+    <string name="refresh_frequency_singular">1秒</string>
+    <string name="refresh_frequency_continuous">持续性</string>
+
+    <string name="power_button_warning_title">注意</string>
+    <string name="power_button_warning_message">基于 CyanogenMod / LineageOS 的自定义ROM在设备处于自由式模式时电源键会出现问题。\n\n请现在测试一下你的电源键。如果不可用，那么请慎用自由式模式，即表示如果屏幕超时，你将无法从休眠中唤醒设备。</string>
+    <string name="action_i_understand">我明白</string>
+
+    <string name="hide_taskbar_disclaimer">不应用到自由式模式中的应用</string>
+    <string name="transparent_start_menu">透明开始菜单</string>
+
+    <string name="launch_games_fullscreen_title">全屏启动游戏</string>
+    <string name="launch_games_fullscreen_message">如果应用程序声明它是游戏，则不允许它在自由式模式中启动</string>
+
+    <string name="invalid_grid_size">无效网格大小</string>
+
+    <string name="window_sizes_not_available">窗口大小在 Android 8.0 上不可用 - 参阅 临时解决办法的 \"帮助 &amp; 使用方法\" </string>
+
+    <string name="navigation_bar_buttons">导航栏按钮</string>
+    <string name="navigation_bar_buttons_description">添加额外按钮到任务栏以执行导航栏按钮</string>
+    <string name="button_back">返回</string>
+    <string name="button_home">主页</string>
+    <string name="button_recents">最近</string>
+
+    <string name="full_length">扩大空白区域</string>
+
+    <string name="restore_widget">还原小部件</string>
+
+    <string name="samsung_freeform_title">注</string>
+    <string name="samsung_freeform_message">由于系统对多窗口模式作出了变更，自由式模式不能在 三星设备 上使用。\n\n你可能需要刷入自定义 ROM 才能在这台设备上使用自由式模式。</string>
+
+    <string name="widget_restore_toast">选择 \"%1$s\" 以还原这个小部件</string>
+
+    <string name="freeform_on">自由式 开启</string>
+    <string name="freeform_off">自由式 关闭</string>
+
+    <string name="auto_hide_navbar">自动控制系统导航栏</string>
+    <string name="auto_hide_navbar_description">任务栏 运行时隐藏导航栏，任务栏 不运行时显示</string>
+
+    <string name="press_enter_alt">未找到应用\n\n点按 Enter 在浏览器中打开</string>
+
+    <string name="freeform_dialog_message_alt">为了让 任务栏 能在自由式窗口模式中启动应用，请遵循以下步骤:\n\n&#8226; 前往开发者选项并启用 USB 调试\n\n&#8226; 将你的设备连接安装了 Android SDK 的电脑, 然后运行如下 adb shell 命令:\n\nsettings put global enable_freeform_support 1\n\n&#8226; 重启你的设备</string>
+
+    <string name="color_picker_alpha">Alpha</string>
+    <string name="color_picker_red">红</string>
+    <string name="color_picker_green">绿</string>
+    <string name="color_picker_blue">蓝</string>
+
+    <string name="pref_title_chrome_os_context_menu_fix">Chrome OS 底栏兼容性修复</string>
+    <string name="pref_description_chrome_os_context_menu_fix">当任务栏在 Chrome OS 底栏旁边显示时启用</string>
+
+    <string name="pin_shortcut_not_supported">你的启动器不支持从其他应用中添加快捷方式。\n\n请手动从你的启动器的\"Widgets\" 菜单中添加快捷方式</string>
+
+    <string name="device_admin_disclosure">为了锁定你的设备屏幕，任务栏 需要激活为设备管理器。这个权限仅用于锁定屏幕，不用于其他用途。\n\n如果你选择了激活这个权限，你需要在卸载之前，取消激活 任务栏 的设备管理器。</string>
+    <string name="action_activate">激活</string>
+
+</resources>

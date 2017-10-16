@@ -37,7 +37,7 @@ android {
         versionCode 170
         versionName "3.7.1"
 
-        resConfigs "en", "ja", "ru", "de"
+        resConfigs "en", "ja", "ru", "de", "zh-rCN"
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
         buildConfigField "String", "PAID_APPLICATION_ID", "\"com.farmerbb.taskbar.paid\""
