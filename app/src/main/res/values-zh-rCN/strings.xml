@@ -138,12 +138,12 @@
     <string name="pref_title_shortcut_icon">显示置顶应用的快捷方式图标</string>
 
     <string name="freeform_dialog_title">启用自由式支持</string>
-    <string name="freeform_dialog_message">为了任务栏能够在自由式窗口模式中启动应用，请遵循以下步骤:\n\n&#8226; 前往开发者选项\n\n&#8226; 滑动到底部并打开 \"强制将活动设为可调整大小\"\n\n&#8226; 重新开机</string>
+    <string name="freeform_dialog_message">为了 任务栏 能够在自由式窗口模式中启动应用，请遵循以下步骤:\n\n&#8226; 前往开发者选项\n\n&#8226; 滑动到底部并打开 \"强制将活动设为可调整大小\"\n\n&#8226; 重新开机</string>
 
     <string name="pref_title_invisible_button">任务栏收起时隐藏按钮</string>
     <string name="pref_title_freeform_mode_help">自由式模式的帮助 &amp; 使用方法</string>
     <string name="freeform_help_dialog_title">帮助 &amp; 使用方法</string>
-    <string name="freeform_help_dialog_message"><b>关于自由式模式</b>\n\n任务栏能让你在 Android 7.0 (Nougat) 上在自由式窗口中启动应用。无需 Root 权限。 Android 8.0 (Oreo) 也可以通过 adb shell 命令实现\n\n遵循以下步骤让你的设备可以在自由式模式中启动应用:\n\n<b>1.</b> 在任务栏应用中的勾选方框 \"自由式窗口支持\" \n\n<b>2.</b> 遵循弹窗中出现的指示来启用设备上适当的设置\n\n<b>3.</b> 前往你的设备的最近应用页面并清除所有最近应用\n\n<b>4.</b> 选择要使用任务栏在自由式窗口启动的应用\n\n<b>窗口大小预设</b>\n\n任务栏可在多个预设大小中启动应用窗口。你可以通过长按或者右击应用图标选择窗口大小，然后选择\"新窗口\"\n\n要保存特定应用的窗口大小预设，只需长按预设，出现勾号就表明已设为默认。任务栏 将会在下次启动时使用所选的大小启动应用。\n\n谨记: 窗口大小不能在 Android 8.0 上正常使用。然而，你可以通过启动应用，立即关闭然后从 Android 的概览菜单中再次启动暂时解决这个问题。\n\n<b>问题排查</b>\n\n<i>&#8226; 应用仍然以全屏模式启动</i>\n\n如果应用已经在内存中载入，任务栏 会将其置于前台运行。为了在自由式模式中启动应用，必须将其在全新状态下启动。\n\n从最近中清除应用，然后使用 任务栏 从最近应用页面将其重新启动。如果不可行，然后长按应用图标，选择 \"应用信息，\" 然后强制停止这个应用。\n\n<i>&#8226; 最大化的应用无法还原为窗口</i>\n\n如果你点按应用的标题栏上的最大化按钮，Android 会将应用移出自由式模式，而后进入全屏模式。如以上提到的，如果这些应用以全新的状态启动，任务栏 仅能在自由式窗口中启动应用。\n\nTo fix this, you要修复这个问题，你可以通过在应用窗口画面外轻按或者点击即可最大化窗口。在保持自由式窗口工作空间的同时扩大窗口至所有可用空间。\n\n<b>启用完整的系统级自由式窗口支持</b>\n\n如果你有已安装 Android SDK 的电脑的访问权，你可以通过运行如下 adb shell 命令在系统层面下启用对自由式模式的支持::\n\nsettings put global enable_freeform_support 1\n\n运行以上命令后，重启你的设备，将会在设备的最近应用页面中出现一个新按钮可用于进入/退出所选应用的自由式模式。 (谨记: 这个按钮目前在 Android 7.1.2 上不可用)</string>
+    <string name="freeform_help_dialog_message"><b>关于自由式模式</b>\n\n任务栏 能让你在 Android 7.0 (Nougat) 上在自由式窗口中启动应用。无需 Root 权限。 Android 8.0 (Oreo) 也可以通过 adb shell 命令实现\n\n遵循以下步骤让你的设备可以在自由式模式中启动应用:\n\n<b>1.</b> 在任务栏应用中的勾选方框 \"自由式窗口支持\" \n\n<b>2.</b> 遵循弹窗中出现的指示来启用设备上适当的设置\n\n<b>3.</b> 前往你的设备的最近应用页面并清除所有最近应用\n\n<b>4.</b> 选择要使用任务栏在自由式窗口启动的应用\n\n<b>窗口大小预设</b>\n\n任务栏可在多个预设大小中启动应用窗口。你可以通过长按或者右击应用图标选择窗口大小，然后选择\"新窗口\"\n\n要保存特定应用的窗口大小预设，只需长按预设，出现勾号就表明已设为默认。任务栏 将会在下次启动时使用所选的大小启动应用。\n\n谨记: 窗口大小不能在 Android 8.0 上正常使用。然而，你可以通过启动应用，立即关闭然后从 Android 的概览菜单中再次启动暂时解决这个问题。\n\n<b>问题排查</b>\n\n<i>&#8226; 应用仍然以全屏模式启动</i>\n\n如果应用已经在内存中载入，任务栏 会将其置于前台运行。为了在自由式模式中启动应用，必须将其在全新状态下启动。\n\n从最近中清除应用，然后使用 任务栏 从最近应用页面将其重新启动。如果不可行，然后长按应用图标，选择 \"应用信息，\" 然后强制停止这个应用。\n\n<i>&#8226; 最大化的应用无法还原为窗口</i>\n\n如果你点按应用的标题栏上的最大化按钮，Android 会将应用移出自由式模式，而后进入全屏模式。如以上提到的，如果这些应用以全新的状态启动，任务栏 仅能在自由式窗口中启动应用。\n\n要修复这个问题，你可以通过在应用窗口画面外轻按或者点击即可最大化窗口。在保持自由式窗口工作空间的同时扩大窗口至所有可用空间。\n\n<b>启用完整的系统级自由式窗口支持</b>\n\n如果你有已安装 Android SDK 的电脑的访问权，你可以通过运行如下 adb shell 命令在系统层面下启用对自由式模式的支持:\n\nsettings put global enable_freeform_support 1\n\n运行以上命令后，重启你的设备，将会在设备的最近应用页面中出现一个新按钮可用于进入/退出所选应用的自由式模式。 (谨记: 这个按钮目前在 Android 7.1.2 上不可用)</string>
 
     <string name="action_developer_options">打开开发者选项</string>
     <string name="action_close">关闭</string>
@@ -163,9 +163,9 @@
     <string name="pref_title_blacklist">配置开始菜单中的应用</string>
     <string name="app_hidden">1款应用已隐藏</string>
     <string name="apps_hidden">%1$d款应用已隐藏</string>
-    <string name="blacklist_dialog_title">已隐藏</string>
-    <string name="top_app">1个置顶应用</string>
-    <string name="top_apps">%1$d个置顶应用</string>
+    <string name="blacklist_dialog_title">隐藏应用</string>
+    <string name="top_app">1款置顶应用</string>
+    <string name="top_apps">%1$d款置顶应用</string>
     <string name="top_apps_dialog_title">置顶应用</string>
     <string name="start_menu_apps">开始菜单应用</string>
 
@@ -290,7 +290,7 @@
     <string name="action_i_understand">我明白</string>
 
     <string name="hide_taskbar_disclaimer">不应用到自由式模式中的应用</string>
-    <string name="transparent_start_menu">透明开始菜单</string>
+    <string name="transparent_start_menu">透明化开始菜单</string>
 
     <string name="launch_games_fullscreen_title">全屏启动游戏</string>
     <string name="launch_games_fullscreen_message">如果应用程序声明它是游戏，则不允许它在自由式模式中启动</string>
