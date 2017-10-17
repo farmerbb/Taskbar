@@ -22,7 +22,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.farmerbb.taskbar" >
           android:versionCode="1"
-          android:versionName="3.7.1-androidx86" >
+          android:versionName="3.7.2-androidx86" >
 
     <uses-sdk
         android:minSdkVersion="26"
