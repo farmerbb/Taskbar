@@ -2,23 +2,10 @@ ext {
     SUPPORT_LIBRARY_VERSION = "26.1.0"
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
-    }
-}
-
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
-    maven {
-        url "https://maven.google.com"
-    }
+    google()
 
     maven {
         url "https://jitpack.io"
@@ -76,23 +63,27 @@ android {
         }
     }
 
+    flavorDimensions "default"
+    
     productFlavors {
         paid {
+            dimension "default"
             applicationId "com.farmerbb.taskbar.paid"
         }
 
         free {
+            dimension "default"
             applicationId "com.farmerbb.taskbar"
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
-    compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    compile 'com.mikepenz:iconics-core:2.9.3@aar'
-    compile 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
-    compile 'moe.banana:toast-compat:1.0.5'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
+    implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+    implementation 'com.mikepenz:iconics-core:2.9.3@aar'
+    implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
+    implementation 'moe.banana:toast-compat:1.0.5'
 }
 
