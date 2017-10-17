@@ -20,13 +20,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Handler;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
-import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.service.StartMenuService;
-import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.U;
 
 public class StartReceiver extends BroadcastReceiver {
@@ -64,16 +60,13 @@ public class StartReceiver extends BroadcastReceiver {
                 context.startActivity(intent2);
             }
 
-            new Handler().postDelayed(() -> {
-                context.startService(new Intent(context, TaskbarService.class));
-                context.startService(new Intent(context, StartMenuService.class));
-                context.startService(new Intent(context, DashboardService.class));
-            }, Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 100);
+            Intent notificationIntent = new Intent(context, NotificationService.class);
+            notificationIntent.putExtra("start_services", true);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                context.startForegroundService(new Intent(context, NotificationService.class));
+                context.startForegroundService(notificationIntent);
             else
-                context.startService(new Intent(context, NotificationService.class));
+                context.startService(notificationIntent);
         }
     }
 }

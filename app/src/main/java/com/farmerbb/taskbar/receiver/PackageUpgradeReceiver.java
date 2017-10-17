@@ -20,13 +20,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Handler;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
-import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.service.StartMenuService;
-import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.U;
 
 public class PackageUpgradeReceiver extends BroadcastReceiver {
@@ -34,6 +30,8 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(Intent.ACTION_MY_PACKAGE_REPLACED)) {
             SharedPreferences pref = U.getSharedPreferences(context);
+            boolean startServices = false;
+
             if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
                     Intent intent2 = new Intent(context, DummyActivity.class);
@@ -43,18 +41,17 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
                     context.startActivity(intent2);
                 }
 
-                new Handler().postDelayed(() -> {
-                    context.startService(new Intent(context, TaskbarService.class));
-                    context.startService(new Intent(context, StartMenuService.class));
-                    context.startService(new Intent(context, DashboardService.class));
-                }, Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 100);
+                startServices = true;
             }
 
             if(pref.getBoolean("taskbar_active", false)) {
+                Intent notificationIntent = new Intent(context, NotificationService.class);
+                notificationIntent.putExtra("start_services", startServices);
+
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    context.startForegroundService(new Intent(context, NotificationService.class));
+                    context.startForegroundService(notificationIntent);
                 else
-                    context.startService(new Intent(context, NotificationService.class));
+                    context.startService(notificationIntent);
             }
         }
     }

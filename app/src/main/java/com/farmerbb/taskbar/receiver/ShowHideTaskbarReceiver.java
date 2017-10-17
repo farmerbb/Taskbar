@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
@@ -54,11 +53,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 context.startActivity(intent2);
             }
 
-            new Handler().postDelayed(() -> {
-                context.startService(taskbarIntent);
-                context.startService(startMenuIntent);
-                context.startService(dashboardIntent);
-            }, Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 100);
+            notificationIntent.putExtra("start_services", true);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 context.startForegroundService(notificationIntent);

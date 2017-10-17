@@ -52,6 +52,12 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if(intent != null && intent.getBooleanExtra("start_services", false)) {
+            startService(new Intent(this, TaskbarService.class));
+            startService(new Intent(this, StartMenuService.class));
+            startService(new Intent(this, DashboardService.class));
+        }
+
         return START_STICKY;
     }
 
