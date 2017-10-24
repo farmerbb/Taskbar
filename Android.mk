@@ -18,8 +18,6 @@ LOCAL_MANIFEST_FILE := app/src/androidx86/AndroidManifest.xml
 LOCAL_STATIC_JAVA_LIBRARIES := \
         android-support-v4 \
         android-support-v7-appcompat \
-        android-support-v7-recyclerview \
-        android-support-transition \
         android-support-design
 
 LOCAL_PROGUARD_ENABLED := disabled
@@ -30,12 +28,12 @@ LOCAL_JAVA_LANGUAGE_VERSION := 1.8
 
 LOCAL_PRIVILEGED_MODULE := true
 
+LOCAL_SDK_VERSION := 25
+
 LOCAL_AAPT_FLAGS := \
         --auto-add-overlay \
         --rename-manifest-package com.farmerbb.taskbar.androidx86 \
         --extra-packages android.support.v7.appcompat \
-        --extra-packages android.support.v7.recyclerview \
-        --extra-packages android.support.transition \
         --extra-packages android.support.design
 
 include $(BUILD_PACKAGE)

@@ -64,7 +64,7 @@ android {
     }
 
     flavorDimensions "default"
-    
+
     productFlavors {
         paid {
             dimension "default"
@@ -74,6 +74,20 @@ android {
         free {
             dimension "default"
             applicationId "com.farmerbb.taskbar"
+        }
+    }
+
+    sourceSets {
+        paid {
+            java {
+                srcDirs('src/main/java', 'src/oreoutils/java')
+            }
+        }
+
+        free {
+            java {
+                srcDirs('src/main/java', 'src/oreoutils/java')
+            }
         }
     }
 }

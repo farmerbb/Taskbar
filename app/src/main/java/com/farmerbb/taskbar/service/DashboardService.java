@@ -242,7 +242,7 @@ public class DashboardService extends Service {
                 cellLayout.setOnClickListener(cellOcl);
                 cellLayout.setOnHoverListener(cellOhl);
 
-                TextView empty = cellLayout.findViewById(R.id.empty);
+                TextView empty = U.findViewById(cellLayout, R.id.empty);
                 empty.setBackgroundColor(accentColorAlt);
                 empty.setTextColor(accentColor);
 
@@ -348,7 +348,7 @@ public class DashboardService extends Service {
             }
 
             if(inFreeformMode) {
-                if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     intent.putExtra("context_menu_fix", true);
 
                 U.launchAppMaximized(this, intent);
@@ -540,7 +540,7 @@ public class DashboardService extends Service {
         cellLayout.setOnGenericMotionListener(ogml);
         cellLayout.setOnInterceptedLongPressListener(listener);
 
-        LinearLayout linearLayout = cellLayout.findViewById(R.id.dashboard);
+        LinearLayout linearLayout = U.findViewById(cellLayout, R.id.dashboard);
         linearLayout.addView(hostView);
 
         Bundle bundle2 = (Bundle) cellLayout.getTag();
@@ -576,7 +576,7 @@ public class DashboardService extends Service {
         mAppWidgetHost.deleteAppWidgetId(bundle.getInt("appWidgetId"));
         bundle.remove("appWidgetId");
 
-        LinearLayout linearLayout = cellLayout.findViewById(R.id.dashboard);
+        LinearLayout linearLayout = U.findViewById(cellLayout, R.id.dashboard);
         linearLayout.removeAllViews();
 
         cellLayout.setTag(bundle);
@@ -600,12 +600,12 @@ public class DashboardService extends Service {
     }
 
     private void addPlaceholder(int cellId) {
-        FrameLayout placeholder = cells.get(cellId).findViewById(R.id.placeholder);
+        FrameLayout placeholder = U.findViewById(cells.get(cellId), R.id.placeholder);
         SharedPreferences pref = U.getSharedPreferences(this);
         String providerName = pref.getString("dashboard_widget_" + Integer.toString(cellId) + "_provider", "null");
 
         if(!providerName.equals("null")) {
-            ImageView imageView = placeholder.findViewById(R.id.placeholder_image);
+            ImageView imageView = U.findViewById(placeholder, R.id.placeholder_image);
             ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
             List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());

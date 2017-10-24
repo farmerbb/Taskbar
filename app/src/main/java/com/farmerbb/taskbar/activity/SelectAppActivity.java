@@ -103,7 +103,7 @@ public class SelectAppActivity extends AppCompatActivity {
                     getWindow().setElevation(0);
             }
 
-            progressBar = findViewById(R.id.progress_bar);
+            progressBar = U.findViewById(this, R.id.progress_bar);
             appListGenerator = new AppListGenerator();
             appListGenerator.execute();
         } else {
@@ -235,10 +235,10 @@ public class SelectAppActivity extends AppCompatActivity {
             topAppsAdapter = adapters[U.TOP_APPS];
 
             SelectAppPagerAdapter pagerAdapter = new SelectAppPagerAdapter(getSupportFragmentManager());
-            ViewPager viewPager = findViewById(R.id.pager);
+            ViewPager viewPager = U.findViewById(SelectAppActivity.this, R.id.pager);
             viewPager.setAdapter(pagerAdapter);
 
-            TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+            TabLayout tabLayout = U.findViewById(SelectAppActivity.this, R.id.sliding_tabs);
             tabLayout.setupWithViewPager(viewPager);
 
             findViewById(R.id.configure_start_menu_layout).setVisibility(View.VISIBLE);

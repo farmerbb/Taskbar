@@ -39,6 +39,7 @@ import android.view.View;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.OreoUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class FreeformModeFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
@@ -198,14 +199,8 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 dialog.show();
                 break;
             case "add_shortcut":
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    ShortcutManager mShortcutManager = getActivity().getSystemService(ShortcutManager.class);
-
-                    if(mShortcutManager.isRequestPinShortcutSupported()) {
-                        ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(getActivity(), "freeform_mode").build();
-                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
-                    } else
-                        U.showToastLong(getActivity(), R.string.pin_shortcut_not_supported);
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+                    OreoUtils.pinAppShortcut(getActivity());
                 } else {
                     Intent intent = U.getShortcutIntent(getActivity());
                     intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
@@ -222,7 +217,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 }
                 break;
             case "window_size":
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
                     U.showToastLong(getActivity(), R.string.window_sizes_not_available);
                 }
 

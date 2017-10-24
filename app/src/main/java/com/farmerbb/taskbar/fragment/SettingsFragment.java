@@ -42,7 +42,7 @@ public class SettingsFragment extends PreferenceFragment {
         // Remove dividers
         View rootView = getView();
         if(rootView != null) {
-            ListView list = rootView.findViewById(android.R.id.list);
+            ListView list = U.findViewById(rootView, android.R.id.list);
             if(list != null) list.setDivider(null);
         }
 

@@ -105,10 +105,10 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
                 String value = pref.getString("max_num_of_recents", "10");
 
-                final TextView textView = dialogLayout.findViewById(R.id.seekbar_value);
+                final TextView textView = U.findViewById(dialogLayout, R.id.seekbar_value);
                 textView.setText("0");
 
-                final SeekBar seekBar = dialogLayout.findViewById(R.id.seekbar);
+                final SeekBar seekBar = U.findViewById(dialogLayout, R.id.seekbar);
                 seekBar.setMax(max);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
@@ -128,7 +128,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
                 seekBar.setProgress(Integer.parseInt(value));
 
-                TextView blurb = dialogLayout.findViewById(R.id.blurb);
+                TextView blurb = U.findViewById(dialogLayout, R.id.blurb);
                 blurb.setText(R.string.num_of_recents_blurb);
 
                 builder.setView(dialogLayout)
@@ -154,10 +154,10 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
                 String value2 = pref.getString("refresh_frequency", "2");
 
-                final TextView textView2 = dialogLayout2.findViewById(R.id.seekbar_value);
+                final TextView textView2 = U.findViewById(dialogLayout2, R.id.seekbar_value);
                 textView2.setText(R.string.infinity);
 
-                final SeekBar seekBar2 = dialogLayout2.findViewById(R.id.seekbar);
+                final SeekBar seekBar2 = U.findViewById(dialogLayout2, R.id.seekbar);
                 seekBar2.setMax(max2);
                 seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
@@ -177,7 +177,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
                 seekBar2.setProgress((int) (Double.parseDouble(value2) * 2));
 
-                TextView blurb2 = dialogLayout2.findViewById(R.id.blurb);
+                TextView blurb2 = U.findViewById(dialogLayout2, R.id.blurb);
                 blurb2.setText(R.string.refresh_frequency_blurb);
 
                 builder2.setView(dialogLayout2)

@@ -23,6 +23,7 @@ import android.os.Build;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
+import com.farmerbb.taskbar.util.OreoUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class BootReceiver extends BroadcastReceiver {
@@ -58,10 +59,7 @@ public class BootReceiver extends BroadcastReceiver {
                 Intent notificationIntent = new Intent(context, NotificationService.class);
                 notificationIntent.putExtra("start_services", startServices);
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    context.startForegroundService(notificationIntent);
-                else
-                    context.startService(notificationIntent);
+                OreoUtils.startForegroundService(context, notificationIntent);
             } else {
                 editor.putBoolean("taskbar_active", U.isServiceRunning(context, NotificationService.class));
                 editor.apply();

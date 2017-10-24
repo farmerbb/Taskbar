@@ -286,20 +286,20 @@ public class TaskbarService extends Service {
 
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
-        taskbar = layout.findViewById(R.id.taskbar);
-        scrollView = layout.findViewById(R.id.taskbar_scrollview);
+        taskbar = U.findViewById(layout, R.id.taskbar);
+        scrollView = U.findViewById(layout, R.id.taskbar_scrollview);
 
         if(altButtonConfig) {
-            space = layout.findViewById(R.id.space_alt);
+            space = U.findViewById(layout, R.id.space_alt);
             layout.findViewById(R.id.space).setVisibility(View.GONE);
         } else {
-            space = layout.findViewById(R.id.space);
+            space = U.findViewById(layout, R.id.space);
             layout.findViewById(R.id.space_alt).setVisibility(View.GONE);
         }
 
         space.setOnClickListener(v -> toggleTaskbar());
 
-        startButton = layout.findViewById(R.id.start_button);
+        startButton = U.findViewById(layout, R.id.start_button);
         int padding;
 
         if(pref.getBoolean("app_drawer_icon", false)) {
@@ -350,10 +350,10 @@ public class TaskbarService extends Service {
         LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
 
         if(altButtonConfig) {
-            button = layout.findViewById(R.id.hide_taskbar_button_alt);
+            button = U.findViewById(layout, R.id.hide_taskbar_button_alt);
             layout.findViewById(R.id.hide_taskbar_button).setVisibility(View.GONE);
         } else {
-            button = layout.findViewById(R.id.hide_taskbar_button);
+            button = U.findViewById(layout, R.id.hide_taskbar_button);
             layout.findViewById(R.id.hide_taskbar_button_alt).setVisibility(View.GONE);
         }
 
@@ -364,12 +364,12 @@ public class TaskbarService extends Service {
         updateButton(false);
         button.setOnClickListener(v -> toggleTaskbar());
 
-        LinearLayout buttonLayout = layout.findViewById(altButtonConfig
+        LinearLayout buttonLayout = U.findViewById(layout, altButtonConfig
                 ? R.id.hide_taskbar_button_layout_alt
                 : R.id.hide_taskbar_button_layout);
         if(buttonLayout != null) buttonLayout.setOnClickListener(v -> toggleTaskbar());
 
-        LinearLayout buttonLayoutToHide = layout.findViewById(altButtonConfig
+        LinearLayout buttonLayoutToHide = U.findViewById(layout, altButtonConfig
                 ? R.id.hide_taskbar_button_layout
                 : R.id.hide_taskbar_button_layout_alt);
         if(buttonLayoutToHide != null) buttonLayoutToHide.setVisibility(View.GONE);
@@ -377,8 +377,8 @@ public class TaskbarService extends Service {
         int backgroundTint = U.getBackgroundTint(this);
         int accentColor = U.getAccentColor(this);
 
-        dashboardButton = layout.findViewById(R.id.dashboard_button);
-        navbarButtons = layout.findViewById(R.id.navbar_buttons);
+        dashboardButton = U.findViewById(layout, R.id.dashboard_button);
+        navbarButtons = U.findViewById(layout, R.id.navbar_buttons);
 
         dashboardEnabled = pref.getBoolean("dashboard", false);
         if(dashboardEnabled) {
@@ -396,7 +396,7 @@ public class TaskbarService extends Service {
         if(pref.getBoolean("button_back", false)) {
             navbarButtonsEnabled = true;
 
-            ImageView backButton = layout.findViewById(R.id.button_back);
+            ImageView backButton = U.findViewById(layout, R.id.button_back);
             backButton.setVisibility(View.VISIBLE);
             backButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK);
@@ -430,7 +430,7 @@ public class TaskbarService extends Service {
         if(pref.getBoolean("button_home", false)) {
             navbarButtonsEnabled = true;
 
-            ImageView homeButton = layout.findViewById(R.id.button_home);
+            ImageView homeButton = U.findViewById(layout, R.id.button_home);
             homeButton.setVisibility(View.VISIBLE);
             homeButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_HOME);
@@ -472,7 +472,7 @@ public class TaskbarService extends Service {
         if(pref.getBoolean("button_recents", false)) {
             navbarButtonsEnabled = true;
 
-            ImageView recentsButton = layout.findViewById(R.id.button_recents);
+            ImageView recentsButton = U.findViewById(layout, R.id.button_recents);
             recentsButton.setVisibility(View.VISIBLE);
             recentsButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_RECENTS);
@@ -855,7 +855,7 @@ public class TaskbarService extends Service {
 
                             if(fullLength && U.getTaskbarPosition(this).contains("bottom")) {
                                 try {
-                                    Space whitespace = layout.findViewById(R.id.whitespace);
+                                    Space whitespace = U.findViewById(layout, R.id.whitespace);
                                     ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
                                     params2.height = maxScreenSize - recentsSize;
                                     whitespace.setLayoutParams(params2);
@@ -870,7 +870,7 @@ public class TaskbarService extends Service {
 
                             if(fullLength && U.getTaskbarPosition(this).contains("right")) {
                                 try {
-                                    Space whitespace = layout.findViewById(R.id.whitespace);
+                                    Space whitespace = U.findViewById(layout, R.id.whitespace);
                                     ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
                                     params2.width = maxScreenSize - recentsSize;
                                     whitespace.setLayoutParams(params2);
@@ -1141,7 +1141,7 @@ public class TaskbarService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-            if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                 intent.putExtra("context_menu_fix", true);
 
             startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
@@ -1186,8 +1186,8 @@ public class TaskbarService extends Service {
         final AppEntry entry = list.get(position);
         final SharedPreferences pref = U.getSharedPreferences(this);
 
-        ImageView imageView = convertView.findViewById(R.id.icon);
-        ImageView imageView2 = convertView.findViewById(R.id.shortcut_icon);
+        ImageView imageView = U.findViewById(convertView, R.id.icon);
+        ImageView imageView2 = U.findViewById(convertView, R.id.shortcut_icon);
         imageView.setImageDrawable(entry.getIcon(this));
         imageView2.setBackgroundColor(pref.getInt("accent_color", getResources().getInteger(R.integer.translucent_white)));
 
@@ -1207,7 +1207,7 @@ public class TaskbarService extends Service {
             imageView2.setRotationY(180);
         }
 
-        FrameLayout layout = convertView.findViewById(R.id.entry);
+        FrameLayout layout = U.findViewById(convertView, R.id.entry);
         layout.setOnClickListener(view -> U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(TaskbarService.this), null, true, false));
 
         layout.setOnLongClickListener(view -> {
@@ -1286,7 +1286,7 @@ public class TaskbarService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-            if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                 intent.putExtra("context_menu_fix", true);
 
             startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());

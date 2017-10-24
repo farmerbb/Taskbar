@@ -29,6 +29,7 @@ import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.util.OreoUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class ShowHideTaskbarReceiver extends BroadcastReceiver {
@@ -55,11 +56,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
 
             notificationIntent.putExtra("start_services", true);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                context.startForegroundService(notificationIntent);
-            else
-                context.startService(notificationIntent);
-
+            OreoUtils.startForegroundService(context, notificationIntent);
         } else {
             pref.edit().putBoolean("is_hidden", true).apply();
 
@@ -75,11 +72,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
             }
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                context.startForegroundService(notificationIntent);
-            else
-                context.startService(notificationIntent);
-
+            OreoUtils.startForegroundService(context, notificationIntent);
         }
     }
 }

@@ -190,13 +190,13 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         View colorPreview = dialogLayout.findViewById(R.id.color_preview);
         colorPreview.setBackgroundColor(Color.argb(alpha, red, green, blue));
 
-        TextView hexPreview = dialogLayout.findViewById(R.id.hex_preview);
+        TextView hexPreview = U.findViewById(dialogLayout, R.id.hex_preview);
         hexPreview.setText("#" + String.format("%08x", Color.argb(alpha, red, green, blue)).toUpperCase());
 
-        final TextView alphaValue = dialogLayout.findViewById(R.id.alpha_value);
+        final TextView alphaValue = U.findViewById(dialogLayout, R.id.alpha_value);
         alphaValue.setText("0");
 
-        final SeekBar alphaSeekBar = dialogLayout.findViewById(R.id.alpha_seekbar);
+        final SeekBar alphaSeekBar = U.findViewById(dialogLayout, R.id.alpha_seekbar);
         alphaSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -216,10 +216,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
         alphaSeekBar.setProgress(Color.alpha(color));
 
-        final TextView redValue = dialogLayout.findViewById(R.id.red_value);
+        final TextView redValue = U.findViewById(dialogLayout, R.id.red_value);
         redValue.setText("0");
 
-        final SeekBar redSeekBar = dialogLayout.findViewById(R.id.red_seekbar);
+        final SeekBar redSeekBar = U.findViewById(dialogLayout, R.id.red_seekbar);
         redSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -239,10 +239,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
         redSeekBar.setProgress(Color.red(color));
 
-        final TextView greenValue = dialogLayout.findViewById(R.id.green_value);
+        final TextView greenValue = U.findViewById(dialogLayout, R.id.green_value);
         greenValue.setText("0");
 
-        final SeekBar greenSeekBar = dialogLayout.findViewById(R.id.green_seekbar);
+        final SeekBar greenSeekBar = U.findViewById(dialogLayout, R.id.green_seekbar);
         greenSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -262,10 +262,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
         greenSeekBar.setProgress(Color.green(color));
 
-        final TextView blueValue = dialogLayout.findViewById(R.id.blue_value);
+        final TextView blueValue = U.findViewById(dialogLayout, R.id.blue_value);
         blueValue.setText("0");
 
-        final SeekBar blueSeekBar = dialogLayout.findViewById(R.id.blue_seekbar);
+        final SeekBar blueSeekBar = U.findViewById(dialogLayout, R.id.blue_seekbar);
         blueSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

@@ -466,7 +466,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "show_window_sizes":
                 generateWindowSizes();
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
                     U.showToastLong(this, R.string.window_sizes_not_available);
                 }
 
@@ -496,7 +496,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 U.launchApp(getApplicationContext(), packageName, componentName, userId, windowSize, false, true);
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     U.cancelToast();
 
                 showStartMenu = false;
@@ -693,7 +693,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getListView().setOnItemLongClickListener(null);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                 U.cancelToast();
         } else {
             if(contextMenuFix && !showStartMenu)

@@ -125,7 +125,7 @@ public class StartMenuService extends Service {
             layout.findViewById(R.id.start_menu_space).setVisibility(View.GONE);
         }
     };
-    
+
     private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -271,7 +271,7 @@ public class StartMenuService extends Service {
 
         ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
         layout = (StartMenuLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
-        startMenu = layout.findViewById(R.id.start_menu);
+        startMenu = U.findViewById(layout, R.id.start_menu);
 
         if((shouldShowSearchBox && !hasHardwareKeyboard) || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             layout.viewHandlesBackButton();
@@ -284,12 +284,12 @@ public class StartMenuService extends Service {
         if(pref.getBoolean("transparent_start_menu", false))
             startMenu.setBackgroundColor(0);
 
-        searchView = layout.findViewById(R.id.search);
+        searchView = U.findViewById(layout, R.id.search);
 
         int backgroundTint = U.getBackgroundTint(this);
 
-        FrameLayout startMenuFrame = layout.findViewById(R.id.start_menu_frame);
-        FrameLayout searchViewLayout = layout.findViewById(R.id.search_view_layout);
+        FrameLayout startMenuFrame = U.findViewById(layout, R.id.start_menu_frame);
+        FrameLayout searchViewLayout = U.findViewById(layout, R.id.search_view_layout);
         startMenuFrame.setBackgroundColor(backgroundTint);
         searchViewLayout.setBackgroundColor(backgroundTint);
 
@@ -306,7 +306,7 @@ public class StartMenuService extends Service {
 
                             if(adapter.getCount() > 0) {
                                 View view = adapter.getView(0, null, startMenu);
-                                LinearLayout layout = view.findViewById(R.id.entry);
+                                LinearLayout layout = U.findViewById(view, R.id.entry);
                                 layout.performClick();
                             } else {
                                 if(U.shouldCollapse(StartMenuService.this, true))
@@ -361,7 +361,7 @@ public class StartMenuService extends Service {
 
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                         new Handler().postDelayed(() -> {
-                            EditText editText = searchView.findViewById(R.id.search_src_text);
+                            EditText editText = U.findViewById(searchView, R.id.search_src_text);
                             if(editText != null) {
                                 editText.requestFocus();
                                 editText.setSelection(editText.getText().length());
@@ -395,7 +395,7 @@ public class StartMenuService extends Service {
 
             searchView.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-            LinearLayout powerButton = layout.findViewById(R.id.power_button);
+            LinearLayout powerButton = U.findViewById(layout, R.id.power_button);
             powerButton.setOnClickListener(view -> {
                 int[] location = new int[2];
                 view.getLocationOnScreen(location);
@@ -426,7 +426,7 @@ public class StartMenuService extends Service {
         } else
             searchViewLayout.setVisibility(View.GONE);
         
-        textView = layout.findViewById(R.id.no_apps_found);
+        textView = U.findViewById(layout, R.id.no_apps_found);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         
@@ -612,7 +612,7 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
                 layout.setAlpha(1);
 
             MenuHelper.getInstance().setStartMenuOpen(true);
@@ -623,7 +623,7 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!U.isChromeOs(this) && (!onHomeScreen || inFreeformMode)) {
-                Class clazz = inFreeformMode && Build.VERSION.SDK_INT < Build.VERSION_CODES.O
+                Class clazz = inFreeformMode && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
                         ? InvisibleActivityAlt.class
                         : InvisibleActivity.class;
 
@@ -645,7 +645,7 @@ public class StartMenuService extends Service {
             refreshApps(false);
 
             new Handler().postDelayed(() -> {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     layout.setAlpha(1);
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -749,7 +749,7 @@ public class StartMenuService extends Service {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                 DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-                if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     intent.putExtra("context_menu_fix", true);
 
                 startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());

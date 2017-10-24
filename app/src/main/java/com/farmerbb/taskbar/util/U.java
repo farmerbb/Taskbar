@@ -49,6 +49,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -251,7 +252,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
 
-        boolean specialLaunch = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        boolean specialLaunch = Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
                 && FreeformHackHelper.getInstance().isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
@@ -897,7 +898,7 @@ public class U {
                 stackId = FREEFORM_WORKSPACE_STACK_ID;
                 break;
             case CONTEXT_MENU:
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     stackId = FULLSCREEN_WORKSPACE_STACK_ID;
         }
 
@@ -1078,8 +1079,8 @@ public class U {
     }
 
     public static int getOverlayType() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        return Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
+                ? OreoUtils.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_PHONE;
     }
 
@@ -1097,5 +1098,15 @@ public class U {
             }
         } else
             return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends View> T findViewById(Activity target, int id) {
+        return (T) target.findViewById(id);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends View> T findViewById(View target, int id) {
+        return (T) target.findViewById(id);
     }
 }

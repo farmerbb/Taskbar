@@ -71,7 +71,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
         final SharedPreferences pref = U.getSharedPreferences(getContext());
 
-        TextView textView = convertView.findViewById(R.id.name);
+        TextView textView = U.findViewById(convertView, R.id.name);
         textView.setText(entry.getLabel());
 
         Intent intent = new Intent();
@@ -90,10 +90,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 break;
         }
 
-        ImageView imageView = convertView.findViewById(R.id.icon);
+        ImageView imageView = U.findViewById(convertView, R.id.icon);
         imageView.setImageDrawable(entry.getIcon(getContext()));
 
-        LinearLayout layout = convertView.findViewById(R.id.entry);
+        LinearLayout layout = U.findViewById(convertView, R.id.entry);
         layout.setOnClickListener(view -> {
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), entry.getUserId(getContext()), null, false, false);
@@ -190,7 +190,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                 DisplayMetrics metrics = U.getRealDisplayMetrics(getContext());
 
-                if(intent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     intent.putExtra("context_menu_fix", true);
 
                 getContext().startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
@@ -208,6 +208,6 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
     private boolean visualFeedbackEnabled() {
         SharedPreferences pref = U.getSharedPreferences(getContext());
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O && pref.getBoolean("visual_feedback", true);
+        return Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && pref.getBoolean("visual_feedback", true);
     }
 }
