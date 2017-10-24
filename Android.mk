@@ -28,6 +28,8 @@ LOCAL_PACKAGE_NAME := Taskbar
 
 LOCAL_JAVA_LANGUAGE_VERSION := 1.8
 
+LOCAL_PRIVILEGED_MODULE := true
+
 LOCAL_AAPT_FLAGS := \
         --auto-add-overlay \
         --rename-manifest-package com.farmerbb.taskbar.androidx86 \
