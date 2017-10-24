@@ -1079,7 +1079,7 @@ public class U {
     }
 
     static void pinAppShortcut(Context context) {
-        Intent intent = U.getShortcutIntent(context);
+        Intent intent = getShortcutIntent(context);
         intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         intent.putExtra("duplicate", false);
 
