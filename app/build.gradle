@@ -14,7 +14,6 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
@@ -79,15 +78,13 @@ android {
 
     sourceSets {
         paid {
-            java {
-                srcDirs('src/main/java', 'src/oreoutils/java')
-            }
+            java { srcDirs('src/main/java', 'src/oreoutils/java') }
+            res { srcDirs('src/main/res', 'src/oreoutils/res') }
         }
 
         free {
-            java {
-                srcDirs('src/main/java', 'src/oreoutils/java')
-            }
+            java { srcDirs('src/main/java', 'src/oreoutils/java') }
+            res { srcDirs('src/main/res', 'src/oreoutils/res') }
         }
     }
 }
