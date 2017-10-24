@@ -18,16 +18,18 @@ package com.farmerbb.taskbar.util;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
+import android.view.WindowManager;
 
 public class OreoUtils {
 
     private OreoUtils() {}
 
-    static int TYPE_APPLICATION_OVERLAY = 2038;
     public static String ACTION_APP_NOTIFICATION_SETTINGS = "android.settings.APP_NOTIFICATION_SETTINGS";
     public static String EXTRA_APP_PACKAGE = "android.provider.extra.APP_PACKAGE";
 
-    public static void pinAppShortcut(Context context) {}
+    public static void pinAppShortcut(Context context) {
+        U.pinAppShortcut(context);
+    }
 
     @SuppressWarnings("deprecation")
     public static NotificationCompat.Builder getNotificationBuilder(Context context) {
@@ -36,5 +38,9 @@ public class OreoUtils {
 
     public static void startForegroundService(Context context, Intent intent) {
         context.startService(intent);
+    }
+
+    public static int getOverlayType() {
+        return WindowManager.LayoutParams.TYPE_PHONE;
     }
 }

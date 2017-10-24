@@ -1078,10 +1078,19 @@ public class U {
         return metrics;
     }
 
-    public static int getOverlayType() {
-        return Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
-                ? OreoUtils.TYPE_APPLICATION_OVERLAY
-                : WindowManager.LayoutParams.TYPE_PHONE;
+    static void pinAppShortcut(Context context) {
+        Intent intent = U.getShortcutIntent(context);
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        intent.putExtra("duplicate", false);
+
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        intent.setPackage(defaultLauncher.activityInfo.packageName);
+        context.sendBroadcast(intent);
+
+        showToast(context, R.string.shortcut_created);
     }
 
     public static boolean shouldCollapse(Context context, boolean pendingAppLaunch) {

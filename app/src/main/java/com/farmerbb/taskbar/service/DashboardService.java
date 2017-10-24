@@ -64,6 +64,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
 import com.farmerbb.taskbar.util.DashboardHelper;
+import com.farmerbb.taskbar.util.OreoUtils;
 import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -194,7 +195,7 @@ public class DashboardService extends Service {
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
-                U.getOverlayType(),
+                OreoUtils.getOverlayType(),
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 PixelFormat.TRANSLUCENT);
 

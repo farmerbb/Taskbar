@@ -34,18 +34,20 @@ public class OreoUtils {
 
     private OreoUtils() {}
 
-    static int TYPE_APPLICATION_OVERLAY = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
     public static String ACTION_APP_NOTIFICATION_SETTINGS = Settings.ACTION_APP_NOTIFICATION_SETTINGS;
     public static String EXTRA_APP_PACKAGE = Settings.EXTRA_APP_PACKAGE;
 
     public static void pinAppShortcut(Context context) {
-        ShortcutManager mShortcutManager = context.getSystemService(ShortcutManager.class);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ShortcutManager mShortcutManager = context.getSystemService(ShortcutManager.class);
 
-        if(mShortcutManager.isRequestPinShortcutSupported()) {
-            ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(context, "freeform_mode").build();
-            mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+            if(mShortcutManager.isRequestPinShortcutSupported()) {
+                ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(context, "freeform_mode").build();
+                mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+            } else
+                U.showToastLong(context, R.string.pin_shortcut_not_supported);
         } else
-            U.showToastLong(context, R.string.pin_shortcut_not_supported);
+            U.pinAppShortcut(context);
     }
 
     public static NotificationCompat.Builder getNotificationBuilder(Context context) {
@@ -67,5 +69,11 @@ public class OreoUtils {
             context.startForegroundService(intent);
         else
             context.startService(intent);
+    }
+
+    public static int getOverlayType() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                : WindowManager.LayoutParams.TYPE_PHONE;
     }
 }

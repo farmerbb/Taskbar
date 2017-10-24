@@ -199,22 +199,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 dialog.show();
                 break;
             case "add_shortcut":
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-                    OreoUtils.pinAppShortcut(getActivity());
-                } else {
-                    Intent intent = U.getShortcutIntent(getActivity());
-                    intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-                    intent.putExtra("duplicate", false);
-
-                    Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                    homeIntent.addCategory(Intent.CATEGORY_HOME);
-                    ResolveInfo defaultLauncher = getActivity().getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
-
-                    intent.setPackage(defaultLauncher.activityInfo.packageName);
-                    getActivity().sendBroadcast(intent);
-
-                    U.showToast(getActivity(), R.string.shortcut_created);
-                }
+                OreoUtils.pinAppShortcut(getActivity());
                 break;
             case "window_size":
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {

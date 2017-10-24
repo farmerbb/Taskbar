@@ -87,6 +87,7 @@ import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.util.OreoUtils;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
@@ -221,7 +222,7 @@ public class TaskbarService extends Service {
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                U.getOverlayType(),
+                OreoUtils.getOverlayType(),
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 PixelFormat.TRANSLUCENT);
 
