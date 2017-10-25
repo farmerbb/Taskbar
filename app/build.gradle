@@ -77,12 +77,7 @@ android {
     }
 
     sourceSets {
-        paid {
-            java { srcDirs('src/main/java', 'src/oreoutils/java') }
-            res { srcDirs('src/main/res', 'src/oreoutils/res') }
-        }
-
-        free {
+        main {
             java { srcDirs('src/main/java', 'src/oreoutils/java') }
             res { srcDirs('src/main/res', 'src/oreoutils/res') }
         }
