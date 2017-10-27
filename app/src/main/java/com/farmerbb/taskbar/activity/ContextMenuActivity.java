@@ -388,7 +388,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                                 ComponentName.unflattenFromString(componentName),
                                 userManager.getUserForSerialNumber(userId),
                                 null,
-                                U.getActivityOptions(ApplicationType.APPLICATION).toBundle()));
+                                U.getActivityOptionsBundle(ApplicationType.APPLICATION)));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -418,7 +418,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.launchApp(this, () -> {
                     Intent intent2 = new Intent(this, MainActivity.class);
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent2, U.getActivityOptions(ApplicationType.APPLICATION).toBundle());
+                    startActivity(intent2, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
                 });
 
                 showStartMenu = false;
@@ -577,7 +577,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
                     try {
-                        startActivity(fileManagerIntent, U.getActivityOptions(ApplicationType.APPLICATION).toBundle());
+                        startActivity(fileManagerIntent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     }
@@ -593,7 +593,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     try {
-                        startActivity(settingsIntent, U.getActivityOptions(ApplicationType.APPLICATION).toBundle());
+                        startActivity(settingsIntent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     }

@@ -137,7 +137,7 @@ public class U {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("device_admin", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent, getActivityOptions(ApplicationType.APPLICATION).toBundle());
+                context.startActivity(intent, getActivityOptionsBundle(ApplicationType.APPLICATION));
 
                 if(context instanceof Activity)
                     ((Activity) context).overridePendingTransition(0, 0);
@@ -160,7 +160,7 @@ public class U {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 try {
-                    context.startActivity(intent, getActivityOptions(ApplicationType.APPLICATION).toBundle());
+                    context.startActivity(intent, getActivityOptionsBundle(ApplicationType.APPLICATION));
                     showToastLong(context, R.string.enable_accessibility);
                 } catch (ActivityNotFoundException e) {
                     showToast(context, R.string.lock_device_not_supported);
@@ -913,6 +913,13 @@ public class U {
         } catch (Exception e) { /* Gracefully fail */ }
 
         return options;
+    }
+
+    public static Bundle getActivityOptionsBundle(ApplicationType applicationType) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            return null;
+        else
+            return getActivityOptions(applicationType).toBundle();
     }
 
     private static ApplicationType getApplicationType(Context context, String packageName) {
