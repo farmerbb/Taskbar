@@ -137,7 +137,7 @@ public class U {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("device_admin", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                context.startActivity(intent, getActivityOptions(ApplicationType.APPLICATION).toBundle());
 
                 if(context instanceof Activity)
                     ((Activity) context).overridePendingTransition(0, 0);
@@ -160,7 +160,7 @@ public class U {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 try {
-                    context.startActivity(intent);
+                    context.startActivity(intent, getActivityOptions(ApplicationType.APPLICATION).toBundle());
                     showToastLong(context, R.string.enable_accessibility);
                 } catch (ActivityNotFoundException e) {
                     showToast(context, R.string.lock_device_not_supported);
@@ -881,7 +881,7 @@ public class U {
             return false;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @TargetApi(Build.VERSION_CODES.N)
     public static ActivityOptions getActivityOptions(ApplicationType applicationType) {
         ActivityOptions options = ActivityOptions.makeBasic();
         Integer stackId = null;
@@ -890,6 +890,8 @@ public class U {
             case APPLICATION:
                 if(!FreeformHackHelper.getInstance().isFreeformHackActive())
                     stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                else
+                    stackId = FREEFORM_WORKSPACE_STACK_ID;
                 break;
             case GAME:
                 stackId = FULLSCREEN_WORKSPACE_STACK_ID;
@@ -898,16 +900,17 @@ public class U {
                 stackId = FREEFORM_WORKSPACE_STACK_ID;
                 break;
             case CONTEXT_MENU:
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(!FreeformHackHelper.getInstance().isFreeformHackActive()
+                        || Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                else
+                    stackId = FREEFORM_WORKSPACE_STACK_ID;
         }
 
-        if(stackId != null) {
-            try {
-                Method method = ActivityOptions.class.getMethod("setLaunchStackId", int.class);
-                method.invoke(options, stackId);
-            } catch (Exception e) { /* Gracefully fail */ }
-        }
+        try {
+            Method method = ActivityOptions.class.getMethod("setLaunchStackId", int.class);
+            method.invoke(options, stackId);
+        } catch (Exception e) { /* Gracefully fail */ }
 
         return options;
     }

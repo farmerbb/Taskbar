@@ -49,6 +49,7 @@ import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.MenuHelper;
@@ -382,7 +383,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         if(appIsValid) switch(p.getKey()) {
             case "app_info":
-                U.launchApp(this, () -> launcherApps.startAppDetailsActivity(ComponentName.unflattenFromString(componentName), userManager.getUserForSerialNumber(userId), null, null));
+                U.launchApp(this, () ->
+                        launcherApps.startAppDetailsActivity(
+                                ComponentName.unflattenFromString(componentName),
+                                userManager.getUserForSerialNumber(userId),
+                                null,
+                                U.getActivityOptions(ApplicationType.APPLICATION).toBundle()));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -412,7 +418,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.launchApp(this, () -> {
                     Intent intent2 = new Intent(this, MainActivity.class);
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent2);
+                    startActivity(intent2, U.getActivityOptions(ApplicationType.APPLICATION).toBundle());
                 });
 
                 showStartMenu = false;
@@ -571,7 +577,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
                     try {
-                        startActivity(fileManagerIntent);
+                        startActivity(fileManagerIntent, U.getActivityOptions(ApplicationType.APPLICATION).toBundle());
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     }
@@ -587,7 +593,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     try {
-                        startActivity(settingsIntent);
+                        startActivity(settingsIntent, U.getActivityOptions(ApplicationType.APPLICATION).toBundle());
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     }
