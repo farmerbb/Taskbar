@@ -884,14 +884,14 @@ public class U {
     @TargetApi(Build.VERSION_CODES.N)
     public static ActivityOptions getActivityOptions(ApplicationType applicationType) {
         ActivityOptions options = ActivityOptions.makeBasic();
-        Integer stackId = null;
+        int stackId = -1;
 
         switch(applicationType) {
             case APPLICATION:
-                if(!FreeformHackHelper.getInstance().isFreeformHackActive())
-                    stackId = FULLSCREEN_WORKSPACE_STACK_ID;
-                else
+                if(FreeformHackHelper.getInstance().isFreeformHackActive())
                     stackId = FREEFORM_WORKSPACE_STACK_ID;
+                else
+                    stackId = FULLSCREEN_WORKSPACE_STACK_ID;
                 break;
             case GAME:
                 stackId = FULLSCREEN_WORKSPACE_STACK_ID;
@@ -900,11 +900,9 @@ public class U {
                 stackId = FREEFORM_WORKSPACE_STACK_ID;
                 break;
             case CONTEXT_MENU:
-                if(!FreeformHackHelper.getInstance().isFreeformHackActive()
-                        || Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     stackId = FULLSCREEN_WORKSPACE_STACK_ID;
-                else
-                    stackId = FREEFORM_WORKSPACE_STACK_ID;
+                break;
         }
 
         try {
