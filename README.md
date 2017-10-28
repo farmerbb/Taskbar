@@ -27,9 +27,16 @@ Simply follow these steps to configure your device for launching apps in freefor
 For more information and detailed instructions, click "Help & instructions for freeform mode" inside the Taskbar app.
 
 ## Download
+Taskbar can be downloaded as a standalone Android app from:
+
 * Google Play (https://play.google.com/store/apps/details?id=com.farmerbb.taskbar)
-* F-Droid (https://f-droid.org/repository/browse/?fdid=com.farmerbb.taskbar)
 * APKMirror (http://www.apkmirror.com/apk/braden-farmer/taskbar/)
+* F-Droid (https://f-droid.org/repository/browse/?fdid=com.farmerbb.taskbar)
+
+Taskbar is also included as part of the following Android distributions for PCs:
+
+* Android-x86 (version 7.1-rc2) (https://www.android-x86.org)
+* Bliss OS (x86 builds) (https://blissroms.com)
 
 ## How to Build
 Prerequisites:
@@ -39,8 +46,6 @@ Prerequisites:
 * Internet connection (to download dependencies)
 
 Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK file "app-free-debug.apk", ready to install on your Android device.
-
-For ROM developers, Taskbar can also be built from source using the included Android.mk file. (For Nougat, use Taskbar version 3.6; for Oreo, use the latest version)
 
 ## Icon Pack Support
 Taskbar includes support for ADW-style icon packs.  If you are an icon pack developer and would like to include support for applying the icon pack from within your app, simply use the following code:
