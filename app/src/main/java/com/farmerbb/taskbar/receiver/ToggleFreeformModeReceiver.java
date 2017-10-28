@@ -19,13 +19,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.util.OreoUtils;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class ToggleFreeformModeReceiver extends BroadcastReceiver {
@@ -39,7 +38,7 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
 
             context.stopService(notificationIntent);
 
-            OreoUtils.startForegroundService(context, notificationIntent);
+            CompatUtils.startForegroundService(context, notificationIntent);
 
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
@@ -54,7 +53,7 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
 
             context.startActivity(intent2);
 
-            OreoUtils.startForegroundService(context, notificationIntent);
+            CompatUtils.startForegroundService(context, notificationIntent);
 
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
         } else

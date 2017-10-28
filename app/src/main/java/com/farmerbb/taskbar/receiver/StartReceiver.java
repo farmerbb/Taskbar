@@ -23,7 +23,7 @@ import android.os.Build;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.util.OreoUtils;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class StartReceiver extends BroadcastReceiver {
@@ -64,7 +64,7 @@ public class StartReceiver extends BroadcastReceiver {
             Intent notificationIntent = new Intent(context, NotificationService.class);
             notificationIntent.putExtra("start_services", true);
 
-            OreoUtils.startForegroundService(context, notificationIntent);
+            CompatUtils.startForegroundService(context, notificationIntent);
         }
     }
 }

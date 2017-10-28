@@ -189,13 +189,7 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        ToastInterface toast;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
-                || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-            toast = new ToastFrameworkImpl(context, message, length);
-        else
-            toast = new ToastCompatImpl(context, message, length);
-
+        ToastInterface toast = CompatUtils.createToast(context, message, length);
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);

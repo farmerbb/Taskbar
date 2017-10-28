@@ -22,10 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -39,7 +35,7 @@ import android.view.View;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.OreoUtils;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class FreeformModeFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
@@ -199,7 +195,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 dialog.show();
                 break;
             case "add_shortcut":
-                OreoUtils.pinAppShortcut(getActivity());
+                CompatUtils.pinAppShortcut(getActivity());
                 break;
             case "window_size":
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {

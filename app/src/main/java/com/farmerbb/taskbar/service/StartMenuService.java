@@ -74,7 +74,7 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.MenuHelper;
-import com.farmerbb.taskbar.util.OreoUtils;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 import com.farmerbb.taskbar.widget.StartMenuLayout;
@@ -218,7 +218,7 @@ public class StartMenuService extends Service {
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                OreoUtils.getOverlayType(),
+                CompatUtils.getOverlayType(),
                 shouldShowSearchBox ? 0 : WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 PixelFormat.TRANSLUCENT);
 

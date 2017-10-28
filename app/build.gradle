@@ -78,8 +78,8 @@ android {
 
     sourceSets {
         main {
-            java { srcDirs('src/main/java', 'src/oreoutils/java') }
-            res { srcDirs('src/main/res', 'src/oreoutils/res') }
+            java { srcDirs('src/main/java', 'src/playstore/java') }
+            res { srcDirs('src/main/res', 'src/playstore/res') }
         }
     }
 }

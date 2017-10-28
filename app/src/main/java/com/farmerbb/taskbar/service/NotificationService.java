@@ -37,7 +37,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.IconCache;
-import com.farmerbb.taskbar.util.OreoUtils;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class NotificationService extends Service {
@@ -103,7 +103,7 @@ public class NotificationService extends Service {
                 PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 PendingIntent receiverPendingIntent2 = PendingIntent.getBroadcast(this, 0, receiverIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                NotificationCompat.Builder mBuilder = OreoUtils.getNotificationBuilder(this)
+                NotificationCompat.Builder mBuilder = CompatUtils.getNotificationBuilder(this)
                         .setSmallIcon(pref.getBoolean("app_drawer_icon", false) ? R.drawable.ic_system : R.drawable.ic_allapps)
                         .setContentIntent(contentIntent)
                         .setContentTitle(getString(R.string.taskbar_is_active))
