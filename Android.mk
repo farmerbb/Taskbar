@@ -11,7 +11,8 @@ LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dir))
 
 LOCAL_SRC_FILES := \
         $(call all-java-files-under, app/src/main/java) \
-        $(call all-java-files-under, app/src/androidx86/java)
+        $(call all-java-files-under, app/src/androidx86/java) \
+        $(call all-java-files-under, app/src/compat-$(PLATFORM_SDK_VERSION)/java)
 
 LOCAL_MANIFEST_FILE := app/src/androidx86/AndroidManifest.xml
 
@@ -27,8 +28,6 @@ LOCAL_PACKAGE_NAME := Taskbar
 LOCAL_JAVA_LANGUAGE_VERSION := 1.8
 
 LOCAL_PRIVILEGED_MODULE := true
-
-LOCAL_SDK_VERSION := 25
 
 LOCAL_AAPT_FLAGS := \
         --auto-add-overlay \

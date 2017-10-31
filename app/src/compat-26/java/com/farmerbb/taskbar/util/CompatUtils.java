@@ -28,7 +28,6 @@ import android.support.v4.app.NotificationCompat;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.R;
-import com.mikepenz.iconics.Iconics;
 
 // Utility class meant for compatibility between the Android-x86 version of Taskbar (targeting API 25)
 // and the Play Store version of Taskbar (targeting API 27, with additional dependencies).
@@ -80,19 +79,5 @@ public class CompatUtils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_PHONE;
-    }
-
-    public static CharSequence getKeyboardShortcutSummary(Context context) {
-        return new Iconics.IconicsBuilder()
-                .ctx(context)
-                .on(context.getString(R.string.pref_description_keyboard_shortcut))
-                .build();
-    }
-
-    static ToastInterface createToast(Context context, String message, int length) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
-            return new ToastFrameworkImpl(context, message, length);
-        else
-            return new ToastCompatImpl(context, message, length);
     }
 }

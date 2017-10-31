@@ -189,7 +189,7 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        ToastInterface toast = CompatUtils.createToast(context, message, length);
+        ToastInterface toast = DependencyUtils.createToast(context, message, length);
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);

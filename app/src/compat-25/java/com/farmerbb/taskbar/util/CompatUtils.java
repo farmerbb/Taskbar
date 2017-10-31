@@ -20,8 +20,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.view.WindowManager;
 
-import com.farmerbb.taskbar.R;
-
 // Utility class meant for compatibility between the Android-x86 version of Taskbar (targeting API 25)
 // and the Play Store version of Taskbar (targeting API 27, with additional dependencies).
 // Do not make changes to this file without making corresponding changes to the Android-x86 version.
@@ -49,12 +47,5 @@ public class CompatUtils {
     public static int getOverlayType() {
         return WindowManager.LayoutParams.TYPE_PHONE;
     }
-
-    public static CharSequence getKeyboardShortcutSummary(Context context) {
-        return context.getString(R.string.pref_description_keyboard_shortcut_alt);
-    }
-
-    static ToastInterface createToast(Context context, String message, int length) {
-        return new ToastFrameworkImpl(context, message, length);
-    }
 }
+

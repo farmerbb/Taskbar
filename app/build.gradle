@@ -78,7 +78,7 @@ android {
 
     sourceSets {
         main {
-            java { srcDirs('src/main/java', 'src/playstore/java') }
+            java { srcDirs('src/main/java', 'src/playstore/java', 'src/compat-26/java') }
             res { srcDirs('src/main/res', 'src/playstore/res') }
         }
     }
