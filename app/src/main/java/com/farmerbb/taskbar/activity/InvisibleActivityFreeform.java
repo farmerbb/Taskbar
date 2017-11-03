@@ -76,7 +76,10 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(FreeformHackHelper.getInstance().isFreeformHackActive()) {
+        FreeformHackHelper helper = FreeformHackHelper.getInstance();
+        SharedPreferences pref = U.getSharedPreferences(this);
+
+        if(helper.isFreeformHackActive()) {
             proceedWithOnCreate = false;
             super.finish();
         }
@@ -91,7 +94,6 @@ public class InvisibleActivityFreeform extends Activity {
         }
 
         if(U.isChromeOs(this)) {
-            FreeformHackHelper helper = FreeformHackHelper.getInstance();
             helper.setFreeformHackActive(true);
             helper.setInFreeformWorkspace(true);
             
@@ -118,35 +120,32 @@ public class InvisibleActivityFreeform extends Activity {
             LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);
             LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
 
-            FreeformHackHelper helper = FreeformHackHelper.getInstance();
             helper.setFreeformHackActive(true);
 
             // Show power button warning on CyanogenMod / LineageOS devices
-            if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")) {
-                SharedPreferences pref = U.getSharedPreferences(this);
-                if(!pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
-                    new Handler().postDelayed(() -> {
-                        if(helper.isInFreeformWorkspace()) {
-                            Intent intent = null;
+            if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")
+                    && !pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
+                new Handler().postDelayed(() -> {
+                    if(helper.isInFreeformWorkspace()) {
+                        Intent intent = null;
 
-                            switch(pref.getString("theme", "light")) {
-                                case "light":
-                                    intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAlt.class);
-                                    break;
-                                case "dark":
-                                    intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAltDark.class);
-                                    break;
-                            }
-
-                            if(intent != null) {
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra("power_button_warning", true);
-                            }
-
-                            U.launchAppMaximized(getApplicationContext(), intent);
+                        switch(pref.getString("theme", "light")) {
+                            case "light":
+                                intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAlt.class);
+                                break;
+                            case "dark":
+                                intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAltDark.class);
+                                break;
                         }
-                    }, 100);
-                }
+
+                        if(intent != null) {
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("power_button_warning", true);
+                        }
+
+                        U.launchAppMaximized(getApplicationContext(), intent);
+                    }
+                }, 100);
             }
 
             showTaskbar = true;
