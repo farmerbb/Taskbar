@@ -565,7 +565,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.launchApp(this, () -> {
                     Intent fileManagerIntent;
 
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                        fileManagerIntent = new Intent(Intent.ACTION_VIEW);
+                    else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                         fileManagerIntent = new Intent("android.provider.action.BROWSE");
                     else {
                         fileManagerIntent = new Intent("android.provider.action.BROWSE_DOCUMENT_ROOT");
