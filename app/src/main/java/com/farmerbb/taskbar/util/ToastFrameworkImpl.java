@@ -17,7 +17,10 @@ package com.farmerbb.taskbar.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Toast;
+
+import com.farmerbb.taskbar.R;
 
 class ToastFrameworkImpl implements ToastInterface {
     private Toast toast;
@@ -25,6 +28,10 @@ class ToastFrameworkImpl implements ToastInterface {
     @SuppressLint("ShowToast")
     ToastFrameworkImpl(Context context, String message, int length) {
         toast = Toast.makeText(context, message, length);
+        toast.setGravity(
+                Gravity.BOTTOM | Gravity.CENTER_VERTICAL,
+                0,
+                context.getResources().getDimensionPixelSize(R.dimen.toast_y_offset));
     }
 
     @Override
