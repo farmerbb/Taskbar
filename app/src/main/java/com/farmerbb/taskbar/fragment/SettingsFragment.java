@@ -66,23 +66,26 @@ public class SettingsFragment extends PreferenceFragment {
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-
-                if(finishedLoadingPrefs && preference.getKey().equals("theme")) {
-                    // Restart MainActivity
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("theme_change", true);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(0, 0);
-                }
-
             } else if(!(preference instanceof CheckBoxPreference)) {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
             }
 
-            if(finishedLoadingPrefs) U.restartTaskbar(getActivity());
+            if(finishedLoadingPrefs) {
+                switch(preference.getKey()) {
+                    case "theme":
+                        // Restart MainActivity
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("theme_change", true);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(0, 0);
+                        break;
+                }
+
+                U.restartTaskbar(getActivity());
+            }
 
             return true;
         }
