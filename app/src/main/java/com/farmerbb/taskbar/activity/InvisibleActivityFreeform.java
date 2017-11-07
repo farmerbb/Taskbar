@@ -93,7 +93,7 @@ public class InvisibleActivityFreeform extends Activity {
             }
         }
 
-        if(U.isChromeOs(this)) {
+        if(U.isOverridingFreeformHack(this)) {
             helper.setFreeformHackActive(true);
             helper.setInFreeformWorkspace(true);
             

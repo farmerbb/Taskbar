@@ -17,16 +17,19 @@ package com.farmerbb.taskbar.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
 import com.farmerbb.taskbar.MainActivity;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -81,6 +84,15 @@ public class SettingsFragment extends PreferenceFragment {
                         intent.putExtra("theme_change", true);
                         startActivity(intent);
                         getActivity().overridePendingTransition(0, 0);
+                        break;
+                    case "chrome_os_context_menu_fix":
+                        FreeformHackHelper helper = FreeformHackHelper.getInstance();
+                        helper.setFreeformHackActive(false);
+                        helper.setInFreeformWorkspace(false);
+
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+
+                        new Handler().post(() -> U.startFreeformHack(getActivity(), false, false));
                         break;
                 }
 

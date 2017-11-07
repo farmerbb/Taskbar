@@ -1098,7 +1098,7 @@ public class U {
     public static boolean shouldCollapse(Context context, boolean pendingAppLaunch) {
         SharedPreferences pref = getSharedPreferences(context);
         if(pref.getBoolean("hide_taskbar", true)) {
-            if(isChromeOs(context))
+            if(isOverridingFreeformHack(context))
                 return true;
             else {
                 FreeformHackHelper helper = FreeformHackHelper.getInstance();
@@ -1109,6 +1109,11 @@ public class U {
             }
         } else
             return false;
+    }
+
+    public static boolean isOverridingFreeformHack(Context context) {
+        SharedPreferences pref = U.getSharedPreferences(context);
+        return isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true);
     }
 
     @SuppressWarnings("unchecked")

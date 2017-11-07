@@ -60,7 +60,9 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
             bindPreferenceSummaryToValue(findPreference("show_search_bar"));
             bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
 
-            if(!U.isChromeOs(getActivity()))
+            if(U.isChromeOs(getActivity()))
+                bindPreferenceSummaryToValue(findPreference("chrome_os_context_menu_fix"));
+            else
                 getPreferenceScreen().removePreference(findPreference("chrome_os_context_menu_fix"));
         }
 
