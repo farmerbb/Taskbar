@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
@@ -92,7 +93,9 @@ public class SettingsFragment extends PreferenceFragment {
 
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
 
-                        new Handler().post(() -> U.startFreeformHack(getActivity(), false, false));
+                        SharedPreferences pref = U.getSharedPreferences(getActivity());
+                        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false))
+                            new Handler().post(() -> U.startFreeformHack(getActivity(), false, false));
                         break;
                 }
 

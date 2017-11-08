@@ -51,21 +51,7 @@ public class HomeActivity extends Activity {
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            LauncherHelper.getInstance().setOnHomeScreen(false);
-
-            // Stop the Taskbar and Start Menu services if they should normally not be active
-            SharedPreferences pref = U.getSharedPreferences(HomeActivity.this);
-            if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-                stopService(new Intent(HomeActivity.this, TaskbarService.class));
-                stopService(new Intent(HomeActivity.this, StartMenuService.class));
-                stopService(new Intent(HomeActivity.this, DashboardService.class));
-
-                IconCache.getInstance(context).clearCache();
-
-                LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
-            }
-
-            finish();
+            killHomeActivity();
         }
     };
 
@@ -182,7 +168,7 @@ public class HomeActivity extends Activity {
         });
 
         if(U.isChromeOs(this))
-            finish();
+            killHomeActivity();
         else
             setContentView(view);
 
@@ -316,5 +302,23 @@ public class HomeActivity extends Activity {
     @Override
     public void onBackPressed() {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+    }
+    
+    private void killHomeActivity() {
+        LauncherHelper.getInstance().setOnHomeScreen(false);
+
+        // Stop the Taskbar and Start Menu services if they should normally not be active
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+            stopService(new Intent(this, TaskbarService.class));
+            stopService(new Intent(this, StartMenuService.class));
+            stopService(new Intent(this, DashboardService.class));
+
+            IconCache.getInstance(this).clearCache();
+
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        }
+
+        finish();
     }
 }

@@ -162,7 +162,7 @@ public class NotificationService extends Service {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
 
-            if(!U.launcherIsDefault(this))
+            if(!U.launcherIsDefault(this) || U.isChromeOs(this))
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
         }
 

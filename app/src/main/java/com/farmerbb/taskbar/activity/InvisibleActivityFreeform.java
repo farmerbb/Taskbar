@@ -77,8 +77,6 @@ public class InvisibleActivityFreeform extends Activity {
         super.onCreate(savedInstanceState);
 
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
-        SharedPreferences pref = U.getSharedPreferences(this);
-
         if(helper.isFreeformHackActive()) {
             proceedWithOnCreate = false;
             super.finish();
@@ -123,29 +121,31 @@ public class InvisibleActivityFreeform extends Activity {
             helper.setFreeformHackActive(true);
 
             // Show power button warning on CyanogenMod / LineageOS devices
-            if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")
-                    && !pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
-                new Handler().postDelayed(() -> {
-                    if(helper.isInFreeformWorkspace()) {
-                        Intent intent = null;
+            if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                if(!pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
+                    new Handler().postDelayed(() -> {
+                        if(helper.isInFreeformWorkspace()) {
+                            Intent intent = null;
 
-                        switch(pref.getString("theme", "light")) {
-                            case "light":
-                                intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAlt.class);
-                                break;
-                            case "dark":
-                                intent = new Intent(InvisibleActivityFreeform.this, InvisibleActivityAltDark.class);
-                                break;
+                            switch(pref.getString("theme", "light")) {
+                                case "light":
+                                    intent = new Intent(this, InvisibleActivityAlt.class);
+                                    break;
+                                case "dark":
+                                    intent = new Intent(this, InvisibleActivityAltDark.class);
+                                    break;
+                            }
+
+                            if(intent != null) {
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("power_button_warning", true);
+                            }
+
+                            U.launchAppMaximized(getApplicationContext(), intent);
                         }
-
-                        if(intent != null) {
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("power_button_warning", true);
-                        }
-
-                        U.launchAppMaximized(getApplicationContext(), intent);
-                    }
-                }, 100);
+                    }, 100);
+                }
             }
 
             showTaskbar = true;
@@ -192,7 +192,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
-        if(U.launcherIsDefault(this)) {
+        if(U.launcherIsDefault(this) && !U.isChromeOs(this)) {
             LauncherHelper.getInstance().setOnHomeScreen(true);
             bootToFreeform = true;
 
@@ -206,10 +206,8 @@ public class InvisibleActivityFreeform extends Activity {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
             // Show the taskbar when activity is started
-            new Handler().postDelayed(() -> {
-                if(showTaskbar)
-                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-            }, 100);
+            if(showTaskbar)
+                new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR")), 100);
         }
 
         // Show the taskbar when activity is started
@@ -253,14 +251,14 @@ public class InvisibleActivityFreeform extends Activity {
     public void finish() {}
 
     private void possiblyHideTaskbar() {
-        new Handler().postDelayed(() -> {
-            if(!doNotHide) {
+        if(!doNotHide) {
+            new Handler().postDelayed(() -> {
                 if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen())
                     LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                 else
                     LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-            }
-        }, 100);
+            }, 100);
+        }
     }
 
     private void reallyFinish() {
