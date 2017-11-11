@@ -36,43 +36,46 @@ import com.farmerbb.taskbar.util.U;
 public class GeneralFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
 
+        super.onCreate(savedInstanceState);
+
+        // Add preferences
+        addPreferencesFromResource(R.xml.pref_general);
+
+        // Set OnClickListeners for certain preferences
+        findPreference("blacklist").setOnPreferenceClickListener(this);
+        findPreference("notification_settings").setOnPreferenceClickListener(this);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !U.isChromeOs(getActivity()))
+            findPreference("hide_taskbar").setSummary(R.string.hide_taskbar_disclaimer);
+
+        bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
+        bindPreferenceSummaryToValue(findPreference("scrollbar"));
+        bindPreferenceSummaryToValue(findPreference("position"));
+        bindPreferenceSummaryToValue(findPreference("anchor"));
+        bindPreferenceSummaryToValue(findPreference("alt_button_config"));
+        bindPreferenceSummaryToValue(findPreference("show_search_bar"));
+        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
+
+        if(U.isChromeOs(getActivity()))
+            bindPreferenceSummaryToValue(findPreference("chrome_os_context_menu_fix"));
+        else
+            getPreferenceScreen().removePreference(findPreference("chrome_os_context_menu_fix"));
+
+        finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if(findPreference("dummy") == null) {
-            // Add preferences
-            addPreferencesFromResource(R.xml.pref_general);
-
-            // Set OnClickListeners for certain preferences
-            findPreference("blacklist").setOnPreferenceClickListener(this);
-            findPreference("notification_settings").setOnPreferenceClickListener(this);
-
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !U.isChromeOs(getActivity()))
-                findPreference("hide_taskbar").setSummary(R.string.hide_taskbar_disclaimer);
-
-            bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
-            bindPreferenceSummaryToValue(findPreference("scrollbar"));
-            bindPreferenceSummaryToValue(findPreference("position"));
-            bindPreferenceSummaryToValue(findPreference("anchor"));
-            bindPreferenceSummaryToValue(findPreference("alt_button_config"));
-            bindPreferenceSummaryToValue(findPreference("show_search_bar"));
-            bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
-
-            if(U.isChromeOs(getActivity()))
-                bindPreferenceSummaryToValue(findPreference("chrome_os_context_menu_fix"));
-            else
-                getPreferenceScreen().removePreference(findPreference("chrome_os_context_menu_fix"));
-        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_general);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

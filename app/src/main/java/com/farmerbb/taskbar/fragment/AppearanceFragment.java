@@ -43,40 +43,43 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
     private enum ColorPickerType { BACKGROUND_TINT, ACCENT_COLOR }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
 
+        super.onCreate(savedInstanceState);
+
+        // Add preferences
+        addPreferencesFromResource(R.xml.pref_appearance);
+
+        // Set OnClickListeners for certain preferences
+        findPreference("icon_pack_list").setOnPreferenceClickListener(this);
+        findPreference("reset_colors").setOnPreferenceClickListener(this);
+        findPreference("background_tint_pref").setOnPreferenceClickListener(this);
+        findPreference("accent_color_pref").setOnPreferenceClickListener(this);
+
+        bindPreferenceSummaryToValue(findPreference("theme"));
+        bindPreferenceSummaryToValue(findPreference("invisible_button"));
+        bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
+        bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
+        bindPreferenceSummaryToValue(findPreference("visual_feedback"));
+        bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
+        bindPreferenceSummaryToValue(findPreference("transparent_start_menu"));
+
+        findPreference("background_tint_pref").setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
+        findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
+
+        finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if(findPreference("dummy") == null) {
-            // Add preferences
-            addPreferencesFromResource(R.xml.pref_appearance);
-
-            // Set OnClickListeners for certain preferences
-            findPreference("icon_pack_list").setOnPreferenceClickListener(this);
-            findPreference("reset_colors").setOnPreferenceClickListener(this);
-            findPreference("background_tint_pref").setOnPreferenceClickListener(this);
-            findPreference("accent_color_pref").setOnPreferenceClickListener(this);
-
-            bindPreferenceSummaryToValue(findPreference("theme"));
-            bindPreferenceSummaryToValue(findPreference("invisible_button"));
-            bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
-            bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
-            bindPreferenceSummaryToValue(findPreference("visual_feedback"));
-            bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
-            bindPreferenceSummaryToValue(findPreference("transparent_start_menu"));
-
-            findPreference("background_tint_pref").setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
-            findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
-        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_appearance);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

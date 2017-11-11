@@ -40,6 +40,17 @@ public class SettingsFragment extends PreferenceFragment {
     boolean restartNotificationService = false;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Set values
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
+
+        U.initPrefs(getActivity());
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -49,12 +60,6 @@ public class SettingsFragment extends PreferenceFragment {
             ListView list = U.findViewById(rootView, android.R.id.list);
             if(list != null) list.setDivider(null);
         }
-
-        // Set values
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
-
-        U.initPrefs(getActivity());
     }
 
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {

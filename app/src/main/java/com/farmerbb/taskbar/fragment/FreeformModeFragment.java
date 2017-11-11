@@ -52,61 +52,61 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
     };
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
 
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-        if(findPreference("dummy") == null) {
-            // Add preferences
-            addPreferencesFromResource(R.xml.pref_freeform_hack);
+        // Add preferences
+        addPreferencesFromResource(R.xml.pref_freeform_hack);
 
-            findPreference("freeform_hack").setOnPreferenceClickListener(this);
-            findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
-            findPreference("add_shortcut").setOnPreferenceClickListener(this);
-            findPreference("window_size").setOnPreferenceClickListener(this);
+        findPreference("freeform_hack").setOnPreferenceClickListener(this);
+        findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
+        findPreference("add_shortcut").setOnPreferenceClickListener(this);
+        findPreference("window_size").setOnPreferenceClickListener(this);
 
-            bindPreferenceSummaryToValue(findPreference("window_size"));
+        bindPreferenceSummaryToValue(findPreference("window_size"));
 
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
-            boolean lockFreeformToggle = pref.getBoolean("freeform_hack", false)
-                    && U.isChromeOs(getActivity());
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        boolean lockFreeformToggle = pref.getBoolean("freeform_hack", false)
+                && U.isChromeOs(getActivity());
 
-            if(!lockFreeformToggle) {
-                findPreference("save_window_sizes").setDependency("freeform_hack");
-                findPreference("force_new_window").setDependency("freeform_hack");
-                findPreference("launch_games_fullscreen").setDependency("freeform_hack");
-                findPreference("window_size").setDependency("freeform_hack");
-                findPreference("add_shortcut").setDependency("freeform_hack");
-            }
-
-            findPreference("freeform_hack").setEnabled(!lockFreeformToggle);
+        if(!lockFreeformToggle) {
+            findPreference("save_window_sizes").setDependency("freeform_hack");
+            findPreference("force_new_window").setDependency("freeform_hack");
+            findPreference("launch_games_fullscreen").setDependency("freeform_hack");
+            findPreference("window_size").setDependency("freeform_hack");
+            findPreference("add_shortcut").setDependency("freeform_hack");
         }
+
+        findPreference("freeform_hack").setEnabled(!lockFreeformToggle);
+
+        // Dialog shown on devices which seem to not work correctly with freeform mode
+        if(U.hasPartialFreeformSupport() && !pref.getBoolean("samsung_dialog_shown", false)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.samsung_freeform_title)
+                    .setMessage(R.string.samsung_freeform_message)
+                    .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            dialog.setCancelable(false);
+        }
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(checkBoxReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+
+        finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_freeform);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        // Dialog shown on devices which seem to not work correctly with freeform mode
-        if(U.hasPartialFreeformSupport()) {
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
-            if(!pref.getBoolean("samsung_dialog_shown", false)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.samsung_freeform_title)
-                        .setMessage(R.string.samsung_freeform_message)
-                        .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.setCancelable(false);
-            }
-        }
-
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(checkBoxReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

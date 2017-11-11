@@ -39,49 +39,52 @@ import com.farmerbb.taskbar.util.U;
 public class RecentAppsFragment extends SettingsFragment implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
 
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-        if(findPreference("dummy") == null) {
-            // Add preferences
-            addPreferencesFromResource(R.xml.pref_recent_apps);
+        // Add preferences
+        addPreferencesFromResource(R.xml.pref_recent_apps);
 
-            // Set OnClickListeners for certain preferences
-            findPreference("enable_recents").setOnPreferenceClickListener(this);
-            findPreference("max_num_of_recents").setOnPreferenceClickListener(this);
-            findPreference("refresh_frequency").setOnPreferenceClickListener(this);
+        // Set OnClickListeners for certain preferences
+        findPreference("enable_recents").setOnPreferenceClickListener(this);
+        findPreference("max_num_of_recents").setOnPreferenceClickListener(this);
+        findPreference("refresh_frequency").setOnPreferenceClickListener(this);
 
-            if(showRunningAppsOnly()) {
-                ListPreference recentsAmountPref = ((ListPreference) findPreference("recents_amount"));
-                recentsAmountPref.setEntries(getResources().getStringArray(R.array.pref_recents_amount_alt));
-                recentsAmountPref.setEntryValues(getResources().getStringArray(R.array.pref_recents_amount_values_alt));
+        if(showRunningAppsOnly()) {
+            ListPreference recentsAmountPref = ((ListPreference) findPreference("recents_amount"));
+            recentsAmountPref.setEntries(getResources().getStringArray(R.array.pref_recents_amount_alt));
+            recentsAmountPref.setEntryValues(getResources().getStringArray(R.array.pref_recents_amount_values_alt));
 
-                SharedPreferences pref = U.getSharedPreferences(getActivity());
-                if(pref.getString("recents_amount", "past_day").equals("running_apps_only")) {
-                    ListPreference sortOrderPref = ((ListPreference) findPreference("sort_order"));
-                    sortOrderPref.setEntries(getResources().getStringArray(R.array.pref_sort_order_alt));
-                    sortOrderPref.setEntryValues(getResources().getStringArray(R.array.pref_sort_order_values_alt));
-                }
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            if(pref.getString("recents_amount", "past_day").equals("running_apps_only")) {
+                ListPreference sortOrderPref = ((ListPreference) findPreference("sort_order"));
+                sortOrderPref.setEntries(getResources().getStringArray(R.array.pref_sort_order_alt));
+                sortOrderPref.setEntryValues(getResources().getStringArray(R.array.pref_sort_order_values_alt));
             }
-
-            bindPreferenceSummaryToValue(findPreference("recents_amount"));
-            bindPreferenceSummaryToValue(findPreference("sort_order"));
-            bindPreferenceSummaryToValue(findPreference("disable_scrolling_list"));
-            bindPreferenceSummaryToValue(findPreference("full_length"));
-
-            updateMaxNumOfRecents(false);
-            updateRefreshFrequency(false);
         }
+
+        bindPreferenceSummaryToValue(findPreference("recents_amount"));
+        bindPreferenceSummaryToValue(findPreference("sort_order"));
+        bindPreferenceSummaryToValue(findPreference("disable_scrolling_list"));
+        bindPreferenceSummaryToValue(findPreference("full_length"));
+
+        updateMaxNumOfRecents(false);
+        updateRefreshFrequency(false);
+
+        finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_recent_apps);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        finishedLoadingPrefs = true;
     }
 
     @SuppressLint("SetTextI18n")

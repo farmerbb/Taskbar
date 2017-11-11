@@ -41,58 +41,61 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
     private int noThanksCount = 0;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
 
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-        if(findPreference("dummy") == null) {
-            // Add preferences
-            addPreferencesFromResource(R.xml.pref_base);
+        // Add preferences
+        addPreferencesFromResource(R.xml.pref_base);
 
-            boolean playStoreInstalled = true;
-            try {
-                getActivity().getPackageManager().getPackageInfo("com.android.vending", 0);
-            } catch (PackageManager.NameNotFoundException e) {
-                playStoreInstalled = false;
-            }
-
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
-            addPreferencesFromResource(R.xml.pref_about);
-
-            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
-                    && playStoreInstalled
-                    && !U.isSystemApp(getActivity())
-                    && !pref.getBoolean("hide_donate", false)) {
-                findPreference("donate").setOnPreferenceClickListener(this);
-            } else
-                getPreferenceScreen().removePreference(findPreference("donate_category"));
-
-            // Set OnClickListeners for certain preferences
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
-            else
-                getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));
-
-            findPreference("pref_screen_general").setOnPreferenceClickListener(this);
-            findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
-            findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
-            findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
-            findPreference("about").setOnPreferenceClickListener(this);
-
-            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-                findPreference("about").setSummary(R.string.pref_about_description_alt);
-            else
-                findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+        boolean playStoreInstalled = true;
+        try {
+            getActivity().getPackageManager().getPackageInfo("com.android.vending", 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            playStoreInstalled = false;
         }
+
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        addPreferencesFromResource(R.xml.pref_about);
+
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+                && playStoreInstalled
+                && !U.isSystemApp(getActivity())
+                && !pref.getBoolean("hide_donate", false)) {
+            findPreference("donate").setOnPreferenceClickListener(this);
+        } else
+            getPreferenceScreen().removePreference(findPreference("donate_category"));
+
+        // Set OnClickListeners for certain preferences
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
+        else
+            getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));
+
+        findPreference("pref_screen_general").setOnPreferenceClickListener(this);
+        findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
+        findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
+        findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
+        findPreference("about").setOnPreferenceClickListener(this);
+
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
+            findPreference("about").setSummary(R.string.pref_about_description_alt);
+        else
+            findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+
+        finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.app_name);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(false);
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

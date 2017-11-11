@@ -49,40 +49,43 @@ import com.farmerbb.taskbar.util.U;
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
 
+        super.onCreate(savedInstanceState);
+
+        // Add preferences
+        addPreferencesFromResource(R.xml.pref_advanced);
+
+        // Set OnClickListeners for certain preferences
+        findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
+        findPreference("launcher").setOnPreferenceClickListener(this);
+        findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
+        findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
+        findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
+        findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
+
+        bindPreferenceSummaryToValue(findPreference("dashboard"));
+
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        boolean lockHomeToggle = pref.getBoolean("launcher", false)
+                && (U.hasSupportLibrary(getActivity())
+                || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID));
+
+        findPreference("launcher").setEnabled(!lockHomeToggle);
+
+        finishedLoadingPrefs = true;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if(findPreference("dummy") == null) {
-            // Add preferences
-            addPreferencesFromResource(R.xml.pref_advanced);
-
-            // Set OnClickListeners for certain preferences
-            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
-            findPreference("launcher").setOnPreferenceClickListener(this);
-            findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
-            findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
-            findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
-            findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
-
-            bindPreferenceSummaryToValue(findPreference("dashboard"));
-
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
-            boolean lockHomeToggle = pref.getBoolean("launcher", false)
-                    && (U.hasSupportLibrary(getActivity())
-                    || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID));
-
-            findPreference("launcher").setEnabled(!lockHomeToggle);
-        }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setTitle(R.string.pref_header_advanced);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-        finishedLoadingPrefs = true;
     }
 
     @Override
