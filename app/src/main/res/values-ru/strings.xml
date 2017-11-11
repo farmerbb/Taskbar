@@ -252,6 +252,7 @@
     <string name="tools">Инструменты</string>
 
     <string name="enable_accessibility">Нужно включить службу Taskbar!</string>
+    <string name="accessibility_service_summary">Taskbar будет показывать меню питания.</string>
     <string name="accessibility_service_description">Taskbar будет показывать меню питания.\n\n(Это больше нигде не используется)</string>
 
     <string name="pref_title_force_new_window">Всегда открывать в новом окне</string>

@@ -252,6 +252,7 @@
     <string name="tools">Werkzeuge</string>
 
     <string name="enable_accessibility">Taskbar muss als Zugangshilfe akriviert werden, um das Powermenü anzuzeigen</string>
+    <string name="accessibility_service_summary">Erlaubt, Taskbar das Ausschaltmenü anzuzeigen.</string>
     <string name="accessibility_service_description">Erlaubt, Taskbar das Ausschaltmenü anzuzeigen. \n\n(wird nicht für einen anderen Zweck verwendet)</string>
 
     <string name="pref_title_force_new_window">Apps immer in neuen Fenstern öffnen</string>

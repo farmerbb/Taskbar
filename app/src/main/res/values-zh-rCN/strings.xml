@@ -252,6 +252,7 @@
     <string name="tools">工具</string>
 
     <string name="enable_accessibility">必须启用 任务栏 的无障碍服务才能执行这个操作</string>
+    <string name="accessibility_service_summary">允许 任务栏 显示设备的电源菜单并执行导航栏按钮操作。</string>
     <string name="accessibility_service_description">允许 任务栏 显示设备的电源菜单并执行导航栏按钮操作。\n\n(此服务不用于任何其他用途)</string>
     
     <string name="pref_title_force_new_window">始终在新窗口打开应用</string>

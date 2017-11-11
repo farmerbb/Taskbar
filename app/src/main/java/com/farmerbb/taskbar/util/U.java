@@ -156,15 +156,13 @@ public class U {
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         } else {
             launchApp(context, () -> {
-                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                Intent intent = new Intent(context, DummyActivity.class);
+                intent.putExtra("accessibility", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent, getActivityOptionsBundle(ApplicationType.APPLICATION));
 
-                try {
-                    context.startActivity(intent, getActivityOptionsBundle(ApplicationType.APPLICATION));
-                    showToastLong(context, R.string.enable_accessibility);
-                } catch (ActivityNotFoundException e) {
-                    showToast(context, R.string.lock_device_not_supported);
-                }
+                if(context instanceof Activity)
+                    ((Activity) context).overridePendingTransition(0, 0);
             });
         }
     }

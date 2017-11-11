@@ -252,6 +252,7 @@
     <string name="tools">ツール</string>
 
     <string name="enable_accessibility">電源メニューを表示するには Taskbar のアクセシビリティサービスを有効にする必要があります</string>
+    <string name="accessibility_service_summary">Taskbar がデバイスの電源メニューを表示できるようにします。</string>
     <string name="accessibility_service_description">Taskbar がデバイスの電源メニューを表示できるようにします。\n\n(このサービスは他の目的には使用されません)</string>
 
     <string name="pref_title_force_new_window">新しいウインドウでアプリを開くことを許可</string>

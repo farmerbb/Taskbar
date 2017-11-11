@@ -27,11 +27,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
+import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -86,6 +88,40 @@ public class DummyActivity extends Activity {
 
                             try {
                                 startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                U.showToast(this, R.string.lock_device_not_supported);
+
+                                finish();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCancelable(false);
+            } else if(getIntent().hasExtra("accessibility")) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+
+                int theme = -1;
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        theme = R.style.AppTheme;
+                        break;
+                    case "dark":
+                        theme = R.style.AppTheme_Dark;
+                        break;
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, theme));
+                builder.setTitle(R.string.permission_dialog_title)
+                        .setMessage(R.string.accessibility_service_description)
+                        .setNegativeButton(R.string.action_cancel, (dialog, which) -> new Handler().post(this::finish))
+                        .setPositiveButton(R.string.action_activate, (dialog, which) -> {
+                            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                            try {
+                                startActivity(intent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
+                                U.showToastLong(this, R.string.usage_stats_message);
                             } catch (ActivityNotFoundException e) {
                                 U.showToast(this, R.string.lock_device_not_supported);
 
