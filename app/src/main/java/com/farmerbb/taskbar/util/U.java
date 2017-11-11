@@ -426,13 +426,9 @@ public class U {
                 ? metrics.heightPixels / 2
                 : metrics.heightPixels;
 
-        SharedPreferences pref = getSharedPreferences(context);
-        int iconSize;
-
-        if(isChromeOs(context) && pref.getBoolean("hide_taskbar", true))
-            iconSize = 0;
-        else
-            iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
+        int iconSize = isOverridingFreeformHack(context)
+                ? 0
+                : context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
         if(position.contains("vertical_left")) {
             if(launchType != RIGHT || isPortrait) left = left + iconSize;

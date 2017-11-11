@@ -18,8 +18,8 @@ android {
         minSdkVersion 21
         targetSdkVersion SDK_VERSION
 
-        versionCode 171
-        versionName "3.7.2"
+        versionCode 172
+        versionName "3.8"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN"
 
