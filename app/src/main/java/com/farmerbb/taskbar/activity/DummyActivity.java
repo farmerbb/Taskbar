@@ -113,7 +113,7 @@ public class DummyActivity extends Activity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, theme));
                 builder.setTitle(R.string.permission_dialog_title)
-                        .setMessage(R.string.accessibility_service_description)
+                        .setMessage(R.string.enable_accessibility)
                         .setNegativeButton(R.string.action_cancel, (dialog, which) -> new Handler().post(this::finish))
                         .setPositiveButton(R.string.action_activate, (dialog, which) -> {
                             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);

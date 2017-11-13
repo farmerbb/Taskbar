@@ -251,7 +251,7 @@
 
     <string name="tools">Tools</string>
 
-    <string name="enable_accessibility">Taskbar\'s accessibility service must be enabled to perform this action</string>
+    <string name="enable_accessibility">@string/accessibility_service_description</string>
     <string name="accessibility_service_summary">Allows Taskbar to perform button press actions</string>
     <string name="accessibility_service_description">In order to perform button press actions such as back, home, recents, and showing the power menu, Taskbar needs to be activated as an accessibility service.\n\nThis permission is used only to perform button press actions, and for no other purpose.</string>
     
