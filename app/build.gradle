@@ -1,5 +1,5 @@
 ext {
-    SUPPORT_LIBRARY_VERSION = "27.0.0"
+    SUPPORT_LIBRARY_VERSION = "27.0.1"
     SDK_VERSION = 27
 }
 
@@ -12,13 +12,14 @@ repositories {
 
 android {
     compileSdkVersion SDK_VERSION
+    buildToolsVersion "27.0.1"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
         minSdkVersion 21
         targetSdkVersion SDK_VERSION
 
-        versionCode 173
+        versionCode 174
         versionName "3.8"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN"
