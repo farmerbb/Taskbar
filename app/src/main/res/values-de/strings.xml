@@ -77,8 +77,8 @@
     <string name="pref_description_freeform_hack">Erlaubt Taskbar, Apps im Freifenstermodus zu starten, für ein Desktop-ähnlicheres Erlebnis.\n\nDiese Funktion ist experemintell und kann u.U. Probleme mit standart Split-Screen Multitasking veraursachen.</string>
 
     <string name="pref_header_about">Über Taskbar</string>
-    <string name="pref_about_description">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; 2017 Braden Farmer\nApps Logo von Mark Morilla\n\nKlicken Sie hier um auf Updates zu überprüfen oder eine Bewertung geben! %1$s</string>
-    <string name="pref_about_description_alt">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; 2017 Braden Farmer\nApps Logo von Mark Morilla</string>
+    <string name="pref_about_description">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; 2018 Braden Farmer\nApps Logo von Mark Morilla\n\nKlicken Sie hier um auf Updates zu überprüfen oder eine Bewertung geben! %1$s</string>
+    <string name="pref_about_description_alt">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; 2018 Braden Farmer\nApps Logo von Mark Morilla</string>
 
     <string name="pref_title_hide_taskbar">Taskbar nach dem Auswählen der App verbergen</string>
 

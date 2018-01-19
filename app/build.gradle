@@ -1,5 +1,5 @@
 ext {
-    SUPPORT_LIBRARY_VERSION = "27.0.1"
+    SUPPORT_LIBRARY_VERSION = "27.0.2"
     SDK_VERSION = 27
 }
 
@@ -12,7 +12,7 @@ repositories {
 
 android {
     compileSdkVersion SDK_VERSION
-    buildToolsVersion "27.0.1"
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
@@ -81,7 +81,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    implementation 'com.mikepenz:iconics-core:2.9.3@aar'
+    implementation 'com.mikepenz:iconics-core:3.0.0@aar'
     implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
     implementation 'moe.banana:toast-compat:1.0.5'
 }
