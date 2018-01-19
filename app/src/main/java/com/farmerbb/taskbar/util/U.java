@@ -31,6 +31,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
@@ -927,10 +928,15 @@ public class U {
     }
 
     public static boolean hasSupportLibrary(Context context) {
+        return hasSupportLibrary(context, 0);
+    }
+
+    public static boolean hasSupportLibrary(Context context, int minVersion) {
         PackageManager pm = context.getPackageManager();
         try {
-            pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
-            return pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, BuildConfig.APPLICATION_ID) == PackageManager.SIGNATURE_MATCH
+            PackageInfo pInfo = pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
+            return pInfo.versionCode >= minVersion
+                    && pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, BuildConfig.APPLICATION_ID) == PackageManager.SIGNATURE_MATCH
                     && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                     && isSystemApp(context);
         } catch (PackageManager.NameNotFoundException e) {
@@ -1042,6 +1048,35 @@ public class U {
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
             }
+        }
+
+        // Customizations for Bliss-x86
+        if(hasSupportLibrary(context, 5)) {
+            SharedPreferences.Editor editor = pref.edit();
+
+            if(U.hasFreeformSupport(context)) {
+                editor.putBoolean("freeform_hack", true);
+            }
+
+            editor.putString("recents_amount", "running_apps_only");
+            editor.putString("refresh_frequency", "0");
+            editor.putString("max_num_of_recents", "2147483647");
+            editor.putString("sort_order", "true");
+            editor.putBoolean("full_length", true);
+            editor.putBoolean("dashboard", true);
+            editor.putBoolean("app_drawer_icon", true);
+            editor.putBoolean("button_back", true);
+            editor.putBoolean("button_home", true);
+            editor.putBoolean("button_recents", true);
+            editor.putBoolean("auto_hide_navbar", true);
+
+            try {
+                Settings.Secure.putString(context.getContentResolver(),
+                        Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
+                        new ComponentName(context, PowerMenuService.class).flattenToString());
+            } catch (Exception e) { /* Gracefully fail */ }
+
+            editor.apply();
         }
 
         // Customizations for Android-x86 devices (non-Bliss)

@@ -304,7 +304,15 @@ public class TaskbarService extends Service {
         int padding;
 
         if(pref.getBoolean("app_drawer_icon", false)) {
-            startButton.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+            if(U.hasSupportLibrary(this, 5)) {
+                try {
+                    startButton.setImageDrawable(getPackageManager().getApplicationIcon(BuildConfig.SUPPORT_APPLICATION_ID));
+                } catch (PackageManager.NameNotFoundException e) {
+                    startButton.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+                }
+            } else
+                startButton.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+
             padding = getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
         } else {
             startButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.all_apps_button_icon));
