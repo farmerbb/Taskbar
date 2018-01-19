@@ -1119,4 +1119,13 @@ public class U {
     public static <T extends View> T findViewById(View target, int id) {
         return (T) target.findViewById(id);
     }
+
+    public static boolean isPlayStoreInstalled(Context context) {
+        try {
+            context.getPackageManager().getPackageInfo("com.android.vending", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
 }

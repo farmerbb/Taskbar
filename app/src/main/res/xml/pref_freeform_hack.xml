@@ -57,6 +57,11 @@
         android:key="freeform_mode_help"
         android:title="@string/pref_title_freeform_mode_help" />
 
+    <Preference
+        android:key="secondscreen"
+        android:summary="@string/pref_secondscreen_description"
+        android:widgetLayout="@layout/secondscreen_pref_widget"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

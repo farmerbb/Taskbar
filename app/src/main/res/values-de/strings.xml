@@ -338,4 +338,8 @@
     <string name="device_admin_disclosure">In order to lock your device\'s screen, Taskbar needs to be activated as a device administrator. This permission is used only to lock the screen, and for no other purpose.\n\nIf you choose to activate this, you will need to deactivate Taskbar as a device administrator prior to uninstalling.</string>
     <string name="action_activate">Activate</string>
 
+    <string name="pref_secondscreen_title_open">Open SecondScreen</string>
+    <string name="pref_secondscreen_title_install">Install SecondScreen</string>
+    <string name="pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
+
 </resources>

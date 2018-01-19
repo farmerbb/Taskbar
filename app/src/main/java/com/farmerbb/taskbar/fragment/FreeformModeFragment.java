@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -33,6 +35,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.CompatUtils;
@@ -64,6 +67,17 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
         findPreference("add_shortcut").setOnPreferenceClickListener(this);
         findPreference("window_size").setOnPreferenceClickListener(this);
+
+        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
+                && !U.hasSupportLibrary(getActivity())
+                && U.isPlayStoreInstalled(getActivity())) {
+            findPreference("secondscreen").setOnPreferenceClickListener(this);
+            findPreference("secondscreen").setTitle(
+                    getSecondScreenPackageName() == null
+                            ? R.string.pref_secondscreen_title_install
+                            : R.string.pref_secondscreen_title_open);
+        } else
+            getPreferenceScreen().removePreference(findPreference("secondscreen"));
 
         bindPreferenceSummaryToValue(findPreference("window_size"));
 
@@ -203,6 +217,26 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 }
 
                 break;
+            case "secondscreen":
+                PackageManager packageManager = getActivity().getPackageManager();
+                String packageName = getSecondScreenPackageName();
+                Intent intent;
+
+                if(packageName == null) {
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.farmerbb.secondscreen.free"));
+                } else
+                    intent = packageManager.getLaunchIntentForPackage(packageName);
+
+                if(intent != null) {
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                }
+
+                break;
         }
 
         return true;
@@ -214,5 +248,24 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         if(U.hasFreeformSupport(getActivity())) {
             U.showToastLong(getActivity(), R.string.reboot_required);
         }
+    }
+
+    private String getSecondScreenPackageName() {
+        PackageManager pm = getActivity().getPackageManager();
+        String packageName;
+
+        try {
+            packageName = "com.farmerbb.secondscreen.free";
+            pm.getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            try {
+                packageName = "com.farmerbb.secondscreen";
+                pm.getPackageInfo(packageName, 0);
+            } catch (PackageManager.NameNotFoundException e1) {
+                packageName = null;
+            }
+        }
+
+        return packageName;
     }
 }

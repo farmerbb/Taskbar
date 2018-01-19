@@ -338,4 +338,8 @@
     <string name="device_admin_disclosure">为了锁定你的设备屏幕，任务栏 需要激活为设备管理器。这个权限仅用于锁定屏幕，不用于其他用途。\n\n如果你选择了激活这个权限，你需要在卸载之前，取消激活 任务栏 的设备管理器。</string>
     <string name="action_activate">激活</string>
 
+    <string name="pref_secondscreen_title_open">Open SecondScreen</string>
+    <string name="pref_secondscreen_title_install">Install SecondScreen</string>
+    <string name="pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
+
 </resources>

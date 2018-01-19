@@ -19,7 +19,6 @@ import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,18 +48,11 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         // Add preferences
         addPreferencesFromResource(R.xml.pref_base);
 
-        boolean playStoreInstalled = true;
-        try {
-            getActivity().getPackageManager().getPackageInfo("com.android.vending", 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            playStoreInstalled = false;
-        }
-
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         addPreferencesFromResource(R.xml.pref_about);
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
-                && playStoreInstalled
+                && U.isPlayStoreInstalled(getActivity())
                 && !U.isSystemApp(getActivity())
                 && !pref.getBoolean("hide_donate", false)) {
             findPreference("donate").setOnPreferenceClickListener(this);
