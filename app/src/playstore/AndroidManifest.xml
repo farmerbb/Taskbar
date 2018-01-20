@@ -37,6 +37,7 @@
     <uses-permission-sdk-23 android:name="android.permission.GET_TASKS" />
     <uses-permission-sdk-23 android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission-sdk-23 android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission-sdk-23 android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"

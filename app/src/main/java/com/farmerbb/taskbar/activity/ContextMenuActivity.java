@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.activity;
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -73,6 +74,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     boolean secondaryMenu = false;
     boolean dashboardOrStartMenuAppearing = false;
     boolean contextMenuFix = false;
+    boolean isRunningApp = false;
 
     List<ShortcutInfo> shortcuts;
 
@@ -98,6 +100,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         isStartButton = isNonAppMenu && getIntent().getBooleanExtra("is_start_button", false);
         isOverflowMenu = isNonAppMenu && getIntent().getBooleanExtra("is_overflow_menu", false);
         contextMenuFix = getIntent().hasExtra("context_menu_fix");
+        isRunningApp = getIntent().getBooleanExtra("is_running_app", false);
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -315,7 +318,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             addPreferencesFromResource(R.xml.pref_context_menu);
 
             findPreference("app_info").setOnPreferenceClickListener(this);
-            findPreference("uninstall").setOnPreferenceClickListener(this);
+
+            if(isRunningApp) {
+                findPreference("close").setOnPreferenceClickListener(this);
+                getPreferenceScreen().removePreference(findPreference("uninstall"));
+            } else {
+                findPreference("uninstall").setOnPreferenceClickListener(this);
+                getPreferenceScreen().removePreference(findPreference("close"));
+            }
         }
     }
 
@@ -623,6 +633,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 U.launchAppMaximized(getApplicationContext(), intent3);
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                contextMenuFix = false;
+                break;
+            case "close":
+                ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                am.killBackgroundProcesses(packageName);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

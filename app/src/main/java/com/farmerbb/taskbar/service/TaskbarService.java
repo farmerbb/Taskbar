@@ -1283,6 +1283,7 @@ public class TaskbarService extends Service {
             intent.putExtra("app_name", entry.getLabel());
             intent.putExtra("component_name", entry.getComponentName());
             intent.putExtra("user_id", entry.getUserId(this));
+            intent.putExtra("is_running_app", runningAppsOnly);
             intent.putExtra("x", location[0]);
             intent.putExtra("y", location[1]);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
