@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -167,10 +168,15 @@ public class HomeActivity extends Activity {
             return false;
         });
 
-        if(U.isChromeOs(this))
-            killHomeActivity();
-        else
+        if(!U.isChromeOs(this)) {
             setContentView(view);
+
+            new Handler().postDelayed(() -> {
+                WallpaperManager wallpaperManager = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+                wallpaperManager.setWallpaperOffsets(view.getWindowToken(), 0.5f, 0.5f);
+            }, 100);
+        } else
+            killHomeActivity();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
