@@ -43,6 +43,11 @@
         android:summary="@string/navigation_bar_buttons_description" />
 
     <Preference
+        android:key="secondscreen"
+        android:summary="@string/pref_secondscreen_description"
+        android:widgetLayout="@layout/secondscreen_pref_widget"/>
+
+    <Preference
         android:key="clear_pinned_apps"
         android:title="@string/clear_pinned_apps"/>
 

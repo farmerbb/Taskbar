@@ -16,12 +16,14 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
@@ -64,6 +66,17 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
         findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
         findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
+
+        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
+                && !U.hasSupportLibrary(getActivity())
+                && U.isPlayStoreInstalled(getActivity())) {
+            findPreference("secondscreen").setOnPreferenceClickListener(this);
+            findPreference("secondscreen").setTitle(
+                    getSecondScreenPackageName() == null
+                            ? R.string.pref_secondscreen_title_install
+                            : R.string.pref_secondscreen_title_open);
+        } else
+            getPreferenceScreen().removePreference(findPreference("secondscreen"));
 
         bindPreferenceSummaryToValue(findPreference("dashboard"));
 
@@ -212,6 +225,26 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
                 startActivity(intent);
                 break;
+            case "secondscreen":
+                PackageManager packageManager = getActivity().getPackageManager();
+                String packageName = getSecondScreenPackageName();
+                Intent intent2;
+
+                if(packageName == null) {
+                    intent2 = new Intent(Intent.ACTION_VIEW);
+                    intent2.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.farmerbb.secondscreen.free"));
+                } else
+                    intent2 = packageManager.getLaunchIntentForPackage(packageName);
+
+                if(intent2 != null) {
+                    intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        startActivity(intent2);
+                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                }
+
+                break;
         }
 
         return true;
@@ -241,5 +274,24 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
+    }
+
+    private String getSecondScreenPackageName() {
+        PackageManager pm = getActivity().getPackageManager();
+        String packageName;
+
+        try {
+            packageName = "com.farmerbb.secondscreen.free";
+            pm.getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            try {
+                packageName = "com.farmerbb.secondscreen";
+                pm.getPackageInfo(packageName, 0);
+            } catch (PackageManager.NameNotFoundException e1) {
+                packageName = null;
+            }
+        }
+
+        return packageName;
     }
 }
