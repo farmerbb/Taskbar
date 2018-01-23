@@ -1051,7 +1051,8 @@ public class U {
         }
 
         // Customizations for Bliss-x86
-        if(hasSupportLibrary(context, 5)) {
+        if(hasSupportLibrary(context, 5)
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             SharedPreferences.Editor editor = pref.edit();
 
             if(U.hasFreeformSupport(context)) {
@@ -1064,6 +1065,7 @@ public class U {
             editor.putString("sort_order", "true");
             editor.putBoolean("full_length", true);
             editor.putBoolean("dashboard", true);
+            editor.putBoolean("scrollbar", true);
             editor.putBoolean("app_drawer_icon", true);
             editor.putBoolean("button_back", true);
             editor.putBoolean("button_home", true);
@@ -1090,6 +1092,7 @@ public class U {
                     .putString("sort_order", "true")
                     .putBoolean("full_length", true)
                     .putBoolean("dashboard", true)
+                    .putBoolean("scrollbar", true)
                     .putBoolean("android_x86_prefs", true)
                     .apply();
         }
