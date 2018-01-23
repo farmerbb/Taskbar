@@ -50,6 +50,8 @@ import com.farmerbb.taskbar.util.U;
 
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
+    boolean secondScreenPrefEnabled = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
@@ -71,10 +73,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 && !U.hasSupportLibrary(getActivity())
                 && U.isPlayStoreInstalled(getActivity())) {
             findPreference("secondscreen").setOnPreferenceClickListener(this);
-            findPreference("secondscreen").setTitle(
-                    getSecondScreenPackageName() == null
-                            ? R.string.pref_secondscreen_title_install
-                            : R.string.pref_secondscreen_title_open);
+            secondScreenPrefEnabled = true;
         } else
             getPreferenceScreen().removePreference(findPreference("secondscreen"));
 
@@ -104,6 +103,13 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
     @Override
     public void onResume() {
         super.onResume();
+
+        if(secondScreenPrefEnabled) {
+            findPreference("secondscreen").setTitle(
+                    getSecondScreenPackageName() == null
+                            ? R.string.pref_secondscreen_title_install
+                            : R.string.pref_secondscreen_title_open);
+        }
 
         updateDashboardGridSize(false);
     }
