@@ -16,6 +16,9 @@
 package com.farmerbb.taskbar.util;
 
 import android.content.Context;
+import android.view.Gravity;
+
+import com.farmerbb.taskbar.R;
 
 import moe.banana.support.ToastCompat;
 
@@ -24,6 +27,10 @@ class ToastCompatImpl implements ToastInterface {
 
     ToastCompatImpl(Context context, String message, int length) {
         toast = ToastCompat.makeText(context, message, length);
+        toast.setGravity(
+                Gravity.BOTTOM | Gravity.CENTER_VERTICAL,
+                0,
+                context.getResources().getDimensionPixelSize(R.dimen.toast_y_offset));
     }
 
     @Override
