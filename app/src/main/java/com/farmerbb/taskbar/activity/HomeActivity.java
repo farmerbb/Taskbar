@@ -172,8 +172,10 @@ public class HomeActivity extends Activity {
             setContentView(view);
 
             new Handler().postDelayed(() -> {
-                WallpaperManager wallpaperManager = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
-                wallpaperManager.setWallpaperOffsets(view.getWindowToken(), 0.5f, 0.5f);
+                try {
+                    WallpaperManager wallpaperManager = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+                    wallpaperManager.setWallpaperOffsets(view.getWindowToken(), 0.5f, 0.5f);
+                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
             }, 100);
         } else
             killHomeActivity();
@@ -225,7 +227,7 @@ public class HomeActivity extends Activity {
     protected void onStart() {
         super.onStart();
 
-        LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
         if(U.canDrawOverlays(this)) {
             if(!bootToFreeform()) {
