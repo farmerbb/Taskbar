@@ -124,6 +124,7 @@
     <string name="clear_pinned_apps">アプリのピン止め/ブロックをリセット</string>
 
     <string name="pref_title_hide_foreground">前面アプリケーションのアイコンを非表示</string>
+    <string name="pref_summary_hide_foreground">May reduce performance</string>
 
     <string name="pref_title_theme">テーマ</string>
     <string-array name="pref_theme_list">

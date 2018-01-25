@@ -124,6 +124,7 @@
     <string name="clear_pinned_apps">Appeinstellungen zurücksetzen</string>
 
     <string name="pref_title_hide_foreground">Symbol für Fordergrundapp verstecken</string>
+    <string name="pref_summary_hide_foreground">May reduce performance</string>
 
     <string name="pref_title_theme">Thema</string>
     <string-array name="pref_theme_list">

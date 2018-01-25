@@ -124,6 +124,7 @@
     <string name="clear_pinned_apps">Reset per-app preferences</string>
 
     <string name="pref_title_hide_foreground">Hide icon for foreground application</string>
+    <string name="pref_summary_hide_foreground">May reduce performance</string>
 
     <string name="pref_title_theme">Theme</string>
     <string-array name="pref_theme_list">
