@@ -298,7 +298,7 @@
 
     <string name="invalid_grid_size">Invalid grid size</string>
 
-    <string name="window_sizes_not_available">Window sizes don\'t work correctly on Android 8.0 - see \"Help &amp; instructions\" for a workaround</string>
+    <string name="window_sizes_not_available">Window sizes don\'t work correctly on this Android version - see \"Help &amp; instructions\" for a workaround</string>
 
     <string name="navigation_bar_buttons">Navigation bar buttons</string>
     <string name="navigation_bar_buttons_description">Add additional buttons to the Taskbar that perform navigation bar actions</string>
