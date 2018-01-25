@@ -49,6 +49,9 @@ public class HomeActivity extends Activity {
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
 
+    private boolean shouldDelayFreeformHack = true;
+    private int hits = 0;
+
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -68,8 +71,22 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        View view = new View(this);
-        view.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
+        View view = new View(this) {
+            @Override
+            protected void onAttachedToWindow() {
+                super.onAttachedToWindow();
+
+                WallpaperManager wallpaperManager = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+                wallpaperManager.setWallpaperOffsets(getWindowToken(), 0.5f, 0.5f);
+
+                if(shouldDelayFreeformHack && hits > 0) {
+                    shouldDelayFreeformHack = false;
+                    startFreeformHack();
+                }
+            }
+        };
+
+        view.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
 
         view.setOnLongClickListener(view12 -> {
             setWallpaper();
@@ -168,17 +185,10 @@ public class HomeActivity extends Activity {
             return false;
         });
 
-        if(!U.isChromeOs(this)) {
-            setContentView(view);
-
-            new Handler().postDelayed(() -> {
-                try {
-                    WallpaperManager wallpaperManager = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
-                    wallpaperManager.setWallpaperOffsets(view.getWindowToken(), 0.5f, 0.5f);
-                } catch (IllegalArgumentException e) { /* Gracefully fail */ }
-            }, 100);
-        } else
+        if(U.isChromeOs(this))
             killHomeActivity();
+        else
+            setContentView(view);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
@@ -204,9 +214,9 @@ public class HomeActivity extends Activity {
         super.onResume();
 
         if(bootToFreeform()) {
-            if(U.launcherIsDefault(this)) {
-                U.startFreeformHack(this, false, false);
-            } else {
+            if(U.launcherIsDefault(this))
+                startFreeformHack();
+            else {
                 U.showToastLong(this, R.string.set_as_default_home);
 
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
@@ -242,9 +252,8 @@ public class HomeActivity extends Activity {
                     }, 250);
                 } else
                     startTaskbar();
-            } else if(U.launcherIsDefault(this)) {
-                U.startFreeformHack(this, false, false);
-            }
+            } else if(U.launcherIsDefault(this))
+                startFreeformHack();
         } else
             dialog = U.showPermissionDialog(this);
     }
@@ -268,6 +277,13 @@ public class HomeActivity extends Activity {
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
         new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(HomeActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR")), 100);
+    }
+
+    private void startFreeformHack() {
+        if(shouldDelayFreeformHack)
+            hits++;
+        else
+            U.startFreeformHack(this, false, false);
     }
 
     @Override
