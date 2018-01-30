@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,8 +51,8 @@ public class HomeActivity extends Activity {
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
 
-    private boolean shouldDelayFreeformHack = true;
-    private int hits = 0;
+    private boolean shouldDelayFreeformHack;
+    private int hits;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
@@ -66,9 +68,14 @@ public class HomeActivity extends Activity {
         }
     };
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        shouldDelayFreeformHack = true;
+        hits = 0;
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         View view = new View(this) {
@@ -79,10 +86,16 @@ public class HomeActivity extends Activity {
                 WallpaperManager wallpaperManager = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
                 wallpaperManager.setWallpaperOffsets(getWindowToken(), 0.5f, 0.5f);
 
-                if(shouldDelayFreeformHack && hits > 0) {
-                    shouldDelayFreeformHack = false;
-                    startFreeformHack();
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    DisplayMetrics metrics = U.getRealDisplayMetrics(HomeActivity.this);
+                    wallpaperManager.suggestDesiredDimensions(metrics.widthPixels, metrics.heightPixels);
                 }
+
+                boolean shouldStartFreeformHack = shouldDelayFreeformHack && hits > 0;
+                shouldDelayFreeformHack = false;
+
+                if(shouldStartFreeformHack)
+                    startFreeformHack();
             }
         };
 

@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
@@ -47,6 +48,7 @@ public class DummyActivity extends Activity {
         setContentView(new View(this));
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onResume() {
         super.onResume();
