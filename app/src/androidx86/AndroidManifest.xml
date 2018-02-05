@@ -19,7 +19,9 @@
      * HomeActivity is enabled by default
      * SendSettingsReceiver and ReceiveSettingsReceiver are not exposed
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest android:versionCode="176"
+          android:versionName="3.8.1"
+          xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.farmerbb.taskbar" >
 
     <permission android:name="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
