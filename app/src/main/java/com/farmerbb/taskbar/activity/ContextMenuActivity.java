@@ -35,6 +35,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.UserManager;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -415,9 +416,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName));
                     intent2.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(userId));
 
-                    try {
-                        startActivity(intent2);
-                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                    new Handler().post(() -> {
+                        try {
+                            startActivity(intent2);
+                        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                    });
                 }
 
                 showStartMenu = false;
