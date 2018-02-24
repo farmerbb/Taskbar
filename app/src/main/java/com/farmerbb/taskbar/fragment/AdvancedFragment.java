@@ -203,7 +203,11 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                             if(!successfullyUpdated)
                                 U.showToast(getActivity(), R.string.invalid_grid_size);
                         })
-                        .setNegativeButton(R.string.action_cancel, null);
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .setNeutralButton(R.string.use_default, (dialog, id) -> {
+                            pref.edit().remove("dashboard_width").remove("dashboard_height").apply();
+                            updateDashboardGridSize(true);
+                        });
 
                 editText.setText(Integer.toString(pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_width))));
                 editText2.setText(Integer.toString(pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_height))));

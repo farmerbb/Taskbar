@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2016 Braden Farmer
+<!-- Copyright 2018 Braden Farmer
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,8 +14,18 @@
      limitations under the License.
 -->
 
-<resources>
-    <dimen name="max_width">720dp</dimen>
-    <dimen name="phone_size_width">411dp</dimen>
-    <dimen name="phone_size_height">731dp</dimen>
-</resources>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="view_play_store"
+        android:title="@string/view_play_store" />
+
+    <Preference
+        android:key="view_github"
+        android:title="@string/view_github" />
+
+    <Preference
+        android:key="view_licenses"
+        android:title="@string/view_licenses" />
+
+</PreferenceScreen>

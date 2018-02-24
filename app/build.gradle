@@ -4,6 +4,7 @@ ext {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.oss.licenses.plugin'
 
 repositories {
     google()
@@ -19,8 +20,8 @@ android {
         minSdkVersion 21
         targetSdkVersion SDK_VERSION
 
-        versionCode 177
-        versionName "3.8.1"
+        versionCode 178
+        versionName "3.8.2"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN"
 
@@ -81,7 +82,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    implementation 'com.mikepenz:iconics-core:3.0.0@aar'
+    implementation 'com.google.android.gms:play-services-oss-licenses:11.8.0'
+    implementation 'com.mikepenz:iconics-core:3.0.3@aar'
     implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
     implementation 'moe.banana:toast-compat:1.0.5'
 }

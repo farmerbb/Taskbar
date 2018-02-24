@@ -222,6 +222,12 @@
         <activity
             android:name=".activity.dark.NavigationBarButtonsActivityDark"
             android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
+        <activity
+            android:name=".activity.AboutDialogActivity"
+            android:theme="@style/AppTheme.Dialog.Preference"/>
+        <activity
+            android:name=".activity.dark.AboutDialogActivityDark"
+            android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

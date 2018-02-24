@@ -29,6 +29,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.AboutDialogActivity;
+import com.farmerbb.taskbar.activity.dark.AboutDialogActivityDark;
 import com.farmerbb.taskbar.util.U;
 
 import java.text.NumberFormat;
@@ -96,7 +98,18 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         switch(p.getKey()) {
             case "about":
-                U.checkForUpdates(getActivity());
+                Intent intent = null;
+
+                switch(pref.getString("theme", "light")) {
+                    case "light":
+                        intent = new Intent(getActivity(), AboutDialogActivity.class);
+                        break;
+                    case "dark":
+                        intent = new Intent(getActivity(), AboutDialogActivityDark.class);
+                        break;
+                }
+
+                startActivity(intent);
                 break;
             case "donate":
                 NumberFormat format = NumberFormat.getCurrencyInstance();
@@ -106,12 +119,12 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                 builder.setTitle(R.string.pref_title_donate)
                         .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.PAID_APPLICATION_ID));
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                            intent2.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.PAID_APPLICATION_ID));
+                            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             try {
-                                startActivity(intent);
+                                startActivity(intent2);
                             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         })
                         .setNegativeButton(noThanksCount == 2 ? R.string.action_dont_show_again : R.string.action_no_thanks, (dialog, which) -> {

@@ -342,12 +342,13 @@ public class TaskbarService extends Service {
                 searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
                 break;
             case "app_start":
-                long oneDayAgo = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
                 long appStartTime = pref.getLong("time_of_service_start", System.currentTimeMillis());
                 long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
-                long startTime = deviceStartTime > appStartTime ? deviceStartTime : appStartTime;
 
-                searchInterval = startTime > oneDayAgo ? startTime : oneDayAgo;
+                searchInterval = deviceStartTime > appStartTime ? deviceStartTime : appStartTime;
+                break;
+            case "show_all":
+                searchInterval = 0;
                 break;
         }
 
@@ -1344,7 +1345,7 @@ public class TaskbarService extends Service {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private List<AppEntry> getAppEntriesUsingUsageStats() {
         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-        List<UsageStats> usageStatsList = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, searchInterval, System.currentTimeMillis());
+        List<UsageStats> usageStatsList = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, searchInterval, System.currentTimeMillis());
         List<AppEntry> entries = new ArrayList<>();
 
         for(UsageStats usageStats : usageStatsList) {
@@ -1374,6 +1375,9 @@ public class TaskbarService extends Service {
     }
 
     private boolean isScreenOff() {
+        if(U.isChromeOs(this))
+            return false;
+
         PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
         return !pm.isInteractive();
     }

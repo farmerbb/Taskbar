@@ -535,26 +535,24 @@ public class U {
     }
 
     public static void checkForUpdates(Context context) {
-        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
-            if(!BuildConfig.DEBUG) {
-                String url;
-                try {
-                    context.getPackageManager().getPackageInfo("com.android.vending", 0);
-                    url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
-                } catch (PackageManager.NameNotFoundException e) {
-                    url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.BASE_APPLICATION_ID;
-                }
+        if(!BuildConfig.DEBUG) {
+            String url;
+            try {
+                context.getPackageManager().getPackageInfo("com.android.vending", 0);
+                url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+            } catch (PackageManager.NameNotFoundException e) {
+                url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.BASE_APPLICATION_ID;
+            }
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                try {
-                    context.startActivity(intent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-            } else
-                showToast(context, R.string.debug_build);
-        }
+            try {
+                context.startActivity(intent);
+            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } else
+            showToast(context, R.string.debug_build);
     }
 
     public static boolean launcherIsDefault(Context context) {
@@ -1030,7 +1028,7 @@ public class U {
     public static void initPrefs(Context context) {
         // On smaller-screened devices, set "Grid" as the default start menu layout
         SharedPreferences pref = getSharedPreferences(context);
-        if(context.getApplicationContext().getResources().getConfiguration().smallestScreenWidthDp < 600
+        if(context.getApplicationContext().getResources().getConfiguration().smallestScreenWidthDp < 720
                 && pref.getString("start_menu_layout", "null").equals("null")) {
             pref.edit().putString("start_menu_layout", "grid").apply();
         }
@@ -1065,7 +1063,6 @@ public class U {
             editor.putString("sort_order", "true");
             editor.putBoolean("full_length", true);
             editor.putBoolean("dashboard", true);
-            editor.putBoolean("scrollbar", true);
             editor.putBoolean("app_drawer_icon", true);
             editor.putBoolean("button_back", true);
             editor.putBoolean("button_home", true);
@@ -1092,7 +1089,6 @@ public class U {
                     .putString("sort_order", "true")
                     .putBoolean("full_length", true)
                     .putBoolean("dashboard", true)
-                    .putBoolean("scrollbar", true)
                     .putBoolean("android_x86_prefs", true)
                     .apply();
         }
@@ -1165,5 +1161,21 @@ public class U {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    public static boolean isUntestedAndroidVersion(Context context) {
+        int androidSdkInt = Build.VERSION.SDK_INT;
+        int targetSdkInt = context.getApplicationInfo().targetSdkVersion;
+
+        if(androidSdkInt > targetSdkInt)
+            return true;
+
+        if(androidSdkInt >= Build.VERSION_CODES.M) {
+            int previewSdkInt = Build.VERSION.PREVIEW_SDK_INT;
+
+            return androidSdkInt == targetSdkInt && previewSdkInt > 0;
+        }
+
+        return false;
     }
 }

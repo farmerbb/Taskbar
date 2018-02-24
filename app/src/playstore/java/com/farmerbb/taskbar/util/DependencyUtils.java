@@ -16,9 +16,11 @@
 package com.farmerbb.taskbar.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import com.farmerbb.taskbar.R;
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.mikepenz.iconics.Iconics;
 
 public class DependencyUtils {
@@ -37,5 +39,10 @@ public class DependencyUtils {
             return new ToastFrameworkImpl(context, message, length);
         else
             return new ToastCompatImpl(context, message, length);
+    }
+
+    public static void showLicenses(Context context) {
+        Intent intent = new Intent(context, OssLicensesMenuActivity.class);
+        context.startActivity(intent);
     }
 }

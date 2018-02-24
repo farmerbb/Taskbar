@@ -30,10 +30,12 @@
     <string-array name="pref_recents_amount_values">
         <item>past_day</item>
         <item>app_start</item>
+        <item>show_all</item>
     </string-array>
     <string-array name="pref_recents_amount_values_alt">
         <item>past_day</item>
         <item>app_start</item>
+        <item>show_all</item>
         <item>running_apps_only</item>
     </string-array>
 

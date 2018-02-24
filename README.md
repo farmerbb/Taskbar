@@ -35,7 +35,7 @@ Taskbar can be downloaded as a standalone Android app from:
 
 Taskbar is also included as part of the following Android distributions for PCs:
 
-* Android-x86 (version 7.1-rc2) (http://www.android-x86.org)
+* Android-x86 (7.1-rc2 and 7.1-r1) (http://www.android-x86.org)
 * Bliss OS (x86 builds) (https://blissroms.com)
 
 ## How to Build
