@@ -19,7 +19,7 @@
      * HomeActivity is enabled by default
      * SendSettingsReceiver and ReceiveSettingsReceiver are not exposed
 -->
-<manifest android:versionCode="178"
+<manifest android:versionCode="179"
           android:versionName="3.8.2"
           xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.farmerbb.taskbar" >
@@ -218,12 +218,6 @@
             android:theme="@style/AppTheme.Dialog.Preference"/>
         <activity
             android:name=".activity.dark.NavigationBarButtonsActivityDark"
-            android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
-        <activity
-            android:name=".activity.AboutDialogActivity"
-            android:theme="@style/AppTheme.Dialog.Preference"/>
-        <activity
-            android:name=".activity.dark.AboutDialogActivityDark"
             android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
 
         <service android:name=".service.TaskbarService"/>

@@ -29,8 +29,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.AboutDialogActivity;
-import com.farmerbb.taskbar.activity.dark.AboutDialogActivityDark;
 import com.farmerbb.taskbar.util.U;
 
 import java.text.NumberFormat;
@@ -71,12 +69,12 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
         findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
         findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
-        findPreference("about").setOnPreferenceClickListener(this);
 
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-            findPreference("about").setSummary(R.string.pref_about_description_alt);
-        else
+        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
             findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+            findPreference("about").setOnPreferenceClickListener(this);
+        } else
+            findPreference("about").setSummary(R.string.pref_about_description_alt);
 
         finishedLoadingPrefs = true;
     }
@@ -98,18 +96,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         switch(p.getKey()) {
             case "about":
-                Intent intent = null;
-
-                switch(pref.getString("theme", "light")) {
-                    case "light":
-                        intent = new Intent(getActivity(), AboutDialogActivity.class);
-                        break;
-                    case "dark":
-                        intent = new Intent(getActivity(), AboutDialogActivityDark.class);
-                        break;
-                }
-
-                startActivity(intent);
+                U.checkForUpdates(getActivity());
                 break;
             case "donate":
                 NumberFormat format = NumberFormat.getCurrencyInstance();

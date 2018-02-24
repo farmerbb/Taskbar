@@ -349,8 +349,4 @@
 
     <string name="use_default">Use default</string>
 
-    <string name="view_play_store">Check for updates</string>
-    <string name="view_github">View GitHub page</string>
-    <string name="view_licenses">Open source licenses</string>
-
 </resources>

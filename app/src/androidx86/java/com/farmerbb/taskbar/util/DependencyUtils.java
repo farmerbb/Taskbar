@@ -30,6 +30,4 @@ public class DependencyUtils {
     static ToastInterface createToast(Context context, String message, int length) {
         return new ToastFrameworkImpl(context, message, length);
     }
-
-    public static void showLicenses(Context context) {}
 }
