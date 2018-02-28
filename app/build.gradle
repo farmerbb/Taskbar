@@ -1,5 +1,5 @@
 ext {
-    SUPPORT_LIBRARY_VERSION = "27.0.2"
+    SUPPORT_LIBRARY_VERSION = "27.1.0"
     SDK_VERSION = 27
 }
 
@@ -19,7 +19,7 @@ android {
         minSdkVersion 21
         targetSdkVersion SDK_VERSION
 
-        versionCode 180
+        versionCode 181
         versionName "3.8.2"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN"

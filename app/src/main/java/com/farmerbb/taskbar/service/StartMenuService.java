@@ -378,7 +378,7 @@ public class StartMenuService extends Service {
                 if(!hasHardwareKeyboard) {
                     ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
                     params1.height = getResources().getDimensionPixelSize(
-                            b && !U.isServiceRunning(this, "com.farmerbb.secondscreen.service.DisableKeyboardService")
+                            b && !isSecondScreenDisablingKeyboard()
                                     ? R.dimen.start_menu_height_half
                                     : R.dimen.start_menu_height);
                     startMenu.setLayoutParams(params1);
@@ -764,5 +764,10 @@ public class StartMenuService extends Service {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
+    }
+
+    private boolean isSecondScreenDisablingKeyboard() {
+        return Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD)
+                .startsWith("com.farmerbb.secondscreen");
     }
 }
