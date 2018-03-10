@@ -116,13 +116,13 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 openContextMenu(entry, location);
             }
 
-            if(action == MotionEvent.ACTION_SCROLL && visualFeedbackEnabled())
+            if(action == MotionEvent.ACTION_SCROLL && U.visualFeedbackEnabled(getContext()))
                 view.setBackgroundColor(0);
 
             return false;
         });
 
-        if(visualFeedbackEnabled()) {
+        if(U.visualFeedbackEnabled(getContext())) {
             layout.setOnHoverListener((v, event) -> {
                 if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
                     int backgroundTint = pref.getBoolean("transparent_start_menu", false)
@@ -190,7 +190,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                 DisplayMetrics metrics = U.getRealDisplayMetrics(getContext());
 
-                if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
                 getContext().startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
@@ -204,10 +204,5 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
-    }
-
-    private boolean visualFeedbackEnabled() {
-        SharedPreferences pref = U.getSharedPreferences(getContext());
-        return Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && pref.getBoolean("visual_feedback", true);
     }
 }

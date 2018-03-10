@@ -30,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -150,17 +149,7 @@ public class HomeActivity extends Activity {
                     if(pref.getBoolean("double_tap_to_sleep", false)) {
                         U.lockDevice(HomeActivity.this);
                     } else {
-                        int theme = -1;
-                        switch(pref.getString("theme", "light")) {
-                            case "light":
-                                theme = R.style.AppTheme;
-                                break;
-                            case "dark":
-                                theme = R.style.AppTheme_Dark;
-                                break;
-                        }
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(HomeActivity.this, theme));
+                        AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(HomeActivity.this));
                         builder.setTitle(R.string.double_tap_to_sleep)
                                 .setMessage(R.string.enable_double_tap_to_sleep)
                                 .setNegativeButton(pref.getBoolean("double_tap_dialog_shown", false)
@@ -205,6 +194,9 @@ public class HomeActivity extends Activity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        pref.edit().putBoolean("launcher", true).apply();
 
         U.initPrefs(this);
     }
@@ -268,7 +260,9 @@ public class HomeActivity extends Activity {
             } else if(U.launcherIsDefault(this))
                 startFreeformHack();
         } else
-            dialog = U.showPermissionDialog(this);
+            dialog = U.showPermissionDialog(U.wrapContext(this),
+                    () -> dialog = U.showErrorDialog(U.wrapContext(this), "SYSTEM_ALERT_WINDOW"),
+                    null);
     }
 
     private boolean bootToFreeform() {
@@ -279,12 +273,23 @@ public class HomeActivity extends Activity {
     }
 
     private void startTaskbar() {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        if(pref.getBoolean("first_run", true)) {
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("first_run", false);
+            editor.putBoolean("collapsed", true);
+            editor.apply();
+
+            dialog = U.showRecentAppsDialog(U.wrapContext(this),
+                    () -> dialog = U.showErrorDialog(U.wrapContext(this), "GET_USAGE_STATS"),
+                    null);
+        }
+
         // We always start the Taskbar and Start Menu services, even if the app isn't normally running
         startService(new Intent(this, TaskbarService.class));
         startService(new Intent(this, StartMenuService.class));
         startService(new Intent(this, DashboardService.class));
 
-        SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
             pref.edit().putBoolean("taskbar_active", false).apply();
 

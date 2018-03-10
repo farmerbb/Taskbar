@@ -45,7 +45,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Process;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
 import android.util.SparseArray;
@@ -177,7 +176,7 @@ public class DashboardService extends Service {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("dashboard", false)) {
             if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+                if(U.canDrawOverlays(this))
                     drawDashboard();
                 else {
                     pref.edit().putBoolean("taskbar_active", false).apply();
@@ -349,7 +348,7 @@ public class DashboardService extends Service {
             }
 
             if(inFreeformMode) {
-                if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
                 U.launchAppMaximized(this, intent);
@@ -439,7 +438,7 @@ public class DashboardService extends Service {
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+            if(U.canDrawOverlays(this))
                 drawDashboard();
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();

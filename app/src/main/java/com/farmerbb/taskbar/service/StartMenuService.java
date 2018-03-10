@@ -44,7 +44,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -182,7 +181,7 @@ public class StartMenuService extends Service {
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+            if(U.canDrawOverlays(this))
                 drawStartMenu();
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
@@ -259,19 +258,7 @@ public class StartMenuService extends Service {
         }
 
         // Initialize views
-        int theme = 0;
-
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                theme = R.style.AppTheme;
-                break;
-            case "dark":
-                theme = R.style.AppTheme_Dark;
-                break;
-        }
-
-        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
-        layout = (StartMenuLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
+        layout = (StartMenuLayout) LayoutInflater.from(U.wrapContext(this)).inflate(layoutId, null);
         startMenu = U.findViewById(layout, R.id.start_menu);
 
         if((shouldShowSearchBox && !hasHardwareKeyboard) || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -284,6 +271,9 @@ public class StartMenuService extends Service {
 
         if(pref.getBoolean("transparent_start_menu", false))
             startMenu.setBackgroundColor(0);
+
+        if(U.visualFeedbackEnabled(this))
+            startMenu.setRecyclerListener(view -> view.setBackgroundColor(0));
 
         searchView = U.findViewById(layout, R.id.search);
 
@@ -624,7 +614,7 @@ public class StartMenuService extends Service {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!U.isChromeOs(this) && (!onHomeScreen || inFreeformMode)) {
-                Class clazz = inFreeformMode && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
+                Class clazz = inFreeformMode && !U.hasBrokenSetLaunchBoundsApi()
                         ? InvisibleActivityAlt.class
                         : InvisibleActivity.class;
 
@@ -711,7 +701,7 @@ public class StartMenuService extends Service {
                 windowManager.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+            if(U.canDrawOverlays(this))
                 drawStartMenu();
             else {
                 SharedPreferences pref = U.getSharedPreferences(this);
@@ -750,7 +740,7 @@ public class StartMenuService extends Service {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                 DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-                if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
                 startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());

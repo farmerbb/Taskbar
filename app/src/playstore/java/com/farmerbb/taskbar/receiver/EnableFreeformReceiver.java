@@ -1,4 +1,4 @@
-/* Copyright 2017 Braden Farmer
+/* Copyright 2018 Braden Farmer
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,27 @@
 package com.farmerbb.taskbar.receiver;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.util.U;
 
-public class DisableHomeReceiver extends BroadcastReceiver {
+public class EnableFreeformReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        pref.edit().putBoolean("launcher", false).apply();
+        boolean freeformEnabled = pref.getBoolean("freeform_hack", false);
 
-        ComponentName component = new ComponentName(context, HomeActivity.class);
-        context.getPackageManager().setComponentEnabledSetting(component,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+        if(intent.hasExtra("secondscreen") && freeformEnabled)
+            pref.edit().putBoolean("skip_disable_freeform_receiver", true).apply();
+        else if(U.hasFreeformSupport(context) && !freeformEnabled) {
+            U.restartNotificationService(context);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+            pref.edit().putBoolean("freeform_hack", true).apply();
+
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+        }
     }
 }

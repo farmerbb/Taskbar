@@ -16,10 +16,13 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -52,6 +55,15 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
     boolean secondScreenPrefEnabled = false;
 
+    private BroadcastReceiver homeToggleReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            CheckBoxPreference checkBox = (CheckBoxPreference) findPreference("launcher");
+            checkBox.setChecked(pref.getBoolean("launcher", false));
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
@@ -80,8 +92,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         boolean lockHomeToggle = pref.getBoolean("launcher", false)
-                && (U.hasSupportLibrary(getActivity())
-                || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID));
+                && U.isLauncherPermanentlyEnabled(getActivity());
 
         findPreference("launcher").setEnabled(!lockHomeToggle);
 
@@ -105,12 +116,27 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         if(secondScreenPrefEnabled) {
             findPreference("secondscreen").setTitle(
-                    getSecondScreenPackageName() == null
+                    U.getSecondScreenPackageName(getActivity()) == null
                             ? R.string.pref_secondscreen_title_install
                             : R.string.pref_secondscreen_title_open);
         }
 
         updateDashboardGridSize(false);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(homeToggleReceiver,
+                new IntentFilter("com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED"));
+    }
+
+    @Override
+    public void onDetach() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(homeToggleReceiver);
+
+        super.onDetach();
     }
 
     @SuppressLint("SetTextI18n")
@@ -236,7 +262,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 break;
             case "secondscreen":
                 PackageManager packageManager = getActivity().getPackageManager();
-                String packageName = getSecondScreenPackageName();
+                String packageName = U.getSecondScreenPackageName(getActivity());
                 Intent intent2;
 
                 if(packageName == null) {
@@ -283,24 +309,5 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
-    }
-
-    private String getSecondScreenPackageName() {
-        PackageManager pm = getActivity().getPackageManager();
-        String packageName;
-
-        try {
-            packageName = "com.farmerbb.secondscreen.free";
-            pm.getPackageInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            try {
-                packageName = "com.farmerbb.secondscreen";
-                pm.getPackageInfo(packageName, 0);
-            } catch (PackageManager.NameNotFoundException e1) {
-                packageName = null;
-            }
-        }
-
-        return packageName;
     }
 }

@@ -33,7 +33,7 @@ import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
-public class SettingsFragment extends PreferenceFragment {
+public abstract class SettingsFragment extends PreferenceFragment {
 
     boolean finishedLoadingPrefs;
     boolean showReminderToast = false;

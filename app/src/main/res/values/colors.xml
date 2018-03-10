@@ -35,4 +35,6 @@
 
     <color name="ic_launcher_adaptive_bg">#4557A6</color>
     <color name="ic_freeform_mode_adaptive_bg">#4790CD</color>
+
+    <color name="app_shortcut_bg">#F5F5F5</color>
 </resources>

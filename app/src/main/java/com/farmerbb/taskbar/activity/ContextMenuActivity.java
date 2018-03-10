@@ -411,7 +411,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.putExtra("uninstall", packageName);
                     intent2.putExtra("user_id", userId);
 
-                    startActivity(intent2);
+                    try {
+                        startActivity(intent2);
+                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 } else {
                     Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName));
                     intent2.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(userId));
@@ -419,7 +421,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     new Handler().post(() -> {
                         try {
                             startActivity(intent2);
-                        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                        } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
                     });
                 }
 
@@ -431,7 +433,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.launchApp(this, () -> {
                     Intent intent2 = new Intent(this, MainActivity.class);
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent2, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
+
+                    try {
+                        startActivity(intent2, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
+                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
                 showStartMenu = false;
@@ -485,9 +490,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "show_window_sizes":
                 generateWindowSizes();
 
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+                if(U.hasBrokenSetLaunchBoundsApi())
                     U.showToastLong(this, R.string.window_sizes_not_available);
-                }
 
                 getListView().setOnItemLongClickListener((parent, view, position, id) -> {
                     String[] windowSizes = { "standard", "large", "fullscreen", "half_left", "half_right", "phone_size" };
@@ -515,7 +519,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 U.launchApp(getApplicationContext(), packageName, componentName, userId, windowSize, false, true);
 
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(U.hasBrokenSetLaunchBoundsApi())
                     U.cancelToast();
 
                 showStartMenu = false;
@@ -559,8 +563,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
                     U.launchAppMaximized(getApplicationContext(), intent);
-                } else
-                    startActivity(intent);
+                } else {
+                    try {
+                        startActivity(intent);
+                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                }
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -595,7 +602,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         startActivity(fileManagerIntent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
-                    }
+                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
                 showStartMenu = false;
@@ -611,7 +618,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         startActivity(settingsIntent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
-                    }
+                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
                 showStartMenu = false;
@@ -722,7 +729,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             getListView().setOnItemLongClickListener(null);
 
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+            if(U.hasBrokenSetLaunchBoundsApi())
                 U.cancelToast();
         } else {
             if(contextMenuFix && !showStartMenu)

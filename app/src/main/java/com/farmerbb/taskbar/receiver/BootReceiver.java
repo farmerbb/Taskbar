@@ -29,8 +29,12 @@ import com.farmerbb.taskbar.util.U;
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+        if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            // Initialize preferences on BlissOS
             SharedPreferences pref = U.getSharedPreferences(context);
+            if(U.isBlissOs(context) && !pref.getBoolean("bliss_os_prefs", false))
+                U.initPrefs(context);
+
             SharedPreferences.Editor editor = pref.edit();
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N

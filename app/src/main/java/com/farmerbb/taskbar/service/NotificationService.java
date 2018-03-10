@@ -27,7 +27,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.service.quicksettings.TileService;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -87,7 +86,7 @@ public class NotificationService extends Service {
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false)) {
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
+            if(U.canDrawOverlays(this)) {
                 isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
 
                 Intent intent = new Intent(this, MainActivity.class);

@@ -27,6 +27,9 @@
     <permission android:name="${applicationId}.ENABLE_DISABLE_HOME"
         android:protectionLevel="signature" />
 
+    <permission android:name="${applicationId}.ENABLE_DISABLE_FREEFORM"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -353,6 +356,24 @@
             android:permission="${applicationId}.START_STOP_TASKBAR" >
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.EnableFreeformReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="${applicationId}.ENABLE_DISABLE_FREEFORM" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.ENABLE_FREEFORM_MODE"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.DisableFreeformReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="${applicationId}.ENABLE_DISABLE_FREEFORM" >
+            <intent-filter>
+                <action android:name="com.farmerbb.taskbar.DISABLE_FREEFORM_MODE"/>
             </intent-filter>
         </receiver>
 

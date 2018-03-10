@@ -28,7 +28,6 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.SavedWindowSizesEntry;
 import com.farmerbb.taskbar.util.TopApps;
-import com.farmerbb.taskbar.util.U;
 
 import java.io.BufferedReader;
 import java.io.File;

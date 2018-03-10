@@ -17,17 +17,14 @@
 <!-- Manifest used for Android-x86 builds of Taskbar, with the following changes:
 
      * HomeActivity is enabled by default
-     * SendSettingsReceiver and ReceiveSettingsReceiver are not exposed
+     * Certain BroadcastReceivers are not exposed
 -->
-<manifest android:versionCode="181"
-          android:versionName="3.8.2"
+<manifest android:versionCode="182"
+          android:versionName="3.9"
           xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.farmerbb.taskbar" >
 
     <permission android:name="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
-        android:protectionLevel="signature" />
-
-    <permission android:name="com.farmerbb.taskbar.androidx86.ENABLE_DISABLE_HOME"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
@@ -307,24 +304,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
                 <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".receiver.EnableHomeReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="com.farmerbb.taskbar.androidx86.ENABLE_DISABLE_HOME" >
-            <intent-filter>
-                <action android:name="com.farmerbb.taskbar.ENABLE_HOME"/>
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".receiver.DisableHomeReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="com.farmerbb.taskbar.androidx86.ENABLE_DISABLE_HOME" >
-            <intent-filter>
-                <action android:name="com.farmerbb.taskbar.DISABLE_HOME"/>
             </intent-filter>
         </receiver>
         <receiver

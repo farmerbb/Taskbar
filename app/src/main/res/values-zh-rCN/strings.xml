@@ -345,8 +345,10 @@
     <string name="pref_secondscreen_title_install">Install SecondScreen</string>
     <string name="pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
 
-    <string name="dialog_upgrade_message">Taskbar\'s freeform mode support has not been tested on this version of Android. It may behave in unexpected ways - check for updates if there are any issues.</string>
+    <string name="dialog_upgrade_message">Taskbar\'s freeform mode support has not been tested on this version of Android. It may stop working completely or behave in other unexpected ways.\n\nCheck for app updates if you see any issues.</string>
 
     <string name="use_default">Use default</string>
+
+    <string name="action_continue">Continue</string>
 
 </resources>

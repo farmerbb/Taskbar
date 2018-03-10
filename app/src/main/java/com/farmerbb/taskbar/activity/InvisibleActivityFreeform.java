@@ -196,12 +196,27 @@ public class InvisibleActivityFreeform extends Activity {
             LauncherHelper.getInstance().setOnHomeScreen(true);
             bootToFreeform = true;
 
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(pref.getBoolean("first_run", true)) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("first_run", false);
+                editor.putBoolean("collapsed", true);
+                editor.apply();
+
+                new Handler().postDelayed(() -> {
+                    Intent intent = new Intent(this, DummyActivity.class);
+                    intent.putExtra("show_recent_apps_dialog", true);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    startActivity(intent);
+                }, 250);
+            }
+
             // We always start the Taskbar and Start Menu services, even if the app isn't normally running
             startService(new Intent(this, TaskbarService.class));
             startService(new Intent(this, StartMenuService.class));
             startService(new Intent(this, DashboardService.class));
 
-            SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
                 pref.edit().putBoolean("taskbar_active", false).apply();
 

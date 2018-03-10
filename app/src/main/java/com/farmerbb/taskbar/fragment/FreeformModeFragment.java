@@ -91,12 +91,11 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             AlertDialog dialog = builder.create();
             dialog.show();
             dialog.setCancelable(false);
-        } else if(U.isUntestedAndroidVersion(getActivity())
-                && pref.getInt("current_api_version", Build.VERSION.SDK_INT - 1) < Build.VERSION.SDK_INT) {
+        } else if(U.isUntestedAndroidVersion(getActivity())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.samsung_freeform_title)
                     .setMessage(R.string.dialog_upgrade_message)
-                    .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putInt("current_api_version", Build.VERSION.SDK_INT).apply());
+                    .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putFloat("current_api_version_new", U.getCurrentApiVersion()).apply());
 
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -156,7 +155,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
                                 builder.setTitle(R.string.freeform_dialog_title)
                                         .setMessage(R.string.freeform_dialog_message_alt)
-                                        .setPositiveButton(R.string.action_ok, (dialogInterface, i) -> freeformSetupComplete());
+                                        .setPositiveButton(R.string.action_continue, (dialogInterface, i) -> freeformSetupComplete());
                             } else {
                                 builder.setTitle(R.string.freeform_dialog_title)
                                         .setMessage(R.string.freeform_dialog_message)
@@ -208,10 +207,8 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 CompatUtils.pinAppShortcut(getActivity());
                 break;
             case "window_size":
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+                if(U.hasBrokenSetLaunchBoundsApi())
                     U.showToastLong(getActivity(), R.string.window_sizes_not_available);
-                }
-
                 break;
         }
 

@@ -69,9 +69,10 @@ public class CompatUtils {
     }
 
     public static void startForegroundService(Context context, Intent intent) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            context.startForegroundService(intent);
-        else
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(Settings.canDrawOverlays(context))
+                context.startForegroundService(intent);
+        } else
             context.startService(intent);
     }
 

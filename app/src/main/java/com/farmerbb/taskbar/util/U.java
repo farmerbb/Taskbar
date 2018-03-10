@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
@@ -31,7 +32,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
@@ -47,6 +47,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
@@ -66,9 +67,11 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.jrummyapps.android.os.SystemProperties;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class U {
@@ -94,8 +97,20 @@ public class U {
         return pref;
     }
 
+    public static void showPermissionDialog(Context context) {
+        showPermissionDialog(context, null, null);
+    }
+    
     @TargetApi(Build.VERSION_CODES.M)
-    public static AlertDialog showPermissionDialog(final Context context) {
+    public static AlertDialog showPermissionDialog(Context context, Runnable onError, Runnable onFinish) {
+        Runnable finalOnFinish = onFinish == null
+                ? () -> {}
+                : onFinish;
+
+        Runnable finalOnError = onError == null
+                ? () -> showErrorDialog(context, "SYSTEM_ALERT_WINDOW", finalOnFinish)
+                : onError;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.permission_dialog_title)
                 .setMessage(R.string.permission_dialog_message)
@@ -103,8 +118,10 @@ public class U {
                     try {
                         context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                 Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+
+                        finalOnFinish.run();
                     } catch (ActivityNotFoundException e) {
-                        showErrorDialog(context, "SYSTEM_ALERT_WINDOW");
+                        finalOnError.run();
                     }
                 });
 
@@ -115,14 +132,25 @@ public class U {
         return dialog;
     }
 
-    public static void showErrorDialog(final Context context, String appopCmd) {
+    public static AlertDialog showErrorDialog(Context context, String appopCmd) {
+        return showErrorDialog(context, appopCmd, null);
+    }
+
+    private static AlertDialog showErrorDialog(Context context, String appopCmd, Runnable onFinish) {
+        Runnable finalOnFinish = onFinish == null
+                ? () -> {}
+                : onFinish;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.error_dialog_title)
                 .setMessage(context.getString(R.string.error_dialog_message, BuildConfig.APPLICATION_ID, appopCmd))
-                .setPositiveButton(R.string.action_ok, null);
+                .setPositiveButton(R.string.action_ok, (dialog, which) -> finalOnFinish.run());
 
         AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.setCancelable(false);
+        
+        return dialog;
     }
 
     public static void lockDevice(Context context) {
@@ -245,7 +273,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
 
-        boolean specialLaunch = Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
+        boolean specialLaunch = hasBrokenSetLaunchBoundsApi()
                 && FreeformHackHelper.getInstance().isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
@@ -803,9 +831,9 @@ public class U {
     public static boolean hasFreeformSupport(Context context) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
-                || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", -1) == 1
+                || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", 0) != 0
                 || (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
-                && Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", -1) == 1));
+                && Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", 0) != 0));
     }
 
     public static boolean hasPartialFreeformSupport() {
@@ -887,7 +915,7 @@ public class U {
                 stackId = FREEFORM_WORKSPACE_STACK_ID;
                 break;
             case CONTEXT_MENU:
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(hasBrokenSetLaunchBoundsApi())
                     stackId = FULLSCREEN_WORKSPACE_STACK_ID;
                 break;
         }
@@ -925,16 +953,21 @@ public class U {
         return context.getPackageManager().hasSystemFeature("org.chromium.arc");
     }
 
-    public static boolean hasSupportLibrary(Context context) {
-        return hasSupportLibrary(context, 0);
+    public static boolean isBlissOs(Context context) {
+        String blissVersion = SystemProperties.get("ro.bliss.version");
+        return blissVersion != null && !blissVersion.isEmpty()
+                && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+                && isSystemApp(context);
     }
 
-    public static boolean hasSupportLibrary(Context context, int minVersion) {
+    public static boolean isLauncherPermanentlyEnabled(Context context) {
+        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
+            return true;
+
         PackageManager pm = context.getPackageManager();
         try {
-            PackageInfo pInfo = pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
-            return pInfo.versionCode >= minVersion
-                    && pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, BuildConfig.APPLICATION_ID) == PackageManager.SIGNATURE_MATCH
+            pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
+            return pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, BuildConfig.APPLICATION_ID) == PackageManager.SIGNATURE_MATCH
                     && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                     && isSystemApp(context);
         } catch (PackageManager.NameNotFoundException e) {
@@ -1048,12 +1081,12 @@ public class U {
             }
         }
 
-        // Customizations for Bliss-x86
-        if(hasSupportLibrary(context, 5)
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        // Customizations for BlissOS
+        if(isBlissOs(context) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !pref.getBoolean("bliss_os_prefs", false)) {
             SharedPreferences.Editor editor = pref.edit();
 
-            if(U.hasFreeformSupport(context)) {
+            if(hasFreeformSupport(context)) {
                 editor.putBoolean("freeform_hack", true);
             }
 
@@ -1068,6 +1101,7 @@ public class U {
             editor.putBoolean("button_home", true);
             editor.putBoolean("button_recents", true);
             editor.putBoolean("auto_hide_navbar", true);
+            editor.putBoolean("bliss_os_prefs", true);
 
             try {
                 Settings.Secure.putString(context.getContentResolver(),
@@ -1140,7 +1174,7 @@ public class U {
     }
 
     public static boolean isOverridingFreeformHack(Context context) {
-        SharedPreferences pref = U.getSharedPreferences(context);
+        SharedPreferences pref = getSharedPreferences(context);
         return isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true);
     }
 
@@ -1164,18 +1198,116 @@ public class U {
     }
 
     public static boolean isUntestedAndroidVersion(Context context) {
-        int androidSdkInt = Build.VERSION.SDK_INT;
-        int targetSdkInt = context.getApplicationInfo().targetSdkVersion;
+        SharedPreferences pref = getSharedPreferences(context);
+        float testedApiVersion = 27.0f;
 
-        if(androidSdkInt > targetSdkInt)
-            return true;
+        return getCurrentApiVersion() > Math.max(testedApiVersion, pref.getFloat("current_api_version_new", testedApiVersion));
+    }
 
-        if(androidSdkInt >= Build.VERSION_CODES.M) {
-            int previewSdkInt = Build.VERSION.PREVIEW_SDK_INT;
+    public static float getCurrentApiVersion() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
+        else
+            return (float) Build.VERSION.SDK_INT;
+    }
 
-            return androidSdkInt == targetSdkInt && previewSdkInt > 0;
+    public static boolean hasBrokenSetLaunchBoundsApi() {
+        return Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1;
+    }
+
+    public static String getSecondScreenPackageName(Context context) {
+        return getInstalledPackage(context, Arrays.asList(
+                "com.farmerbb.secondscreen.free",
+                "com.farmerbb.secondscreen"));
+    }
+
+    // Returns the name of an installed package from a list of package names, in order of preference
+    private static String getInstalledPackage(Context context, List<String> packageNames) {
+        if(packageNames == null || packageNames.isEmpty())
+            return null;
+
+        List<String> packages = packageNames instanceof ArrayList ? packageNames : new ArrayList<>(packageNames);
+        String packageName = packages.get(0);
+
+        try {
+            context.getPackageManager().getPackageInfo(packageName, 0);
+            return packageName;
+        } catch (PackageManager.NameNotFoundException e) {
+            packages.remove(0);
+            return getInstalledPackage(context, packages);
+        }
+    }
+
+    public static boolean visualFeedbackEnabled(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && pref.getBoolean("visual_feedback", true);
+    }
+
+    public static void showRecentAppsDialog(Context context) {
+        showRecentAppsDialog(context, null, null);
+    }
+
+    public static AlertDialog showRecentAppsDialog(Context context, Runnable onError, Runnable onFinish) {
+        Runnable finalOnFinish = onFinish == null
+                ? () -> {}
+                : onFinish;
+
+        Runnable finalOnError = onError == null
+                ? () -> showErrorDialog(context, "GET_USAGE_STATS", finalOnFinish)
+                : onError;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp(context)) {
+            ApplicationInfo applicationInfo = null;
+            try {
+                applicationInfo = context.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+
+            if(applicationInfo != null) {
+                AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+                int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+
+                if(mode != AppOpsManager.MODE_ALLOWED) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.pref_header_recent_apps)
+                            .setMessage(R.string.enable_recent_apps)
+                            .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                                try {
+                                    context.startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                                    showToastLong(context, R.string.usage_stats_message);
+
+                                    finalOnFinish.run();
+                                } catch (ActivityNotFoundException e) {
+                                    finalOnError.run();
+                                }
+                            })
+                            .setNegativeButton(R.string.action_cancel, (dialog, which) -> finalOnFinish.run());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.setCancelable(false);
+                    
+                    return dialog;
+                }
+            }
         }
 
-        return false;
+        finalOnFinish.run();
+        return null;
+    }
+
+    public static Context wrapContext(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+
+        int theme = -1;
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                theme = R.style.AppTheme;
+                break;
+            case "dark":
+                theme = R.style.AppTheme_Dark;
+                break;
+        }
+
+        return theme > -1 ? new ContextThemeWrapper(context, theme) : context;
     }
 }

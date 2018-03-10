@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -31,10 +32,20 @@ public class StartReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
 
-        boolean taskbarNotActive = !pref.getBoolean("taskbar_active", false);
-        boolean taskbarActiveButHidden = pref.getBoolean("taskbar_active", false) && pref.getBoolean("is_hidden", false);
+        boolean taskbarNotActive = !U.isServiceRunning(context, NotificationService.class);
+        boolean taskbarActiveButHidden = !taskbarNotActive && pref.getBoolean("is_hidden", false);
 
-        if(taskbarNotActive || taskbarActiveButHidden) {
+        if(!U.canDrawOverlays(context)) {
+            new Handler().postDelayed(() -> {
+                Intent intent2 = new Intent(context, DummyActivity.class);
+                intent2.putExtra("show_permission_dialog", true);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(intent2);
+            }, 250);
+        } else if(taskbarNotActive || taskbarActiveButHidden) {
+            U.initPrefs(context);
+
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("is_hidden", false);
 
@@ -42,6 +53,14 @@ public class StartReceiver extends BroadcastReceiver {
                 if(pref.getBoolean("first_run", true)) {
                     editor.putBoolean("first_run", false);
                     editor.putBoolean("collapsed", true);
+
+                    new Handler().postDelayed(() -> {
+                        Intent intent2 = new Intent(context, DummyActivity.class);
+                        intent2.putExtra("show_recent_apps_dialog", true);
+                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        context.startActivity(intent2);
+                    }, 250);
                 }
 
                 editor.putBoolean("taskbar_active", true);
@@ -65,6 +84,7 @@ public class StartReceiver extends BroadcastReceiver {
             notificationIntent.putExtra("start_services", true);
 
             CompatUtils.startForegroundService(context, notificationIntent);
-        }
+        } else if(intent.hasExtra("secondscreen"))
+            pref.edit().putBoolean("skip_quit_receiver", true).apply();
     }
 }

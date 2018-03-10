@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar;
 
 import android.app.AlertDialog;
-import android.app.AppOpsManager;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -25,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
@@ -34,7 +32,6 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -93,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Ensure that components that should be enabled are enabled properly
         boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this))
-                || U.hasSupportLibrary(this)
-                || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
+                || U.isLauncherPermanentlyEnabled(this);
 
         editor.putBoolean("launcher", launcherEnabled);
         editor.apply();
@@ -165,10 +161,10 @@ public class MainActivity extends AppCompatActivity {
                         boolean firstRun = pref.getBoolean("first_run", true);
                         startTaskbarService();
 
-                        if(firstRun && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !U.isSystemApp(this))
-                            showRecentAppsDialog();
+                        if(firstRun)
+                            U.showRecentAppsDialog(this);
                     } else {
-                        U.showPermissionDialog(MainActivity.this);
+                        U.showPermissionDialog(this);
                         compoundButton.setChecked(false);
                     }
                 } else
@@ -247,36 +243,6 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
                 shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut2));
-            }
-        }
-    }
-
-    private void showRecentAppsDialog() {
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
-        } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
-
-        if(applicationInfo != null) {
-            AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-            int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
-
-            if(mode != AppOpsManager.MODE_ALLOWED) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.pref_header_recent_apps)
-                        .setMessage(R.string.enable_recent_apps)
-                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
-                            try {
-                                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                                U.showToastLong(this, R.string.usage_stats_message);
-                            } catch (ActivityNotFoundException e) {
-                                U.showErrorDialog(this, "GET_USAGE_STATS");
-                            }
-                        }).setNegativeButton(R.string.action_cancel, null);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.setCancelable(false);
             }
         }
     }

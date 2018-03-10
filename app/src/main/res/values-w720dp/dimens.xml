@@ -16,6 +16,4 @@
 
 <resources>
     <dimen name="max_width">720dp</dimen>
-    <dimen name="phone_size_width">411dp</dimen>
-    <dimen name="phone_size_height">731dp</dimen>
 </resources>

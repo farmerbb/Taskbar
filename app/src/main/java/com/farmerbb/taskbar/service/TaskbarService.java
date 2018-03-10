@@ -47,12 +47,10 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
-import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
-import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -201,7 +199,7 @@ public class TaskbarService extends Service {
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+            if(U.canDrawOverlays(this))
                 drawTaskbar();
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
@@ -271,22 +269,10 @@ public class TaskbarService extends Service {
         }
 
         // Initialize views
-        int theme = 0;
-
         SharedPreferences pref = U.getSharedPreferences(this);
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                theme = R.style.AppTheme;
-                break;
-            case "dark":
-                theme = R.style.AppTheme_Dark;
-                break;
-        }
-
         boolean altButtonConfig = pref.getBoolean("alt_button_config", false);
 
-        ContextThemeWrapper wrapper = new ContextThemeWrapper(this, theme);
-        layout = (LinearLayout) LayoutInflater.from(wrapper).inflate(layoutId, null);
+        layout = (LinearLayout) LayoutInflater.from(U.wrapContext(this)).inflate(layoutId, null);
         taskbar = U.findViewById(layout, R.id.taskbar);
         scrollView = U.findViewById(layout, R.id.taskbar_scrollview);
 
@@ -305,9 +291,7 @@ public class TaskbarService extends Service {
 
         if(pref.getBoolean("app_drawer_icon", false)) {
             startButton.setImageDrawable(ContextCompat.getDrawable(this,
-                    U.hasSupportLibrary(this, 5)
-                            ? R.drawable.bliss
-                            : R.mipmap.ic_launcher));
+                    U.isBlissOs(this) ? R.drawable.bliss : R.mipmap.ic_launcher));
 
             padding = getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
         } else {
@@ -1147,7 +1131,7 @@ public class TaskbarService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-            if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+            if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                 intent.putExtra("context_menu_fix", true);
 
             startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
@@ -1175,7 +1159,7 @@ public class TaskbarService extends Service {
 
             currentTaskbarPosition = 0;
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this))
+            if(U.canDrawOverlays(this))
                 drawTaskbar();
             else {
                 SharedPreferences pref = U.getSharedPreferences(this);
@@ -1293,7 +1277,7 @@ public class TaskbarService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
-            if(intent != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+            if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                 intent.putExtra("context_menu_fix", true);
 
             startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());

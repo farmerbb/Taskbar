@@ -29,7 +29,7 @@ import com.farmerbb.taskbar.util.U;
 public class PackageUpgradeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.getAction().equals(Intent.ACTION_MY_PACKAGE_REPLACED)) {
+        if(Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) {
             SharedPreferences pref = U.getSharedPreferences(context);
             boolean startServices = false;
 

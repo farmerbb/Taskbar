@@ -29,7 +29,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 
 import com.farmerbb.taskbar.R;
@@ -67,19 +66,7 @@ public class DummyActivity extends Activity {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             } else if(getIntent().hasExtra("device_admin")) {
-                SharedPreferences pref = U.getSharedPreferences(this);
-
-                int theme = -1;
-                switch(pref.getString("theme", "light")) {
-                    case "light":
-                        theme = R.style.AppTheme;
-                        break;
-                    case "dark":
-                        theme = R.style.AppTheme_Dark;
-                        break;
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, theme));
+                AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
                 builder.setTitle(R.string.permission_dialog_title)
                         .setMessage(R.string.device_admin_disclosure)
                         .setNegativeButton(R.string.action_cancel, (dialog, which) -> new Handler().post(this::finish))
@@ -101,19 +88,7 @@ public class DummyActivity extends Activity {
                 dialog.show();
                 dialog.setCancelable(false);
             } else if(getIntent().hasExtra("accessibility")) {
-                SharedPreferences pref = U.getSharedPreferences(this);
-
-                int theme = -1;
-                switch(pref.getString("theme", "light")) {
-                    case "light":
-                        theme = R.style.AppTheme;
-                        break;
-                    case "dark":
-                        theme = R.style.AppTheme_Dark;
-                        break;
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, theme));
+                AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
                 builder.setTitle(R.string.permission_dialog_title)
                         .setMessage(R.string.enable_accessibility)
                         .setNegativeButton(R.string.action_cancel, (dialog, which) -> new Handler().post(this::finish))
@@ -144,7 +119,12 @@ public class DummyActivity extends Activity {
                 }
 
                 finish();
-            } else finish();
+            } else if(getIntent().hasExtra("show_permission_dialog"))
+                U.showPermissionDialog(U.wrapContext(this), null, this::finish);
+            else if(getIntent().hasExtra("show_recent_apps_dialog"))
+                U.showRecentAppsDialog(U.wrapContext(this), null, this::finish);
+            else
+                finish();
         }
     }
 }

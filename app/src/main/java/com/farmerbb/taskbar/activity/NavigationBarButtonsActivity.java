@@ -38,7 +38,7 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
         findPreference("button_home").setOnPreferenceClickListener(this);
         findPreference("button_recents").setOnPreferenceClickListener(this);
 
-        if(U.hasSupportLibrary(this))
+        if(U.isBlissOs(this))
             findPreference("auto_hide_navbar").setOnPreferenceClickListener(this);
         else
             getPreferenceScreen().removePreference(findPreference("auto_hide_navbar_category"));
