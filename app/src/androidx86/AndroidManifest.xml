@@ -17,10 +17,10 @@
 <!-- Manifest used for Android-x86 builds of Taskbar, with the following changes:
 
      * HomeActivity is enabled by default
-     * Certain BroadcastReceivers are not exposed
+     * Certain activities and receivers are not exposed
 -->
-<manifest android:versionCode="182"
-          android:versionName="3.9"
+<manifest android:versionCode="183"
+          android:versionName="3.9.1"
           xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.farmerbb.taskbar" >
 
@@ -151,18 +151,6 @@
         <activity
             android:name=".activity.dark.IconPackActivityDark"
             android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
-        <activity
-            android:name=".activity.IconPackApplyActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Dialog"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="com.farmerbb.taskbar.APPLY_ICON_PACK"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activity.ShortcutActivity"
             android:icon="@mipmap/ic_freeform_mode"

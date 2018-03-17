@@ -19,8 +19,8 @@ android {
         minSdkVersion 21
         targetSdkVersion SDK_VERSION
 
-        versionCode 182
-        versionName "3.9"
+        versionCode 183
+        versionName "3.9.1"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN"
 
@@ -84,5 +84,6 @@ dependencies {
     implementation 'com.mikepenz:iconics-core:3.0.3@aar'
     implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
     implementation 'moe.banana:toast-compat:1.0.5'
+    implementation group:'com.twofortyfouram', name:'android-plugin-api-for-locale', version:'[1.0.2,2.0['
 }
 

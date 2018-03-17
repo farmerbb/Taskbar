@@ -351,4 +351,11 @@
 
     <string name="action_continue">Continue</string>
 
+    <string name="tasker_action_title">Select action</string>
+    <string name="tasker_condition_title">Select condition</string>
+    <string name="tasker_on">Taskbar On</string>
+    <string name="tasker_off">Taskbar Off</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+
 </resources>

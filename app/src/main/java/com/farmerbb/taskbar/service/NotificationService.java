@@ -35,6 +35,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.MainActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
@@ -138,6 +139,8 @@ public class NotificationService extends Service {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
 
+                DependencyUtils.requestTaskerQuery(this);
+
                 if(!isHidden) {
                     registerReceiver(userForegroundReceiver, new IntentFilter(Intent.ACTION_USER_FOREGROUND));
                     registerReceiver(userBackgroundReceiver, new IntentFilter(Intent.ACTION_USER_BACKGROUND));
@@ -160,6 +163,8 @@ public class NotificationService extends Service {
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
+
+            DependencyUtils.requestTaskerQuery(this);
 
             if(!U.launcherIsDefault(this) || U.isChromeOs(this))
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));

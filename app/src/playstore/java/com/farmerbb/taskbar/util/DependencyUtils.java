@@ -16,9 +16,12 @@
 package com.farmerbb.taskbar.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.TaskerConditionActivity;
+import com.jrummyapps.android.os.SystemProperties;
 import com.mikepenz.iconics.Iconics;
 
 public class DependencyUtils {
@@ -37,5 +40,15 @@ public class DependencyUtils {
             return new ToastFrameworkImpl(context, message, length);
         else
             return new ToastCompatImpl(context, message, length);
+    }
+
+    static String getBlissOsVersion() {
+        return SystemProperties.get("ro.bliss.version");
+    }
+
+    public static void requestTaskerQuery(Context context) {
+        Intent query = new Intent(com.twofortyfouram.locale.api.Intent.ACTION_REQUEST_QUERY);
+        query.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_STRING_ACTIVITY_CLASS_NAME, TaskerConditionActivity.class.getName());
+        context.sendBroadcast(query);
     }
 }

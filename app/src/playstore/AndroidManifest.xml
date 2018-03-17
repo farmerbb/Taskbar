@@ -225,6 +225,26 @@
         <activity
             android:name=".activity.dark.NavigationBarButtonsActivityDark"
             android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
+        <activity
+            android:name=".activity.TaskerActionActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Material.Light.Dialog">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.TaskerConditionActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Material.Light.Dialog">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_CONDITION" />
+            </intent-filter>
+        </activity>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>
@@ -374,6 +394,22 @@
             android:permission="${applicationId}.ENABLE_DISABLE_FREEFORM" >
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.DISABLE_FREEFORM_MODE"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.TaskerActionReceiver"
+            android:exported="true"
+            android:process=":background" >
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.TaskerConditionReceiver"
+            android:exported="true"
+            android:process=":background" >
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
             </intent-filter>
         </receiver>
 

@@ -67,7 +67,6 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
-import com.jrummyapps.android.os.SystemProperties;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -954,7 +953,7 @@ public class U {
     }
 
     public static boolean isBlissOs(Context context) {
-        String blissVersion = SystemProperties.get("ro.bliss.version");
+        String blissVersion = DependencyUtils.getBlissOsVersion();
         return blissVersion != null && !blissVersion.isEmpty()
                 && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                 && isSystemApp(context);

@@ -30,4 +30,10 @@ public class DependencyUtils {
     static ToastInterface createToast(Context context, String message, int length) {
         return new ToastFrameworkImpl(context, message, length);
     }
+
+    static String getBlissOsVersion() {
+        return null;
+    }
+
+    public static void requestTaskerQuery(Context context) {}
 }
