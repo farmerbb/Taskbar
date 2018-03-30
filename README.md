@@ -60,3 +60,4 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
 * HardSer (Russian translation)
 * OfficialMITX (German translation)
 * Whale Majida (Chinese translation)
+* Mesut Han (Turkish translation)

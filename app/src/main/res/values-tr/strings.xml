@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+<string name="accessibility_service_description">"Geri, ana ekran, son kullanılan, güç menüsü tıklama eylemini gerçekleştirmektedir için erişilebilirlik aktif edilmesi gerekir.
+
+Bu izin sadece düğme basma eylemlerini gerçekleştirmek için kullanılır ve başka bir amaç için kullanılmaz."</string>
+<string name="accessibility_service_summary">Taskbar tuşa basma eylemlerini gerçekleştirmesine izin verir</string>
+<string name="action_activate">Aktif et</string>
+<string name="action_cancel">İptal</string>
+<string name="action_close">Kapat</string>
+<string name="action_continue">Devam et</string>
+<string name="action_developer_options">Geliştirici ayarlarını aç</string>
+<string name="action_dont_show_again">Tekrar gösterme</string>
+<string name="action_grant_permission">İzin ver</string>
+<string name="action_hide">Taskbar gizle</string>
+<string name="action_hide_alt">Gizle</string>
+<string name="action_i_understand">Anladım</string>
+<string name="action_no_thanks">Hayır teşekkürler</string>
+<string name="action_ok">Tamam</string>
+<string name="action_quit">Kapat</string>
+<string name="action_reset">Sıfırla</string>
+<string name="action_show">Taskbar göster</string>
+<string name="action_show_alt">Göster</string>
+<string name="action_uninstall">Kaldır</string>
+<string name="add_shortcut">Ana ekrana kısayol ekle</string>
+<string name="already_blacklisted">Gizli uygulamalar listesinde olduğundan %1$s seçilemiyor</string>
+<string name="already_top_app">En iyi uygulamalar listesinde olduğu için %1$s seçilemiyor</string>
+<string name="alt_button_config">Daralt düğmesi için alternatif konum</string>
+<string name="app_hidden">1 uygulama gizli</string>
+<string name="app_info">Uygulama bilgisi</string>
+<string name="app_name">Taskbar</string>
+<string name="app_name_debug">Taskbar (Debug)</string>
+<string name="app_shortcuts">Daha fazla eylem…</string>
+<string name="apply_icon_pack">Simge paketi uygula</string>
+<string name="apply_icon_pack_description">\"%1$s\" Taskbar uygulamasından uygulansın mı?</string>
+<string name="apps_hidden">%1$d uygulama gizli</string>
+<string name="are_you_sure">Emin misin ?</string>
+<string name="auto_hide_navbar">Sistem gezinme çubuğunu otomatik olarak denetle</string>
+<string name="auto_hide_navbar_description">Taskbar aktif olduğunda gezinme çubuğunu gizle ve Taskbar etkin değilken göster</string>
+<string name="blacklist_dialog_title">Gizli</string>
+<string name="block_app">Son kullanılan engelle</string>
+<string name="button_back">Geri</string>
+<string name="button_home">Ana ekran</string>
+<string name="button_recents">Son kullanılan</string>
+<string name="change_wallpaper">Arkaplanı değiştir</string>
+<string name="clear_hidden_apps">Başlat menüsü – Gizli uygulamalar</string>
+<string name="clear_pba">Son kullanılan sabit / engelli uygulamalar</string>
+<string name="clear_pinned_apps">Uygulama tercihlerini sıfırla</string>
+<string name="clear_top_apps">Başlat menüsü – En iyi uygulamalar</string>
+<string name="clear_window_sizes">Kaydedilen pencere boyutu</string>
+<string name="click_to_add_widget">Tıkla widget ekle</string>
+<string name="click_to_open_settings">Ayarları açmak için tıkla</string>
+<string name="color_picker_alpha">Alfa</string>
+<string name="color_picker_blue">Mavi</string>
+<string name="color_picker_green">Yeşil</string>
+<string name="color_picker_red">Kırmızı</string>
+<string name="dashboard">Widget desteğini aktif et</string>
+<string name="dashboard_description">Taskbar widget için buton ekle</string>
+<string name="dashboard_grid_size">Widget gösterge tablosu ızgarası boyutu</string>
+<string name="dashboard_tutorial">Gösterge tablosuna bir widget eklemek için ekranda herhangi bir yeri tıkla</string>
+<string name="debug_build">Hata ayıklama yapısı</string>
+<string name="device_admin_description">"Taskbar cihazın ekranını kapatmasına izin verir.
+
+Taskbar kaldırmadan önce cihaz yöneticisi olarak devre dışı bırakmanızı gerektirir."</string>
+<string name="device_admin_description_short">Taskbar cihazın ekranını kapatmasına izin verir</string>
+<string name="device_admin_disclosure">"Cihazınızın ekranını kilitlemek için, Taskbar cihaz yöneticisi olarak etkinleştirilmesi gerekir. Bu izin yalnızca ekranı kilitlemek için kullanılır ve başka bir amaç için kullanılmaz.
+
+Bunu etkinleştirmeyi seçerseniz, kaldırılmadan önce Taskbar cihaz yöneticisi olarak devre dışı bırakmanız gerekir."</string>
+<string name="dialog_donate_message">"Taskbar gelişimini desteklemek için %1$s!
+
+Bağış sürümü ücretsiz sürümle aynıdır ve tercihleriniz otomatik olarak aktarılacaktır.
+
+Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak desteğiniz büyük beğeni topluyor!"</string>
+<string name="dialog_upgrade_message">"Taskbar serbest biçimli mod desteği, Android'in bu sürümünde test edilmedi. Tamamen çalışmayabilir veya diğer beklenmedik şekillerde davranabilir.
+
+Herhangi bir sorunla karşılaşırsanız uygulama güncellemelerini kontrol edin."</string>
+<string name="disable_scrolling_list">Listeyi kaydırmayı devredışı bırak</string>
+<string name="double_tap_to_sleep">Çift tıkla uyku</string>
+<string name="enable_accessibility">@string/accessibility_service_description</string>
+<string name="enable_developer_options">Derleme numarasına 7 kez dokunarak Geliştirici seçeneklerini etkinleştirin</string>
+<string name="enable_double_tap_to_sleep">Çift tıkla uykuya geçme aktif edilsin mi?</string>
+<string name="enable_force_activities_resizable">Aşağı kaydırın ve \"Yeniden boyutlandırılacak etkinlikleri zorla\" yı açın.</string>
+<string name="enable_recent_apps">"Taskbar, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için Taskbar, kullanım erişim izinleri gerektirir.
+
+Son kullanılan uygulamalar için desteği etkinleştirilsin mi?"</string>
+<string name="error_dialog_message">"Ne yazık ki, OEM kısıtlamaları nedeniyle, bu özellik cihazınızda etkinleştirilemiyor.
+
+Bu adb shell komutunu kullanarak bunu yine de etkinleştirebilirsiniz:
+
+appops set %1$s %2$s allow"</string>
+<string name="error_dialog_title">Hata</string>
+<string name="file_manager">Dosya yöneticisi</string>
+<string name="freeform_dialog_message">"Taskbar serbest biçimli pencere modunda uygulama başlatması için lütfen şu adımları izleyin:
+
+• Geliştirici seçeneklerine gidin
+
+• Aşağı kaydırın ve \"Yeniden boyutlandırılacak etkinlikleri zorla\" yı açın.
+
+• Cihazı kapatıp açın"</string>
+<string name="freeform_dialog_message_alt">"Taskbar serbest biçimli pencere modunda uygulama başlatması için lütfen şu adımları izleyin:
+
+• Geliştirici seçeneklerine gidin ve USB hata ayıklamasını etkinleştirin
+
+• Cihazınızı Android SDK yüklü bir bilgisayara bağlayın ve aşağıdaki komutu çalıştırın (tek satır):
+
+adb shell settings put global enable_freeform_support 1
+
+• Cihazınızı kapatıp açın"</string>
+<string name="freeform_dialog_title">Serbestlik desteğini aktif et</string>
+<string name="freeform_help_dialog_message">"Serbest biçim modu hakkında
+
+Taskbar, Android 7.0+ (Nougat) da serbest biçimli yüzer pencerelerde uygulamaları başlatmanızı sağlar. Kök erişimi gerekli değildir. Android 8.0+ (Oreo) ayrıca bir adb kabuk komutuyla desteklenir.
+
+Cihazınızı serbest biçimli modda başlatmak için yapılandırmak için aşağıdaki adımları uygulamanız yeterlidir:
+
+1. Taskbar uygulamasında \"Serbest biçimli pencere desteği\" kutusunu işaretleyin.
+
+2. Cihazınızda uygun ayarları etkinleştirmek için açılır pencerede görünen talimatları izleyin (tek seferlik kurulum)
+
+3. Cihazınızın son uygulamalar sayfasına gidin ve tüm son uygulamaları temizleyin *
+
+4. Serbest biçimli bir pencerede başlatmak için Taskbar kullanarak bir uygulama seçin
+
+* En iyi sonuçlar için, özellikle Android 8.0+ sürümünde, serbest biçimli modu kullanmadan önce cihazınızı yeniden başlatın.
+
+Pencere boyutu hazır ayarları
+
+Taskbar çeşitli hazır boyutlarda uygulama pencereleri başlatabilir. Bir uygulama simgesine uzun basarak veya sağ tıklayıp \"Yeni pencere\" yi seçerek bir pencere boyutu seçebilirsiniz.
+
+Belirli bir uygulama için pencere boyutu ön ayarını kaydetmek için, önayarı uzun süre basılı tutun ve varsayılan olarak ayarlandığını gösteren bir onay işareti görünecektir. Taskbar, sonraki başlatılan lansmanlarda bu seçilen boyutu kullanarak uygulamayı başlatır.
+
+Pencere boyutları Android 8.0+ üzerinde düzgün çalışmıyor. Ancak, uygulamayı başlatarak, hemen kapatarak ve Android in genel bakış menüsünden tekrar başlatarak bu konuda çalışabilirsiniz.
+
+Sorun giderme
+
+• Uygulamalar hala tam ekran başlatıyor
+
+Zaten belleğe yüklenmiş bir uygulama başlatılırsa, Taskbar ön plana getirecektir. Uygulamayı serbest biçime çevirmek için yeni bir durumdan başlatılmalıdır.
+
+Uygulamayı tekrarlardan hızlıca kaydırın ve ardından Taskbar kullanarak son uygulamalar sayfasından yeniden başlatın. Bu işe yaramazsa, uygulama simgesine uzun basın, \"Uygulama bilgisi\" ni seçin ve ardından uygulamayı durdurmaya zorlayın. Alternatif olarak, cihazınızı yeniden başlatabilirsiniz.
+
+• En iyileştirilen uygulamalar bir pencereye geri yüklenemez
+
+Bir uygulamanın başlık çubuğunda Büyüt düğmesine basarsanız, Android uygulamayı serbest biçimli moddan ve tam ekran moduna geçirir. Yukarıda belirtildiği gibi, Taskbar, yeni bir durumdan başlatılırsa, uygulamaları yalnızca serbest biçimli pencerelere açabilir.
+
+Bunu düzeltmek için, uygulamanın pencere çerçevesinin hemen dışına hafifçe dokunarak veya tıklayarak pencereleri en üst düzeye çıkarabilirsiniz. Bu, boş alanı, boş alan penceresi içinde saklarken tüm boş alanı dolduracak şekilde genişletecektir.
+
+Tam sistem düzeyinde serbest form penceresi desteğini etkinleştirme
+
+Android SDK yüklü bir bilgisayara erişiminiz varsa, aşağıdaki komutu çalıştırarak sistem düzeyinde serbest form modunu destekleyebilirsiniz (tek satır):
+
+adb shell settings put global enable_freeform_support 1
+
+Yukarıdaki komutu çalıştırdıktan sonra cihazınızı yeniden başlatın ve belirli bir uygulama için serbest biçim moduna giriş / çıkış yapmak için cihazınızın son uygulamalar sayfasındaki uygulama girişleri için yeni bir düğme görünecektir. (Düğmenin Android 7.1.2 de çalışmadığını unutmayın)"</string>
+<string name="freeform_help_dialog_title">Yardım &amp; talimatlar</string>
+<string name="freeform_off">Serbestlik kapalı</string>
+<string name="freeform_on">Serbestlik açık</string>
+<string name="full_length">Beyaz boşluk ile alanı genişlet</string>
+<string name="hide_taskbar_disclaimer">Serbest biçim modundaki uygulamalar için geçerli değildir</string>
+<string name="icon_pack">Simge paketi</string>
+<string name="icon_pack_none">Yok</string>
+<string name="import_dialog_message">"Taskbar bağış sürümünü satın aldığınız için teşekkür ederiz!
+
+Ayarlarınız başarıyla içe aktarıldı ve şimdi uygulamanın ücretsiz sürümünü kaldırabilirsiniz."</string>
+<string name="importing_settings">Ayarlar alınıyor… Bekleyin.</string>
+<string name="invalid_grid_size">Hatalı ızgara boyutu</string>
+<string name="invalid_package_name">Hatalı paket adı</string>
+<string name="launch_games_fullscreen_message">Bir uygulama kendini bir oyun olarak ilan ederse, serbest form modunda başlatılmasına izin vermeyin</string>
+<string name="launch_games_fullscreen_title">Oyunları tam ekran başlat</string>
+<string name="loading_apps">Uygulamalar yükleniyor…</string>
+<string name="lock_device">Cihaz kilitle</string>
+<string name="lock_device_not_supported">Aygıt desteklenmiyor</string>
+<string name="max_num_of_recents">%1$d uygulama</string>
+<string name="max_num_of_recents_singular">1 uygulama</string>
+<string name="max_num_of_recents_unlimited">Sınırsız</string>
+<string name="must_specify_extra">Intent.EXTRA_PACKAGE_NAME belirtilmeli</string>
+<string name="navigation_bar_buttons">Gezinti çubuğu butonları</string>
+<string name="navigation_bar_buttons_description">Gezinme çubuğu eylemlerini gerçekleştiren Taskbar a ek düğmeler ekleyin</string>
+<string name="no_freeform_support">Serbest modu cihazınızda etkin değil - Taskbar açın ve önce etkinleştirin</string>
+<string name="no_icon_packs_installed">Simge paketi yüklenmemiş</string>
+<string name="nothing_to_see_here">Burada görülecek hiçbir şey yok...</string>
+<string name="notification_settings">Sistem bildirim ayarları</string>
+<string name="num_of_recents_blurb">"Bu ayarı değiştirmeden önce kullanım erişiminin etkinleştirildiğinden emin olun.
+
+Daha yüksek değerler performansı düşürebilir."</string>
+<string name="off">Kapalı</string>
+<string name="on">Açık</string>
+<string name="open_taskbar_settings">Ayarları aç</string>
+<string name="permission_dialog_message">"Taskbar, başlamadan önce diğer uygulamaların üzerine çizim izni gerektirir.
+
+Lütfen \"İzin Ver\" e basın ve \"Diğer uygulamaların üzerine çizim izni verme\" özelliğinin etkinleştirildiğinden emin olun."</string>
+<string name="permission_dialog_title">İzin gereklidir</string>
+<string name="pin_app">Son kullanılanlara al</string>
+<string name="pin_shortcut_not_supported">"Ana ekran uygulaması, diğer uygulamalardan kısayol eklemeyi desteklemiyor.
+
+Lütfen el ile uygulamanızın \"Widgetlar\" menüsünden kısayolu ekleyin."</string>
+<string name="power_button_warning_message">"CyanogenMod / LineageOS tabanlı özel ROM lar, aygıt serbest biçimli moddayken güç düğmesinin çalışmadığı bir sorun var.
+
+Lütfen güç düğmenizi şimdi test edin. Çalışmıyorsa, ekran zaman aşımına uğradığında cihazı uykudan uyandırma yeteneğini kaybedebileceğinden serbest biçimli modu kullanırken dikkatli olun."</string>
+<string name="power_button_warning_title">Dikkat</string>
+<string name="power_menu">Güç menüsü</string>
+<string name="pref_about_description">"Taskbar: Android için PC görünümü
+
+© 2018 Braden Farmer
+Uygulama simgesi: Mark Morilla
+
+Güncellemeleri kontrol etmek veya derecelendirme bırakmak için buraya tıklayın! %1$s
+
+Türkçe: Mesut Aktaş - MaxiCep"</string>
+<string name="pref_about_description_alt">"Taskbar: Android için PC görünümü
+
+© 2018 Braden Farmer
+Uygulama simgesi: Mark Morilla
+
+Türkçe: Mesut Aktaş - MaxiCep"</string>
+<string name="pref_description_chrome_os_context_menu_fix">Chrome OS ile Taskbar kullanılıyorsa aktif edebilirsin</string>
+<string name="pref_description_force_new_window">Bir uygulamayı, başlangıç menüsünden veya son uygulamalardan her seçildiğinde yeni bir pencere açmaya zorlar (bir uygulama birden çok pencereye izin veriyorsa)</string>
+<string name="pref_description_freeform_hack">"Daha fazla masaüstü benzeri bir deneyim için Taskbar ın serbest biçimli pencere modunda uygulama başlatmasını sağlar.
+
+Bu özellik deneyseldir ve standart bölünmüş ekran çoklu göreviyle ilgili sorunlara neden olabilir."</string>
+<string name="pref_description_hide_when_keyboard_shown">Ekran klavyesi gösterildiğinde</string>
+<string name="pref_description_keyboard_shortcut">"Taskbar başlat/durdur:   {fou_social-windows} + M   {fou_magnifying-glass} + M
+
+Cihaz kilitlemr:   {fou_social-windows} + L   {fou_magnifying-glass} + L
+
+Başlat menüsünü gösterme:   {fou_social-windows}   {fou_magnifying-glass}
+(ayarlarda Taskbar yardımcı uygulaması olarak ayarlanmasını gerektirir)"</string>
+<string name="pref_description_keyboard_shortcut_alt">"Taskbar başlat/durdur
+• WinKey+M / Search+M
+
+Cihaz kilitle
+• WinKey+L / Search+L
+
+Başlat menüsü gösterme
+• WinKey / Search
+(ayarlarda Taskbar yardımcı uygulaması olarak ayarlanmasını gerektirir)"</string>
+<string name="pref_description_launcher">Ana ekranı değiştirerek Taskbar kullan</string>
+<string name="pref_description_save_window_sizes">İçerik menüsü yeni pencere açma</string>
+<string name="pref_description_use_mask">Bir simge paketi ayarlandığında performansı düşürebilir</string>
+<string name="pref_disable_animations">Daha hızlı uygulama değiştirme</string>
+<string name="pref_header_about">Taskbar hakkında</string>
+<string name="pref_header_advanced">Gelişmiş ayarlar</string>
+<string name="pref_header_appearance">Görünüm</string>
+<string name="pref_header_freeform">Serbest mod</string>
+<string name="pref_header_general">Genel ayarlar</string>
+<string name="pref_header_recent_apps">Son kullanılan uygulamalar</string>
+<string name="pref_max_num_of_recents">Son kullanılan / sabitlenmiş uygulamaların maksimum sayısı</string>
+<string name="pref_secondscreen_description">Continuum veya DeX benzeri bir deneyim için harici bir ekrana bağlandığında cihazınızın çözünürlüğünü ve yoğunluğunu değiştirin</string>
+<string name="pref_secondscreen_title_install">İkincil ekran yükle</string>
+<string name="pref_secondscreen_title_open">İkincil ekranı aç</string>
+<string name="pref_summary_donate">Taskbar gelişimini, bağış sürümüne yükselterek küçük bir bağışla destekleyin</string>
+<string name="pref_summary_hide_foreground">Performansı azaltabilir</string>
+<string name="pref_title_accent_color">Vurgu rengi</string>
+<string name="pref_title_amount_of_recents">Son kullanılan uygulamaları görüntüle</string>
+<string name="pref_title_anchor">Ekran döndürmede Taskbar tut</string>
+<string name="pref_title_app_drawer_icon">Başlat menüsü simgesi olarak Taskbar logosunu kullan</string>
+<string name="pref_title_background_tint">Arkaplan tonu</string>
+<string name="pref_title_blacklist">Uygulamaları başlangıç menüsünde yapılandır</string>
+<string name="pref_title_chrome_os_context_menu_fix">Chrome OS uyumluluğu düzeltmesi</string>
+<string name="pref_title_donate">Bağış</string>
+<string name="pref_title_enable_recents">Kullanım erişimini etkinleştir / devre dışı bırak</string>
+<string name="pref_title_force_new_window">Uygulamaları her zaman yeni pencerelerde aç</string>
+<string name="pref_title_freeform_hack">Serbest pencere desteği</string>
+<string name="pref_title_freeform_mode_help">Serbest biçimli mod için yardım ve talimatlar</string>
+<string name="pref_title_hide_foreground">Ön plan uygulaması için simgeyi gizle</string>
+<string name="pref_title_hide_taskbar">Öğeleri seçerken Taskbar daralt</string>
+<string name="pref_title_hide_when_keyboard_shown">Taskbar otomatik olarak daralt</string>
+<string name="pref_title_invisible_button">Taskbar daraltılırken düğmeyi gizle</string>
+<string name="pref_title_keyboard_shortcut">Klavye kısayollarını etkinleştir</string>
+<string name="pref_title_launcher">Ana ekranı değiştir</string>
+<string name="pref_title_position">Ekrandaki pozisyonu</string>
+<string name="pref_title_recents_refresh_interval">Yenileme oranı</string>
+<string name="pref_title_save_window_sizes">Uygulamalar için her zaman pencere boyutlarını kaydet</string>
+<string name="pref_title_scrollbar">Başlat menüsünde kaydırma çubuğunu göster</string>
+<string name="pref_title_shortcut_icon">Sabitlenmiş uygulamalar için kısayol simgesini göster</string>
+<string name="pref_title_sort_order">Sıralama düzeni</string>
+<string name="pref_title_start_menu_layout">Başlat menüsü düzeni</string>
+<string name="pref_title_start_on_boot">Açılışta başlat</string>
+<string name="pref_title_theme">Tema</string>
+<string name="pref_title_use_mask">Temasız simgeler için maske kullan</string>
+<string name="pref_title_window_size">Varsayılan pencere boyutu</string>
+<string name="press_enter">"Uygulama bulunamadı
+
+Enter ile Google da arayın"</string>
+<string name="press_enter_alt">"Uygulama bulunamadı
+
+Enter ile tarayıcıda açın"</string>
+<string name="quit_taskbar">Kapat</string>
+<string name="reboot_required">Serbest biçimli mod kurulumunu tamamlamak için cihazınızı yeniden başlatın</string>
+<string name="refresh_frequency">%1$s saniye</string>
+<string name="refresh_frequency_blurb">"Bu ayarı değiştirmeden önce kullanım erişiminin etkinleştirildiğinden emin olun.
+
+Düşük değerler CPU kullanımını artıracak ve pil ömrünü azaltacaktır."</string>
+<string name="refresh_frequency_continuous">Sürekli</string>
+<string name="refresh_frequency_singular">1 saniye</string>
+<string name="remove_widget">Widget kaldır</string>
+<string name="reset_colors">Renkleri varsayılana geri al</string>
+<string name="restore_widget">Widget geri al</string>
+<string name="samsung_freeform_message">"Taskbar, çok pencereli modda yapılan sistem değişiklikleri nedeniyle, bazı Samsung aygıtlarında serbest biçimli uygulama açma sorunları olabilir.
+
+Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM flaş etmeniz gerekebilir."</string>
+<string name="samsung_freeform_title">Not</string>
+<string name="set_as_default_home">Taskbar varsayılan başlatıcınız olarak ayarlamak için \"Her zaman\" a basın</string>
+<string name="set_wallpaper">Duvar kağıdını kullanılan ayarla…</string>
+<string name="settings_imported_successfully">Ayarları alma başarılı</string>
+<string name="shortcut_created">Serbest mod kısayolu oluşturuldu</string>
+<string name="show_search_bar">Arama çubuğu görünürlüğü</string>
+<string name="show_window_sizes">Yeni pencere…</string>
+<string name="start_menu_apps">Başlat menüsü uygulamaları</string>
+<string name="start_taskbar">Taskbar başlat/durdur</string>
+<string name="system_settings">Sistem ayarları</string>
+<string name="taskbar_is_active">Taskbar aktif</string>
+<string name="tasker_action_title">Eylem seç</string>
+<string name="tasker_condition_title">Koşul seç</string>
+<string name="tasker_off">Taskbar kapalı</string>
+<string name="tasker_on">Taskbar açık</string>
+<string name="tools">Araçlar</string>
+<string name="top_app">1 en iyi uygulama</string>
+<string name="top_apps">%1$d en iyi uygulamalar</string>
+<string name="top_apps_dialog_title">En iyi uygulamalar</string>
+<string name="transparent_start_menu">Şeffaf başlat menüsü</string>
+<string name="unblock_app">Son kullanılandan engeli kaldır</string>
+<string name="uninstall">Kaldır</string>
+<string name="unpin_app">Son kullanılandan çıkar</string>
+<string name="usage_stats_message">Lütfen Taskbar \"Açık\" olduğundan emin olun</string>
+<string name="use_default">Varsayılanı kullan</string>
+<string name="visual_feedback">Simgeleri seçerken görsel geribildirim</string>
+<string name="volume">Ses kontrol</string>
+<string name="widget_restore_toast">Bu widgetı geri yüklemek için \"%1$s\" öğesini seçin</string>
+<string name="window_size_fullscreen">Maksimum</string>
+<string name="window_size_half_left">@string/window_size_half_left_alt</string>
+<string name="window_size_half_left_alt">Yarım ekran (sol / üst)</string>
+<string name="window_size_half_right">@string/window_size_half_right_alt</string>
+<string name="window_size_half_right_alt">Yarım ekran (sağ / alt)</string>
+<string name="window_size_large">Büyük</string>
+<string name="window_size_phone_size">Telefon boyutu</string>
+<string name="window_size_standard">Standart</string>
+<string name="window_sizes_not_available">Pencere boyutları bu Android sürümünde düzgün çalışmıyor - bir geçici çözüm için bkz. \"Yardım ve talimatlar\"</string>
+
+<string-array name="pref_position_list"><item>Alt sol (yatay)</item><item>Alt sol (dikey)</item><item>Alt sağ (yatay)</item><item>Alt sağ (dikey)</item><item>Sol üst (yatay)</item><item>Sol üst (dikey)</item><item>Sağ üst (yatay)</item><item>Sağ üst (dikey)</item></string-array>
+<string-array name="pref_recents_amount"><item>Geçtiğimiz gün içinde kullanılan uygulamalar</item><item>Taskbar başladıktan sonra kullanılan uygulamalar</item><item>Tüm uygulamalar (performansı düşürebilir)</item></string-array>
+<string-array name="pref_recents_amount_alt"><item>Geçtiğimiz gün içinde kullanılan uygulamalar</item><item>Taskbar başladıktan sonra kullanılan uygulamalar</item><item>Tüm uygulamalar (performansı düşürebilir)</item><item>Yalnızca çalışan uygulamalar</item></string-array>
+<string-array name="pref_show_search_bar_list"><item>Donanım veya yazılım klavyesi</item><item>Sadece donanım klavyesi</item><item>Arama çubuğunu hiçbir zaman göstermer</item></string-array>
+<string-array name="pref_sort_order"><item>Son zamanlarda kullanılan (azalan)</item><item>Son kullanılan (artan)</item><item>En çok zaman kullanılan (azalan)</item><item>En çok zaman kullanılan (artan)</item></string-array>
+<string-array name="pref_sort_order_alt"><item>Yakın zamanda başlatılan (azalan)</item><item>Yakın zamanda başlatılan (artan)</item></string-array>
+<string-array name="pref_start_menu_list"><item>Liste</item><item>Izgara</item></string-array>
+<string-array name="pref_theme_list"><item>Açık</item><item>Koyu</item></string-array>
+<string-array name="pref_window_size_list"><item>@string/window_size_standard</item><item>@string/window_size_large</item><item>@string/window_size_fullscreen</item><item>@string/window_size_half_left_alt</item><item>@string/window_size_half_right_alt</item><item>@string/window_size_phone_size</item></string-array>
+</resources>
