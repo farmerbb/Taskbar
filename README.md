@@ -1,4 +1,6 @@
-﻿Taskbar puts a start menu and recent apps tray on top of your screen that's accessible at any time, increasing your productivity and turning your Android tablet (or phone) into a real multitasking machine!
+![Taskbar](http://i.imgur.com/gttRian.png)
+
+Taskbar puts a start menu and recent apps tray on top of your screen that's accessible at any time, increasing your productivity and turning your Android tablet (or phone) into a real multitasking machine!
 
 On devices running Android 7.0+ (Nougat), Taskbar can also launch apps in freeform windows for a PC-like experience!  No root required!  (see below for instructions)
 
@@ -35,7 +37,7 @@ Taskbar can be downloaded as a standalone Android app from:
 
 Taskbar is also included as part of the following Android distributions for PCs:
 
-* Android-x86 (7.1-rc2 and 7.1-r1) (http://www.android-x86.org)
+* Android-x86 (7.1-rc2 and later) (http://www.android-x86.org)
 * Bliss OS (x86 builds) (https://blissroms.com)
 
 ## How to Build
