@@ -31,9 +31,14 @@ For more information and detailed instructions, click "Help & instructions for f
 ## Download
 Taskbar can be downloaded as a standalone Android app from:
 
-* Google Play (https://play.google.com/store/apps/details?id=com.farmerbb.taskbar)
-* APKMirror (http://www.apkmirror.com/apk/braden-farmer/taskbar/)
-* F-Droid (https://f-droid.org/repository/browse/?fdid=com.farmerbb.taskbar)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+      alt="Google Play"
+      height="80"
+      align="middle">](https://play.google.com/store/apps/details?id=com.farmerbb.taskbar)
+[<img src="https://f-droid.org/badge/get-it-on.png"
+      alt="F-Droid"
+      height="80"
+      align="middle">](https://f-droid.org/packages/com.farmerbb.taskbar/)
 
 Taskbar is also included as part of the following Android distributions for PCs:
 
