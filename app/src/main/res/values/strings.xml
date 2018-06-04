@@ -18,7 +18,6 @@
 
     <string name="app_name">Taskbar</string>
     <string name="app_name_debug">Taskbar (Debug)</string>
-    <string name="debug_build">Debug build</string>
 
     <string name="taskbar_is_active">Taskbar is active</string>
     <string name="click_to_open_settings">Click to open settings</string>
@@ -86,6 +85,7 @@
 
     <string name="pref_title_launcher">Replace home screen</string>
     <string name="pref_description_launcher">Use Taskbar as a home screen replacement</string>
+    <string name="pref_description_launcher_alt">Use Taskbar as a home screen replacement\n\nWhen freeform window support is also enabled, this will allow Taskbar to always launch apps in freeform mode.</string>
 
     <string name="set_wallpaper">Set wallpaper using&#8230;</string>
     <string name="pref_disable_animations">Faster app switching</string>

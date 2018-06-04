@@ -18,7 +18,6 @@
 
     <string name="app_name">任务栏</string>
     <string name="app_name_debug">任务栏 (Debug)</string>
-    <string name="debug_build">Debug build</string>
 
     <string name="taskbar_is_active">任务栏正在运行</string>
     <string name="click_to_open_settings">点击打开设置</string>
@@ -86,6 +85,7 @@
 
     <string name="pref_title_launcher">替换主屏幕</string>
     <string name="pref_description_launcher">使用任务栏作为主屏幕替换</string>
+    <string name="pref_description_launcher_alt">使用 任务栏 作为主屏幕替换 \n\n当启用自由式窗口支持时，将允许 任务栏 始终在自由式模式中启动应用。</string>
 
     <string name="set_wallpaper">使用&#8230;设置壁纸</string>
     <string name="pref_disable_animations">更快速地切换应用</string>

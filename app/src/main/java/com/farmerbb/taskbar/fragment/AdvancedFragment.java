@@ -97,6 +97,11 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         findPreference("launcher").setEnabled(!lockHomeToggle);
 
+        if(U.canEnableFreeform(getActivity()) && !U.isChromeOs(getActivity()))
+            findPreference("launcher").setSummary(R.string.pref_description_launcher_alt);
+        else
+            findPreference("launcher").setSummary(R.string.pref_description_launcher);
+
         finishedLoadingPrefs = true;
     }
 

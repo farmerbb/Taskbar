@@ -18,7 +18,6 @@
 
     <string name="app_name">Taskbar</string>
     <string name="app_name_debug">Taskbar (Debug)</string>
-    <string name="debug_build">Debug build</string>
 
     <string name="taskbar_is_active">Taskbar ist aktiv</string>
     <string name="click_to_open_settings">Klocken, um Einstellungen zu öffnen</string>
@@ -86,6 +85,7 @@
 
     <string name="pref_title_launcher">Launcher ersetzen</string>
     <string name="pref_description_launcher">Taskbar als Homescreen verwenden</string>
+    <string name="pref_description_launcher_alt">Taskbar als Homescreen verwenden</string>
 
     <string name="set_wallpaper">Hintergrundbild festlegen mit&#8230;</string>
     <string name="pref_disable_animations">Schnellerer Appwechsel</string>

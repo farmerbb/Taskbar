@@ -20,7 +20,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
@@ -71,11 +70,12 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
         findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
 
-        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
+        if(BuildConfig.DEBUG || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
+            findPreference("about").setSummary(R.string.pref_about_description_alt);
+        else {
             findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
             findPreference("about").setOnPreferenceClickListener(this);
-        } else
-            findPreference("about").setSummary(R.string.pref_about_description_alt);
+        }
 
         finishedLoadingPrefs = true;
     }
@@ -97,10 +97,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         switch(p.getKey()) {
             case "about":
-                if(!BuildConfig.DEBUG)
-                    U.checkForUpdates(getActivity());
-                else
-                    U.showToast(getActivity(), R.string.debug_build);
+                U.checkForUpdates(getActivity());
                 break;
             case "donate":
                 NumberFormat format = NumberFormat.getCurrencyInstance();

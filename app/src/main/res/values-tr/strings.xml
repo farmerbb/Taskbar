@@ -72,7 +72,6 @@ Bu izin sadece düğme basma eylemlerini gerçekleştirmek için kullanılır ve
 <string name="dashboard_description">Taskbar widget için buton ekle</string>
 <string name="dashboard_grid_size">Widget gösterge tablosu ızgarası boyutu</string>
 <string name="dashboard_tutorial">Gösterge tablosuna bir widget eklemek için ekranda herhangi bir yeri tıkla</string>
-<string name="debug_build">Hata ayıklama yapısı</string>
 <string name="device_admin_description">"Taskbar cihazın ekranını kapatmasına izin verir.
 
 Taskbar kaldırmadan önce cihaz yöneticisi olarak devre dışı bırakmanızı gerektirir."</string>
@@ -249,6 +248,7 @@ Başlat menüsü gösterme
 • WinKey / Search
 (ayarlarda Taskbar yardımcı uygulaması olarak ayarlanmasını gerektirir)"</string>
 <string name="pref_description_launcher">Ana ekranı değiştirerek Taskbar kullan</string>
+<string name="pref_description_launcher_alt">Ana ekranı değiştirerek Taskbar kullan</string>
 <string name="pref_description_save_window_sizes">İçerik menüsü yeni pencere açma</string>
 <string name="pref_description_use_mask">Bir simge paketi ayarlandığında performansı düşürebilir</string>
 <string name="pref_disable_animations">Daha hızlı uygulama değiştirme</string>
