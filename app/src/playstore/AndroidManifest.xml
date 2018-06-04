@@ -64,17 +64,21 @@
         android:label="${appName}"
         android:theme="@style/AppTheme" >
 
-        <activity
+        <activity-alias
             android:name=".MainActivity"
-            android:label="${appName}"
-            android:launchMode="singleTask" >
+            android:targetActivity=".activity.MainActivity"
+            android:label="${appName}">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
+        </activity-alias>
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="${appName}"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".activity.InvisibleActivity"
             android:documentLaunchMode="always"

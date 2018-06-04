@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar;
+package com.farmerbb.taskbar.activity;
 
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -37,11 +37,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 
-import com.farmerbb.taskbar.activity.HomeActivity;
-import com.farmerbb.taskbar.activity.ImportSettingsActivity;
-import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
-import com.farmerbb.taskbar.activity.ShortcutActivity;
-import com.farmerbb.taskbar.activity.StartTaskbarActivity;
+import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;
 import com.farmerbb.taskbar.service.DashboardService;

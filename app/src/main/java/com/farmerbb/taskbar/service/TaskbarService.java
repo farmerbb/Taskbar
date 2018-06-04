@@ -74,7 +74,7 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 
 import com.farmerbb.taskbar.BuildConfig;
-import com.farmerbb.taskbar.MainActivity;
+import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;

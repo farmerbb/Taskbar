@@ -33,7 +33,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
-import com.farmerbb.taskbar.MainActivity;
+import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.IconCache;
