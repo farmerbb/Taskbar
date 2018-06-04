@@ -279,7 +279,7 @@ public class U {
                 && FreeformHackHelper.getInstance().isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        if(hasFreeformSupport(context)
                 && pref.getBoolean("freeform_hack", false)
                 && (!helper.isInFreeformWorkspace() || specialLaunch)) {
             new Handler().postDelayed(() -> {
@@ -825,8 +825,14 @@ public class U {
         return intent;
     }
 
-    public static boolean hasFreeformSupport(Context context) {
+    public static boolean canEnableFreeform(Context context) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && (getCurrentApiVersion() <= 27
+                || context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT));
+    }
+
+    public static boolean hasFreeformSupport(Context context) {
+        return canEnableFreeform(context)
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
                 || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", 0) != 0
                 || (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
@@ -1064,7 +1070,7 @@ public class U {
         }
 
         // Enable freeform hack automatically on supported devices
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if(canEnableFreeform(context)) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
                         .putBoolean("freeform_hack", hasFreeformSupport(context) && !hasPartialFreeformSupport())
@@ -1076,6 +1082,17 @@ public class U {
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
             }
+        } else {
+            boolean freeformWasEnabled = pref.getBoolean("freeform_hack", false)
+                    || pref.getBoolean("show_freeform_disabled_message", false);
+
+            pref.edit()
+                    .putBoolean("freeform_hack", false)
+                    .putBoolean("show_freeform_disabled_message", freeformWasEnabled)
+                    .apply();
+
+            SavedWindowSizes.getInstance(context).clear(context);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
         }
 
         // Customizations for BlissOS

@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import java.util.Set;
 public class KeyboardShortcutActivity extends Activity {
 
     @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,7 @@ public class KeyboardShortcutActivity extends Activity {
 
                 if(categories.contains(Intent.CATEGORY_APP_MAPS)) {
                     SharedPreferences pref = U.getSharedPreferences(this);
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    if(U.hasFreeformSupport(this)
                             && pref.getBoolean("freeform_hack", false)
                             && isInMultiWindowMode()
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
@@ -75,7 +77,7 @@ public class KeyboardShortcutActivity extends Activity {
 
                     if(intent.resolveActivity(getPackageManager()) != null) {
                         SharedPreferences pref = U.getSharedPreferences(this);
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                        if(U.hasFreeformSupport(this)
                                 && pref.getBoolean("freeform_hack", false)
                                 && isInMultiWindowMode()) {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);

@@ -46,7 +46,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
 
             context.stopService(notificationIntent);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && pref.getBoolean("freeform_hack", false)) {
+            if(U.hasFreeformSupport(context) && pref.getBoolean("freeform_hack", false)) {
                 Intent intent2 = new Intent(context, DummyActivity.class);
                 intent2.putExtra("start_freeform_hack", true);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

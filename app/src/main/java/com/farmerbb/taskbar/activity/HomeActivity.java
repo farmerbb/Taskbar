@@ -267,9 +267,7 @@ public class HomeActivity extends Activity {
 
     private boolean bootToFreeform() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && pref.getBoolean("freeform_hack", false)
-                && U.hasFreeformSupport(this);
+        return U.hasFreeformSupport(this) && pref.getBoolean("freeform_hack", false);
     }
 
     private void startTaskbar() {

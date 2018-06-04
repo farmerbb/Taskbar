@@ -266,7 +266,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             }
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+            if(U.hasFreeformSupport(this)
                     && pref.getBoolean("freeform_hack", false)
                     && !U.isGame(this, packageName)) {
                 addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
@@ -405,8 +405,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "uninstall":
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode() && !U.isChromeOs(this)) {
-                    Intent intent2 = new Intent(ContextMenuActivity.this, DummyActivity.class);
+                if(U.hasFreeformSupport(this) && isInMultiWindowMode() && !U.isChromeOs(this)) {
+                    Intent intent2 = new Intent(this, DummyActivity.class);
                     intent2.putExtra("uninstall", packageName);
                     intent2.putExtra("user_id", userId);
 
@@ -555,7 +555,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         break;
                 }
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                if(U.hasFreeformSupport(this)
                         && pref3.getBoolean("freeform_hack", false)
                         && intent != null && isInMultiWindowMode()) {
                     intent.putExtra("no_shadow", true);

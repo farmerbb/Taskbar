@@ -33,6 +33,7 @@ import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.TopApps;
+import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -127,7 +128,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                 }
 
             // Get saved window sizes
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if(U.canEnableFreeform(context)) {
                 SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
                 savedWindowSizes.clear(context);
 

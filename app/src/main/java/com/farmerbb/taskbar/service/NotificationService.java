@@ -115,7 +115,7 @@ public class NotificationService extends Service {
 
                 String showHideLabel;
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !U.isChromeOs(this)) {
+                if(U.canEnableFreeform(this) && !U.isChromeOs(this)) {
                     String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.freeform_off : R.string.freeform_on);
 
                     Intent freeformIntent = new Intent("com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE");

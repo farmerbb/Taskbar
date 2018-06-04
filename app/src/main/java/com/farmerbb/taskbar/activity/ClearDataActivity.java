@@ -65,7 +65,7 @@ public class ClearDataActivity extends AppCompatActivity {
         topApps.setOnCheckedChangeListener(listener);
         
         savedWindowSizes = U.findViewById(this, R.id.clear_window_sizes);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if(U.canEnableFreeform(this))
             savedWindowSizes.setOnCheckedChangeListener(listener);
         else
             savedWindowSizes.setVisibility(View.GONE);

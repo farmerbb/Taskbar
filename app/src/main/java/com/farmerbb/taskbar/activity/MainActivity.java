@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
@@ -52,6 +53,7 @@ import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component3,
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                U.canEnableFreeform(this) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
@@ -229,17 +231,20 @@ public class MainActivity extends AppCompatActivity {
                         .setIntent(intent)
                         .build();
 
-                Intent intent2 = new Intent(Intent.ACTION_MAIN);
-                intent2.setClass(this, ShortcutActivity.class);
-                intent2.putExtra("is_launching_shortcut", true);
+                if(U.canEnableFreeform(this)) {
+                    Intent intent2 = new Intent(Intent.ACTION_MAIN);
+                    intent2.setClass(this, ShortcutActivity.class);
+                    intent2.putExtra("is_launching_shortcut", true);
 
-                ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
-                        .setShortLabel(getString(R.string.pref_header_freeform))
-                        .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_freeform))
-                        .setIntent(intent2)
-                        .build();
+                    ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
+                            .setShortLabel(getString(R.string.pref_header_freeform))
+                            .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_freeform))
+                            .setIntent(intent2)
+                            .build();
 
-                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut2));
+                    shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut2));
+                } else
+                    shortcutManager.setDynamicShortcuts(Collections.singletonList(shortcut));
             }
         }
     }
@@ -259,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.N)
     private void startTaskbarService() {
         SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
@@ -274,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putLong("time_of_service_start", System.currentTimeMillis());
         editor.apply();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        if(U.hasFreeformSupport(this)
                 && pref.getBoolean("freeform_hack", false)
                 && isInMultiWindowMode()
                 && !FreeformHackHelper.getInstance().isFreeformHackActive()) {

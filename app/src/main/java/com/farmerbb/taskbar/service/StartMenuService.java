@@ -737,7 +737,7 @@ public class StartMenuService extends Service {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+            if(U.hasFreeformSupport(this) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                 DisplayMetrics metrics = U.getRealDisplayMetrics(this);
 
                 if(intent != null && U.hasBrokenSetLaunchBoundsApi())
@@ -751,7 +751,7 @@ public class StartMenuService extends Service {
 
     private boolean shouldDelay() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        return U.hasFreeformSupport(this)
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }

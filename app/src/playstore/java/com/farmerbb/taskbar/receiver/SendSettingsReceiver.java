@@ -28,6 +28,7 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.SavedWindowSizesEntry;
 import com.farmerbb.taskbar.util.TopApps;
+import com.farmerbb.taskbar.util.U;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -116,7 +117,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             sendSettingsIntent.putExtra("top_apps_labels", topAppsLabels);
 
             // Get saved window sizes
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if(U.canEnableFreeform(context)) {
                 SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
                 List<SavedWindowSizesEntry> savedWindowSizesList = savedWindowSizes.getSavedWindowSizes();
 

@@ -187,7 +187,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+            if(U.hasFreeformSupport(getContext()) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                 DisplayMetrics metrics = U.getRealDisplayMetrics(getContext());
 
                 if(intent != null && U.hasBrokenSetLaunchBoundsApi())
@@ -201,7 +201,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
     private boolean shouldDelay() {
         SharedPreferences pref = U.getSharedPreferences(getContext());
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        return U.hasFreeformSupport(getContext())
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }

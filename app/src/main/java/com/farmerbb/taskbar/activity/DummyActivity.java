@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
@@ -48,6 +49,7 @@ public class DummyActivity extends Activity {
     }
 
     @SuppressLint("RestrictedApi")
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onResume() {
         super.onResume();
@@ -111,7 +113,7 @@ public class DummyActivity extends Activity {
                 dialog.setCancelable(false);
             } else if(getIntent().hasExtra("start_freeform_hack")) {
                 SharedPreferences pref = U.getSharedPreferences(this);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                if(U.hasFreeformSupport(this)
                         && pref.getBoolean("freeform_hack", false)
                         && isInMultiWindowMode()
                         && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
