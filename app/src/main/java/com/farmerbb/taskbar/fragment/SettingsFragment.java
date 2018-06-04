@@ -46,8 +46,6 @@ public abstract class SettingsFragment extends PreferenceFragment {
         // Set values
         setRetainInstance(true);
         setHasOptionsMenu(true);
-
-        U.initPrefs(getActivity());
     }
 
     @Override

@@ -345,8 +345,6 @@
     <string name="pref_secondscreen_title_install">Install SecondScreen</string>
     <string name="pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
 
-    <string name="dialog_upgrade_message">Taskbar\'s freeform mode support has not been tested on this version of Android. It may stop working completely or behave in other unexpected ways.\n\nCheck for app updates if you see any issues.</string>
-
     <string name="use_default">Use default</string>
 
     <string name="action_continue">Continue</string>
@@ -357,5 +355,9 @@
     <string name="tasker_off">Taskbar Off</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+
+    <string name="rip_freeform_snackbar">Freeform mode is no longer available in this version of Android</string>
+    <string name="rip_freeform_dialog">Unfortunately, due to changes made by Google in this version of Android, freeform mode can no longer be enabled and used by Taskbar.\n\nAll other Taskbar features will continue to work as expected.  Thanks for your understanding!</string>
+    <string name="action_details">Details</string>
 
 </resources>

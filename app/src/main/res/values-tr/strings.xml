@@ -84,9 +84,6 @@ Bunu etkinleştirmeyi seçerseniz, kaldırılmadan önce Taskbar cihaz yönetici
 Bağış sürümü ücretsiz sürümle aynıdır ve tercihleriniz otomatik olarak aktarılacaktır.
 
 Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak desteğiniz büyük beğeni topluyor!"</string>
-<string name="dialog_upgrade_message">"Taskbar serbest biçimli mod desteği, Android'in bu sürümünde test edilmedi. Tamamen çalışmayabilir veya diğer beklenmedik şekillerde davranabilir.
-
-Herhangi bir sorunla karşılaşırsanız uygulama güncellemelerini kontrol edin."</string>
 <string name="disable_scrolling_list">Listeyi kaydırmayı devredışı bırak</string>
 <string name="double_tap_to_sleep">Çift tıkla uyku</string>
 <string name="enable_accessibility">@string/accessibility_service_description</string>
@@ -360,4 +357,9 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 <string-array name="pref_start_menu_list"><item>Liste</item><item>Izgara</item></string-array>
 <string-array name="pref_theme_list"><item>Açık</item><item>Koyu</item></string-array>
 <string-array name="pref_window_size_list"><item>@string/window_size_standard</item><item>@string/window_size_large</item><item>@string/window_size_fullscreen</item><item>@string/window_size_half_left_alt</item><item>@string/window_size_half_right_alt</item><item>@string/window_size_phone_size</item></string-array>
+
+    <string name="rip_freeform_snackbar">Freeform mode is no longer available in this version of Android</string>
+    <string name="rip_freeform_dialog">Unfortunately, due to changes made by Google in this version of Android, freeform mode can no longer be enabled and used by Taskbar.\n\nAll other Taskbar features will continue to work as expected.  Thanks for your understanding!</string>
+    <string name="action_details">Details</string>
+
 </resources>

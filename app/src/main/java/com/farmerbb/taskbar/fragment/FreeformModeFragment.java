@@ -91,15 +91,6 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             AlertDialog dialog = builder.create();
             dialog.show();
             dialog.setCancelable(false);
-        } else if(U.isUntestedAndroidVersion(getActivity())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(R.string.samsung_freeform_title)
-                    .setMessage(R.string.dialog_upgrade_message)
-                    .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putFloat("current_api_version_new", U.getCurrentApiVersion()).apply());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.setCancelable(false);
         }
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(checkBoxReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));

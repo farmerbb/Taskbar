@@ -827,10 +827,11 @@ public class U {
 
     public static boolean canEnableFreeform(Context context) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && (getCurrentApiVersion() <= 27
+                && (getCurrentApiVersion() <= 27.0f
                 || context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT));
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     public static boolean hasFreeformSupport(Context context) {
         return canEnableFreeform(context)
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
@@ -1211,14 +1212,7 @@ public class U {
         }
     }
 
-    public static boolean isUntestedAndroidVersion(Context context) {
-        SharedPreferences pref = getSharedPreferences(context);
-        float testedApiVersion = 27.0f;
-
-        return getCurrentApiVersion() > Math.max(testedApiVersion, pref.getFloat("current_api_version_new", testedApiVersion));
-    }
-
-    public static float getCurrentApiVersion() {
+    private static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
         else
