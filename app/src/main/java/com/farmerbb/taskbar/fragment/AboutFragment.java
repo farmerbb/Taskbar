@@ -53,6 +53,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                 && U.isPlayStoreInstalled(getActivity())
+                && U.isPlayStoreRelease(getActivity())
                 && !U.isSystemApp(getActivity())
                 && !pref.getBoolean("hide_donate", false)) {
             findPreference("donate").setOnPreferenceClickListener(this);
@@ -96,7 +97,10 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         switch(p.getKey()) {
             case "about":
-                U.checkForUpdates(getActivity());
+                if(!BuildConfig.DEBUG)
+                    U.checkForUpdates(getActivity());
+                else
+                    U.showToast(getActivity(), R.string.debug_build);
                 break;
             case "donate":
                 NumberFormat format = NumberFormat.getCurrencyInstance();

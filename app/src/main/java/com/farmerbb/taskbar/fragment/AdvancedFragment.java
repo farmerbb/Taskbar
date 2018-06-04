@@ -82,7 +82,8 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
 
         if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
-                && U.isPlayStoreInstalled(getActivity())) {
+                && U.isPlayStoreInstalled(getActivity())
+                && U.isPlayStoreRelease(getActivity())) {
             findPreference("secondscreen").setOnPreferenceClickListener(this);
             secondScreenPrefEnabled = true;
         } else

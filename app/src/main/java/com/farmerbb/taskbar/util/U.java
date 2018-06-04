@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.util;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -32,9 +33,11 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -562,24 +565,19 @@ public class U {
     }
 
     public static void checkForUpdates(Context context) {
-        if(!BuildConfig.DEBUG) {
-            String url;
-            try {
-                context.getPackageManager().getPackageInfo("com.android.vending", 0);
-                url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
-            } catch (PackageManager.NameNotFoundException e) {
-                url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.BASE_APPLICATION_ID;
-            }
+        String url;
+        if(isPlayStoreRelease(context))
+            url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+        else
+            url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.APPLICATION_ID;
 
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            try {
-                context.startActivity(intent);
-            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-        } else
-            showToast(context, R.string.debug_build);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
     public static boolean launcherIsDefault(Context context) {
@@ -1308,5 +1306,20 @@ public class U {
         }
 
         return theme > -1 ? new ContextThemeWrapper(context, theme) : context;
+    }
+
+    @SuppressLint("PackageManagerGetSignatures")
+    public static boolean isPlayStoreRelease(Context context) {
+        Signature playStoreSignature = new Signature(context.getString(R.string.signature));
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo info = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+            for(Signature signature : info.signatures) {
+                if(signature.equals(playStoreSignature))
+                    return true;
+            }
+        } catch (Exception e) { /* Gracefully fail */ }
+
+        return false;
     }
 }
