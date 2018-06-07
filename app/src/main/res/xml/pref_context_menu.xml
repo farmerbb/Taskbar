@@ -24,8 +24,4 @@
             android:key="uninstall"
             android:title="@string/uninstall" />
 
-        <Preference
-            android:key="close"
-            android:title="@string/action_close" />
-
 </PreferenceScreen>
