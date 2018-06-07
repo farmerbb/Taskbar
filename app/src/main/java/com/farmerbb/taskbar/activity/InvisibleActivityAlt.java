@@ -52,11 +52,11 @@ public class InvisibleActivityAlt extends InvisibleActivity {
         if(powerButtonWarning)
             new Handler().postDelayed(() -> {
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(InvisibleActivityAlt.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(R.string.power_button_warning_title)
                             .setMessage(R.string.power_button_warning_message)
                             .setPositiveButton(R.string.action_i_understand, (dialog, which) -> {
-                                SharedPreferences pref = U.getSharedPreferences(InvisibleActivityAlt.this);
+                                SharedPreferences pref = U.getSharedPreferences(this);
                                 pref.edit().putString("power_button_warning",
                                         Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)).apply();
 

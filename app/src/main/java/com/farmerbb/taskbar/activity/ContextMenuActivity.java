@@ -485,7 +485,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 getListView().setOnItemLongClickListener((parent, view, position, id) -> {
                     String[] windowSizes = { "standard", "large", "fullscreen", "half_left", "half_right", "phone_size" };
 
-                    SavedWindowSizes.getInstance(ContextMenuActivity.this).setWindowSize(ContextMenuActivity.this, packageName, windowSizes[position]);
+                    SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, windowSizes[position]);
 
                     generateWindowSizes();
                     return true;

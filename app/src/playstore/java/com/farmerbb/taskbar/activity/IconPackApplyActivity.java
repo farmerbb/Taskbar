@@ -55,7 +55,7 @@ public class IconPackApplyActivity extends Activity {
                         .setPositiveButton(R.string.action_ok, (dialog, which) -> {
                             pref.edit().putString("icon_pack", iconPackPackage).apply();
 
-                            U.refreshPinnedIcons(IconPackApplyActivity.this);
+                            U.refreshPinnedIcons(this);
                             U.restartTaskbar(this);
 
                             finish();

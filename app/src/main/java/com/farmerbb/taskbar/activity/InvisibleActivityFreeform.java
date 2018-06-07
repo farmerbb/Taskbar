@@ -269,9 +269,9 @@ public class InvisibleActivityFreeform extends Activity {
         if(!doNotHide) {
             new Handler().postDelayed(() -> {
                 if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen())
-                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
                 else
-                    LocalBroadcastManager.getInstance(InvisibleActivityFreeform.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             }, 100);
         }
     }

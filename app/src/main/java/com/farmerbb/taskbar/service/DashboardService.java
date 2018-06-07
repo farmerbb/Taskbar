@@ -97,7 +97,7 @@ public class DashboardService extends Service {
         cellClick(v, false);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            v.setPointerIcon(PointerIcon.getSystemIcon(DashboardService.this, PointerIcon.TYPE_DEFAULT));
+            v.setPointerIcon(PointerIcon.getSystemIcon(this, PointerIcon.TYPE_DEFAULT));
 
         return false;
     };
@@ -290,7 +290,7 @@ public class DashboardService extends Service {
         new Handler().postDelayed(() -> {
             int paddingSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
 
-            switch(U.getTaskbarPosition(DashboardService.this)) {
+            switch(U.getTaskbarPosition(this)) {
                 case "top_vertical_left":
                 case "bottom_vertical_left":
                     layout.setPadding(paddingSize, 0, 0, 0);
@@ -484,7 +484,7 @@ public class DashboardService extends Service {
             Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED");
             intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
             intent.putExtra("cellId", cellId);
-            LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
             if(shouldShowPlaceholder) {
                 String providerName = pref.getString("dashboard_widget_" + Integer.toString(cellId) + "_provider", "null");
@@ -520,14 +520,14 @@ public class DashboardService extends Service {
 
         Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
         intent.putExtra("cellId", cellId);
-        LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 
         final DashboardCell cellLayout = cells.get(cellId);
-        final AppWidgetHostView hostView = mAppWidgetHost.createView(DashboardService.this, appWidgetId, appWidgetInfo);
+        final AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
 
         Bundle bundle = new Bundle();

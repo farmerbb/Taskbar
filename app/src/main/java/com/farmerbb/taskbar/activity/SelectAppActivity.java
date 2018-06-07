@@ -113,14 +113,14 @@ public class SelectAppActivity extends AppCompatActivity {
             if(!noShadow)
                 new Handler().post(() -> {
                     Intent intent = null;
-                    SharedPreferences pref3 = U.getSharedPreferences(SelectAppActivity.this);
+                    SharedPreferences pref3 = U.getSharedPreferences(this);
 
                     switch(pref3.getString("theme", "light")) {
                         case "light":
-                            intent = new Intent(SelectAppActivity.this, SelectAppActivity.class);
+                            intent = new Intent(this, SelectAppActivity.class);
                             break;
                         case "dark":
-                            intent = new Intent(SelectAppActivity.this, SelectAppActivityDark.class);
+                            intent = new Intent(this, SelectAppActivityDark.class);
                             break;
                     }
 

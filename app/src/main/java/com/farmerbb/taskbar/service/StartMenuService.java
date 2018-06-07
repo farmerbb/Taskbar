@@ -376,7 +376,7 @@ public class StartMenuService extends Service {
 
                 if(!b) {
                     if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-                        LocalBroadcastManager.getInstance(StartMenuService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
                     else {
                         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -409,7 +409,7 @@ public class StartMenuService extends Service {
                 hideStartMenu(true);
 
                 AppEntry entry = (AppEntry) parent.getAdapter().getItem(position);
-                U.launchApp(StartMenuService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(StartMenuService.this), null, false, false);
+                U.launchApp(this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(this), null, false, false);
             });
 
             if(pref.getBoolean("transparent_start_menu", false))
@@ -466,14 +466,14 @@ public class StartMenuService extends Service {
             final List<LauncherActivityInfo> allAppsList = new ArrayList<>();
             final List<LauncherActivityInfo> list = new ArrayList<>();
 
-            TopApps topApps = TopApps.getInstance(StartMenuService.this);
+            TopApps topApps = TopApps.getInstance(this);
             for(LauncherActivityInfo appInfo : unfilteredList) {
                 if(topApps.isTopApp(appInfo.getComponentName().flattenToString())
                         || topApps.isTopApp(appInfo.getName()))
                     topAppsList.add(appInfo);
             }
 
-            Blacklist blacklist = Blacklist.getInstance(StartMenuService.this);
+            Blacklist blacklist = Blacklist.getInstance(this);
             for(LauncherActivityInfo appInfo : unfilteredList) {
                 if(!(blacklist.isBlocked(appInfo.getComponentName().flattenToString())
                         || blacklist.isBlocked(appInfo.getName()))
@@ -538,7 +538,7 @@ public class StartMenuService extends Service {
 
                     try {
                         label = appInfo.getLabel().toString();
-                        icon = IconCache.getInstance(StartMenuService.this).getIcon(StartMenuService.this, pm, appInfo);
+                        icon = IconCache.getInstance(this).getIcon(this, pm, appInfo);
                     } catch (OutOfMemoryError e) {
                         System.gc();
 
@@ -564,12 +564,12 @@ public class StartMenuService extends Service {
                     if(query == null && queryText.length() == 0
                             || query != null && query.equals(queryText)) {
                         StartMenuAdapter adapter;
-                        SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+                        SharedPreferences pref = U.getSharedPreferences(this);
                         if(pref.getString("start_menu_layout", "list").equals("grid")) {
                             startMenu.setNumColumns(3);
-                            adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row_alt, entries);
+                            adapter = new StartMenuAdapter(this, R.layout.row_alt, entries);
                         } else
-                            adapter = new StartMenuAdapter(StartMenuService.this, R.layout.row, entries);
+                            adapter = new StartMenuAdapter(this, R.layout.row, entries);
 
                         int position = startMenu.getFirstVisiblePosition();
                         startMenu.setAdapter(adapter);
@@ -717,15 +717,15 @@ public class StartMenuService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 
         new Handler().postDelayed(() -> {
-            SharedPreferences pref = U.getSharedPreferences(StartMenuService.this);
+            SharedPreferences pref = U.getSharedPreferences(this);
             Intent intent = null;
 
             switch(pref.getString("theme", "light")) {
                 case "light":
-                    intent = new Intent(StartMenuService.this, ContextMenuActivity.class);
+                    intent = new Intent(this, ContextMenuActivity.class);
                     break;
                 case "dark":
-                    intent = new Intent(StartMenuService.this, ContextMenuActivityDark.class);
+                    intent = new Intent(this, ContextMenuActivityDark.class);
                     break;
             }
 

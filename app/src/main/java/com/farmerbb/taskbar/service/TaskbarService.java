@@ -134,7 +134,7 @@ public class TaskbarService extends Service {
 
     private View.OnClickListener ocl = view -> {
         Intent intent = new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
-        LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     };
 
     private BroadcastReceiver showReceiver = new BroadcastReceiver() {
@@ -337,7 +337,7 @@ public class TaskbarService extends Service {
         }
 
         Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
-        LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
         if(altButtonConfig) {
             button = U.findViewById(layout, R.id.hide_taskbar_button_alt);
@@ -379,7 +379,7 @@ public class TaskbarService extends Service {
             layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
-            dashboardButton.setOnClickListener(v -> LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD")));
+            dashboardButton.setOnClickListener(v -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD")));
         } else
             dashboardButton.setVisibility(View.GONE);
 
@@ -818,7 +818,7 @@ public class TaskbarService extends Service {
                                 packageName,
                                 appInfo.getComponentName().flattenToString(),
                                 appInfo.getLabel().toString(),
-                                IconCache.getInstance(TaskbarService.this).getIcon(TaskbarService.this, pm, appInfo),
+                                IconCache.getInstance(this).getIcon(this, pm, appInfo),
                                 false);
 
                         newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
@@ -835,10 +835,10 @@ public class TaskbarService extends Service {
                         int recentsSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
-                        if(U.getTaskbarPosition(TaskbarService.this).contains("vertical")) {
+                        if(U.getTaskbarPosition(this).contains("vertical")) {
                             int maxScreenSize = metrics.heightPixels
-                                    - U.getStatusBarHeight(TaskbarService.this)
-                                    - U.getBaseTaskbarSize(TaskbarService.this);
+                                    - U.getStatusBarHeight(this)
+                                    - U.getBaseTaskbarSize(this);
 
                             params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
@@ -853,7 +853,7 @@ public class TaskbarService extends Service {
                             }
                         } else {
                             int maxScreenSize = metrics.widthPixels
-                                    - U.getBaseTaskbarSize(TaskbarService.this);
+                                    - U.getBaseTaskbarSize(this);
 
                             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
@@ -885,7 +885,7 @@ public class TaskbarService extends Service {
 
                         if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
                             new Handler().post(() -> {
-                                switch(U.getTaskbarPosition(TaskbarService.this)) {
+                                switch(U.getTaskbarPosition(this)) {
                                     case "bottom_left":
                                     case "bottom_right":
                                     case "top_left":
@@ -959,7 +959,7 @@ public class TaskbarService extends Service {
 
             updateButton(false);
 
-            new Handler().post(() -> LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_START_MENU_SPACE")));
+            new Handler().post(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_START_MENU_SPACE")));
         }
     }
 
@@ -991,16 +991,16 @@ public class TaskbarService extends Service {
 
             updateButton(true);
 
-            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-            LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
 
-            new Handler().post(() -> LocalBroadcastManager.getInstance(TaskbarService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_SPACE")));
+            new Handler().post(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_SPACE")));
         }
     }
 
     private void tempShowTaskbar() {
         if(!taskbarHiddenTemporarily) {
-            SharedPreferences pref = U.getSharedPreferences(TaskbarService.this);
+            SharedPreferences pref = U.getSharedPreferences(this);
             if(!pref.getBoolean("collapsed", false)) taskbarShownTemporarily = true;
         }
 
@@ -1012,7 +1012,7 @@ public class TaskbarService extends Service {
 
     private void tempHideTaskbar(boolean monitorPositionChanges) {
         if(!taskbarShownTemporarily) {
-            SharedPreferences pref = U.getSharedPreferences(TaskbarService.this);
+            SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getBoolean("collapsed", false)) taskbarHiddenTemporarily = true;
         }
 
@@ -1198,7 +1198,7 @@ public class TaskbarService extends Service {
         }
 
         FrameLayout layout = U.findViewById(convertView, R.id.entry);
-        layout.setOnClickListener(view -> U.launchApp(TaskbarService.this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(TaskbarService.this), null, true, false));
+        layout.setOnClickListener(view -> U.launchApp(this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(this), null, true, false));
 
         layout.setOnLongClickListener(view -> {
             int[] location = new int[2];
@@ -1226,7 +1226,7 @@ public class TaskbarService extends Service {
         if(pref.getBoolean("visual_feedback", true)) {
             layout.setOnHoverListener((v, event) -> {
                 if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
-                    int accentColor = U.getAccentColor(TaskbarService.this);
+                    int accentColor = U.getAccentColor(this);
                     accentColor = ColorUtils.setAlphaComponent(accentColor, Color.alpha(accentColor) / 2);
                     v.setBackgroundColor(accentColor);
                 }
@@ -1235,7 +1235,7 @@ public class TaskbarService extends Service {
                     v.setBackgroundColor(0);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    v.setPointerIcon(PointerIcon.getSystemIcon(TaskbarService.this, PointerIcon.TYPE_DEFAULT));
+                    v.setPointerIcon(PointerIcon.getSystemIcon(this, PointerIcon.TYPE_DEFAULT));
 
                 return false;
             });
