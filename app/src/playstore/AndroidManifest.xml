@@ -14,6 +14,8 @@
      limitations under the License.
 -->
 
+<!-- TODO when making changes to the manifest, be sure to update the Android-x86 manifest as well -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="com.farmerbb.taskbar">
@@ -63,6 +65,10 @@
         android:label="${appName}"
         android:theme="@style/AppTheme" >
 
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="${appName}"
+            android:launchMode="singleTask"/>
         <activity-alias
             android:name=".MainActivity"
             android:targetActivity=".activity.MainActivity"
@@ -74,10 +80,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity-alias>
-        <activity
-            android:name=".activity.MainActivity"
-            android:label="${appName}"
-            android:launchMode="singleTask"/>
         <activity
             android:name=".activity.InvisibleActivity"
             android:documentLaunchMode="always"

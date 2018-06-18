@@ -19,6 +19,7 @@ android {
         minSdkVersion 21
         targetSdkVersion SDK_VERSION
 
+        // TODO keep versionName and versionCode in sync with Android-x86 manifest
         versionCode 184
         versionName "3.9.2"
 
