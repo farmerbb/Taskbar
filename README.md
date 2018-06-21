@@ -47,7 +47,7 @@ Taskbar is also included as part of the following Android distributions for PCs:
 
 ## How to Build
 Prerequisites:
-* Linux or MacOS
+* Windows/MacOS/Linux
 * JDK 8
 * Android SDK
 * Internet connection (to download dependencies)
