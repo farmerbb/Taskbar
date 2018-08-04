@@ -24,6 +24,10 @@ import com.farmerbb.taskbar.activity.TaskerConditionActivity;
 import com.jrummyapps.android.os.SystemProperties;
 import com.mikepenz.iconics.Iconics;
 
+// Utility class meant for abstracting out all third-party dependencies.
+// This allows the Android-x86 version of Taskbar to be built purely from AOSP source.
+// TODO Do not make changes to this file without making corresponding changes to the Android-x86 version.
+
 public class DependencyUtils {
 
     private DependencyUtils() {}
@@ -42,8 +46,8 @@ public class DependencyUtils {
             return new ToastCompatImpl(context, message, length);
     }
 
-    static String getBlissOsVersion() {
-        return SystemProperties.get("ro.bliss.version");
+    static String getSystemProperty(String key) {
+        return SystemProperties.get(key);
     }
 
     public static void requestTaskerQuery(Context context) {

@@ -208,6 +208,7 @@
     <string name="pref_description_use_mask">Kann die Leistung reduzieren, falls ein Icon Paket gesetzt ist.</string>
 
     <string name="pref_title_app_drawer_icon">Das Logo von Taskbar als Menüknopf verwenden</string>
+    <string name="pref_title_app_drawer_icon_bliss">Das Logo von Taskbar als Menüknopf verwenden</string>
 
     <string name="already_blacklisted">%1$s kann nicht ausgewählt werden, da es auf der Liste der verborgenen Apps ist.</string>
     <string name="already_top_app">%1$s kann nicht ausgewählt werden, da es auf der Liste der top Apps ist.</string>

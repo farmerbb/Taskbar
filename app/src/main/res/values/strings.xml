@@ -208,6 +208,7 @@
     <string name="pref_description_use_mask">May reduce performance when an icon pack is set</string>
 
     <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
+    <string name="pref_title_app_drawer_icon_bliss">Use Bliss logo as start menu icon</string>
 
     <string name="already_blacklisted">%1$s can\'t be selected because it is on the hidden apps list</string>
     <string name="already_top_app">%1$s can\'t be selected because it is on the top apps list</string>

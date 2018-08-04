@@ -958,8 +958,17 @@ public class U {
     }
 
     public static boolean isBlissOs(Context context) {
-        String blissVersion = DependencyUtils.getBlissOsVersion();
-        return blissVersion != null && !blissVersion.isEmpty()
+        boolean validBlissOsBuildProp = false;
+
+        String blissVersion = DependencyUtils.getSystemProperty("ro.bliss.version");
+        if(blissVersion != null && !blissVersion.isEmpty())
+            validBlissOsBuildProp = true;
+
+        String buildUser = DependencyUtils.getSystemProperty("ro.build.user");
+        if(buildUser != null && buildUser.equals("electrikjesus"))
+            validBlissOsBuildProp = true;
+
+        return validBlissOsBuildProp
                 && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
                 && isSystemApp(context);
     }

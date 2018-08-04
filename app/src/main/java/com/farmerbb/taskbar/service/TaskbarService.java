@@ -40,6 +40,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -276,6 +277,9 @@ public class TaskbarService extends Service {
         taskbar = U.findViewById(layout, R.id.taskbar);
         scrollView = U.findViewById(layout, R.id.taskbar_scrollview);
 
+        int backgroundTint = U.getBackgroundTint(this);
+        int accentColor = U.getAccentColor(this);
+
         if(altButtonConfig) {
             space = U.findViewById(layout, R.id.space_alt);
             layout.findViewById(R.id.space).setVisibility(View.GONE);
@@ -290,9 +294,15 @@ public class TaskbarService extends Service {
         int padding;
 
         if(pref.getBoolean("app_drawer_icon", false)) {
-            startButton.setImageDrawable(ContextCompat.getDrawable(this,
-                    U.isBlissOs(this) ? R.drawable.bliss : R.mipmap.ic_launcher));
+            Drawable drawable;
 
+            if(U.isBlissOs(this)) {
+                drawable = ContextCompat.getDrawable(this, R.drawable.bliss);
+                drawable.setTint(accentColor);
+            } else
+                drawable = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+
+            startButton.setImageDrawable(drawable);
             padding = getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
         } else {
             startButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.all_apps_button_icon));
@@ -364,9 +374,6 @@ public class TaskbarService extends Service {
                 : R.id.hide_taskbar_button_layout_alt);
         if(buttonLayoutToHide != null) buttonLayoutToHide.setVisibility(View.GONE);
 
-        int backgroundTint = U.getBackgroundTint(this);
-        int accentColor = U.getAccentColor(this);
-
         dashboardButton = U.findViewById(layout, R.id.dashboard_button);
         navbarButtons = U.findViewById(layout, R.id.navbar_buttons);
 
@@ -387,6 +394,7 @@ public class TaskbarService extends Service {
             navbarButtonsEnabled = true;
 
             ImageView backButton = U.findViewById(layout, R.id.button_back);
+            backButton.setColorFilter(accentColor);
             backButton.setVisibility(View.VISIBLE);
             backButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK);
@@ -421,6 +429,7 @@ public class TaskbarService extends Service {
             navbarButtonsEnabled = true;
 
             ImageView homeButton = U.findViewById(layout, R.id.button_home);
+            homeButton.setColorFilter(accentColor);
             homeButton.setVisibility(View.VISIBLE);
             homeButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_HOME);
@@ -463,6 +472,7 @@ public class TaskbarService extends Service {
             navbarButtonsEnabled = true;
 
             ImageView recentsButton = U.findViewById(layout, R.id.button_recents);
+            recentsButton.setColorFilter(accentColor);
             recentsButton.setVisibility(View.VISIBLE);
             recentsButton.setOnClickListener(v -> {
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_RECENTS);

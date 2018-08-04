@@ -265,6 +265,7 @@ Başlat menüsü gösterme
 <string name="pref_title_amount_of_recents">Son kullanılan uygulamaları görüntüle</string>
 <string name="pref_title_anchor">Ekran döndürmede Taskbar tut</string>
 <string name="pref_title_app_drawer_icon">Başlat menüsü simgesi olarak Taskbar logosunu kullan</string>
+<string name="pref_title_app_drawer_icon_bliss">Başlat menüsü simgesi olarak Taskbar logosunu kullan</string>
 <string name="pref_title_background_tint">Arkaplan tonu</string>
 <string name="pref_title_blacklist">Uygulamaları başlangıç menüsünde yapılandır</string>
 <string name="pref_title_chrome_os_context_menu_fix">Chrome OS uyumluluğu düzeltmesi</string>

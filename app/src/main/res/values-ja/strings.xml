@@ -208,6 +208,7 @@
     <string name="pref_description_use_mask">アイコンパックが設定されているとパフォーマンスが低下することがあります</string>
 
     <string name="pref_title_app_drawer_icon">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
+    <string name="pref_title_app_drawer_icon_bliss">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
 
     <string name="already_blacklisted">非表示アプリリストにあるため %1$s は選択できません</string>
     <string name="already_top_app">トップアプリリストにあるため %1$s は選択できません</string>

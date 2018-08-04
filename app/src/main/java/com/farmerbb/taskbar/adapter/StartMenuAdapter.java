@@ -57,10 +57,8 @@ import java.util.List;
 public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionIndexer {
 
     private boolean isGrid = false;
-
-    private final List<AppEntry> list = new ArrayList<>();
     private final List<Character> sections = new ArrayList<>();
-    
+
     private final List<Character> lowercase = Arrays.asList(
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
@@ -230,16 +228,13 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         updateList(list, false);
     }
 
-    private void updateList(List<AppEntry> newList, boolean firstUpdate) {
+    private void updateList(List<AppEntry> list, boolean firstUpdate) {
         if(!firstUpdate) {
             clear();
             sections.clear();
-            list.clear();
 
-            addAll(newList);
+            addAll(list);
         }
-
-        list.addAll(newList);
 
         SharedPreferences pref = U.getSharedPreferences(getContext());
         if(pref.getBoolean("scrollbar", false)) {
@@ -265,24 +260,27 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         return '#';
     }
 
+    @Override
     public int getPositionForSection(int section) {
-        for(int i = 0; i < list.size(); i++) {
-            if(sections.get(section) == getSectionForAppEntry(list.get(i)))
+        for(int i = 0; i < getCount(); i++) {
+            if(sections.get(section) == getSectionForAppEntry(getItem(i)))
                 return i;
         }
 
         return 0;
     }
 
+    @Override
     public int getSectionForPosition(int position) {
         for(int i = 0; i < sections.size(); i++) {
-            if(sections.get(i) == getSectionForAppEntry(list.get(position)))
+            if(sections.get(i) == getSectionForAppEntry(getItem(position)))
                 return i;
         }
 
         return 0;
     }
 
+    @Override
     public Object[] getSections() {
         return sections.toArray();
     }

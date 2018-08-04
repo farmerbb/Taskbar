@@ -31,7 +31,7 @@ public class DependencyUtils {
         return new ToastFrameworkImpl(context, message, length);
     }
 
-    static String getBlissOsVersion() {
+    static String getSystemProperty(String key) {
         return null;
     }
 

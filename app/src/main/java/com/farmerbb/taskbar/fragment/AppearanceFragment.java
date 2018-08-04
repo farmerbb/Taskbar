@@ -68,6 +68,9 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         findPreference("background_tint_pref").setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
         findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
 
+        if(U.isBlissOs(getActivity()))
+            findPreference("app_drawer_icon").setTitle(R.string.pref_title_app_drawer_icon_bliss);
+
         finishedLoadingPrefs = true;
     }
 

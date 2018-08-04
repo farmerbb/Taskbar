@@ -31,7 +31,7 @@ import com.farmerbb.taskbar.R;
 
 // Utility class meant for compatibility between the Android-x86 version of Taskbar (targeting API 25)
 // and the Play Store version of Taskbar (targeting API 27, with additional dependencies).
-// Do not make changes to this file without making corresponding changes to the Android-x86 version.
+// TODO Do not make changes to this file without making corresponding changes to the Android-x86 version.
 
 @TargetApi(Build.VERSION_CODES.O)
 public class CompatUtils {
