@@ -42,6 +42,12 @@
         android:title="@string/navigation_bar_buttons"
         android:summary="@string/navigation_bar_buttons_description" />
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="tasker_enabled"
+        android:summary="@string/pref_summary_tasker_enabled"
+        android:title="@string/pref_title_tasker_enabled" />
+
     <Preference
         android:key="secondscreen"
         android:summary="@string/pref_secondscreen_description"

@@ -80,7 +80,6 @@ public class U {
 
     private U() {}
 
-    private static SharedPreferences pref;
     private static Integer cachedRotation;
 
     private static final int MAXIMIZED = 0;
@@ -95,8 +94,11 @@ public class U {
     private static final int FREEFORM_WORKSPACE_STACK_ID = 2;
 
     public static SharedPreferences getSharedPreferences(Context context) {
-        if(pref == null) pref = context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
-        return pref;
+        return getSharedPreferences(context, Context.MODE_PRIVATE);
+    }
+
+    private static SharedPreferences getSharedPreferences(Context context, int mode) {
+        return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", mode);
     }
 
     public static void showPermissionDialog(Context context) {
@@ -1341,5 +1343,10 @@ public class U {
         } catch (Exception e) { /* Gracefully fail */ }
 
         return false;
+    }
+
+    public static boolean isTaskerDisabled(Context context) {
+        SharedPreferences pref = getSharedPreferences(context, Context.MODE_MULTI_PROCESS);
+        return !pref.getBoolean("tasker_enabled", true);
     }
 }

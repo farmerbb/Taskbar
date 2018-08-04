@@ -81,13 +81,16 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
         findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
 
-        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
-                && U.isPlayStoreInstalled(getActivity())
-                && U.isPlayStoreRelease(getActivity())) {
+        boolean isAndroidx86 = BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
+
+        if(!isAndroidx86 && U.isPlayStoreInstalled(getActivity()) && U.isPlayStoreRelease(getActivity())) {
             findPreference("secondscreen").setOnPreferenceClickListener(this);
             secondScreenPrefEnabled = true;
         } else
             getPreferenceScreen().removePreference(findPreference("secondscreen"));
+
+        if(isAndroidx86)
+            getPreferenceScreen().removePreference(findPreference("tasker_enabled"));
 
         bindPreferenceSummaryToValue(findPreference("dashboard"));
 

@@ -23,10 +23,13 @@ import android.os.Bundle;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.BundleScrubber;
 import com.farmerbb.taskbar.util.PluginBundleManager;
+import com.farmerbb.taskbar.util.U;
 
 public final class TaskerActionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        if(U.isTaskerDisabled(context)) return;
+
         BundleScrubber.scrub(intent);
 
         final Bundle bundle = intent.getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE);
