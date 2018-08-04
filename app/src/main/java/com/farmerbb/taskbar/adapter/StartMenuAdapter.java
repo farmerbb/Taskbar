@@ -38,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
@@ -49,15 +50,32 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
+public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionIndexer {
 
     private boolean isGrid = false;
+
+    private final List<AppEntry> list = new ArrayList<>();
+    private final List<Character> sections = new ArrayList<>();
+    
+    private final List<Character> lowercase = Arrays.asList(
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    );
+
+    private final List<Character> uppercase = Arrays.asList(
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    );
 
     public StartMenuAdapter(Context context, int layout, List<AppEntry> list) {
         super(context, layout, list);
         isGrid = layout == R.layout.row_alt;
+
+        updateList(list, true);
     }
 
     @Override
@@ -73,13 +91,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
 
         TextView textView = U.findViewById(convertView, R.id.name);
         textView.setText(entry.getLabel());
-
-        Intent intent = new Intent();
-        intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
-        ActivityInfo activityInfo = intent.resolveActivityInfo(getContext().getPackageManager(), 0);
-
-        if(activityInfo != null)
-            textView.setTypeface(null, isTopApp(activityInfo) ? Typeface.BOLD : Typeface.NORMAL);
+        textView.setTypeface(null, isTopApp(entry) ? Typeface.BOLD : Typeface.NORMAL);
 
         switch(pref.getString("theme", "light")) {
             case "light":
@@ -154,9 +166,17 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         return convertView;
     }
 
-    private boolean isTopApp(ActivityInfo activityInfo) {
-        TopApps topApps = TopApps.getInstance(getContext());
-        return topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name) || topApps.isTopApp(activityInfo.name);
+    private boolean isTopApp(AppEntry entry) {
+        Intent intent = new Intent();
+        intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
+        ActivityInfo activityInfo = intent.resolveActivityInfo(getContext().getPackageManager(), 0);
+
+        if(activityInfo != null) {
+            TopApps topApps = TopApps.getInstance(getContext());
+            return topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name) || topApps.isTopApp(activityInfo.name);
+        }
+
+        return false;
     }
 
     @SuppressWarnings("deprecation")
@@ -204,5 +224,66 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> {
         return U.hasFreeformSupport(getContext())
                 && pref.getBoolean("freeform_hack", false)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
+    }
+
+    public void updateList(List<AppEntry> list) {
+        updateList(list, false);
+    }
+
+    private void updateList(List<AppEntry> newList, boolean firstUpdate) {
+        if(!firstUpdate) {
+            clear();
+            sections.clear();
+            list.clear();
+
+            addAll(newList);
+        }
+
+        list.addAll(newList);
+
+        SharedPreferences pref = U.getSharedPreferences(getContext());
+        if(pref.getBoolean("scrollbar", false)) {
+            for(AppEntry entry : list) {
+                char firstLetter = getSectionForAppEntry(entry);
+                if(!sections.contains(firstLetter))
+                    sections.add(firstLetter);
+            }
+        }
+    }
+
+    private char getSectionForAppEntry(AppEntry entry) {
+        if(isTopApp(entry))
+            return '\u2605';
+
+        char origChar = entry.getLabel().charAt(0);
+        if(uppercase.contains(origChar))
+            return origChar;
+
+        if(lowercase.contains(origChar))
+            return uppercase.get(lowercase.indexOf(origChar));
+
+        return '#';
+    }
+
+    public int getPositionForSection(int section) {
+        for(int i = 0; i < list.size(); i++) {
+            if(sections.get(section) == getSectionForAppEntry(list.get(i)))
+                return i;
+        }
+
+        return 0;
+    }
+
+    public int getSectionForPosition(int position) {
+        for(int i = 0; i < sections.size(); i++) {
+            if(sections.get(i) == getSectionForAppEntry(list.get(position)))
+                return i;
+        }
+
+        return 0;
+    }
+
+    public Object[] getSections() {
+        return sections.toArray();
     }
 }

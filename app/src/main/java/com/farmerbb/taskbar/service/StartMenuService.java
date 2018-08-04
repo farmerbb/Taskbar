@@ -92,6 +92,7 @@ public class StartMenuService extends Service {
     private SearchView searchView;
     private TextView textView;
     private PackageManager pm;
+    private StartMenuAdapter adapter;
 
     private Handler handler;
     private Thread thread;
@@ -563,16 +564,20 @@ public class StartMenuService extends Service {
                     String queryText = searchView.getQuery().toString();
                     if(query == null && queryText.length() == 0
                             || query != null && query.equals(queryText)) {
-                        StartMenuAdapter adapter;
-                        SharedPreferences pref = U.getSharedPreferences(this);
-                        if(pref.getString("start_menu_layout", "list").equals("grid")) {
-                            startMenu.setNumColumns(3);
-                            adapter = new StartMenuAdapter(this, R.layout.row_alt, entries);
-                        } else
-                            adapter = new StartMenuAdapter(this, R.layout.row, entries);
+
+                        if(firstDraw) {
+                            SharedPreferences pref = U.getSharedPreferences(this);
+                            if(pref.getString("start_menu_layout", "list").equals("grid")) {
+                                startMenu.setNumColumns(3);
+                                adapter = new StartMenuAdapter(this, R.layout.row_alt, entries);
+                            } else
+                                adapter = new StartMenuAdapter(this, R.layout.row, entries);
+
+                            startMenu.setAdapter(adapter);
+                        }
 
                         int position = startMenu.getFirstVisiblePosition();
-                        startMenu.setAdapter(adapter);
+                        if(!firstDraw) adapter.updateList(entries);
                         startMenu.setSelection(position);
 
                         if(adapter.getCount() > 0)
