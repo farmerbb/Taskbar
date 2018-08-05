@@ -288,7 +288,7 @@ public class TaskbarService extends Service {
             layout.findViewById(R.id.space_alt).setVisibility(View.GONE);
         }
 
-        space.setOnClickListener(v -> toggleTaskbar());
+        space.setOnClickListener(v -> toggleTaskbar(true));
 
         startButton = U.findViewById(layout, R.id.start_button);
         int padding;
@@ -362,12 +362,12 @@ public class TaskbarService extends Service {
         } catch (RuntimeException e) { /* Gracefully fail */ }
 
         updateButton(false);
-        button.setOnClickListener(v -> toggleTaskbar());
+        button.setOnClickListener(v -> toggleTaskbar(true));
 
         LinearLayout buttonLayout = U.findViewById(layout, altButtonConfig
                 ? R.id.hide_taskbar_button_layout_alt
                 : R.id.hide_taskbar_button_layout);
-        if(buttonLayout != null) buttonLayout.setOnClickListener(v -> toggleTaskbar());
+        if(buttonLayout != null) buttonLayout.setOnClickListener(v -> toggleTaskbar(true));
 
         LinearLayout buttonLayoutToHide = U.findViewById(layout, altButtonConfig
                 ? R.id.hide_taskbar_button_layout
@@ -511,7 +511,7 @@ public class TaskbarService extends Service {
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar(false);
         else if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false))
-            toggleTaskbar();
+            toggleTaskbar(false);
 
         if(pref.getBoolean("auto_hide_navbar", false))
             U.showHideNavigationBar(this, false);
@@ -935,7 +935,15 @@ public class TaskbarService extends Service {
         }
     }
 
-    private void toggleTaskbar() {
+    private void toggleTaskbar(boolean userInitiated) {
+        if(userInitiated && Build.BRAND.equalsIgnoreCase("essential")) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(!pref.getBoolean("grip_rejection_toast_shown", false)) {
+                U.showToastLong(this, R.string.essential_phone_grip_rejection);
+                pref.edit().putBoolean("grip_rejection_toast_shown", true).apply();
+            }
+        }
+
         if(startButton.getVisibility() == View.GONE)
             showTaskbar(true);
         else
