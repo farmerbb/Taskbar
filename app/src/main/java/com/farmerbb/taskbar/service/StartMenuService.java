@@ -577,7 +577,10 @@ public class StartMenuService extends Service {
                         }
 
                         int position = startMenu.getFirstVisiblePosition();
-                        if(!firstDraw) adapter.updateList(entries);
+
+                        if(!firstDraw && adapter != null)
+                            adapter.updateList(entries);
+
                         startMenu.setSelection(position);
 
                         if(adapter.getCount() > 0)

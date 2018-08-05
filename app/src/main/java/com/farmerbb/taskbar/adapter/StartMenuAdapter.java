@@ -63,6 +63,8 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     private final SparseIntArray gpfsCache = new SparseIntArray();
     private final SparseIntArray gsfpCache = new SparseIntArray();
 
+    private Thread cacheThread;
+
     private final List<Character> lowercase = Arrays.asList(
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
@@ -233,6 +235,9 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     }
 
     private void updateList(List<AppEntry> list, boolean firstUpdate) {
+        if(cacheThread != null && cacheThread.isAlive())
+            cacheThread.interrupt();
+
         if(!firstUpdate) {
             clear();
 
@@ -245,11 +250,23 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
         SharedPreferences pref = U.getSharedPreferences(getContext());
         if(pref.getBoolean("scrollbar", false)) {
-            for(AppEntry entry : list) {
-                char firstLetter = getSectionForAppEntry(entry);
-                if(!sections.contains(firstLetter))
-                    sections.add(firstLetter);
-            }
+            cacheThread = new Thread(() -> {
+                for(AppEntry entry : list) {
+                    char firstLetter = getSectionForAppEntry(entry);
+                    if(!sections.contains(firstLetter))
+                        sections.add(firstLetter);
+                }
+
+                for(int i = 0; i < sections.size(); i++) {
+                    getPositionForSection(i);
+                }
+
+                for(int i = 0; i < getCount(); i++) {
+                    getSectionForPosition(i);
+                }
+            });
+
+            cacheThread.run();
         }
     }
 
