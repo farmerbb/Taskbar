@@ -53,7 +53,9 @@ import com.farmerbb.taskbar.util.U;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionIndexer {
 
@@ -62,8 +64,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     private final List<Character> sections = new ArrayList<>();
     private final SparseIntArray gpfsCache = new SparseIntArray();
     private final SparseIntArray gsfpCache = new SparseIntArray();
-
-    private Thread cacheThread;
+    private final Map<AppEntry, Boolean> topAppsCache = new HashMap<>();
 
     private final List<Character> lowercase = Arrays.asList(
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -171,15 +172,23 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     }
 
     private boolean isTopApp(AppEntry entry) {
+        if(topAppsCache.containsKey(entry))
+            return topAppsCache.get(entry);
+
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
         ActivityInfo activityInfo = intent.resolveActivityInfo(getContext().getPackageManager(), 0);
 
         if(activityInfo != null) {
             TopApps topApps = TopApps.getInstance(getContext());
-            return topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name) || topApps.isTopApp(activityInfo.name);
+            boolean isTopApp = topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name)
+                    || topApps.isTopApp(activityInfo.name);
+
+            topAppsCache.put(entry, isTopApp);
+            return isTopApp;
         }
 
+        topAppsCache.put(entry, false);
         return false;
     }
 
@@ -235,38 +244,24 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     }
 
     private void updateList(List<AppEntry> list, boolean firstUpdate) {
-        if(cacheThread != null && cacheThread.isAlive())
-            cacheThread.interrupt();
-
         if(!firstUpdate) {
             clear();
 
             sections.clear();
             gsfpCache.clear();
             gpfsCache.clear();
+            topAppsCache.clear();
 
             addAll(list);
         }
 
         SharedPreferences pref = U.getSharedPreferences(getContext());
         if(pref.getBoolean("scrollbar", false)) {
-            cacheThread = new Thread(() -> {
-                for(AppEntry entry : list) {
-                    char firstLetter = getSectionForAppEntry(entry);
-                    if(!sections.contains(firstLetter))
-                        sections.add(firstLetter);
-                }
-
-                for(int i = 0; i < sections.size(); i++) {
-                    getPositionForSection(i);
-                }
-
-                for(int i = 0; i < getCount(); i++) {
-                    getSectionForPosition(i);
-                }
-            });
-
-            cacheThread.run();
+            for(AppEntry entry : list) {
+                char firstLetter = getSectionForAppEntry(entry);
+                if(!sections.contains(firstLetter))
+                    sections.add(firstLetter);
+            }
         }
     }
 

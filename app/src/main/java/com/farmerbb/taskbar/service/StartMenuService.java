@@ -583,7 +583,7 @@ public class StartMenuService extends Service {
 
                         startMenu.setSelection(position);
 
-                        if(adapter.getCount() > 0)
+                        if(adapter != null && adapter.getCount() > 0)
                             textView.setText(null);
                         else if(query != null)
                             textView.setText(getString(Patterns.WEB_URL.matcher(query).matches() ? R.string.press_enter_alt : R.string.press_enter));
