@@ -30,6 +30,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.PointerIcon;
@@ -57,7 +58,10 @@ import java.util.List;
 public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionIndexer {
 
     private boolean isGrid = false;
+
     private final List<Character> sections = new ArrayList<>();
+    private final SparseIntArray gpfsCache = new SparseIntArray();
+    private final SparseIntArray gsfpCache = new SparseIntArray();
 
     private final List<Character> lowercase = Arrays.asList(
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -231,7 +235,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     private void updateList(List<AppEntry> list, boolean firstUpdate) {
         if(!firstUpdate) {
             clear();
+
             sections.clear();
+            gsfpCache.clear();
+            gpfsCache.clear();
 
             addAll(list);
         }
@@ -262,21 +269,35 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
     @Override
     public int getPositionForSection(int section) {
+        int cachedPos = gpfsCache.get(section, -1);
+        if(cachedPos != -1)
+            return cachedPos;
+
         for(int i = 0; i < getCount(); i++) {
-            if(sections.get(section) == getSectionForAppEntry(getItem(i)))
+            if(sections.get(section) == getSectionForAppEntry(getItem(i))) {
+                gpfsCache.put(section, i);
                 return i;
+            }
         }
 
+        gpfsCache.put(section, 0);
         return 0;
     }
 
     @Override
     public int getSectionForPosition(int position) {
+        int cachedSection = gsfpCache.get(position, -1);
+        if(cachedSection != -1)
+            return cachedSection;
+
         for(int i = 0; i < sections.size(); i++) {
-            if(sections.get(i) == getSectionForAppEntry(getItem(position)))
+            if(sections.get(i) == getSectionForAppEntry(getItem(position))) {
+                gsfpCache.put(position, i);
                 return i;
+            }
         }
 
+        gsfpCache.put(position, 0);
         return 0;
     }
 
