@@ -34,7 +34,7 @@
     <string name="pref_header_general">General settings</string>
     <string name="pref_title_start_menu_layout">Start menu layout</string>
     <string name="pref_title_background_tint">Background tint</string>
-    <string name="pref_title_scrollbar">Show scrollbar on start menu</string>
+    <string name="pref_title_scrollbar">Use fast scrollbar on start menu</string>
     <string name="pref_title_start_on_boot">Launch on boot</string>
 
     <string-array name="pref_start_menu_list">
