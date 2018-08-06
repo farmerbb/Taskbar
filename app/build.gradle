@@ -20,8 +20,8 @@ android {
         targetSdkVersion SDK_VERSION
 
         // TODO keep versionName and versionCode in sync with Android-x86 manifest
-        versionCode 184
-        versionName "3.9.2"
+        versionCode 185
+        versionName "3.9.3"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN", "tr"
 
@@ -59,6 +59,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             manifestPlaceholders = [appName: "@string/app_name"]
+
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "${project.parent.name}-${defaultConfig.versionName}.apk"
+                }
+            }
         }
     }
 
