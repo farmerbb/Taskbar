@@ -48,7 +48,9 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
         findPreference("blacklist").setOnPreferenceClickListener(this);
         findPreference("notification_settings").setOnPreferenceClickListener(this);
 
-        if(U.canEnableFreeform(getActivity()) && !U.isChromeOs(getActivity()))
+        if(U.canEnableFreeform()
+                && !U.isChromeOs(getActivity())
+                && !U.isOverridingFreeformHack(getActivity()))
             findPreference("hide_taskbar").setSummary(R.string.hide_taskbar_disclaimer);
 
         bindPreferenceSummaryToValue(findPreference("start_menu_layout"));

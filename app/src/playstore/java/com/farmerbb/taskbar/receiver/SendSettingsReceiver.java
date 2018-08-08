@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;
@@ -117,7 +116,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             sendSettingsIntent.putExtra("top_apps_labels", topAppsLabels);
 
             // Get saved window sizes
-            if(U.canEnableFreeform(context)) {
+            if(U.canEnableFreeform()) {
                 SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
                 List<SavedWindowSizesEntry> savedWindowSizesList = savedWindowSizes.getSavedWindowSizes();
 

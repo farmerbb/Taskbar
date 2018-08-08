@@ -20,10 +20,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.view.WindowManager;
 
-// Utility class meant for compatibility between the Android-x86 version of Taskbar (targeting API 25)
-// and the Play Store version of Taskbar (targeting API 27, with additional dependencies).
-// Do not make changes to this file without making corresponding changes to the Android-x86 version.
-
 public class CompatUtils {
 
     private CompatUtils() {}

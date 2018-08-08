@@ -179,7 +179,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                         U.startFreeformHack(getActivity(), false, false);
                     }
                 } else {
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+                    U.stopFreeformHack(getActivity());
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
                 }
 

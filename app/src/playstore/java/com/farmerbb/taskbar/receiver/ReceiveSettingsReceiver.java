@@ -20,7 +20,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LauncherApps;
-import android.os.Build;
 import android.os.Process;
 import android.os.UserManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -128,7 +127,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                 }
 
             // Get saved window sizes
-            if(U.canEnableFreeform(context)) {
+            if(U.canEnableFreeform()) {
                 SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
                 savedWindowSizes.clear(context);
 

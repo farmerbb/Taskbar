@@ -115,7 +115,7 @@ public class NotificationService extends Service {
 
                 String showHideLabel;
 
-                if(U.canEnableFreeform(this) && !U.isChromeOs(this)) {
+                if(U.canEnableFreeform() && !U.isChromeOs(this)) {
                     String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.freeform_off : R.string.freeform_on);
 
                     Intent freeformIntent = new Intent("com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE");
@@ -167,7 +167,7 @@ public class NotificationService extends Service {
             DependencyUtils.requestTaskerQuery(this);
 
             if(!U.launcherIsDefault(this) || U.isChromeOs(this))
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+                U.stopFreeformHack(this);
         }
 
         super.onDestroy();

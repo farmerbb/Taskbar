@@ -751,7 +751,11 @@ public class StartMenuService extends Service {
                 if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
-                startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
+                startActivity(intent,
+                        U.getActivityOptions(this, ApplicationType.CONTEXT_MENU)
+                                .setLaunchBounds(
+                                        new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)
+                                ).toBundle());
             } else
                 startActivity(intent);
         }, shouldDelay() ? 100 : 0);

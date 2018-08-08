@@ -60,7 +60,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
             getPreferenceScreen().removePreference(findPreference("donate_category"));
 
         // Set OnClickListeners for certain preferences
-        if(U.canEnableFreeform(getActivity()))
+        if(U.canEnableFreeform())
             findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
         else
             getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));

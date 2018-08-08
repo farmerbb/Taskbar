@@ -226,7 +226,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
                 if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
-                getContext().startActivity(intent, U.getActivityOptions(ApplicationType.CONTEXT_MENU).setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)).toBundle());
+                getContext().startActivity(intent,
+                        U.getActivityOptions(getContext(), ApplicationType.CONTEXT_MENU)
+                                .setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels))
+                                .toBundle());
             } else
                 getContext().startActivity(intent);
         }, shouldDelay() ? 100 : 0);

@@ -267,7 +267,9 @@ public class HomeActivity extends Activity {
 
     private boolean bootToFreeform() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        return U.hasFreeformSupport(this) && pref.getBoolean("freeform_hack", false);
+        return U.hasFreeformSupport(this)
+                && pref.getBoolean("freeform_hack", false)
+                && !U.isOverridingFreeformHack(this);
     }
 
     private void startTaskbar() {
@@ -356,7 +358,7 @@ public class HomeActivity extends Activity {
 
             IconCache.getInstance(this).clearCache();
 
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+            U.stopFreeformHack(this);
         }
 
         finish();

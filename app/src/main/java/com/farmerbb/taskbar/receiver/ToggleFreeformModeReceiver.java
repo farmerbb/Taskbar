@@ -25,6 +25,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.CompatUtils;
+import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class ToggleFreeformModeReceiver extends BroadcastReceiver {
@@ -40,7 +41,7 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
 
             CompatUtils.startForegroundService(context, notificationIntent);
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+            U.stopFreeformHack(context);
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
         } else if(U.hasFreeformSupport(context)) {
             pref.edit().putBoolean("freeform_hack", true).apply();

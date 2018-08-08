@@ -93,6 +93,10 @@ public class U {
     private static final int FULLSCREEN_WORKSPACE_STACK_ID = 1;
     private static final int FREEFORM_WORKSPACE_STACK_ID = 2;
 
+    // From android.app.WindowConfiguration
+    private static final int WINDOWING_MODE_FULLSCREEN = 1;
+    private static final int WINDOWING_MODE_FREEFORM = 5;
+
     public static SharedPreferences getSharedPreferences(Context context) {
         return getSharedPreferences(context, Context.MODE_PRIVATE);
     }
@@ -170,7 +174,7 @@ public class U {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("device_admin", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent, getActivityOptionsBundle(ApplicationType.APPLICATION));
+                context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
 
                 if(context instanceof Activity)
                     ((Activity) context).overridePendingTransition(0, 0);
@@ -192,7 +196,7 @@ public class U {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("accessibility", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent, getActivityOptionsBundle(ApplicationType.APPLICATION));
+                context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
 
                 if(context instanceof Activity)
                     ((Activity) context).overridePendingTransition(0, 0);
@@ -312,6 +316,16 @@ public class U {
             launchAppLowerRight(context, freeformHackIntent);
     }
 
+    public static void stopFreeformHack(Context context) {
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+
+        if(isOverridingFreeformHack(context)) {
+            FreeformHackHelper helper = FreeformHackHelper.getInstance();
+            helper.setFreeformHackActive(false);
+            helper.setInFreeformWorkspace(false);
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.N)
     private static void continueLaunchingApp(Context context,
                                              String packageName,
@@ -357,7 +371,7 @@ public class U {
         if(windowSize == null)
             windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, packageName);
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+        if(!canEnableFreeform()
                 || !pref.getBoolean("freeform_hack", false)
                 || windowSize.equals("standard")) {
             launchStandard(context, intent, userId, shortcut, type);
@@ -386,7 +400,7 @@ public class U {
     }
     
     private static void launchStandard(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type) {
-        Bundle bundle = Build.VERSION.SDK_INT < Build.VERSION_CODES.N ? null : getActivityOptions(type).toBundle();
+        Bundle bundle = canEnableFreeform() ? getActivityOptions(context, type).toBundle() : null;
         if(shortcut == null) {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
@@ -411,7 +425,7 @@ public class U {
         int height1 = metrics.heightPixels / 8;
         int height2 = metrics.heightPixels - height1;
 
-        Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(context, type).setLaunchBounds(new Rect(
                 width1,
                 height1,
                 width2,
@@ -459,7 +473,7 @@ public class U {
                 ? metrics.heightPixels / 2
                 : metrics.heightPixels;
 
-        int iconSize = isOverridingFreeformHack(context)
+        int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
                 ? 0
                 : context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
@@ -473,7 +487,7 @@ public class U {
         } else if(isLandscape || (launchType != RIGHT && isPortrait))
             top = top + iconSize;
 
-        Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(context, type).setLaunchBounds(new Rect(
                 left,
                 top,
                 right,
@@ -504,7 +518,7 @@ public class U {
         int height1 = metrics.heightPixels / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
-        Bundle bundle = getActivityOptions(type).setLaunchBounds(new Rect(
+        Bundle bundle = getActivityOptions(context, type).setLaunchBounds(new Rect(
                 width1 - width2,
                 height1 - height2,
                 width1 + width2,
@@ -557,11 +571,13 @@ public class U {
     public static void launchAppLowerRight(Context context, Intent intent) {
         DisplayMetrics metrics = getRealDisplayMetrics(context);
         try {
-            context.startActivity(intent, getActivityOptions(ApplicationType.FREEFORM_HACK).setLaunchBounds(new Rect(
-                    metrics.widthPixels,
-                    metrics.heightPixels,
-                    metrics.widthPixels + 1,
-                    metrics.heightPixels + 1
+            context.startActivity(intent,
+                    getActivityOptions(context, ApplicationType.FREEFORM_HACK)
+                            .setLaunchBounds(new Rect(
+                                    metrics.widthPixels,
+                                    metrics.heightPixels,
+                                    metrics.widthPixels + 1,
+                                    metrics.heightPixels + 1
             )).toBundle());
         } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
     }
@@ -827,15 +843,13 @@ public class U {
         return intent;
     }
 
-    public static boolean canEnableFreeform(Context context) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && (getCurrentApiVersion() <= 27.0f
-                || context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT));
-    }
+    public static boolean canEnableFreeform() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+   }
 
     @TargetApi(Build.VERSION_CODES.N)
     public static boolean hasFreeformSupport(Context context) {
-        return canEnableFreeform(context)
+        return canEnableFreeform()
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
                 || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", 0) != 0
                 || (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
@@ -903,42 +917,64 @@ public class U {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    public static ActivityOptions getActivityOptions(ApplicationType applicationType) {
+    public static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType) {
         ActivityOptions options = ActivityOptions.makeBasic();
         int stackId = -1;
 
         switch(applicationType) {
             case APPLICATION:
                 if(FreeformHackHelper.getInstance().isFreeformHackActive())
-                    stackId = FREEFORM_WORKSPACE_STACK_ID;
+                    stackId = getFreeformWindowModeId();
                 else
-                    stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                    stackId = getFullscreenWindowModeId();
                 break;
             case GAME:
-                stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                stackId = getFullscreenWindowModeId();
                 break;
             case FREEFORM_HACK:
-                stackId = FREEFORM_WORKSPACE_STACK_ID;
+                stackId = getFreeformWindowModeId();
                 break;
             case CONTEXT_MENU:
-                if(hasBrokenSetLaunchBoundsApi())
-                    stackId = FULLSCREEN_WORKSPACE_STACK_ID;
+                if(hasBrokenSetLaunchBoundsApi()
+                        || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f))
+                    stackId = getFullscreenWindowModeId();
                 break;
         }
 
         try {
-            Method method = ActivityOptions.class.getMethod("setLaunchStackId", int.class);
+            Method method = ActivityOptions.class.getMethod(getWindowingModeMethodName(), int.class);
             method.invoke(options, stackId);
         } catch (Exception e) { /* Gracefully fail */ }
 
         return options;
     }
 
-    public static Bundle getActivityOptionsBundle(ApplicationType applicationType) {
+    private static int getFullscreenWindowModeId() {
+        if(getCurrentApiVersion() >= 28.0f)
+            return WINDOWING_MODE_FULLSCREEN;
+        else
+            return FULLSCREEN_WORKSPACE_STACK_ID;
+    }
+
+    private static int getFreeformWindowModeId() {
+        if(getCurrentApiVersion() >= 28.0f)
+            return WINDOWING_MODE_FREEFORM;
+        else
+            return FREEFORM_WORKSPACE_STACK_ID;
+    }
+
+    private static String getWindowingModeMethodName() {
+        if(getCurrentApiVersion() >= 28.0f)
+            return "setLaunchWindowingMode";
+        else
+            return "setLaunchStackId";
+    }
+
+    public static Bundle getActivityOptionsBundle(Context context, ApplicationType applicationType) {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             return null;
         else
-            return getActivityOptions(applicationType).toBundle();
+            return getActivityOptions(context, applicationType).toBundle();
     }
 
     private static ApplicationType getApplicationType(Context context, String packageName) {
@@ -1082,7 +1118,7 @@ public class U {
         }
 
         // Enable freeform hack automatically on supported devices
-        if(canEnableFreeform(context)) {
+        if(canEnableFreeform()) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
                         .putBoolean("freeform_hack", hasFreeformSupport(context) && !hasPartialFreeformSupport())
@@ -1092,7 +1128,7 @@ public class U {
             } else if(!hasFreeformSupport(context)) {
                 pref.edit().putBoolean("freeform_hack", false).apply();
 
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+                stopFreeformHack(context);
             }
         } else {
             boolean freeformWasEnabled = pref.getBoolean("freeform_hack", false)
@@ -1104,7 +1140,7 @@ public class U {
                     .apply();
 
             SavedWindowSizes.getInstance(context).clear(context);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+            stopFreeformHack(context);
         }
 
         // Customizations for BlissOS
@@ -1187,7 +1223,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         if(pref.getBoolean("hide_taskbar", true)) {
             if(isOverridingFreeformHack(context))
-                return true;
+                return !LauncherHelper.getInstance().isOnHomeScreen();
             else {
                 FreeformHackHelper helper = FreeformHackHelper.getInstance();
                 if(pendingAppLaunch)
@@ -1201,7 +1237,8 @@ public class U {
 
     public static boolean isOverridingFreeformHack(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true);
+        return (isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true))
+                || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f);
     }
 
     @SuppressWarnings("unchecked")
@@ -1231,7 +1268,7 @@ public class U {
     }
 
     public static boolean hasBrokenSetLaunchBoundsApi() {
-        return Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1;
+        return getCurrentApiVersion() >= 26.0f && getCurrentApiVersion() < 28.0f;
     }
 
     public static String getSecondScreenPackageName(Context context) {

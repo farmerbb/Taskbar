@@ -99,7 +99,7 @@ public class DummyActivity extends Activity {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             try {
-                                startActivity(intent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
+                                startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
                                 U.showToastLong(this, R.string.usage_stats_message);
                             } catch (ActivityNotFoundException e) {
                                 U.showToast(this, R.string.lock_device_not_supported);

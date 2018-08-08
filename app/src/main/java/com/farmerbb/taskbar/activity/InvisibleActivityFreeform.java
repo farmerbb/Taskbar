@@ -94,7 +94,7 @@ public class InvisibleActivityFreeform extends Activity {
         if(U.isOverridingFreeformHack(this)) {
             helper.setFreeformHackActive(true);
             helper.setInFreeformWorkspace(true);
-            
+
             proceedWithOnCreate = false;
             super.finish();
         }
@@ -176,13 +176,7 @@ public class InvisibleActivityFreeform extends Activity {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(disappearingReceiver);
             LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
 
-            if(!finish) {
-                FreeformHackHelper helper = FreeformHackHelper.getInstance();
-                helper.setFreeformHackActive(false);
-                helper.setInFreeformWorkspace(false);
-
-                finish = true;
-            }
+            cleanup();
         }
     }
 
@@ -280,6 +274,10 @@ public class InvisibleActivityFreeform extends Activity {
         super.finish();
         overridePendingTransition(0, 0);
 
+        cleanup();
+    }
+
+    private void cleanup() {
         if(!finish) {
             FreeformHackHelper helper = FreeformHackHelper.getInstance();
             helper.setFreeformHackActive(false);

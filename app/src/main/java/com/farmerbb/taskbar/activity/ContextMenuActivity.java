@@ -220,7 +220,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
-            if(U.launcherIsDefault(this) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+            if(U.launcherIsDefault(this)
+                    && FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                    && !U.isOverridingFreeformHack(this)) {
                 addPreferencesFromResource(R.xml.pref_context_menu_change_wallpaper);
                 findPreference("change_wallpaper").setOnPreferenceClickListener(this);
             }
@@ -388,7 +390,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                                 ComponentName.unflattenFromString(componentName),
                                 userManager.getUserForSerialNumber(userId),
                                 null,
-                                U.getActivityOptionsBundle(ApplicationType.APPLICATION)));
+                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION)));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -424,7 +426,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                     try {
-                        startActivity(intent2, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
+                        startActivity(intent2, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
@@ -588,7 +590,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
                     try {
-                        startActivity(fileManagerIntent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
+                        startActivity(fileManagerIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -604,7 +606,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     try {
-                        startActivity(settingsIntent, U.getActivityOptionsBundle(ApplicationType.APPLICATION));
+                        startActivity(settingsIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }

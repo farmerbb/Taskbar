@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -65,7 +64,7 @@ public class ClearDataActivity extends AppCompatActivity {
         topApps.setOnCheckedChangeListener(listener);
         
         savedWindowSizes = U.findViewById(this, R.id.clear_window_sizes);
-        if(U.canEnableFreeform(this))
+        if(U.canEnableFreeform())
             savedWindowSizes.setOnCheckedChangeListener(listener);
         else
             savedWindowSizes.setVisibility(View.GONE);
