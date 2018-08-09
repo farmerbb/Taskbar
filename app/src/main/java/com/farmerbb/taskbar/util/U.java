@@ -1296,7 +1296,8 @@ public class U {
 
     public static boolean visualFeedbackEnabled(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && pref.getBoolean("visual_feedback", true);
+        return (getCurrentApiVersion() < 26.0f || getCurrentApiVersion() >= 28.0f)
+                && pref.getBoolean("visual_feedback", true);
     }
 
     public static void showRecentAppsDialog(Context context) {
