@@ -351,7 +351,7 @@ public class DashboardService extends Service {
                 if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
-                U.launchAppMaximized(this, intent);
+                U.startActivityMaximized(this, intent);
             } else
                 startActivity(intent);
 

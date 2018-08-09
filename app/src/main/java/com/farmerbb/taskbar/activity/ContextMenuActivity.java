@@ -52,6 +52,7 @@ import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
@@ -220,9 +221,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
-            if(U.launcherIsDefault(this)
-                    && FreeformHackHelper.getInstance().isInFreeformWorkspace()
-                    && !U.isOverridingFreeformHack(this)) {
+            if((U.launcherIsDefault(this)
+                    && FreeformHackHelper.getInstance().isInFreeformWorkspace())
+                    || (U.isOverridingFreeformHack(this)
+                    && LauncherHelper.getInstance().isOnHomeScreen())) {
                 addPreferencesFromResource(R.xml.pref_context_menu_change_wallpaper);
                 findPreference("change_wallpaper").setOnPreferenceClickListener(this);
             }
@@ -553,7 +555,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent.putExtra("no_shadow", true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
-                    U.launchAppMaximized(getApplicationContext(), intent);
+                    U.startActivityMaximized(getApplicationContext(), intent);
                 } else {
                     try {
                         startActivity(intent);
@@ -633,7 +635,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "change_wallpaper":
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                U.launchAppMaximized(getApplicationContext(), intent3);
+                U.startActivityMaximized(getApplicationContext(), intent3);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

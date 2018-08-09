@@ -81,7 +81,7 @@ public class KeyboardShortcutActivity extends Activity {
                                 && pref.getBoolean("freeform_hack", false)
                                 && isInMultiWindowMode()) {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                            U.launchAppMaximized(getApplicationContext(), intent);
+                            U.startActivityMaximized(getApplicationContext(), intent);
                         } else {
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);

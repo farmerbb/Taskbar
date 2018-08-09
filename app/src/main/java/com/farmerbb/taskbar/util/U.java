@@ -64,6 +64,7 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
+import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -108,7 +109,7 @@ public class U {
     public static void showPermissionDialog(Context context) {
         showPermissionDialog(context, null, null);
     }
-    
+
     @TargetApi(Build.VERSION_CODES.M)
     public static AlertDialog showPermissionDialog(Context context, Runnable onError, Runnable onFinish) {
         Runnable finalOnFinish = onFinish == null
@@ -157,7 +158,7 @@ public class U {
         AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCancelable(false);
-        
+
         return dialog;
     }
 
@@ -263,12 +264,12 @@ public class U {
     }
 
     private static void launchApp(final Context context,
-                                 final String packageName,
-                                 final String componentName,
-                                 final long userId, final String windowSize,
-                                 final boolean launchedFromTaskbar,
-                                 final boolean openInNewWindow,
-                                 final ShortcutInfo shortcut) {
+                                  final String packageName,
+                                  final String componentName,
+                                  final long userId, final String windowSize,
+                                  final boolean launchedFromTaskbar,
+                                  final boolean openInNewWindow,
+                                  final ShortcutInfo shortcut) {
         launchApp(context, launchedFromTaskbar, () -> continueLaunchingApp(context, packageName, componentName, userId,
                 windowSize, launchedFromTaskbar, openInNewWindow, shortcut));
     }
@@ -313,7 +314,7 @@ public class U {
         }
 
         if(canDrawOverlays(context))
-            launchAppLowerRight(context, freeformHackIntent);
+            startActivityLowerRight(context, freeformHackIntent);
     }
 
     public static void stopFreeformHack(Context context) {
@@ -398,14 +399,14 @@ public class U {
         else
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
     }
-    
+
     private static void launchStandard(Context context, Intent intent, long userId, ShortcutInfo shortcut, ApplicationType type) {
         Bundle bundle = canEnableFreeform() ? getActivityOptions(context, type).toBundle() : null;
         if(shortcut == null) {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    context.startActivity(intent, bundle);
+                    startActivity(context, intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
@@ -436,7 +437,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    context.startActivity(intent, bundle);
+                    startActivity(context, intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
@@ -450,7 +451,7 @@ public class U {
     @TargetApi(Build.VERSION_CODES.N)
     private static void launchMode2(Context context, Intent intent, int launchType, long userId, ShortcutInfo shortcut, ApplicationType type) {
         DisplayMetrics metrics = getRealDisplayMetrics(context);
-        
+
         int statusBarHeight = getStatusBarHeight(context);
         String position = getTaskbarPosition(context);
 
@@ -487,18 +488,14 @@ public class U {
         } else if(isLandscape || (launchType != RIGHT && isPortrait))
             top = top + iconSize;
 
-        Bundle bundle = getActivityOptions(context, type).setLaunchBounds(new Rect(
-                left,
-                top,
-                right,
-                bottom
-        )).toBundle();
+        Bundle bundle = getActivityOptions(context, type)
+                .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
 
         if(shortcut == null) {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    context.startActivity(intent, bundle);
+                    startActivity(context, intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
@@ -529,7 +526,7 @@ public class U {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                 try {
-                    context.startActivity(intent, bundle);
+                    startActivity(context, intent, bundle);
                 } catch (ActivityNotFoundException e) {
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
                 } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
@@ -559,16 +556,30 @@ public class U {
         }
     }
 
-    public static void launchAppMaximized(Context context, Intent intent) {
+    private static void startActivity(Context context, Intent intent, Bundle bundle) {
+        boolean shouldLaunchTouchAbsorber =
+                !FreeformHackHelper.getInstance().isTouchAbsorberActive()
+                        && isOverridingFreeformHack(context)
+                        && !isChromeOs(context);
+
+        if(!shouldLaunchTouchAbsorber) {
+            context.startActivity(intent, bundle);
+            return;
+        }
+
+        startTouchAbsorberActivity(context);
+        new Handler().postDelayed(() -> context.startActivity(intent, bundle), 100);
+    }
+
+    public static void startActivityMaximized(Context context, Intent intent) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         long userId = userManager.getSerialNumberForUser(Process.myUserHandle());
 
         launchMode2(context, intent, MAXIMIZED, userId, null, ApplicationType.CONTEXT_MENU);
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
-    public static void launchAppLowerRight(Context context, Intent intent) {
+    public static void startActivityLowerRight(Context context, Intent intent) {
         DisplayMetrics metrics = getRealDisplayMetrics(context);
         try {
             context.startActivity(intent,
@@ -578,7 +589,39 @@ public class U {
                                     metrics.heightPixels,
                                     metrics.widthPixels + 1,
                                     metrics.heightPixels + 1
-            )).toBundle());
+                            )).toBundle());
+        } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public static void startTouchAbsorberActivity(Context context) {
+        String position = getTaskbarPosition(context);
+        DisplayMetrics metrics = getRealDisplayMetrics(context);
+
+        int left = 0;
+        int top = 0;
+        int right = metrics.widthPixels;
+        int bottom = metrics.heightPixels;
+
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
+
+        if(position.contains("vertical_left"))
+            right = iconSize;
+        else if(position.contains("vertical_right"))
+            left = right - iconSize;
+        else if(position.contains("bottom"))
+            top = bottom - iconSize;
+        else
+            bottom = iconSize;
+
+        Intent intent = new Intent(context, TouchAbsorberActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+        try {
+            context.startActivity(intent,
+                    getActivityOptions(context, ApplicationType.FREEFORM_HACK)
+                            .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle());
         } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
     }
 
@@ -845,7 +888,7 @@ public class U {
 
     public static boolean canEnableFreeform() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
-   }
+    }
 
     @TargetApi(Build.VERSION_CODES.N)
     public static boolean hasFreeformSupport(Context context) {
@@ -857,7 +900,7 @@ public class U {
     }
 
     public static boolean hasPartialFreeformSupport() {
-         return Build.MANUFACTURER.equalsIgnoreCase("Samsung");
+        return Build.MANUFACTURER.equalsIgnoreCase("Samsung");
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
@@ -1237,8 +1280,9 @@ public class U {
 
     public static boolean isOverridingFreeformHack(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return (isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true))
-                || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f);
+        return pref.getBoolean("freeform_hack", false)
+                && ((isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true))
+                || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
     }
 
     @SuppressWarnings("unchecked")
@@ -1342,7 +1386,7 @@ public class U {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     dialog.setCancelable(false);
-                    
+
                     return dialog;
                 }
             }

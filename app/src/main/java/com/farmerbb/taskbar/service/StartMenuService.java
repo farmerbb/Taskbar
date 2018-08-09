@@ -632,9 +632,9 @@ public class StartMenuService extends Service {
 
                 if(inFreeformMode) {
                     if(clazz.equals(InvisibleActivity.class))
-                        U.launchAppLowerRight(this, intent);
+                        U.startActivityLowerRight(this, intent);
                     else if(clazz.equals(InvisibleActivityAlt.class))
-                        U.launchAppMaximized(this, intent);
+                        U.startActivityMaximized(this, intent);
                 } else
                     startActivity(intent);
             }

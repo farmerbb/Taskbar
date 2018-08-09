@@ -142,7 +142,7 @@ public class InvisibleActivityFreeform extends Activity {
                                 intent.putExtra("power_button_warning", true);
                             }
 
-                            U.launchAppMaximized(getApplicationContext(), intent);
+                            U.startActivityMaximized(getApplicationContext(), intent);
                         }
                     }, 100);
                 }
