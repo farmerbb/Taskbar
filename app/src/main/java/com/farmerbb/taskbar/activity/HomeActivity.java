@@ -67,6 +67,13 @@ public class HomeActivity extends Activity {
         }
     };
 
+    private BroadcastReceiver freeformToggleReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateWindowFlags();
+        }
+    };
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,13 +199,12 @@ public class HomeActivity extends Activity {
         else
             setContentView(view);
 
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-        );
+        updateWindowFlags();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+        lbm.registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+        lbm.registerReceiver(freeformToggleReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
 
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("launcher", true).apply();
@@ -342,8 +348,10 @@ public class HomeActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(killReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(forceTaskbarStartReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.unregisterReceiver(killReceiver);
+        lbm.unregisterReceiver(forceTaskbarStartReceiver);
+        lbm.unregisterReceiver(freeformToggleReceiver);
     }
 
     @Override
@@ -367,5 +375,15 @@ public class HomeActivity extends Activity {
         }
 
         finish();
+    }
+
+    private void updateWindowFlags() {
+        if(U.isOverridingFreeformHack(this)) {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            );
+        } else
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }
