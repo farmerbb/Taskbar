@@ -85,7 +85,6 @@
 
     <string name="pref_title_launcher">Заменить главный экран</string>
     <string name="pref_description_launcher">Использовать Taskbar как замену главного экрана</string>
-    <string name="pref_description_launcher_alt">Использовать Taskbar как замену главного экрана\n\nКогда режим Freeform включен, это позволит Taskbar всегда запускать приложения в этом режиме.</string>
 
     <string name="set_wallpaper">Сменить обои используя&#8230;</string>
     <string name="pref_disable_animations">Быстрое переключение приложений</string>

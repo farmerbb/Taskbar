@@ -85,7 +85,6 @@
 
     <string name="pref_title_launcher">替换主屏幕</string>
     <string name="pref_description_launcher">使用任务栏作为主屏幕替换</string>
-    <string name="pref_description_launcher_alt">使用 任务栏 作为主屏幕替换 \n\n当启用自由式窗口支持时，将允许 任务栏 始终在自由式模式中启动应用。</string>
 
     <string name="set_wallpaper">使用&#8230;设置壁纸</string>
     <string name="pref_disable_animations">更快速地切换应用</string>
