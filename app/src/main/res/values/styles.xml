@@ -16,7 +16,7 @@
 
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeBase" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -26,7 +26,7 @@
         <item name="settings_icon_color">@color/settings_icon_color</item>
     </style>
 
-    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+    <style name="AppThemeBase.Dark" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -35,6 +35,10 @@
         <item name="main_activity_background">@color/main_activity_background_dark</item>
         <item name="settings_icon_color">@color/settings_icon_color_dark</item>
     </style>
+
+    <style name="AppTheme" parent="AppThemeBase" />
+
+    <style name="AppTheme.Dark" parent="AppThemeBase.Dark" />
 
     <style name="AppTheme.HomeActivity" parent="@android:style/Theme.Material.Wallpaper.NoTitleBar"/>
 

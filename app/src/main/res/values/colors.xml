@@ -37,4 +37,9 @@
     <color name="ic_freeform_mode_adaptive_bg">#4790CD</color>
 
     <color name="app_shortcut_bg">#F5F5F5</color>
+
+    <color name="navbar_color_light">#FFFFFF</color>
+    <color name="navbar_color_dark">#000000</color>
+    <color name="navbar_divider_color_light">#DCDCDC</color>
+    <color name="navbar_divider_color_dark">#00000000</color>
 </resources>
