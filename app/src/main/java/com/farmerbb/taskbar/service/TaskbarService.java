@@ -517,7 +517,13 @@ public class TaskbarService extends Service {
             U.showHideNavigationBar(this, false);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        
+
+        if(FreeformHackHelper.getInstance().isTouchAbsorberActive()) {
+            lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+
+            new Handler().postDelayed(() -> U.startTouchAbsorberActivity(this), 500);
+        }
+
         lbm.unregisterReceiver(showReceiver);
         lbm.unregisterReceiver(hideReceiver);
         lbm.unregisterReceiver(tempShowReceiver);

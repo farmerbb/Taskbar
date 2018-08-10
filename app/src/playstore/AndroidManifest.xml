@@ -255,6 +255,7 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:theme="@style/AppTheme.Incognito"/>
 
         <service android:name=".service.TaskbarService"/>
