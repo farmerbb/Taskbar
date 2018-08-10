@@ -62,8 +62,13 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
 
         findPreference("freeform_hack").setOnPreferenceClickListener(this);
         findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
-        findPreference("add_shortcut").setOnPreferenceClickListener(this);
         findPreference("window_size").setOnPreferenceClickListener(this);
+
+        boolean enableFreeformModeShortcut = U.enableFreeformModeShortcut(getActivity());
+        if(enableFreeformModeShortcut)
+            findPreference("add_shortcut").setOnPreferenceClickListener(this);
+        else
+            getPreferenceScreen().removePreference(findPreference("add_shortcut"));
 
         bindPreferenceSummaryToValue(findPreference("window_size"));
 
@@ -76,7 +81,9 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
             findPreference("force_new_window").setDependency("freeform_hack");
             findPreference("launch_games_fullscreen").setDependency("freeform_hack");
             findPreference("window_size").setDependency("freeform_hack");
-            findPreference("add_shortcut").setDependency("freeform_hack");
+
+            if(enableFreeformModeShortcut)
+                findPreference("add_shortcut").setDependency("freeform_hack");
         }
 
         findPreference("freeform_hack").setEnabled(!lockFreeformToggle);

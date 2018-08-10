@@ -1431,4 +1431,10 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context, Context.MODE_MULTI_PROCESS);
         return !pref.getBoolean("tasker_enabled", true);
     }
+
+    public static boolean enableFreeformModeShortcut(Context context) {
+        return canEnableFreeform()
+                && !U.isOverridingFreeformHack(context)
+                && !U.isChromeOs(context);
+    }
 }

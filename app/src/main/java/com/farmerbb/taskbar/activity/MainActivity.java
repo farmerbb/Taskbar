@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component3,
-                U.canEnableFreeform() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                U.enableFreeformModeShortcut(this) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                         .setIntent(intent)
                         .build();
 
-                if(U.canEnableFreeform()) {
+                if(U.enableFreeformModeShortcut(this)) {
                     Intent intent2 = new Intent(Intent.ACTION_MAIN);
                     intent2.setClass(this, ShortcutActivity.class);
                     intent2.putExtra("is_launching_shortcut", true);
