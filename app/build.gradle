@@ -1,6 +1,6 @@
 ext {
     SUPPORT_LIBRARY_VERSION = "27.1.1"
-    SDK_VERSION = 27
+    SDK_VERSION = 28
 }
 
 apply plugin: 'com.android.application'
@@ -17,7 +17,9 @@ android {
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
         minSdkVersion 21
-        targetSdkVersion SDK_VERSION
+
+        //noinspection OldTargetApi
+        targetSdkVersion 27
 
         // TODO keep versionName and versionCode in sync with Android-x86 manifest
         versionCode 185
@@ -78,7 +80,7 @@ android {
     sourceSets {
         main {
             java { srcDirs('src/main/java', 'src/playstore/java', "src/compat-${SDK_VERSION}/java") }
-            res { srcDirs('src/main/res', 'src/playstore/res') }
+            res { srcDirs('src/main/res') }
             manifest.srcFile 'src/playstore/AndroidManifest.xml'
         }
     }

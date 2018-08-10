@@ -37,6 +37,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -1247,19 +1248,30 @@ public class U {
         return metrics;
     }
 
-    static void pinAppShortcut(Context context) {
-        Intent intent = getShortcutIntent(context);
-        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        intent.putExtra("duplicate", false);
+    public static void pinAppShortcut(Context context) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ShortcutManager mShortcutManager = context.getSystemService(ShortcutManager.class);
 
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory(Intent.CATEGORY_HOME);
-        ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            if(mShortcutManager.isRequestPinShortcutSupported()) {
+                ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(context, "freeform_mode").build();
 
-        intent.setPackage(defaultLauncher.activityInfo.packageName);
-        context.sendBroadcast(intent);
+                mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+            } else
+                showToastLong(context, R.string.pin_shortcut_not_supported);
+        } else {
+            Intent intent = getShortcutIntent(context);
+            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            intent.putExtra("duplicate", false);
 
-        showToast(context, R.string.shortcut_created);
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory(Intent.CATEGORY_HOME);
+            ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+            intent.setPackage(defaultLauncher.activityInfo.packageName);
+            context.sendBroadcast(intent);
+
+            showToast(context, R.string.shortcut_created);
+        }
     }
 
     public static boolean shouldCollapse(Context context, boolean pendingAppLaunch) {
@@ -1436,5 +1448,19 @@ public class U {
         return canEnableFreeform()
                 && !U.isOverridingFreeformHack(context)
                 && !U.isChromeOs(context);
+    }
+
+    public static void startForegroundService(Context context, Intent intent) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(Settings.canDrawOverlays(context))
+                context.startForegroundService(intent);
+        } else
+            context.startService(intent);
+    }
+
+    public static int getOverlayType() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                : WindowManager.LayoutParams.TYPE_PHONE;
     }
 }

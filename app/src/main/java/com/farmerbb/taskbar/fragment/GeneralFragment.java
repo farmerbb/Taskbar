@@ -15,12 +15,14 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -29,7 +31,6 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.Blacklist;
-import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
@@ -96,6 +97,7 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     @Override
     public boolean onPreferenceClick(final Preference p) {
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
@@ -117,10 +119,10 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
                 break;
             case "notification_settings":
                 Intent intent2 = new Intent();
-                intent2.setAction(CompatUtils.ACTION_APP_NOTIFICATION_SETTINGS);
+                intent2.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
 
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
-                    intent2.putExtra(CompatUtils.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID);
+                    intent2.putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID);
                 else {
                     intent2.putExtra("app_package", BuildConfig.APPLICATION_ID);
                     intent2.putExtra("app_uid", getActivity().getApplicationInfo().uid);

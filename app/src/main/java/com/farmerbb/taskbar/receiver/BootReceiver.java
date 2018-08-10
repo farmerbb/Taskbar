@@ -19,11 +19,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class BootReceiver extends BroadcastReceiver {
@@ -62,7 +60,7 @@ public class BootReceiver extends BroadcastReceiver {
                 Intent notificationIntent = new Intent(context, NotificationService.class);
                 notificationIntent.putExtra("start_services", startServices);
 
-                CompatUtils.startForegroundService(context, notificationIntent);
+                U.startForegroundService(context, notificationIntent);
             } else {
                 editor.putBoolean("taskbar_active", U.isServiceRunning(context, NotificationService.class));
                 editor.apply();

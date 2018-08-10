@@ -35,7 +35,6 @@ import android.view.View;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class FreeformModeFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
@@ -202,7 +201,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 dialog.show();
                 break;
             case "add_shortcut":
-                CompatUtils.pinAppShortcut(getActivity());
+                U.pinAppShortcut(getActivity());
                 break;
             case "window_size":
                 if(U.hasBrokenSetLaunchBoundsApi())

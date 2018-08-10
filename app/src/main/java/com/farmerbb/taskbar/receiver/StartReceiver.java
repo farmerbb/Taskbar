@@ -19,12 +19,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Handler;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class StartReceiver extends BroadcastReceiver {
@@ -83,7 +81,7 @@ public class StartReceiver extends BroadcastReceiver {
             Intent notificationIntent = new Intent(context, NotificationService.class);
             notificationIntent.putExtra("start_services", true);
 
-            CompatUtils.startForegroundService(context, notificationIntent);
+            U.startForegroundService(context, notificationIntent);
         } else if(intent.hasExtra("secondscreen"))
             pref.edit().putBoolean("skip_quit_receiver", true).apply();
     }
