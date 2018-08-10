@@ -41,6 +41,7 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -82,6 +83,9 @@ public class HomeActivity extends Activity {
         shouldDelayFreeformHack = true;
         hits = 0;
 
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        CompatUtils.applyLayoutInDisplayCutoutModeTo(params);
+        getWindow().setAttributes(params);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         View view = new View(this) {
