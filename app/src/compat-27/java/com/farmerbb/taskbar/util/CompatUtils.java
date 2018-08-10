@@ -46,9 +46,7 @@ public class CompatUtils {
             ShortcutManager mShortcutManager = context.getSystemService(ShortcutManager.class);
 
             if(mShortcutManager.isRequestPinShortcutSupported()) {
-                ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(context, "freeform_mode")
-                        .setShortLabel(context.getString(R.string.pref_header_freeform))
-                        .build();
+                ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(context, "freeform_mode").build();
 
                 mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
             } else

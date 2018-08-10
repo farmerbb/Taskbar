@@ -50,7 +50,6 @@ public class TouchAbsorberActivity extends Activity {
         DisplayMetrics metrics = U.getRealDisplayMetrics(this);
         LinearLayout layout = U.findViewById(this, R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(metrics.widthPixels, metrics.heightPixels));
-        // layout.setBackgroundColor(0x800000FF);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
         FreeformHackHelper.getInstance().setTouchAbsorberActive(true);
