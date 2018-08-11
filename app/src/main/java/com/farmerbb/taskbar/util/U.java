@@ -449,35 +449,34 @@ public class U {
         boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-        int left = launchType == RIGHT && isLandscape
-                ? metrics.widthPixels / 2
-                : 0;
-
-        int top = launchType == RIGHT && isPortrait
-                ? metrics.heightPixels / 2
-                : statusBarHeight;
-
-        int right = launchType == LEFT && isLandscape
-                ? metrics.widthPixels / 2
-                : metrics.widthPixels;
-
-        int bottom = launchType == LEFT && isPortrait
-                ? metrics.heightPixels / 2
-                : metrics.heightPixels;
+        int left = 0;
+        int top = statusBarHeight;
+        int right = metrics.widthPixels;
+        int bottom = metrics.heightPixels;
 
         int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
                 ? 0
                 : context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
-        if(position.contains("vertical_left")) {
-            if(launchType != RIGHT || isPortrait) left = left + iconSize;
-        } else if(position.contains("vertical_right")) {
-            if(launchType != LEFT || isPortrait) right = right - iconSize;
-        } else if(position.contains("bottom")) {
-            if(isLandscape || (launchType != LEFT && isPortrait))
-                bottom = bottom - iconSize;
-        } else if(isLandscape || (launchType != RIGHT && isPortrait))
+        if(position.contains("vertical_left"))
+            left = left + iconSize;
+        else if(position.contains("vertical_right"))
+            right = right - iconSize;
+        else if(position.contains("bottom"))
+            bottom = bottom - iconSize;
+        else
             top = top + iconSize;
+
+        if(launchType == RIGHT && isLandscape)
+            left = (right / 2) + ((iconSize / 2) * (position.contains("vertical_left") ? 1 : 0));
+        else if(launchType == RIGHT && isPortrait)
+            top = (bottom / 2) + ((iconSize / 2)
+                    * ((position.equals("top_left") || position.equals("top_right")) ? 1 : 0));
+        else if(launchType == LEFT && isLandscape)
+            right = (right / 2) + ((iconSize / 2) * (position.contains("vertical_left") ? 1 : 0));
+        else if(launchType == LEFT && isPortrait)
+            bottom = (bottom / 2) + ((iconSize / 2)
+                    * ((position.equals("top_left") || position.equals("top_right")) ? 1 : 0));
 
         Bundle bundle = getActivityOptions(context, type)
                 .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
