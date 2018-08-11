@@ -47,7 +47,7 @@ public class ShortcutActivity extends Activity {
                 intent.setPackage(BuildConfig.APPLICATION_ID);
                 sendBroadcast(intent);
 
-                new Handler().postDelayed(() -> U.startFreeformHack(this, true, false), 100);
+                new Handler().postDelayed(() -> U.startFreeformHack(this, true), 100);
             } else
                 U.showToastLong(this, R.string.no_freeform_support);
         } else

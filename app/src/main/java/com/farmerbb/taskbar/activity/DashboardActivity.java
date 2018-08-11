@@ -111,7 +111,7 @@ public class DashboardActivity extends Activity {
             shouldCollapse = false;
 
             if(contextMenuFix)
-                U.startFreeformHack(DashboardActivity.this, false, false);
+                U.startFreeformHack(DashboardActivity.this);
 
             finish();
         }
@@ -151,7 +151,7 @@ public class DashboardActivity extends Activity {
     @Override
     public void onBackPressed() {
         if(contextMenuFix)
-            U.startFreeformHack(this, false, false);
+            U.startFreeformHack(this);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
     }

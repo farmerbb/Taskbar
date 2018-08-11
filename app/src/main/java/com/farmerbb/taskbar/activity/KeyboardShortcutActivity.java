@@ -51,7 +51,7 @@ public class KeyboardShortcutActivity extends Activity {
                             && pref.getBoolean("freeform_hack", false)
                             && isInMultiWindowMode()
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                        U.startFreeformHack(this, false, false);
+                        U.startFreeformHack(this);
                     }
 
                     Intent startStopIntent;

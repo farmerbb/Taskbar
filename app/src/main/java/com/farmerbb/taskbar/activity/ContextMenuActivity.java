@@ -718,7 +718,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.cancelToast();
         } else {
             if(contextMenuFix && !showStartMenu)
-                U.startFreeformHack(this, false, false);
+                U.startFreeformHack(this);
 
             super.onBackPressed();
             if(FreeformHackHelper.getInstance().isInFreeformWorkspace())

@@ -98,7 +98,7 @@ public abstract class SettingsFragment extends PreferenceFragment {
 
                         SharedPreferences pref = U.getSharedPreferences(getActivity());
                         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false))
-                            new Handler().post(() -> U.startFreeformHack(getActivity(), false, false));
+                            new Handler().post(() -> U.startFreeformHack(getActivity()));
                         break;
                 }
 

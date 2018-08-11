@@ -175,11 +175,8 @@ public class U {
             launchApp(context, () -> {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("device_admin", true);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
-
-                if(context instanceof Activity)
-                    ((Activity) context).overridePendingTransition(0, 0);
             });
         }
     }
@@ -197,11 +194,8 @@ public class U {
             launchApp(context, () -> {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("accessibility", true);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
-
-                if(context instanceof Activity)
-                    ((Activity) context).overridePendingTransition(0, 0);
             });
         }
     }
@@ -272,7 +266,7 @@ public class U {
                                   final boolean openInNewWindow,
                                   final ShortcutInfo shortcut) {
         launchApp(context, launchedFromTaskbar, () -> continueLaunchingApp(context, packageName, componentName, userId,
-                windowSize, launchedFromTaskbar, openInNewWindow, shortcut));
+                windowSize, openInNewWindow, shortcut));
     }
 
     public static void launchApp(Context context, Runnable runnable) {
@@ -291,7 +285,7 @@ public class U {
                 && pref.getBoolean("freeform_hack", false)
                 && (!helper.isInFreeformWorkspace() || specialLaunch)) {
             new Handler().postDelayed(() -> {
-                startFreeformHack(context, true, launchedFromTaskbar);
+                startFreeformHack(context, true);
 
                 new Handler().postDelayed(runnable, helper.isFreeformHackActive() ? 0 : 100);
             }, launchedFromTaskbar ? 0 : 100);
@@ -299,20 +293,19 @@ public class U {
             runnable.run();
     }
 
-    @SuppressWarnings("deprecation")
+    public static void startFreeformHack(Context context) {
+        startFreeformHack(context, false);
+    }
+
     @TargetApi(Build.VERSION_CODES.N)
-    public static void startFreeformHack(Context context, boolean checkMultiWindow, boolean launchedFromTaskbar) {
+    public static void startFreeformHack(Context context, boolean checkMultiWindow) {
         Intent freeformHackIntent = new Intent(context, InvisibleActivityFreeform.class);
-        freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT
+                | Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
         if(checkMultiWindow)
             freeformHackIntent.putExtra("check_multiwindow", true);
-
-        if(launchedFromTaskbar) {
-            SharedPreferences pref = getSharedPreferences(context);
-            if(pref.getBoolean("disable_animations", false))
-                freeformHackIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        }
 
         if(canDrawOverlays(context))
             startActivityLowerRight(context, freeformHackIntent);
@@ -334,7 +327,6 @@ public class U {
                                              String componentName,
                                              long userId,
                                              String windowSize,
-                                             boolean launchedFromTaskbar,
                                              boolean openInNewWindow,
                                              ShortcutInfo shortcut) {
         SharedPreferences pref = getSharedPreferences(context);
@@ -349,10 +341,8 @@ public class U {
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
             intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
 
-        if(launchedFromTaskbar) {
-            if(pref.getBoolean("disable_animations", false))
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        }
+        if(pref.getBoolean("disable_animations", false))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
         if(openInNewWindow || pref.getBoolean("force_new_window", false)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);

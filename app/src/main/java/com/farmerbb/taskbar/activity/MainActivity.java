@@ -312,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                 && pref.getBoolean("freeform_hack", false)
                 && isInMultiWindowMode()
                 && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-            U.startFreeformHack(this, false, false);
+            U.startFreeformHack(this);
         }
 
         startService(new Intent(this, TaskbarService.class));

@@ -317,7 +317,7 @@ public class HomeActivity extends Activity {
         if(shouldDelayFreeformHack)
             hits++;
         else
-            U.startFreeformHack(this, false, false);
+            U.startFreeformHack(this);
     }
 
     @Override

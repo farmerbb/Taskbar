@@ -117,7 +117,7 @@ public class DummyActivity extends Activity {
                         && pref.getBoolean("freeform_hack", false)
                         && isInMultiWindowMode()
                         && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                    U.startFreeformHack(this, false, false);
+                    U.startFreeformHack(this);
                 }
 
                 finish();
