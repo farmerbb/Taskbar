@@ -24,7 +24,7 @@ Simply follow these steps to configure your device for launching apps in freefor
 1. Check the box for "Freeform window support" inside the Taskbar app
 2. Follow the directions that appear in the pop-up to enable the proper settings on your device (one-time setup)
 3. Go to your device's recent apps page and clear all recent apps
-4. Select an app using Taskbar to launch it in a freeform window
+4. Start Taskbar, then select an app to launch it in a freeform window
 
 For more information and detailed instructions, click "Help & instructions for freeform mode" inside the Taskbar app.
 
