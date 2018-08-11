@@ -19,5 +19,7 @@ public class CompatUtils {
 
     private CompatUtils() {}
 
-    public static void applyLayoutInDisplayCutoutModeTo(WindowManager.LayoutParams params) {}
+    public static boolean applyDisplayCutoutModeTo(WindowManager.LayoutParams params) {
+        return false;
+    }
 }

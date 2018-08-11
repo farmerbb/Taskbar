@@ -84,8 +84,9 @@ public class HomeActivity extends Activity {
         hits = 0;
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        CompatUtils.applyLayoutInDisplayCutoutModeTo(params);
-        getWindow().setAttributes(params);
+        if(CompatUtils.applyDisplayCutoutModeTo(params))
+            getWindow().setAttributes(params);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         View view = new View(this) {

@@ -19,16 +19,19 @@ package com.farmerbb.taskbar.util;
 // and the Play Store version of Taskbar (compiled with SDK 28).
 // TODO Do not make changes to this file without making corresponding changes to the Android-x86 version.
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.WindowManager;
 
-@TargetApi(Build.VERSION_CODES.P)
 public class CompatUtils {
 
     private CompatUtils() {}
     
-    public static void applyLayoutInDisplayCutoutModeTo(WindowManager.LayoutParams params) {
-        params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+    public static boolean applyDisplayCutoutModeTo(WindowManager.LayoutParams params) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            return true;
+        }
+
+        return false;
     }
 }
