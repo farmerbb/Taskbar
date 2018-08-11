@@ -97,6 +97,7 @@ public class InvisibleActivityFreeform extends Activity {
 
             proceedWithOnCreate = false;
             super.finish();
+            overridePendingTransition(0, 0);
         }
 
         if(proceedWithOnCreate) {

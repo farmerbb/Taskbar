@@ -281,6 +281,8 @@ public class U {
                 && FreeformHackHelper.getInstance().isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
+        boolean noAnimation = pref.getBoolean("disable_animations", false);
+
         if(hasFreeformSupport(context)
                 && pref.getBoolean("freeform_hack", false)
                 && (!helper.isInFreeformWorkspace() || specialLaunch)) {
@@ -290,7 +292,7 @@ public class U {
                 new Handler().postDelayed(runnable, helper.isFreeformHackActive() ? 0 : 100);
             }, launchedFromTaskbar ? 0 : 100);
         } else
-            runnable.run();
+            new Handler().postDelayed(runnable, !launchedFromTaskbar && noAnimation ? 100 : 0);
     }
 
     public static void startFreeformHack(Context context) {
