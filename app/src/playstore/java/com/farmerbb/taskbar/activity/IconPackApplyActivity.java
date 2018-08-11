@@ -32,7 +32,9 @@ public class IconPackApplyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getIntent().hasExtra(Intent.EXTRA_PACKAGE_NAME)) {
+        if(U.isExternalAccessDisabled(this))
+            finish();
+        else if(getIntent().hasExtra(Intent.EXTRA_PACKAGE_NAME)) {
             SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getString("theme", "light").equals("dark"))
                 setTheme(R.style.AppTheme_Dialog_Dark);

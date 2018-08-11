@@ -41,13 +41,22 @@ public abstract class TaskerActivityBase extends PreferenceActivity implements P
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        if(this instanceof TaskerActionActivity)
+        if(this instanceof TaskerActionActivity) {
             setTitle(R.string.tasker_action_title);
 
-        if(this instanceof TaskerConditionActivity)
+            addPreferencesFromResource(R.xml.pref_tasker_action);
+            findPreference("show_taskbar").setOnPreferenceClickListener(this);
+            findPreference("hide_taskbar").setOnPreferenceClickListener(this);
+            findPreference("toggle_start_menu").setOnPreferenceClickListener(this);
+            findPreference("toggle_dashboard").setOnPreferenceClickListener(this);
+        }
+
+        if(this instanceof TaskerConditionActivity) {
             setTitle(R.string.tasker_condition_title);
 
-        addPreferencesFromResource(R.xml.pref_tasker);
+            addPreferencesFromResource(R.xml.pref_tasker_condition);
+        }
+
         findPreference("tasker_on").setOnPreferenceClickListener(this);
         findPreference("tasker_off").setOnPreferenceClickListener(this);
     }
@@ -70,13 +79,16 @@ public abstract class TaskerActivityBase extends PreferenceActivity implements P
         /*
          * The blurb is concise status text to be displayed in the host's UI.
          */
-
+        String extraName = com.twofortyfouram.locale.api.Intent.EXTRA_STRING_BLURB;
         switch(p.getKey()) {
             case "tasker_on":
-                resultIntent.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_STRING_BLURB, getString(R.string.on));
+                resultIntent.putExtra(extraName, getString(R.string.on));
                 break;
             case "tasker_off":
-                resultIntent.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_STRING_BLURB, getString(R.string.off));
+                resultIntent.putExtra(extraName, getString(R.string.off));
+                break;
+            default:
+                resultIntent.putExtra(extraName, p.getTitle());
                 break;
         }
 

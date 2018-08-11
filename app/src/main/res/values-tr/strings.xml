@@ -366,4 +366,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 
     <string name="essential_phone_grip_rejection">On the Essential Phone, disable grip rejection (in developer options) to assist with opening/closing Taskbar</string>
 
+    <string name="toggle_start_menu">Toggle Start Menu</string>
+    <string name="toggle_dashboard">Toggle Dashboard</string>
+
 </resources>

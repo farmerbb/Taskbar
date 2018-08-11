@@ -28,7 +28,7 @@ import com.farmerbb.taskbar.util.U;
 public final class TaskerConditionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(U.isTaskerDisabled(context)) return;
+        if(U.isExternalAccessDisabled(context)) return;
 
         BundleScrubber.scrub(intent);
 

@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.BundleScrubber;
@@ -28,32 +29,47 @@ import com.farmerbb.taskbar.util.U;
 public final class TaskerActionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(U.isTaskerDisabled(context)) return;
+        if(U.isExternalAccessDisabled(context)) return;
 
         BundleScrubber.scrub(intent);
 
         final Bundle bundle = intent.getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE);
         BundleScrubber.scrub(bundle);
 
-        if(bundle.containsKey(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE)) {
-            if(PluginBundleManager.isBundleValid(bundle)) {
-                String action = bundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE);
-                Intent startStopIntent = null;
+        if(bundle.containsKey(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE)
+                && PluginBundleManager.isBundleValid(bundle)) {
+            String action = bundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE);
+            Intent actionIntent = generateIntent(action);
 
-                if(action != null) switch(action) {
-                    case "tasker_on":
-                        startStopIntent = new Intent("com.farmerbb.taskbar.START");
-                        break;
-                    case "tasker_off":
-                        startStopIntent = new Intent("com.farmerbb.taskbar.QUIT");
-                        break;
-                }
-
-                if(startStopIntent != null) {
-                    startStopIntent.setPackage(BuildConfig.APPLICATION_ID);
-                    context.sendBroadcast(startStopIntent);
-                }
+            if(actionIntent != null) switch(action) {
+                case "tasker_on":
+                case "tasker_off":
+                    actionIntent.setPackage(BuildConfig.APPLICATION_ID);
+                    context.sendBroadcast(actionIntent);
+                    break;
+                default:
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(actionIntent);
+                    break;
             }
         }
+    }
+    
+    private Intent generateIntent(String action) {
+        if(action != null) switch(action) {
+            case "tasker_on":
+                return new Intent("com.farmerbb.taskbar.START");
+            case "tasker_off":
+                return new Intent("com.farmerbb.taskbar.QUIT");
+            case "show_taskbar":
+                return new Intent("com.farmerbb.taskbar.SHOW_TASKBAR");
+            case "hide_taskbar":
+                return new Intent("com.farmerbb.taskbar.HIDE_TASKBAR");
+            case "toggle_start_menu":
+                return new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
+            case "toggle_dashboard":
+                return new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD");
+        }
+
+        return null;
     }
 }

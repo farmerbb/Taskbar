@@ -100,11 +100,7 @@ public class U {
     private static final int WINDOWING_MODE_FREEFORM = 5;
 
     public static SharedPreferences getSharedPreferences(Context context) {
-        return getSharedPreferences(context, Context.MODE_PRIVATE);
-    }
-
-    private static SharedPreferences getSharedPreferences(Context context, int mode) {
-        return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", mode);
+        return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
     }
 
     public static void showPermissionDialog(Context context) {
@@ -1395,8 +1391,8 @@ public class U {
         return false;
     }
 
-    public static boolean isTaskerDisabled(Context context) {
-        SharedPreferences pref = getSharedPreferences(context, Context.MODE_MULTI_PROCESS);
+    public static boolean isExternalAccessDisabled(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
         return !pref.getBoolean("tasker_enabled", true);
     }
 

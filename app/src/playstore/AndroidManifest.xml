@@ -410,16 +410,14 @@
         </receiver>
         <receiver
             android:name=".receiver.TaskerActionReceiver"
-            android:exported="true"
-            android:process=":background" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".receiver.TaskerConditionReceiver"
-            android:exported="true"
-            android:process=":background" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
             </intent-filter>
