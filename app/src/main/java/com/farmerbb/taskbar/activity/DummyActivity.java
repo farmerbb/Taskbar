@@ -77,13 +77,19 @@ public class DummyActivity extends Activity {
                             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, new ComponentName(this, LockDeviceReceiver.class));
                             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.device_admin_description));
 
-                            try {
-                                startActivity(intent);
-                            } catch (ActivityNotFoundException e) {
-                                U.showToast(this, R.string.lock_device_not_supported);
+                            SharedPreferences pref = U.getSharedPreferences(this);
+                            if(pref.getBoolean("disable_animations", false))
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                                finish();
-                            }
+                            U.launchApp(this, () -> {
+                                try {
+                                    startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
+                                } catch (ActivityNotFoundException e) {
+                                    U.showToast(this, R.string.lock_device_not_supported);
+
+                                    finish();
+                                }
+                            });
                         });
 
                 AlertDialog dialog = builder.create();
@@ -96,16 +102,21 @@ public class DummyActivity extends Activity {
                         .setNegativeButton(R.string.action_cancel, (dialog, which) -> new Handler().post(this::finish))
                         .setPositiveButton(R.string.action_activate, (dialog, which) -> {
                             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                            try {
-                                startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
-                                U.showToastLong(this, R.string.usage_stats_message);
-                            } catch (ActivityNotFoundException e) {
-                                U.showToast(this, R.string.lock_device_not_supported);
+                            SharedPreferences pref = U.getSharedPreferences(this);
+                            if(pref.getBoolean("disable_animations", false))
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                                finish();
-                            }
+                            U.launchApp(this, () -> {
+                                try {
+                                    startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
+                                    U.showToastLong(this, R.string.usage_stats_message);
+                                } catch (ActivityNotFoundException e) {
+                                    U.showToast(this, R.string.lock_device_not_supported);
+
+                                    finish();
+                                }
+                            });
                         });
 
                 AlertDialog dialog = builder.create();
