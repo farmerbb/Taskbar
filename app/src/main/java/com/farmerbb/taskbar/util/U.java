@@ -172,7 +172,10 @@ public class U {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("device_admin", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
+
+                try {
+                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
+                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             });
         }
     }
@@ -191,7 +194,10 @@ public class U {
                 Intent intent = new Intent(context, DummyActivity.class);
                 intent.putExtra("accessibility", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
+
+                try {
+                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
+                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             });
         }
     }
@@ -274,7 +280,7 @@ public class U {
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
 
         boolean specialLaunch = hasBrokenSetLaunchBoundsApi()
-                && FreeformHackHelper.getInstance().isInFreeformWorkspace()
+                && helper.isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
         boolean noAnimation = pref.getBoolean("disable_animations", false);
