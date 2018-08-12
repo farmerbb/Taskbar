@@ -388,10 +388,6 @@ public class U {
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
     }
 
-    private static Bundle launchStandard(Context context, ApplicationType type) {
-        return canEnableFreeform() ? getActivityOptions(context, type).toBundle() : null;
-    }
-
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode1(Context context, ApplicationType type) {
@@ -954,14 +950,9 @@ public class U {
     }
     
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize) {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-            return null;
-
         SharedPreferences pref = getSharedPreferences(context);
-        if(!canEnableFreeform()
-                || !pref.getBoolean("freeform_hack", false)
-                || windowSize.equals("standard"))
-            return launchStandard(context, type);
+        if(!canEnableFreeform() || !pref.getBoolean("freeform_hack", false))
+            return null;
         
         switch(windowSize) {
             case "large":
