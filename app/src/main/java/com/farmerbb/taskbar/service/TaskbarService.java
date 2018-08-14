@@ -38,10 +38,10 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -51,7 +51,6 @@ import android.os.UserManager;
 import android.speech.RecognizerIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
-import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -77,12 +76,10 @@ import android.widget.Space;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.ApplicationType;
+import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -846,12 +843,12 @@ public class TaskbarService extends Service {
                 handler.post(() -> {
                     if(numOfEntries > 0 || fullLength) {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-                        DisplayMetrics metrics = U.getRealDisplayMetrics(this);
+                        DisplayInfo display = U.getDisplayInfo(this);
                         int recentsSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
                         if(U.getTaskbarPosition(this).contains("vertical")) {
-                            int maxScreenSize = metrics.heightPixels
+                            int maxScreenSize = display.height
                                     - U.getStatusBarHeight(this)
                                     - U.getBaseTaskbarSize(this);
 
@@ -867,8 +864,7 @@ public class TaskbarService extends Service {
                                 } catch (NullPointerException e) { /* Gracefully fail */ }
                             }
                         } else {
-                            int maxScreenSize = metrics.widthPixels
-                                    - U.getBaseTaskbarSize(this);
+                            int maxScreenSize = display.width - U.getBaseTaskbarSize(this);
 
                             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + getResources().getDimensionPixelSize(R.dimen.divider_size);
@@ -1134,36 +1130,14 @@ public class TaskbarService extends Service {
     @SuppressWarnings("deprecation")
     private void openContextMenu() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        Intent intent = null;
 
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                intent = new Intent(this, ContextMenuActivity.class);
-                break;
-            case "dark":
-                intent = new Intent(this, ContextMenuActivityDark.class);
-                break;
-        }
+        Bundle args = new Bundle();
+        args.putBoolean("dont_show_quit",
+                LauncherHelper.getInstance().isOnHomeScreen()
+                        && !pref.getBoolean("taskbar_active", false));
+        args.putBoolean("is_start_button", true);
 
-        if(intent != null) {
-            intent.putExtra("dont_show_quit", LauncherHelper.getInstance().isOnHomeScreen() && !pref.getBoolean("taskbar_active", false));
-            intent.putExtra("is_start_button", true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        if(U.hasFreeformSupport(this) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-            DisplayMetrics metrics = U.getRealDisplayMetrics(this);
-
-            if(intent != null && U.hasBrokenSetLaunchBoundsApi())
-                intent.putExtra("context_menu_fix", true);
-
-            startActivity(intent,
-                    U.getActivityOptions(this, ApplicationType.CONTEXT_MENU)
-                            .setLaunchBounds(
-                                    new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)
-                            ).toBundle());
-        } else
-            startActivity(intent);
+        U.startContextMenuActivity(this, args);
     }
 
     private void updateButton(boolean isCollapsed) {
@@ -1278,41 +1252,15 @@ public class TaskbarService extends Service {
 
     @SuppressWarnings("deprecation")
     private void openContextMenu(AppEntry entry, int[] location) {
-        SharedPreferences pref = U.getSharedPreferences(this);
-        Intent intent = null;
+        Bundle args = new Bundle();
+        args.putString("package_name", entry.getPackageName());
+        args.putString("app_name", entry.getLabel());
+        args.putString("component_name", entry.getComponentName());
+        args.putLong("user_id", entry.getUserId(this));
+        args.putInt("x", location[0]);
+        args.putInt("y", location[1]);
 
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                intent = new Intent(this, ContextMenuActivity.class);
-                break;
-            case "dark":
-                intent = new Intent(this, ContextMenuActivityDark.class);
-                break;
-        }
-
-        if(intent != null) {
-            intent.putExtra("package_name", entry.getPackageName());
-            intent.putExtra("app_name", entry.getLabel());
-            intent.putExtra("component_name", entry.getComponentName());
-            intent.putExtra("user_id", entry.getUserId(this));
-            intent.putExtra("x", location[0]);
-            intent.putExtra("y", location[1]);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        if(U.hasFreeformSupport(this) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-            DisplayMetrics metrics = U.getRealDisplayMetrics(this);
-
-            if(intent != null && U.hasBrokenSetLaunchBoundsApi())
-                intent.putExtra("context_menu_fix", true);
-
-            startActivity(intent,
-                    U.getActivityOptions(this, ApplicationType.CONTEXT_MENU)
-                            .setLaunchBounds(
-                                    new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)
-                            ).toBundle());
-        } else
-            startActivity(intent);
+        U.startContextMenuActivity(this, args);
     }
 
     private List<AppEntry> getAppEntries() {

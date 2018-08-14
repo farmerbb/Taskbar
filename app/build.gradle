@@ -22,7 +22,7 @@ android {
         targetSdkVersion 27
 
         // TODO keep versionName and versionCode in sync with Android-x86 manifest
-        versionCode 186
+        versionCode 187
         versionName "4.0"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN", "tr"

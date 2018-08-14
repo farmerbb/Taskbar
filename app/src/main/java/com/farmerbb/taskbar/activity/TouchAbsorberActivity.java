@@ -23,11 +23,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -47,9 +47,9 @@ public class TouchAbsorberActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.incognito);
 
-        DisplayMetrics metrics = U.getRealDisplayMetrics(this);
+        DisplayInfo display = U.getDisplayInfo(this);
         LinearLayout layout = U.findViewById(this, R.id.incognitoLayout);
-        layout.setLayoutParams(new FrameLayout.LayoutParams(metrics.widthPixels, metrics.heightPixels));
+        layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
         LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
         FreeformHackHelper.getInstance().setTouchAbsorberActive(true);

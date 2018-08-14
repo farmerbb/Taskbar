@@ -31,10 +31,10 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.UserHandle;
@@ -42,7 +42,6 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.SearchView;
-import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -61,13 +60,10 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
@@ -723,41 +719,13 @@ public class StartMenuService extends Service {
     private void openContextMenu(final int[] location) {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 
-        new Handler().postDelayed(() -> {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            Intent intent = null;
+        Bundle args = new Bundle();
+        args.putBoolean("launched_from_start_menu", true);
+        args.putBoolean("is_overflow_menu", true);
+        args.putInt("x", location[0]);
+        args.putInt("y", location[1]);
 
-            switch(pref.getString("theme", "light")) {
-                case "light":
-                    intent = new Intent(this, ContextMenuActivity.class);
-                    break;
-                case "dark":
-                    intent = new Intent(this, ContextMenuActivityDark.class);
-                    break;
-            }
-
-            if(intent != null) {
-                intent.putExtra("launched_from_start_menu", true);
-                intent.putExtra("is_overflow_menu", true);
-                intent.putExtra("x", location[0]);
-                intent.putExtra("y", location[1]);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            }
-
-            if(U.hasFreeformSupport(this) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-                DisplayMetrics metrics = U.getRealDisplayMetrics(this);
-
-                if(intent != null && U.hasBrokenSetLaunchBoundsApi())
-                    intent.putExtra("context_menu_fix", true);
-
-                startActivity(intent,
-                        U.getActivityOptions(this, ApplicationType.CONTEXT_MENU)
-                                .setLaunchBounds(
-                                        new Rect(0, 0, metrics.widthPixels, metrics.heightPixels)
-                                ).toBundle());
-            } else
-                startActivity(intent);
-        }, shouldDelay() ? 100 : 0);
+        new Handler().postDelayed(() -> U.startContextMenuActivity(this, args), shouldDelay() ? 100 : 0);
     }
 
     private boolean shouldDelay() {

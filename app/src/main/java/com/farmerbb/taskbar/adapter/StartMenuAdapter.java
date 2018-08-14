@@ -21,15 +21,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
-import android.util.DisplayMetrics;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -43,10 +42,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.ContextMenuActivity;
-import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
@@ -196,43 +192,16 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     private void openContextMenu(final AppEntry entry, final int[] location) {
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 
-        new Handler().postDelayed(() -> {
-            SharedPreferences pref = U.getSharedPreferences(getContext());
-            Intent intent = null;
+        Bundle args = new Bundle();
+        args.putString("package_name", entry.getPackageName());
+        args.putString("app_name", entry.getLabel());
+        args.putString("component_name", entry.getComponentName());
+        args.putLong("user_id", entry.getUserId(getContext()));
+        args.putBoolean("launched_from_start_menu", true);
+        args.putInt("x", location[0]);
+        args.putInt("y", location[1]);
 
-            switch(pref.getString("theme", "light")) {
-                case "light":
-                    intent = new Intent(getContext(), ContextMenuActivity.class);
-                    break;
-                case "dark":
-                    intent = new Intent(getContext(), ContextMenuActivityDark.class);
-                    break;
-            }
-
-            if(intent != null) {
-                intent.putExtra("package_name", entry.getPackageName());
-                intent.putExtra("app_name", entry.getLabel());
-                intent.putExtra("component_name", entry.getComponentName());
-                intent.putExtra("user_id", entry.getUserId(getContext()));
-                intent.putExtra("launched_from_start_menu", true);
-                intent.putExtra("x", location[0]);
-                intent.putExtra("y", location[1]);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            }
-
-            if(U.hasFreeformSupport(getContext()) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
-                DisplayMetrics metrics = U.getRealDisplayMetrics(getContext());
-
-                if(intent != null && U.hasBrokenSetLaunchBoundsApi())
-                    intent.putExtra("context_menu_fix", true);
-
-                getContext().startActivity(intent,
-                        U.getActivityOptions(getContext(), ApplicationType.CONTEXT_MENU)
-                                .setLaunchBounds(new Rect(0, 0, metrics.widthPixels, metrics.heightPixels))
-                                .toBundle());
-            } else
-                getContext().startActivity(intent);
-        }, shouldDelay() ? 100 : 0);
+        new Handler().postDelayed(() -> U.startContextMenuActivity(getContext(), args), shouldDelay() ? 100 : 0);
     }
 
     private boolean shouldDelay() {

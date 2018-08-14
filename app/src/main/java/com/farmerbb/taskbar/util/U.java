@@ -61,11 +61,13 @@ import android.widget.Toast;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
+import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -391,12 +393,12 @@ public class U {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode1(Context context, ApplicationType type) {
-        DisplayMetrics metrics = getRealDisplayMetrics(context);
+        DisplayInfo display = getDisplayInfo(context);
 
-        int width1 = metrics.widthPixels / 8;
-        int width2 = metrics.widthPixels - width1;
-        int height1 = metrics.heightPixels / 8;
-        int height2 = metrics.heightPixels - height1;
+        int width1 = display.width / 8;
+        int width2 = display.width - width1;
+        int height1 = display.height / 8;
+        int height2 = display.height - height1;
 
         return getActivityOptions(context, type).setLaunchBounds(new Rect(
                 width1,
@@ -409,7 +411,7 @@ public class U {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode2(Context context, int launchType, ApplicationType type) {
-        DisplayMetrics metrics = getRealDisplayMetrics(context);
+        DisplayInfo display = getDisplayInfo(context);
 
         int statusBarHeight = getStatusBarHeight(context);
         String position = getTaskbarPosition(context);
@@ -419,8 +421,8 @@ public class U {
 
         int left = 0;
         int top = statusBarHeight;
-        int right = metrics.widthPixels;
-        int bottom = metrics.heightPixels;
+        int right = display.width;
+        int bottom = display.height;
 
         int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
                 ? 0
@@ -453,11 +455,11 @@ public class U {
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode3(Context context, ApplicationType type) {
-        DisplayMetrics metrics = getRealDisplayMetrics(context);
+        DisplayInfo display = getDisplayInfo(context);
 
-        int width1 = metrics.widthPixels / 2;
+        int width1 = display.width / 2;
         int width2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_width) / 2;
-        int height1 = metrics.heightPixels / 2;
+        int height1 = display.height / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
         return getActivityOptions(context, type).setLaunchBounds(new Rect(
@@ -510,15 +512,15 @@ public class U {
 
     @TargetApi(Build.VERSION_CODES.N)
     public static void startActivityLowerRight(Context context, Intent intent) {
-        DisplayMetrics metrics = getRealDisplayMetrics(context);
+        DisplayInfo display = getDisplayInfo(context);
         try {
             context.startActivity(intent,
                     getActivityOptions(context, ApplicationType.FREEFORM_HACK)
                             .setLaunchBounds(new Rect(
-                                    metrics.widthPixels,
-                                    metrics.heightPixels,
-                                    metrics.widthPixels + 1,
-                                    metrics.heightPixels + 1
+                                    display.width,
+                                    display.height,
+                                    display.width + 1,
+                                    display.height + 1
                             )).toBundle());
         } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
     }
@@ -526,12 +528,12 @@ public class U {
     @TargetApi(Build.VERSION_CODES.N)
     public static void startTouchAbsorberActivity(Context context) {
         String position = getTaskbarPosition(context);
-        DisplayMetrics metrics = getRealDisplayMetrics(context);
+        DisplayInfo display = getDisplayInfo(context);
 
         int left = 0;
         int top = 0;
-        int right = metrics.widthPixels;
-        int bottom = metrics.heightPixels;
+        int right = display.width;
+        int bottom = display.height;
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
@@ -553,6 +555,39 @@ public class U {
                     getActivityOptions(context, ApplicationType.FREEFORM_HACK)
                             .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle());
         } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
+    }
+
+    public static void startContextMenuActivity(Context context, Bundle args) {
+        SharedPreferences pref = getSharedPreferences(context);
+        Intent intent = null;
+
+        switch(pref.getString("theme", "light")) {
+            case "light":
+                intent = new Intent(context, ContextMenuActivity.class);
+                break;
+            case "dark":
+                intent = new Intent(context, ContextMenuActivityDark.class);
+                break;
+        }
+
+        if(intent != null) {
+            intent.putExtra("args", args);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+
+        if(hasFreeformSupport(context) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
+            DisplayInfo display = getDisplayInfo(context);
+
+            if(intent != null && hasBrokenSetLaunchBoundsApi())
+                intent.putExtra("context_menu_fix", true);
+
+            context.startActivity(intent,
+                    getActivityOptions(context, ApplicationType.CONTEXT_MENU)
+                            .setLaunchBounds(
+                                    new Rect(0, 0, display.width, display.height)
+                            ).toBundle());
+        } else
+            context.startActivity(intent);
     }
 
     public static void checkForUpdates(Context context) {
@@ -696,15 +731,16 @@ public class U {
 
     private static int getMaxNumOfColumns(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        DisplayMetrics metrics = getRealDisplayMetrics(context);
-        float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / metrics.density;
+        DisplayInfo display = getDisplayInfo(context);
+        float density = display.density / 160;
+        float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
         int numOfColumns = 0;
 
         float maxScreenSize = getTaskbarPosition(context).contains("vertical")
-                ? (metrics.heightPixels - getStatusBarHeight(context)) / metrics.density
-                : metrics.widthPixels / metrics.density;
+                ? (display.height - getStatusBarHeight(context)) / density
+                : display.width / density;
 
-        float iconSize = context.getResources().getDimension(R.dimen.icon_size) / metrics.density;
+        float iconSize = context.getResources().getDimension(R.dimen.icon_size) / density;
 
         int userMaxNumOfColumns = Integer.valueOf(pref.getString("max_num_of_recents", "10"));
 
@@ -725,12 +761,20 @@ public class U {
     }
 
     public static int getStatusBarHeight(Context context) {
-        int statusBarHeight = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if(resourceId > 0)
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        return getSystemDimen(context, "status_bar_height");
+    }
 
-        return statusBarHeight;
+    private static int getNavbarHeight(Context context) {
+        return getSystemDimen(context, "navigation_bar_height");
+    }
+
+    private static int getSystemDimen(Context context, String id) {
+        int value = 0;
+        int resourceId = context.getResources().getIdentifier(id, "dimen", "android");
+        if(resourceId > 0)
+            value = context.getResources().getDimensionPixelSize(resourceId);
+
+        return value;
     }
 
     public static void refreshPinnedIcons(Context context) {
@@ -1183,18 +1227,42 @@ public class U {
         }
     }
 
-    public static DisplayMetrics getRealDisplayMetrics(Context context) {
-        DisplayMetrics metrics = new DisplayMetrics();
+    public static DisplayInfo getDisplayInfo(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display disp = wm.getDefaultDisplay();
 
-        SharedPreferences pref = getSharedPreferences(context);
-        if(isChromeOs(context) && !pref.getBoolean("chrome_os_context_menu_fix", true))
-            disp.getRealMetrics(metrics);
-        else
-            disp.getMetrics(metrics);
+        DisplayMetrics metrics = new DisplayMetrics();
+        disp.getMetrics(metrics);
 
-        return metrics;
+        DisplayMetrics realMetrics = new DisplayMetrics();
+        disp.getRealMetrics(realMetrics);
+
+        DisplayInfo display = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+
+        if(isChromeOs(context)) {
+            SharedPreferences pref = getSharedPreferences(context);
+            if(!pref.getBoolean("chrome_os_context_menu_fix", true)) {
+                display.width = realMetrics.widthPixels;
+                display.height = realMetrics.heightPixels;
+            }
+
+            return display;
+        }
+
+        boolean sameWidth = metrics.widthPixels == realMetrics.widthPixels;
+        boolean sameHeight = metrics.heightPixels == realMetrics.heightPixels;
+
+        if(sameWidth && !sameHeight) {
+            display.width = realMetrics.widthPixels;
+            display.height = realMetrics.heightPixels - getNavbarHeight(context);
+        }
+
+        if(!sameWidth && sameHeight) {
+            display.width = realMetrics.widthPixels - getNavbarHeight(context);
+            display.height = realMetrics.heightPixels;
+        }
+
+        return display;
     }
 
     public static void pinAppShortcut(Context context) {

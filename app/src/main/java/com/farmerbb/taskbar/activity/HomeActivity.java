@@ -30,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +41,7 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.CompatUtils;
+import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -98,8 +98,8 @@ public class HomeActivity extends Activity {
                 wallpaperManager.setWallpaperOffsets(getWindowToken(), 0.5f, 0.5f);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    DisplayMetrics metrics = U.getRealDisplayMetrics(HomeActivity.this);
-                    wallpaperManager.suggestDesiredDimensions(metrics.widthPixels, metrics.heightPixels);
+                    DisplayInfo display = U.getDisplayInfo(HomeActivity.this);
+                    wallpaperManager.suggestDesiredDimensions(display.width, display.height);
                 }
 
                 boolean shouldStartFreeformHack = shouldDelayFreeformHack && hits > 0;

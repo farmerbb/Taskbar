@@ -39,7 +39,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,6 +48,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
+import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -60,6 +60,8 @@ import com.farmerbb.taskbar.util.U;
 import java.util.List;
 
 public class ContextMenuActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
+
+    private Bundle args;
 
     String packageName;
     String componentName;
@@ -93,15 +95,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
         MenuHelper.getInstance().setContextMenuOpen(true);
 
-        boolean isNonAppMenu = !getIntent().hasExtra("package_name") && !getIntent().hasExtra("app_name");
-        showStartMenu = getIntent().getBooleanExtra("launched_from_start_menu", false);
-        isStartButton = isNonAppMenu && getIntent().getBooleanExtra("is_start_button", false);
-        isOverflowMenu = isNonAppMenu && getIntent().getBooleanExtra("is_overflow_menu", false);
-        contextMenuFix = getIntent().hasExtra("context_menu_fix");
+        args = getIntent().getBundleExtra("args");
+        
+        boolean isNonAppMenu = !args.containsKey("package_name") && !args.containsKey("app_name");
+        showStartMenu = args.getBoolean("launched_from_start_menu", false);
+        isStartButton = isNonAppMenu && args.getBoolean("is_start_button", false);
+        isOverflowMenu = isNonAppMenu && args.getBoolean("is_overflow_menu", false);
+        contextMenuFix = args.containsKey("context_menu_fix");
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        DisplayMetrics metrics = U.getRealDisplayMetrics(this);
+        DisplayInfo display = U.getDisplayInfo(this);
 
         int statusBarHeight = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -109,8 +113,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
         if(showStartMenu) {
-            int x = getIntent().getIntExtra("x", 0);
-            int y = getIntent().getIntExtra("y", 0);
+            int x = args.getInt("x", 0);
+            int y = args.getInt("y", 0);
             int offset = getResources().getDimensionPixelSize(isOverflowMenu ? R.dimen.context_menu_offset_overflow : R.dimen.context_menu_offset);
 
             switch(U.getTaskbarPosition(this)) {
@@ -118,13 +122,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = x;
-                    params.y = metrics.heightPixels - y - offset;
+                    params.y = display.height - y - offset;
                     break;
                 case "bottom_right":
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
-                    params.y = metrics.heightPixels - y - offset;
+                    params.y = display.height - y - offset;
                     break;
                 case "top_left":
                 case "top_vertical_left":
@@ -142,8 +146,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         } else {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-            int x = getIntent().getIntExtra("x", metrics.widthPixels);
-            int y = getIntent().getIntExtra("y", metrics.heightPixels);
+            int x = args.getInt("x", display.width);
+            int y = args.getInt("y", display.height);
             int offset = getResources().getDimensionPixelSize(R.dimen.icon_size);
 
             switch(U.getTaskbarPosition(this)) {
@@ -155,17 +159,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 case "bottom_vertical_left":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = offset;
-                    params.y = metrics.heightPixels - y - (isStartButton ? 0 : offset);
+                    params.y = display.height - y - (isStartButton ? 0 : offset);
                     break;
                 case "bottom_right":
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                    params.x = metrics.widthPixels - x;
+                    params.x = display.width - x;
                     params.y = offset;
                     break;
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                     params.x = offset;
-                    params.y = metrics.heightPixels - y - (isStartButton ? 0 : offset);
+                    params.y = display.height - y - (isStartButton ? 0 : offset);
                     break;
                 case "top_left":
                     params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -179,7 +183,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
                 case "top_right":
                     params.gravity = Gravity.TOP | Gravity.RIGHT;
-                    params.x = metrics.widthPixels - x;
+                    params.x = display.width - x;
                     params.y = offset;
                     break;
                 case "top_vertical_right":
@@ -189,7 +193,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
 
-            if(!U.getTaskbarPosition(this).contains("vertical") && (params.x > metrics.widthPixels / 2))
+            if(!U.getTaskbarPosition(this).contains("vertical") && (params.x > display.width / 2))
                 params.x = params.x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset;
         }
 
@@ -228,7 +232,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("change_wallpaper").setOnPreferenceClickListener(this);
             }
 
-            if(!getIntent().getBooleanExtra("dont_show_quit", false)) {
+            if(!args.getBoolean("dont_show_quit", false)) {
                 addPreferencesFromResource(R.xml.pref_context_menu_quit);
                 findPreference("quit_taskbar").setOnPreferenceClickListener(this);
             }
@@ -252,10 +256,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             else
                 getPreferenceScreen().removePreference(findPreference("file_manager"));
         } else {
-            appName = getIntent().getStringExtra("app_name");
-            packageName = getIntent().getStringExtra("package_name");
-            componentName = getIntent().getStringExtra("component_name");
-            userId = getIntent().getLongExtra("user_id", 0);
+            appName = args.getString("app_name");
+            packageName = args.getString("package_name");
+            componentName = args.getString("component_name");
+            userId = args.getLong("user_id", 0);
 
             if(getResources().getConfiguration().screenWidthDp >= 600
                     && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
@@ -381,7 +385,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
         LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
         boolean appIsValid = isStartButton || isOverflowMenu ||
-                !launcherApps.getActivityList(getIntent().getStringExtra("package_name"),
+                !launcherApps.getActivityList(args.getString("package_name"),
                         userManager.getUserForSerialNumber(userId)).isEmpty();
 
         if(appIsValid) switch(p.getKey()) {

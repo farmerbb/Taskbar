@@ -21,11 +21,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
@@ -40,12 +40,12 @@ public class InvisibleActivityAlt extends InvisibleActivity {
 
         boolean powerButtonWarning = getIntent().hasExtra("power_button_warning");
 
-        DisplayMetrics metrics = U.getRealDisplayMetrics(this);
+        DisplayInfo display = U.getDisplayInfo(this);
 
         setContentView(R.layout.incognito);
 
         LinearLayout layout = U.findViewById(this, R.id.incognitoLayout);
-        layout.setLayoutParams(new FrameLayout.LayoutParams(metrics.widthPixels, metrics.heightPixels));
+        layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
         if(!MenuHelper.getInstance().isStartMenuOpen() && !powerButtonWarning) finish();
 
