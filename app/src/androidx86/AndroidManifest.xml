@@ -19,7 +19,7 @@
      * HomeActivity is enabled by default
      * Certain activities and receivers are not exposed
 -->
-<manifest android:versionCode="187"
+<manifest android:versionCode="188"
           android:versionName="4.0"
           xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.farmerbb.taskbar" >

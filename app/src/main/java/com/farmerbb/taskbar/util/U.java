@@ -204,7 +204,7 @@ public class U {
         }
     }
 
-    private static boolean isAccessibilityServiceEnabled(Context context) {
+    public static boolean isAccessibilityServiceEnabled(Context context) {
         String accessibilityServices = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
         ComponentName component = new ComponentName(context, PowerMenuService.class);
 
@@ -1228,6 +1228,8 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context) {
+        context = context.getApplicationContext();
+
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display disp = wm.getDefaultDisplay();
 
