@@ -15,6 +15,8 @@
 
 package com.farmerbb.taskbar.util;
 
+import android.view.WindowManager;
+
 public class CompatUtils {
 
     private CompatUtils() {}
