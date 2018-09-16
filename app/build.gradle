@@ -17,9 +17,7 @@ android {
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
         minSdkVersion 21
-
-        //noinspection OldTargetApi
-        targetSdkVersion 27
+        targetSdkVersion SDK_VERSION
 
         // TODO keep versionName and versionCode in sync with Android-x86 manifest
         versionCode 189
