@@ -873,7 +873,7 @@ public class U {
                 && Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", 0) != 0));
     }
 
-    public static boolean hasPartialFreeformSupport() {
+    public static boolean isSamsungDevice() {
         return Build.MANUFACTURER.equalsIgnoreCase("Samsung");
     }
 
@@ -1158,7 +1158,7 @@ public class U {
         if(canEnableFreeform()) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()
-                        .putBoolean("freeform_hack", hasFreeformSupport(context) && !hasPartialFreeformSupport())
+                        .putBoolean("freeform_hack", hasFreeformSupport(context) && !isSamsungDevice())
                         .putBoolean("save_window_sizes", false)
                         .putBoolean("freeform_hack_override", true)
                         .apply();
@@ -1343,7 +1343,9 @@ public class U {
     }
 
     public static boolean hasBrokenSetLaunchBoundsApi() {
-        return getCurrentApiVersion() >= 26.0f && getCurrentApiVersion() < 28.0f;
+        return getCurrentApiVersion() >= 26.0f
+                && getCurrentApiVersion() < 28.0f
+                && !isSamsungDevice();
     }
 
     public static String getSecondScreenPackageName(Context context) {

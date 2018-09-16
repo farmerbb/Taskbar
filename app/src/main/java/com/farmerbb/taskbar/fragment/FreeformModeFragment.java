@@ -88,7 +88,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         findPreference("freeform_hack").setEnabled(!lockFreeformToggle);
 
         // Dialog shown on devices which seem to not work correctly with freeform mode
-        if(U.hasPartialFreeformSupport() && !pref.getBoolean("samsung_dialog_shown", false)) {
+        if(U.isSamsungDevice() && !pref.getBoolean("samsung_dialog_shown", false)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.samsung_freeform_title)
                     .setMessage(R.string.samsung_freeform_message)
