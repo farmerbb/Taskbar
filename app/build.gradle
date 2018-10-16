@@ -23,7 +23,7 @@ android {
         versionCode 189
         versionName "4.0"
 
-        resConfigs "en", "ja", "ru", "de", "zh-rCN", "tr"
+        resConfigs "en", "ja", "ru", "de", "zh-rCN", "tr", "nl"
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
         buildConfigField "String", "PAID_APPLICATION_ID", "\"com.farmerbb.taskbar.paid\""
