@@ -33,6 +33,7 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
             updateSwitch();
         }
     };
+
+    private boolean hasCaption = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(!launcherEnabled)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+
+        // Update caption state
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this)) {
+            getWindow().setRestrictedCaptionAreaListener(rect -> hasCaption = true);
+
+            new Handler().postDelayed(() -> pref.edit().putBoolean("has_caption", hasCaption).apply(), 500);
+        }
 
         if(BuildConfig.APPLICATION_ID.equals(BuildConfig.PAID_APPLICATION_ID)) {
             File file = new File(getFilesDir() + File.separator + "imported_successfully");
@@ -286,9 +296,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
         LocalBroadcastManager.getInstance(this).unregisterReceiver(switchReceiver);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this))
+            getWindow().setRestrictedCaptionAreaListener(null);
+
+        super.onDestroy();
     }
 
     @SuppressWarnings("deprecation")

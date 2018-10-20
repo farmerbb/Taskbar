@@ -200,6 +200,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         params.width = getResources().getDimensionPixelSize(R.dimen.context_menu_width);
         params.dimAmount = 0;
 
+        if(U.isChromeOs(this) && U.getTaskbarPosition(this).contains("bottom")) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+
+            if(pref.getBoolean("chrome_os_context_menu_fix", true)
+                    && !pref.getBoolean("has_caption", false))
+                params.y = params.y - getResources().getDimensionPixelSize(R.dimen.caption_offset);
+        }
+
         getWindow().setAttributes(params);
 
         if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
