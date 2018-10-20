@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2016 Braden Farmer
+<!-- Copyright 2018 Braden Farmer
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -290,7 +290,7 @@
     <string name="refresh_frequency_continuous">Doorlopend</string>
 
     <string name="power_button_warning_title">Waarschuwing</string>
-    <string name="power_button_warning_message">Aangepaste ROM's die gebaseerd zijn op CyanogenMod / LineageOS, hebben last van een probleem: de aan-/uitknop werkt niet als het apparaat zich bevindt in vrije venstermodus.\n\nTest je aan-/uitknop nu.  Als deze niet werkt, wees dan voorzichtig met het gebruiken van vrije venstermodus, aangezien je het scherm niet meer kunt inschakelen als het is uitgeschakeld.</string>
+    <string name="power_button_warning_message">Aangepaste ROM\'s die gebaseerd zijn op CyanogenMod / LineageOS, hebben last van een probleem: de aan-/uitknop werkt niet als het apparaat zich bevindt in vrije venstermodus.\n\nTest je aan-/uitknop nu.  Als deze niet werkt, wees dan voorzichtig met het gebruiken van vrije venstermodus, aangezien je het scherm niet meer kunt inschakelen als het is uitgeschakeld.</string>
     <string name="action_i_understand">Ik begrijp het</string>
 
     <string name="hide_taskbar_disclaimer">Niet van toepassing op apps in vrije venstermodus</string>
