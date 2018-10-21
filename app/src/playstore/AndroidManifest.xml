@@ -126,7 +126,12 @@
             android:label="${appName}"
             android:launchMode="singleTask"
             android:exported="true"
-            android:theme="@style/AppTheme.HomeActivity" />
+            android:permission="${applicationId}.ENABLE_DISABLE_HOME"
+            android:theme="@style/AppTheme.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.KeyboardShortcutActivity"
             android:label="${appName}"

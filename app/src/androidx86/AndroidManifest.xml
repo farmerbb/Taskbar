@@ -112,7 +112,6 @@
             android:name=".activity.HomeActivityDelegate"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:exported="true"
             android:theme="@style/AppTheme.HomeActivity" />
         <activity
             android:name=".activity.KeyboardShortcutActivity"
