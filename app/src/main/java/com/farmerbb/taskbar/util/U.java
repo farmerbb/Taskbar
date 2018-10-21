@@ -1484,4 +1484,17 @@ public class U {
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_PHONE;
     }
+
+    public static boolean isDelegatingHomeActivity(Context context) {
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+
+        final List<ResolveInfo> listOfLaunchers = context.getPackageManager().queryIntentActivities(homeIntent, 0);
+        for(ResolveInfo launcher : listOfLaunchers) {
+            if(launcher.activityInfo.packageName.equals(BuildConfig.SUPPORT_APPLICATION_ID))
+                return true;
+        }
+
+        return false;
+    }
 }

@@ -100,17 +100,23 @@ public class MainActivity extends AppCompatActivity {
 
         ComponentName component = new ComponentName(this, HomeActivity.class);
         getPackageManager().setComponentEnabledSetting(component,
-                launcherEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                launcherEnabled && !U.isDelegatingHomeActivity(this)
+                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         ComponentName component2 = new ComponentName(this, KeyboardShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component2,
-                pref.getBoolean("keyboard_shortcut", false) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                pref.getBoolean("keyboard_shortcut", false)
+                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
         getPackageManager().setComponentEnabledSetting(component3,
-                U.enableFreeformModeShortcut(this) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                U.enableFreeformModeShortcut(this)
+                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
         ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
