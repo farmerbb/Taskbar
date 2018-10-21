@@ -64,7 +64,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity
             android:name=".activity.MainActivity"
@@ -120,6 +121,12 @@
                 <category android:name="android.intent.category.HOME"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.HomeActivityDelegate"
+            android:label="${appName}"
+            android:launchMode="singleTask"
+            android:exported="true"
+            android:theme="@style/AppTheme.HomeActivity" />
         <activity
             android:name=".activity.KeyboardShortcutActivity"
             android:label="${appName}"
