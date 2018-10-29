@@ -592,9 +592,13 @@ public class U {
 
     public static void checkForUpdates(Context context) {
         String url;
-        if(isPlayStoreRelease(context))
-            url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
-        else
+        if(isPlayStoreRelease(context)) {
+            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+                    && !isPlayStoreInstalled(context))
+                url = "https://github.com/farmerbb/Taskbar/releases";
+            else
+                url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+        } else
             url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.APPLICATION_ID;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
