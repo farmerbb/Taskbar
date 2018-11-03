@@ -227,15 +227,19 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @SuppressWarnings("deprecation")
     private void generateMenu() {
+        SharedPreferences pref = U.getSharedPreferences(this);
+
         if(isStartButton) {
             addPreferencesFromResource(R.xml.pref_context_menu_open_settings);
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
-            if((U.launcherIsDefault(this)
+            if(pref.getBoolean("freeform_hack", false)
+                    && ((U.launcherIsDefault(this)
+                    && !U.isOverridingFreeformHack(this)
                     && FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     || (U.isOverridingFreeformHack(this)
-                    && LauncherHelper.getInstance().isOnHomeScreen())) {
+                    && LauncherHelper.getInstance().isOnHomeScreen()))) {
                 addPreferencesFromResource(R.xml.pref_context_menu_change_wallpaper);
                 findPreference("change_wallpaper").setOnPreferenceClickListener(this);
             }
@@ -277,7 +281,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("header").setTitle(appName);
             }
 
-            SharedPreferences pref = U.getSharedPreferences(this);
             if(U.hasFreeformSupport(this)
                     && pref.getBoolean("freeform_hack", false)
                     && !U.isGame(this, packageName)) {

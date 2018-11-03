@@ -159,9 +159,6 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onResume() {
         super.onResume();
 
-        if(!proceedWithOnCreate)
-            return;
-
         // Show the taskbar when activity is resumed (no other freeform windows are active)
         if(showTaskbar)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
@@ -189,9 +186,6 @@ public class InvisibleActivityFreeform extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        if(!proceedWithOnCreate)
-            return;
 
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
@@ -237,18 +231,12 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onPause() {
         super.onPause();
 
-        if(!proceedWithOnCreate)
-            return;
-
         possiblyHideTaskbar();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        if(!proceedWithOnCreate)
-            return;
 
         if(!finish)
             FreeformHackHelper.getInstance().setInFreeformWorkspace(false);
