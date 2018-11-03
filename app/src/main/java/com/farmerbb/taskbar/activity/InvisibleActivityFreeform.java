@@ -100,63 +100,67 @@ public class InvisibleActivityFreeform extends Activity {
             overridePendingTransition(0, 0);
         }
 
-        if(proceedWithOnCreate) {
-            // Detect outside touches, and pass them through to the underlying activity
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
+        if(!proceedWithOnCreate)
+            return;
 
-            IntentFilter appearingReceiverFilter = new IntentFilter();
-            appearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
-            appearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING");
-            appearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
+        // Detect outside touches, and pass them through to the underlying activity
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
-            IntentFilter disappearingReceiverFilter = new IntentFilter();
-            disappearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_DISAPPEARING");
-            disappearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING");
-            disappearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING");
+        IntentFilter appearingReceiverFilter = new IntentFilter();
+        appearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
+        appearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING");
+        appearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
-            LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, appearingReceiverFilter);
-            LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);
-            LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        IntentFilter disappearingReceiverFilter = new IntentFilter();
+        disappearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_DISAPPEARING");
+        disappearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING");
+        disappearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING");
 
-            helper.setFreeformHackActive(true);
+        LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, appearingReceiverFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
 
-            // Show power button warning on CyanogenMod / LineageOS devices
-            if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")) {
-                SharedPreferences pref = U.getSharedPreferences(this);
-                if(!pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
-                    new Handler().postDelayed(() -> {
-                        if(helper.isInFreeformWorkspace()) {
-                            Intent intent = null;
+        helper.setFreeformHackActive(true);
 
-                            switch(pref.getString("theme", "light")) {
-                                case "light":
-                                    intent = new Intent(this, InvisibleActivityAlt.class);
-                                    break;
-                                case "dark":
-                                    intent = new Intent(this, InvisibleActivityAltDark.class);
-                                    break;
-                            }
+        // Show power button warning on CyanogenMod / LineageOS devices
+        if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(!pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
+                new Handler().postDelayed(() -> {
+                    if(helper.isInFreeformWorkspace()) {
+                        Intent intent = null;
 
-                            if(intent != null) {
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra("power_button_warning", true);
-                            }
-
-                            U.startActivityMaximized(getApplicationContext(), intent);
+                        switch(pref.getString("theme", "light")) {
+                            case "light":
+                                intent = new Intent(this, InvisibleActivityAlt.class);
+                                break;
+                            case "dark":
+                                intent = new Intent(this, InvisibleActivityAltDark.class);
+                                break;
                         }
-                    }, 100);
-                }
-            }
 
-            showTaskbar = true;
+                        if(intent != null) {
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("power_button_warning", true);
+                        }
+
+                        U.startActivityMaximized(getApplicationContext(), intent);
+                    }
+                }, 100);
+            }
         }
+
+        showTaskbar = true;
     }
 
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(!proceedWithOnCreate)
+            return;
 
         // Show the taskbar when activity is resumed (no other freeform windows are active)
         if(showTaskbar)
@@ -172,18 +176,22 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if(proceedWithOnCreate) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(appearingReceiver);
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(disappearingReceiver);
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+        if(!proceedWithOnCreate)
+            return;
 
-            cleanup();
-        }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(appearingReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(disappearingReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+
+        cleanup();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        if(!proceedWithOnCreate)
+            return;
 
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
@@ -229,6 +237,9 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onPause() {
         super.onPause();
 
+        if(!proceedWithOnCreate)
+            return;
+
         possiblyHideTaskbar();
     }
 
@@ -236,7 +247,11 @@ public class InvisibleActivityFreeform extends Activity {
     protected void onStop() {
         super.onStop();
 
-        if(!finish) FreeformHackHelper.getInstance().setInFreeformWorkspace(false);
+        if(!proceedWithOnCreate)
+            return;
+
+        if(!finish)
+            FreeformHackHelper.getInstance().setInFreeformWorkspace(false);
 
         possiblyHideTaskbar();
 
