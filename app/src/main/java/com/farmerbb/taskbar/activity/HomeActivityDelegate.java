@@ -200,11 +200,6 @@ public class HomeActivityDelegate extends Activity {
             return false;
         });
 
-        if(U.isChromeOs(this))
-            killHomeActivity();
-        else
-            setContentView(view);
-
         if((this instanceof HomeActivity || U.isLauncherPermanentlyEnabled(this))
                 && !U.isChromeOs(this)) {
             setContentView(view);
