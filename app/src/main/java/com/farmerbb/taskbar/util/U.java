@@ -371,18 +371,20 @@ public class U {
 
         Bundle bundle = getActivityOptionsBundle(context, type, windowSize);
 
-        if(shortcut == null) {
-            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-            if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
-                try {
-                    startActivity(context, intent, bundle);
-                } catch (ActivityNotFoundException e) {
+        prepareToStartActivity(context, () -> {
+            if(shortcut == null) {
+                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+                if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                    try {
+                        context.startActivity(intent, bundle);
+                    } catch (ActivityNotFoundException e) {
+                        launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+                    } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
+                } else
                     launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             } else
-                launchAndroidForWork(context, intent.getComponent(), bundle, userId);
-        } else
-            launchShortcut(context, shortcut, bundle);
+                launchShortcut(context, shortcut, bundle);
+        });
 
         if(shouldCollapse(context, true))
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
@@ -490,24 +492,24 @@ public class U {
         }
     }
 
-    private static void startActivity(Context context, Intent intent, Bundle bundle) {
+    private static void prepareToStartActivity(Context context, Runnable runnable) {
         boolean shouldLaunchTouchAbsorber =
                 !FreeformHackHelper.getInstance().isTouchAbsorberActive()
                         && isOverridingFreeformHack(context)
                         && !isChromeOs(context);
 
         if(!shouldLaunchTouchAbsorber) {
-            context.startActivity(intent, bundle);
+            runnable.run();
             return;
         }
 
         startTouchAbsorberActivity(context);
-        new Handler().postDelayed(() -> context.startActivity(intent, bundle), 100);
+        new Handler().postDelayed(runnable, 100);
     }
 
     public static void startActivityMaximized(Context context, Intent intent) {
         Bundle bundle = launchMode2(context, MAXIMIZED, ApplicationType.CONTEXT_MENU);
-        startActivity(context, intent, bundle);
+        prepareToStartActivity(context, () -> context.startActivity(intent, bundle));
     }
 
     @TargetApi(Build.VERSION_CODES.N)
