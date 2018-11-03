@@ -90,6 +90,8 @@ public class HomeActivityDelegate extends Activity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
+        SharedPreferences pref = U.getSharedPreferences(this);
+
         View view = new View(this) {
             @Override
             protected void onAttachedToWindow() {
@@ -113,16 +115,19 @@ public class HomeActivityDelegate extends Activity {
 
         view.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
 
-        view.setOnLongClickListener(view12 -> {
-            setWallpaper();
+        view.setOnLongClickListener(view2 -> {
+            if(!pref.getBoolean("freeform_hack", false))
+                setWallpaper();
+
             return false;
         });
 
-        view.setOnGenericMotionListener((view13, motionEvent) -> {
+        view.setOnGenericMotionListener((view3, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY
+                    && !pref.getBoolean("freeform_hack", false))
                 setWallpaper();
-            }
+
             return false;
         });
 
@@ -157,7 +162,6 @@ public class HomeActivityDelegate extends Activity {
         detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                final SharedPreferences pref = U.getSharedPreferences(HomeActivityDelegate.this);
                 if(!pref.getBoolean("dont_show_double_tap_dialog", false)) {
                     if(pref.getBoolean("double_tap_to_sleep", false)) {
                         U.lockDevice(HomeActivityDelegate.this);
@@ -196,15 +200,15 @@ public class HomeActivityDelegate extends Activity {
         });
 
         view.setOnTouchListener((v, event) -> {
-            detector.onTouchEvent(event);
+            if(!pref.getBoolean("freeform_hack", false))
+                detector.onTouchEvent(event);
+
             return false;
         });
 
         if((this instanceof HomeActivity || U.isLauncherPermanentlyEnabled(this))
                 && !U.isChromeOs(this)) {
             setContentView(view);
-
-            SharedPreferences pref = U.getSharedPreferences(this);
             pref.edit().putBoolean("launcher", true).apply();
         } else
             killHomeActivity();
