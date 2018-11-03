@@ -55,8 +55,11 @@ public class TouchAbsorberActivity extends Activity {
         LinearLayout layout = U.findViewById(this, R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+
         FreeformHackHelper.getInstance().setTouchAbsorberActive(true);
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED"));
 
         lastStartTime = System.currentTimeMillis();
     }
@@ -69,8 +72,11 @@ public class TouchAbsorberActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.unregisterReceiver(finishReceiver);
+
         FreeformHackHelper.getInstance().setTouchAbsorberActive(false);
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED"));
 
         super.onDestroy();
     }
