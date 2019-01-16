@@ -89,8 +89,8 @@ dependencies {
     implementation "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    implementation 'com.mikepenz:iconics-core:3.0.4@aar'
-    implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
+    implementation 'com.mikepenz:iconics-core:3.2.0-rc1'
+    implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.5'
     implementation 'moe.banana:toast-compat:1.0.5'
     implementation group:'com.twofortyfouram', name:'android-plugin-api-for-locale', version:'[1.0.2,2.0['
 }
