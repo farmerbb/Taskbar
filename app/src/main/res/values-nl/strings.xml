@@ -78,8 +78,8 @@
     <string name="pref_description_freeform_hack">Staat Taakbalk toe om op te starten in vrije venstermodus. Dit zorgt voor een bureaubladachtige gebruikservaring.\n\nDeze functie is experimenteel en kan problemen veroorzaken met de standaard split-screen multitasking.</string>
 
     <string name="pref_header_about">Over Taakbalk</string>
-    <string name="pref_about_description">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2018 Braden Farmer\nApp-logo door Mark Morilla\n\nDruk hier om te controleren op updates of laat een beoordeling achter! %1$s</string>
-    <string name="pref_about_description_alt">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2018 Braden Farmer\nApp-logo door Mark Morilla</string>
+    <string name="pref_about_description">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2019 Braden Farmer\nApp-logo door Mark Morilla\n\nDruk hier om te controleren op updates of laat een beoordeling achter! %1$s</string>
+    <string name="pref_about_description_alt">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2019 Braden Farmer\nApp-logo door Mark Morilla</string>
 
     <string name="pref_title_hide_taskbar">Taakbalk inklappen na drukken op item</string>
 
