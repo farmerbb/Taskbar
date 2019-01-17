@@ -126,9 +126,8 @@ public class DummyActivity extends Activity {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 if(U.hasFreeformSupport(this)
                         && pref.getBoolean("freeform_hack", false)
-                        && isInMultiWindowMode()
                         && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                    U.startFreeformHack(this);
+                    U.startFreeformHack(this, true);
                 }
 
                 finish();

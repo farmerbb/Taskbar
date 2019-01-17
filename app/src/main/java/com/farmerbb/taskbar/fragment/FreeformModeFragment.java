@@ -180,9 +180,8 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                     }
 
                     if(pref.getBoolean("taskbar_active", false)
-                            && getActivity().isInMultiWindowMode()
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
-                        U.startFreeformHack(getActivity());
+                        U.startFreeformHack(getActivity(), true);
                     }
                 } else {
                     U.stopFreeformHack(getActivity());
