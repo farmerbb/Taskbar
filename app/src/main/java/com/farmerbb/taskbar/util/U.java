@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.util;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -55,7 +54,6 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -1320,16 +1318,6 @@ public class U {
         return pref.getBoolean("freeform_hack", false)
                 && ((isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true))
                 || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends View> T findViewById(Activity target, int id) {
-        return (T) target.findViewById(id);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends View> T findViewById(View target, int id) {
-        return (T) target.findViewById(id);
     }
 
     public static boolean isPlayStoreInstalled(Context context) {

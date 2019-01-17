@@ -132,7 +132,7 @@ public class DashboardActivity extends Activity {
 
         setContentView(R.layout.incognito);
 
-        LinearLayout layout = U.findViewById(this, R.id.incognitoLayout);
+        LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
         LocalBroadcastManager.getInstance(this).registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED"));

@@ -44,7 +44,7 @@ public class InvisibleActivityAlt extends InvisibleActivity {
 
         setContentView(R.layout.incognito);
 
-        LinearLayout layout = U.findViewById(this, R.id.incognitoLayout);
+        LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
         if(!MenuHelper.getInstance().isStartMenuOpen() && !powerButtonWarning) finish();

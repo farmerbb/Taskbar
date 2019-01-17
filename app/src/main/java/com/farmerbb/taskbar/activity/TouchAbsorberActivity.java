@@ -52,7 +52,7 @@ public class TouchAbsorberActivity extends Activity {
         setContentView(R.layout.incognito);
 
         DisplayInfo display = U.getDisplayInfo(this);
-        LinearLayout layout = U.findViewById(this, R.id.incognitoLayout);
+        LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);

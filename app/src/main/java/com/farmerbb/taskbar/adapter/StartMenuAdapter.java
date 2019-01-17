@@ -90,7 +90,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
         final SharedPreferences pref = U.getSharedPreferences(getContext());
 
-        TextView textView = U.findViewById(convertView, R.id.name);
+        TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
         textView.setTypeface(null, isTopApp(entry) ? Typeface.BOLD : Typeface.NORMAL);
 
@@ -103,10 +103,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
                 break;
         }
 
-        ImageView imageView = U.findViewById(convertView, R.id.icon);
+        ImageView imageView = convertView.findViewById(R.id.icon);
         imageView.setImageDrawable(entry.getIcon(getContext()));
 
-        LinearLayout layout = U.findViewById(convertView, R.id.entry);
+        LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
             U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), entry.getUserId(getContext()), null, false, false);

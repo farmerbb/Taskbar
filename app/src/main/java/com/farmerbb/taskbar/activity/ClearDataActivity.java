@@ -54,22 +54,22 @@ public class ClearDataActivity extends AppCompatActivity {
         setContentView(R.layout.clear_data);
         setTitle(R.string.clear_pinned_apps);
 
-        pba = U.findViewById(this, R.id.clear_pba);
+        pba = findViewById(R.id.clear_pba);
         pba.setOnCheckedChangeListener(listener);
         
-        hiddenApps = U.findViewById(this, R.id.clear_hidden_apps);
+        hiddenApps = findViewById(R.id.clear_hidden_apps);
         hiddenApps.setOnCheckedChangeListener(listener);
         
-        topApps = U.findViewById(this, R.id.clear_top_apps);
+        topApps = findViewById(R.id.clear_top_apps);
         topApps.setOnCheckedChangeListener(listener);
         
-        savedWindowSizes = U.findViewById(this, R.id.clear_window_sizes);
+        savedWindowSizes = findViewById(R.id.clear_window_sizes);
         if(U.canEnableFreeform())
             savedWindowSizes.setOnCheckedChangeListener(listener);
         else
             savedWindowSizes.setVisibility(View.GONE);
         
-        button = U.findViewById(this, R.id.button);
+        button = findViewById(R.id.button);
         button.setText(getResources().getString(R.string.action_close).toUpperCase());
         button.setOnClickListener(view -> {
             if(pba.isChecked())
