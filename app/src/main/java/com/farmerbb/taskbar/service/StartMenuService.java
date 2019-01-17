@@ -94,6 +94,7 @@ public class StartMenuService extends Service {
 
     private boolean shouldShowSearchBox = false;
     private boolean hasSubmittedQuery = false;
+    private boolean hasHardwareKeyboard = false;
 
     private int layoutId = R.layout.start_menu_left;
 
@@ -175,6 +176,8 @@ public class StartMenuService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
+
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
             if(U.canDrawOverlays(this))
@@ -192,8 +195,6 @@ public class StartMenuService extends Service {
         IconCache.getInstance(this).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(this);
-        final boolean hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
-
         switch(pref.getString("show_search_bar", "keyboard")) {
             case "always":
                 shouldShowSearchBox = true;
@@ -357,26 +358,6 @@ public class StartMenuService extends Service {
                     }
 
                     return true;
-                }
-            });
-
-            searchView.setOnQueryTextFocusChangeListener((view, b) -> {
-                if(!hasHardwareKeyboard) {
-                    ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
-                    params1.height = getResources().getDimensionPixelSize(
-                            b && !isSecondScreenDisablingKeyboard()
-                                    ? R.dimen.start_menu_height_half
-                                    : R.dimen.start_menu_height);
-                    startMenu.setLayoutParams(params1);
-                }
-
-                if(!b) {
-                    if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                    else {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
                 }
             });
 
@@ -634,13 +615,50 @@ public class StartMenuService extends Service {
                     startActivity(intent);
             }
 
-            if(searchView.getVisibility() == View.VISIBLE) searchView.requestFocus();
+            EditText editText = searchView.findViewById(R.id.search_src_text);
+            if(searchView.getVisibility() == View.VISIBLE) {
+                if(hasHardwareKeyboard && U.isChromeOs(this)) {
+                    searchView.setIconifiedByDefault(true);
+
+                    if(editText != null)
+                        editText.setShowSoftInputOnFocus(false);
+                } else
+                    searchView.requestFocus();
+            }
 
             refreshApps(false);
 
             new Handler().postDelayed(() -> {
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
                     layout.setAlpha(1);
+
+                if(hasHardwareKeyboard && U.isChromeOs(this)) {
+                    searchView.setIconifiedByDefault(false);
+                    if(editText != null)
+                        editText.setShowSoftInputOnFocus(true);
+
+                    searchView.requestFocus();
+                }
+
+                searchView.setOnQueryTextFocusChangeListener((view, b) -> {
+                    if(!hasHardwareKeyboard) {
+                        ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
+                        params1.height = getResources().getDimensionPixelSize(
+                                b && !isSecondScreenDisablingKeyboard()
+                                        ? R.dimen.start_menu_height_half
+                                        : R.dimen.start_menu_height);
+                        startMenu.setLayoutParams(params1);
+                    }
+
+                    if(!b) {
+                        if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                        else {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
+                    }
+                });
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(layout.getWindowToken(), 0);
@@ -661,6 +679,7 @@ public class StartMenuService extends Service {
                 layout.setVisibility(View.GONE);
                 searchView.setQuery(null, false);
                 searchView.setIconified(true);
+                searchView.setOnQueryTextFocusChangeListener(null);
                 hasSubmittedQuery = false;
 
                 if(shouldReset) {
