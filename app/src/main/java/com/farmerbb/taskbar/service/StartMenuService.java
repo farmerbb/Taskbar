@@ -256,6 +256,8 @@ public class StartMenuService extends Service {
 
         // Initialize views
         layout = (StartMenuLayout) LayoutInflater.from(U.wrapContext(this)).inflate(layoutId, null);
+        layout.setAlpha(0);
+
         startMenu = layout.findViewById(R.id.start_menu);
 
         if((shouldShowSearchBox && !hasHardwareKeyboard) || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -587,7 +589,9 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
-            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
+            boolean applySoftKeyboardFix = hasHardwareKeyboard && U.isChromeOs(this);
+
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && !applySoftKeyboardFix)
                 layout.setAlpha(1);
 
             MenuHelper.getInstance().setStartMenuOpen(true);
@@ -617,7 +621,7 @@ public class StartMenuService extends Service {
 
             EditText editText = searchView.findViewById(R.id.search_src_text);
             if(searchView.getVisibility() == View.VISIBLE) {
-                if(hasHardwareKeyboard && U.isChromeOs(this)) {
+                if(applySoftKeyboardFix) {
                     searchView.setIconifiedByDefault(true);
 
                     if(editText != null)
@@ -629,10 +633,10 @@ public class StartMenuService extends Service {
             refreshApps(false);
 
             new Handler().postDelayed(() -> {
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 || applySoftKeyboardFix)
                     layout.setAlpha(1);
 
-                if(hasHardwareKeyboard && U.isChromeOs(this)) {
+                if(applySoftKeyboardFix) {
                     searchView.setIconifiedByDefault(false);
                     if(editText != null)
                         editText.setShowSoftInputOnFocus(true);
