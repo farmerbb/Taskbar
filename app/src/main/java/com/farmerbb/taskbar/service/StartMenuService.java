@@ -95,6 +95,7 @@ public class StartMenuService extends Service {
     private boolean shouldShowSearchBox = false;
     private boolean hasSubmittedQuery = false;
     private boolean hasHardwareKeyboard = false;
+    private boolean applySoftKeyboardFix = false;
 
     private int layoutId = R.layout.start_menu_left;
 
@@ -177,6 +178,7 @@ public class StartMenuService extends Service {
         super.onCreate();
 
         hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
+        applySoftKeyboardFix = hasHardwareKeyboard && U.isChromeOs(this);
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
@@ -589,8 +591,6 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
-            boolean applySoftKeyboardFix = hasHardwareKeyboard && U.isChromeOs(this);
-
             if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && !applySoftKeyboardFix)
                 layout.setAlpha(1);
 
@@ -681,7 +681,10 @@ public class StartMenuService extends Service {
 
             layout.postDelayed(() -> {
                 layout.setVisibility(View.GONE);
-                searchView.setQuery(null, false);
+
+                if(!applySoftKeyboardFix)
+                    searchView.setQuery(null, false);
+
                 searchView.setIconified(true);
                 searchView.setOnQueryTextFocusChangeListener(null);
                 hasSubmittedQuery = false;
