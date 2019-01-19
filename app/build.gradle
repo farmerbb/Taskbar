@@ -20,8 +20,8 @@ android {
         targetSdkVersion SDK_VERSION
 
         // TODO keep versionName and versionCode in sync with Android-x86 manifest
-        versionCode 192
-        versionName "4.0.1"
+        versionCode 193
+        versionName "4.0.2"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN", "tr", "nl"
 
