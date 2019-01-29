@@ -881,6 +881,10 @@ public class U {
         return Build.MANUFACTURER.equalsIgnoreCase("Samsung");
     }
 
+    public static boolean isNvidiaDevice() {
+        return Build.MANUFACTURER.equalsIgnoreCase("NVIDIA");
+    }
+
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
         return isServiceRunning(context, cls.getName());
     }
@@ -1339,7 +1343,8 @@ public class U {
     public static boolean hasBrokenSetLaunchBoundsApi() {
         return getCurrentApiVersion() >= 26.0f
                 && getCurrentApiVersion() < 28.0f
-                && !isSamsungDevice();
+                && !isSamsungDevice()
+                && !isNvidiaDevice();
     }
 
     public static String getSecondScreenPackageName(Context context) {
