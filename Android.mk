@@ -2,8 +2,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 appcompat_dir := ../../../frameworks/support/v7/appcompat
-design_dir := ../../../frameworks/support/design
-res_dir := app/src/main/res $(appcompat_dir)/res $(design_dir)/res
+res_dir := app/src/main/res $(appcompat_dir)/res
 
 LOCAL_MODULE_TAGS := optional
 
