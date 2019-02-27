@@ -1,12 +1,12 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-appcompat_dir := ../../../frameworks/support/v7/appcompat
-res_dir := app/src/main/res $(appcompat_dir)/res
+appcompat_dir := frameworks/support/v7/appcompat
+res_dir := app/src/main/res
 
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dir))
+LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/$(res_dir) $(appcompat_dir)/res
 
 LOCAL_SRC_FILES := \
         $(call all-java-files-under, app/src/main/java) \
