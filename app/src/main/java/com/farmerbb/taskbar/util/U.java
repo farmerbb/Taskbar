@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.util;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
@@ -181,14 +182,52 @@ public class U {
     }
 
     public static void sendAccessibilityAction(Context context, int action) {
+        sendAccessibilityAction(context, action, null);
+    }
+
+    public static void sendAccessibilityAction(Context context, int action, Runnable onComplete) {
         ComponentName component = new ComponentName(context, PowerMenuService.class);
         context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
-        if(isAccessibilityServiceEnabled(context)) {
+        boolean isAccessibilityServiceEnabled = isAccessibilityServiceEnabled(context);
+
+        if(!isAccessibilityServiceEnabled
+                && hasWriteSecureSettingsPermission(context)) {
+            String notificationServices = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+
+            String powerMenuService = new ComponentName(context, PowerMenuService.class).flattenToString();
+
+            if(!notificationServices.contains(powerMenuService)) {
+                try {
+                    Settings.Secure.putString(context.getContentResolver(),
+                            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
+                            notificationServices.isEmpty()
+                                    ? powerMenuService
+                                    : notificationServices + ":" + powerMenuService);
+                } catch (Exception e) { /* Gracefully fail */ }
+            }
+
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent("com.farmerbb.taskbar.ACCESSIBILITY_ACTION");
+                intent.putExtra("action", action);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+                try {
+                    Settings.Secure.putString(context.getContentResolver(),
+                            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
+                            notificationServices);
+                } catch (Exception e) { /* Gracefully fail */ }
+
+                if(onComplete != null) onComplete.run();
+            }, 100);
+        } else if(isAccessibilityServiceEnabled) {
             Intent intent = new Intent("com.farmerbb.taskbar.ACCESSIBILITY_ACTION");
             intent.putExtra("action", action);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+            if(onComplete != null) onComplete.run();
         } else {
             launchApp(context, () -> {
                 Intent intent = new Intent(context, DummyActivity.class);
@@ -209,6 +248,11 @@ public class U {
         return accessibilityServices != null
                 && (accessibilityServices.contains(component.flattenToString())
                 || accessibilityServices.contains(component.flattenToShortString()));
+    }
+
+    public static boolean hasWriteSecureSettingsPermission(Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && context.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void showToast(Context context, int message) {
@@ -1209,13 +1253,6 @@ public class U {
             editor.putBoolean("button_recents", true);
             editor.putBoolean("auto_hide_navbar", true);
             editor.putBoolean("bliss_os_prefs", true);
-
-            try {
-                Settings.Secure.putString(context.getContentResolver(),
-                        Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
-                        new ComponentName(context, PowerMenuService.class).flattenToString());
-            } catch (Exception e) { /* Gracefully fail */ }
-
             editor.apply();
         }
 

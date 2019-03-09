@@ -83,15 +83,15 @@ public class TouchAbsorberActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if(!U.isAccessibilityServiceEnabled(this) || lastStartTime > System.currentTimeMillis() - 250)
+        if((!U.isAccessibilityServiceEnabled(this) && !U.hasWriteSecureSettingsPermission(this))
+                || lastStartTime > System.currentTimeMillis() - 250)
             return;
 
         super.onBackPressed();
 
-        new Handler().postDelayed(() -> {
-            U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK);
-
-            new Handler().postDelayed(() -> U.startTouchAbsorberActivity(this), 100);
-        }, 100);
+        new Handler().postDelayed(() ->
+                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK, () ->
+                        new Handler().postDelayed(() -> U.startTouchAbsorberActivity(this), 100)
+                ), 100);
     }
 }
