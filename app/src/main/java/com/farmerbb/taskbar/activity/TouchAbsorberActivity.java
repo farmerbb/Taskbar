@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -36,6 +37,7 @@ import com.farmerbb.taskbar.util.U;
 public class TouchAbsorberActivity extends Activity {
 
     private static long lastStartTime = 0;
+    private static String transitionAnimScale = "";
 
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
@@ -65,8 +67,33 @@ public class TouchAbsorberActivity extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(U.hasWriteSecureSettingsPermission(this)) {
+            transitionAnimScale = Settings.Global.getString(getContentResolver(),
+                    Settings.Global.TRANSITION_ANIMATION_SCALE);
+
+            try {
+                Settings.Global.putString(getContentResolver(),
+                        Settings.Global.TRANSITION_ANIMATION_SCALE,
+                        "0.0");
+            } catch (Exception e) { /* Gracefully fail */ }
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+
+        if(U.hasWriteSecureSettingsPermission(this)) {
+            try {
+                Settings.Global.putString(getContentResolver(),
+                        Settings.Global.TRANSITION_ANIMATION_SCALE,
+                        transitionAnimScale);
+            } catch (Exception e) { /* Gracefully fail */ }
+        }
+
         finish();
     }
 
