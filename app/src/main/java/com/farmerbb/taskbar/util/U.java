@@ -1245,6 +1245,7 @@ public class U {
             editor.putString("refresh_frequency", "0");
             editor.putString("max_num_of_recents", "2147483647");
             editor.putString("sort_order", "true");
+            editor.putString("window_size", "phone_size");
             editor.putBoolean("full_length", true);
             editor.putBoolean("dashboard", true);
             editor.putBoolean("app_drawer_icon", true);
@@ -1265,6 +1266,7 @@ public class U {
                     .putString("refresh_frequency", "0")
                     .putString("max_num_of_recents", "2147483647")
                     .putString("sort_order", "true")
+                    .putString("window_size", "phone_size")
                     .putBoolean("full_length", true)
                     .putBoolean("dashboard", true)
                     .putBoolean("android_x86_prefs", true)
