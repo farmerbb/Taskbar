@@ -78,13 +78,21 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     List<ShortcutInfo> shortcuts;
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver dashboardOrStartMenuAppearingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             dashboardOrStartMenuAppearing = true;
             finish();
         }
     };
+
+    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
+
 
     @SuppressLint("RtlHardcoded")
     @SuppressWarnings("deprecation")
@@ -222,7 +230,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         intentFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
         intentFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(dashboardOrStartMenuAppearingReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_CONTEXT_MENU"));
     }
 
     @SuppressWarnings("deprecation")
@@ -398,6 +407,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         boolean appIsValid = isStartButton || isOverflowMenu ||
                 !launcherApps.getActivityList(args.getString("package_name"),
                         userManager.getUserForSerialNumber(userId)).isEmpty();
+        secondaryMenu = false;
 
         if(appIsValid) switch(p.getKey()) {
             case "app_info":
@@ -744,6 +754,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     protected void onDestroy() {
         super.onDestroy();
 
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(dashboardOrStartMenuAppearingReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
     }
 }

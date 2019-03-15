@@ -535,6 +535,8 @@ public class U {
     }
 
     private static void prepareToStartActivity(Context context, Runnable runnable) {
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_CONTEXT_MENU"));
+
         boolean shouldLaunchTouchAbsorber =
                 !FreeformHackHelper.getInstance().isTouchAbsorberActive()
                         && isOverridingFreeformHack(context)

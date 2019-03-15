@@ -29,6 +29,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -56,6 +57,7 @@ public class TouchAbsorberActivity extends Activity {
         DisplayInfo display = U.getDisplayInfo(this);
         LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
+        if(BuildConfig.DEBUG) layout.setBackgroundColor(0x800000FF);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
