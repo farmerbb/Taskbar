@@ -194,18 +194,20 @@ public class U {
 
         if(!isAccessibilityServiceEnabled
                 && hasWriteSecureSettingsPermission(context)) {
-            String notificationServices = Settings.Secure.getString(context.getContentResolver(),
+            String services = Settings.Secure.getString(context.getContentResolver(),
                     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+
+            String finalServices = services == null ? "" : services;
 
             String powerMenuService = new ComponentName(context, PowerMenuService.class).flattenToString();
 
-            if(!notificationServices.contains(powerMenuService)) {
+            if(!finalServices.contains(powerMenuService)) {
                 try {
                     Settings.Secure.putString(context.getContentResolver(),
                             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
-                            notificationServices.isEmpty()
+                            finalServices.isEmpty()
                                     ? powerMenuService
-                                    : notificationServices + ":" + powerMenuService);
+                                    : finalServices + ":" + powerMenuService);
                 } catch (Exception e) { /* Gracefully fail */ }
             }
 
@@ -217,7 +219,7 @@ public class U {
                 try {
                     Settings.Secure.putString(context.getContentResolver(),
                             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
-                            notificationServices);
+                            finalServices);
                 } catch (Exception e) { /* Gracefully fail */ }
 
                 if(onComplete != null) onComplete.run();

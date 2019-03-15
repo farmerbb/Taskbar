@@ -178,7 +178,7 @@ public class StartMenuService extends Service {
         super.onCreate();
 
         hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
-        applySoftKeyboardFix = hasHardwareKeyboard && U.isChromeOs(this);
+        applySoftKeyboardFix = hasHardwareKeyboard /* && U.isChromeOs(this) */ ;
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
