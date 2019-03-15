@@ -730,7 +730,7 @@ public class TaskbarService extends Service {
                     Collections.reverse(usageStatsList6);
                 }
 
-                // Generate the AppEntries for TaskbarAdapter
+                // Generate the AppEntries for the recent apps list
                 int number = usageStatsList6.size() == maxNumOfEntries
                         ? usageStatsList6.size() - realNumOfPinnedApps
                         : usageStatsList6.size();
@@ -743,6 +743,7 @@ public class TaskbarService extends Service {
                 for(int i = 0; i < number; i++) {
                     for(UserHandle handle : userHandles) {
                         String packageName = usageStatsList6.get(i).getPackageName();
+                        long lastTimeUsed = usageStatsList6.get(i).getLastTimeUsed();
                         List<LauncherActivityInfo> list = launcherApps.getActivityList(packageName, handle);
                         if(!list.isEmpty()) {
                             // Google App workaround
@@ -769,6 +770,7 @@ public class TaskbarService extends Service {
                             );
 
                             newEntry.setUserId(userManager.getSerialNumberForUser(handle));
+                            newEntry.setLastTimeUsed(lastTimeUsed);
                             entries.add(newEntry);
 
                             break;
@@ -823,6 +825,7 @@ public class TaskbarService extends Service {
                         launcherAppCachePos++;
                         LauncherActivityInfo appInfo = launcherAppCache.get(launcherAppCachePos);
                         String packageName = entries.get(i).getPackageName();
+                        long lastTimeUsed = entries.get(i).getLastTimeUsed();
 
                         entries.remove(i);
 
@@ -834,6 +837,7 @@ public class TaskbarService extends Service {
                                 false);
 
                         newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
+                        newEntry.setLastTimeUsed(lastTimeUsed);
                         entries.add(i, newEntry);
                     }
                 }
@@ -1199,7 +1203,15 @@ public class TaskbarService extends Service {
         }
 
         FrameLayout layout = convertView.findViewById(R.id.entry);
-        layout.setOnClickListener(view -> U.launchApp(this, entry.getPackageName(), entry.getComponentName(), entry.getUserId(this), null, true, false));
+        layout.setOnClickListener(view -> U.launchApp(
+                this,
+                entry.getPackageName(),
+                entry.getComponentName(),
+                entry.getUserId(this),
+                null,
+                true,
+                false
+        ));
 
         layout.setOnLongClickListener(view -> {
             int[] location = new int[2];
@@ -1245,6 +1257,15 @@ public class TaskbarService extends Service {
                 v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
                 return false;
             });
+        }
+
+        if(runningAppsOnly) {
+            ImageView runningAppIndicator = convertView.findViewById(R.id.running_app_indicator);
+            if(entry.getLastTimeUsed() > 0) {
+                runningAppIndicator.setVisibility(View.VISIBLE);
+                runningAppIndicator.setColorFilter(U.getAccentColor(this));
+            } else
+                runningAppIndicator.setVisibility(View.GONE);
         }
 
         return convertView;

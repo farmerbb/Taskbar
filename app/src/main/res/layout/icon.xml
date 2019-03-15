@@ -40,5 +40,15 @@
         android:scaleX="-1"
         android:visibility="gone"
         tools:visibility="visible" />
+    
+    <ImageView
+        android:id="@+id/running_app_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="2dp"
+        android:src="@drawable/running_app_indicator"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </FrameLayout>

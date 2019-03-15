@@ -1253,6 +1253,7 @@ public class U {
             editor.putBoolean("button_home", true);
             editor.putBoolean("button_recents", true);
             editor.putBoolean("auto_hide_navbar", true);
+            editor.putBoolean("shortcut_icon", false);
             editor.putBoolean("bliss_os_prefs", true);
             editor.apply();
         }
@@ -1269,6 +1270,7 @@ public class U {
                     .putString("window_size", "phone_size")
                     .putBoolean("full_length", true)
                     .putBoolean("dashboard", true)
+                    .putBoolean("shortcut_icon", false)
                     .putBoolean("android_x86_prefs", true)
                     .apply();
         }
