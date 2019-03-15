@@ -1203,7 +1203,7 @@ public class U {
             } catch (Exception e) { /* Gracefully fail */ }
         };
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        if(getCurrentApiVersion() >= 28.0f)
             new Handler().postDelayed(runnable, 500);
         else
             runnable.run();

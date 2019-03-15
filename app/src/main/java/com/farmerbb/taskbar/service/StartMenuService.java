@@ -95,7 +95,6 @@ public class StartMenuService extends Service {
     private boolean shouldShowSearchBox = false;
     private boolean hasSubmittedQuery = false;
     private boolean hasHardwareKeyboard = false;
-    private boolean applySoftKeyboardFix = false;
 
     private int layoutId = R.layout.start_menu_left;
 
@@ -178,7 +177,6 @@ public class StartMenuService extends Service {
         super.onCreate();
 
         hasHardwareKeyboard = getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
-        applySoftKeyboardFix = hasHardwareKeyboard /* && U.isChromeOs(this) */ ;
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
@@ -591,7 +589,7 @@ public class StartMenuService extends Service {
             layout.setOnClickListener(ocl);
             layout.setVisibility(View.VISIBLE);
 
-            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && !applySoftKeyboardFix)
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1 && !hasHardwareKeyboard)
                 layout.setAlpha(1);
 
             MenuHelper.getInstance().setStartMenuOpen(true);
@@ -621,7 +619,7 @@ public class StartMenuService extends Service {
 
             EditText editText = searchView.findViewById(R.id.search_src_text);
             if(searchView.getVisibility() == View.VISIBLE) {
-                if(applySoftKeyboardFix) {
+                if(hasHardwareKeyboard) {
                     searchView.setIconifiedByDefault(true);
 
                     if(editText != null)
@@ -633,10 +631,10 @@ public class StartMenuService extends Service {
             refreshApps(false);
 
             new Handler().postDelayed(() -> {
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 || applySoftKeyboardFix)
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 || hasHardwareKeyboard)
                     layout.setAlpha(1);
 
-                if(applySoftKeyboardFix) {
+                if(hasHardwareKeyboard) {
                     searchView.setIconifiedByDefault(false);
                     if(editText != null)
                         editText.setShowSoftInputOnFocus(true);
@@ -682,7 +680,7 @@ public class StartMenuService extends Service {
             layout.postDelayed(() -> {
                 layout.setVisibility(View.GONE);
 
-                if(!applySoftKeyboardFix)
+                if(!hasHardwareKeyboard)
                     searchView.setQuery(null, false);
 
                 searchView.setIconified(true);
