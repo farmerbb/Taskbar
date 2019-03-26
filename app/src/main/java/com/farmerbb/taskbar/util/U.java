@@ -1196,17 +1196,10 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, boolean show) {
-        Runnable runnable = () -> {
-            // Show or hide the system navigation bar on Bliss-x86
-            try {
-                Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", show ? 1 : 0);
-            } catch (Exception e) { /* Gracefully fail */ }
-        };
-
-        if(getCurrentApiVersion() >= 28.0f)
-            new Handler().postDelayed(runnable, 500);
-        else
-            runnable.run();
+        // Show or hide the system navigation bar on Bliss-x86
+        try {
+            Settings.Secure.putInt(context.getContentResolver(), "navigation_bar_visible", show ? 1 : 0);
+        } catch (Exception e) { /* Gracefully fail */ }
     }
 
     public static void initPrefs(Context context) {
