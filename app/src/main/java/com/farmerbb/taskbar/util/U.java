@@ -1198,7 +1198,11 @@ public class U {
     public static void showHideNavigationBar(Context context, boolean show) {
         // Show or hide the system navigation bar on Bliss-x86
         try {
-            Settings.Secure.putInt(context.getContentResolver(), "navigation_bar_visible", show ? 1 : 0);
+            if(getCurrentApiVersion() >= 28.0f) {
+                Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", 1);
+                Settings.Secure.putInt(context.getContentResolver(), "navigation_bar_visible", show ? 1 : 0);
+            } else
+                Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", show ? 1 : 0);
         } catch (Exception e) { /* Gracefully fail */ }
     }
 
