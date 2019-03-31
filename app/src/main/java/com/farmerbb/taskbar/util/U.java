@@ -1198,10 +1198,9 @@ public class U {
     public static void showHideNavigationBar(Context context, boolean show) {
         // Show or hide the system navigation bar on Bliss-x86
         try {
-            if(getCurrentApiVersion() >= 28.0f) {
-                Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", 1);
+            if(getCurrentApiVersion() >= 28.0f)
                 Settings.Secure.putInt(context.getContentResolver(), "navigation_bar_visible", show ? 1 : 0);
-            } else
+            else
                 Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", show ? 1 : 0);
         } catch (Exception e) { /* Gracefully fail */ }
     }
@@ -1241,29 +1240,36 @@ public class U {
         }
 
         // Customizations for BlissOS
-        if(isBlissOs(context) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !pref.getBoolean("bliss_os_prefs", false)) {
-            SharedPreferences.Editor editor = pref.edit();
-
-            if(hasFreeformSupport(context)) {
-                editor.putBoolean("freeform_hack", true);
+        if(isBlissOs(context)) {
+            if(getCurrentApiVersion() >= 28.0f) {
+                try {
+                    Settings.System.putString(context.getContentResolver(), "navigation_bar_show", "null");
+                } catch (Exception e) { /* Gracefully fail */ }
             }
 
-            editor.putString("recents_amount", "running_apps_only");
-            editor.putString("refresh_frequency", "0");
-            editor.putString("max_num_of_recents", "2147483647");
-            editor.putString("sort_order", "true");
-            editor.putString("window_size", "phone_size");
-            editor.putBoolean("full_length", true);
-            editor.putBoolean("dashboard", true);
-            editor.putBoolean("app_drawer_icon", true);
-            editor.putBoolean("button_back", true);
-            editor.putBoolean("button_home", true);
-            editor.putBoolean("button_recents", true);
-            editor.putBoolean("auto_hide_navbar", true);
-         // editor.putBoolean("shortcut_icon", false);
-            editor.putBoolean("bliss_os_prefs", true);
-            editor.apply();
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                    && !pref.getBoolean("bliss_os_prefs", false)) {
+                SharedPreferences.Editor editor = pref.edit();
+
+                if(hasFreeformSupport(context))
+                    editor.putBoolean("freeform_hack", true);
+
+                editor.putString("recents_amount", "running_apps_only");
+                editor.putString("refresh_frequency", "0");
+                editor.putString("max_num_of_recents", "2147483647");
+                editor.putString("sort_order", "true");
+                editor.putString("window_size", "phone_size");
+                editor.putBoolean("full_length", true);
+                editor.putBoolean("dashboard", true);
+                editor.putBoolean("app_drawer_icon", true);
+                editor.putBoolean("button_back", true);
+                editor.putBoolean("button_home", true);
+                editor.putBoolean("button_recents", true);
+                editor.putBoolean("auto_hide_navbar", true);
+                // editor.putBoolean("shortcut_icon", false);
+                editor.putBoolean("bliss_os_prefs", true);
+                editor.apply();
+            }
         }
 
         // Customizations for Android-x86 devices (non-Bliss)
