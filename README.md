@@ -35,7 +35,7 @@ Taskbar can be downloaded as a standalone Android app from:
       alt="Google Play"
       height="80"
       align="middle">](https://play.google.com/store/apps/details?id=com.farmerbb.taskbar)
-[<img src="https://f-droid.org/badge/get-it-on.png"
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
       alt="F-Droid"
       height="80"
       align="middle">](https://f-droid.org/packages/com.farmerbb.taskbar/)
@@ -47,12 +47,12 @@ Taskbar is also included as part of the following Android distributions for PCs:
 
 ## How to Build
 Prerequisites:
-* Windows/MacOS/Linux
+* Windows / MacOS / Linux
 * JDK 8
 * Android SDK
 * Internet connection (to download dependencies)
 
-Once all the prerequisites are met, simply cd to the base directory of the project and run "./gradlew assembleFreeDebug" to start the build.  Dependencies will download and the build will run.  After the build completes, cd to "app/build/outputs/apk" where you will end up with the APK file "app-free-debug.apk", ready to install on your Android device.
+Once all the prerequisites are met, make sure that the `ANDROID_HOME` environment variable is set to your Android SDK directory, then run `./gradlew assembleFreeDebug` at the base directory of the project to start the build. After the build completes, navigate to `app/build/outputs/apk/free/debug` where you will end up with an APK file ready to install on your Android device.
 
 ## Icon Pack Support
 Taskbar includes support for ADW-style icon packs.  If you are an icon pack developer and would like to include support for applying the icon pack from within your app, simply use the following code:
@@ -62,7 +62,7 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
     startActivity(intent);
 
 ## Contributors
-* Mark Morilla (app logo) (https://plus.google.com/106169552593075739372)
+* Mark Morilla (app logo)
 * naofum (Japanese translation)
 * HardSer (Russian translation)
 * OfficialMITX (German translation)
