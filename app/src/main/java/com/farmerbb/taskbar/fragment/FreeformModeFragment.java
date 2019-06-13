@@ -32,6 +32,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -149,20 +150,25 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                             ((CheckBoxPreference) p).setChecked(false);
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+                            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
+                                    && Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
                                 builder.setTitle(R.string.freeform_dialog_title)
                                         .setMessage(R.string.freeform_dialog_message_alt)
                                         .setPositiveButton(R.string.action_continue, (dialogInterface, i) -> freeformSetupComplete());
                             } else {
+                                String settingName = Build.VERSION.SDK_INT > Build.VERSION_CODES.P
+                                        ? getString(R.string.enable_freeform_windows)
+                                        : getString(R.string.force_activities_resizable);
+
                                 builder.setTitle(R.string.freeform_dialog_title)
-                                        .setMessage(R.string.freeform_dialog_message)
+                                        .setMessage(getString(R.string.freeform_dialog_message, settingName))
                                         .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
                                             showReminderToast = true;
 
                                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
                                             try {
                                                 startActivity(intent);
-                                                U.showToastLong(getActivity(), R.string.enable_force_activities_resizable);
+                                                U.showToast(getActivity(), getString(R.string.enable_force_activities_resizable, settingName), Toast.LENGTH_LONG);
                                             } catch (ActivityNotFoundException e1) {
                                                 intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
                                                 try {

@@ -80,7 +80,7 @@ Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak
 <string name="disable_scrolling_list">Listeyi kaydırmayı devredışı bırak</string>
 <string name="enable_accessibility">@string/accessibility_service_description</string>
 <string name="enable_developer_options">Derleme numarasına 7 kez dokunarak Geliştirici seçeneklerini etkinleştirin</string>
-<string name="enable_force_activities_resizable">Aşağı kaydırın ve \"Yeniden boyutlandırılacak etkinlikleri zorla\" yı açın.</string>
+<string name="enable_force_activities_resizable">Aşağı kaydırın ve \"%s\" yı açın.</string>
 <string name="enable_recent_apps">"Taskbar, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için Taskbar, kullanım erişim izinleri gerektirir.
 
 Son kullanılan uygulamalar için desteği etkinleştirilsin mi?"</string>
@@ -95,7 +95,7 @@ appops set %1$s %2$s allow"</string>
 
 • Geliştirici seçeneklerine gidin
 
-• Aşağı kaydırın ve \"Yeniden boyutlandırılacak etkinlikleri zorla\" yı açın.
+• Aşağı kaydırın ve \"%s\" yı açın.
 
 • Cihazı kapatıp açın"</string>
 <string name="freeform_dialog_message_alt">"Taskbar serbest biçimli pencere modunda uygulama başlatması için lütfen şu adımları izleyin:
@@ -353,5 +353,8 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 
     <string name="toggle_start_menu">Toggle Start Menu</string>
     <string name="toggle_dashboard">Toggle Dashboard</string>
+
+    <string name="force_activities_resizable">Yeniden boyutlandırılacak etkinlikleri zorla</string>
+    <string name="enable_freeform_windows">Enable freeform windows</string>
 
 </resources>

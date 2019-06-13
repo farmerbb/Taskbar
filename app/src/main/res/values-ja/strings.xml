@@ -138,7 +138,7 @@
     <string name="pref_title_shortcut_icon">ピン止めしたアプリのショートカットアイコンを表示</string>
 
     <string name="freeform_dialog_title">フリーフォームサポートを有効にする</string>
-    <string name="freeform_dialog_message">Taskbar がフリーフォーム ウインドウ モードでアプリを起動するために、次の手順に従ってください:\n\n&#8226; 開発者オプションに移動します\n\n&#8226; 最下部にスクロールして \"強制的にアクティビティをリサイズ可能にする\" をオンにします\n\n&#8226; お使いのデバイスを再起動します</string>
+    <string name="freeform_dialog_message">Taskbar がフリーフォーム ウインドウ モードでアプリを起動するために、次の手順に従ってください:\n\n&#8226; 開発者オプションに移動します\n\n&#8226; 最下部にスクロールして \"%s\" をオンにします\n\n&#8226; お使いのデバイスを再起動します</string>
 
     <string name="pref_title_invisible_button">Taskbar を折りたたんでいるときボタンを非表示</string>
     <string name="pref_title_freeform_mode_help">ヘルプ &amp; フリーフォームモードの説明</string>
@@ -170,7 +170,7 @@
     <string name="start_menu_apps">スタートメニューアプリ</string>
 
     <string name="reboot_required">お使いのデバイスを再起動して、フリーフォームモードの設定を完了してください</string>
-    <string name="enable_force_activities_resizable">下部にスクロールして \"強制的にアクティビティをリサイズ可能にする\" をオンにします</string>
+    <string name="enable_force_activities_resizable">下部にスクロールして \"%s\" をオンにします</string>
     <string name="set_as_default_home">\"常に\" を押して、Taskbar をお使いのデフォルトのランチャーとして設定します</string>
     <string name="enable_developer_options">ビルド番号を 7 回タップして、開発者オプションを有効にします</string>
 
@@ -361,5 +361,8 @@
 
     <string name="toggle_start_menu">Toggle Start Menu</string>
     <string name="toggle_dashboard">Toggle Dashboard</string>
+
+    <string name="force_activities_resizable">強制的にアクティビティをリサイズ可能にする</string>
+    <string name="enable_freeform_windows">Enable freeform windows</string>
 
 </resources>

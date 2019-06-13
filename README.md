@@ -17,7 +17,7 @@ Taskbar is also fully supported on Chrome OS - use Taskbar as a secondary Androi
 
 #### Freeform window mode (Android 7.0+)
 
-Taskbar lets you launch apps in freeform floating windows on Android 7.0+ devices.  No root access is required, although Android 8.0+ devices require an adb shell command to be run during initial setup.
+Taskbar lets you launch apps in freeform floating windows on Android 7.0+ devices.  No root access is required, although Android 8.0, 8.1, and 9 devices require an adb shell command to be run during initial setup.
 
 Simply follow these steps to configure your device for launching apps in freeform mode:
 

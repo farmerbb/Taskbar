@@ -138,7 +138,7 @@
     <string name="pref_title_shortcut_icon">Показать значок ярлыка для закрепленных приложений</string>
 
     <string name="freeform_dialog_title">Включить Freeform</string>
-    <string name="freeform_dialog_message">Для запуска приложений в режиме Freeform:\n\n&#8226; Откройте Настройки Разработчика\n\n&#8226; Прокрутите вниз и включите \"Изменение размера в многооконном режиме\"\n\n&#8226; Перезагрузите устройство</string>
+    <string name="freeform_dialog_message">Для запуска приложений в режиме Freeform:\n\n&#8226; Откройте Настройки Разработчика\n\n&#8226; Прокрутите вниз и включите \"%s\"\n\n&#8226; Перезагрузите устройство</string>
 
     <string name="pref_title_invisible_button">Спрятать кнопку Taskbar при скрытии</string>
     <string name="pref_title_freeform_mode_help">Инструкции для режима Freeform</string>
@@ -170,7 +170,7 @@
     <string name="start_menu_apps">Приложения в меню</string>
 
     <string name="reboot_required">Перезагрузите устройство для завершения операции</string>
-    <string name="enable_force_activities_resizable">Прокрутите вниз и включите \"Изменение размера в многооконном режиме\"\n\n</string>
+    <string name="enable_force_activities_resizable">Прокрутите вниз и включите \"%s\"\n\n</string>
     <string name="set_as_default_home">Нажмите \"Всегда\" для применения Taskbar в качестве рабочего стола</string>
     <string name="enable_developer_options">Включите Настройки Разработчика нажиманием на номер сборки 7 раз</string>
 
@@ -361,5 +361,8 @@
 
     <string name="toggle_start_menu">Toggle Start Menu</string>
     <string name="toggle_dashboard">Toggle Dashboard</string>
+
+    <string name="force_activities_resizable">Изменение размера в многооконном режиме</string>
+    <string name="enable_freeform_windows">Enable freeform windows</string>
 
 </resources>

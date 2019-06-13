@@ -138,7 +138,7 @@
     <string name="pref_title_shortcut_icon">Kürzelsymbol für angeheftete Apps anzeigen</string>
 
     <string name="freeform_dialog_title">Freiformunterstützung aktivieren</string>
-    <string name="freeform_dialog_message">Um Taskbar zu erlauben, Apps im Freiform Fenstermodus laufen zu lassen, befolgen Sie die folgenden Schritte:\n\n* Gehen Sie in die Enwickleroptionen\n\n* Scrollen Sie bis ganz nach unten und aktivieren Sie \"Applikatione  Zwingen, skalierbar zu sein\"\n\n* Starten Sie ihr Gerät neu.</string>
+    <string name="freeform_dialog_message">Um Taskbar zu erlauben, Apps im Freiform Fenstermodus laufen zu lassen, befolgen Sie die folgenden Schritte:\n\n* Gehen Sie in die Enwickleroptionen\n\n* Scrollen Sie bis ganz nach unten und aktivieren Sie \"%s\"\n\n* Starten Sie ihr Gerät neu.</string>
 
     <string name="pref_title_invisible_button">Knopf ausblenden, wenn Taskbar versteckt ist</string>
     <string name="pref_title_freeform_mode_help">Hilfe und Anleitung zum Frriform Modus</string>
@@ -170,7 +170,7 @@
     <string name="start_menu_apps">Apps im Startmenü</string>
 
     <string name="reboot_required">Starten Sie Ihr Gerät neu, um den Freiform Modus abzuschließen</string>
-    <string name="enable_force_activities_resizable">Scrollen Sie auf zum Ende und aktivieren Sie \"Apps zwingen, skalierbar zu sein"</string>
+    <string name="enable_force_activities_resizable">Scrollen Sie auf zum Ende und aktivieren Sie \"%s\""</string>
     <string name="set_as_default_home">Drücken Sie \"Immer\", um Taskbar als Ihren Standartlauncher festzulegen</string>
     <string name="enable_developer_options">Aktivieren Sie die Entwickleroptionen, indem Sie sieben mal auf die build Nummer tippen</string>
 
@@ -361,5 +361,8 @@
 
     <string name="toggle_start_menu">Toggle Start Menu</string>
     <string name="toggle_dashboard">Toggle Dashboard</string>
+
+    <string name="force_activities_resizable">Applikatione  Zwingen, skalierbar zu sein</string>
+    <string name="enable_freeform_windows">Enable freeform windows</string>
 
 </resources>
