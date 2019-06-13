@@ -133,8 +133,6 @@
         <item>Dark</item>
     </string-array>
 
-    <string name="device_admin_description_short">Allows Taskbar to turn off the device\'s screen</string>
-    <string name="device_admin_description">Allows Taskbar to turn off the device\'s screen.\n\nThis will require you to deactivate Taskbar as a device administrator prior to uninstalling.</string>
     <string name="lock_device_not_supported">Not supported on this device</string>
 
     <string name="pref_title_shortcut_icon">Show shortcut icon for pinned apps</string>
@@ -225,8 +223,6 @@
 
     <string name="disable_scrolling_list">Disable scrolling list</string>
 
-    <string name="double_tap_to_sleep">Double tap to sleep</string>
-    <string name="enable_double_tap_to_sleep">Enable double tap to sleep?</string>
     <string name="action_dont_show_again">Don\'t show again</string>
 
     <string name="app_shortcuts">More actions&#8230;</string>
@@ -236,7 +232,6 @@
     <string name="volume">Volume control</string>
     <string name="file_manager">File manager</string>
     <string name="system_settings">System settings</string>
-    <string name="lock_device">Lock device</string>
     <string name="power_menu">Power menu</string>
 
     <string name="show_search_bar">Search bar visibility</string>
@@ -338,7 +333,6 @@
 
     <string name="pin_shortcut_not_supported">Your launcher doesn\'t support adding shortcuts from other apps.\n\nPlease manually add the shortcut from your launcher\'s \"Widgets\" menu.</string>
 
-    <string name="device_admin_disclosure">In order to lock your device\'s screen, Taskbar needs to be activated as a device administrator. This permission is used only to lock the screen, and for no other purpose.\n\nIf you choose to activate this, you will need to deactivate Taskbar as a device administrator prior to uninstalling.</string>
     <string name="action_activate">Activate</string>
 
     <string name="pref_secondscreen_title_open">Open SecondScreen</string>

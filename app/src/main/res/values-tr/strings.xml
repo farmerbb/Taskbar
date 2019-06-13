@@ -72,23 +72,14 @@ Bu izin sadece düğme basma eylemlerini gerçekleştirmek için kullanılır ve
 <string name="dashboard_description">Taskbar widget için buton ekle</string>
 <string name="dashboard_grid_size">Widget gösterge tablosu ızgarası boyutu</string>
 <string name="dashboard_tutorial">Gösterge tablosuna bir widget eklemek için ekranda herhangi bir yeri tıkla</string>
-<string name="device_admin_description">"Taskbar cihazın ekranını kapatmasına izin verir.
-
-Taskbar kaldırmadan önce cihaz yöneticisi olarak devre dışı bırakmanızı gerektirir."</string>
-<string name="device_admin_description_short">Taskbar cihazın ekranını kapatmasına izin verir</string>
-<string name="device_admin_disclosure">"Cihazınızın ekranını kilitlemek için, Taskbar cihaz yöneticisi olarak etkinleştirilmesi gerekir. Bu izin yalnızca ekranı kilitlemek için kullanılır ve başka bir amaç için kullanılmaz.
-
-Bunu etkinleştirmeyi seçerseniz, kaldırılmadan önce Taskbar cihaz yöneticisi olarak devre dışı bırakmanız gerekir."</string>
 <string name="dialog_donate_message">"Taskbar gelişimini desteklemek için %1$s!
 
 Bağış sürümü ücretsiz sürümle aynıdır ve tercihleriniz otomatik olarak aktarılacaktır.
 
 Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak desteğiniz büyük beğeni topluyor!"</string>
 <string name="disable_scrolling_list">Listeyi kaydırmayı devredışı bırak</string>
-<string name="double_tap_to_sleep">Çift tıkla uyku</string>
 <string name="enable_accessibility">@string/accessibility_service_description</string>
 <string name="enable_developer_options">Derleme numarasına 7 kez dokunarak Geliştirici seçeneklerini etkinleştirin</string>
-<string name="enable_double_tap_to_sleep">Çift tıkla uykuya geçme aktif edilsin mi?</string>
 <string name="enable_force_activities_resizable">Aşağı kaydırın ve \"Yeniden boyutlandırılacak etkinlikleri zorla\" yı açın.</string>
 <string name="enable_recent_apps">"Taskbar, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için Taskbar, kullanım erişim izinleri gerektirir.
 
@@ -178,7 +169,6 @@ Ayarlarınız başarıyla içe aktarıldı ve şimdi uygulamanın ücretsiz sür
 <string name="launch_games_fullscreen_message">Bir uygulama kendini bir oyun olarak ilan ederse, serbest form modunda başlatılmasına izin vermeyin</string>
 <string name="launch_games_fullscreen_title">Oyunları tam ekran başlat</string>
 <string name="loading_apps">Uygulamalar yükleniyor…</string>
-<string name="lock_device">Cihaz kilitle</string>
 <string name="lock_device_not_supported">Aygıt desteklenmiyor</string>
 <string name="max_num_of_recents">%1$d uygulama</string>
 <string name="max_num_of_recents_singular">1 uygulama</string>

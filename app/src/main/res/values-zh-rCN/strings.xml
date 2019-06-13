@@ -133,8 +133,6 @@
         <item>暗色</item>
     </string-array>
 
-    <string name="device_admin_description_short">允许任务栏关闭设备屏幕</string>
-    <string name="device_admin_description">允许任务栏关闭设备屏幕。\n\n这个需要你在设备管理器中将任务栏取消激活后才能卸载。</string>
     <string name="lock_device_not_supported">不支持这台设备</string>
 
     <string name="pref_title_shortcut_icon">显示置顶应用的快捷方式图标</string>
@@ -225,8 +223,6 @@
 
     <string name="disable_scrolling_list">停用滚动列表</string>
 
-    <string name="double_tap_to_sleep">双击休眠</string>
-    <string name="enable_double_tap_to_sleep">启用双击休眠?</string>
     <string name="action_dont_show_again">不再显示</string>
 
     <string name="app_shortcuts">更多操作&#8230;</string>
@@ -236,7 +232,6 @@
     <string name="volume">音量控制</string>
     <string name="file_manager">文件管理器</string>
     <string name="system_settings">系统设置</string>
-    <string name="lock_device">锁定设备</string>
     <string name="power_menu">电源菜单</string>
 
     <string name="show_search_bar">搜索栏可见性</string>
@@ -338,7 +333,6 @@
 
     <string name="pin_shortcut_not_supported">你的启动器不支持从其他应用中添加快捷方式。\n\n请手动从你的启动器的\"Widgets\" 菜单中添加快捷方式</string>
 
-    <string name="device_admin_disclosure">为了锁定你的设备屏幕，任务栏 需要激活为设备管理器。这个权限仅用于锁定屏幕，不用于其他用途。\n\n如果你选择了激活这个权限，你需要在卸载之前，取消激活 任务栏 的设备管理器。</string>
     <string name="action_activate">激活</string>
 
     <string name="pref_secondscreen_title_open">Open SecondScreen</string>

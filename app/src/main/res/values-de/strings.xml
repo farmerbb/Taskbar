@@ -133,8 +133,6 @@
         <item>Dunkel</item>
     </string-array>
 
-    <string name="device_admin_description_short">Erlaubt Taskbar den Bildschirm zu sperren</string>
-    <string name="device_admin_description">Erlaubt Taskbar den Bildschirm zu sperren.\n\nSie müssen Taskbar die Administratorrechte entziehen, um es deinstallieren zu können.</string>
     <string name="lock_device_not_supported">Nicht auf diesem Gerät unterstützt</string>
 
     <string name="pref_title_shortcut_icon">Kürzelsymbol für angeheftete Apps anzeigen</string>
@@ -225,8 +223,6 @@
 
     <string name="disable_scrolling_list">Listenscrollen deaktivieren</string>
 
-    <string name="double_tap_to_sleep">Doppelklick zum Schlafen</string>
-    <string name="enable_double_tap_to_sleep">Doppelklick zum Schlafen aktivieren?</string>
     <string name="action_dont_show_again">Nicht wieder anzeigen</string>
 
     <string name="app_shortcuts">Mehr Optionen</string>
@@ -236,7 +232,6 @@
     <string name="volume">Lautstärke</string>
     <string name="file_manager">Dateimanager</string>
     <string name="system_settings">Systemeinstellungen</string>
-    <string name="lock_device">Gerät sperren</string>
     <string name="power_menu">Energiemenü</string>
 
     <string name="show_search_bar">Sichtbarkeit der Suchzeile</string>
@@ -338,7 +333,6 @@
 
     <string name="pin_shortcut_not_supported">Your launcher doesn\'t support adding shortcuts from other apps.\n\nPlease manually add the shortcut from your launcher\'s \"Widgets\" menu.</string>
 
-    <string name="device_admin_disclosure">In order to lock your device\'s screen, Taskbar needs to be activated as a device administrator. This permission is used only to lock the screen, and for no other purpose.\n\nIf you choose to activate this, you will need to deactivate Taskbar as a device administrator prior to uninstalling.</string>
     <string name="action_activate">Activate</string>
 
     <string name="pref_secondscreen_title_open">Open SecondScreen</string>

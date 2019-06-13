@@ -133,8 +133,6 @@
         <item>Темная</item>
     </string-array>
 
-    <string name="device_admin_description_short">Разрешить Taskbar выключать экран</string>
-    <string name="device_admin_description">Разрешает Taskbar выключать экран устройства.\n\nЭто потребует выключения этой возможности для удаления Taskbar.</string>
     <string name="lock_device_not_supported">Не поддерживается на этом устройстве</string>
 
     <string name="pref_title_shortcut_icon">Показать значок ярлыка для закрепленных приложений</string>
@@ -225,8 +223,6 @@
 
     <string name="disable_scrolling_list">Отключить список</string>
 
-    <string name="double_tap_to_sleep">Двойной тап для сна</string>
-    <string name="enable_double_tap_to_sleep">Включить DT2S?</string>
     <string name="action_dont_show_again">Не показывать снова</string>
 
     <string name="app_shortcuts">Действия&#8230;</string>
@@ -236,7 +232,6 @@
     <string name="volume">Настройка громкости</string>
     <string name="file_manager">Проводник</string>
     <string name="system_settings">Системные настройки</string>
-    <string name="lock_device">Заблокировать устройство</string>
     <string name="power_menu">Меню питания</string>
 
     <string name="show_search_bar">Панель поиска</string>
@@ -338,7 +333,6 @@
 
     <string name="pin_shortcut_not_supported">Your launcher doesn\'t support adding shortcuts from other apps.\n\nPlease manually add the shortcut from your launcher\'s \"Widgets\" menu.</string>
 
-    <string name="device_admin_disclosure">In order to lock your device\'s screen, Taskbar needs to be activated as a device administrator. This permission is used only to lock the screen, and for no other purpose.\n\nIf you choose to activate this, you will need to deactivate Taskbar as a device administrator prior to uninstalling.</string>
     <string name="action_activate">Activate</string>
 
     <string name="pref_secondscreen_title_open">Open SecondScreen</string>

@@ -133,8 +133,6 @@
         <item>Donker</item>
     </string-array>
 
-    <string name="device_admin_description_short">Staat Taakbalk toe om het scherm uit te schakelen</string>
-    <string name="device_admin_description">Staat Taakbalk toe om het scherm uit te schakelen.\n\nDit vereist dat je Taakbalk deactiveert als apparaatadmin vóórdat je de app verwijdert.</string>
     <string name="lock_device_not_supported">Niet ondersteund op dit apparaat</string>
 
     <string name="pref_title_shortcut_icon">Snelkoppelingspictogram tonen voor vastgemaakte apps</string>
@@ -225,8 +223,6 @@
 
     <string name="disable_scrolling_list">Scrollijst uitschakelen</string>
 
-    <string name="double_tap_to_sleep">Dubbeltik om venster uit te schakelen</string>
-    <string name="enable_double_tap_to_sleep">Dubbeltikken om venster uit te schakelen inschakelen?</string>
     <string name="action_dont_show_again">Niet meer tonen</string>
 
     <string name="app_shortcuts">Meer acties&#8230;</string>
@@ -236,7 +232,6 @@
     <string name="volume">Volumebeheer</string>
     <string name="file_manager">Bestandsbeheer</string>
     <string name="system_settings">Systeeminstellingen</string>
-    <string name="lock_device">Apparaat vergrendelen</string>
     <string name="power_menu">Energiemenu</string>
 
     <string name="show_search_bar">Zichtbaarheid van zoekvak</string>
@@ -338,7 +333,6 @@
 
     <string name="pin_shortcut_not_supported">Je launcher heeft geen ondersteuning voor het toevoegen van snelkoppelingen uit andere apps apps.\n\nVoeg de snelkoppeling handmatig toe via het \"Widgets\"-menu van je launcher.</string>
 
-    <string name="device_admin_disclosure">Om het scherm van je apparaat te vergrendelen, moet Taakbalk worden geactiveerd als apparaatadmin. Deze machtiging wordt alleen gebruikt om het scherm te vergrendelen en nergens anders voor.\n\nAls je dit activeert, dan moet je Taakbalk deactiveren vóórdat je de app verwijdert.</string>
     <string name="action_activate">Activeren</string>
 
     <string name="pref_secondscreen_title_open">SecondScreen openen</string>
