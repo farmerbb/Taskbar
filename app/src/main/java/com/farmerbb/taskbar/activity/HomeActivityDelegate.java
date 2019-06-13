@@ -30,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -127,81 +126,6 @@ public class HomeActivityDelegate extends Activity {
                     && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY
                     && !pref.getBoolean("freeform_hack", false))
                 setWallpaper();
-
-            return false;
-        });
-
-        final GestureDetector detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent e) {}
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {}
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                return false;
-            }
-
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return false;
-            }
-        });
-
-        detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                if(!pref.getBoolean("dont_show_double_tap_dialog", false)) {
-                    if(pref.getBoolean("double_tap_to_sleep", false)) {
-                        U.lockDevice(HomeActivityDelegate.this);
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(HomeActivityDelegate.this));
-                        builder.setTitle(R.string.double_tap_to_sleep)
-                                .setMessage(R.string.enable_double_tap_to_sleep)
-                                .setNegativeButton(pref.getBoolean("double_tap_dialog_shown", false)
-                                        ? R.string.action_dont_show_again
-                                        : R.string.action_cancel, (dialog, which) -> pref.edit().putBoolean(pref.getBoolean("double_tap_dialog_shown", false)
-                                        ? "dont_show_double_tap_dialog"
-                                        : "double_tap_dialog_shown", true).apply())
-                                .setPositiveButton(R.string.action_ok, (dialog, which) -> {
-                                    pref.edit().putBoolean("double_tap_to_sleep", true).apply();
-                                    U.lockDevice(HomeActivityDelegate.this);
-                                });
-
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                }
-
-                return false;
-            }
-
-            @Override
-            public boolean onDoubleTapEvent(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                return false;
-            }
-
-        });
-
-        view.setOnTouchListener((v, event) -> {
-            if(!pref.getBoolean("freeform_hack", false))
-                detector.onTouchEvent(event);
 
             return false;
         });

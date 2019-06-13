@@ -21,10 +21,6 @@
         android:title="@string/volume" />
 
     <Preference
-        android:key="lock_device"
-        android:title="@string/lock_device" />
-
-    <Preference
         android:key="file_manager"
         android:title="@string/file_manager" />
 

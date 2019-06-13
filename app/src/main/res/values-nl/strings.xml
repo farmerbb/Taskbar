@@ -107,8 +107,8 @@
     <string name="quit_taskbar">Afsluiten</string>
 
     <string name="pref_title_keyboard_shortcut">Sneltoetsen inschakelen</string>
-    <string name="pref_description_keyboard_shortcut">Taakbalk starten/stoppen: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nApparaat vergrendelen: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\nStartmenu tonen: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
-    <string name="pref_description_keyboard_shortcut_alt">Taakbalk starten/stoppen\n&#8226; WinKey+M / Search+M\n\nApparaat vergrendelen\n&#8226; WinKey+L / Search+L\n\nStartmenu tonen\n&#8226; WinKey / Search\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
+    <string name="pref_description_keyboard_shortcut">Taakbalk starten/stoppen: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nStartmenu tonen: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
+    <string name="pref_description_keyboard_shortcut_alt">Taakbalk starten/stoppen\n&#8226; WinKey+M / Search+M\n\nStartmenu tonen\n&#8226; WinKey / Search\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
     <string name="loading_apps">Bezig met laden van apps&#8230;</string>
     <string name="press_enter">Geen apps aangetroffen\n\nDruk op Enter om te zoeken met Google</string>
     <string name="nothing_to_see_here">Niks te zien, loop maar door&#8230;</string>

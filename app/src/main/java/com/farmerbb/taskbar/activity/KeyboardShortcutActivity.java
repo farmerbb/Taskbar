@@ -62,8 +62,7 @@ public class KeyboardShortcutActivity extends Activity {
 
                     startStopIntent.setPackage(BuildConfig.APPLICATION_ID);
                     sendBroadcast(startStopIntent);
-                } else if(categories.contains(Intent.CATEGORY_APP_CALENDAR))
-                    U.lockDevice(this);
+                }
 
                 break;
             case Intent.ACTION_ASSIST:

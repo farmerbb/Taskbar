@@ -67,7 +67,6 @@ import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
-import com.farmerbb.taskbar.receiver.LockDeviceReceiver;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
@@ -158,27 +157,6 @@ public class U {
         dialog.setCancelable(false);
 
         return dialog;
-    }
-
-    public static void lockDevice(Context context) {
-        ComponentName component = new ComponentName(context, LockDeviceReceiver.class);
-        context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-
-        DevicePolicyManager mDevicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        if(mDevicePolicyManager.isAdminActive(component))
-            mDevicePolicyManager.lockNow();
-        else {
-            launchApp(context, () -> {
-                Intent intent = new Intent(context, DummyActivity.class);
-                intent.putExtra("device_admin", true);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                try {
-                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
-                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
-            });
-        }
     }
 
     public static void sendAccessibilityAction(Context context, int action) {

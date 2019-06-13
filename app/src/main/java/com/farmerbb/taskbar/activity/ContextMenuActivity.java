@@ -640,13 +640,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 shouldHideTaskbar = true;
                 contextMenuFix = false;
                 break;
-            case "lock_device":
-                U.lockDevice(this);
-
-                showStartMenu = false;
-                shouldHideTaskbar = true;
-                contextMenuFix = false;
-                break;
             case "power_menu":
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
 
