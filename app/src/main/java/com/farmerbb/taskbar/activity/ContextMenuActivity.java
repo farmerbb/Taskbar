@@ -269,7 +269,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             addPreferencesFromResource(R.xml.pref_context_menu_overflow);
             findPreference("volume").setOnPreferenceClickListener(this);
             findPreference("system_settings").setOnPreferenceClickListener(this);
-            findPreference("lock_device").setOnPreferenceClickListener(this);
             findPreference("power_menu").setOnPreferenceClickListener(this);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
