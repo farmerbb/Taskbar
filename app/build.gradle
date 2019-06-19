@@ -82,6 +82,10 @@ android {
             manifest.srcFile 'src/playstore/AndroidManifest.xml'
         }
     }
+    
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
