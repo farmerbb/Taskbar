@@ -15,13 +15,13 @@
 
 package com.farmerbb.taskbar.service;
 
-import com.farmerbb.taskbar.ui.ServiceHost;
+import com.farmerbb.taskbar.ui.HostService;
 import com.farmerbb.taskbar.ui.Controller;
 import com.farmerbb.taskbar.ui.TaskbarController;
 
-public class TaskbarService extends ServiceHost {
+public class TaskbarService extends HostService {
     @Override
-    public Controller newChild() {
+    public Controller newController() {
         return new TaskbarController(this);
     }
 }

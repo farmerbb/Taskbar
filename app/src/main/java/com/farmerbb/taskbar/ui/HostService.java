@@ -25,7 +25,7 @@ import android.view.WindowManager;
 
 import com.farmerbb.taskbar.util.U;
 
-public abstract class ServiceHost extends Service implements Host {
+public abstract class HostService extends Service implements Host {
 
     private Controller controller;
     private WindowManager windowManager;
@@ -46,7 +46,7 @@ public abstract class ServiceHost extends Service implements Host {
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
-        controller = newChild();
+        controller = newController();
         controller.onCreateHost(this);
     }
 
@@ -87,5 +87,5 @@ public abstract class ServiceHost extends Service implements Host {
         stopSelf();
     }
 
-    public abstract Controller newChild();
+    public abstract Controller newController();
 }
