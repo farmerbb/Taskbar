@@ -16,13 +16,12 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.service;
+package com.farmerbb.taskbar.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Service;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
@@ -38,12 +37,10 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Process;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
@@ -70,12 +67,12 @@ import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
 
-public class DashboardService extends Service {
+public class DashboardController implements Controller {
 
     private AppWidgetManager mAppWidgetManager;
     private AppWidgetHost mAppWidgetHost;
 
-    private WindowManager windowManager;
+    private Context context;
     private LinearLayout layout;
 
     private SparseArray<DashboardCell> cells = new SparseArray<>();
@@ -96,7 +93,7 @@ public class DashboardService extends Service {
         cellClick(v, false);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            v.setPointerIcon(PointerIcon.getSystemIcon(this, PointerIcon.TYPE_DEFAULT));
+            v.setPointerIcon(PointerIcon.getSystemIcon(context, PointerIcon.TYPE_DEFAULT));
 
         return false;
     };
@@ -157,58 +154,48 @@ public class DashboardService extends Service {
         }
     };
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+    public DashboardController(Context context) {
+        this.context = context;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onCreate() {
-        super.onCreate();
-
-        SharedPreferences pref = U.getSharedPreferences(this);
+    public void onCreateHost(Host host) {
+        SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("dashboard", false)) {
             if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-                if(U.canDrawOverlays(this))
-                    drawDashboard();
+                if(U.canDrawOverlays(context))
+                    drawDashboard(host);
                 else {
                     pref.edit().putBoolean("taskbar_active", false).apply();
 
-                    stopSelf();
+                    host.terminate();
                 }
-            } else stopSelf();
-        } else stopSelf();
+            } else host.terminate();
+        } else host.terminate();
     }
 
     @SuppressLint("RtlHardcoded")
-    private void drawDashboard() {
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+    private void drawDashboard(Host host) {
+        final ViewParams params = new ViewParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
-                U.getOverlayType(),
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
-                PixelFormat.TRANSLUCENT);
+                -1,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+        );
 
         // Initialize views
-        layout = new LinearLayout(this);
+        layout = new LinearLayout(context);
         layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setVisibility(View.GONE);
         layout.setAlpha(0);
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        int width = pref.getInt("dashboard_width", getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
-        int height = pref.getInt("dashboard_height", getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
+        SharedPreferences pref = U.getSharedPreferences(context);
+        int width = pref.getInt("dashboard_width", context.getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
+        int height = pref.getInt("dashboard_height", context.getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
 
-        boolean isPortrait = getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        boolean isLandscape = getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        boolean isPortrait = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         if(isPortrait) {
             columns = height;
@@ -222,20 +209,20 @@ public class DashboardService extends Service {
 
         maxSize = columns * rows;
 
-        int backgroundTint = U.getBackgroundTint(this);
-        int accentColor = U.getAccentColor(this);
+        int backgroundTint = U.getBackgroundTint(context);
+        int accentColor = U.getAccentColor(context);
         int accentColorAlt = accentColor;
         accentColorAlt = ColorUtils.setAlphaComponent(accentColorAlt, Color.alpha(accentColorAlt) / 2);
 
         int cellCount = 0;
 
         for(int i = 0; i < columns; i++) {
-            LinearLayout layout2 = new LinearLayout(this);
+            LinearLayout layout2 = new LinearLayout(context);
             layout2.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
             layout2.setOrientation(LinearLayout.VERTICAL);
 
             for(int j = 0; j < rows; j++) {
-                DashboardCell cellLayout = (DashboardCell) View.inflate(this, R.layout.dashboard, null);
+                DashboardCell cellLayout = (DashboardCell) View.inflate(context, R.layout.dashboard, null);
                 cellLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
                 cellLayout.setBackgroundColor(backgroundTint);
                 cellLayout.setOnClickListener(cellOcl);
@@ -258,22 +245,22 @@ public class DashboardService extends Service {
             layout.addView(layout2);
         }
 
-        mAppWidgetManager = AppWidgetManager.getInstance(this);
-        mAppWidgetHost = new AppWidgetHost(this, APPWIDGET_HOST_ID);
+        mAppWidgetManager = AppWidgetManager.getInstance(context);
+        mAppWidgetHost = new AppWidgetHost(context, APPWIDGET_HOST_ID);
         mAppWidgetHost.startListening();
 
         for(int i = 0; i < maxSize; i++) {
-            int appWidgetId = pref.getInt("dashboard_widget_" + Integer.toString(i), -1);
+            int appWidgetId = pref.getInt("dashboard_widget_" + i, -1);
             if(appWidgetId != -1)
                 addWidget(appWidgetId, i, false);
-            else if(pref.getBoolean("dashboard_widget_" + Integer.toString(i) + "_placeholder", false))
+            else if(pref.getBoolean("dashboard_widget_" + i + "_placeholder", false))
                 addPlaceholder(i);
         }
 
         mAppWidgetHost.stopListening();
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+
         lbm.unregisterReceiver(toggleReceiver);
         lbm.unregisterReceiver(addWidgetReceiver);
         lbm.unregisterReceiver(removeWidgetReceiver);
@@ -284,12 +271,12 @@ public class DashboardService extends Service {
         lbm.registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
         lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
 
-        windowManager.addView(layout, params);
+        host.addView(layout, params);
 
         new Handler().postDelayed(() -> {
-            int paddingSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
+            int paddingSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
 
-            switch(U.getTaskbarPosition(this)) {
+            switch(U.getTaskbarPosition(context)) {
                 case "top_vertical_left":
                 case "bottom_vertical_left":
                     layout.setPadding(paddingSize, 0, 0, 0);
@@ -324,20 +311,20 @@ public class DashboardService extends Service {
             layout.setOnClickListener(ocl);
             fadeIn();
 
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
-            final SharedPreferences pref = U.getSharedPreferences(this);
+            final SharedPreferences pref = U.getSharedPreferences(context);
             Intent intent = null;
 
             switch(pref.getString("theme", "light")) {
                 case "light":
-                    intent = new Intent(this, DashboardActivity.class);
+                    intent = new Intent(context, DashboardActivity.class);
                     break;
                 case "dark":
-                    intent = new Intent(this, DashboardActivityDark.class);
+                    intent = new Intent(context, DashboardActivityDark.class);
                     break;
             }
 
@@ -350,9 +337,9 @@ public class DashboardService extends Service {
                 if(intent != null && U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
-                U.startActivityMaximized(this, intent);
+                U.startActivityMaximized(context, intent);
             } else
-                startActivity(intent);
+                context.startActivity(intent);
 
             for(int i = 0; i < maxSize; i++) {
                 final DashboardCell cellLayout = cells.get(i);
@@ -360,7 +347,7 @@ public class DashboardService extends Service {
 
                 if(hostView != null) {
                     try {
-                        getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
+                        context.getPackageManager().getApplicationInfo(hostView.getAppWidgetInfo().provider.getPackageName(), 0);
                         hostView.post(() -> {
                             ViewGroup.LayoutParams params = hostView.getLayoutParams();
                             params.width = cellLayout.getWidth();
@@ -377,7 +364,7 @@ public class DashboardService extends Service {
             }
 
             if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
-                U.showToastLong(this, R.string.dashboard_tutorial);
+                U.showToastLong(context, R.string.dashboard_tutorial);
                 pref.edit().putBoolean("dashboard_tutorial_shown", true).apply();
             }
         }
@@ -405,7 +392,7 @@ public class DashboardService extends Service {
         layout.setVisibility(View.VISIBLE);
         layout.animate()
                 .alpha(1)
-                .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+                .setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime))
                 .setListener(null);
     }
 
@@ -416,46 +403,43 @@ public class DashboardService extends Service {
 
         layout.animate()
                 .alpha(0)
-                .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+                .setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime))
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         layout.setVisibility(View.GONE);
-                        if(sendIntent) LocalBroadcastManager.getInstance(DashboardService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+                        if(sendIntent) LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
                     }
                 });
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
+    public void onRecreateHost(Host host) {
         if(layout != null) {
             try {
-                windowManager.removeView(layout);
+                host.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-            SharedPreferences pref = U.getSharedPreferences(this);
-            if(U.canDrawOverlays(this))
-                drawDashboard();
+            SharedPreferences pref = U.getSharedPreferences(context);
+            if(U.canDrawOverlays(context))
+                drawDashboard(host);
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
-                stopSelf();
+                host.terminate();
             }
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyHost(Host host) {
         if(layout != null)
             try {
-                windowManager.removeView(layout);
+                host.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
 
         lbm.unregisterReceiver(toggleReceiver);
         lbm.unregisterReceiver(addWidgetReceiver);
@@ -472,8 +456,8 @@ public class DashboardService extends Service {
 
         int currentlySelectedCell = appWidgetId == -1 ? cellId : -1;
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        boolean shouldShowPlaceholder = pref.getBoolean("dashboard_widget_" + Integer.toString(cellId) + "_placeholder", false);
+        SharedPreferences pref = U.getSharedPreferences(context);
+        boolean shouldShowPlaceholder = pref.getBoolean("dashboard_widget_" + cellId + "_placeholder", false);
         if(isActualClick && ((appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) || shouldShowPlaceholder)) {
             fadeOut(false);
 
@@ -483,17 +467,17 @@ public class DashboardService extends Service {
             Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED");
             intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
             intent.putExtra("cellId", cellId);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
             if(shouldShowPlaceholder) {
-                String providerName = pref.getString("dashboard_widget_" + Integer.toString(cellId) + "_provider", "null");
+                String providerName = pref.getString("dashboard_widget_" + cellId + "_provider", "null");
                 if(!providerName.equals("null")) {
                     ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
                     List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
                     for(AppWidgetProviderInfo info : providerInfoList) {
                         if(info.provider.equals(componentName)) {
-                            U.showToast(this, getString(R.string.widget_restore_toast, info.loadLabel(getPackageManager())), Toast.LENGTH_SHORT);
+                            U.showToast(context, context.getString(R.string.widget_restore_toast, info.loadLabel(context.getPackageManager())), Toast.LENGTH_SHORT);
                             break;
                         }
                     }
@@ -519,14 +503,14 @@ public class DashboardService extends Service {
 
         Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
         intent.putExtra("cellId", cellId);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 
         final DashboardCell cellLayout = cells.get(cellId);
-        final AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
+        final AppWidgetHostView hostView = mAppWidgetHost.createView(context, appWidgetId, appWidgetInfo);
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
 
         Bundle bundle = new Bundle();
@@ -549,11 +533,11 @@ public class DashboardService extends Service {
         widgets.put(cellId, hostView);
 
         if(shouldSave) {
-            SharedPreferences pref = U.getSharedPreferences(this);
+            SharedPreferences pref = U.getSharedPreferences(context);
             SharedPreferences.Editor editor = pref.edit();
-            editor.putInt("dashboard_widget_" + Integer.toString(cellId), appWidgetId);
-            editor.putString("dashboard_widget_" + Integer.toString(cellId) + "_provider", appWidgetInfo.provider.flattenToString());
-            editor.remove("dashboard_widget_" + Integer.toString(cellId) + "_placeholder");
+            editor.putInt("dashboard_widget_" + cellId, appWidgetId);
+            editor.putString("dashboard_widget_" + cellId + "_provider", appWidgetInfo.provider.flattenToString());
+            editor.remove("dashboard_widget_" + cellId + "_placeholder");
             editor.apply();
         }
 
@@ -585,23 +569,23 @@ public class DashboardService extends Service {
         cellLayout.setOnGenericMotionListener(null);
         cellLayout.setOnInterceptedLongPressListener(null);
 
-        SharedPreferences pref = U.getSharedPreferences(this);
+        SharedPreferences pref = U.getSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
-        editor.remove("dashboard_widget_" + Integer.toString(cellId));
+        editor.remove("dashboard_widget_" + cellId);
 
         if(tempRemove) {
-            editor.putBoolean("dashboard_widget_" + Integer.toString(cellId) + "_placeholder", true);
+            editor.putBoolean("dashboard_widget_" + cellId + "_placeholder", true);
             addPlaceholder(cellId);
         } else
-            editor.remove("dashboard_widget_" + Integer.toString(cellId) + "_provider");
+            editor.remove("dashboard_widget_" + cellId + "_provider");
 
         editor.apply();
     }
 
     private void addPlaceholder(int cellId) {
         FrameLayout placeholder = cells.get(cellId).findViewById(R.id.placeholder);
-        SharedPreferences pref = U.getSharedPreferences(this);
-        String providerName = pref.getString("dashboard_widget_" + Integer.toString(cellId) + "_provider", "null");
+        SharedPreferences pref = U.getSharedPreferences(context);
+        String providerName = pref.getString("dashboard_widget_" + cellId + "_provider", "null");
 
         if(!providerName.equals("null")) {
             ImageView imageView = placeholder.findViewById(R.id.placeholder_image);
@@ -610,8 +594,8 @@ public class DashboardService extends Service {
             List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
             for(AppWidgetProviderInfo info : providerInfoList) {
                 if(info.provider.equals(componentName)) {
-                    Drawable drawable = info.loadPreviewImage(this, -1);
-                    if(drawable == null) drawable = info.loadIcon(this, -1);
+                    Drawable drawable = info.loadPreviewImage(context, -1);
+                    if(drawable == null) drawable = info.loadIcon(context, -1);
 
                     ColorMatrix matrix = new ColorMatrix();
                     matrix.setSaturation(0);
