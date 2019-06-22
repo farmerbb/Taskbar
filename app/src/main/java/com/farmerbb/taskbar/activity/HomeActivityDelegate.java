@@ -53,9 +53,9 @@ import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class HomeActivityDelegate extends Activity implements Host {
-    private TaskbarController taskbarChild;
-    private StartMenuController startMenuChild;
-    private DashboardController dashboardChild;
+    private TaskbarController taskbarController;
+    private StartMenuController startMenuController;
+    private DashboardController dashboardController;
 
     private FrameLayout layout;
 
@@ -82,9 +82,9 @@ public class HomeActivityDelegate extends Activity implements Host {
     private BroadcastReceiver restartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(taskbarChild != null) taskbarChild.onRecreateHost(HomeActivityDelegate.this);
-            if(startMenuChild != null) startMenuChild.onRecreateHost(HomeActivityDelegate.this);
-            if(dashboardChild != null) dashboardChild.onRecreateHost(HomeActivityDelegate.this);
+            if(taskbarController != null) taskbarController.onRecreateHost(HomeActivityDelegate.this);
+            if(startMenuController != null) startMenuController.onRecreateHost(HomeActivityDelegate.this);
+            if(dashboardController != null) dashboardController.onRecreateHost(HomeActivityDelegate.this);
         }
     };
 
@@ -255,13 +255,13 @@ public class HomeActivityDelegate extends Activity implements Host {
         stopService(new Intent(this, StartMenuService.class));
         stopService(new Intent(this, DashboardService.class));
 
-        taskbarChild = new TaskbarController(this);
-        startMenuChild = new StartMenuController(this);
-        dashboardChild = new DashboardController(this);
+        taskbarController = new TaskbarController(this);
+        startMenuController = new StartMenuController(this);
+        dashboardController = new DashboardController(this);
 
-        taskbarChild.onCreateHost(this);
-        startMenuChild.onCreateHost(this);
-        dashboardChild.onCreateHost(this);
+        taskbarController.onCreateHost(this);
+        startMenuController.onCreateHost(this);
+        dashboardController.onCreateHost(this);
 
         if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
             pref.edit().putBoolean("taskbar_active", false).apply();
@@ -290,9 +290,9 @@ public class HomeActivityDelegate extends Activity implements Host {
             else
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-            if(taskbarChild != null) taskbarChild.onDestroyHost(this);
-            if(startMenuChild != null) startMenuChild.onDestroyHost(this);
-            if(dashboardChild != null) dashboardChild.onDestroyHost(this);
+            if(taskbarController != null) taskbarController.onDestroyHost(this);
+            if(startMenuController != null) startMenuController.onDestroyHost(this);
+            if(dashboardController != null) dashboardController.onDestroyHost(this);
 
             IconCache.getInstance(this).clearCache();
 
@@ -330,9 +330,9 @@ public class HomeActivityDelegate extends Activity implements Host {
     private void killHomeActivity() {
         LauncherHelper.getInstance().setOnHomeScreen(false);
 
-        if(taskbarChild != null) taskbarChild.onDestroyHost(this);
-        if(startMenuChild != null) startMenuChild.onDestroyHost(this);
-        if(dashboardChild != null) dashboardChild.onDestroyHost(this);
+        if(taskbarController != null) taskbarController.onDestroyHost(this);
+        if(startMenuController != null) startMenuController.onDestroyHost(this);
+        if(dashboardController != null) dashboardController.onDestroyHost(this);
 
         IconCache.getInstance(this).clearCache();
 
