@@ -33,12 +33,15 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.service.StartMenuService;
-import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.ui.DashboardController;
+import com.farmerbb.taskbar.ui.Host;
+import com.farmerbb.taskbar.ui.ViewParams;
+import com.farmerbb.taskbar.ui.StartMenuController;
+import com.farmerbb.taskbar.ui.TaskbarController;
 import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -46,7 +49,12 @@ import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
-public class HomeActivityDelegate extends Activity {
+public class HomeActivityDelegate extends Activity implements Host {
+    private TaskbarController taskbarChild;
+    private StartMenuController startMenuChild;
+    private DashboardController dashboardChild;
+
+    private FrameLayout layout;
 
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
@@ -87,11 +95,9 @@ public class HomeActivityDelegate extends Activity {
         if(CompatUtils.applyDisplayCutoutModeTo(params))
             getWindow().setAttributes(params);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
         SharedPreferences pref = U.getSharedPreferences(this);
 
-        View view = new View(this) {
+        layout = new FrameLayout(this) {
             @Override
             protected void onAttachedToWindow() {
                 super.onAttachedToWindow();
@@ -112,16 +118,16 @@ public class HomeActivityDelegate extends Activity {
             }
         };
 
-        view.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
+        layout.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
 
-        view.setOnLongClickListener(view2 -> {
+        layout.setOnLongClickListener(view2 -> {
             if(!pref.getBoolean("freeform_hack", false))
                 setWallpaper();
 
             return false;
         });
 
-        view.setOnGenericMotionListener((view3, motionEvent) -> {
+        layout.setOnGenericMotionListener((view3, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                     && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY
                     && !pref.getBoolean("freeform_hack", false))
@@ -130,9 +136,11 @@ public class HomeActivityDelegate extends Activity {
             return false;
         });
 
+        layout.setFitsSystemWindows(true);
+
         if((this instanceof HomeActivity || U.isLauncherPermanentlyEnabled(this))
                 && !U.isChromeOs(this)) {
-            setContentView(view);
+            setContentView(layout);
             pref.edit().putBoolean("launcher", true).apply();
         } else
             killHomeActivity();
@@ -237,9 +245,13 @@ public class HomeActivityDelegate extends Activity {
         }
 
         // We always start the Taskbar and Start Menu services, even if the app isn't normally running
-        startService(new Intent(this, TaskbarService.class));
-        startService(new Intent(this, StartMenuService.class));
-        startService(new Intent(this, DashboardService.class));
+        taskbarChild = new TaskbarController(this);
+        startMenuChild = new StartMenuController(this);
+        dashboardChild = new DashboardController(this);
+
+        taskbarChild.onCreateHost(this);
+        startMenuChild.onCreateHost(this);
+        dashboardChild.onCreateHost(this);
 
         if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
             pref.edit().putBoolean("taskbar_active", false).apply();
@@ -270,9 +282,9 @@ public class HomeActivityDelegate extends Activity {
 
             // Stop the Taskbar and Start Menu services if they should normally not be active
             if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-                stopService(new Intent(this, TaskbarService.class));
-                stopService(new Intent(this, StartMenuService.class));
-                stopService(new Intent(this, DashboardService.class));
+                taskbarChild.onDestroyHost(this);
+                startMenuChild.onDestroyHost(this);
+                dashboardChild.onDestroyHost(this);
 
                 IconCache.getInstance(this).clearCache();
             }
@@ -305,9 +317,9 @@ public class HomeActivityDelegate extends Activity {
         // Stop the Taskbar and Start Menu services if they should normally not be active
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-            stopService(new Intent(this, TaskbarService.class));
-            stopService(new Intent(this, StartMenuService.class));
-            stopService(new Intent(this, DashboardService.class));
+            taskbarChild.onDestroyHost(this);
+            startMenuChild.onDestroyHost(this);
+            dashboardChild.onDestroyHost(this);
 
             IconCache.getInstance(this).clearCache();
 
@@ -323,5 +335,29 @@ public class HomeActivityDelegate extends Activity {
             getWindow().setFlags(flags, flags);
         else
             getWindow().clearFlags(flags);
+    }
+
+    @Override
+    public void addView(View view, ViewParams params) {
+        final FrameLayout.LayoutParams flParams = new FrameLayout.LayoutParams(
+                params.width,
+                params.height
+        );
+
+        if(params.gravity > -1)
+            flParams.gravity = params.gravity;
+
+        view.setLayoutParams(flParams);
+        layout.addView(view);
+    }
+
+    @Override
+    public void removeView(View view) {
+        layout.removeView(view);
+    }
+
+    @Override
+    public void terminate() {
+        layout.removeAllViews();
     }
 }
