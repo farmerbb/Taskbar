@@ -164,7 +164,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 startActivity(clearIntent);
                 break;
             case "launcher":
-                if(U.canDrawOverlays(getActivity())) {
+                if(U.canDrawOverlays(getActivity(), true)) {
                     ComponentName component = new ComponentName(getActivity(), HomeActivity.class);
                     getActivity().getPackageManager().setComponentEnabledSetting(component,
                             ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,

@@ -106,6 +106,7 @@
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.SECONDARY_HOME"/>
             </intent-filter>
         </activity>
         <activity
@@ -127,7 +128,6 @@
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.APP_MAPS" />
-                <category android:name="android.intent.category.APP_CALENDAR" />
             </intent-filter>
         </activity>
         <activity

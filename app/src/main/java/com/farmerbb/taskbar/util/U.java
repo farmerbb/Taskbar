@@ -23,7 +23,6 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.Service;
-import android.app.admin.DevicePolicyManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -62,6 +61,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.DummyActivity;
+import com.farmerbb.taskbar.activity.HomeActivityDelegate;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
@@ -903,15 +903,28 @@ public class U {
                 && Settings.Global.getInt(context.getContentResolver(), "force_resizable_activities", 0) != 0));
     }
 
+    public static boolean canBootToFreeform(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return hasFreeformSupport(context)
+                && pref.getBoolean("freeform_hack", false)
+                && !isOverridingFreeformHack(context);
+    }
+
     public static boolean isSamsungDevice() {
         return Build.MANUFACTURER.equalsIgnoreCase("Samsung");
     }
 
-    public static boolean isNvidiaDevice() {
+    private static boolean isNvidiaDevice() {
         return Build.MANUFACTURER.equalsIgnoreCase("NVIDIA");
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
+        if(LauncherHelper.getInstance().isOnHomeScreen()
+                && (cls.equals(TaskbarService.class)
+                || cls.equals(StartMenuService.class)
+                || cls.equals(DashboardService.class)))
+            return true;
+
         return isServiceRunning(context, cls.getName());
     }
 
@@ -947,9 +960,15 @@ public class U {
         return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public static boolean canDrawOverlays(Context context) {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+        return canDrawOverlays(context, false);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static boolean canDrawOverlays(Context context, boolean forHomeScreen) {
+        return (forHomeScreen && !canBootToFreeform(context))
+                || Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                || Settings.canDrawOverlays(context);
     }
 
     public static boolean isGame(Context context, String packageName) {
@@ -1160,6 +1179,8 @@ public class U {
             stopTaskbarService(context, false);
             startTaskbarService(context, false);
         }
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.RESTART"));
     }
 
     public static void restartNotificationService(Context context) {

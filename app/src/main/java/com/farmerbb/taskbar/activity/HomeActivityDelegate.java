@@ -36,7 +36,10 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
+import com.farmerbb.taskbar.service.StartMenuService;
+import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.ui.DashboardController;
 import com.farmerbb.taskbar.ui.Host;
 import com.farmerbb.taskbar.ui.ViewParams;
@@ -73,6 +76,15 @@ public class HomeActivityDelegate extends Activity implements Host {
         @Override
         public void onReceive(Context context, Intent intent) {
             forceTaskbarStart = true;
+        }
+    };
+
+    private BroadcastReceiver restartReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(taskbarChild != null) taskbarChild.onRecreateHost(HomeActivityDelegate.this);
+            if(startMenuChild != null) startMenuChild.onRecreateHost(HomeActivityDelegate.this);
+            if(dashboardChild != null) dashboardChild.onRecreateHost(HomeActivityDelegate.this);
         }
     };
 
@@ -150,6 +162,7 @@ public class HomeActivityDelegate extends Activity implements Host {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         lbm.registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+        lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX");
@@ -177,7 +190,7 @@ public class HomeActivityDelegate extends Activity implements Host {
     protected void onResume() {
         super.onResume();
 
-        if(bootToFreeform()) {
+        if(U.canBootToFreeform(this)) {
             if(U.launcherIsDefault(this))
                 startFreeformHack();
             else {
@@ -203,8 +216,8 @@ public class HomeActivityDelegate extends Activity implements Host {
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-        if(U.canDrawOverlays(this)) {
-            if(!bootToFreeform()) {
+        if(U.canDrawOverlays(this, true)) {
+            if(!U.canBootToFreeform(this)) {
                 final LauncherHelper helper = LauncherHelper.getInstance();
                 helper.setOnHomeScreen(true);
 
@@ -224,13 +237,6 @@ public class HomeActivityDelegate extends Activity implements Host {
                     null);
     }
 
-    private boolean bootToFreeform() {
-        SharedPreferences pref = U.getSharedPreferences(this);
-        return U.hasFreeformSupport(this)
-                && pref.getBoolean("freeform_hack", false)
-                && !U.isOverridingFreeformHack(this);
-    }
-
     private void startTaskbar() {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("first_run", true)) {
@@ -244,7 +250,11 @@ public class HomeActivityDelegate extends Activity implements Host {
                     null);
         }
 
-        // We always start the Taskbar and Start Menu services, even if the app isn't normally running
+        // Stop any currently running services and switch to using HomeActivityDelegate as UI host
+        stopService(new Intent(this, TaskbarService.class));
+        stopService(new Intent(this, StartMenuService.class));
+        stopService(new Intent(this, DashboardService.class));
+
         taskbarChild = new TaskbarController(this);
         startMenuChild = new StartMenuController(this);
         dashboardChild = new DashboardController(this);
@@ -272,7 +282,7 @@ public class HomeActivityDelegate extends Activity implements Host {
         super.onStop();
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!bootToFreeform()) {
+        if(!U.canBootToFreeform(this)) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
 
             if(U.shouldCollapse(this, true))
@@ -280,13 +290,18 @@ public class HomeActivityDelegate extends Activity implements Host {
             else
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-            // Stop the Taskbar and Start Menu services if they should normally not be active
-            if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-                taskbarChild.onDestroyHost(this);
-                startMenuChild.onDestroyHost(this);
-                dashboardChild.onDestroyHost(this);
+            if(taskbarChild != null) taskbarChild.onDestroyHost(this);
+            if(startMenuChild != null) startMenuChild.onDestroyHost(this);
+            if(dashboardChild != null) dashboardChild.onDestroyHost(this);
 
-                IconCache.getInstance(this).clearCache();
+            IconCache.getInstance(this).clearCache();
+
+            // Stop using HomeActivityDelegate as UI host and restart services if needed
+            if(pref.getBoolean("taskbar_active", false)
+                    && !pref.getBoolean("is_hidden", false)) {
+                startService(new Intent(this, TaskbarService.class));
+                startService(new Intent(this, StartMenuService.class));
+                startService(new Intent(this, DashboardService.class));
             }
         }
 
@@ -303,6 +318,7 @@ public class HomeActivityDelegate extends Activity implements Host {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.unregisterReceiver(killReceiver);
         lbm.unregisterReceiver(forceTaskbarStartReceiver);
+        lbm.unregisterReceiver(restartReceiver);
         lbm.unregisterReceiver(freeformToggleReceiver);
     }
 
@@ -314,16 +330,21 @@ public class HomeActivityDelegate extends Activity implements Host {
     private void killHomeActivity() {
         LauncherHelper.getInstance().setOnHomeScreen(false);
 
-        // Stop the Taskbar and Start Menu services if they should normally not be active
+        if(taskbarChild != null) taskbarChild.onDestroyHost(this);
+        if(startMenuChild != null) startMenuChild.onDestroyHost(this);
+        if(dashboardChild != null) dashboardChild.onDestroyHost(this);
+
+        IconCache.getInstance(this).clearCache();
+
+        U.stopFreeformHack(this);
+
+        // Stop using HomeActivityDelegate as UI host and restart services if needed
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
-            taskbarChild.onDestroyHost(this);
-            startMenuChild.onDestroyHost(this);
-            dashboardChild.onDestroyHost(this);
-
-            IconCache.getInstance(this).clearCache();
-
-            U.stopFreeformHack(this);
+        if(pref.getBoolean("taskbar_active", false)
+                && !pref.getBoolean("is_hidden", false)) {
+            startService(new Intent(this, TaskbarService.class));
+            startService(new Intent(this, StartMenuService.class));
+            startService(new Intent(this, DashboardService.class));
         }
 
         finish();
