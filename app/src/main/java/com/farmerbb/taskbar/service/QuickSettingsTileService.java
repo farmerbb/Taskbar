@@ -57,7 +57,7 @@ public class QuickSettingsTileService extends TileService {
                     ? R.drawable.ic_system
                     : R.drawable.ic_allapps));
 
-            if(U.canDrawOverlays(this))
+            if(U.canDrawOverlays(this, false))
                 tile.setState(U.isServiceRunning(this, NotificationService.class)
                         ? Tile.STATE_ACTIVE
                         : Tile.STATE_INACTIVE);

@@ -379,6 +379,6 @@ public class HomeActivityDelegate extends Activity implements Host {
 
     @Override
     public void terminate() {
-        layout.removeAllViews();
+        // no-op
     }
 }

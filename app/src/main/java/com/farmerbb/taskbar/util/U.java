@@ -335,7 +335,7 @@ public class U {
         if(checkMultiWindow)
             freeformHackIntent.putExtra("check_multiwindow", true);
 
-        if(canDrawOverlays(context))
+        if(canDrawOverlays(context, false))
             startActivityLowerRight(context, freeformHackIntent);
     }
 
@@ -958,10 +958,6 @@ public class U {
     public static int getAccentColor(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
-    }
-
-    public static boolean canDrawOverlays(Context context) {
-        return canDrawOverlays(context, false);
     }
 
     @TargetApi(Build.VERSION_CODES.M)

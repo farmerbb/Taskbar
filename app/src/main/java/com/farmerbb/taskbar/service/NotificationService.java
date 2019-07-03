@@ -88,7 +88,7 @@ public class NotificationService extends Service {
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean("taskbar_active", false)) {
-            if(U.canDrawOverlays(this)) {
+            if(U.canDrawOverlays(this, false)) {
                 isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
 
                 Intent intent = new Intent(this, MainActivity.class);

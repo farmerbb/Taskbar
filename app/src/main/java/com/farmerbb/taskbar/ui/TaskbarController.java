@@ -70,6 +70,7 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 
 import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.activity.HomeActivityDelegate;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
@@ -184,7 +185,7 @@ public class TaskbarController implements Controller {
     public void onCreateHost(Host host) {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(U.canDrawOverlays(context))
+            if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
                 drawTaskbar(host);
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
@@ -1149,7 +1150,7 @@ public class TaskbarController implements Controller {
 
             currentTaskbarPosition = 0;
 
-            if(U.canDrawOverlays(context))
+            if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
                 drawTaskbar(host);
             else {
                 SharedPreferences pref = U.getSharedPreferences(context);

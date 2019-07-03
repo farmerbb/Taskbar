@@ -57,6 +57,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.HomeActivity;
+import com.farmerbb.taskbar.activity.HomeActivityDelegate;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
@@ -169,7 +171,7 @@ public class StartMenuController implements Controller {
 
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(U.canDrawOverlays(context))
+            if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
                 drawStartMenu(host);
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
@@ -714,7 +716,7 @@ public class StartMenuController implements Controller {
                 host.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-            if(U.canDrawOverlays(context))
+            if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
                 drawStartMenu(host);
             else {
                 SharedPreferences pref = U.getSharedPreferences(context);

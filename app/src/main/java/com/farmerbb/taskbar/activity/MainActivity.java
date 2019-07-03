@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("taskbar_active", false);
 
         // Ensure that components that should be enabled are enabled properly
-        boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this))
+        boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this, true))
                 || U.isLauncherPermanentlyEnabled(this);
 
         editor.putBoolean("launcher", launcherEnabled);
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
             theSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
                 if(b) {
-                    if(U.canDrawOverlays(this)) {
+                    if(U.canDrawOverlays(this, false)) {
                         boolean firstRun = pref.getBoolean("first_run", true);
                         startTaskbarService();
 

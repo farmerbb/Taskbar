@@ -33,7 +33,7 @@ public class StartReceiver extends BroadcastReceiver {
         boolean taskbarNotActive = !U.isServiceRunning(context, NotificationService.class);
         boolean taskbarActiveButHidden = !taskbarNotActive && pref.getBoolean("is_hidden", false);
 
-        if(!U.canDrawOverlays(context)) {
+        if(!U.canDrawOverlays(context, false)) {
             new Handler().postDelayed(() -> {
                 Intent intent2 = new Intent(context, DummyActivity.class);
                 intent2.putExtra("show_permission_dialog", true);
