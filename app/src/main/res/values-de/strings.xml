@@ -285,14 +285,14 @@
     <string name="refresh_frequency_continuous">Kontinuierlich</string>
 
     <string name="power_button_warning_title">Vorsicht</string>
-    <string name="power_button_warning_message">Custom ROMs basierend auf CyanogenMod / LineageOS haben ein Problem, bei dem der Power Button nicht funktioniert, während das Gerät im Freiform Modus ist.\n\nBitte teste deinen Power Button nun. Sollte dieser nicht funktionieren dann sei Vorsichtig im freeform mode, da du vielleicht die Möglichkeit das Gerät wieder aufzuwecken verlierst, nachdem es automatisch in den Ruhezustand fällt.</string>
+    <string name="power_button_warning_message">Custom ROMs basierend auf CyanogenMod / LineageOS haben ein Problem, bei dem der Power Button nicht funktioniert, während das Gerät im Freiform Modus ist.\n\nBitte teste deinen Power Button nun. Sollte dieser nicht funktionieren dann sei Vorsichtig im Freiform Modus, da du vielleicht die Möglichkeit das Gerät wieder aufzuwecken verlierst, nachdem es automatisch in den Ruhezustand fällt.</string>
     <string name="action_i_understand">Ich verstehe</string>
 
     <string name="hide_taskbar_disclaimer">Trifft nicht auf Apps im Freiform Modus zu</string>
     <string name="transparent_start_menu">Transparentes Startmenü</string>
 
     <string name="launch_games_fullscreen_title">Spiele im Vollbildmodus öffnen</string>
-    <string name="launch_games_fullscreen_message">Wenn eine Anwendung sich als Spiel deklariert, dann diesem verbieten im Freiform-Modus zu starten.</string>
+    <string name="launch_games_fullscreen_message">Wenn eine Anwendung sich als Spiel deklariert, dann diesem verbieten im Freiform Modus zu starten.</string>
 
     <string name="invalid_grid_size">Unerlaubte Gitter Größe</string>
 
@@ -309,7 +309,7 @@
     <string name="restore_widget">Widget wiederherstellen</string>
 
     <string name="samsung_freeform_title">Hinweis</string>
-    <string name="samsung_freeform_message">Taskbar kann auf einigen Samsung-Geräten Probleme beim Öffnen von Anwendungen im Freiform-Modus haben, da Systemänderungen im Multi-Window-Modus vorgenommen wurden. In diesem Fall müssen Sie möglicherweise ein benutzerdefiniertes ROM flashen, um den Freiform-Modus auf diesem Gerät zu verwenden.</string>
+    <string name="samsung_freeform_message">Taskbar kann auf einigen Samsung-Geräten Probleme beim Öffnen von Anwendungen im Freiform Modus haben, da Systemänderungen im Multi-Window-Modus vorgenommen wurden. In diesem Fall müssen Sie möglicherweise ein benutzerdefiniertes ROM flashen, um den Freiform Modus auf diesem Gerät zu verwenden.</string>
 
     <string name="widget_restore_toast">Wählen Sie \"%1$s\", um dieses Widget wiederherzustellen.</string>
 
@@ -350,8 +350,8 @@
     <string name="on">An</string>
     <string name="off">Aus</string>
 
-    <string name="rip_freeform_snackbar">Der Freiform-Modus ist in dieser Version von Android nicht mehr verfügbar.</string>
-    <string name="rip_freeform_dialog">Leider kann der Freiform-Modus aufgrund von Änderungen, die Google in dieser Version von Android vorgenommen hat, nicht mehr aktiviert und von Taskbar benutzt werden.\n\nAlle anderen Taskbar-Funktionen werden wie erwartet weiter funktionieren.  Vielen Dank für dein Verständnis!</string>
+    <string name="rip_freeform_snackbar">Der Freiform Modus ist in dieser Version von Android nicht mehr verfügbar.</string>
+    <string name="rip_freeform_dialog">Leider kann der Freiform Modus aufgrund von Änderungen, die Google in dieser Version von Android vorgenommen hat, nicht mehr aktiviert und von Taskbar benutzt werden.\n\nAlle anderen Taskbar-Funktionen werden wie erwartet weiter funktionieren.  Vielen Dank für dein Verständnis!</string>
     <string name="action_details">Details</string>
 
     <string name="pref_title_tasker_enabled">Drittanbieter-App-Integration zulassen</string>
