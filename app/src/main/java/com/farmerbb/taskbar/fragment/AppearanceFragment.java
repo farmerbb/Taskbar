@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.fragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -23,13 +22,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.provider.Settings;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
@@ -60,9 +60,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         findPreference("reset_colors").setOnPreferenceClickListener(this);
         findPreference("background_tint_pref").setOnPreferenceClickListener(this);
         findPreference("accent_color_pref").setOnPreferenceClickListener(this);
-        findPreference("app_drawer_icon_custom").setOnPreferenceClickListener(this);
         findPreference("app_drawer_icon_image").setOnPreferenceClickListener(this);
-
 
         bindPreferenceSummaryToValue(findPreference("theme"));
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
@@ -166,11 +164,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
             case "accent_color_pref":
                 showColorPicker(ColorPickerType.ACCENT_COLOR);
                 break;
-            case "app_drawer_icon_custom":
-                //android.support.v4.app.ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
-                break;
             case "app_drawer_icon_image":
-                //android.support.v4.app.ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
                 showFileChooser();
                 break;
         }
@@ -185,7 +179,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
         try {
             startActivityForResult(Intent.createChooser(intent, "Select an Image File"), 1001);
-        } catch (android.content.ActivityNotFoundException ex) {
+        } catch (ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
             U.showToast(getActivity(), "Please install a File Manager.", 50);
         }
@@ -199,12 +193,17 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         }
 
         if (requestCode == 1001) {
-            android.net.Uri currFileURI = data.getData();
-            final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
-            prefs.edit().putString("app_drawer_icon_image", currFileURI.toString()).commit();
-            if(prefs.getBoolean("app_drawer_icon_custom", true) == false) {
+            Uri currFileURI = data.getData();
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            Boolean customStartImageBoolValue = prefs.getBoolean("app_drawer_icon_custom", true);
+
+            if(customStartImageBoolValue == false) {
                 prefs.edit().putBoolean("app_drawer_icon_custom", true).commit();
+                ((CheckBoxPreference) findPreference("app_drawer_icon_custom")).setChecked(true);
             }
+
+            prefs.edit().putString("app_drawer_icon_image", currFileURI.toString()).commit();
+            bindPreferenceSummaryToValue(findPreference("app_drawer_icon_image"));
             U.restartTaskbar(getActivity());
         }
     }
