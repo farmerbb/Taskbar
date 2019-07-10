@@ -33,6 +33,7 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -292,6 +293,19 @@ public class TaskbarController implements Controller {
         } else {
             startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
             padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+        }
+
+        if(pref.getBoolean("app_drawer_icon_custom", true)) {
+            String strPath = "";
+            if (pref.getString("app_drawer_icon_image", "DEFAULT").isEmpty() == false) {
+                try {
+                    strPath = pref.getString("app_drawer_icon_image", "DEFAULT");
+                    startButton.setImageURI(android.net.Uri.parse(strPath));
+                    padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+                } catch (Exception e) {
+                    U.showToast(this.context, "Error reading the custom image for the start menu. Try another file.", 500);
+                }
+            }
         }
 
         startButton.setPadding(padding, padding, padding, padding);
