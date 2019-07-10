@@ -20,7 +20,7 @@
     <string name="app_name_debug">Taskbar (Debug)</string>
 
     <string name="taskbar_is_active">Taskbar ist aktiv</string>
-    <string name="click_to_open_settings">Klocken, um Einstellungen zu öffnen</string>
+    <string name="click_to_open_settings">Klicken, um Einstellungen zu öffnen</string>
     <string name="action_show">Taskbar anzeigen</string>
     <string name="action_hide">Taskbar verstecken</string>
     <string name="action_show_alt">@string/action_show</string>
@@ -50,13 +50,13 @@
     <string name="pref_title_amount_of_recents">Anzahl der anzuzeigenden laufenden Apps</string>
     <string-array name="pref_recents_amount">
         <item>Seit dem letzten Tag</item>
-        <item>Nach dem Start von Taskbar</item>
-        <item>All apps (may reduce performance)</item>
+        <item>Seit dem Start von Taskbar</item>
+        <item>Alle apps (kann die Leistung beeinträchtigen)</item>
     </string-array>
     <string-array name="pref_recents_amount_alt">
         <item>Seit dem letzten Tag</item>
-        <item>Nach dem Start von Taskbar</item>
-        <item>All apps (may reduce performance)</item>
+        <item>Seit dem Start von Taskbar</item>
+        <item>Alle apps (kann die Leistung beeinträchtigen)</item>
         <item>Running apps only</item>
     </string-array>
 
@@ -169,7 +169,7 @@
     <string name="top_apps_dialog_title">Top Apps</string>
     <string name="start_menu_apps">Apps im Startmenü</string>
 
-    <string name="reboot_required">Starten Sie Ihr Gerät neu, um den Freiform Modus abzuschließen</string>
+    <string name="reboot_required">Starten Sie Ihr Gerät neu, um die Einrichtung des Freiform Modus abzuschließen</string>
     <string name="enable_force_activities_resizable">Scrollen Sie auf zum Ende und aktivieren Sie \"%s\""</string>
     <string name="set_as_default_home">Drücken Sie \"Immer\", um Taskbar als Ihren Standartlauncher festzulegen</string>
     <string name="enable_developer_options">Aktivieren Sie die Entwickleroptionen, indem Sie sieben mal auf die build Nummer tippen</string>
@@ -249,7 +249,7 @@
 
     <string name="tools">Werkzeuge</string>
 
-    <string name="enable_accessibility">Taskbar muss als Zugangshilfe akriviert werden, um das Powermenü anzuzeigen</string>
+    <string name="enable_accessibility">Taskbar muss als Zugangshilfe aktiviert werden, um das Ausschaltmenü anzuzeigen</string>
     <string name="accessibility_service_summary">Erlaubt, Taskbar das Ausschaltmenü anzuzeigen.</string>
     <string name="accessibility_service_description">Erlaubt, Taskbar das Ausschaltmenü anzuzeigen. \n\n(wird nicht für einen anderen Zweck verwendet)</string>
 
@@ -284,85 +284,85 @@
     <string name="refresh_frequency_singular">Eine Sekunde</string>
     <string name="refresh_frequency_continuous">Kontinuierlich</string>
 
-    <string name="power_button_warning_title">Caution</string>
-    <string name="power_button_warning_message">Custom ROMs based on CyanogenMod / LineageOS have an issue where the power button does not work while the device is in freeform mode.\n\nPlease test your power button now.  If it does not work, then exercise caution when using freeform mode as you may lose the ability to wake the device from sleep if the screen times out.</string>
-    <string name="action_i_understand">I understand</string>
+    <string name="power_button_warning_title">Vorsicht</string>
+    <string name="power_button_warning_message">Custom ROMs basierend auf CyanogenMod / LineageOS haben ein Problem, bei dem der Power Button nicht funktioniert, während das Gerät im Freiform Modus ist.\n\nBitte teste deinen Power Button nun. Sollte dieser nicht funktionieren dann sei Vorsichtig im Freiform Modus, da du vielleicht die Möglichkeit das Gerät wieder aufzuwecken verlierst, nachdem es automatisch in den Ruhezustand fällt.</string>
+    <string name="action_i_understand">Ich verstehe</string>
 
-    <string name="hide_taskbar_disclaimer">Does not apply to apps in freeform mode</string>
-    <string name="transparent_start_menu">Transparent start menu</string>
+    <string name="hide_taskbar_disclaimer">Trifft nicht auf Apps im Freiform Modus zu</string>
+    <string name="transparent_start_menu">Transparentes Startmenü</string>
 
-    <string name="launch_games_fullscreen_title">Launch games fullscreen</string>
-    <string name="launch_games_fullscreen_message">If an application declares itself to be a game, disallow it from launching in freeform mode</string>
+    <string name="launch_games_fullscreen_title">Spiele im Vollbildmodus öffnen</string>
+    <string name="launch_games_fullscreen_message">Wenn eine Anwendung sich als Spiel deklariert, dann diesem verbieten im Freiform Modus zu starten.</string>
 
-    <string name="invalid_grid_size">Invalid grid size</string>
+    <string name="invalid_grid_size">Unerlaubte Gitter Größe</string>
 
-    <string name="window_sizes_not_available">Window sizes don\'t work correctly on this Android version - see \"Help &amp; instructions\" for a workaround</string>
+    <string name="window_sizes_not_available">Fenstergrößen funktionieren bei dieser Android-Version nicht richtig - siehe \"Hilfe &amp; Anweisungen\" für einen Workaround.</string>
 
-    <string name="navigation_bar_buttons">Navigation bar buttons</string>
-    <string name="navigation_bar_buttons_description">Add additional buttons to the Taskbar that perform navigation bar actions</string>
-    <string name="button_back">Back</string>
-    <string name="button_home">Home</string>
-    <string name="button_recents">Recents</string>
+    <string name="navigation_bar_buttons">Schaltflächen in der Navigationsleiste</string>
+    <string name="navigation_bar_buttons_description">Füge der Taskleiste zusätzliche Schaltflächen hinzu, die Aktionen in der Navigationsleiste ausführen.</string>
+    <string name="button_back">Zurück</string>
+    <string name="button_home">Start</string>
+    <string name="button_recents">Letzte</string>
 
-    <string name="full_length">Expand area with whitespace</string>
+    <string name="full_length">Erweitern des Bereichs mit Leerraum.</string>
 
-    <string name="restore_widget">Restore widget</string>
+    <string name="restore_widget">Widget wiederherstellen</string>
 
-    <string name="samsung_freeform_title">Note</string>
-    <string name="samsung_freeform_message">Taskbar may have issues with opening apps in freeform mode on some Samsung devices, due to system changes made to multi-window mode.\n\nIf this is the case, you may need to flash a custom ROM in order to use freeform mode on this device.</string>
+    <string name="samsung_freeform_title">Hinweis</string>
+    <string name="samsung_freeform_message">Taskbar kann auf einigen Samsung-Geräten Probleme beim Öffnen von Anwendungen im Freiform Modus haben, da Systemänderungen im Multi-Window-Modus vorgenommen wurden. In diesem Fall müssen Sie möglicherweise ein benutzerdefiniertes ROM flashen, um den Freiform Modus auf diesem Gerät zu verwenden.</string>
 
-    <string name="widget_restore_toast">Select \"%1$s\" to restore this widget</string>
+    <string name="widget_restore_toast">Wählen Sie \"%1$s\", um dieses Widget wiederherzustellen.</string>
 
-    <string name="freeform_on">Freeform on</string>
-    <string name="freeform_off">Freeform off</string>
+    <string name="freeform_on">Freiform an</string>
+    <string name="freeform_off">Freiform aus</string>
 
-    <string name="auto_hide_navbar">Automatically control the system navigation bar</string>
-    <string name="auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
+    <string name="auto_hide_navbar">Automatische Steuerung der System Navigationsleiste</string>
+    <string name="auto_hide_navbar_description">Die Navigationsleiste ausblenden, wenn die Taskleiste aktiv ist, und sie anzeigen, wenn die Taskleiste inaktiv ist.</string>
 
     <string name="press_enter_alt">@string/press_enter</string>
 
-    <string name="freeform_dialog_message_alt">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options and enable USB debugging\n\n&#8226; Connect your device to a computer with the Android SDK installed, and run the following command (one-line):\n\nadb shell settings put global enable_freeform_support 1\n\n&#8226; Reboot your device</string>
+    <string name="freeform_dialog_message_alt">Damit die Taskleiste Anwendungen im Freiform-Fenstermodus starten kann, führen Sie bitte folgende Schritte aus:\n\n&#8226; Gehen Sie zu den Entwickleroptionen und aktivieren Sie USB-Debugging\n\n&#8226; Verbinden Sie Ihr Gerät mit einem Computer, auf dem das Android-SDK installiert ist, und führen Sie den folgenden Befehl (einzeilig) aus: \n\nadb shell settings put global enable_freeform_support 1\n\n&#8226; Starten Sie Ihr Gerät neu.</string>
 
     <string name="color_picker_alpha">Alpha</string>
-    <string name="color_picker_red">Red</string>
-    <string name="color_picker_green">Green</string>
-    <string name="color_picker_blue">Blue</string>
+    <string name="color_picker_red">Rot</string>
+    <string name="color_picker_green">Grün</string>
+    <string name="color_picker_blue">Blau</string>
 
-    <string name="pref_title_chrome_os_context_menu_fix">Chrome OS dock compatibility fix</string>
-    <string name="pref_description_chrome_os_context_menu_fix">Enable this if using Taskbar alongside the Chrome OS dock</string>
+    <string name="pref_title_chrome_os_context_menu_fix">Chrome OS Dock Kompatibilitätsfehler</string>
+    <string name="pref_description_chrome_os_context_menu_fix">Aktivieren Sie dies, wenn Sie die Taskleiste neben dem Chrome OS Dock verwenden.</string>
 
-    <string name="pin_shortcut_not_supported">Your launcher doesn\'t support adding shortcuts from other apps.\n\nPlease manually add the shortcut from your launcher\'s \"Widgets\" menu.</string>
+    <string name="pin_shortcut_not_supported">Ihr Launcher unterstützt das Hinzufügen von Verknüpfungen aus anderen Anwendungen nicht.\n\n\Bitte fügen Sie die Verknüpfung manuell aus dem Menü \"Widgets\" Ihres Launchers hinzu.</string>
 
-    <string name="action_activate">Activate</string>
+    <string name="action_activate">Aktivieren</string>
 
-    <string name="pref_secondscreen_title_open">Open SecondScreen</string>
-    <string name="pref_secondscreen_title_install">Install SecondScreen</string>
-    <string name="pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
+    <string name="pref_secondscreen_title_open">Öffne SecondScreen</string>
+    <string name="pref_secondscreen_title_install">Installiere SecondScreen</string>
+    <string name="pref_secondscreen_description">Ändern Sie die Auflösung und Anzeigegröße Ihres Geräts, wenn Sie es an ein externes Display anschließen, für ein Continuum- oder DeX-ähnliches Erlebnis.</string>
 
-    <string name="use_default">Use default</string>
+    <string name="use_default">Standard verwenden</string>
 
-    <string name="action_continue">Continue</string>
+    <string name="action_continue">Weiter</string>
 
-    <string name="tasker_action_title">Select action</string>
-    <string name="tasker_condition_title">Select condition</string>
-    <string name="tasker_on">Taskbar On</string>
-    <string name="tasker_off">Taskbar Off</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
+    <string name="tasker_action_title">Aktion auswählen</string>
+    <string name="tasker_condition_title">Bedingung auswählen</string>
+    <string name="tasker_on">Taskbar an</string>
+    <string name="tasker_off">Taskbar aus</string>
+    <string name="on">An</string>
+    <string name="off">Aus</string>
 
-    <string name="rip_freeform_snackbar">Freeform mode is no longer available in this version of Android</string>
-    <string name="rip_freeform_dialog">Unfortunately, due to changes made by Google in this version of Android, freeform mode can no longer be enabled and used by Taskbar.\n\nAll other Taskbar features will continue to work as expected.  Thanks for your understanding!</string>
+    <string name="rip_freeform_snackbar">Der Freiform Modus ist in dieser Version von Android nicht mehr verfügbar.</string>
+    <string name="rip_freeform_dialog">Leider kann der Freiform Modus aufgrund von Änderungen, die Google in dieser Version von Android vorgenommen hat, nicht mehr aktiviert und von Taskbar benutzt werden.\n\nAlle anderen Taskbar-Funktionen werden wie erwartet weiter funktionieren.  Vielen Dank für dein Verständnis!</string>
     <string name="action_details">Details</string>
 
-    <string name="pref_title_tasker_enabled">Allow third-party app integration</string>
-    <string name="pref_summary_tasker_enabled">Disable for improved security</string>
+    <string name="pref_title_tasker_enabled">Drittanbieter-App-Integration zulassen</string>
+    <string name="pref_summary_tasker_enabled">Deaktivieren für verbesserte Sicherheit</string>
 
-    <string name="essential_phone_grip_rejection">On the Essential Phone, disable grip rejection (in developer options) to assist with opening/closing Taskbar</string>
+    <string name="essential_phone_grip_rejection">Deaktivieren Sie auf dem Essential Phone die Griffabweisung (in den Entwickleroptionen), um beim Öffnen/Schließen der Taskleiste zu helfen.</string>
 
-    <string name="toggle_start_menu">Toggle Start Menu</string>
-    <string name="toggle_dashboard">Toggle Dashboard</string>
+    <string name="toggle_start_menu">Startmenü umschalten</string>
+    <string name="toggle_dashboard">Dashboard umschalten</string>
 
-    <string name="force_activities_resizable">Applikatione  Zwingen, skalierbar zu sein</string>
-    <string name="enable_freeform_windows">Enable freeform windows</string>
+    <string name="force_activities_resizable">Erzwingen, dass Apps in der Größe veränderbar sind.</string>
+    <string name="enable_freeform_windows">Freiform-Fenster aktivieren</string>
 
 </resources>
