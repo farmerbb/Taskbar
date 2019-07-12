@@ -193,7 +193,17 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         }
 
         if (requestCode == 1001) {
-            Uri currFileURI = data.getData();
+            Uri currFileURI;
+            try {
+                currFileURI = data.getData();
+            }
+            catch (Exception ex) {
+                return;
+            }
+            if (currFileURI == null) {
+                return;
+            }
+
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             Boolean customStartImageBoolValue = prefs.getBoolean("app_drawer_icon_custom", true);
 
