@@ -250,18 +250,25 @@ public class HomeActivityDelegate extends Activity implements Host {
                     null);
         }
 
-        // Stop any currently running services and switch to using HomeActivityDelegate as UI host
-        stopService(new Intent(this, TaskbarService.class));
-        stopService(new Intent(this, StartMenuService.class));
-        stopService(new Intent(this, DashboardService.class));
+        if(U.isHomeActivityUIHost()) {
+            // Stop any currently running services and switch to using HomeActivityDelegate as UI host
+            stopService(new Intent(this, TaskbarService.class));
+            stopService(new Intent(this, StartMenuService.class));
+            stopService(new Intent(this, DashboardService.class));
 
-        taskbarController = new TaskbarController(this);
-        startMenuController = new StartMenuController(this);
-        dashboardController = new DashboardController(this);
+            taskbarController = new TaskbarController(this);
+            startMenuController = new StartMenuController(this);
+            dashboardController = new DashboardController(this);
 
-        taskbarController.onCreateHost(this);
-        startMenuController.onCreateHost(this);
-        dashboardController.onCreateHost(this);
+            taskbarController.onCreateHost(this);
+            startMenuController.onCreateHost(this);
+            dashboardController.onCreateHost(this);
+        } else {
+            // We always start the Taskbar and Start Menu services, even if the app isn't normally running
+            startService(new Intent(this, TaskbarService.class));
+            startService(new Intent(this, StartMenuService.class));
+            startService(new Intent(this, DashboardService.class));
+        }
 
         if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
             pref.edit().putBoolean("taskbar_active", false).apply();
@@ -290,18 +297,28 @@ public class HomeActivityDelegate extends Activity implements Host {
             else
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-            if(taskbarController != null) taskbarController.onDestroyHost(this);
-            if(startMenuController != null) startMenuController.onDestroyHost(this);
-            if(dashboardController != null) dashboardController.onDestroyHost(this);
+            if(U.isHomeActivityUIHost()) {
+                if(taskbarController != null) taskbarController.onDestroyHost(this);
+                if(startMenuController != null) startMenuController.onDestroyHost(this);
+                if(dashboardController != null) dashboardController.onDestroyHost(this);
 
-            IconCache.getInstance(this).clearCache();
+                IconCache.getInstance(this).clearCache();
 
-            // Stop using HomeActivityDelegate as UI host and restart services if needed
-            if(pref.getBoolean("taskbar_active", false)
-                    && !pref.getBoolean("is_hidden", false)) {
-                startService(new Intent(this, TaskbarService.class));
-                startService(new Intent(this, StartMenuService.class));
-                startService(new Intent(this, DashboardService.class));
+                // Stop using HomeActivityDelegate as UI host and restart services if needed
+                if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+                    startService(new Intent(this, TaskbarService.class));
+                    startService(new Intent(this, StartMenuService.class));
+                    startService(new Intent(this, DashboardService.class));
+                }
+            } else {
+                // Stop the Taskbar and Start Menu services if they should normally not be active
+                if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+                    stopService(new Intent(this, TaskbarService.class));
+                    stopService(new Intent(this, StartMenuService.class));
+                    stopService(new Intent(this, DashboardService.class));
+
+                    IconCache.getInstance(this).clearCache();
+                }
             }
         }
 
@@ -330,21 +347,34 @@ public class HomeActivityDelegate extends Activity implements Host {
     private void killHomeActivity() {
         LauncherHelper.getInstance().setOnHomeScreen(false);
 
-        if(taskbarController != null) taskbarController.onDestroyHost(this);
-        if(startMenuController != null) startMenuController.onDestroyHost(this);
-        if(dashboardController != null) dashboardController.onDestroyHost(this);
+        if(U.isHomeActivityUIHost()) {
+            if(taskbarController != null) taskbarController.onDestroyHost(this);
+            if(startMenuController != null) startMenuController.onDestroyHost(this);
+            if(dashboardController != null) dashboardController.onDestroyHost(this);
 
-        IconCache.getInstance(this).clearCache();
+            IconCache.getInstance(this).clearCache();
 
-        U.stopFreeformHack(this);
+            U.stopFreeformHack(this);
 
-        // Stop using HomeActivityDelegate as UI host and restart services if needed
-        SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("taskbar_active", false)
-                && !pref.getBoolean("is_hidden", false)) {
-            startService(new Intent(this, TaskbarService.class));
-            startService(new Intent(this, StartMenuService.class));
-            startService(new Intent(this, DashboardService.class));
+            // Stop using HomeActivityDelegate as UI host and restart services if needed
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+                startService(new Intent(this, TaskbarService.class));
+                startService(new Intent(this, StartMenuService.class));
+                startService(new Intent(this, DashboardService.class));
+            }
+        } else {
+            // Stop the Taskbar and Start Menu services if they should normally not be active
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+                stopService(new Intent(this, TaskbarService.class));
+                stopService(new Intent(this, StartMenuService.class));
+                stopService(new Intent(this, DashboardService.class));
+
+                IconCache.getInstance(this).clearCache();
+
+                U.stopFreeformHack(this);
+            }
         }
 
         finish();

@@ -920,6 +920,7 @@ public class U {
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
         if(LauncherHelper.getInstance().isOnHomeScreen()
+                && isHomeActivityUIHost()
                 && (cls.equals(TaskbarService.class)
                 || cls.equals(StartMenuService.class)
                 || cls.equals(DashboardService.class)))
@@ -962,7 +963,7 @@ public class U {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean canDrawOverlays(Context context, boolean forHomeScreen) {
-        return (forHomeScreen && !canBootToFreeform(context))
+        return (forHomeScreen && isHomeActivityUIHost() && !canBootToFreeform(context))
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.M
                 || Settings.canDrawOverlays(context);
     }
@@ -983,7 +984,7 @@ public class U {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    public static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType) {
+    private static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType) {
         ActivityOptions options = ActivityOptions.makeBasic();
         int stackId = -1;
 
@@ -1538,5 +1539,9 @@ public class U {
         }
 
         return false;
+    }
+
+    public static boolean isHomeActivityUIHost() {
+        return BuildConfig.DEBUG;
     }
 }
