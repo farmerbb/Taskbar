@@ -162,13 +162,15 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
         lbm.registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
-        lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX");
         intentFilter.addAction("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED");
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);
+
+        if(U.isHomeActivityUIHost())
+            lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
         U.initPrefs(this);
     }
@@ -334,8 +336,10 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.unregisterReceiver(killReceiver);
         lbm.unregisterReceiver(forceTaskbarStartReceiver);
-        lbm.unregisterReceiver(restartReceiver);
         lbm.unregisterReceiver(freeformToggleReceiver);
+
+        if(U.isHomeActivityUIHost())
+            lbm.unregisterReceiver(restartReceiver);
     }
 
     @Override
