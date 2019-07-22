@@ -184,7 +184,6 @@ public class HomeActivityDelegate extends Activity implements Host {
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onResume() {

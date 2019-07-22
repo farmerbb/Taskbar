@@ -61,7 +61,6 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.DummyActivity;
-import com.farmerbb.taskbar.activity.HomeActivityDelegate;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
@@ -414,7 +413,6 @@ public class U {
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode1(Context context, ApplicationType type) {
         DisplayInfo display = getDisplayInfo(context);
@@ -432,7 +430,6 @@ public class U {
         )).toBundle();
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode2(Context context, int launchType, ApplicationType type) {
         DisplayInfo display = getDisplayInfo(context);
@@ -461,22 +458,22 @@ public class U {
         else
             top = top + iconSize;
 
+        int halfLandscape = (right / 2) + ((iconSize / 2) * (position.contains("vertical_left") ? 1 : 0));
+        int halfPortrait = (bottom / 2) + ((iconSize / 2) * ((position.equals("top_left") || position.equals("top_right")) ? 1 : 0));
+
         if(launchType == RIGHT && isLandscape)
-            left = (right / 2) + ((iconSize / 2) * (position.contains("vertical_left") ? 1 : 0));
+            left = halfLandscape;
         else if(launchType == RIGHT && isPortrait)
-            top = (bottom / 2) + ((iconSize / 2)
-                    * ((position.equals("top_left") || position.equals("top_right")) ? 1 : 0));
+            top = halfPortrait;
         else if(launchType == LEFT && isLandscape)
-            right = (right / 2) + ((iconSize / 2) * (position.contains("vertical_left") ? 1 : 0));
+            right = halfLandscape;
         else if(launchType == LEFT && isPortrait)
-            bottom = (bottom / 2) + ((iconSize / 2)
-                    * ((position.equals("top_left") || position.equals("top_right")) ? 1 : 0));
+            bottom = halfPortrait;
 
         return getActivityOptions(context, type)
                 .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode3(Context context, ApplicationType type) {
         DisplayInfo display = getDisplayInfo(context);
