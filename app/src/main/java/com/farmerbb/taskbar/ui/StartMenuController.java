@@ -57,7 +57,6 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.HomeActivityDelegate;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
@@ -78,7 +77,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class StartMenuController implements Controller {
+public class StartMenuController implements UIController {
 
     private Context context;
     private StartMenuLayout layout;
@@ -166,7 +165,7 @@ public class StartMenuController implements Controller {
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onCreateHost(Host host) {
+    public void onCreateHost(UIHost host) {
         hasHardwareKeyboard = context.getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
 
         SharedPreferences pref = U.getSharedPreferences(context);
@@ -182,7 +181,7 @@ public class StartMenuController implements Controller {
     }
 
     @SuppressLint("RtlHardcoded")
-    private void drawStartMenu(Host host) {
+    private void drawStartMenu(UIHost host) {
         IconCache.getInstance(context).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(context);
@@ -690,7 +689,7 @@ public class StartMenuController implements Controller {
     }
 
     @Override
-    public void onDestroyHost(Host host) {
+    public void onDestroyHost(UIHost host) {
         if(layout != null)
             try {
                 host.removeView(layout);
@@ -710,7 +709,7 @@ public class StartMenuController implements Controller {
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onRecreateHost(Host host) {
+    public void onRecreateHost(UIHost host) {
         if(layout != null) {
             try {
                 host.removeView(layout);

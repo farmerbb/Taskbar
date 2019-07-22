@@ -41,7 +41,7 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.ui.DashboardController;
-import com.farmerbb.taskbar.ui.Host;
+import com.farmerbb.taskbar.ui.UIHost;
 import com.farmerbb.taskbar.ui.ViewParams;
 import com.farmerbb.taskbar.ui.StartMenuController;
 import com.farmerbb.taskbar.ui.TaskbarController;
@@ -52,7 +52,7 @@ import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
-public class HomeActivityDelegate extends Activity implements Host {
+public class HomeActivityDelegate extends Activity implements UIHost {
     private TaskbarController taskbarController;
     private StartMenuController startMenuController;
     private DashboardController dashboardController;

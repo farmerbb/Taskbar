@@ -68,7 +68,7 @@ import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
 
-public class DashboardController implements Controller {
+public class DashboardController implements UIController {
 
     private AppWidgetManager mAppWidgetManager;
     private AppWidgetHost mAppWidgetHost;
@@ -161,7 +161,7 @@ public class DashboardController implements Controller {
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onCreateHost(Host host) {
+    public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("dashboard", false)) {
             if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
@@ -177,7 +177,7 @@ public class DashboardController implements Controller {
     }
 
     @SuppressLint("RtlHardcoded")
-    private void drawDashboard(Host host) {
+    private void drawDashboard(UIHost host) {
         final ViewParams params = new ViewParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -416,7 +416,7 @@ public class DashboardController implements Controller {
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onRecreateHost(Host host) {
+    public void onRecreateHost(UIHost host) {
         if(layout != null) {
             try {
                 host.removeView(layout);
@@ -434,7 +434,7 @@ public class DashboardController implements Controller {
     }
 
     @Override
-    public void onDestroyHost(Host host) {
+    public void onDestroyHost(UIHost host) {
         if(layout != null)
             try {
                 host.removeView(layout);

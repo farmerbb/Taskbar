@@ -84,7 +84,7 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
-public class TaskbarController implements Controller {
+public class TaskbarController implements UIController {
 
     private Context context;
     private LinearLayout layout;
@@ -182,7 +182,7 @@ public class TaskbarController implements Controller {
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onCreateHost(Host host) {
+    public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
             if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
@@ -196,7 +196,7 @@ public class TaskbarController implements Controller {
     }
 
     @SuppressLint("RtlHardcoded")
-    private void drawTaskbar(Host host) {
+    private void drawTaskbar(UIHost host) {
         IconCache.getInstance(context).clearCache();
 
         // Initialize layout params
@@ -1093,7 +1093,7 @@ public class TaskbarController implements Controller {
     }
 
     @Override
-    public void onDestroyHost(Host host) {
+    public void onDestroyHost(UIHost host) {
         shouldRefreshRecents = false;
 
         if(layout != null)
@@ -1142,7 +1142,7 @@ public class TaskbarController implements Controller {
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onRecreateHost(Host host) {
+    public void onRecreateHost(UIHost host) {
         if(layout != null) {
             try {
                 host.removeView(layout);

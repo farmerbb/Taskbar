@@ -16,12 +16,12 @@
 package com.farmerbb.taskbar.service;
 
 import com.farmerbb.taskbar.ui.DashboardController;
-import com.farmerbb.taskbar.ui.HostService;
-import com.farmerbb.taskbar.ui.Controller;
+import com.farmerbb.taskbar.ui.UIHostService;
+import com.farmerbb.taskbar.ui.UIController;
 
-public class DashboardService extends HostService {
+public class DashboardService extends UIHostService {
     @Override
-    public Controller newController() {
+    public UIController newController() {
         return new DashboardController(this);
     }
 }

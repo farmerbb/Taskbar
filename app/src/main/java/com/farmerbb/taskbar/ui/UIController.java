@@ -15,8 +15,8 @@
 
 package com.farmerbb.taskbar.ui;
 
-public interface Controller {
-    void onCreateHost(Host host);
-    void onRecreateHost(Host host);
-    void onDestroyHost(Host host);
+public interface UIController {
+    void onCreateHost(UIHost host);
+    void onRecreateHost(UIHost host);
+    void onDestroyHost(UIHost host);
 }

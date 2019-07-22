@@ -25,9 +25,9 @@ import android.view.WindowManager;
 
 import com.farmerbb.taskbar.util.U;
 
-public abstract class HostService extends Service implements Host {
+public abstract class UIHostService extends Service implements UIHost {
 
-    private Controller controller;
+    private UIController controller;
     private WindowManager windowManager;
 
     @Override
@@ -87,5 +87,5 @@ public abstract class HostService extends Service implements Host {
         stopSelf();
     }
 
-    public abstract Controller newController();
+    public abstract UIController newController();
 }
