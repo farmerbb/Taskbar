@@ -303,7 +303,7 @@ public class TaskbarController implements Controller {
                     startButton.setImageURI(Uri.parse(strPath));
                     padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
                 } catch (Exception e) {
-                    U.showToast(this.context, "Error reading the custom image for the start menu. Try another file.", 500);
+                    U.showErrorDialog(this.context, this.context.getResources().getString(R.string.error_reading_custom_start_image));
                 }
             }
         }

@@ -178,10 +178,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(Intent.createChooser(intent, "Select an Image File"), 1001);
+            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.filepicker_select_an_image_file)), 1001);
         } catch (ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
-            U.showToast(getActivity(), "Please install a File Manager.", 50);
+            U.showToast(getActivity(), getResources().getString(R.string.filepicker_install_file_manager), 50);
         }
     }
 
