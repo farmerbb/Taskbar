@@ -48,6 +48,15 @@
         android:title="@string/pref_title_app_drawer_icon"/>
 
     <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="app_drawer_icon_custom"
+        android:title="@string/pref_title_app_drawer_icon_custom"/>
+
+    <Preference
+        android:key="app_drawer_icon_image"
+        android:title="@string/pref_title_app_drawer_icon_image"/>
+
+    <CheckBoxPreference
         android:defaultValue="true"
         android:key="shortcut_icon"
         android:title="@string/pref_title_shortcut_icon"/>

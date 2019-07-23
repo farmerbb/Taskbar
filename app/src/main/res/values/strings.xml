@@ -205,6 +205,8 @@
     <string name="pref_description_use_mask">May reduce performance when an icon pack is set</string>
 
     <string name="pref_title_app_drawer_icon">Use Taskbar logo as start menu icon</string>
+    <string name="pref_title_app_drawer_icon_custom">Use custom image as start menu icon</string>
+    <string name="pref_title_app_drawer_icon_image">Custom Image Path</string>
     <string name="pref_title_app_drawer_icon_bliss">Use Bliss logo as start menu icon</string>
 
     <string name="already_blacklisted">%1$s can\'t be selected because it is on the hidden apps list</string>
@@ -364,5 +366,9 @@
 
     <string name="force_activities_resizable">Force activities to be resizable</string>
     <string name="enable_freeform_windows">Enable freeform windows</string>
+
+    <string name="filepicker_select_an_image_file">Select an Image File</string>
+    <string name="filepicker_install_file_manager">"Please install a File Manager."</string>
+    <string name="error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
 
 </resources>

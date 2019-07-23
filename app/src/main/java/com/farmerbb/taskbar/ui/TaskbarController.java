@@ -37,6 +37,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -292,6 +293,19 @@ public class TaskbarController implements UIController {
         } else {
             startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
             padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+        }
+
+        if(pref.getBoolean("app_drawer_icon_custom", true)) {
+            String strPath = "";
+            if (pref.getString("app_drawer_icon_image", "DEFAULT").isEmpty() == false) {
+                try {
+                    strPath = pref.getString("app_drawer_icon_image", "DEFAULT");
+                    startButton.setImageURI(Uri.parse(strPath));
+                    padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+                } catch (Exception e) {
+                    U.showErrorDialog(this.context, this.context.getResources().getString(R.string.error_reading_custom_start_image));
+                }
+            }
         }
 
         startButton.setPadding(padding, padding, padding, padding);
