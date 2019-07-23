@@ -192,14 +192,9 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
             U.restartTaskbar(getActivity());
         }
 
-        if (requestCode == 1001) {
-            Uri currFileURI;
-            try {
-                currFileURI = data.getData();
-            }
-            catch (Exception ex) {
-                return;
-            }
+        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
+            Uri currFileURI = data.getData();
+
             if (currFileURI == null) {
                 return;
             }
