@@ -917,7 +917,7 @@ public class U {
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
         if(LauncherHelper.getInstance().isOnHomeScreen()
-                && isHomeActivityUIHost()
+                && FeatureFlags.homeActivityUIHost()
                 && (cls.equals(TaskbarService.class)
                 || cls.equals(StartMenuService.class)
                 || cls.equals(DashboardService.class)))
@@ -960,7 +960,7 @@ public class U {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean canDrawOverlays(Context context, boolean forHomeScreen) {
-        return (forHomeScreen && isHomeActivityUIHost() && !canBootToFreeform(context))
+        return (forHomeScreen && FeatureFlags.homeActivityUIHost() && !canBootToFreeform(context))
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.M
                 || Settings.canDrawOverlays(context);
     }
@@ -1536,9 +1536,5 @@ public class U {
         }
 
         return false;
-    }
-
-    public static boolean isHomeActivityUIHost() {
-        return BuildConfig.DEBUG;
     }
 }

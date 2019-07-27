@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,11 +30,19 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.service.DashboardService;
@@ -45,8 +54,10 @@ import com.farmerbb.taskbar.ui.UIHost;
 import com.farmerbb.taskbar.ui.ViewParams;
 import com.farmerbb.taskbar.ui.StartMenuController;
 import com.farmerbb.taskbar.ui.TaskbarController;
+import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DisplayInfo;
+import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -58,11 +69,13 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     private DashboardController dashboardController;
 
     private FrameLayout layout;
+    private GridLayout desktopIcons;
 
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
 
     private boolean shouldDelayFreeformHack;
+    private boolean shouldInitDesktopIcons;
     private int hits;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
@@ -101,6 +114,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         super.onCreate(savedInstanceState);
 
         shouldDelayFreeformHack = true;
+        shouldInitDesktopIcons = true;
         hits = 0;
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -127,6 +141,16 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
                 if(shouldStartFreeformHack)
                     startFreeformHack();
+            }
+
+            @Override
+            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                super.onLayout(changed, left, top, right, bottom);
+
+                if(shouldInitDesktopIcons && FeatureFlags.desktopIcons(HomeActivityDelegate.this)) {
+                    initDesktopIcons();
+                    shouldInitDesktopIcons = false;
+                }
             }
         };
 
@@ -169,7 +193,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);
 
-        if(U.isHomeActivityUIHost())
+        if(FeatureFlags.homeActivityUIHost())
             lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
         U.initPrefs(this);
@@ -251,7 +275,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
                     null);
         }
 
-        if(U.isHomeActivityUIHost()) {
+        if(FeatureFlags.homeActivityUIHost()) {
             // Stop any currently running services and switch to using HomeActivityDelegate as UI host
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
@@ -298,7 +322,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
             else
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-            if(U.isHomeActivityUIHost()) {
+            if(FeatureFlags.homeActivityUIHost()) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);
                 if(startMenuController != null) startMenuController.onDestroyHost(this);
                 if(dashboardController != null) dashboardController.onDestroyHost(this);
@@ -338,7 +362,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         lbm.unregisterReceiver(forceTaskbarStartReceiver);
         lbm.unregisterReceiver(freeformToggleReceiver);
 
-        if(U.isHomeActivityUIHost())
+        if(FeatureFlags.homeActivityUIHost())
             lbm.unregisterReceiver(restartReceiver);
     }
 
@@ -350,7 +374,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     private void killHomeActivity() {
         LauncherHelper.getInstance().setOnHomeScreen(false);
 
-        if(U.isHomeActivityUIHost()) {
+        if(FeatureFlags.homeActivityUIHost()) {
             if(taskbarController != null) taskbarController.onDestroyHost(this);
             if(startMenuController != null) startMenuController.onDestroyHost(this);
             if(dashboardController != null) dashboardController.onDestroyHost(this);
@@ -413,5 +437,151 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     @Override
     public void terminate() {
         // no-op
+    }
+
+    private void initDesktopIcons() {
+        int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.start_menu_grid_width)
+                + getResources().getDimensionPixelSize(R.dimen.start_menu_grid_padding);
+
+        int columns = layout.getWidth() / desktopIconSize;
+        int rows = layout.getHeight() / desktopIconSize;
+
+        desktopIcons = new GridLayout(this);
+        desktopIcons.setColumnCount(columns);
+        desktopIcons.setRowCount(rows);
+
+        for(int i = 0; i < columns * rows; i++) {
+            FrameLayout iconContainer = new FrameLayout(this);
+            iconContainer.setLayoutParams(new GridLayout.LayoutParams(new ViewGroup.LayoutParams(desktopIconSize, desktopIconSize)));
+            iconContainer.setOnDragListener(new DesktopIconDragListener());
+
+            if(i == 0) {
+                AppEntry entry = new AppEntry(
+                        "com.farmerbb.taskbar",
+                        "com.farmerbb.taskbar/.MainActivity",
+                        "Taskbar",
+                        getResources().getDrawable(R.mipmap.ic_launcher),
+                        false
+                );
+
+                iconContainer.addView(inflateDesktopIcon(iconContainer, entry));
+            }
+
+            desktopIcons.addView(iconContainer);
+        }
+
+        layout.addView(desktopIcons, 0);
+        layout.invalidate();
+    }
+
+    private int getIndexForColumnAndRow(int column, int row) {
+        return (row * desktopIcons.getColumnCount()) + column;
+    }
+
+    private int getColumnForIndex(int index) {
+        return index % desktopIcons.getColumnCount();
+    }
+
+    private int getRowForIndex(int index) {
+        int pos = index;
+        int rowCount = -1;
+
+        while(pos >= 0) {
+            pos -= desktopIcons.getColumnCount();
+            rowCount++;
+        }
+
+        return rowCount;
+    }
+
+    private View inflateDesktopIcon(ViewGroup parent, AppEntry entry) {
+        View icon = LayoutInflater.from(this).inflate(R.layout.row_alt, parent, false);
+
+        TextView textView = icon.findViewById(R.id.name);
+        textView.setText(entry.getLabel());
+        textView.setTextColor(ContextCompat.getColor(this, R.color.desktop_icon_text));
+        textView.setShadowLayer(50, 0, 0, R.color.desktop_icon_shadow);
+
+        ImageView imageView = icon.findViewById(R.id.icon);
+        imageView.setImageDrawable(entry.getIcon(this));
+
+        LinearLayout layout = icon.findViewById(R.id.entry);
+        layout.setOnClickListener(view -> U.launchApp(
+                this,
+                entry.getPackageName(),
+                entry.getComponentName(),
+                entry.getUserId(this),
+                null,
+                false,
+                false
+        ));
+
+        layout.setOnLongClickListener(view -> {
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            // TODO openContextMenu(entry, location);
+            return true;
+        });
+
+        layout.setOnGenericMotionListener((view, motionEvent) -> {
+            int action = motionEvent.getAction();
+
+            if(action == MotionEvent.ACTION_BUTTON_PRESS
+                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                // TODO openContextMenu(entry, location);
+            }
+
+            return false;
+        });
+
+        icon.setOnTouchListener(new DesktopIconTouchListener());
+        return icon;
+    }
+
+    private final class DesktopIconTouchListener implements View.OnTouchListener {
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                ClipData data = ClipData.newPlainText("", "");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                view.startDrag(data, shadowBuilder, view, 0);
+                view.setVisibility(View.INVISIBLE);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    class DesktopIconDragListener implements View.OnDragListener {
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // do nothing
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    v.setBackgroundResource(R.drawable.drop_target);
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                case DragEvent.ACTION_DRAG_ENDED:
+                    v.setBackground(null);
+                    break;
+                case DragEvent.ACTION_DROP:
+                    // Dropped, reassign View to ViewGroup
+                    View view = (View) event.getLocalState();
+                    ViewGroup owner = (ViewGroup) view.getParent();
+                    owner.removeView(view);
+                    FrameLayout container = (FrameLayout) v;
+                    container.addView(view);
+                    view.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
     }
 }
