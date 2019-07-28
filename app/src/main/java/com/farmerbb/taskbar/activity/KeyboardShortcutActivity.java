@@ -33,7 +33,6 @@ import java.util.Set;
 
 public class KeyboardShortcutActivity extends Activity {
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1133,7 +1133,6 @@ public class TaskbarController implements UIController {
         isFirstStart = true;
     }
 
-    @SuppressWarnings("deprecation")
     private void openContextMenu() {
         SharedPreferences pref = U.getSharedPreferences(context);
 
@@ -1271,7 +1270,6 @@ public class TaskbarController implements UIController {
         return convertView;
     }
 
-    @SuppressWarnings("deprecation")
     private void openContextMenu(AppEntry entry, int[] location) {
         Bundle args = new Bundle();
         args.putString("package_name", entry.getPackageName());

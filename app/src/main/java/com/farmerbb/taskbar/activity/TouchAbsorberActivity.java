@@ -48,7 +48,6 @@ public class TouchAbsorberActivity extends Activity {
     };
 
     @SuppressLint("HardwareIds")
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

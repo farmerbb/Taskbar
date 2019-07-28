@@ -45,10 +45,13 @@ import android.view.WindowManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
+import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
+import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -68,10 +71,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     String appName;
     long userId = 0;
 
+    DesktopIconInfo desktopIcon;
+
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
     boolean isStartButton = false;
     boolean isOverflowMenu = false;
+    boolean isNonAppMenu = false;
     boolean secondaryMenu = false;
     boolean dashboardOrStartMenuAppearing = false;
     boolean contextMenuFix = false;
@@ -95,7 +101,6 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
 
     @SuppressLint("RtlHardcoded")
-    @SuppressWarnings("deprecation")
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -104,8 +109,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         MenuHelper.getInstance().setContextMenuOpen(true);
 
         args = getIntent().getBundleExtra("args");
-        
-        boolean isNonAppMenu = !args.containsKey("package_name") && !args.containsKey("app_name");
+
+        desktopIcon = (DesktopIconInfo) args.getSerializable("desktop_icon");
+
+        isNonAppMenu = !args.containsKey("package_name") && !args.containsKey("app_name");
         showStartMenu = args.getBoolean("launched_from_start_menu", false);
         isStartButton = isNonAppMenu && args.getBoolean("is_start_button", false);
         isOverflowMenu = isNonAppMenu && args.getBoolean("is_overflow_menu", false);
@@ -120,7 +127,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         if(resourceId > 0)
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        if(showStartMenu) {
+        if(showStartMenu || desktopIcon != null) {
             int x = args.getInt("x", 0);
             int y = args.getInt("y", 0);
             int offset = getResources().getDimensionPixelSize(isOverflowMenu ? R.dimen.context_menu_offset_overflow : R.dimen.context_menu_offset);
@@ -244,6 +251,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
             if(pref.getBoolean("freeform_hack", false)
+                    && !FeatureFlags.desktopIcons(this)
                     && ((U.launcherIsDefault(this)
                     && !U.isOverridingFreeformHack(this)
                     && FreeformHackHelper.getInstance().isInFreeformWorkspace())
@@ -275,6 +283,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("file_manager").setOnPreferenceClickListener(this);
             else
                 getPreferenceScreen().removePreference(findPreference("file_manager"));
+        } else if(desktopIcon != null && isNonAppMenu) {
+            addPreferencesFromResource(R.xml.pref_context_menu_desktop_icons);
+            findPreference("add_icon_to_desktop").setOnPreferenceClickListener(this);
+            findPreference("arrange_icons").setOnPreferenceClickListener(this);
+            findPreference("change_wallpaper").setOnPreferenceClickListener(this);
         } else {
             appName = args.getString("app_name");
             packageName = args.getString("package_name");
@@ -645,6 +658,42 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 contextMenuFix = false;
+                break;
+            case "add_icon_to_desktop":
+                Intent intent2 = null;
+
+                SharedPreferences pref4 = U.getSharedPreferences(this);
+                switch(pref4.getString("theme", "light")) {
+                    case "light":
+                        intent2 = new Intent(this, DesktopIconSelectAppActivity.class);
+                        break;
+                    case "dark":
+                        intent2 = new Intent(this, DesktopIconSelectAppActivityDark.class);
+                        break;
+                }
+
+                if(intent2 != null)
+                    intent2.putExtra("desktop_icon", desktopIcon);
+
+                if(U.hasFreeformSupport(this)
+                        && pref4.getBoolean("freeform_hack", false)
+                        && intent2 != null && isInMultiWindowMode()) {
+                    intent2.putExtra("no_shadow", true);
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+
+                    U.startActivityMaximized(getApplicationContext(), intent2);
+                } else {
+                    try {
+                        startActivity(intent2);
+                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                }
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                contextMenuFix = false;
+                break;
+            case "arrange_icons":
+                // TODO implement
                 break;
             case "change_wallpaper":
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));

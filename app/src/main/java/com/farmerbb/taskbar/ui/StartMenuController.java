@@ -572,7 +572,6 @@ public class StartMenuController implements UIController {
             hideStartMenu(true);
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private void showStartMenu() {
         if(layout.getVisibility() == View.GONE) {
@@ -726,7 +725,6 @@ public class StartMenuController implements UIController {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void openContextMenu(final int[] location) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 

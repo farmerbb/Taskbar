@@ -1,4 +1,4 @@
-/* Copyright 2018 Braden Farmer
+/* Copyright 2019 Braden Farmer
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,8 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.util;
+package com.farmerbb.taskbar.activity.dark;
 
-public class DisplayInfo {
-    public int width;
-    public int height;
-    int density;
+import com.farmerbb.taskbar.activity.DesktopIconSelectAppActivity;
 
-    DisplayInfo(int width, int height, int density) {
-        this.width = width;
-        this.height = height;
-        this.density = density;
-    }
-}
+public class DesktopIconSelectAppActivityDark extends DesktopIconSelectAppActivity {}

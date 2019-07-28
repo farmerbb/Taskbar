@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.SparseArray;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -56,12 +57,16 @@ import com.farmerbb.taskbar.ui.StartMenuController;
 import com.farmerbb.taskbar.ui.TaskbarController;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.CompatUtils;
+import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class HomeActivityDelegate extends Activity implements UIHost {
     private TaskbarController taskbarController;
@@ -105,6 +110,13 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateWindowFlags();
+        }
+    };
+
+    private BroadcastReceiver refreshDesktopIconsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshDesktopIcons();
         }
     };
 
@@ -154,23 +166,25 @@ public class HomeActivityDelegate extends Activity implements UIHost {
             }
         };
 
-        layout.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
+        if(!FeatureFlags.desktopIcons(this)) {
+            layout.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
 
-        layout.setOnLongClickListener(view2 -> {
-            if(!pref.getBoolean("freeform_hack", false))
-                setWallpaper();
+            layout.setOnLongClickListener(view2 -> {
+                if(!pref.getBoolean("freeform_hack", false))
+                    setWallpaper();
 
-            return false;
-        });
+                return false;
+            });
 
-        layout.setOnGenericMotionListener((view3, motionEvent) -> {
-            if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY
-                    && !pref.getBoolean("freeform_hack", false))
-                setWallpaper();
+            layout.setOnGenericMotionListener((view3, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY
+                        && !pref.getBoolean("freeform_hack", false))
+                    setWallpaper();
 
-            return false;
-        });
+                return false;
+            });
+        }
 
         layout.setFitsSystemWindows(true);
 
@@ -195,6 +209,9 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
         if(FeatureFlags.homeActivityUIHost())
             lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
+
+        if(FeatureFlags.desktopIcons(this))
+            lbm.registerReceiver(refreshDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
 
         U.initPrefs(this);
     }
@@ -364,6 +381,9 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
         if(FeatureFlags.homeActivityUIHost())
             lbm.unregisterReceiver(restartReceiver);
+
+        if(FeatureFlags.desktopIcons(this))
+            lbm.unregisterReceiver(refreshDesktopIconsReceiver);
     }
 
     @Override
@@ -440,58 +460,88 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     }
 
     private void initDesktopIcons() {
+        desktopIcons = new GridLayout(this);
+        refreshDesktopIcons();
+
+        layout.addView(desktopIcons, 0);
+        layout.invalidate();
+    }
+
+    private void refreshDesktopIcons() {
         int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.start_menu_grid_width)
                 + getResources().getDimensionPixelSize(R.dimen.start_menu_grid_padding);
 
         int columns = layout.getWidth() / desktopIconSize;
         int rows = layout.getHeight() / desktopIconSize;
 
-        desktopIcons = new GridLayout(this);
+        desktopIcons.removeAllViews();
         desktopIcons.setColumnCount(columns);
         desktopIcons.setRowCount(rows);
+
+        SparseArray<DesktopIconInfo> icons = new SparseArray<>();
+
+        try {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
+
+            for(int i = 0; i < jsonIcons.length(); i++) {
+                DesktopIconInfo info = DesktopIconInfo.fromJson(jsonIcons.getJSONObject(i));
+                if(info != null)
+                    icons.put(getIndex(info), info);
+            }
+        } catch (JSONException e) { /* Gracefully fail */ }
 
         for(int i = 0; i < columns * rows; i++) {
             FrameLayout iconContainer = new FrameLayout(this);
             iconContainer.setLayoutParams(new GridLayout.LayoutParams(new ViewGroup.LayoutParams(desktopIconSize, desktopIconSize)));
             iconContainer.setOnDragListener(new DesktopIconDragListener());
 
-            if(i == 0) {
-                AppEntry entry = new AppEntry(
-                        "com.farmerbb.taskbar",
-                        "com.farmerbb.taskbar/.MainActivity",
-                        "Taskbar",
-                        getResources().getDrawable(R.mipmap.ic_launcher),
-                        false
-                );
+            int index = i;
 
-                iconContainer.addView(inflateDesktopIcon(iconContainer, entry));
-            }
+            iconContainer.setOnLongClickListener(view -> {
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                openContextMenu(null, location, getDesktopIconInfo(index));
+                return true;
+            });
+
+            iconContainer.setOnGenericMotionListener((view, motionEvent) -> {
+                int action = motionEvent.getAction();
+
+                if(action == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    openContextMenu(null, location, getDesktopIconInfo(index));
+                }
+
+                return false;
+            });
+
+            DesktopIconInfo info = icons.get(index);
+            if(info != null && info.entry != null)
+                iconContainer.addView(inflateDesktopIcon(iconContainer, info.entry));
 
             desktopIcons.addView(iconContainer);
         }
-
-        layout.addView(desktopIcons, 0);
-        layout.invalidate();
     }
 
-    private int getIndexForColumnAndRow(int column, int row) {
-        return (row * desktopIcons.getColumnCount()) + column;
+    private int getIndex(DesktopIconInfo info) {
+        return (info.row * desktopIcons.getColumnCount()) + info.column;
     }
 
-    private int getColumnForIndex(int index) {
-        return index % desktopIcons.getColumnCount();
-    }
+    private DesktopIconInfo getDesktopIconInfo(int index) {
+        int column = index % desktopIcons.getColumnCount();
 
-    private int getRowForIndex(int index) {
         int pos = index;
-        int rowCount = -1;
+        int row = -1;
 
         while(pos >= 0) {
             pos -= desktopIcons.getColumnCount();
-            rowCount++;
+            row++;
         }
 
-        return rowCount;
+        return new DesktopIconInfo(column, row, null);
     }
 
     private View inflateDesktopIcon(ViewGroup parent, AppEntry entry) {
@@ -516,28 +566,25 @@ public class HomeActivityDelegate extends Activity implements UIHost {
                 false
         ));
 
-        layout.setOnLongClickListener(view -> {
-            int[] location = new int[2];
-            view.getLocationOnScreen(location);
-            // TODO openContextMenu(entry, location);
-            return true;
-        });
-
-        layout.setOnGenericMotionListener((view, motionEvent) -> {
-            int action = motionEvent.getAction();
-
-            if(action == MotionEvent.ACTION_BUTTON_PRESS
-                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                int[] location = new int[2];
-                view.getLocationOnScreen(location);
-                // TODO openContextMenu(entry, location);
-            }
-
-            return false;
-        });
-
         icon.setOnTouchListener(new DesktopIconTouchListener());
         return icon;
+    }
+
+    private void openContextMenu(final AppEntry entry, final int[] location, DesktopIconInfo info) {
+        Bundle args = new Bundle();
+
+        if(entry != null) {
+            args.putString("package_name", entry.getPackageName());
+            args.putString("app_name", entry.getLabel());
+            args.putString("component_name", entry.getComponentName());
+            args.putLong("user_id", entry.getUserId(this));
+        }
+
+        args.putSerializable("desktop_icon", info);
+        args.putInt("x", location[0]);
+        args.putInt("y", location[1]);
+
+        U.startContextMenuActivity(this, args);
     }
 
     private final class DesktopIconTouchListener implements View.OnTouchListener {

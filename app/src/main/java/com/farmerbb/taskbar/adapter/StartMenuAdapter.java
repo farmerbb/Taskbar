@@ -188,7 +188,6 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         return false;
     }
 
-    @SuppressWarnings("deprecation")
     private void openContextMenu(final AppEntry entry, final int[] location) {
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 

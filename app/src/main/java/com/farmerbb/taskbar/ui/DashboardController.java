@@ -305,7 +305,6 @@ public class DashboardController implements UIController {
             hideDashboard();
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private void showDashboard() {
         if(layout.getVisibility() == View.GONE) {

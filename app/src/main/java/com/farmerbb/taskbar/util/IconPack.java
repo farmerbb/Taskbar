@@ -160,7 +160,6 @@ public class IconPack {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private Bitmap loadBitmap(Context context, String drawableName) {
         int id = getResources(context).getIdentifier(drawableName, "drawable", packageName);
         if(id > 0) {
@@ -170,7 +169,7 @@ public class IconPack {
         }
         return null;
     }
-    @SuppressWarnings("deprecation")
+
     private Drawable loadDrawable(Context context, String drawableName) {
         int id = getResources(context).getIdentifier(drawableName, "drawable", packageName);
         if(id > 0) {

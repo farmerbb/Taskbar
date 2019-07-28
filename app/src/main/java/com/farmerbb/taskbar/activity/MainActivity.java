@@ -310,7 +310,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.N)
     private void startTaskbarService() {
         SharedPreferences pref = U.getSharedPreferences(this);

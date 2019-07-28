@@ -33,7 +33,6 @@ import com.farmerbb.taskbar.util.U;
 public class InvisibleActivityAlt extends InvisibleActivity {
 
     @SuppressLint("HardwareIds")
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
