@@ -27,6 +27,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.LauncherActivityInfo;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,6 +70,12 @@ import com.farmerbb.taskbar.util.U;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class HomeActivityDelegate extends Activity implements UIHost {
     private TaskbarController taskbarController;
@@ -117,6 +126,13 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         @Override
         public void onReceive(Context context, Intent intent) {
             refreshDesktopIcons();
+        }
+    };
+
+    private BroadcastReceiver arrangeDesktopIconsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            arrangeDesktopIcons();
         }
     };
 
@@ -210,8 +226,10 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         if(FeatureFlags.homeActivityUIHost())
             lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
-        if(FeatureFlags.desktopIcons(this))
+        if(FeatureFlags.desktopIcons(this)) {
             lbm.registerReceiver(refreshDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
+            lbm.registerReceiver(arrangeDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.ARRANGE_DESKTOP_ICONS"));
+        }
 
         U.initPrefs(this);
     }
@@ -382,8 +400,10 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         if(FeatureFlags.homeActivityUIHost())
             lbm.unregisterReceiver(restartReceiver);
 
-        if(FeatureFlags.desktopIcons(this))
+        if(FeatureFlags.desktopIcons(this)) {
             lbm.unregisterReceiver(refreshDesktopIconsReceiver);
+            lbm.unregisterReceiver(arrangeDesktopIconsReceiver);
+        }
     }
 
     @Override
@@ -468,13 +488,13 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     }
 
     private void refreshDesktopIcons() {
-        int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.start_menu_grid_width)
-                + getResources().getDimensionPixelSize(R.dimen.start_menu_grid_padding);
+        int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.start_menu_grid_width);
 
         int columns = layout.getWidth() / desktopIconSize;
         int rows = layout.getHeight() / desktopIconSize;
 
         desktopIcons.removeAllViews();
+        desktopIcons.setOrientation(LinearLayout.VERTICAL);
         desktopIcons.setColumnCount(columns);
         desktopIcons.setRowCount(rows);
 
@@ -526,19 +546,50 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         }
     }
 
+    private void arrangeDesktopIcons() {
+        try {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
+            List<DesktopIconInfo> icons = new ArrayList<>();
+
+            for(int i = 0; i < jsonIcons.length(); i++) {
+                DesktopIconInfo info = DesktopIconInfo.fromJson(jsonIcons.getJSONObject(i));
+                if(info != null)
+                    icons.add(info);
+            }
+
+            Collections.sort(icons, (o1, o2) -> Collator.getInstance().compare(o1.entry.getLabel(), o2.entry.getLabel()));
+
+            jsonIcons = new JSONArray();
+
+            for(int i = 0; i < icons.size(); i++) {
+                DesktopIconInfo oldInfo = icons.get(i);
+                DesktopIconInfo newInfo = getDesktopIconInfo(i);
+
+                oldInfo.column = newInfo.column;
+                oldInfo.row = newInfo.row;
+
+                jsonIcons.put(oldInfo.toJson(this));
+            }
+
+            pref.edit().putString("desktop_icons", jsonIcons.toString()).apply();
+            refreshDesktopIcons();
+        } catch (JSONException e) { /* Gracefully fail */ }
+    }
+
     private int getIndex(DesktopIconInfo info) {
-        return (info.row * desktopIcons.getColumnCount()) + info.column;
+        return (info.column * desktopIcons.getRowCount()) + info.row;
     }
 
     private DesktopIconInfo getDesktopIconInfo(int index) {
-        int column = index % desktopIcons.getColumnCount();
+        int row = index % desktopIcons.getRowCount();
 
         int pos = index;
-        int row = -1;
+        int column = -1;
 
         while(pos >= 0) {
-            pos -= desktopIcons.getColumnCount();
-            row++;
+            pos -= desktopIcons.getRowCount();
+            column++;
         }
 
         return new DesktopIconInfo(column, row, null);
@@ -610,7 +661,11 @@ public class HomeActivityDelegate extends Activity implements UIHost {
                     // do nothing
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    v.setBackgroundResource(R.drawable.drop_target);
+                    Drawable dropTarget = ContextCompat.getDrawable(HomeActivityDelegate.this, R.drawable.drop_target);
+                    if(dropTarget != null) {
+                        dropTarget.setColorFilter(U.getAccentColor(HomeActivityDelegate.this), PorterDuff.Mode.DST_IN);
+                        v.setBackground(dropTarget);
+                    }
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                 case DragEvent.ACTION_DRAG_ENDED:

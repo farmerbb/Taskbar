@@ -23,7 +23,6 @@ import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,7 +31,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.adapter.DesktopIconAppListAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
@@ -41,6 +39,7 @@ import com.farmerbb.taskbar.util.U;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,48 +59,24 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
         desktopIcon = (DesktopIconInfo) getIntent().getSerializableExtra("desktop_icon");
         boolean noShadow = getIntent().hasExtra("no_shadow");
 
-        if(savedInstanceState == null) {
-            setContentView(R.layout.desktop_icon_select_app);
-            setFinishOnTouchOutside(false);
-            setTitle(getString(R.string.select_an_app));
+        setContentView(R.layout.desktop_icon_select_app);
+        setFinishOnTouchOutside(false);
+        setTitle(getString(R.string.select_an_app));
 
-            if(noShadow) {
-                WindowManager.LayoutParams params = getWindow().getAttributes();
-                params.dimAmount = 0;
-                getWindow().setAttributes(params);
+        if(noShadow) {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.dimAmount = 0;
+            getWindow().setAttributes(params);
 
-                if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-                    getWindow().setElevation(0);
-            }
-
-            progressBar = findViewById(R.id.progress_bar);
-            appList = findViewById(R.id.list);
-
-            appListGenerator = new DesktopIconAppListGenerator();
-            appListGenerator.execute();
-        } else {
-            finish();
-
-            if(!noShadow)
-                new Handler().post(() -> {
-                    Intent intent = null;
-                    SharedPreferences pref = U.getSharedPreferences(this);
-
-                    switch(pref.getString("theme", "light")) {
-                        case "light":
-                            intent = new Intent(this, DesktopIconSelectAppActivity.class);
-                            break;
-                        case "dark":
-                            intent = new Intent(this, DesktopIconSelectAppActivityDark.class);
-                            break;
-                    }
-
-                    if(intent != null)
-                        intent.putExtra("desktop_icon", desktopIcon);
-
-                    startActivity(intent);
-                });
+            if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                getWindow().setElevation(0);
         }
+
+        progressBar = findViewById(R.id.progress_bar);
+        appList = findViewById(R.id.list);
+
+        appListGenerator = new DesktopIconAppListGenerator();
+        appListGenerator.execute();
     }
 
     @Override
@@ -136,7 +111,22 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             List<ResolveInfo> info = pm.queryIntentActivities(intent, 0);
 
-            Collections.sort(info, (ai1, ai2) -> ai1.activityInfo.loadLabel(pm).toString().compareTo(ai2.activityInfo.loadLabel(pm).toString()));
+            Collections.sort(info, (ai1, ai2) -> {
+                String label1;
+                String label2;
+
+                try {
+                    label1 = ai1.activityInfo.loadLabel(pm).toString();
+                    label2 = ai2.activityInfo.loadLabel(pm).toString();
+                } catch (OutOfMemoryError e) {
+                    System.gc();
+
+                    label1 = ai1.activityInfo.packageName;
+                    label2 = ai2.activityInfo.packageName;
+                }
+
+                return Collator.getInstance().compare(label1, label2);
+            });
 
             final List<AppEntry> entries = new ArrayList<>();
             for(ResolveInfo appInfo : info) {
