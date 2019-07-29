@@ -494,7 +494,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         int rows = layout.getHeight() / desktopIconSize;
 
         desktopIcons.removeAllViews();
-        desktopIcons.setOrientation(LinearLayout.VERTICAL);
+        desktopIcons.setOrientation(GridLayout.VERTICAL);
         desktopIcons.setColumnCount(columns);
         desktopIcons.setRowCount(rows);
 
