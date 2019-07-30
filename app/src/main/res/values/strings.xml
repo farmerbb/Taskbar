@@ -374,5 +374,6 @@
     <string name="add_icon_to_desktop">Add icon to desktop</string>
     <string name="arrange_icons">Arrange icons</string>
     <string name="select_an_app">Select an app</string>
+    <string name="remove_desktop_icon">Remove desktop icon</string>
 
 </resources>

@@ -60,6 +60,9 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
 import com.farmerbb.taskbar.util.U;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.List;
 
 public class ContextMenuActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
@@ -324,7 +327,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             ResolveInfo defaultLauncher = pm.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-            if(!packageName.contains(BuildConfig.BASE_APPLICATION_ID)
+            if(desktopIcon != null) {
+                addPreferencesFromResource(R.xml.pref_context_menu_remove_desktop_icon);
+                findPreference("remove_desktop_icon").setOnPreferenceClickListener(this);
+            } else if(!packageName.contains(BuildConfig.BASE_APPLICATION_ID)
                     && !packageName.equals(defaultLauncher.activityInfo.packageName)) {
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
 
@@ -703,6 +709,28 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 contextMenuFix = false;
+                break;
+            case "remove_desktop_icon":
+                try {
+                    SharedPreferences pref5 = U.getSharedPreferences(this);
+                    JSONArray jsonIcons = new JSONArray(pref5.getString("desktop_icons", "[]"));
+                    int iconToRemove = -1;
+
+                    for(int i = 0; i < jsonIcons.length(); i++) {
+                        DesktopIconInfo info = DesktopIconInfo.fromJson(jsonIcons.getJSONObject(i));
+                        if(info != null && info.column == desktopIcon.column && info.row == desktopIcon.row) {
+                            iconToRemove = i;
+                            break;
+                        }
+                    }
+
+                    if(iconToRemove > -1) {
+                        jsonIcons.remove(iconToRemove);
+
+                        pref5.edit().putString("desktop_icons", jsonIcons.toString()).apply();
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
+                    }
+                } catch (JSONException e) { /* Gracefully fail */ }
                 break;
         }
 

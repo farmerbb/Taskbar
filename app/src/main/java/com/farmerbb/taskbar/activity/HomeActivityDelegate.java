@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.LauncherActivityInfo;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -45,7 +44,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
@@ -66,6 +64,7 @@ import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 import org.json.JSONArray;
@@ -74,7 +73,6 @@ import org.json.JSONException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class HomeActivityDelegate extends Activity implements UIHost {
@@ -518,10 +516,32 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
             int index = i;
 
+            iconContainer.setOnClickListener(view -> {
+                boolean isStartMenuOpen = MenuHelper.getInstance().isStartMenuOpen();
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+
+                DesktopIconInfo info = icons.get(index);
+                if(!isStartMenuOpen && info != null && info.entry != null) {
+                    U.launchApp(
+                            this,
+                            info.entry.getPackageName(),
+                            info.entry.getComponentName(),
+                            info.entry.getUserId(this),
+                            null,
+                            false,
+                            false
+                    );
+                }
+            });
+
             iconContainer.setOnLongClickListener(view -> {
                 int[] location = new int[2];
                 view.getLocationOnScreen(location);
-                openContextMenu(null, location, getDesktopIconInfo(index));
+
+                DesktopIconInfo info = icons.get(index);
+                if(info == null) info = getDesktopIconInfo(index);
+
+                openContextMenu(info, location);
                 return true;
             });
 
@@ -532,7 +552,11 @@ public class HomeActivityDelegate extends Activity implements UIHost {
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                     int[] location = new int[2];
                     view.getLocationOnScreen(location);
-                    openContextMenu(null, location, getDesktopIconInfo(index));
+
+                    DesktopIconInfo info = icons.get(index);
+                    if(info == null) info = getDesktopIconInfo(index);
+
+                    openContextMenu(info, location);
                 }
 
                 return false;
@@ -606,29 +630,18 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         ImageView imageView = icon.findViewById(R.id.icon);
         imageView.setImageDrawable(entry.getIcon(this));
 
-        LinearLayout layout = icon.findViewById(R.id.entry);
-        layout.setOnClickListener(view -> U.launchApp(
-                this,
-                entry.getPackageName(),
-                entry.getComponentName(),
-                entry.getUserId(this),
-                null,
-                false,
-                false
-        ));
-
         icon.setOnTouchListener(new DesktopIconTouchListener());
         return icon;
     }
 
-    private void openContextMenu(final AppEntry entry, final int[] location, DesktopIconInfo info) {
+    private void openContextMenu(final DesktopIconInfo info, final int[] location) {
         Bundle args = new Bundle();
 
-        if(entry != null) {
-            args.putString("package_name", entry.getPackageName());
-            args.putString("app_name", entry.getLabel());
-            args.putString("component_name", entry.getComponentName());
-            args.putLong("user_id", entry.getUserId(this));
+        if(info.entry != null) {
+            args.putString("package_name", info.entry.getPackageName());
+            args.putString("app_name", info.entry.getLabel());
+            args.putString("component_name", info.entry.getComponentName());
+            args.putLong("user_id", info.entry.getUserId(this));
         }
 
         args.putSerializable("desktop_icon", info);
@@ -640,6 +653,9 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
     private final class DesktopIconTouchListener implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
+            view.setAlpha(motionEvent.getAction() == MotionEvent.ACTION_DOWN ? 0.5f : 1);
+            return false;
+/*
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 ClipData data = ClipData.newPlainText("", "");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
@@ -649,6 +665,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
             } else {
                 return false;
             }
+*/
         }
     }
 
@@ -670,6 +687,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
                 case DragEvent.ACTION_DRAG_EXITED:
                 case DragEvent.ACTION_DRAG_ENDED:
                     v.setBackground(null);
+                    v.setVisibility(View.VISIBLE);
                     break;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign View to ViewGroup
