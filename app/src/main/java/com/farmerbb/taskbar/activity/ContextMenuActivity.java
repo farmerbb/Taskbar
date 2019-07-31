@@ -699,7 +699,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "arrange_icons":
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ARRANGE_DESKTOP_ICONS"));
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
+                break;
+            case "sort_by_name":
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
                 break;
             case "change_wallpaper":
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));

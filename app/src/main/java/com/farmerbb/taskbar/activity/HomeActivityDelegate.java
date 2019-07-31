@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
@@ -27,15 +26,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -75,13 +75,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HomeActivityDelegate extends Activity implements UIHost {
+public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private TaskbarController taskbarController;
     private StartMenuController startMenuController;
     private DashboardController dashboardController;
 
     private FrameLayout layout;
     private GridLayout desktopIcons;
+    private FloatingActionButton fab;
 
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
@@ -89,6 +90,10 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     private boolean shouldDelayFreeformHack;
     private boolean shouldInitDesktopIcons;
     private int hits;
+
+    private boolean iconArrangeMode = false;
+    private int startDragIndex;
+    private int endDragIndex;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
@@ -127,10 +132,18 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         }
     };
 
-    private BroadcastReceiver arrangeDesktopIconsReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver iconArrangeModeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            arrangeDesktopIcons();
+            iconArrangeMode = true;
+            fab.show();
+        }
+    };
+
+    private BroadcastReceiver sortDesktopIconsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            sortDesktopIcons();
         }
     };
 
@@ -174,6 +187,9 @@ public class HomeActivityDelegate extends Activity implements UIHost {
                 super.onLayout(changed, left, top, right, bottom);
 
                 if(shouldInitDesktopIcons && FeatureFlags.desktopIcons(HomeActivityDelegate.this)) {
+                    if(savedInstanceState != null)
+                        iconArrangeMode = savedInstanceState.getBoolean("icon_arrange_mode");
+
                     initDesktopIcons();
                     shouldInitDesktopIcons = false;
                 }
@@ -226,7 +242,8 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
         if(FeatureFlags.desktopIcons(this)) {
             lbm.registerReceiver(refreshDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
-            lbm.registerReceiver(arrangeDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.ARRANGE_DESKTOP_ICONS"));
+            lbm.registerReceiver(iconArrangeModeReceiver, new IntentFilter("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
+            lbm.registerReceiver(sortDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
         }
 
         U.initPrefs(this);
@@ -400,8 +417,15 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
         if(FeatureFlags.desktopIcons(this)) {
             lbm.unregisterReceiver(refreshDesktopIconsReceiver);
-            lbm.unregisterReceiver(arrangeDesktopIconsReceiver);
+            lbm.unregisterReceiver(iconArrangeModeReceiver);
+            lbm.unregisterReceiver(sortDesktopIconsReceiver);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("icon_arrange_mode", iconArrangeMode);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -481,8 +505,29 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         desktopIcons = new GridLayout(this);
         refreshDesktopIcons();
 
+        fab = new FloatingActionButton(this);
+        fab.setImageResource(R.drawable.ic_done_black_24dp);
+        fab.setOnClickListener(v -> {
+            iconArrangeMode = false;
+            fab.hide();
+            refreshDesktopIcons();
+        });
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        int fabMargin = getResources().getDimensionPixelSize(R.dimen.desktop_icon_fab_margin);
+
+        params.gravity = Gravity.BOTTOM | Gravity.END;
+        params.setMargins(fabMargin, fabMargin, fabMargin, fabMargin);
+        fab.setLayoutParams(params);
+
+        if(!iconArrangeMode) fab.hide();
+
         layout.addView(desktopIcons, 0);
-        layout.invalidate();
+        layout.addView(fab, 1);
     }
 
     private void refreshDesktopIcons() {
@@ -570,7 +615,7 @@ public class HomeActivityDelegate extends Activity implements UIHost {
         }
     }
 
-    private void arrangeDesktopIcons() {
+    private void sortDesktopIcons() {
         try {
             SharedPreferences pref = U.getSharedPreferences(this);
             JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
@@ -598,6 +643,35 @@ public class HomeActivityDelegate extends Activity implements UIHost {
 
             pref.edit().putString("desktop_icons", jsonIcons.toString()).apply();
             refreshDesktopIcons();
+        } catch (JSONException e) { /* Gracefully fail */ }
+    }
+
+    private void reassignDroppedIcon() {
+        if(startDragIndex == endDragIndex) return;
+
+        try {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
+            int iconToRemove = -1;
+
+            DesktopIconInfo oldInfo = getDesktopIconInfo(startDragIndex);
+            DesktopIconInfo newInfo = getDesktopIconInfo(endDragIndex);
+
+            for(int i = 0; i < jsonIcons.length(); i++) {
+                DesktopIconInfo info = DesktopIconInfo.fromJson(jsonIcons.getJSONObject(i));
+                if(info != null && info.column == oldInfo.column && info.row == oldInfo.row) {
+                    newInfo.entry = info.entry;
+                    iconToRemove = i;
+                    break;
+                }
+            }
+
+            if(iconToRemove > -1) {
+                jsonIcons.remove(iconToRemove);
+                jsonIcons.put(newInfo.toJson(this));
+
+                pref.edit().putString("desktop_icons", jsonIcons.toString()).apply();
+            }
         } catch (JSONException e) { /* Gracefully fail */ }
     }
 
@@ -635,6 +709,8 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     }
 
     private void openContextMenu(final DesktopIconInfo info, final int[] location) {
+        if(iconArrangeMode) return;
+
         Bundle args = new Bundle();
 
         if(info.entry != null) {
@@ -652,53 +728,57 @@ public class HomeActivityDelegate extends Activity implements UIHost {
     }
 
     private final class DesktopIconTouchListener implements View.OnTouchListener {
+        @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            view.setAlpha(motionEvent.getAction() == MotionEvent.ACTION_DOWN ? 0.5f : 1);
-            return false;
-/*
-            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            if(iconArrangeMode && motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                startDragIndex = desktopIcons.indexOfChild((ViewGroup) view.getParent());
+
                 ClipData data = ClipData.newPlainText("", "");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(data, shadowBuilder, view, 0);
                 view.setVisibility(View.INVISIBLE);
                 return true;
-            } else {
+            } else
                 return false;
-            }
-*/
         }
     }
 
-    class DesktopIconDragListener implements View.OnDragListener {
-
+    private final class DesktopIconDragListener implements View.OnDragListener {
         @Override
         public boolean onDrag(View v, DragEvent event) {
-            switch (event.getAction()) {
+            switch(event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
+                default:
                     // do nothing
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    Drawable dropTarget = ContextCompat.getDrawable(HomeActivityDelegate.this, R.drawable.drop_target);
-                    if(dropTarget != null) {
-                        dropTarget.setColorFilter(U.getAccentColor(HomeActivityDelegate.this), PorterDuff.Mode.DST_IN);
-                        v.setBackground(dropTarget);
+                    FrameLayout container = (FrameLayout) v;
+                    if(container.getChildCount() == 0
+                            || startDragIndex == desktopIcons.indexOfChild(container)) {
+                        v.setBackgroundColor(U.getAccentColor(HomeActivityDelegate.this));
+                        v.setAlpha(0.5f);
                     }
                     break;
-                case DragEvent.ACTION_DRAG_EXITED:
                 case DragEvent.ACTION_DRAG_ENDED:
+                    View view = (View) event.getLocalState();
+                    view.setVisibility(View.VISIBLE);
+                    // fall through
+                case DragEvent.ACTION_DRAG_EXITED:
                     v.setBackground(null);
-                    v.setVisibility(View.VISIBLE);
+                    v.setAlpha(1);
                     break;
                 case DragEvent.ACTION_DROP:
-                    // Dropped, reassign View to ViewGroup
-                    View view = (View) event.getLocalState();
-                    ViewGroup owner = (ViewGroup) view.getParent();
-                    owner.removeView(view);
-                    FrameLayout container = (FrameLayout) v;
-                    container.addView(view);
-                    view.setVisibility(View.VISIBLE);
-                    break;
-                default:
+                    FrameLayout container2 = (FrameLayout) v;
+                    if(container2.getChildCount() == 0) {
+                        // Dropped, reassign View to ViewGroup
+                        View view2 = (View) event.getLocalState();
+                        ViewGroup owner = (ViewGroup) view2.getParent();
+                        owner.removeView(view2);
+                        container2.addView(view2);
+
+                        endDragIndex = desktopIcons.indexOfChild(container2);
+                        reassignDroppedIcon();
+                    }
                     break;
             }
             return true;

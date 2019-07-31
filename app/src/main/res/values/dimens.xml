@@ -38,4 +38,5 @@
     <dimen name="navbar_buttons_margin">8dp</dimen>
     <dimen name="toast_y_offset">64dp</dimen>
     <dimen name="caption_offset">48dp</dimen>
+    <dimen name="desktop_icon_fab_margin">16dp</dimen>
 </resources>

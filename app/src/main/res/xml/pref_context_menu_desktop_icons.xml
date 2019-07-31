@@ -25,6 +25,10 @@
         android:title="@string/arrange_icons" />
 
     <Preference
+        android:key="sort_by_name"
+        android:title="@string/sort_by_name" />
+
+    <Preference
         android:key="change_wallpaper"
         android:title="@string/change_wallpaper" />
 
