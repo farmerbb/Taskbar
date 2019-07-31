@@ -290,6 +290,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             addPreferencesFromResource(R.xml.pref_context_menu_desktop_icons);
             findPreference("add_icon_to_desktop").setOnPreferenceClickListener(this);
             findPreference("arrange_icons").setOnPreferenceClickListener(this);
+            findPreference("sort_by_name").setOnPreferenceClickListener(this);
             findPreference("change_wallpaper").setOnPreferenceClickListener(this);
         } else {
             appName = args.getString("app_name");
