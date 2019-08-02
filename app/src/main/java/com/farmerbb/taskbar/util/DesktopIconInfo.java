@@ -27,6 +27,8 @@ public class DesktopIconInfo implements Serializable {
     public int row;
     public AppEntry entry;
 
+    static final long serialVersionUID = 1L;
+
     public DesktopIconInfo(int column, int row, AppEntry entry) {
         this.column = column;
         this.row = row;

@@ -24,6 +24,7 @@ android {
         versionName "4.0.3"
 
         resConfigs "en", "ja", "ru", "de", "zh-rCN", "tr", "nl"
+        vectorDrawables.generatedDensities = []
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
         buildConfigField "String", "PAID_APPLICATION_ID", "\"com.farmerbb.taskbar.paid\""

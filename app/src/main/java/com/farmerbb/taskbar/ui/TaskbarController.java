@@ -345,8 +345,9 @@ public class TaskbarController implements UIController {
                 break;
         }
 
-        Intent intent = new Intent("com.farmerbb.taskbar.HIDE_START_MENU");
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
 
         if(altButtonConfig) {
             button = layout.findViewById(R.id.hide_taskbar_button_alt);
@@ -514,8 +515,6 @@ public class TaskbarController implements UIController {
 
         if(pref.getBoolean("auto_hide_navbar", false))
             U.showHideNavigationBar(context, false);
-
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
 
         if(FreeformHackHelper.getInstance().isTouchAbsorberActive()) {
             lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));

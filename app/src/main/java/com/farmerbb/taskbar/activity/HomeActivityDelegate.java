@@ -40,6 +40,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
@@ -88,7 +89,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private AlertDialog dialog;
 
     private boolean shouldDelayFreeformHack;
-    private boolean shouldInitDesktopIcons;
     private int hits;
 
     private boolean iconArrangeMode = false;
@@ -135,8 +135,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private BroadcastReceiver iconArrangeModeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            iconArrangeMode = true;
-            fab.show();
+            enterIconArrangeMode();
         }
     };
 
@@ -147,13 +146,19 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         }
     };
 
+    private BroadcastReceiver updateMarginsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateMargins();
+        }
+    };
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         shouldDelayFreeformHack = true;
-        shouldInitDesktopIcons = true;
         hits = 0;
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -181,20 +186,21 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 if(shouldStartFreeformHack)
                     startFreeformHack();
             }
+        };
 
-            @Override
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                super.onLayout(changed, left, top, right, bottom);
+        if(FeatureFlags.desktopIcons(HomeActivityDelegate.this)) {
+            layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                if(shouldInitDesktopIcons && FeatureFlags.desktopIcons(HomeActivityDelegate.this)) {
                     if(savedInstanceState != null)
                         iconArrangeMode = savedInstanceState.getBoolean("icon_arrange_mode");
 
                     initDesktopIcons();
-                    shouldInitDesktopIcons = false;
                 }
-            }
-        };
+            });
+        }
 
         if(!FeatureFlags.desktopIcons(this)) {
             layout.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
@@ -244,6 +250,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             lbm.registerReceiver(refreshDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
             lbm.registerReceiver(iconArrangeModeReceiver, new IntentFilter("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
             lbm.registerReceiver(sortDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
+            lbm.registerReceiver(updateMarginsReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
         }
 
         U.initPrefs(this);
@@ -419,6 +426,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             lbm.unregisterReceiver(refreshDesktopIconsReceiver);
             lbm.unregisterReceiver(iconArrangeModeReceiver);
             lbm.unregisterReceiver(sortDesktopIconsReceiver);
+            lbm.unregisterReceiver(updateMarginsReceiver);
         }
     }
 
@@ -503,26 +511,17 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     private void initDesktopIcons() {
         desktopIcons = new GridLayout(this);
+        fab = new FloatingActionButton(this);
+
+        updateMargins();
         refreshDesktopIcons();
 
-        fab = new FloatingActionButton(this);
         fab.setImageResource(R.drawable.ic_done_black_24dp);
         fab.setOnClickListener(v -> {
             iconArrangeMode = false;
             fab.hide();
             refreshDesktopIcons();
         });
-
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-        );
-
-        int fabMargin = getResources().getDimensionPixelSize(R.dimen.desktop_icon_fab_margin);
-
-        params.gravity = Gravity.BOTTOM | Gravity.END;
-        params.setMargins(fabMargin, fabMargin, fabMargin, fabMargin);
-        fab.setLayoutParams(params);
 
         if(!iconArrangeMode) fab.hide();
 
@@ -531,10 +530,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void refreshDesktopIcons() {
+        boolean taskbarIsVertical = U.getTaskbarPosition(this).contains("vertical");
+        int iconSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
         int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.start_menu_grid_width);
 
-        int columns = layout.getWidth() / desktopIconSize;
-        int rows = layout.getHeight() / desktopIconSize;
+        int columns = (layout.getWidth() - (taskbarIsVertical ? iconSize : 0)) / desktopIconSize;
+        int rows = (layout.getHeight() - (!taskbarIsVertical ? iconSize : 0)) / desktopIconSize;
 
         desktopIcons.removeAllViews();
         desktopIcons.setOrientation(GridLayout.VERTICAL);
@@ -619,6 +620,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         try {
             SharedPreferences pref = U.getSharedPreferences(this);
             JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
+
+            if(jsonIcons.length() == 0) {
+                U.showToast(this, R.string.no_icons_to_sort);
+                return;
+            }
+
             List<DesktopIconInfo> icons = new ArrayList<>();
 
             for(int i = 0; i < jsonIcons.length(); i++) {
@@ -673,6 +680,65 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 pref.edit().putString("desktop_icons", jsonIcons.toString()).apply();
             }
         } catch (JSONException e) { /* Gracefully fail */ }
+    }
+
+    private void enterIconArrangeMode() {
+        try {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
+
+            if(jsonIcons.length() == 0) {
+                U.showToast(this, R.string.no_icons_to_arrange);
+                return;
+            }
+
+            iconArrangeMode = true;
+            fab.show();
+        } catch (JSONException e) { /* Gracefully fail */ }
+    }
+
+    private void updateMargins() {
+        if(desktopIcons == null || fab == null) return;
+
+        String position = U.getTaskbarPosition(this);
+        int iconSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
+
+        int left = 0;
+        int top = 0;
+        int right = 0;
+        int bottom = 0;
+
+        if(position.contains("vertical_left"))
+            left = iconSize;
+        else if(position.contains("vertical_right"))
+            right = iconSize;
+        else if(position.contains("bottom"))
+            bottom = iconSize;
+        else
+            top = iconSize;
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+        );
+
+        params.setMargins(left, top, right, bottom);
+        desktopIcons.setLayoutParams(params);
+
+        int fabMargin = getResources().getDimensionPixelSize(R.dimen.desktop_icon_fab_margin);
+        left += fabMargin;
+        top += fabMargin;
+        right += fabMargin;
+        bottom += fabMargin;
+
+        FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params2.gravity = Gravity.BOTTOM | Gravity.END;
+        params2.setMargins(left, top, right, bottom);
+        fab.setLayoutParams(params2);
     }
 
     private int getIndex(DesktopIconInfo info) {
