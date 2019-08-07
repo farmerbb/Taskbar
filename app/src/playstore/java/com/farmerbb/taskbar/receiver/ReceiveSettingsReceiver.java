@@ -72,7 +72,6 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                             pinnedAppsLabels[i],
                             IconCache.getInstance(context).getIcon(
                                     context,
-                                    context.getPackageManager(),
                                     launcherApps.resolveActivity(throwaway, userManager.getUserForSerialNumber(userId))),
                             true
                     );

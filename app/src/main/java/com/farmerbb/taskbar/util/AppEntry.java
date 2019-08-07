@@ -17,7 +17,9 @@ package com.farmerbb.taskbar.util;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -82,9 +84,17 @@ public class AppEntry implements Serializable {
         if(icon == null) {
             if(iconByteArray != null)
                 icon = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(iconByteArray, 0, iconByteArray.length));
-            else try {
-                icon = context.getPackageManager().getActivityIcon(ComponentName.unflattenFromString(componentName));
-            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+            else {
+                Intent intent = new Intent();
+                intent.setComponent(ComponentName.unflattenFromString(componentName));
+
+                LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+
+                LauncherActivityInfo appInfo = launcherApps.resolveActivity(intent, userManager.getUserForSerialNumber(userId));
+
+                icon = IconCache.getInstance(context).getIcon(context, appInfo);
+            }
         }
         return icon;
     }
