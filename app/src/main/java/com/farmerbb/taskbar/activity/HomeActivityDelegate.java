@@ -517,6 +517,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         refreshDesktopIcons();
 
         fab.setImageResource(R.drawable.ic_done_black_24dp);
+        fab.setBackgroundColor(U.getAccentColor(this));
         fab.setOnClickListener(v -> {
             iconArrangeMode = false;
             fab.hide();
