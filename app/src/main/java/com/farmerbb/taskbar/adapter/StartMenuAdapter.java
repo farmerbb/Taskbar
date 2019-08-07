@@ -177,7 +177,8 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
         if(activityInfo != null) {
             TopApps topApps = TopApps.getInstance(getContext());
-            boolean isTopApp = topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name)
+            boolean isTopApp = topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name + ":" + entry.getUserId(getContext()))
+                    || topApps.isTopApp(activityInfo.packageName + "/" + activityInfo.name)
                     || topApps.isTopApp(activityInfo.name);
 
             topAppsCache.put(entry, isTopApp);

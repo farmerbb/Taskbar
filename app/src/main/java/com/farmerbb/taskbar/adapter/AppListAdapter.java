@@ -38,7 +38,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
     private final Blacklist blacklist = Blacklist.getInstance(getContext());
     private final TopApps topApps = TopApps.getInstance(getContext());
 
-    private int type = -1;
+    private int type;
 
     public AppListAdapter(Context context, int layout, List<BlacklistEntry> list, int type) {
         super(context, layout, list);
@@ -69,17 +69,22 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         assert entry != null;
 
         final String componentName = entry.getPackageName();
-        final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;
+        final String componentNameAlt = componentName.contains(":") ? componentName.split(":")[0] : componentName;
+        final String componentNameAlt2 = componentNameAlt.contains("/") ? componentNameAlt.split("/")[1] : componentNameAlt;
 
         TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
         final CheckBox checkBox = convertView.findViewById(R.id.checkbox);
-        checkBox.setChecked(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt));
+        checkBox.setChecked(blacklist.isBlocked(componentName)
+                || blacklist.isBlocked(componentNameAlt)
+                || blacklist.isBlocked(componentNameAlt2));
 
         LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
-            if(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt)) {
+            if(topApps.isTopApp(componentName)
+                    || topApps.isTopApp(componentNameAlt)
+                    || topApps.isTopApp(componentNameAlt2)) {
                 U.showToast(getContext(),
                         getContext().getString(R.string.already_top_app, entry.getLabel()),
                         Toast.LENGTH_LONG);
@@ -88,6 +93,9 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
                 checkBox.setChecked(false);
             } else if(blacklist.isBlocked(componentNameAlt)) {
                 blacklist.removeBlockedApp(getContext(), componentNameAlt);
+                checkBox.setChecked(false);
+            } else if(blacklist.isBlocked(componentNameAlt2)) {
+                blacklist.removeBlockedApp(getContext(), componentNameAlt2);
                 checkBox.setChecked(false);
             } else {
                 blacklist.addBlockedApp(getContext(), entry);
@@ -101,17 +109,22 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
         assert entry != null;
 
         final String componentName = entry.getPackageName();
-        final String componentNameAlt = componentName.contains("/") ? componentName.split("/")[1] : componentName;
+        final String componentNameAlt = componentName.contains(":") ? componentName.split(":")[0] : componentName;
+        final String componentNameAlt2 = componentNameAlt.contains("/") ? componentNameAlt.split("/")[1] : componentNameAlt;
 
         TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
         final CheckBox checkBox = convertView.findViewById(R.id.checkbox);
-        checkBox.setChecked(topApps.isTopApp(componentName) || topApps.isTopApp(componentNameAlt));
+        checkBox.setChecked(topApps.isTopApp(componentName)
+                || topApps.isTopApp(componentNameAlt)
+                || topApps.isTopApp(componentNameAlt2));
 
         LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
-            if(blacklist.isBlocked(componentName) || blacklist.isBlocked(componentNameAlt)) {
+            if(blacklist.isBlocked(componentName)
+                    || blacklist.isBlocked(componentNameAlt)
+                    || blacklist.isBlocked(componentNameAlt2)) {
                 U.showToast(getContext(),
                         getContext().getString(R.string.already_blacklisted, entry.getLabel()),
                         Toast.LENGTH_LONG);
@@ -120,6 +133,9 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
                 checkBox.setChecked(false);
             } else if(topApps.isTopApp(componentNameAlt)) {
                 topApps.removeTopApp(getContext(), componentNameAlt);
+                checkBox.setChecked(false);
+            } else if(topApps.isTopApp(componentNameAlt2)) {
+                topApps.removeTopApp(getContext(), componentNameAlt2);
                 checkBox.setChecked(false);
             } else {
                 topApps.addTopApp(getContext(), entry);

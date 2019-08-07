@@ -437,16 +437,21 @@ public class StartMenuController implements UIController {
 
             TopApps topApps = TopApps.getInstance(context);
             for(LauncherActivityInfo appInfo : unfilteredList) {
-                if(topApps.isTopApp(appInfo.getComponentName().flattenToString())
+                String userSuffix = ":" + userManager.getSerialNumberForUser(appInfo.getUser());
+                if(topApps.isTopApp(appInfo.getComponentName().flattenToString() + userSuffix)
+                        || topApps.isTopApp(appInfo.getComponentName().flattenToString())
                         || topApps.isTopApp(appInfo.getName()))
                     topAppsList.add(appInfo);
             }
 
             Blacklist blacklist = Blacklist.getInstance(context);
             for(LauncherActivityInfo appInfo : unfilteredList) {
-                if(!(blacklist.isBlocked(appInfo.getComponentName().flattenToString())
+                String userSuffix = ":" + userManager.getSerialNumberForUser(appInfo.getUser());
+                if(!(blacklist.isBlocked(appInfo.getComponentName().flattenToString() + userSuffix)
+                        || blacklist.isBlocked(appInfo.getComponentName().flattenToString())
                         || blacklist.isBlocked(appInfo.getName()))
-                        && !(topApps.isTopApp(appInfo.getComponentName().flattenToString())
+                        && !(topApps.isTopApp(appInfo.getComponentName().flattenToString() + userSuffix)
+                        || topApps.isTopApp(appInfo.getComponentName().flattenToString())
                         || topApps.isTopApp(appInfo.getName())))
                     allAppsList.add(appInfo);
             }

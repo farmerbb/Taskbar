@@ -181,6 +181,8 @@ public class SelectAppActivity extends AppCompatActivity {
             }
 
             for(LauncherActivityInfo appInfo : list) {
+                installedApps.add(appInfo.getApplicationInfo().packageName + "/" + appInfo.getName()
+                        + ":" + userManager.getSerialNumberForUser(appInfo.getUser()));
                 installedApps.add(appInfo.getApplicationInfo().packageName + "/" + appInfo.getName());
                 installedApps.add(appInfo.getName());
             }
@@ -225,7 +227,8 @@ public class SelectAppActivity extends AppCompatActivity {
                 }
 
                 entries.add(new BlacklistEntry(
-                        appInfo.getApplicationInfo().packageName + "/" + appInfo.getName(),
+                        appInfo.getApplicationInfo().packageName + "/" + appInfo.getName()
+                                + ":" + userManager.getSerialNumberForUser(appInfo.getUser()),
                         label));
             }
 
