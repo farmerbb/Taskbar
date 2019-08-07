@@ -15,14 +15,17 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -152,12 +155,15 @@ public class SelectAppActivity extends AppCompatActivity {
         @SuppressWarnings("Convert2streamapi")
         @Override
         protected AppListAdapter[] doInBackground(Void... params) {
-            final PackageManager pm = getPackageManager();
+            UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
+            LauncherApps launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            final List<UserHandle> userHandles = userManager.getUserProfiles();
+            final List<LauncherActivityInfo> list = new ArrayList<>();
 
-            List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
+            for(UserHandle handle : userHandles) {
+                list.addAll(launcherApps.getActivityList(null, handle));
+            }
 
             // Remove any uninstalled apps from the blacklist and top apps
             Blacklist blacklist = Blacklist.getInstance(SelectAppActivity.this);
@@ -167,16 +173,16 @@ public class SelectAppActivity extends AppCompatActivity {
             List<String> installedApps = new ArrayList<>();
 
             for(BlacklistEntry entry : blacklist.getBlockedApps()) {
-               blacklistedApps.add(entry.getPackageName());
+                blacklistedApps.add(entry.getPackageName());
             }
 
             for(BlacklistEntry entry : topApps.getTopApps()) {
                 topAppsList.add(entry.getPackageName());
             }
 
-            for(ResolveInfo appInfo : list) {
-                installedApps.add(appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name);
-                installedApps.add(appInfo.activityInfo.name);
+            for(LauncherActivityInfo appInfo : list) {
+                installedApps.add(appInfo.getApplicationInfo().packageName + "/" + appInfo.getName());
+                installedApps.add(appInfo.getName());
             }
 
             for(String packageName : blacklistedApps) {
@@ -194,32 +200,32 @@ public class SelectAppActivity extends AppCompatActivity {
                 String label2;
 
                 try {
-                    label1 = ai1.activityInfo.loadLabel(pm).toString();
-                    label2 = ai2.activityInfo.loadLabel(pm).toString();
+                    label1 = ai1.getLabel().toString();
+                    label2 = ai2.getLabel().toString();
                 } catch (OutOfMemoryError e) {
                     System.gc();
 
-                    label1 = ai1.activityInfo.packageName;
-                    label2 = ai2.activityInfo.packageName;
+                    label1 = ai1.getApplicationInfo().packageName;
+                    label2 = ai2.getApplicationInfo().packageName;
                 }
 
                 return Collator.getInstance().compare(label1, label2);
             });
 
             final List<BlacklistEntry> entries = new ArrayList<>();
-            for(ResolveInfo appInfo : list) {
+            for(LauncherActivityInfo appInfo : list) {
                 String label;
 
                 try {
-                    label = appInfo.loadLabel(pm).toString();
+                    label = appInfo.getLabel().toString();
                 } catch (OutOfMemoryError e) {
                     System.gc();
 
-                    label = appInfo.activityInfo.packageName;
+                    label = appInfo.getApplicationInfo().packageName;
                 }
 
                 entries.add(new BlacklistEntry(
-                        appInfo.activityInfo.packageName + "/" + appInfo.activityInfo.name,
+                        appInfo.getApplicationInfo().packageName + "/" + appInfo.getName(),
                         label));
             }
 

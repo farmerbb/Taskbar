@@ -16,13 +16,16 @@
 package com.farmerbb.taskbar.activity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -34,6 +37,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.adapter.DesktopIconAppListAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
 import org.json.JSONArray;
@@ -105,39 +109,47 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
     private final class DesktopIconAppListGenerator extends AsyncTask<Void, Void, DesktopIconAppListAdapter> {
         @Override
         protected DesktopIconAppListAdapter doInBackground(Void... params) {
-            final PackageManager pm = getPackageManager();
+            UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
+            LauncherApps launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> info = pm.queryIntentActivities(intent, 0);
+            final List<UserHandle> userHandles = userManager.getUserProfiles();
+            final List<LauncherActivityInfo> info = new ArrayList<>();
+
+            for(UserHandle handle : userHandles) {
+                info.addAll(launcherApps.getActivityList(null, handle));
+            }
 
             Collections.sort(info, (ai1, ai2) -> {
                 String label1;
                 String label2;
 
                 try {
-                    label1 = ai1.activityInfo.loadLabel(pm).toString();
-                    label2 = ai2.activityInfo.loadLabel(pm).toString();
+                    label1 = ai1.getLabel().toString();
+                    label2 = ai2.getLabel().toString();
                 } catch (OutOfMemoryError e) {
                     System.gc();
 
-                    label1 = ai1.activityInfo.packageName;
-                    label2 = ai2.activityInfo.packageName;
+                    label1 = ai1.getApplicationInfo().packageName;
+                    label2 = ai2.getApplicationInfo().packageName;
                 }
 
                 return Collator.getInstance().compare(label1, label2);
             });
 
             final List<AppEntry> entries = new ArrayList<>();
-            for(ResolveInfo appInfo : info) {
-                entries.add(new AppEntry(
-                        appInfo.activityInfo.applicationInfo.packageName,
+            for(LauncherActivityInfo appInfo : info) {
+                AppEntry entry = new AppEntry(
+                        appInfo.getApplicationInfo().packageName,
                         new ComponentName(
-                                appInfo.activityInfo.applicationInfo.packageName,
-                                appInfo.activityInfo.name).flattenToString(),
-                        appInfo.loadLabel(pm).toString(),
-                        appInfo.loadIcon(pm),
-                        false));
+                                appInfo.getApplicationInfo().packageName,
+                                appInfo.getName()).flattenToString(),
+                        appInfo.getLabel().toString(),
+                        IconCache.getInstance(DesktopIconSelectAppActivity.this)
+                                .getIcon(DesktopIconSelectAppActivity.this, appInfo),
+                        false);
+
+                entry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
+                entries.add(entry);
             }
 
             return new DesktopIconAppListAdapter(DesktopIconSelectAppActivity.this, R.layout.desktop_icon_row, entries);
