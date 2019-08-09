@@ -54,6 +54,7 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -214,7 +215,7 @@ public class U {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 try {
-                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION));
+                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION, null));
                 } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             });
         }
@@ -256,42 +257,40 @@ public class U {
         if(toast != null) toast.cancel();
     }
 
-    public static void startShortcut(Context context, String packageName, String componentName, ShortcutInfo shortcut) {
+    public static void startShortcut(Context context, AppEntry entry, ShortcutInfo shortcut) {
         launchApp(context,
-                packageName,
-                componentName,
-                0,
+                entry,
                 null,
                 false,
                 false,
-                shortcut);
-    }
-
-    public static void launchApp(final Context context,
-                                 final String packageName,
-                                 final String componentName,
-                                 final long userId, final String windowSize,
-                                 final boolean launchedFromTaskbar,
-                                 final boolean openInNewWindow) {
-        launchApp(context,
-                packageName,
-                componentName,
-                userId,
-                windowSize,
-                launchedFromTaskbar,
-                openInNewWindow,
+                shortcut,
                 null);
     }
 
+    public static void launchApp(final Context context,
+                                 final AppEntry entry,
+                                 final String windowSize,
+                                 final boolean launchedFromTaskbar,
+                                 final boolean openInNewWindow,
+                                 final View view) {
+        launchApp(context,
+                entry,
+                windowSize,
+                launchedFromTaskbar,
+                openInNewWindow,
+                null,
+                view);
+    }
+
     private static void launchApp(final Context context,
-                                  final String packageName,
-                                  final String componentName,
-                                  final long userId, final String windowSize,
+                                  final AppEntry entry,
+                                  final String windowSize,
                                   final boolean launchedFromTaskbar,
                                   final boolean openInNewWindow,
-                                  final ShortcutInfo shortcut) {
-        launchApp(context, launchedFromTaskbar, () -> continueLaunchingApp(context, packageName, componentName, userId,
-                windowSize, openInNewWindow, shortcut));
+                                  final ShortcutInfo shortcut,
+                                  final View view) {
+        launchApp(context, launchedFromTaskbar, () -> continueLaunchingApp(context, entry,
+                windowSize, openInNewWindow, shortcut, view));
     }
 
     public static void launchApp(Context context, Runnable runnable) {
@@ -350,15 +349,14 @@ public class U {
 
     @TargetApi(Build.VERSION_CODES.N)
     private static void continueLaunchingApp(Context context,
-                                             String packageName,
-                                             String componentName,
-                                             long userId,
+                                             AppEntry entry,
                                              String windowSize,
                                              boolean openInNewWindow,
-                                             ShortcutInfo shortcut) {
+                                             ShortcutInfo shortcut,
+                                             View view) {
         SharedPreferences pref = getSharedPreferences(context);
         Intent intent = new Intent();
-        intent.setComponent(ComponentName.unflattenFromString(componentName));
+        intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -385,24 +383,24 @@ public class U {
             }
         }
 
-        ApplicationType type = getApplicationType(context, packageName);
+        ApplicationType type = getApplicationType(context, entry.getPackageName());
 
         if(windowSize == null)
-            windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, packageName);
+            windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, entry.getPackageName());
 
-        Bundle bundle = getActivityOptionsBundle(context, type, windowSize);
+        Bundle bundle = getActivityOptionsBundle(context, type, windowSize, view);
 
         prepareToStartActivity(context, () -> {
             if(shortcut == null) {
                 UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-                if(userId == userManager.getSerialNumberForUser(Process.myUserHandle())) {
+                if(entry.getUserId(context) == userManager.getSerialNumberForUser(Process.myUserHandle())) {
                     try {
                         context.startActivity(intent, bundle);
                     } catch (ActivityNotFoundException e) {
-                        launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+                        launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context));
                     } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
                 } else
-                    launchAndroidForWork(context, intent.getComponent(), bundle, userId);
+                    launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context));
             } else
                 launchShortcut(context, shortcut, bundle);
         });
@@ -414,7 +412,7 @@ public class U {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private static Bundle launchMode1(Context context, ApplicationType type) {
+    private static Bundle launchMode1(Context context, ApplicationType type, View view) {
         DisplayInfo display = getDisplayInfo(context);
 
         int width1 = display.width / 8;
@@ -422,7 +420,7 @@ public class U {
         int height1 = display.height / 8;
         int height2 = display.height - height1;
 
-        return getActivityOptions(context, type).setLaunchBounds(new Rect(
+        return getActivityOptions(context, type, view).setLaunchBounds(new Rect(
                 width1,
                 height1,
                 width2,
@@ -431,7 +429,7 @@ public class U {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private static Bundle launchMode2(Context context, int launchType, ApplicationType type) {
+    private static Bundle launchMode2(Context context, int launchType, ApplicationType type, View view) {
         DisplayInfo display = getDisplayInfo(context);
 
         int statusBarHeight = getStatusBarHeight(context);
@@ -470,12 +468,12 @@ public class U {
         else if(launchType == LEFT && isPortrait)
             bottom = halfPortrait;
 
-        return getActivityOptions(context, type)
+        return getActivityOptions(context, type, view)
                 .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private static Bundle launchMode3(Context context, ApplicationType type) {
+    private static Bundle launchMode3(Context context, ApplicationType type, View view) {
         DisplayInfo display = getDisplayInfo(context);
 
         int width1 = display.width / 2;
@@ -483,7 +481,7 @@ public class U {
         int height1 = display.height / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
 
-        return getActivityOptions(context, type).setLaunchBounds(new Rect(
+        return getActivityOptions(context, type, view).setLaunchBounds(new Rect(
                 width1 - width2,
                 height1 - height2,
                 width1 + width2,
@@ -529,7 +527,7 @@ public class U {
     }
 
     public static void startActivityMaximized(Context context, Intent intent) {
-        Bundle bundle = launchMode2(context, MAXIMIZED, ApplicationType.CONTEXT_MENU);
+        Bundle bundle = launchMode2(context, MAXIMIZED, ApplicationType.CONTEXT_MENU, null);
         prepareToStartActivity(context, () -> context.startActivity(intent, bundle));
     }
 
@@ -538,7 +536,7 @@ public class U {
         DisplayInfo display = getDisplayInfo(context);
         try {
             context.startActivity(intent,
-                    getActivityOptions(context, ApplicationType.FREEFORM_HACK)
+                    getActivityOptions(context, ApplicationType.FREEFORM_HACK, null)
                             .setLaunchBounds(new Rect(
                                     display.width,
                                     display.height,
@@ -575,7 +573,7 @@ public class U {
 
         try {
             context.startActivity(intent,
-                    getActivityOptions(context, ApplicationType.FREEFORM_HACK)
+                    getActivityOptions(context, ApplicationType.FREEFORM_HACK, null)
                             .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle());
         } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
     }
@@ -605,7 +603,7 @@ public class U {
                 intent.putExtra("context_menu_fix", true);
 
             context.startActivity(intent,
-                    getActivityOptions(context, ApplicationType.CONTEXT_MENU)
+                    getActivityOptions(context, ApplicationType.CONTEXT_MENU, null)
                             .setLaunchBounds(
                                     new Rect(0, 0, display.width, display.height)
                             ).toBundle());
@@ -980,9 +978,21 @@ public class U {
             return false;
     }
 
+    private static ActivityOptions getActivityOptions(View view) {
+        return getActivityOptions(null, null, view);
+    }
+
     @TargetApi(Build.VERSION_CODES.N)
-    private static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType) {
-        ActivityOptions options = ActivityOptions.makeBasic();
+    private static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType, View view) {
+        ActivityOptions options;
+        if(view != null)
+            options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
+        else
+            options = ActivityOptions.makeBasic();
+
+        if(applicationType == null)
+            return options;
+
         int stackId = -1;
 
         switch(applicationType) {
@@ -1034,31 +1044,31 @@ public class U {
             return "setLaunchStackId";
     }
 
-    public static Bundle getActivityOptionsBundle(Context context, ApplicationType type) {
+    public static Bundle getActivityOptionsBundle(Context context, ApplicationType type, View view) {
         SharedPreferences pref = getSharedPreferences(context);
 
-        return getActivityOptionsBundle(context, type, pref.getString("window_size", "standard"));
+        return getActivityOptionsBundle(context, type, pref.getString("window_size", "standard"), view);
     }
     
-    private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize) {
+    private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
         SharedPreferences pref = getSharedPreferences(context);
         if(!canEnableFreeform() || !pref.getBoolean("freeform_hack", false))
-            return null;
+            return getActivityOptions(view).toBundle();
         
         switch(windowSize) {
             case "large":
-                return launchMode1(context, type);
+                return launchMode1(context, type, view);
             case "fullscreen":
-                return launchMode2(context, MAXIMIZED, type);
+                return launchMode2(context, MAXIMIZED, type, view);
             case "half_left":
-                return launchMode2(context, LEFT, type);
+                return launchMode2(context, LEFT, type, view);
             case "half_right":
-                return launchMode2(context, RIGHT, type);
+                return launchMode2(context, RIGHT, type, view);
             case "phone_size":
-                return launchMode3(context, type);
+                return launchMode3(context, type, view);
         }
 
-        return getActivityOptions(context, type).toBundle();
+        return getActivityOptions(context, type, view).toBundle();
     }
 
     private static ApplicationType getApplicationType(Context context, String packageName) {

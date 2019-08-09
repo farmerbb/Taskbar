@@ -109,7 +109,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-            U.launchApp(getContext(), entry.getPackageName(), entry.getComponentName(), entry.getUserId(getContext()), null, false, false);
+            U.launchApp(getContext(), entry, null, false, false, view);
         });
 
         layout.setOnLongClickListener(view -> {
@@ -193,10 +193,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
 
         Bundle args = new Bundle();
-        args.putString("package_name", entry.getPackageName());
-        args.putString("app_name", entry.getLabel());
-        args.putString("component_name", entry.getComponentName());
-        args.putLong("user_id", entry.getUserId(getContext()));
+        args.putSerializable("app_entry", entry);
         args.putBoolean("launched_from_start_menu", true);
         args.putInt("x", location[0]);
         args.putInt("y", location[1]);

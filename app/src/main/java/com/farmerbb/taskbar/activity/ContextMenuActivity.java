@@ -67,23 +67,17 @@ import java.util.List;
 
 public class ContextMenuActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 
-    private Bundle args;
-
-    String packageName;
-    String componentName;
-    String appName;
-    long userId = 0;
-
-    DesktopIconInfo desktopIcon;
+    private AppEntry entry;
+    private DesktopIconInfo desktopIcon;
 
     boolean showStartMenu = false;
     boolean shouldHideTaskbar = false;
     boolean isStartButton = false;
     boolean isOverflowMenu = false;
-    boolean isNonAppMenu = false;
     boolean secondaryMenu = false;
     boolean dashboardOrStartMenuAppearing = false;
     boolean contextMenuFix = false;
+    boolean showQuitOption = false;
 
     List<ShortcutInfo> shortcuts;
 
@@ -111,15 +105,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
         MenuHelper.getInstance().setContextMenuOpen(true);
 
-        args = getIntent().getBundleExtra("args");
-
+        Bundle args = getIntent().getBundleExtra("args");
+        entry = (AppEntry) args.getSerializable("app_entry");
         desktopIcon = (DesktopIconInfo) args.getSerializable("desktop_icon");
 
-        isNonAppMenu = !args.containsKey("package_name") && !args.containsKey("app_name");
         showStartMenu = args.getBoolean("launched_from_start_menu", false);
-        isStartButton = isNonAppMenu && args.getBoolean("is_start_button", false);
-        isOverflowMenu = isNonAppMenu && args.getBoolean("is_overflow_menu", false);
+        isStartButton = entry == null && args.getBoolean("is_start_button", false);
+        isOverflowMenu = entry == null && args.getBoolean("is_overflow_menu", false);
         contextMenuFix = args.containsKey("context_menu_fix");
+        showQuitOption = !args.getBoolean("dont_show_quit", false);
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -264,7 +258,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("change_wallpaper").setOnPreferenceClickListener(this);
             }
 
-            if(!args.getBoolean("dont_show_quit", false)) {
+            if(showQuitOption) {
                 addPreferencesFromResource(R.xml.pref_context_menu_quit);
                 findPreference("quit_taskbar").setOnPreferenceClickListener(this);
             }
@@ -286,29 +280,24 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference("file_manager").setOnPreferenceClickListener(this);
             else
                 getPreferenceScreen().removePreference(findPreference("file_manager"));
-        } else if(desktopIcon != null && isNonAppMenu) {
+        } else if(desktopIcon != null && entry == null) {
             addPreferencesFromResource(R.xml.pref_context_menu_desktop_icons);
             findPreference("add_icon_to_desktop").setOnPreferenceClickListener(this);
             findPreference("arrange_icons").setOnPreferenceClickListener(this);
             findPreference("sort_by_name").setOnPreferenceClickListener(this);
             findPreference("change_wallpaper").setOnPreferenceClickListener(this);
         } else {
-            appName = args.getString("app_name");
-            packageName = args.getString("package_name");
-            componentName = args.getString("component_name");
-            userId = args.getLong("user_id", 0);
-
             if(getResources().getConfiguration().screenWidthDp >= 600
                     && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
-                setTitle(appName);
+                setTitle(entry.getLabel());
             else {
                 addPreferencesFromResource(R.xml.pref_context_menu_header);
-                findPreference("header").setTitle(appName);
+                findPreference("header").setTitle(entry.getLabel());
             }
 
             if(U.hasFreeformSupport(this)
                     && pref.getBoolean("freeform_hack", false)
-                    && !U.isGame(this, packageName)) {
+                    && !U.isGame(this, entry.getPackageName())) {
                 addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
             }
@@ -331,15 +320,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             if(desktopIcon != null) {
                 addPreferencesFromResource(R.xml.pref_context_menu_remove_desktop_icon);
                 findPreference("remove_desktop_icon").setOnPreferenceClickListener(this);
-            } else if(!packageName.contains(BuildConfig.BASE_APPLICATION_ID)
-                    && !packageName.equals(defaultLauncher.activityInfo.packageName)) {
+            } else if(!entry.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
+                    && !entry.getPackageName().equals(defaultLauncher.activityInfo.packageName)) {
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
 
-                if(pba.isPinned(componentName)) {
+                if(pba.isPinned(entry.getComponentName())) {
                     addPreferencesFromResource(R.xml.pref_context_menu_pin);
                     findPreference("pin_app").setOnPreferenceClickListener(this);
                     findPreference("pin_app").setTitle(R.string.unpin_app);
-                } else if(pba.isBlocked(componentName)) {
+                } else if(pba.isBlocked(entry.getComponentName())) {
                     addPreferencesFromResource(R.xml.pref_context_menu_block);
                     findPreference("block_app").setOnPreferenceClickListener(this);
                     findPreference("block_app").setTitle(R.string.unblock_app);
@@ -412,7 +401,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         findPreference("window_size_half_right").setOnPreferenceClickListener(this);
         findPreference("window_size_phone_size").setOnPreferenceClickListener(this);
 
-        String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, packageName);
+        String windowSizePref = SavedWindowSizes.getInstance(this).getWindowSize(this, entry.getPackageName());
         CharSequence title = findPreference("window_size_" + windowSizePref).getTitle();
         findPreference("window_size_" + windowSizePref).setTitle('\u2713' + " " + title);
     }
@@ -424,18 +413,18 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
         LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
         boolean appIsValid = isStartButton || isOverflowMenu ||
-                !launcherApps.getActivityList(args.getString("package_name"),
-                        userManager.getUserForSerialNumber(userId)).isEmpty();
+                !launcherApps.getActivityList(entry.getPackageName(),
+                        userManager.getUserForSerialNumber(entry.getUserId(this))).isEmpty();
         secondaryMenu = false;
 
         if(appIsValid) switch(p.getKey()) {
             case "app_info":
                 U.launchApp(this, () ->
                         launcherApps.startAppDetailsActivity(
-                                ComponentName.unflattenFromString(componentName),
-                                userManager.getUserForSerialNumber(userId),
+                                ComponentName.unflattenFromString(entry.getComponentName()),
+                                userManager.getUserForSerialNumber(entry.getUserId(this)),
                                 null,
-                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION)));
+                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null)));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -444,15 +433,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "uninstall":
                 if(U.hasFreeformSupport(this) && isInMultiWindowMode() && !U.isChromeOs(this)) {
                     Intent intent2 = new Intent(this, DummyActivity.class);
-                    intent2.putExtra("uninstall", packageName);
-                    intent2.putExtra("user_id", userId);
+                    intent2.putExtra("uninstall", entry.getPackageName());
+                    intent2.putExtra("user_id", entry.getUserId(this));
 
                     try {
                         startActivity(intent2);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 } else {
-                    Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName));
-                    intent2.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(userId));
+                    Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + entry.getPackageName()));
+                    intent2.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(entry.getUserId(this)));
 
                     try {
                         startActivity(intent2);
@@ -469,7 +458,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                     try {
-                        startActivity(intent2, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
+                        startActivity(intent2, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
@@ -488,38 +477,32 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "pin_app":
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
-                if(pba.isPinned(componentName))
-                    pba.removePinnedApp(this, componentName);
+                if(pba.isPinned(entry.getComponentName()))
+                    pba.removePinnedApp(this, entry.getComponentName());
                 else {
                     Intent intent = new Intent();
-                    intent.setComponent(ComponentName.unflattenFromString(componentName));
+                    intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
 
-                    LauncherActivityInfo appInfo = launcherApps.resolveActivity(intent, userManager.getUserForSerialNumber(userId));
+                    LauncherActivityInfo appInfo = launcherApps.resolveActivity(intent, userManager.getUserForSerialNumber(entry.getUserId(this)));
                     if(appInfo != null) {
                         AppEntry newEntry = new AppEntry(
-                                packageName,
-                                componentName,
-                                appName,
+                                entry.getPackageName(),
+                                entry.getComponentName(),
+                                entry.getLabel(),
                                 IconCache.getInstance(this).getIcon(this, appInfo),
                                 true);
 
-                        newEntry.setUserId(userId);
+                        newEntry.setUserId(entry.getUserId(this));
                         pba.addPinnedApp(this, newEntry);
                     }
                 }
                 break;
             case "block_app":
                 PinnedBlockedApps pba2 = PinnedBlockedApps.getInstance(this);
-                if(pba2.isBlocked(componentName))
-                    pba2.removeBlockedApp(this, componentName);
-                else {
-                    pba2.addBlockedApp(this, new AppEntry(
-                            packageName,
-                            componentName,
-                            appName,
-                            null,
-                            false));
-                }
+                if(pba2.isBlocked(entry.getComponentName()))
+                    pba2.removeBlockedApp(this, entry.getComponentName());
+                else
+                    pba2.addBlockedApp(this, entry);
                 break;
             case "show_window_sizes":
                 generateWindowSizes();
@@ -530,7 +513,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 getListView().setOnItemLongClickListener((parent, view, position, id) -> {
                     String[] windowSizes = { "standard", "large", "fullscreen", "half_left", "half_right", "phone_size" };
 
-                    SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, windowSizes[position]);
+                    SavedWindowSizes.getInstance(this).setWindowSize(this, entry.getPackageName(), windowSizes[position]);
 
                     generateWindowSizes();
                     return true;
@@ -548,10 +531,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 SharedPreferences pref2 = U.getSharedPreferences(this);
                 if(pref2.getBoolean("save_window_sizes", true)) {
-                    SavedWindowSizes.getInstance(this).setWindowSize(this, packageName, windowSize);
+                    SavedWindowSizes.getInstance(this).setWindowSize(this, entry.getPackageName(), windowSize);
                 }
 
-                U.launchApp(getApplicationContext(), packageName, componentName, userId, windowSize, false, true);
+                U.launchApp(getApplicationContext(), entry, windowSize, false, true, null);
 
                 if(U.hasBrokenSetLaunchBoundsApi())
                     U.cancelToast();
@@ -571,7 +554,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "shortcut_3":
             case "shortcut_4":
             case "shortcut_5":
-                U.startShortcut(getApplicationContext(), packageName, componentName, shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1));
+                U.startShortcut(getApplicationContext(), entry, shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -633,7 +616,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
                     try {
-                        startActivity(fileManagerIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
+                        startActivity(fileManagerIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -649,7 +632,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     try {
-                        startActivity(settingsIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION));
+                        startActivity(settingsIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -778,12 +761,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
 
             LauncherApps.ShortcutQuery query = new LauncherApps.ShortcutQuery();
-            query.setActivity(ComponentName.unflattenFromString(componentName));
+            query.setActivity(ComponentName.unflattenFromString(entry.getComponentName()));
             query.setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC
                     | LauncherApps.ShortcutQuery.FLAG_MATCH_MANIFEST
                     | LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED);
 
-            shortcuts = launcherApps.getShortcuts(query, userManager.getUserForSerialNumber(userId));
+            shortcuts = launcherApps.getShortcuts(query, userManager.getUserForSerialNumber(entry.getUserId(this)));
             if(shortcuts != null)
                 return shortcuts.size();
         }

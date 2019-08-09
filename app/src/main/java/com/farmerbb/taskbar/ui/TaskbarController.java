@@ -1203,12 +1203,11 @@ public class TaskbarController implements UIController {
         FrameLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> U.launchApp(
                 context,
-                entry.getPackageName(),
-                entry.getComponentName(),
-                entry.getUserId(context),
+                entry,
                 null,
                 true,
-                false
+                false,
+                view
         ));
 
         layout.setOnLongClickListener(view -> {
@@ -1271,10 +1270,7 @@ public class TaskbarController implements UIController {
 
     private void openContextMenu(AppEntry entry, int[] location) {
         Bundle args = new Bundle();
-        args.putString("package_name", entry.getPackageName());
-        args.putString("app_name", entry.getLabel());
-        args.putString("component_name", entry.getComponentName());
-        args.putLong("user_id", entry.getUserId(context));
+        args.putSerializable("app_entry", entry);
         args.putInt("x", location[0]);
         args.putInt("y", location[1]);
 

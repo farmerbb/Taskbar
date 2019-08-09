@@ -571,12 +571,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 if(!isStartMenuOpen && info != null && info.entry != null) {
                     U.launchApp(
                             this,
-                            info.entry.getPackageName(),
-                            info.entry.getComponentName(),
-                            info.entry.getUserId(this),
+                            info.entry,
                             null,
                             false,
-                            false
+                            false,
+                            view
                     );
                 }
             });
@@ -779,14 +778,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(iconArrangeMode) return;
 
         Bundle args = new Bundle();
-
-        if(info.entry != null) {
-            args.putString("package_name", info.entry.getPackageName());
-            args.putString("app_name", info.entry.getLabel());
-            args.putString("component_name", info.entry.getComponentName());
-            args.putLong("user_id", info.entry.getUserId(this));
-        }
-
+        args.putSerializable("app_entry", info.entry);
         args.putSerializable("desktop_icon", info);
         args.putInt("x", location[0]);
         args.putInt("y", location[1]);

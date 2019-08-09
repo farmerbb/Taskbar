@@ -378,7 +378,7 @@ public class StartMenuController implements UIController {
                 hideStartMenu(true);
 
                 AppEntry entry = (AppEntry) viewParent.getAdapter().getItem(position);
-                U.launchApp(context, entry.getPackageName(), entry.getComponentName(), entry.getUserId(context), null, false, false);
+                U.launchApp(context, entry, null, false, false, view);
             });
 
             if(pref.getBoolean("transparent_start_menu", false))
