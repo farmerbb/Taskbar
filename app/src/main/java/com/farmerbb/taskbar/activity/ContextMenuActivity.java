@@ -412,9 +412,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     public boolean onPreferenceClick(Preference p) {
         UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
         LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
-        boolean appIsValid = isStartButton || isOverflowMenu ||
-                !launcherApps.getActivityList(entry.getPackageName(),
-                        userManager.getUserForSerialNumber(entry.getUserId(this))).isEmpty();
+        boolean appIsValid = isStartButton || isOverflowMenu || desktopIcon != null ||
+                (entry != null && !launcherApps.getActivityList(entry.getPackageName(),
+                        userManager.getUserForSerialNumber(entry.getUserId(this))).isEmpty());
         secondaryMenu = false;
 
         if(appIsValid) switch(p.getKey()) {
