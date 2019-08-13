@@ -115,7 +115,9 @@ public class NotificationService extends Service {
                 }
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, id)
-                        .setSmallIcon(pref.getBoolean("app_drawer_icon", false) ? R.drawable.ic_system : R.drawable.ic_allapps)
+                        .setSmallIcon(pref.getString("start_button_image", U.getDefaultStartButtonImage(this)).equals("app_logo")
+                                ? R.drawable.ic_system
+                                : R.drawable.ic_allapps)
                         .setContentIntent(contentIntent)
                         .setContentTitle(getString(R.string.taskbar_is_active))
                         .setContentText(getString(R.string.click_to_open_settings))

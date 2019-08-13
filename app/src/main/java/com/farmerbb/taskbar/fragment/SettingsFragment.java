@@ -100,6 +100,10 @@ public abstract class SettingsFragment extends PreferenceFragment {
                         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false))
                             new Handler().post(() -> U.startFreeformHack(getActivity()));
                         break;
+                    case "start_button_image":
+                        if(stringValue.equals("custom"))
+                            ((AppearanceFragment) SettingsFragment.this).showFileChooser();
+                        break;
                 }
 
                 U.restartTaskbar(getActivity());

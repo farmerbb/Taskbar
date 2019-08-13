@@ -24,9 +24,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +40,12 @@ import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.activity.dark.IconPackActivityDark;
 import com.farmerbb.taskbar.util.U;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class AppearanceFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
     private int alpha, red, green, blue;
 
@@ -52,6 +57,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
         super.onCreate(savedInstanceState);
 
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        if(pref.getString("start_button_image", "null").equals("null"))
+            pref.edit().putString("start_button_image", U.getDefaultStartButtonImage(getActivity())).apply();
+
         // Add preferences
         addPreferencesFromResource(R.xml.pref_appearance);
 
@@ -60,13 +69,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         findPreference("reset_colors").setOnPreferenceClickListener(this);
         findPreference("background_tint_pref").setOnPreferenceClickListener(this);
         findPreference("accent_color_pref").setOnPreferenceClickListener(this);
-        findPreference("app_drawer_icon_image").setOnPreferenceClickListener(this);
 
         bindPreferenceSummaryToValue(findPreference("theme"));
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
-        bindPreferenceSummaryToValue(findPreference("app_drawer_icon"));
-        bindPreferenceSummaryToValue(findPreference("app_drawer_icon_custom"));
-        bindPreferenceSummaryToValue(findPreference("app_drawer_icon_image"));
+        bindPreferenceSummaryToValue(findPreference("start_button_image"));
         bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
         bindPreferenceSummaryToValue(findPreference("visual_feedback"));
         bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
@@ -76,7 +82,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
 
         if(U.isBlissOs(getActivity()))
-            findPreference("app_drawer_icon").setTitle(R.string.pref_title_app_drawer_icon_bliss);
+            ((ListPreference) findPreference("start_button_image")).setEntries(R.array.pref_start_button_image_list_alt);
 
         finishedLoadingPrefs = true;
     }
@@ -164,15 +170,12 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
             case "accent_color_pref":
                 showColorPicker(ColorPickerType.ACCENT_COLOR);
                 break;
-            case "app_drawer_icon_image":
-                showFileChooser();
-                break;
         }
 
         return true;
     }
 
-    private void showFileChooser() {
+    protected void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -187,29 +190,46 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 123 && resultCode == Activity.RESULT_OK) {
+        if(resultCode != Activity.RESULT_OK)
+            return;
+
+        if(requestCode == 123) {
             U.refreshPinnedIcons(getActivity());
             U.restartTaskbar(getActivity());
         }
 
-        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
-            Uri currFileURI = data.getData();
-
-            if (currFileURI == null) {
+        if(requestCode == 1001) {
+            if(data.getData() == null)
                 return;
+
+            if(importCustomImage(data.getData()))
+                U.restartTaskbar(getActivity());
+        }
+    }
+
+    private boolean importCustomImage(Uri uri) {
+        try {
+            File importedFile = new File(getActivity().getFilesDir(), "custom_image_new");
+            if(importedFile.exists()) importedFile.delete();
+
+            BufferedInputStream is = new BufferedInputStream(getActivity().getContentResolver().openInputStream(uri));
+            byte[] data = new byte[is.available()];
+
+            if(data.length > 0) {
+                BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(importedFile));
+                is.read(data);
+                os.write(data);
+                is.close();
+                os.close();
             }
 
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            Boolean customStartImageBoolValue = prefs.getBoolean("app_drawer_icon_custom", true);
+            File prevFile = new File(getActivity().getFilesDir(), "custom_image");
+            if(prevFile.exists()) prevFile.delete();
 
-            if(customStartImageBoolValue == false) {
-                prefs.edit().putBoolean("app_drawer_icon_custom", true).commit();
-                ((CheckBoxPreference) findPreference("app_drawer_icon_custom")).setChecked(true);
-            }
-
-            prefs.edit().putString("app_drawer_icon_image", currFileURI.toString()).commit();
-            bindPreferenceSummaryToValue(findPreference("app_drawer_icon_image"));
-            U.restartTaskbar(getActivity());
+            importedFile.renameTo(prevFile);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 

@@ -61,6 +61,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -277,35 +278,39 @@ public class TaskbarController implements UIController {
         space.setOnClickListener(v -> toggleTaskbar(true));
 
         startButton = layout.findViewById(R.id.start_button);
-        int padding;
+        int padding = 0;
 
-        if(pref.getBoolean("app_drawer_icon", false)) {
-            Drawable drawable;
+        switch(pref.getString("start_button_image", U.getDefaultStartButtonImage(context))) {
+            case "default":
+                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
+                padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+                break;
+            case "app_logo":
+                Drawable drawable;
 
-            if(U.isBlissOs(context)) {
-                drawable = ContextCompat.getDrawable(context, R.drawable.bliss);
-                drawable.setTint(accentColor);
-            } else
-                drawable = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
+                if(U.isBlissOs(context)) {
+                    drawable = ContextCompat.getDrawable(context, R.drawable.bliss);
+                    drawable.setTint(accentColor);
+                } else
+                    drawable = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
 
-            startButton.setImageDrawable(drawable);
-            padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
-        } else {
-            startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
-            padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
-        }
+                startButton.setImageDrawable(drawable);
+                padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
+                break;
+            case "custom":
+                File file = new File(context.getFilesDir(), "custom_image");
+                if(file.exists()) {
+                    try {
+                        startButton.setImageURI(Uri.fromFile(file));
+                    } catch (Exception e) {
+                        U.showToastLong(context, R.string.error_reading_custom_start_image);
+                        startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
+                    }
+                } else
+                    startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
 
-        if(pref.getBoolean("app_drawer_icon_custom", true)) {
-            String strPath = "";
-            if (pref.getString("app_drawer_icon_image", "DEFAULT").isEmpty() == false) {
-                try {
-                    strPath = pref.getString("app_drawer_icon_image", "DEFAULT");
-                    startButton.setImageURI(Uri.parse(strPath));
-                    padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
-                } catch (Exception e) {
-                    U.showErrorDialog(this.context, this.context.getResources().getString(R.string.error_reading_custom_start_image));
-                }
-            }
+                padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+                break;
         }
 
         startButton.setPadding(padding, padding, padding, padding);

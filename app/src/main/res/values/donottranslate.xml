@@ -92,4 +92,22 @@
         <item>never</item>
     </string-array>
 
+    <string-array name="pref_start_button_image_list">
+        <item>@string/start_button_image_default</item>
+        <item>@string/pref_title_app_drawer_icon</item>
+        <item>@string/start_button_image_custom</item>
+    </string-array>
+
+    <string-array name="pref_start_button_image_list_alt">
+        <item>@string/start_button_image_default</item>
+        <item>@string/pref_title_app_drawer_icon_bliss</item>
+        <item>@string/start_button_image_custom</item>
+    </string-array>
+
+    <string-array name="pref_start_button_image_list_values">
+        <item>default</item>
+        <item>app_logo</item>
+        <item>custom</item>
+    </string-array>
+
 </resources>

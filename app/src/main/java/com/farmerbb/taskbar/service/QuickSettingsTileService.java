@@ -53,9 +53,10 @@ public class QuickSettingsTileService extends TileService {
         Tile tile = getQsTile();
         if(tile != null) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            tile.setIcon(Icon.createWithResource(this, pref.getBoolean("app_drawer_icon", false)
-                    ? R.drawable.ic_system
-                    : R.drawable.ic_allapps));
+            tile.setIcon(Icon.createWithResource(this,
+                    pref.getString("start_button_image", U.getDefaultStartButtonImage(this)).equals("app_logo")
+                            ? R.drawable.ic_system
+                            : R.drawable.ic_allapps));
 
             if(U.canDrawOverlays(this, false))
                 tile.setState(U.isServiceRunning(this, NotificationService.class)

@@ -1256,9 +1256,9 @@ public class U {
             editor.putString("max_num_of_recents", "2147483647");
             editor.putString("sort_order", "true");
             editor.putString("window_size", "phone_size");
+            editor.putString("start_button_image", "app_logo");
             editor.putBoolean("full_length", true);
             editor.putBoolean("dashboard", true);
-            editor.putBoolean("app_drawer_icon", true);
             editor.putBoolean("button_back", true);
             editor.putBoolean("button_home", true);
             editor.putBoolean("button_recents", true);
@@ -1556,5 +1556,12 @@ public class U {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String getDefaultStartButtonImage(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getBoolean("app_drawer_icon", false)
+                ? "app_logo"
+                : "default";
     }
 }
