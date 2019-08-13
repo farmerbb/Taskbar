@@ -31,9 +31,5 @@ public class DependencyUtils {
         return new ToastFrameworkImpl(context, message, length);
     }
 
-    static String getSystemProperty(String key) {
-        return null;
-    }
-
     public static void requestTaskerQuery(Context context) {}
 }

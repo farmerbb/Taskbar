@@ -1092,11 +1092,11 @@ public class U {
     public static boolean isBlissOs(Context context) {
         boolean validBlissOsBuildProp = false;
 
-        String blissVersion = DependencyUtils.getSystemProperty("ro.bliss.version");
+        String blissVersion = getSystemProperty("ro.bliss.version");
         if(blissVersion != null && !blissVersion.isEmpty())
             validBlissOsBuildProp = true;
 
-        String buildUser = DependencyUtils.getSystemProperty("ro.build.user");
+        String buildUser = getSystemProperty("ro.build.user");
         if(buildUser != null && buildUser.equals("electrikjesus"))
             validBlissOsBuildProp = true;
 
@@ -1546,5 +1546,15 @@ public class U {
         }
 
         return false;
+    }
+
+    @SuppressLint("PrivateApi")
+    private static String getSystemProperty(String key) {
+        try {
+            Class<?> cls = Class.forName("android.os.SystemProperties");
+            return cls.getMethod("get", String.class).invoke(null, key).toString();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

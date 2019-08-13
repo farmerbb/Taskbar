@@ -21,7 +21,6 @@ import android.os.Build;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.TaskerConditionActivity;
-import com.jrummyapps.android.os.SystemProperties;
 import com.mikepenz.iconics.Iconics;
 
 // Utility class meant for abstracting out all third-party dependencies.
@@ -44,10 +43,6 @@ public class DependencyUtils {
             return new ToastFrameworkImpl(context, message, length);
         else
             return new ToastCompatImpl(context, message, length);
-    }
-
-    static String getSystemProperty(String key) {
-        return SystemProperties.get(key);
     }
 
     public static void requestTaskerQuery(Context context) {
