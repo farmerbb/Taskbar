@@ -20,8 +20,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LauncherApps;
+import android.net.Uri;
 import android.os.Process;
 import android.os.UserManager;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
@@ -152,6 +154,13 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                     output.close();
                 } catch (IOException e) { /* Gracefully fail */ }
 
+            // Get custom start button image
+            if(intent.hasExtra("custom_image")) {
+                Uri uri = intent.getParcelableExtra("custom_image");
+                U.importCustomStartButtonImage(context, uri);
+            }
+
+            // Finish import
             try {
                 File file = new File(context.getFilesDir() + File.separator + "imported_successfully");
                 if(file.createNewFile())

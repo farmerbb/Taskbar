@@ -298,7 +298,7 @@ public class TaskbarController implements UIController {
                 padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
                 break;
             case "custom":
-                File file = new File(context.getFilesDir(), "custom_image");
+                File file = new File(context.getFilesDir() + "/images", "custom_image");
                 if(file.exists()) {
                     try {
                         startButton.setImageURI(Uri.fromFile(file));

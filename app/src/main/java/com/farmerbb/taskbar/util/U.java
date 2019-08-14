@@ -73,6 +73,11 @@ import com.farmerbb.taskbar.service.PowerMenuService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1495,12 +1500,16 @@ public class U {
         return theme > -1 ? new ContextThemeWrapper(context, theme) : context;
     }
 
-    @SuppressLint("PackageManagerGetSignatures")
     public static boolean isPlayStoreRelease(Context context) {
+        return isPlayStoreRelease(context, BuildConfig.APPLICATION_ID);
+    }
+
+    @SuppressLint("PackageManagerGetSignatures")
+    public static boolean isPlayStoreRelease(Context context, String packageName) {
         Signature playStoreSignature = new Signature(context.getString(R.string.signature));
         try {
             PackageManager pm = context.getPackageManager();
-            PackageInfo info = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+            PackageInfo info = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
             for(Signature signature : info.signatures) {
                 if(signature.equals(playStoreSignature))
                     return true;
@@ -1555,6 +1564,36 @@ public class U {
             return cls.getMethod("get", String.class).invoke(null, key).toString();
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static boolean importCustomStartButtonImage(Context context, Uri uri) {
+        try {
+            File imagesDir = new File(context.getFilesDir(), "images");
+            imagesDir.mkdirs();
+
+            File importedFile = new File(imagesDir, "custom_image_new");
+            if(importedFile.exists()) importedFile.delete();
+
+            BufferedInputStream is = new BufferedInputStream(context.getContentResolver().openInputStream(uri));
+            byte[] data = new byte[is.available()];
+
+            if(data.length > 0) {
+                BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(importedFile));
+                is.read(data);
+                os.write(data);
+                is.close();
+                os.close();
+            }
+
+            File prevFile = new File(imagesDir, "custom_image");
+            if(prevFile.exists()) prevFile.delete();
+
+            importedFile.renameTo(prevFile);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 

@@ -18,6 +18,8 @@ package com.farmerbb.taskbar.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;
@@ -134,7 +136,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             }
 
             // Get shared preferences
-            StringBuilder preferences = new StringBuilder("");
+            StringBuilder preferences = new StringBuilder();
 
             try {
                 File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + BuildConfig.APPLICATION_ID + "_preferences.xml");
@@ -154,6 +156,14 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             } catch (IOException e) { /* Gracefully fail */ }
 
             sendSettingsIntent.putExtra("preferences", preferences.toString());
+
+            // Get custom start button image
+            File file = new File(context.getFilesDir() + "/images", "custom_image");
+            if(file.exists() && U.isPlayStoreRelease(context, BuildConfig.PAID_APPLICATION_ID)) {
+                Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file);
+                context.grantUriPermission(BuildConfig.PAID_APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                sendSettingsIntent.putExtra("custom_image", uri);
+            }
 
             // Finally, send the broadcast
             context.sendBroadcast(sendSettingsIntent);

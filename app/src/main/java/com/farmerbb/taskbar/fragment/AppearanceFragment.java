@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -39,12 +38,6 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.activity.dark.IconPackActivityDark;
 import com.farmerbb.taskbar.util.U;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class AppearanceFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
     private int alpha, red, green, blue;
@@ -202,34 +195,8 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
             if(data.getData() == null)
                 return;
 
-            if(importCustomImage(data.getData()))
+            if(U.importCustomStartButtonImage(getActivity(), data.getData()))
                 U.restartTaskbar(getActivity());
-        }
-    }
-
-    private boolean importCustomImage(Uri uri) {
-        try {
-            File importedFile = new File(getActivity().getFilesDir(), "custom_image_new");
-            if(importedFile.exists()) importedFile.delete();
-
-            BufferedInputStream is = new BufferedInputStream(getActivity().getContentResolver().openInputStream(uri));
-            byte[] data = new byte[is.available()];
-
-            if(data.length > 0) {
-                BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(importedFile));
-                is.read(data);
-                os.write(data);
-                is.close();
-                os.close();
-            }
-
-            File prevFile = new File(getActivity().getFilesDir(), "custom_image");
-            if(prevFile.exists()) prevFile.delete();
-
-            importedFile.renameTo(prevFile);
-            return true;
-        } catch (IOException e) {
-            return false;
         }
     }
 
