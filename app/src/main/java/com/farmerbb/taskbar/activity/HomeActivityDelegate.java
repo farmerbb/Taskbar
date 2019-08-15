@@ -614,8 +614,15 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         } catch (JSONException e) { /* Gracefully fail */ }
 
         for(int i = 0; i < columns * rows; i++) {
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams(
+                    GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),
+                    GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f));
+
+            params.width = 0;
+            params.height = 0;
+
             FrameLayout iconContainer = new FrameLayout(this);
-            iconContainer.setLayoutParams(new GridLayout.LayoutParams(new ViewGroup.LayoutParams(desktopIconSize, desktopIconSize)));
+            iconContainer.setLayoutParams(params);
             iconContainer.setOnDragListener(new DesktopIconDragListener());
 
             int index = i;
