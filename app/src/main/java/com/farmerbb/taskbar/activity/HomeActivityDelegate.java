@@ -22,13 +22,17 @@ import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.LauncherApps;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -153,6 +157,33 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         }
     };
 
+    private LauncherApps.Callback callback = new LauncherApps.Callback() {
+        @Override
+        public void onPackageRemoved(String packageName, UserHandle user) {
+            refreshDesktopIcons();
+        }
+
+        @Override
+        public void onPackageAdded(String packageName, UserHandle user) {
+            refreshDesktopIcons();
+        }
+
+        @Override
+        public void onPackageChanged(String packageName, UserHandle user) {
+            refreshDesktopIcons();
+        }
+
+        @Override
+        public void onPackagesAvailable(String[] packageNames, UserHandle user, boolean replacing) {
+            refreshDesktopIcons();
+        }
+
+        @Override
+        public void onPackagesUnavailable(String[] packageNames, UserHandle user, boolean replacing) {
+            refreshDesktopIcons();
+        }
+    };
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,6 +282,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             lbm.registerReceiver(iconArrangeModeReceiver, new IntentFilter("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
             lbm.registerReceiver(sortDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
             lbm.registerReceiver(updateMarginsReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
+
+            LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
+            launcherApps.registerCallback(callback);
         }
 
         U.initPrefs(this);
@@ -427,6 +461,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             lbm.unregisterReceiver(iconArrangeModeReceiver);
             lbm.unregisterReceiver(sortDesktopIconsReceiver);
             lbm.unregisterReceiver(updateMarginsReceiver);
+
+            LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
+            launcherApps.unregisterCallback(callback);
         }
     }
 
@@ -531,6 +568,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void refreshDesktopIcons() {
+        if(desktopIcons == null) return;
+
         boolean taskbarIsVertical = U.getTaskbarPosition(this).contains("vertical");
         int iconSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
         int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.start_menu_grid_width);
@@ -543,7 +582,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         desktopIcons.setColumnCount(columns);
         desktopIcons.setRowCount(rows);
 
+        LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
+        UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
+
         SparseArray<DesktopIconInfo> icons = new SparseArray<>();
+        List<Integer> iconsToRemove = new ArrayList<>();
 
         try {
             SharedPreferences pref = U.getSharedPreferences(this);
@@ -551,8 +594,22 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
             for(int i = 0; i < jsonIcons.length(); i++) {
                 DesktopIconInfo info = DesktopIconInfo.fromJson(jsonIcons.getJSONObject(i));
-                if(info != null)
-                    icons.put(getIndex(info), info);
+                if(info != null) {
+                    if(launcherApps.isActivityEnabled(
+                            ComponentName.unflattenFromString(info.entry.getComponentName()),
+                            userManager.getUserForSerialNumber(info.entry.getUserId(this))))
+                        icons.put(getIndex(info), info);
+                    else
+                        iconsToRemove.add(i);
+                }
+            }
+
+            if(!iconsToRemove.isEmpty()) {
+                for(int i : iconsToRemove) {
+                    jsonIcons.remove(i);
+                }
+
+                pref.edit().putString("desktop_icons", jsonIcons.toString()).apply();
             }
         } catch (JSONException e) { /* Gracefully fail */ }
 
