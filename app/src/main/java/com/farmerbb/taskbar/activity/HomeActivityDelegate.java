@@ -547,9 +547,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         refreshDesktopIcons();
 
         fab.setImageResource(R.drawable.ic_done_black_24dp);
-        fab.setBackgroundTintList(
-                ColorStateList.valueOf(ColorUtils.setAlphaComponent(U.getAccentColor(this), 255)));
-
         fab.setOnClickListener(v -> {
             iconArrangeMode = false;
             fab.hide();
@@ -750,6 +747,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 U.showToast(this, R.string.no_icons_to_arrange);
                 return;
             }
+
+            fab.setBackgroundTintList(
+                    ColorStateList.valueOf(ColorUtils.setAlphaComponent(U.getAccentColor(this), 255)));
 
             iconArrangeMode = true;
             fab.show();
