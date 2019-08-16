@@ -30,6 +30,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -106,6 +107,8 @@ public class SelectAppActivity extends AppCompatActivity {
                     getWindow().setElevation(0);
             }
 
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+
             progressBar = findViewById(R.id.progress_bar);
             appListGenerator = new AppListGenerator();
             appListGenerator.execute();
@@ -136,6 +139,9 @@ public class SelectAppActivity extends AppCompatActivity {
     public void finish() {
         if(appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING)
             appListGenerator.cancel(true);
+
+        if(!U.shouldCollapse(this, false))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
 
         super.finish();
     }

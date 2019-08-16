@@ -262,14 +262,14 @@ public class U {
         if(toast != null) toast.cancel();
     }
 
-    public static void startShortcut(Context context, AppEntry entry, ShortcutInfo shortcut) {
+    public static void startShortcut(Context context, AppEntry entry, ShortcutInfo shortcut, View view) {
         launchApp(context,
                 entry,
                 null,
                 false,
                 false,
                 shortcut,
-                null);
+                view);
     }
 
     public static void launchApp(final Context context,

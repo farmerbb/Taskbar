@@ -423,7 +423,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                                 ComponentName.unflattenFromString(entry.getComponentName()),
                                 userManager.getUserForSerialNumber(entry.getUserId(this)),
                                 null,
-                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null)));
+                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder()))));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -457,7 +457,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                     try {
-                        startActivity(intent2, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
+                        startActivity(intent2,
+                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
@@ -533,7 +534,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     SavedWindowSizes.getInstance(this).setWindowSize(this, entry.getPackageName(), windowSize);
                 }
 
-                U.launchApp(getApplicationContext(), entry, windowSize, false, true, null);
+                U.launchApp(
+                        getApplicationContext(),
+                        entry,
+                        windowSize,
+                        false,
+                        true,
+                        getListView().getChildAt(p.getOrder()));
 
                 if(U.hasBrokenSetLaunchBoundsApi())
                     U.cancelToast();
@@ -553,7 +560,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "shortcut_3":
             case "shortcut_4":
             case "shortcut_5":
-                U.startShortcut(getApplicationContext(), entry, shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1));
+                U.startShortcut(
+                        getApplicationContext(),
+                        entry,
+                        shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1),
+                        getListView().getChildAt(p.getOrder()));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -615,7 +626,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     fileManagerIntent.setData(Uri.parse("content://com.android.externalstorage.documents/root/primary"));
 
                     try {
-                        startActivity(fileManagerIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
+                        startActivity(fileManagerIntent,
+                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -631,7 +643,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     try {
-                        startActivity(settingsIntent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
+                        startActivity(settingsIntent,
+                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -688,6 +701,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
                 break;
             case "change_wallpaper":
+                if(LauncherHelper.getInstance().isOnHomeScreen())
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 U.startActivityMaximized(getApplicationContext(), intent3);

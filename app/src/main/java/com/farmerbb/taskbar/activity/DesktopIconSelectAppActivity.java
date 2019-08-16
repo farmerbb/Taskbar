@@ -76,6 +76,8 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
                 getWindow().setElevation(0);
         }
 
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+
         progressBar = findViewById(R.id.progress_bar);
         appList = findViewById(R.id.list);
 
@@ -87,6 +89,9 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
     public void finish() {
         if(appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING)
             appListGenerator.cancel(true);
+
+        if(!U.shouldCollapse(this, false))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
 
         super.finish();
     }
@@ -159,6 +164,7 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
         protected void onPostExecute(DesktopIconAppListAdapter adapter) {
             progressBar.setVisibility(View.GONE);
             appList.setAdapter(adapter);
+            setFinishOnTouchOutside(true);
         }
     }
 }

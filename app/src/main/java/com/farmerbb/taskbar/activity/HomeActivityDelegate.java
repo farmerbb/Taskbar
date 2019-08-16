@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherApps;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,7 @@ import android.os.UserManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.DragEvent;
@@ -219,7 +221,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         };
 
-        if(U.isDesktopIconsEnabled(HomeActivityDelegate.this)) {
+        if(U.isDesktopIconsEnabled(this)) {
             layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -231,9 +233,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     initDesktopIcons();
                 }
             });
-        }
-
-        if(!U.isDesktopIconsEnabled(this)) {
+        } else {
             layout.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
 
             layout.setOnLongClickListener(view2 -> {
@@ -291,10 +291,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void setWallpaper() {
-        if(U.shouldCollapse(this, true))
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
-        else
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
         try {
             startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper)));
@@ -407,11 +404,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!U.canBootToFreeform(this)) {
             LauncherHelper.getInstance().setOnHomeScreen(false);
-
-            if(U.shouldCollapse(this, true))
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
-            else
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
             if(FeatureFlags.homeActivityUIHost()) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);
@@ -554,7 +547,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         refreshDesktopIcons();
 
         fab.setImageResource(R.drawable.ic_done_black_24dp);
-        fab.setBackgroundColor(U.getAccentColor(this));
+        fab.setBackgroundTintList(
+                ColorStateList.valueOf(ColorUtils.setAlphaComponent(U.getAccentColor(this), 255)));
+
         fab.setOnClickListener(v -> {
             iconArrangeMode = false;
             fab.hide();
@@ -829,7 +824,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         TextView textView = icon.findViewById(R.id.name);
         textView.setText(entry.getLabel());
         textView.setTextColor(ContextCompat.getColor(this, R.color.desktop_icon_text));
-        textView.setShadowLayer(50, 0, 0, R.color.desktop_icon_shadow);
+        textView.setShadowLayer(10, 0, 0, R.color.desktop_icon_shadow);
 
         ImageView imageView = icon.findViewById(R.id.icon);
         imageView.setImageDrawable(entry.getIcon(this));
