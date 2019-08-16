@@ -15,19 +15,11 @@
 
 package com.farmerbb.taskbar.util;
 
-import android.content.Context;
-
-import com.farmerbb.taskbar.BuildConfig;
-
 public class FeatureFlags {
 
     private FeatureFlags() {}
 
     public static boolean homeActivityUIHost() {
-        return BuildConfig.DEBUG;
-    }
-
-    public static boolean desktopIcons(Context context) {
-        return !U.canBootToFreeform(context) && BuildConfig.DEBUG;
+        return false;
     }
 }

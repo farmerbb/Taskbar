@@ -51,7 +51,6 @@ import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
-import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -248,7 +247,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
             if(pref.getBoolean("freeform_hack", false)
-                    && !FeatureFlags.desktopIcons(this)
+                    && !U.isDesktopIconsEnabled(this)
                     && ((U.launcherIsDefault(this)
                     && !U.isOverridingFreeformHack(this)
                     && FreeformHackHelper.getInstance().isInFreeformWorkspace())

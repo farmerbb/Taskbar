@@ -219,7 +219,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         };
 
-        if(FeatureFlags.desktopIcons(HomeActivityDelegate.this)) {
+        if(U.isDesktopIconsEnabled(HomeActivityDelegate.this)) {
             layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -233,7 +233,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             });
         }
 
-        if(!FeatureFlags.desktopIcons(this)) {
+        if(!U.isDesktopIconsEnabled(this)) {
             layout.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
 
             layout.setOnLongClickListener(view2 -> {
@@ -277,7 +277,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(FeatureFlags.homeActivityUIHost())
             lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
-        if(FeatureFlags.desktopIcons(this)) {
+        if(U.isDesktopIconsEnabled(this)) {
             lbm.registerReceiver(refreshDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
             lbm.registerReceiver(iconArrangeModeReceiver, new IntentFilter("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
             lbm.registerReceiver(sortDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
@@ -456,7 +456,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(FeatureFlags.homeActivityUIHost())
             lbm.unregisterReceiver(restartReceiver);
 
-        if(FeatureFlags.desktopIcons(this)) {
+        if(U.isDesktopIconsEnabled(this)) {
             lbm.unregisterReceiver(refreshDesktopIconsReceiver);
             lbm.unregisterReceiver(iconArrangeModeReceiver);
             lbm.unregisterReceiver(sortDesktopIconsReceiver);

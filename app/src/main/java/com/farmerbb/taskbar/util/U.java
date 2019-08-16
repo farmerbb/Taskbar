@@ -517,13 +517,7 @@ public class U {
     private static void prepareToStartActivity(Context context, Runnable runnable) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_CONTEXT_MENU"));
 
-        boolean shouldLaunchTouchAbsorber =
-                !FreeformHackHelper.getInstance().isTouchAbsorberActive()
-                        && isOverridingFreeformHack(context)
-                        && !isChromeOs(context)
-                        && getCurrentApiVersion() < 29.0f;
-
-        if(!shouldLaunchTouchAbsorber) {
+        if(!shouldLaunchTouchAbsorber(context)) {
             runnable.run();
             return;
         }
@@ -1603,5 +1597,16 @@ public class U {
         return pref.getBoolean("app_drawer_icon", false)
                 ? "app_logo"
                 : "default";
+    }
+
+    private static boolean shouldLaunchTouchAbsorber(Context context) {
+        return !FreeformHackHelper.getInstance().isTouchAbsorberActive()
+                        && isOverridingFreeformHack(context)
+                        && !isChromeOs(context)
+                        && getCurrentApiVersion() < 29.0f;
+    }
+
+    public static boolean isDesktopIconsEnabled(Context context) {
+        return !U.canBootToFreeform(context) && !U.shouldLaunchTouchAbsorber(context);
     }
 }
