@@ -520,7 +520,8 @@ public class U {
         boolean shouldLaunchTouchAbsorber =
                 !FreeformHackHelper.getInstance().isTouchAbsorberActive()
                         && isOverridingFreeformHack(context)
-                        && !isChromeOs(context);
+                        && !isChromeOs(context)
+                        && getCurrentApiVersion() < 29.0f;
 
         if(!shouldLaunchTouchAbsorber) {
             runnable.run();
