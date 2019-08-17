@@ -97,6 +97,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private boolean shouldDelayFreeformHack;
     private int hits;
 
+    private boolean isDesktopIconsEnabled;
     private boolean iconArrangeMode = false;
     private int startDragIndex;
     private int endDragIndex;
@@ -127,7 +128,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private BroadcastReceiver freeformToggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateWindowFlags();
+            if(isDesktopIconsEnabled == U.isDesktopIconsEnabled(HomeActivityDelegate.this))
+                updateWindowFlags();
+            else
+                recreate();
         }
     };
 
@@ -221,7 +225,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         };
 
-        if(U.isDesktopIconsEnabled(this)) {
+        isDesktopIconsEnabled = U.isDesktopIconsEnabled(this);
+        if(isDesktopIconsEnabled) {
             layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -271,13 +276,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX");
         intentFilter.addAction("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED");
+        intentFilter.addAction("com.farmerbb.taskbar.FREEFORM_PREF_CHANGED");
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);
 
         if(FeatureFlags.homeActivityUIHost)
             lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
-        if(U.isDesktopIconsEnabled(this)) {
+        if(isDesktopIconsEnabled) {
             lbm.registerReceiver(refreshDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
             lbm.registerReceiver(iconArrangeModeReceiver, new IntentFilter("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
             lbm.registerReceiver(sortDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
@@ -449,7 +455,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(FeatureFlags.homeActivityUIHost)
             lbm.unregisterReceiver(restartReceiver);
 
-        if(U.isDesktopIconsEnabled(this)) {
+        if(isDesktopIconsEnabled) {
             lbm.unregisterReceiver(refreshDesktopIconsReceiver);
             lbm.unregisterReceiver(iconArrangeModeReceiver);
             lbm.unregisterReceiver(sortDesktopIconsReceiver);
