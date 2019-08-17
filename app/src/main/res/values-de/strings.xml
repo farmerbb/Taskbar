@@ -350,10 +350,6 @@
     <string name="on">An</string>
     <string name="off">Aus</string>
 
-    <string name="rip_freeform_snackbar">Der Freiform Modus ist in dieser Version von Android nicht mehr verfügbar.</string>
-    <string name="rip_freeform_dialog">Leider kann der Freiform Modus aufgrund von Änderungen, die Google in dieser Version von Android vorgenommen hat, nicht mehr aktiviert und von Taskbar benutzt werden.\n\nAlle anderen Taskbar-Funktionen werden wie erwartet weiter funktionieren.  Vielen Dank für dein Verständnis!</string>
-    <string name="action_details">Details</string>
-
     <string name="pref_title_tasker_enabled">Drittanbieter-App-Integration zulassen</string>
     <string name="pref_summary_tasker_enabled">Deaktivieren für verbesserte Sicherheit</string>
 

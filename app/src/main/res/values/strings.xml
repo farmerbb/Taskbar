@@ -350,10 +350,6 @@
     <string name="on">On</string>
     <string name="off">Off</string>
 
-    <string name="rip_freeform_snackbar">Freeform mode is no longer available in this version of Android</string>
-    <string name="rip_freeform_dialog">Unfortunately, due to changes made by Google in this version of Android, freeform mode can no longer be enabled and used by Taskbar.\n\nAll other Taskbar features will continue to work as expected.  Thanks for your understanding!</string>
-    <string name="action_details">Details</string>
-
     <string name="pref_title_tasker_enabled">Allow third-party app integration</string>
     <string name="pref_summary_tasker_enabled">Disable for improved security</string>
 

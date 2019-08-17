@@ -34,7 +34,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -265,31 +264,6 @@ public class MainActivity extends AppCompatActivity {
                 } else
                     shortcutManager.setDynamicShortcuts(Collections.singletonList(shortcut));
             }
-        }
-
-        if(pref.getBoolean("show_freeform_disabled_message", false)) {
-            Snackbar snackbar = Snackbar.make(
-                    findViewById(R.id.main_activity_layout),
-                    R.string.rip_freeform_snackbar,
-                    Snackbar.LENGTH_INDEFINITE
-            );
-
-            snackbar.setAction(R.string.action_details, v -> {
-                snackbar.dismiss();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.pref_header_freeform)
-                        .setMessage(R.string.rip_freeform_dialog)
-                        .setPositiveButton(R.string.action_close, (dialog, which) ->
-                                pref.edit().putBoolean("show_freeform_disabled_message", false).apply()
-                        );
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.setCancelable(false);
-            });
-
-            snackbar.show();
         }
     }
 
