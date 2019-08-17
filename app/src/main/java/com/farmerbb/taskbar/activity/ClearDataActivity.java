@@ -15,7 +15,10 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -35,13 +38,18 @@ public class ClearDataActivity extends AppCompatActivity {
     CheckBox hiddenApps;
     CheckBox topApps;
     CheckBox savedWindowSizes;
-    
+    CheckBox desktopIcons;
+
     Button button;
     
     CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if(pba.isChecked() || hiddenApps.isChecked() || topApps.isChecked() || savedWindowSizes.isChecked())
+            if(pba.isChecked()
+                    || hiddenApps.isChecked()
+                    || topApps.isChecked()
+                    || savedWindowSizes.isChecked()
+                    || desktopIcons.isChecked())
                 button.setText(getResources().getString(R.string.action_reset).toUpperCase());
             else
                 button.setText(getResources().getString(R.string.action_close).toUpperCase());
@@ -68,6 +76,9 @@ public class ClearDataActivity extends AppCompatActivity {
             savedWindowSizes.setOnCheckedChangeListener(listener);
         else
             savedWindowSizes.setVisibility(View.GONE);
+
+        desktopIcons = findViewById(R.id.clear_desktop_icons);
+        desktopIcons.setOnCheckedChangeListener(listener);
         
         button = findViewById(R.id.button);
         button.setText(getResources().getString(R.string.action_close).toUpperCase());
@@ -83,6 +94,13 @@ public class ClearDataActivity extends AppCompatActivity {
 
             if(savedWindowSizes.isChecked())
                 SavedWindowSizes.getInstance(this).clear(this);
+
+            if(desktopIcons.isChecked()) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                pref.edit().remove("desktop_icons").apply();
+                LocalBroadcastManager.getInstance(this).sendBroadcast(
+                        new Intent("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
+            }
 
             finish();
         });
