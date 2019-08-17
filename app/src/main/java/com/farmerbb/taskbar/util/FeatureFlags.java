@@ -19,7 +19,5 @@ public class FeatureFlags {
 
     private FeatureFlags() {}
 
-    public static boolean homeActivityUIHost() {
-        return false;
-    }
+    public static boolean homeActivityUIHost = false;
 }
