@@ -169,12 +169,22 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp" />
 
+            <Space
+                android:id="@+id/whitespace_top"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
             <LinearLayout
                 android:id="@+id/taskbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:clickable="false" />
+
+            <Space
+                android:id="@+id/whitespace_bottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
         </LinearLayout>
 

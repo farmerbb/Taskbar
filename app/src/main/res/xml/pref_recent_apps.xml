@@ -67,6 +67,12 @@
         android:key="full_length"
         android:title="@string/full_length"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="centered_icons"
+        android:dependency="full_length"
+        android:title="@string/pref_centered_icons"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

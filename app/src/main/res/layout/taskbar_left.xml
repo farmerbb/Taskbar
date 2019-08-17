@@ -158,12 +158,22 @@
                             android:layout_marginLeft="2dp"
                             android:layout_marginRight="2dp" />
 
+                        <Space
+                            android:id="@+id/whitespace_left"
+                            android:layout_height="0dp"
+                            android:layout_width="0dp" />
+
                         <LinearLayout
                             android:id="@+id/taskbar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:clickable="false" />
+
+                        <Space
+                            android:id="@+id/whitespace_right"
+                            android:layout_height="0dp"
+                            android:layout_width="0dp" />
 
                 </LinearLayout>
 
@@ -173,12 +183,12 @@
             android:id="@+id/space"
             android:layout_width="4dp"
             android:layout_height="match_parent" />
-        
+
         <Button
             android:layout_width="24dp"
             android:layout_height="@dimen/icon_size"
             android:textSize="20dp"
             android:background="@null"
             android:id="@+id/hide_taskbar_button" />
-        
+
 </LinearLayout>

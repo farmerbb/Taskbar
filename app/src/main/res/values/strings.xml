@@ -378,4 +378,6 @@
     <string name="start_button_image_default">Default</string>
     <string name="start_button_image_custom">Custom</string>
 
+    <string name="pref_centered_icons">Center icons within whitespace</string>
+
 </resources>

@@ -57,7 +57,7 @@
             android:clickable="false">
 
             <Space
-                android:id="@+id/whitespace"
+                android:id="@+id/whitespace_top"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
@@ -67,6 +67,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:clickable="false" />
+
+            <Space
+                android:id="@+id/whitespace_bottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
             <View
                 android:id="@+id/divider"

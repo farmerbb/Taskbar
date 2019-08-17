@@ -866,12 +866,29 @@ public class TaskbarController implements UIController {
                             params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + context.getResources().getDimensionPixelSize(R.dimen.divider_size);
 
-                            if(fullLength && U.getTaskbarPosition(context).contains("bottom")) {
+                            if(fullLength) {
                                 try {
-                                    Space whitespace = layout.findViewById(R.id.whitespace);
-                                    ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
-                                    params2.height = maxScreenSize - recentsSize;
-                                    whitespace.setLayoutParams(params2);
+                                    Space whitespaceTop = layout.findViewById(R.id.whitespace_top);
+                                    Space whitespaceBottom = layout.findViewById(R.id.whitespace_bottom);
+                                    int height = maxScreenSize - recentsSize;
+
+                                    if(pref.getBoolean("centered_icons", false)) {
+                                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
+                                        topParams.height = height / 2;
+                                        whitespaceTop.setLayoutParams(topParams);
+
+                                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
+                                        bottomParams.height = height / 2;
+                                        whitespaceBottom.setLayoutParams(bottomParams);
+                                    } else if(U.getTaskbarPosition(context).contains("bottom")) {
+                                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
+                                        topParams.height = height;
+                                        whitespaceTop.setLayoutParams(topParams);
+                                    } else {
+                                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
+                                        bottomParams.height = height;
+                                        whitespaceBottom.setLayoutParams(bottomParams);
+                                    }
                                 } catch (NullPointerException e) { /* Gracefully fail */ }
                             }
                         } else {
@@ -880,12 +897,29 @@ public class TaskbarController implements UIController {
                             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + context.getResources().getDimensionPixelSize(R.dimen.divider_size);
 
-                            if(fullLength && U.getTaskbarPosition(context).contains("right")) {
+                            if(fullLength) {
                                 try {
-                                    Space whitespace = layout.findViewById(R.id.whitespace);
-                                    ViewGroup.LayoutParams params2 = whitespace.getLayoutParams();
-                                    params2.width = maxScreenSize - recentsSize;
-                                    whitespace.setLayoutParams(params2);
+                                    Space whitespaceLeft = layout.findViewById(R.id.whitespace_left);
+                                    Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
+                                    int width = maxScreenSize - recentsSize;
+
+                                    if(pref.getBoolean("centered_icons", false)) {
+                                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
+                                        leftParams.width = width / 2;
+                                        whitespaceLeft.setLayoutParams(leftParams);
+
+                                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
+                                        rightParams.width = width / 2;
+                                        whitespaceRight.setLayoutParams(rightParams);
+                                    } else if(U.getTaskbarPosition(context).contains("right")) {
+                                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
+                                        leftParams.width = width;
+                                        whitespaceLeft.setLayoutParams(leftParams);
+                                    } else {
+                                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
+                                        rightParams.width = width;
+                                        whitespaceRight.setLayoutParams(rightParams);
+                                    }
                                 } catch (NullPointerException e) { /* Gracefully fail */ }
                             }
                         }
