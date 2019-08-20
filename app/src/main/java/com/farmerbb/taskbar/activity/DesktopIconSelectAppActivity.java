@@ -56,6 +56,8 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
 
     private DesktopIconInfo desktopIcon;
 
+    private boolean isCollapsed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +78,11 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
                 getWindow().setElevation(0);
         }
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+        SharedPreferences pref = U.getSharedPreferences(this);
+        isCollapsed = !pref.getBoolean("collapsed", false);
+
+        if(!isCollapsed)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
 
         progressBar = findViewById(R.id.progress_bar);
         appList = findViewById(R.id.list);
@@ -90,8 +96,8 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
         if(appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING)
             appListGenerator.cancel(true);
 
-        if(!U.shouldCollapse(this, false))
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        if(!isCollapsed)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
 
         super.finish();
     }

@@ -58,6 +58,8 @@ public class SelectAppActivity extends AppCompatActivity {
     private AppListAdapter hiddenAdapter;
     private AppListAdapter topAppsAdapter;
 
+    private boolean isCollapsed;
+
     private class SelectAppPagerAdapter extends FragmentPagerAdapter {
 
         SelectAppPagerAdapter(FragmentManager fm) {
@@ -107,7 +109,11 @@ public class SelectAppActivity extends AppCompatActivity {
                     getWindow().setElevation(0);
             }
 
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+            SharedPreferences pref = U.getSharedPreferences(this);
+            isCollapsed = !pref.getBoolean("collapsed", false);
+
+            if(!isCollapsed)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
 
             progressBar = findViewById(R.id.progress_bar);
             appListGenerator = new AppListGenerator();
@@ -140,8 +146,8 @@ public class SelectAppActivity extends AppCompatActivity {
         if(appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING)
             appListGenerator.cancel(true);
 
-        if(!U.shouldCollapse(this, false))
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        if(!isCollapsed)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
 
         super.finish();
     }
