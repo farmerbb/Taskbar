@@ -49,6 +49,7 @@ import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -116,6 +117,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
+        CompatUtils.applyDisplayCutoutModeTo(params);
         DisplayInfo display = U.getDisplayInfo(this);
 
         int statusBarHeight = 0;

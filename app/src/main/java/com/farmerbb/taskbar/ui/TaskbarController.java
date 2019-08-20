@@ -854,7 +854,7 @@ public class TaskbarController implements UIController {
                 handler.post(() -> {
                     if(numOfEntries > 0 || fullLength) {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-                        DisplayInfo display = U.getDisplayInfo(context);
+                        DisplayInfo display = U.getDisplayInfo(context, true);
                         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 

@@ -1048,12 +1048,12 @@ public class U {
 
         return getActivityOptionsBundle(context, type, pref.getString("window_size", "standard"), view);
     }
-    
+
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
         SharedPreferences pref = getSharedPreferences(context);
         if(!canEnableFreeform() || !pref.getBoolean("freeform_hack", false))
             return getActivityOptions(view).toBundle();
-        
+
         switch(windowSize) {
             case "large":
                 return launchMode1(context, type, view);
@@ -1286,6 +1286,10 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context) {
+        return getDisplayInfo(context, false);
+    }
+
+    public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
         context = context.getApplicationContext();
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -1308,6 +1312,10 @@ public class U {
 
             return display;
         }
+
+        // Workaround for incorrect display size on devices with notches in landscape mode
+        if(fromTaskbar && context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+            return display;
 
         boolean sameWidth = metrics.widthPixels == realMetrics.widthPixels;
         boolean sameHeight = metrics.heightPixels == realMetrics.heightPixels;
