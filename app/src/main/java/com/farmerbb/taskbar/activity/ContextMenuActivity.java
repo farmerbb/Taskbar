@@ -117,7 +117,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        CompatUtils.applyDisplayCutoutModeTo(params);
+        
+        if(args.containsKey("x") && args.containsKey("y"))
+            CompatUtils.applyDisplayCutoutModeTo(params);
+
         DisplayInfo display = U.getDisplayInfo(this);
 
         int statusBarHeight = 0;
