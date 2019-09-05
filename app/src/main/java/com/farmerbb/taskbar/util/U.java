@@ -251,7 +251,7 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        ToastInterface toast = DependencyUtils.createToast(context, message, length);
+        ToastInterface toast = DependencyUtils.createToast(context.getApplicationContext(), message, length);
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);
