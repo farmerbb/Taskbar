@@ -8,7 +8,7 @@ buildscript {
 
     dependencies {
         //noinspection GradleDependency
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.5.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -16,8 +16,8 @@ buildscript {
 }
 
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.10'
-    id 'com.github.ben-manes.versions' version '0.21.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.12'
+    id 'com.github.ben-manes.versions' version '0.24.0'
 }
 
 dependencyUpdates {
