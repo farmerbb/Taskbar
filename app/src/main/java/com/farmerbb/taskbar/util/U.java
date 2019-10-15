@@ -1528,8 +1528,8 @@ public class U {
 
     public static boolean enableFreeformModeShortcut(Context context) {
         return canEnableFreeform()
-                && !U.isOverridingFreeformHack(context)
-                && !U.isChromeOs(context);
+                && !isOverridingFreeformHack(context)
+                && !isChromeOs(context);
     }
 
     public static void startForegroundService(Context context, Intent intent) {
@@ -1611,6 +1611,6 @@ public class U {
     }
 
     public static boolean isDesktopIconsEnabled(Context context) {
-        return !U.canBootToFreeform(context) && !U.shouldLaunchTouchAbsorber(context);
+        return !canBootToFreeform(context) && !shouldLaunchTouchAbsorber(context);
     }
 }
