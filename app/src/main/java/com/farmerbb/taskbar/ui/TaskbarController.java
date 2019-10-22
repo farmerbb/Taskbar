@@ -126,6 +126,8 @@ public class TaskbarController implements UIController {
     private boolean navbarButtonsEnabled = false;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
+    private List<String> currentRunningAppIds = new ArrayList<>();
+    private List<String> prevRunningAppIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
 
     private View.OnClickListener ocl = view -> {
@@ -610,8 +612,11 @@ public class TaskbarController implements UIController {
         int realNumOfPinnedApps = 0;
         boolean fullLength = pref.getBoolean("full_length", false);
 
+        if(runningAppsOnly)
+            currentRunningAppIds.clear();
+
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
-        List<AppEntry> pinnedApps = pba.getPinnedApps();
+        List<AppEntry> pinnedApps = setTimeLastUsedFor(pba.getPinnedApps());
         List<AppEntry> blockedApps = pba.getBlockedApps();
         List<String> applicationIdsToRemove = new ArrayList<>();
 
@@ -809,6 +814,7 @@ public class TaskbarController implements UIController {
             }
 
             if(finalApplicationIds.size() != currentTaskbarIds.size()
+                    || (runningAppsOnly && currentRunningAppIds.size() != prevRunningAppIds.size())
                     || numOfPinnedApps != realNumOfPinnedApps)
                 shouldRedrawTaskbar = true;
             else {
@@ -818,11 +824,25 @@ public class TaskbarController implements UIController {
                         break;
                     }
                 }
+
+                if(!shouldRedrawTaskbar && runningAppsOnly) {
+                    for(int i = 0; i < finalApplicationIds.size(); i++) {
+                        if(!currentRunningAppIds.get(i).equals(prevRunningAppIds.get(i))) {
+                            shouldRedrawTaskbar = true;
+                            break;
+                        }
+                    }
+                }
             }
 
             if(shouldRedrawTaskbar) {
                 currentTaskbarIds = finalApplicationIds;
                 numOfPinnedApps = realNumOfPinnedApps;
+
+                if(runningAppsOnly) {
+                    prevRunningAppIds.clear();
+                    prevRunningAppIds.addAll(currentRunningAppIds);
+                }
 
                 UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
 
@@ -1346,6 +1366,7 @@ public class TaskbarController implements UIController {
                 try {
                     Field field = ActivityManager.RecentTaskInfo.class.getField("firstActiveTime");
                     newEntry.setLastTimeUsed(field.getLong(recentTaskInfo));
+                    currentRunningAppIds.add(packageName);
                 } catch (Exception e) {
                     newEntry.setLastTimeUsed(i);
                 }
@@ -1355,6 +1376,31 @@ public class TaskbarController implements UIController {
         }
 
         return entries;
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.M)
+    private List<AppEntry> setTimeLastUsedFor(List<AppEntry> pinnedApps) {
+        if(!runningAppsOnly || pinnedApps.size() == 0)
+            return pinnedApps;
+
+        ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RecentTaskInfo> recentTasks = mActivityManager.getRecentTasks(Integer.MAX_VALUE, 0);
+
+        for(AppEntry entry : pinnedApps) {
+            for(ActivityManager.RecentTaskInfo task : recentTasks) {
+                if(task.id != -1 && task.baseActivity.getPackageName().equals(entry.getPackageName())) {
+                    try {
+                        Field field = ActivityManager.RecentTaskInfo.class.getField("firstActiveTime");
+                        entry.setLastTimeUsed(field.getLong(task));
+                        currentRunningAppIds.add(entry.getPackageName());
+                        break;
+                    } catch (Exception e) { /* Gracefully fail */ }
+                }
+            }
+        }
+
+        return pinnedApps;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)

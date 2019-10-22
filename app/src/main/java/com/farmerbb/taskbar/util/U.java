@@ -1279,7 +1279,7 @@ public class U {
                     .putString("window_size", "phone_size")
                     .putBoolean("full_length", true)
                     .putBoolean("dashboard", true)
-                 // .putBoolean("shortcut_icon", false)
+                    .putBoolean("shortcut_icon", false)
                     .putBoolean("android_x86_prefs", true)
                     .apply();
         }
