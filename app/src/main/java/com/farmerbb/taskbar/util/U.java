@@ -1149,6 +1149,12 @@ public class U {
         if(navbarButtonsEnabled)
             baseTaskbarSize += context.getResources().getDimension(R.dimen.navbar_buttons_margin);
 
+        if(FeatureFlags.SYSTEM_TRAY
+                && pref.getBoolean("sys_tray", false)
+                && !getTaskbarPosition(context).contains("vertical")) {
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.systray_size);
+        }
+
         return baseTaskbarSize;
     }
 
@@ -1257,6 +1263,7 @@ public class U {
             editor.putString("window_size", "phone_size");
             editor.putString("start_button_image", "app_logo");
             editor.putBoolean("full_length", true);
+            editor.putBoolean("sys_tray", true);
             editor.putBoolean("dashboard", true);
             editor.putBoolean("button_back", true);
             editor.putBoolean("button_home", true);
@@ -1278,6 +1285,7 @@ public class U {
                     .putString("sort_order", "true")
                     .putString("window_size", "phone_size")
                     .putBoolean("full_length", true)
+                    .putBoolean("sys_tray", true)
                     .putBoolean("dashboard", true)
                     .putBoolean("shortcut_icon", false)
                     .putBoolean("android_x86_prefs", true)

@@ -73,6 +73,13 @@
         android:dependency="full_length"
         android:title="@string/pref_centered_icons"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="sys_tray"
+        android:dependency="full_length"
+        android:title="@string/pref_title_sys_tray"
+        android:summary="@string/pref_description_sys_tray"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>
