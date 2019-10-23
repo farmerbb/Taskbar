@@ -967,9 +967,9 @@ public class TaskbarController implements UIController {
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
                         if(U.getTaskbarPosition(context).contains("vertical")) {
-                            int maxScreenSize = display.height
+                            int maxScreenSize = Math.max(0, display.height
                                     - U.getStatusBarHeight(context)
-                                    - U.getBaseTaskbarSize(context);
+                                    - U.getBaseTaskbarSize(context));
 
                             params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + context.getResources().getDimensionPixelSize(R.dimen.divider_size);
@@ -1000,7 +1000,7 @@ public class TaskbarController implements UIController {
                                 } catch (NullPointerException e) { /* Gracefully fail */ }
                             }
                         } else {
-                            int maxScreenSize = display.width - U.getBaseTaskbarSize(context);
+                            int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
 
                             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                                     + context.getResources().getDimensionPixelSize(R.dimen.divider_size);
