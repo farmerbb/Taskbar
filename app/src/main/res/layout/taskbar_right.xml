@@ -33,8 +33,9 @@
 
         <FrameLayout
             android:id="@+id/add_systray_here"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="@dimen/systray_size"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
         <HorizontalScrollView
             android:id="@+id/taskbar_scrollview"

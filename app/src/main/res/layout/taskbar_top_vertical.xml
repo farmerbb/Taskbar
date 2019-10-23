@@ -193,7 +193,8 @@
     <FrameLayout
         android:id="@+id/add_systray_here"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/systray_size"
+        android:visibility="gone"/>
 
     <Space
         android:id="@+id/space"

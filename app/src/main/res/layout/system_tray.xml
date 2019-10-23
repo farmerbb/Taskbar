@@ -20,6 +20,15 @@
     android:layout_height="@dimen/icon_size"
     tools:background="#0000FF">
 
+    <TextView
+        android:id="@+id/time_left"
+        android:layout_width="84dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="16dp"
+        android:visibility="gone"
+        tools:ignore="SpUsage" />
+
     <ImageView
         android:id="@+id/bluetooth"
         android:layout_width="wrap_content"
@@ -49,13 +58,14 @@
         tools:src="@drawable/ic_battery_80_black_24dp"/>
 
     <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
+        android:id="@+id/time_right"
+        android:layout_width="84dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:textSize="16sp"
-        tools:text="12:34 PM\n10/11/19"/>
+        android:textSize="16dp"
+        android:visibility="gone"
+        tools:text="1:41 AM\n03/27/18"
+        tools:visibility="visible"
+        tools:ignore="SpUsage" />
 
 </LinearLayout>

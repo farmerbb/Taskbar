@@ -112,6 +112,8 @@ public class TaskbarController implements UIController {
     private FrameLayout dashboardButton;
     private LinearLayout navbarButtons;
     private LinearLayout sysTrayLayout;
+    private FrameLayout sysTrayParentLayout;
+    private TextView time;
 
     private Handler handler;
     private Handler handler2;
@@ -541,12 +543,52 @@ public class TaskbarController implements UIController {
 
         if(sysTrayEnabled) {
             sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.system_tray, null);
-            sysTrayLayout.setLayoutParams(new FrameLayout.LayoutParams(
+
+            FrameLayout.LayoutParams sysTrayParams = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     context.getResources().getDimensionPixelSize(R.dimen.icon_size)
-            ));
+            );
 
-            ((FrameLayout) layout.findViewById(R.id.add_systray_here)).addView(sysTrayLayout);
+            if(layoutId == R.layout.taskbar_right) {
+                time = sysTrayLayout.findViewById(R.id.time_left);
+                sysTrayParams.gravity = Gravity.START;
+            } else {
+                time = sysTrayLayout.findViewById(R.id.time_right);
+                sysTrayParams.gravity = Gravity.END;
+            }
+
+            time.setVisibility(View.VISIBLE);
+            sysTrayLayout.setLayoutParams(sysTrayParams);
+
+            sysTrayLayout.setOnClickListener(v -> {
+                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+            });
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sysTrayLayout.setOnLongClickListener(v -> {
+                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+                    if(U.shouldCollapse(context, false))
+                        hideTaskbar(true);
+
+                    return true;
+                });
+
+                sysTrayLayout.setOnGenericMotionListener((view, motionEvent) -> {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+                        if(U.shouldCollapse(context, false))
+                            hideTaskbar(true);
+                    }
+                    return true;
+                });
+            }
+
+            sysTrayParentLayout = layout.findViewById(R.id.add_systray_here);
+            sysTrayParentLayout.setVisibility(View.VISIBLE);
+            sysTrayParentLayout.addView(sysTrayLayout);
 
             TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             manager.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
@@ -1079,7 +1121,7 @@ public class TaskbarController implements UIController {
                 scrollView.setVisibility(View.INVISIBLE);
 
             if(sysTrayEnabled)
-                sysTrayLayout.setVisibility(View.VISIBLE);
+                sysTrayParentLayout.setVisibility(View.VISIBLE);
 
             shouldRefreshRecents = true;
             startRefreshingRecents();
@@ -1113,7 +1155,7 @@ public class TaskbarController implements UIController {
                 scrollView.setVisibility(View.GONE);
 
             if(sysTrayEnabled)
-                sysTrayLayout.setVisibility(View.GONE);
+                sysTrayParentLayout.setVisibility(View.GONE);
 
             shouldRefreshRecents = false;
             if(thread != null) thread.interrupt();
@@ -1497,7 +1539,7 @@ public class TaskbarController implements UIController {
     }
 
     private void updateSystemTray() {
-        if(sysTrayLayout == null || isScreenOff()) return;
+        if(!sysTrayEnabled || isScreenOff()) return;
 
         int accentColor = U.getAccentColor(context);
 
@@ -1518,7 +1560,6 @@ public class TaskbarController implements UIController {
             cellular.setImageDrawable(getCellularDrawable());
             cellular.setColorFilter(accentColor);
 
-            TextView time = sysTrayLayout.findViewById(R.id.time);
             time.setText(context.getString(R.string.systray_clock,
                     DateFormat.getTimeFormat(context).format(new Date()),
                     DateFormat.getDateFormat(context).format(new Date())));

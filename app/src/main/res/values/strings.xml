@@ -251,7 +251,7 @@
 
     <string name="enable_accessibility">@string/accessibility_service_description</string>
     <string name="accessibility_service_summary">Allows Taskbar to perform button press actions</string>
-    <string name="accessibility_service_description">In order to perform button press actions such as back, home, recents, and showing the power menu, Taskbar needs to be activated as an accessibility service.\n\nThis permission is used only to perform button press actions, and for no other purpose.</string>
+    <string name="accessibility_service_description">Taskbar needs to be activated as an accessibility service in order to perform button press actions such as back, home, and recents, as well as displaying the power button menu and notification tray.\n\nThis permission is used only to perform button press actions, and for no other purpose.</string>
     
     <string name="pref_title_force_new_window">Always open apps in new windows</string>
     <string name="pref_description_force_new_window">Forces an app to open a new window every time it is selected from the start menu or recent apps (if an app allows multiple windows)</string>
