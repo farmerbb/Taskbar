@@ -34,7 +34,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.U;
 
 public class RecentAppsFragment extends SettingsFragment implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -72,7 +71,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
         bindPreferenceSummaryToValue(findPreference("full_length"));
         bindPreferenceSummaryToValue(findPreference("centered_icons"));
 
-        if(FeatureFlags.SYSTEM_TRAY && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             bindPreferenceSummaryToValue(findPreference("sys_tray"));
         else
             getPreferenceScreen().removePreference(findPreference("sys_tray"));

@@ -1149,8 +1149,7 @@ public class U {
         if(navbarButtonsEnabled)
             baseTaskbarSize += context.getResources().getDimension(R.dimen.navbar_buttons_margin);
 
-        if(FeatureFlags.SYSTEM_TRAY
-                && pref.getBoolean("sys_tray", false)
+        if(pref.getBoolean("sys_tray", false)
                 && !getTaskbarPosition(context).contains("vertical")) {
             baseTaskbarSize += context.getResources().getDimension(R.dimen.systray_size);
         }

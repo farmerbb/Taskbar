@@ -92,7 +92,6 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
-import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -539,8 +538,7 @@ public class TaskbarController implements UIController {
         if(!navbarButtonsEnabled)
             navbarButtons.setVisibility(View.GONE);
 
-        sysTrayEnabled = FeatureFlags.SYSTEM_TRAY
-                && pref.getBoolean("sys_tray", false)
+        sysTrayEnabled = pref.getBoolean("sys_tray", false)
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !positionIsVertical;
 
