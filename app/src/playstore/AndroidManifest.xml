@@ -45,6 +45,9 @@
     <uses-permission-sdk-23 android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission-sdk-23 android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"

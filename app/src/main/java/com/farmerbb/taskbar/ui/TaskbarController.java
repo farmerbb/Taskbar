@@ -23,6 +23,7 @@ import android.app.AlarmManager;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,7 +38,12 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,9 +51,14 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
+import android.text.format.DateFormat;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -65,11 +76,13 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.LinearLayout;
 import android.widget.Space;
+import android.widget.TextView;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.activity.HomeActivityDelegate;
@@ -79,6 +92,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
+import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -97,6 +111,7 @@ public class TaskbarController implements UIController {
     private Space space;
     private FrameLayout dashboardButton;
     private LinearLayout navbarButtons;
+    private LinearLayout sysTrayLayout;
 
     private Handler handler;
     private Handler handler2;
@@ -124,11 +139,14 @@ public class TaskbarController implements UIController {
     private boolean positionIsVertical = false;
     private boolean dashboardEnabled = false;
     private boolean navbarButtonsEnabled = false;
+    private boolean sysTrayEnabled = false;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
     private List<String> currentRunningAppIds = new ArrayList<>();
     private List<String> prevRunningAppIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
+
+    private int cellStrength = -1;
 
     private View.OnClickListener ocl = view -> {
         Intent intent = new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
@@ -177,6 +195,14 @@ public class TaskbarController implements UIController {
         public void onReceive(Context context, Intent intent) {
             if(startButton.getVisibility() == View.GONE)
                 layout.setVisibility(View.VISIBLE);
+        }
+    };
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private PhoneStateListener listener = new PhoneStateListener() {
+        @Override
+        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+            cellStrength = signalStrength.getLevel();
         }
     };
 
@@ -511,6 +537,21 @@ public class TaskbarController implements UIController {
         if(!navbarButtonsEnabled)
             navbarButtons.setVisibility(View.GONE);
 
+        sysTrayEnabled = FeatureFlags.SYSTEM_TRAY && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !positionIsVertical;
+
+        if(sysTrayEnabled) {
+            sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.system_tray, null);
+            sysTrayLayout.setLayoutParams(new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    context.getResources().getDimensionPixelSize(R.dimen.icon_size)
+            ));
+
+            ((FrameLayout) layout.findViewById(R.id.add_systray_here)).addView(sysTrayLayout);
+
+            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            manager.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        }
+
         layout.setBackgroundColor(backgroundTint);
         layout.findViewById(R.id.divider).setBackgroundColor(accentColor);
         button.setTextColor(accentColor);
@@ -561,6 +602,7 @@ public class TaskbarController implements UIController {
 
         handler = new Handler();
         thread = new Thread(() -> {
+            updateSystemTray();
             updateRecentApps(true);
 
             if(!isRefreshingRecents) {
@@ -568,6 +610,7 @@ public class TaskbarController implements UIController {
 
                 while(shouldRefreshRecents) {
                     SystemClock.sleep(refreshInterval);
+                    updateSystemTray();
                     updateRecentApps(false);
 
                     if(showHideAutomagically && !positionIsVertical && !MenuHelper.getInstance().isStartMenuOpen())
@@ -1035,6 +1078,9 @@ public class TaskbarController implements UIController {
             if(isShowingRecents && scrollView.getVisibility() == View.GONE)
                 scrollView.setVisibility(View.INVISIBLE);
 
+            if(sysTrayEnabled)
+                sysTrayLayout.setVisibility(View.VISIBLE);
+
             shouldRefreshRecents = true;
             startRefreshingRecents();
 
@@ -1063,9 +1109,11 @@ public class TaskbarController implements UIController {
             if(navbarButtonsEnabled)
                 navbarButtons.setVisibility(View.GONE);
 
-            if(isShowingRecents) {
+            if(isShowingRecents)
                 scrollView.setVisibility(View.GONE);
-            }
+
+            if(sysTrayEnabled)
+                sysTrayLayout.setVisibility(View.GONE);
 
             shouldRefreshRecents = false;
             if(thread != null) thread.interrupt();
@@ -1187,6 +1235,11 @@ public class TaskbarController implements UIController {
         lbm.unregisterReceiver(tempHideReceiver);
         lbm.unregisterReceiver(startMenuAppearReceiver);
         lbm.unregisterReceiver(startMenuDisappearReceiver);
+
+        if(sysTrayEnabled) {
+            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            manager.listen(listener, PhoneStateListener.LISTEN_NONE);
+        }
 
         isFirstStart = true;
     }
@@ -1441,5 +1494,116 @@ public class TaskbarController implements UIController {
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         return !pm.isInteractive();
+    }
+
+    private void updateSystemTray() {
+        if(sysTrayLayout == null || isScreenOff()) return;
+
+        int accentColor = U.getAccentColor(context);
+
+        handler.post(() -> {
+            ImageView battery = sysTrayLayout.findViewById(R.id.battery);
+            battery.setImageDrawable(getBatteryDrawable());
+            battery.setColorFilter(accentColor);
+
+            ImageView wifi = sysTrayLayout.findViewById(R.id.wifi);
+            wifi.setImageDrawable(getWifiDrawable());
+            wifi.setColorFilter(accentColor);
+
+            ImageView bluetooth = sysTrayLayout.findViewById(R.id.bluetooth);
+            bluetooth.setImageDrawable(getBluetoothDrawable());
+            bluetooth.setColorFilter(accentColor);
+
+            ImageView cellular = sysTrayLayout.findViewById(R.id.cellular);
+            cellular.setImageDrawable(getCellularDrawable());
+            cellular.setColorFilter(accentColor);
+
+            TextView time = sysTrayLayout.findViewById(R.id.time);
+            time.setText(context.getString(R.string.systray_clock,
+                    DateFormat.getTimeFormat(context).format(new Date()),
+                    DateFormat.getDateFormat(context).format(new Date())));
+            time.setTextColor(accentColor);
+        });
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private Drawable getBatteryDrawable() {
+        BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+        int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+
+        String batDrawable;
+        if(batLevel <= 10)
+            batDrawable = "alert";
+        else if(batLevel <= 20)
+            batDrawable = "20";
+        else if(batLevel <= 30)
+            batDrawable = "30";
+        else if(batLevel <= 50)
+            batDrawable = "50";
+        else if(batLevel <= 60)
+            batDrawable = "60";
+        else if(batLevel <= 80)
+            batDrawable = "80";
+        else if(batLevel <= 90)
+            batDrawable = "90";
+        else
+            batDrawable = "full";
+
+        String charging;
+        if(bm.isCharging())
+            charging = "charging_";
+        else
+            charging = "";
+
+        String batRes = "ic_battery_" + charging + batDrawable + "_black_24dp";
+        int id = context.getResources().getIdentifier(batRes, "drawable", BuildConfig.APPLICATION_ID);
+
+        return ContextCompat.getDrawable(context, id);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private Drawable getWifiDrawable() {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo ethernet = manager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
+        if(ethernet != null && ethernet.isConnected())
+            return ContextCompat.getDrawable(context, R.drawable.ic_settings_ethernet_black_24dp);
+
+        NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if(wifi == null || !wifi.isConnected())
+            return null;
+
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        int numberOfLevels = 5;
+
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int level = WifiManager.calculateSignalLevel(wifiInfo.getRssi(), numberOfLevels);
+
+        String wifiRes = "ic_signal_wifi_" + level + "_bar_black_24dp";
+        int id = context.getResources().getIdentifier(wifiRes, "drawable", BuildConfig.APPLICATION_ID);
+
+        return ContextCompat.getDrawable(context, id);
+    }
+
+    private Drawable getBluetoothDrawable() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if(adapter != null && adapter.isEnabled())
+            return ContextCompat.getDrawable(context, R.drawable.ic_bluetooth_black_24dp);
+
+        return null;
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private Drawable getCellularDrawable() {
+        if(Settings.Global.getInt(context.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0)
+            return ContextCompat.getDrawable(context, R.drawable.ic_airplanemode_active_black_24dp);
+
+        if(cellStrength == -1)
+            return null;
+
+        String cellRes = "ic_signal_cellular_" + cellStrength + "_bar_black_24dp";
+        int id = context.getResources().getIdentifier(cellRes, "drawable", BuildConfig.APPLICATION_ID);
+
+        return ContextCompat.getDrawable(context, id);
     }
 }

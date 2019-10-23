@@ -179,6 +179,11 @@
 
         </HorizontalScrollView>
 
+        <FrameLayout
+            android:id="@+id/add_systray_here"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <Space
             android:id="@+id/space"
             android:layout_width="4dp"

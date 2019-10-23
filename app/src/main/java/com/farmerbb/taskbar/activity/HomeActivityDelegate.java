@@ -280,7 +280,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);
 
-        if(FeatureFlags.homeActivityUIHost)
+        if(FeatureFlags.HOME_ACTIVITY_UI_HOST)
             lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
         if(isDesktopIconsEnabled) {
@@ -369,7 +369,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     null);
         }
 
-        if(FeatureFlags.homeActivityUIHost) {
+        if(FeatureFlags.HOME_ACTIVITY_UI_HOST) {
             // Stop any currently running services and switch to using HomeActivityDelegate as UI host
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
@@ -412,7 +412,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             LauncherHelper.getInstance().setOnHomeScreen(false);
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
-            if(FeatureFlags.homeActivityUIHost) {
+            if(FeatureFlags.HOME_ACTIVITY_UI_HOST) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);
                 if(startMenuController != null) startMenuController.onDestroyHost(this);
                 if(dashboardController != null) dashboardController.onDestroyHost(this);
@@ -452,7 +452,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         lbm.unregisterReceiver(forceTaskbarStartReceiver);
         lbm.unregisterReceiver(freeformToggleReceiver);
 
-        if(FeatureFlags.homeActivityUIHost)
+        if(FeatureFlags.HOME_ACTIVITY_UI_HOST)
             lbm.unregisterReceiver(restartReceiver);
 
         if(isDesktopIconsEnabled) {
@@ -480,7 +480,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void killHomeActivity() {
         LauncherHelper.getInstance().setOnHomeScreen(false);
 
-        if(FeatureFlags.homeActivityUIHost) {
+        if(FeatureFlags.HOME_ACTIVITY_UI_HOST) {
             if(taskbarController != null) taskbarController.onDestroyHost(this);
             if(startMenuController != null) startMenuController.onDestroyHost(this);
             if(dashboardController != null) dashboardController.onDestroyHost(this);

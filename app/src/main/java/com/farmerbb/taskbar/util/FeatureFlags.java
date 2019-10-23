@@ -15,9 +15,12 @@
 
 package com.farmerbb.taskbar.util;
 
+import com.farmerbb.taskbar.BuildConfig;
+
 public class FeatureFlags {
 
     private FeatureFlags() {}
 
-    public static boolean homeActivityUIHost = false;
+    public static final boolean HOME_ACTIVITY_UI_HOST = false;
+    public static final boolean SYSTEM_TRAY = BuildConfig.DEBUG;
 }
