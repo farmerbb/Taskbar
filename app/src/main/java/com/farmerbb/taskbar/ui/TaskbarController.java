@@ -1542,29 +1542,23 @@ public class TaskbarController implements UIController {
     private void updateSystemTray() {
         if(!sysTrayEnabled || isScreenOff()) return;
 
-        int accentColor = U.getAccentColor(context);
-
         handler.post(() -> {
             ImageView battery = sysTrayLayout.findViewById(R.id.battery);
             battery.setImageDrawable(getBatteryDrawable());
-            battery.setColorFilter(accentColor);
 
             ImageView wifi = sysTrayLayout.findViewById(R.id.wifi);
             wifi.setImageDrawable(getWifiDrawable());
-            wifi.setColorFilter(accentColor);
 
             ImageView bluetooth = sysTrayLayout.findViewById(R.id.bluetooth);
             bluetooth.setImageDrawable(getBluetoothDrawable());
-            bluetooth.setColorFilter(accentColor);
 
             ImageView cellular = sysTrayLayout.findViewById(R.id.cellular);
             cellular.setImageDrawable(getCellularDrawable());
-            cellular.setColorFilter(accentColor);
 
             time.setText(context.getString(R.string.systray_clock,
                     DateFormat.getTimeFormat(context).format(new Date()),
                     DateFormat.getDateFormat(context).format(new Date())));
-            time.setTextColor(accentColor);
+            time.setTextColor(U.getAccentColor(context));
         });
     }
 
@@ -1572,9 +1566,13 @@ public class TaskbarController implements UIController {
     private Drawable getBatteryDrawable() {
         BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
         int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        boolean isCharging = bm.isCharging();
+
+        if(batLevel == Integer.MIN_VALUE)
+            return null;
 
         String batDrawable;
-        if(batLevel <= 10)
+        if(batLevel <= 10 && !isCharging)
             batDrawable = "alert";
         else if(batLevel <= 20)
             batDrawable = "20";
@@ -1592,7 +1590,7 @@ public class TaskbarController implements UIController {
             batDrawable = "full";
 
         String charging;
-        if(bm.isCharging())
+        if(isCharging)
             charging = "charging_";
         else
             charging = "";
@@ -1600,7 +1598,7 @@ public class TaskbarController implements UIController {
         String batRes = "ic_battery_" + charging + batDrawable + "_black_24dp";
         int id = context.getResources().getIdentifier(batRes, "drawable", BuildConfig.APPLICATION_ID);
 
-        return ContextCompat.getDrawable(context, id);
+        return applyTintTo(ContextCompat.getDrawable(context, id));
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -1609,7 +1607,7 @@ public class TaskbarController implements UIController {
 
         NetworkInfo ethernet = manager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
         if(ethernet != null && ethernet.isConnected())
-            return ContextCompat.getDrawable(context, R.drawable.ic_settings_ethernet_black_24dp);
+            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.ic_settings_ethernet_black_24dp));
 
         NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if(wifi == null || !wifi.isConnected())
@@ -1624,13 +1622,13 @@ public class TaskbarController implements UIController {
         String wifiRes = "ic_signal_wifi_" + level + "_bar_black_24dp";
         int id = context.getResources().getIdentifier(wifiRes, "drawable", BuildConfig.APPLICATION_ID);
 
-        return ContextCompat.getDrawable(context, id);
+        return applyTintTo(ContextCompat.getDrawable(context, id));
     }
 
     private Drawable getBluetoothDrawable() {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if(adapter != null && adapter.isEnabled())
-            return ContextCompat.getDrawable(context, R.drawable.ic_bluetooth_black_24dp);
+            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.ic_bluetooth_black_24dp));
 
         return null;
     }
@@ -1638,7 +1636,7 @@ public class TaskbarController implements UIController {
     @TargetApi(Build.VERSION_CODES.M)
     private Drawable getCellularDrawable() {
         if(Settings.Global.getInt(context.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0)
-            return ContextCompat.getDrawable(context, R.drawable.ic_airplanemode_active_black_24dp);
+            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.ic_airplanemode_active_black_24dp));
 
         if(cellStrength == -1)
             return null;
@@ -1646,6 +1644,13 @@ public class TaskbarController implements UIController {
         String cellRes = "ic_signal_cellular_" + cellStrength + "_bar_black_24dp";
         int id = context.getResources().getIdentifier(cellRes, "drawable", BuildConfig.APPLICATION_ID);
 
-        return ContextCompat.getDrawable(context, id);
+        return applyTintTo(ContextCompat.getDrawable(context, id));
+    }
+    
+    private Drawable applyTintTo(Drawable drawable) {
+        if(drawable == null) return null;
+
+        drawable.setTint(U.getAccentColor(context));
+        return drawable;
     }
 }
