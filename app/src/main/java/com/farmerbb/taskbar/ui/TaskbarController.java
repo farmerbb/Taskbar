@@ -538,9 +538,7 @@ public class TaskbarController implements UIController {
         if(!navbarButtonsEnabled)
             navbarButtons.setVisibility(View.GONE);
 
-        sysTrayEnabled = pref.getBoolean("sys_tray", false)
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !positionIsVertical;
+        sysTrayEnabled = U.isSystemTrayEnabled(context);
 
         if(sysTrayEnabled) {
             sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.system_tray, null);

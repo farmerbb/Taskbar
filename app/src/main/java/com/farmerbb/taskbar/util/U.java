@@ -1149,10 +1149,8 @@ public class U {
         if(navbarButtonsEnabled)
             baseTaskbarSize += context.getResources().getDimension(R.dimen.navbar_buttons_margin);
 
-        if(pref.getBoolean("sys_tray", false)
-                && !getTaskbarPosition(context).contains("vertical")) {
+        if(isSystemTrayEnabled(context))
             baseTaskbarSize += context.getResources().getDimension(R.dimen.systray_size);
-        }
 
         return baseTaskbarSize;
     }
@@ -1620,5 +1618,14 @@ public class U {
 
     public static boolean isDesktopIconsEnabled(Context context) {
         return !canBootToFreeform(context) && !shouldLaunchTouchAbsorber(context);
+    }
+
+    public static boolean isSystemTrayEnabled(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && pref.getBoolean("sys_tray", false)
+                && pref.getBoolean("full_length", false)
+                && !getTaskbarPosition(context).contains("vertical");
     }
 }
