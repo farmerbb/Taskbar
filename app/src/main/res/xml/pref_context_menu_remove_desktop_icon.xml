@@ -17,6 +17,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
+        android:key="arrange_icons"
+        android:title="@string/arrange_icons_alt" />
+
+    <Preference
         android:key="remove_desktop_icon"
         android:title="@string/remove_desktop_icon" />
 

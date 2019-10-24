@@ -358,9 +358,10 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
 
     <string name="add_icon_to_desktop">Add icon to desktop</string>
-    <string name="arrange_icons">Arrange icons</string>
+    <string name="arrange_icons">Move icons</string>
+    <string name="arrange_icons_alt">Move icon</string>
     <string name="select_an_app">Select an app</string>
-    <string name="remove_desktop_icon">Remove desktop icon</string>
+    <string name="remove_desktop_icon">Remove from desktop</string>
     <string name="sort_by_name">Sort icons by name</string>
     <string name="no_icons_to_arrange">No icons to arrange</string>
     <string name="no_icons_to_sort">No icons to sort</string>
