@@ -922,8 +922,7 @@ public class U {
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
-        if(LauncherHelper.getInstance().isOnHomeScreen()
-                && FeatureFlags.HOME_ACTIVITY_UI_HOST
+        if(LauncherHelper.getInstance().isOnHomeScreen(false, true)
                 && (cls.equals(TaskbarService.class)
                 || cls.equals(StartMenuService.class)
                 || cls.equals(DashboardService.class)))
@@ -964,9 +963,13 @@ public class U {
         return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
     }
 
+    public static boolean canDrawOverlays(Context context) {
+        return canDrawOverlays(context, false);
+    }
+
     @TargetApi(Build.VERSION_CODES.M)
-    public static boolean canDrawOverlays(Context context, boolean forHomeScreen) {
-        return (forHomeScreen && FeatureFlags.HOME_ACTIVITY_UI_HOST && !canBootToFreeform(context))
+    public static boolean canDrawOverlays(Context context, boolean isSecondaryHomeScreen) {
+        return isSecondaryHomeScreen
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.M
                 || Settings.canDrawOverlays(context);
     }

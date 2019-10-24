@@ -17,7 +17,8 @@ package com.farmerbb.taskbar.util;
 
 public class LauncherHelper {
 
-    private boolean onHomeScreen = false;
+    private boolean onPrimaryHomeScreen = false;
+    private boolean onSecondaryHomeScreen = false;
 
     private static LauncherHelper theInstance;
 
@@ -30,10 +31,27 @@ public class LauncherHelper {
     }
 
     public boolean isOnHomeScreen() {
-        return onHomeScreen;
+        return isOnHomeScreen(true, true);
     }
 
-    public void setOnHomeScreen(boolean value) {
-        onHomeScreen = value;
+    public boolean isOnHomeScreen(boolean checkPrimary, boolean checkSecondary) {
+        if(checkPrimary && checkSecondary)
+            return onPrimaryHomeScreen || onSecondaryHomeScreen;
+
+        if(!checkPrimary && checkSecondary)
+            return onSecondaryHomeScreen;
+
+        if(checkPrimary)
+            return onPrimaryHomeScreen;
+
+        return false;
+    }
+
+    public void setOnPrimaryHomeScreen(boolean value) {
+        onPrimaryHomeScreen = value;
+    }
+
+    public void setOnSecondaryHomeScreen(boolean value) {
+        onSecondaryHomeScreen = value;
     }
 }

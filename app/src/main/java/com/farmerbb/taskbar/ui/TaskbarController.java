@@ -90,6 +90,7 @@ import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -216,7 +217,7 @@ public class TaskbarController implements UIController {
     public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
+            if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
                 drawTaskbar(host);
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
@@ -789,6 +790,8 @@ public class TaskbarController implements UIController {
                             if(!(eventCache.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                                     && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())
                                     && !eventCache.getClassName().equals(HomeActivity.class.getCanonicalName())
+                                    && !eventCache.getClassName().equals(HomeActivityDelegate.class.getCanonicalName())
+                                    && !eventCache.getClassName().equals(SecondaryHomeActivity.class.getCanonicalName())
                                     && !eventCache.getClassName().equals(InvisibleActivityFreeform.class.getCanonicalName())))
                                 currentForegroundApp = eventCache.getPackageName();
                         }
@@ -1317,7 +1320,7 @@ public class TaskbarController implements UIController {
 
             currentTaskbarPosition = 0;
 
-            if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
+            if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
                 drawTaskbar(host);
             else {
                 SharedPreferences pref = U.getSharedPreferences(context);

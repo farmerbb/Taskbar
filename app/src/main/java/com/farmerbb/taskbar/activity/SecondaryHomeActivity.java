@@ -13,11 +13,6 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.util;
+package com.farmerbb.taskbar.activity;
 
-public class FeatureFlags {
-
-    private FeatureFlags() {}
-
-    public static final boolean HOME_ACTIVITY_UI_HOST = false;
-}
+public class SecondaryHomeActivity extends HomeActivityDelegate {}

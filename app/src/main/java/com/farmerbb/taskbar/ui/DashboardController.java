@@ -58,7 +58,7 @@ import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
-import com.farmerbb.taskbar.activity.HomeActivityDelegate;
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
@@ -165,7 +165,7 @@ public class DashboardController implements UIController {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("dashboard", false)) {
             if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-                if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
+                if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
                     drawDashboard(host);
                 else {
                     pref.edit().putBoolean("taskbar_active", false).apply();
@@ -422,7 +422,7 @@ public class DashboardController implements UIController {
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(U.canDrawOverlays(context, host instanceof HomeActivityDelegate))
+            if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
                 drawDashboard(host);
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();

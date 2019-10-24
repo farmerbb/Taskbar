@@ -123,6 +123,17 @@
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.SecondaryHomeActivity"
+            android:label="${appName}"
+            android:enabled="false"
+            android:theme="@style/AppTheme.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.SECONDARY_HOME"/>
             </intent-filter>
         </activity>

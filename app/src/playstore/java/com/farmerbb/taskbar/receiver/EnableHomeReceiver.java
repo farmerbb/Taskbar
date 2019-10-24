@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.activity.HomeActivity;
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.util.U;
 
 public class EnableHomeReceiver extends BroadcastReceiver {
@@ -32,13 +33,18 @@ public class EnableHomeReceiver extends BroadcastReceiver {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(intent.hasExtra("secondscreen") && pref.getBoolean("launcher", false))
             pref.edit().putBoolean("skip_disable_home_receiver", true).apply();
-        else if(U.canDrawOverlays(context, true)) {
+        else if(U.canDrawOverlays(context)) {
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("launcher", true);
             editor.apply();
 
             ComponentName component = new ComponentName(context, HomeActivity.class);
             context.getPackageManager().setComponentEnabledSetting(component,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+
+            ComponentName component2 = new ComponentName(context, SecondaryHomeActivity.class);
+            context.getPackageManager().setComponentEnabledSetting(component2,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP);
 

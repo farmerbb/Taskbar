@@ -190,7 +190,7 @@ public class InvisibleActivityFreeform extends Activity {
         FreeformHackHelper.getInstance().setInFreeformWorkspace(true);
 
         if(U.launcherIsDefault(this) && !U.isChromeOs(this)) {
-            LauncherHelper.getInstance().setOnHomeScreen(true);
+            LauncherHelper.getInstance().setOnPrimaryHomeScreen(true);
             bootToFreeform = true;
 
             SharedPreferences pref = U.getSharedPreferences(this);
@@ -244,7 +244,7 @@ public class InvisibleActivityFreeform extends Activity {
         possiblyHideTaskbar();
 
         if(bootToFreeform && !finish) {
-            LauncherHelper.getInstance().setOnHomeScreen(false);
+            LauncherHelper.getInstance().setOnPrimaryHomeScreen(false);
             bootToFreeform = false;
 
             // Stop the Taskbar and Start Menu services if they should normally not be active

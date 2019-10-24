@@ -67,7 +67,6 @@ import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
-import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -260,7 +259,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         layout.setFitsSystemWindows(true);
 
-        if((this instanceof HomeActivity || U.isLauncherPermanentlyEnabled(this))
+        if((this instanceof HomeActivity ||
+                this instanceof SecondaryHomeActivity
+                || U.isLauncherPermanentlyEnabled(this))
                 && !U.isChromeOs(this)) {
             setContentView(layout);
             pref.edit().putBoolean("launcher", true).apply();
@@ -280,7 +281,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);
 
-        if(FeatureFlags.HOME_ACTIVITY_UI_HOST)
+        if(this instanceof SecondaryHomeActivity)
             lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
 
         if(isDesktopIconsEnabled) {
@@ -335,15 +336,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-        if(U.canDrawOverlays(this, true)) {
+        if(U.canDrawOverlays(this, this instanceof SecondaryHomeActivity)) {
             if(!U.canBootToFreeform(this)) {
-                final LauncherHelper helper = LauncherHelper.getInstance();
-                helper.setOnHomeScreen(true);
+                setOnHomeScreen(true);
 
                 if(forceTaskbarStart) {
                     forceTaskbarStart = false;
                     new Handler().postDelayed(() -> {
-                        helper.setOnHomeScreen(true);
+                        setOnHomeScreen(true);
                         startTaskbar();
                     }, 250);
                 } else
@@ -369,7 +369,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     null);
         }
 
-        if(FeatureFlags.HOME_ACTIVITY_UI_HOST) {
+        if(this instanceof SecondaryHomeActivity) {
             // Stop any currently running services and switch to using HomeActivityDelegate as UI host
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
@@ -409,10 +409,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!U.canBootToFreeform(this)) {
-            LauncherHelper.getInstance().setOnHomeScreen(false);
+            setOnHomeScreen(false);
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
-            if(FeatureFlags.HOME_ACTIVITY_UI_HOST) {
+            if(this instanceof SecondaryHomeActivity) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);
                 if(startMenuController != null) startMenuController.onDestroyHost(this);
                 if(dashboardController != null) dashboardController.onDestroyHost(this);
@@ -452,7 +452,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         lbm.unregisterReceiver(forceTaskbarStartReceiver);
         lbm.unregisterReceiver(freeformToggleReceiver);
 
-        if(FeatureFlags.HOME_ACTIVITY_UI_HOST)
+        if(this instanceof SecondaryHomeActivity)
             lbm.unregisterReceiver(restartReceiver);
 
         if(isDesktopIconsEnabled) {
@@ -478,9 +478,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void killHomeActivity() {
-        LauncherHelper.getInstance().setOnHomeScreen(false);
+        setOnHomeScreen(false);
 
-        if(FeatureFlags.HOME_ACTIVITY_UI_HOST) {
+        if(this instanceof SecondaryHomeActivity) {
             if(taskbarController != null) taskbarController.onDestroyHost(this);
             if(startMenuController != null) startMenuController.onDestroyHost(this);
             if(dashboardController != null) dashboardController.onDestroyHost(this);
@@ -907,5 +907,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
             return true;
         }
+    }
+
+    private void setOnHomeScreen(boolean value) {
+        LauncherHelper helper = LauncherHelper.getInstance();
+
+        if(this instanceof SecondaryHomeActivity)
+            helper.setOnSecondaryHomeScreen(value);
+        else
+            helper.setOnPrimaryHomeScreen(value);
     }
 }
