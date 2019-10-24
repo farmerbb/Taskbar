@@ -235,7 +235,10 @@ public class DashboardActivity extends Activity {
         Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED");
         intent.putExtra("appWidgetId", data.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1));
         intent.putExtra("cellId", cellId);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.sendBroadcast(intent);
+        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
 
         shouldFinish = true;
     }
