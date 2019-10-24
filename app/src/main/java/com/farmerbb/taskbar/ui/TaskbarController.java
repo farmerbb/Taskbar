@@ -1564,25 +1564,31 @@ public class TaskbarController implements UIController {
     private Drawable getBatteryDrawable() {
         BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
         int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-        boolean isCharging = bm.isCharging();
 
         if(batLevel == Integer.MIN_VALUE)
             return null;
 
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = context.registerReceiver(null, ifilter);
+
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL;
+
         String batDrawable;
-        if(batLevel <= 10 && !isCharging)
+        if(batLevel < 10 && !isCharging)
             batDrawable = "alert";
-        else if(batLevel <= 20)
+        else if(batLevel < 25)
             batDrawable = "20";
-        else if(batLevel <= 30)
+        else if(batLevel < 40)
             batDrawable = "30";
-        else if(batLevel <= 50)
+        else if(batLevel < 55)
             batDrawable = "50";
-        else if(batLevel <= 60)
+        else if(batLevel < 70)
             batDrawable = "60";
-        else if(batLevel <= 80)
+        else if(batLevel < 85)
             batDrawable = "80";
-        else if(batLevel <= 90)
+        else if(batLevel < 95)
             batDrawable = "90";
         else
             batDrawable = "full";

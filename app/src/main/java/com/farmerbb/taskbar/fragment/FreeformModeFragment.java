@@ -151,12 +151,12 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
-                                    && Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                                    && U.getCurrentApiVersion() <= 28.0f) {
                                 builder.setTitle(R.string.freeform_dialog_title)
                                         .setMessage(R.string.freeform_dialog_message_alt)
                                         .setPositiveButton(R.string.action_continue, (dialogInterface, i) -> freeformSetupComplete());
                             } else {
-                                String settingName = Build.VERSION.SDK_INT > Build.VERSION_CODES.P
+                                String settingName = U.getCurrentApiVersion() > 28.0f
                                         ? getString(R.string.enable_freeform_windows)
                                         : getString(R.string.force_activities_resizable);
 

@@ -1396,7 +1396,7 @@ public class U {
         }
     }
 
-    private static float getCurrentApiVersion() {
+    public static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
         else
