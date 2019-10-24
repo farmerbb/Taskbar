@@ -40,6 +40,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
+import android.view.Display;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -912,9 +913,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void setOnHomeScreen(boolean value) {
         LauncherHelper helper = LauncherHelper.getInstance();
 
-        if(this instanceof SecondaryHomeActivity)
-            helper.setOnSecondaryHomeScreen(value);
-        else
+        if(this instanceof SecondaryHomeActivity) {
+            WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+            Display disp = wm.getDefaultDisplay();
+
+            helper.setOnSecondaryHomeScreen(value, disp.getDisplayId());
+        } else
             helper.setOnPrimaryHomeScreen(value);
     }
 }

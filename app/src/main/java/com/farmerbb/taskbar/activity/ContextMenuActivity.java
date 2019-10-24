@@ -323,6 +323,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             if(desktopIcon != null) {
                 addPreferencesFromResource(R.xml.pref_context_menu_remove_desktop_icon);
+                findPreference("arrange_icons").setOnPreferenceClickListener(this);
                 findPreference("remove_desktop_icon").setOnPreferenceClickListener(this);
             } else if(!entry.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                     && !entry.getPackageName().equals(defaultLauncher.activityInfo.packageName)) {

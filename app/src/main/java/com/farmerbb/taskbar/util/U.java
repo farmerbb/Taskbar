@@ -1031,6 +1031,12 @@ public class U {
             method.invoke(options, stackId);
         } catch (Exception e) { /* Gracefully fail */ }
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int launchDisplayId = LauncherHelper.getInstance().getSecondaryDisplayId();
+            if(launchDisplayId != -1)
+                options.setLaunchDisplayId(launchDisplayId);
+        }
+
         return options;
     }
 
@@ -1307,7 +1313,8 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
-        context = context.getApplicationContext();
+        if(LauncherHelper.getInstance().getSecondaryDisplayId() == -1)
+            context = context.getApplicationContext();
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display disp = wm.getDefaultDisplay();

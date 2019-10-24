@@ -19,6 +19,7 @@ public class LauncherHelper {
 
     private boolean onPrimaryHomeScreen = false;
     private boolean onSecondaryHomeScreen = false;
+    private int secondaryDisplayId = -1;
 
     private static LauncherHelper theInstance;
 
@@ -51,7 +52,12 @@ public class LauncherHelper {
         onPrimaryHomeScreen = value;
     }
 
-    public void setOnSecondaryHomeScreen(boolean value) {
+    public void setOnSecondaryHomeScreen(boolean value, int displayId) {
         onSecondaryHomeScreen = value;
+        secondaryDisplayId = value ? displayId : -1;
+    }
+
+    public int getSecondaryDisplayId() {
+        return secondaryDisplayId;
     }
 }
