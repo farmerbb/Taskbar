@@ -38,11 +38,15 @@ import com.farmerbb.taskbar.util.U;
 public class DummyActivity extends Activity {
 
     boolean shouldFinish = false;
+    boolean finishOnPause = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new View(this));
+
+        if(getIntent().hasExtra("finish_on_pause"))
+            finishOnPause = true;
     }
 
     @SuppressLint("RestrictedApi")
@@ -104,8 +108,16 @@ public class DummyActivity extends Activity {
                 U.showPermissionDialog(U.wrapContext(this), null, this::finish);
             else if(getIntent().hasExtra("show_recent_apps_dialog"))
                 U.showRecentAppsDialog(U.wrapContext(this), null, this::finish);
-            else
+            else if(!finishOnPause)
                 finish();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(finishOnPause)
+            finish();
     }
 }

@@ -374,7 +374,8 @@ public class U {
         if(pref.getBoolean("disable_animations", false))
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        if(openInNewWindow || pref.getBoolean("force_new_window", false)) {
+        boolean realOpenInNewWindow = openInNewWindow || pref.getBoolean("force_new_window", false);
+        if(realOpenInNewWindow) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
             ActivityInfo activityInfo = intent.resolveActivityInfo(context.getPackageManager(), 0);
@@ -395,7 +396,7 @@ public class U {
 
         Bundle bundle = getActivityOptionsBundle(context, type, windowSize, view);
 
-        prepareToStartActivity(context, () -> {
+        prepareToStartActivity(context, realOpenInNewWindow, () -> {
             if(shortcut == null) {
                 UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
                 if(entry.getUserId(context) == userManager.getSerialNumberForUser(Process.myUserHandle())) {
@@ -514,12 +515,20 @@ public class U {
         }
     }
 
-    private static void prepareToStartActivity(Context context, Runnable runnable) {
+    private static void prepareToStartActivity(Context context, boolean openInNewWindow, Runnable runnable) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_CONTEXT_MENU"));
 
         if(!FreeformHackHelper.getInstance().isTouchAbsorberActive()
                 && shouldLaunchTouchAbsorber(context)) {
             startTouchAbsorberActivity(context);
+            new Handler().postDelayed(runnable, 100);
+        } else if(openInNewWindow) {
+            Intent intent = new Intent(context, DummyActivity.class);
+            intent.putExtra("finish_on_pause", true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivityLowerRight(context, intent);
+
             new Handler().postDelayed(runnable, 100);
         } else
             runnable.run();
@@ -527,7 +536,7 @@ public class U {
 
     public static void startActivityMaximized(Context context, Intent intent) {
         Bundle bundle = launchMode2(context, MAXIMIZED, ApplicationType.CONTEXT_MENU, null);
-        prepareToStartActivity(context, () -> context.startActivity(intent, bundle));
+        prepareToStartActivity(context, false, () -> context.startActivity(intent, bundle));
     }
 
     @TargetApi(Build.VERSION_CODES.N)
