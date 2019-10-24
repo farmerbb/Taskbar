@@ -47,6 +47,7 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         ComponentName component5 = new ComponentName(this, SecondaryHomeActivity.class);
         getPackageManager().setComponentEnabledSetting(component5,
-                launcherEnabled && !U.isDelegatingHomeActivity(this)
+                launcherEnabled && !U.isDelegatingHomeActivity(this) && FeatureFlags.SECONDARY_HOME
                         ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                         : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);

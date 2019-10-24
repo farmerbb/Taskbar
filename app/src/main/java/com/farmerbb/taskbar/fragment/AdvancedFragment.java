@@ -50,6 +50,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.DependencyUtils;
+import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.U;
 
 public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
@@ -168,12 +169,16 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 if(U.canDrawOverlays(getActivity())) {
                     ComponentName component = new ComponentName(getActivity(), HomeActivity.class);
                     getActivity().getPackageManager().setComponentEnabledSetting(component,
-                            ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            ((CheckBoxPreference) p).isChecked()
+                                    ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                                    : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);
 
                     ComponentName component2 = new ComponentName(getActivity(), SecondaryHomeActivity.class);
                     getActivity().getPackageManager().setComponentEnabledSetting(component2,
-                            ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            ((CheckBoxPreference) p).isChecked() && FeatureFlags.SECONDARY_HOME
+                                    ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                                    : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);
                 } else {
                     U.showPermissionDialog(getActivity());
