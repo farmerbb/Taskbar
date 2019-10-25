@@ -94,6 +94,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
 
+    private WindowManager windowManager;
     private boolean shouldDelayFreeformHack;
     private int hits;
 
@@ -194,6 +195,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(this instanceof SecondaryHomeActivity)
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
         shouldDelayFreeformHack = true;
         hits = 0;
@@ -337,7 +341,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
 
-        if(U.canDrawOverlays(this, this instanceof SecondaryHomeActivity)) {
+        if(U.canDrawOverlays(this)) {
             if(!U.canBootToFreeform(this)) {
                 setOnHomeScreen(true);
 
@@ -524,21 +528,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     @Override
     public void addView(View view, ViewParams params) {
-        final FrameLayout.LayoutParams flParams = new FrameLayout.LayoutParams(
-                params.width,
-                params.height
-        );
-
-        if(params.gravity > -1)
-            flParams.gravity = params.gravity;
-
-        view.setLayoutParams(flParams);
-        layout.addView(view);
+        windowManager.addView(view, params.toWindowManagerParams());
     }
 
     @Override
     public void removeView(View view) {
-        layout.removeView(view);
+        windowManager.removeView(view);
     }
 
     @Override

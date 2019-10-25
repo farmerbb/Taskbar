@@ -18,12 +18,9 @@ package com.farmerbb.taskbar.ui;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.view.View;
 import android.view.WindowManager;
-
-import com.farmerbb.taskbar.util.U;
 
 public abstract class UIHostService extends Service implements UIHost {
 
@@ -63,18 +60,7 @@ public abstract class UIHostService extends Service implements UIHost {
 
     @Override
     public void addView(View view, ViewParams params) {
-        final WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams(
-                params.width,
-                params.height,
-                U.getOverlayType(),
-                params.flags,
-                PixelFormat.TRANSLUCENT
-        );
-
-        if(params.gravity > -1)
-            wmParams.gravity = params.gravity;
-
-        windowManager.addView(view, wmParams);
+        windowManager.addView(view, params.toWindowManagerParams());
     }
 
     @Override

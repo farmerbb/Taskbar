@@ -165,7 +165,7 @@ public class DashboardController implements UIController {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("dashboard", false)) {
             if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-                if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
+                if(U.canDrawOverlays(context))
                     drawDashboard(host);
                 else {
                     pref.edit().putBoolean("taskbar_active", false).apply();
@@ -422,7 +422,7 @@ public class DashboardController implements UIController {
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
+            if(U.canDrawOverlays(context))
                 drawDashboard(host);
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();

@@ -338,7 +338,7 @@ public class U {
         if(checkMultiWindow)
             freeformHackIntent.putExtra("check_multiwindow", true);
 
-        if(canDrawOverlays(context, false))
+        if(canDrawOverlays(context))
             startActivityLowerRight(context, freeformHackIntent);
     }
 
@@ -963,15 +963,9 @@ public class U {
         return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
     }
 
-    public static boolean canDrawOverlays(Context context) {
-        return canDrawOverlays(context, false);
-    }
-
     @TargetApi(Build.VERSION_CODES.M)
-    public static boolean canDrawOverlays(Context context, boolean isSecondaryHomeScreen) {
-        return isSecondaryHomeScreen
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-                || Settings.canDrawOverlays(context);
+    public static boolean canDrawOverlays(Context context) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
     public static boolean isGame(Context context, String packageName) {

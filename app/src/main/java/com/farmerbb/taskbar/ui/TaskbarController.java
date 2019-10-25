@@ -217,7 +217,7 @@ public class TaskbarController implements UIController {
     public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
+            if(U.canDrawOverlays(context))
                 drawTaskbar(host);
             else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
@@ -1320,7 +1320,7 @@ public class TaskbarController implements UIController {
 
             currentTaskbarPosition = 0;
 
-            if(U.canDrawOverlays(context, host instanceof SecondaryHomeActivity))
+            if(U.canDrawOverlays(context))
                 drawTaskbar(host);
             else {
                 SharedPreferences pref = U.getSharedPreferences(context);

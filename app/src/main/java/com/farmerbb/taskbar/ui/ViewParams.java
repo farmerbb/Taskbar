@@ -15,6 +15,11 @@
 
 package com.farmerbb.taskbar.ui;
 
+import android.graphics.PixelFormat;
+import android.view.WindowManager;
+
+import com.farmerbb.taskbar.util.U;
+
 public class ViewParams {
     public int width;
     public int height;
@@ -26,5 +31,20 @@ public class ViewParams {
         this.height = height;
         this.gravity = gravity;
         this.flags = flags;
+    }
+
+    public WindowManager.LayoutParams toWindowManagerParams() {
+        final WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams(
+                width,
+                height,
+                U.getOverlayType(),
+                flags,
+                PixelFormat.TRANSLUCENT
+        );
+
+        if(gravity > -1)
+            wmParams.gravity = gravity;
+
+        return wmParams;
     }
 }
