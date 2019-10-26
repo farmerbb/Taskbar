@@ -435,7 +435,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
                     stopService(new Intent(this, TaskbarService.class));
                     stopService(new Intent(this, StartMenuService.class));
-                    stopService(new Intent(this, DashboardService.class));
+
+                    if(!pref.getBoolean("dont_stop_dashboard", false))
+                        stopService(new Intent(this, DashboardService.class));
 
                     IconCache.getInstance(this).clearCache();
                 }

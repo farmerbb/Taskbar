@@ -28,6 +28,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
@@ -39,6 +40,7 @@ import android.widget.LinearLayout;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.util.DisplayInfo;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class DashboardActivity extends Activity {
@@ -224,6 +226,10 @@ public class DashboardActivity extends Activity {
             intent.setComponent(appWidgetInfo.configure);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(LauncherHelper.getInstance().isOnHomeScreen() && !pref.getBoolean("taskbar_active", false))
+                pref.edit().putBoolean("dont_stop_dashboard", true).apply();
 
             shouldFinish = false;
         } else {

@@ -446,6 +446,9 @@ public class DashboardController implements UIController {
         lbm.unregisterReceiver(hideReceiver);
 
         lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+
+        SharedPreferences pref = U.getSharedPreferences(context);
+        pref.edit().remove("dont_stop_dashboard").apply();
     }
 
     private void cellClick(View view, boolean isActualClick) {
