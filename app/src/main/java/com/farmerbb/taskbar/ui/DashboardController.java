@@ -212,7 +212,7 @@ public class DashboardController implements UIController {
         int backgroundTint = U.getBackgroundTint(context);
         int accentColor = U.getAccentColor(context);
         int accentColorAlt = accentColor;
-        accentColorAlt = ColorUtils.setAlphaComponent(accentColorAlt, Color.alpha(accentColorAlt) / 2);
+        accentColorAlt = ColorUtils.setAlphaComponent(accentColorAlt, Color.alpha(accentColorAlt) / 3);
 
         int cellCount = 0;
 
