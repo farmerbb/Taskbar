@@ -1605,7 +1605,7 @@ public class TaskbarController implements UIController {
             charging = "";
 
         String batRes = "ic_battery_" + charging + batDrawable + "_black_24dp";
-        int id = context.getResources().getIdentifier(batRes, "drawable", BuildConfig.APPLICATION_ID);
+        int id = getResourceIdFor(batRes);
 
         return applyTintTo(ContextCompat.getDrawable(context, id));
     }
@@ -1629,7 +1629,7 @@ public class TaskbarController implements UIController {
         int level = WifiManager.calculateSignalLevel(wifiInfo.getRssi(), numberOfLevels);
 
         String wifiRes = "ic_signal_wifi_" + level + "_bar_black_24dp";
-        int id = context.getResources().getIdentifier(wifiRes, "drawable", BuildConfig.APPLICATION_ID);
+        int id = getResourceIdFor(wifiRes);
 
         return applyTintTo(ContextCompat.getDrawable(context, id));
     }
@@ -1651,7 +1651,7 @@ public class TaskbarController implements UIController {
             return null;
 
         String cellRes = "ic_signal_cellular_" + cellStrength + "_bar_black_24dp";
-        int id = context.getResources().getIdentifier(cellRes, "drawable", BuildConfig.APPLICATION_ID);
+        int id = getResourceIdFor(cellRes);
 
         return applyTintTo(ContextCompat.getDrawable(context, id));
     }
@@ -1661,5 +1661,10 @@ public class TaskbarController implements UIController {
 
         drawable.setTint(U.getAccentColor(context));
         return drawable;
+    }
+
+    private int getResourceIdFor(String name) {
+        String packageName = context.getResources().getResourcePackageName(R.mipmap.ic_launcher);
+        return context.getResources().getIdentifier(name, "drawable", packageName);
     }
 }
