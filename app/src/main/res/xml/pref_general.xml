@@ -35,7 +35,7 @@
         android:title="@string/pref_title_position"/>
 
     <ListPreference
-        android:defaultValue="keyboard"
+        android:defaultValue="always"
         android:entries="@array/pref_show_search_bar_list"
         android:entryValues="@array/pref_show_search_bar_list_values"
         android:key="show_search_bar"

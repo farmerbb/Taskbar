@@ -92,6 +92,7 @@ public class StartMenuController implements UIController {
     private boolean shouldShowSearchBox = false;
     private boolean hasSubmittedQuery = false;
     private boolean hasHardwareKeyboard = false;
+    private boolean searchViewClicked = false;
 
     private int layoutId = R.layout.start_menu_left;
 
@@ -184,7 +185,7 @@ public class StartMenuController implements UIController {
         IconCache.getInstance(context).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(context);
-        switch(pref.getString("show_search_bar", "keyboard")) {
+        switch(pref.getString("show_search_bar", "always")) {
             case "always":
                 shouldShowSearchBox = true;
                 break;
@@ -270,6 +271,7 @@ public class StartMenuController implements UIController {
         startMenu.setLayoutParams(startMenuParams);
 
         searchView = layout.findViewById(R.id.search);
+        searchViewClicked = false;
 
         int backgroundTint = U.getBackgroundTint(context);
 
@@ -280,6 +282,11 @@ public class StartMenuController implements UIController {
 
         if(shouldShowSearchBox) {
             if(!hasHardwareKeyboard) searchView.setIconifiedByDefault(true);
+
+            searchView.setOnTouchListener((v, event) -> {
+                searchViewClicked = true;
+                return false;
+            });
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -684,10 +691,13 @@ public class StartMenuController implements UIController {
             layout.postDelayed(() -> {
                 layout.setVisibility(View.GONE);
 
-                if(!hasHardwareKeyboard)
-                    searchView.setQuery(null, false);
+                if(searchViewClicked || hasHardwareKeyboard) {
+                    if(!hasHardwareKeyboard)
+                        searchView.setQuery(null, false);
 
-                searchView.setIconified(true);
+                    searchView.setIconified(true);
+                }
+
                 searchView.setOnQueryTextFocusChangeListener(null);
                 hasSubmittedQuery = false;
 
