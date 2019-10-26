@@ -1340,7 +1340,7 @@ public class TaskbarController implements UIController {
         ImageView imageView = convertView.findViewById(R.id.icon);
         ImageView imageView2 = convertView.findViewById(R.id.shortcut_icon);
         imageView.setImageDrawable(entry.getIcon(context));
-        imageView2.setBackgroundColor(pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white)));
+        imageView2.setBackgroundColor(U.getAccentColor(context));
 
         String taskbarPosition = U.getTaskbarPosition(context);
         if(pref.getBoolean("shortcut_icon", true)) {
