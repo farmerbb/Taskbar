@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2016 Braden Farmer
+<!-- Copyright 2019 Braden Farmer
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,5 +15,8 @@
 -->
 
 <resources>
-    <integer name="dashboard_width">4</integer>
+    <bool name="def_full_length">true</bool>
+    <bool name="def_sys_tray">true</bool>
+    <bool name="def_dashboard">true</bool>
+    <string name="def_window_size" translatable="false">phone_size</string>
 </resources>

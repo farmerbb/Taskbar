@@ -58,7 +58,6 @@ import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
-import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
@@ -163,7 +162,7 @@ public class DashboardController implements UIController {
     @Override
     public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("dashboard", false)) {
+        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.def_dashboard))) {
             if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
                 if(U.canDrawOverlays(context))
                     drawDashboard(host);

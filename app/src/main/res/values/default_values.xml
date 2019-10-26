@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2016 Braden Farmer
+<!-- Copyright 2019 Braden Farmer
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,9 +15,8 @@
 -->
 
 <resources>
-    <integer name="translucent_gray">0x60000000</integer>
-    <integer name="translucent_white">0xFFF0F0F0</integer>
-    <integer name="dashboard_width">2</integer>
-    <integer name="dashboard_height">2</integer>
-    <integer name="start_menu_columns">3</integer>
+    <bool name="def_full_length">false</bool>
+    <bool name="def_sys_tray">false</bool>
+    <bool name="def_dashboard">false</bool>
+    <string name="def_window_size" translatable="false">standard</string>
 </resources>

@@ -17,6 +17,8 @@ package com.farmerbb.taskbar.util;
 
 import android.content.Context;
 
+import com.farmerbb.taskbar.R;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -57,7 +59,7 @@ public class SavedWindowSizes implements Serializable {
                 return entry.getWindowSize();
         }
 
-        return U.getSharedPreferences(context).getString("window_size", "standard");
+        return U.getSharedPreferences(context).getString("window_size", context.getString(R.string.def_window_size));
     }
 
     public void clear(Context context) {

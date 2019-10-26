@@ -41,7 +41,7 @@
         android:summary="@string/launch_games_fullscreen_message" />
 
     <ListPreference
-        android:defaultValue="standard"
+        android:defaultValue="@string/def_window_size"
         android:entries="@array/pref_window_size_list"
         android:entryValues="@array/pref_window_size_list_values"
         android:key="window_size"

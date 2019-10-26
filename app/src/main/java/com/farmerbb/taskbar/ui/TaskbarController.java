@@ -412,7 +412,7 @@ public class TaskbarController implements UIController {
         dashboardButton = layout.findViewById(R.id.dashboard_button);
         navbarButtons = layout.findViewById(R.id.navbar_buttons);
 
-        dashboardEnabled = pref.getBoolean("dashboard", false);
+        dashboardEnabled = pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.def_dashboard));
         if(dashboardEnabled) {
             layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
@@ -695,7 +695,7 @@ public class TaskbarController implements UIController {
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(context);
         int realNumOfPinnedApps = 0;
-        boolean fullLength = pref.getBoolean("full_length", false);
+        boolean fullLength = pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.def_full_length));
 
         if(runningAppsOnly)
             currentRunningAppIds.clear();

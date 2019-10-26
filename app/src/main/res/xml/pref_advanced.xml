@@ -28,7 +28,7 @@
         android:title="@string/pref_title_keyboard_shortcut" />
 
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="@bool/def_dashboard"
         android:key="dashboard"
         android:title="@string/dashboard"
         android:summary="@string/dashboard_description" />

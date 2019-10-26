@@ -16,4 +16,5 @@
 
 <resources>
     <integer name="dashboard_width">3</integer>
+    <integer name="start_menu_columns">4</integer>
 </resources>

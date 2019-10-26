@@ -1058,7 +1058,7 @@ public class U {
     public static Bundle getActivityOptionsBundle(Context context, ApplicationType type, View view) {
         SharedPreferences pref = getSharedPreferences(context);
 
-        return getActivityOptionsBundle(context, type, pref.getString("window_size", "standard"), view);
+        return getActivityOptionsBundle(context, type, pref.getString("window_size", context.getString(R.string.def_window_size)), view);
     }
 
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
@@ -1140,7 +1140,7 @@ public class U {
         float baseTaskbarSize = context.getResources().getDimension(R.dimen.base_taskbar_size);
         boolean navbarButtonsEnabled = false;
 
-        if(pref.getBoolean("dashboard", false))
+        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.def_dashboard)))
             baseTaskbarSize += context.getResources().getDimension(R.dimen.dashboard_button_size);
 
         if(pref.getBoolean("button_back", false)) {
@@ -1263,11 +1263,7 @@ public class U {
             editor.putString("refresh_frequency", "0");
             editor.putString("max_num_of_recents", "2147483647");
             editor.putString("sort_order", "true");
-            editor.putString("window_size", "phone_size");
             editor.putString("start_button_image", "app_logo");
-            editor.putBoolean("full_length", true);
-            editor.putBoolean("sys_tray", true);
-            editor.putBoolean("dashboard", true);
             editor.putBoolean("button_back", true);
             editor.putBoolean("button_home", true);
             editor.putBoolean("button_recents", true);
@@ -1286,10 +1282,6 @@ public class U {
                     .putString("refresh_frequency", "0")
                     .putString("max_num_of_recents", "2147483647")
                     .putString("sort_order", "true")
-                    .putString("window_size", "phone_size")
-                    .putBoolean("full_length", true)
-                    .putBoolean("sys_tray", true)
-                    .putBoolean("dashboard", true)
                     .putBoolean("shortcut_icon", false)
                     .putBoolean("android_x86_prefs", true)
                     .apply();
@@ -1631,8 +1623,8 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
 
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && pref.getBoolean("sys_tray", false)
-                && pref.getBoolean("full_length", false)
+                && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.def_sys_tray))
+                && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.def_full_length))
                 && !getTaskbarPosition(context).contains("vertical");
     }
 }

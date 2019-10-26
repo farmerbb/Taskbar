@@ -59,7 +59,6 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
-import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
@@ -264,6 +263,12 @@ public class StartMenuController implements UIController {
         if(U.visualFeedbackEnabled(context))
             startMenu.setRecyclerListener(view -> view.setBackgroundColor(0));
 
+        int columns = context.getResources().getInteger(R.integer.start_menu_columns);
+
+        ViewGroup.LayoutParams startMenuParams = startMenu.getLayoutParams();
+        startMenuParams.width = (int) (startMenuParams.width * (columns / 3f));
+        startMenu.setLayoutParams(startMenuParams);
+
         searchView = layout.findViewById(R.id.search);
 
         int backgroundTint = U.getBackgroundTint(context);
@@ -381,8 +386,13 @@ public class StartMenuController implements UIController {
                 U.launchApp(context, entry, null, false, false, view);
             });
 
+            View childLayout = layout.findViewById(R.id.search_view_child_layout);
             if(pref.getBoolean("transparent_start_menu", false))
-                layout.findViewById(R.id.search_view_child_layout).setBackgroundColor(0);
+                childLayout.setBackgroundColor(0);
+
+            ViewGroup.LayoutParams childLayoutParams = childLayout.getLayoutParams();
+            childLayoutParams.width = (int) (childLayoutParams.width * (columns / 3f));
+            childLayout.setLayoutParams(childLayoutParams);
         } else
             searchViewLayout.setVisibility(View.GONE);
 
@@ -541,7 +551,7 @@ public class StartMenuController implements UIController {
                         if(firstDraw) {
                             SharedPreferences pref = U.getSharedPreferences(context);
                             if(pref.getString("start_menu_layout", "grid").equals("grid")) {
-                                startMenu.setNumColumns(3);
+                                startMenu.setNumColumns(context.getResources().getInteger(R.integer.start_menu_columns));
                                 adapter = new StartMenuAdapter(context, R.layout.row_alt, entries);
                             } else
                                 adapter = new StartMenuAdapter(context, R.layout.row, entries);
