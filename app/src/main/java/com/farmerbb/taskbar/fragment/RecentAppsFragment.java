@@ -161,7 +161,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
                 LinearLayout dialogLayout2 = (LinearLayout) View.inflate(getActivity(), R.layout.seekbar_pref, null);
 
-                String value2 = pref.getString("refresh_frequency", "2");
+                String value2 = pref.getString("refresh_frequency", "1");
 
                 final TextView textView2 = dialogLayout2.findViewById(R.id.seekbar_value);
                 textView2.setText(R.string.infinity);
@@ -228,7 +228,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
     private void updateRefreshFrequency(boolean restartTaskbar) {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        String value = pref.getString("refresh_frequency", "2");
+        String value = pref.getString("refresh_frequency", "1");
         double doubleValue = Double.parseDouble(value);
         int intValue = (int) doubleValue;
 

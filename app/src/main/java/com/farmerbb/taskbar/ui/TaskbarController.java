@@ -358,7 +358,7 @@ public class TaskbarController implements UIController {
             return false;
         });
 
-        refreshInterval = (int) (Float.parseFloat(pref.getString("refresh_frequency", "2")) * 1000);
+        refreshInterval = (int) (Float.parseFloat(pref.getString("refresh_frequency", "1")) * 1000);
         if(refreshInterval == 0)
             refreshInterval = 100;
 
