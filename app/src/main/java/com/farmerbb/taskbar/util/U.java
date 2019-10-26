@@ -1223,14 +1223,8 @@ public class U {
     }
 
     public static void initPrefs(Context context) {
-        // On smaller-screened devices, set "Grid" as the default start menu layout
-        SharedPreferences pref = getSharedPreferences(context);
-        if(context.getApplicationContext().getResources().getConfiguration().smallestScreenWidthDp < 720
-                && pref.getString("start_menu_layout", "null").equals("null")) {
-            pref.edit().putString("start_menu_layout", "grid").apply();
-        }
-
         // Enable freeform hack automatically on supported devices
+        SharedPreferences pref = getSharedPreferences(context);
         if(canEnableFreeform()) {
             if(!pref.getBoolean("freeform_hack_override", false)) {
                 pref.edit()

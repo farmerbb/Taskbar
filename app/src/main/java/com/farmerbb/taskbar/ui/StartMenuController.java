@@ -540,7 +540,7 @@ public class StartMenuController implements UIController {
 
                         if(firstDraw) {
                             SharedPreferences pref = U.getSharedPreferences(context);
-                            if(pref.getString("start_menu_layout", "list").equals("grid")) {
+                            if(pref.getString("start_menu_layout", "grid").equals("grid")) {
                                 startMenu.setNumColumns(3);
                                 adapter = new StartMenuAdapter(context, R.layout.row_alt, entries);
                             } else
