@@ -228,7 +228,9 @@ public class DashboardActivity extends Activity {
             startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(LauncherHelper.getInstance().isOnHomeScreen() && !pref.getBoolean("taskbar_active", false))
+            if(LauncherHelper.getInstance().isOnHomeScreen() 
+                    && (!pref.getBoolean("taskbar_active", false)
+                    || pref.getBoolean("is_hidden", false)))
                 pref.edit().putBoolean("dont_stop_dashboard", true).apply();
 
             shouldFinish = false;
