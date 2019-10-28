@@ -18,18 +18,19 @@ package com.farmerbb.taskbar.lib;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Keep;
 
 import com.farmerbb.taskbar.activity.MainActivity;
 
-public class Taskbar {
+@Keep public class Taskbar {
 
     private Taskbar() {}
 
-    public static void openSettings(Context context) {
+    @Keep public static void openSettings(Context context) {
         openSettings(context, null);
     }
 
-    public static void openSettings(Context context, String title) {
+    @Keep public static void openSettings(Context context, String title) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("title", title);
 
