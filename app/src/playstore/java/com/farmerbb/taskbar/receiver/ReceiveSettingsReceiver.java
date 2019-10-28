@@ -44,7 +44,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Ignore this broadcast if this is the free version
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.PAID_APPLICATION_ID)) {
+        if(context.getPackageName().equals(BuildConfig.PAID_APPLICATION_ID)) {
             // Get pinned and blocked apps
             PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
             pba.clear(context);
@@ -148,7 +148,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
             String contents = intent.getStringExtra("preferences");
             if(contents.length() > 0)
                 try {
-                    File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + BuildConfig.APPLICATION_ID + "_preferences.xml");
+                    File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
                     FileOutputStream output = new FileOutputStream(file);
                     output.write(contents.getBytes());
                     output.close();

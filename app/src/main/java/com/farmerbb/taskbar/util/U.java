@@ -63,8 +63,6 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
-import com.farmerbb.taskbar.activity.ShortcutActivity;
-import com.farmerbb.taskbar.activity.StartTaskbarActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.service.DashboardService;
@@ -104,6 +102,7 @@ public class U {
     private static final int WINDOWING_MODE_FULLSCREEN = 1;
     private static final int WINDOWING_MODE_FREEFORM = 5;
 
+    @SuppressWarnings("deprecation")
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
     }
@@ -128,7 +127,7 @@ public class U {
                 .setPositiveButton(R.string.action_grant_permission, (dialog, which) -> {
                     try {
                         context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+                                Uri.parse("package:" + context.getPackageName())));
 
                         finalOnFinish.run();
                     } catch (ActivityNotFoundException e) {
@@ -154,7 +153,7 @@ public class U {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.error_dialog_title)
-                .setMessage(context.getString(R.string.error_dialog_message, BuildConfig.APPLICATION_ID, appopCmd))
+                .setMessage(context.getString(R.string.error_dialog_message, context.getPackageName(), appopCmd))
                 .setPositiveButton(R.string.action_ok, (dialog, which) -> finalOnFinish.run());
 
         AlertDialog dialog = builder.create();
@@ -622,13 +621,13 @@ public class U {
     public static void checkForUpdates(Context context) {
         String url;
         if(isPlayStoreRelease(context)) {
-            if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+            if(context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
                     && !isPlayStoreInstalled(context))
                 url = "https://github.com/farmerbb/Taskbar/releases";
             else
-                url = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                url = "https://play.google.com/store/apps/details?id=" + context.getPackageName();
         } else
-            url = "https://f-droid.org/repository/browse/?fdid=" + BuildConfig.APPLICATION_ID;
+            url = "https://f-droid.org/repository/browse/?fdid=" + context.getPackageName();
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
@@ -644,7 +643,7 @@ public class U {
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-        return defaultLauncher.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID);
+        return defaultLauncher.activityInfo.packageName.equals(context.getPackageName());
     }
 
     public static void setCachedRotation(int cachedRotation) {
@@ -867,32 +866,6 @@ public class U {
         }
     }
 
-    public static Intent getShortcutIntent(Context context) {
-        Intent shortcutIntent = new Intent(context, ShortcutActivity.class);
-        shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra("is_launching_shortcut", true);
-
-        Intent intent = new Intent();
-        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_freeform_mode));
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.pref_header_freeform));
-
-        return intent;
-    }
-
-    public static Intent getStartStopIntent(Context context) {
-        Intent shortcutIntent = new Intent(context, StartTaskbarActivity.class);
-        shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra("is_launching_shortcut", true);
-
-        Intent intent = new Intent();
-        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_launcher));
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.start_taskbar));
-
-        return intent;
-    }
-
     public static boolean canEnableFreeform() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     }
@@ -1088,7 +1061,7 @@ public class U {
 
     public static boolean isSystemApp(Context context) {
         try {
-            ApplicationInfo info = context.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
             int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
             return (info.flags & mask) != 0;
         } catch (PackageManager.NameNotFoundException e) {
@@ -1112,19 +1085,19 @@ public class U {
             validBlissOsBuildProp = true;
 
         return validBlissOsBuildProp
-                && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+                && context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
                 && isSystemApp(context);
     }
 
     public static boolean isLauncherPermanentlyEnabled(Context context) {
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
+        if(context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
             return true;
 
         PackageManager pm = context.getPackageManager();
         try {
             pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
-            return pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, BuildConfig.APPLICATION_ID) == PackageManager.SIGNATURE_MATCH
-                    && BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
+            return pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, context.getPackageName()) == PackageManager.SIGNATURE_MATCH
+                    && context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
                     && isSystemApp(context);
         } catch (PackageManager.NameNotFoundException e) {
             return false;
@@ -1274,7 +1247,7 @@ public class U {
         }
 
         // Customizations for Android-x86 devices (non-Bliss)
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
+        if(context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
                 && isSystemApp(context)
                 && !pref.getBoolean("android_x86_prefs", false)) {
             pref.edit()
@@ -1348,7 +1321,7 @@ public class U {
             } else
                 showToastLong(context, R.string.pin_shortcut_not_supported);
         } else {
-            Intent intent = getShortcutIntent(context);
+            Intent intent = ShortcutUtils.getShortcutIntent(context);
             intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
             intent.putExtra("duplicate", false);
 
@@ -1455,7 +1428,7 @@ public class U {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp(context)) {
             ApplicationInfo applicationInfo = null;
             try {
-                applicationInfo = context.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+                applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
             } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
 
             if(applicationInfo != null) {
@@ -1508,7 +1481,7 @@ public class U {
     }
 
     public static boolean isPlayStoreRelease(Context context) {
-        return isPlayStoreRelease(context, BuildConfig.APPLICATION_ID);
+        return isPlayStoreRelease(context, context.getPackageName());
     }
 
     @SuppressLint("PackageManagerGetSignatures")
@@ -1626,5 +1599,10 @@ public class U {
                 && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.def_sys_tray))
                 && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.def_full_length))
                 && !getTaskbarPosition(context).contains("vertical");
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean isLibrary(Context context) {
+        return !context.getPackageName().equals(BuildConfig.APPLICATION_ID);
     }
 }

@@ -59,7 +59,7 @@ public class KeyboardShortcutActivity extends Activity {
                     else
                         startStopIntent = new Intent("com.farmerbb.taskbar.START");
 
-                    startStopIntent.setPackage(BuildConfig.APPLICATION_ID);
+                    startStopIntent.setPackage(getPackageName());
                     sendBroadcast(startStopIntent);
                 }
 

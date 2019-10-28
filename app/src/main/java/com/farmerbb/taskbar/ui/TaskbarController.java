@@ -48,6 +48,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -321,8 +322,11 @@ public class TaskbarController implements UIController {
                 if(U.isBlissOs(context)) {
                     drawable = ContextCompat.getDrawable(context, R.drawable.bliss);
                     drawable.setTint(accentColor);
-                } else
-                    drawable = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
+                } else {
+                    LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+                    LauncherActivityInfo info = launcherApps.getActivityList(context.getPackageName(), Process.myUserHandle()).get(0);
+                    drawable = IconCache.getInstance(context).getIcon(context, context.getPackageManager(), info);
+                }
 
                 startButton.setImageDrawable(drawable);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
@@ -1664,7 +1668,7 @@ public class TaskbarController implements UIController {
     }
 
     private int getResourceIdFor(String name) {
-        String packageName = context.getResources().getResourcePackageName(R.mipmap.ic_launcher);
+        String packageName = context.getResources().getResourcePackageName(R.drawable.dummy);
         return context.getResources().getIdentifier(name, "drawable", packageName);
     }
 }

@@ -42,7 +42,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Ignore this broadcast if this is the paid version
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)) {
+        if(context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)) {
             Intent sendSettingsIntent = new Intent("com.farmerbb.taskbar.SEND_SETTINGS");
             sendSettingsIntent.setPackage(BuildConfig.PAID_APPLICATION_ID);
 
@@ -139,7 +139,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             StringBuilder preferences = new StringBuilder();
 
             try {
-                File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + BuildConfig.APPLICATION_ID + "_preferences.xml");
+                File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
                 FileInputStream input = new FileInputStream(file);
                 InputStreamReader reader = new InputStreamReader(input);
                 BufferedReader buffer = new BufferedReader(reader);
@@ -160,7 +160,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
             // Get custom start button image
             File file = new File(context.getFilesDir() + "/images", "custom_image");
             if(file.exists() && U.isPlayStoreRelease(context, BuildConfig.PAID_APPLICATION_ID)) {
-                Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file);
+                Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
                 context.grantUriPermission(BuildConfig.PAID_APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sendSettingsIntent.putExtra("custom_image", uri);
             }

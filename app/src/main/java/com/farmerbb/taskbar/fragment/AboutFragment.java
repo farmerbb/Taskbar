@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.util.U;
 
 import java.text.NumberFormat;
@@ -46,18 +47,20 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         // Add preferences
         addPreferencesFromResource(R.xml.pref_base);
-
-        SharedPreferences pref = U.getSharedPreferences(getActivity());
         addPreferencesFromResource(R.xml.pref_about);
 
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID)
-                && U.isPlayStoreInstalled(getActivity())
-                && U.isPlayStoreRelease(getActivity())
-                && !U.isSystemApp(getActivity())
-                && !pref.getBoolean("hide_donate", false)) {
-            findPreference("donate").setOnPreferenceClickListener(this);
-        } else
-            getPreferenceScreen().removePreference(findPreference("donate_category"));
+        boolean isLibrary = U.isLibrary(getActivity());
+        if(!isLibrary) {
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            if(getActivity().getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
+                    && U.isPlayStoreInstalled(getActivity())
+                    && U.isPlayStoreRelease(getActivity())
+                    && !U.isSystemApp(getActivity())
+                    && !pref.getBoolean("hide_donate", false)) {
+                findPreference("donate").setOnPreferenceClickListener(this);
+            } else
+                getPreferenceScreen().removePreference(findPreference("donate_category"));
+        }
 
         // Set OnClickListeners for certain preferences
         if(U.canEnableFreeform())
@@ -70,11 +73,13 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
         findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
 
-        if(BuildConfig.DEBUG || BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-            findPreference("about").setSummary(R.string.pref_about_description_alt);
-        else {
-            findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
-            findPreference("about").setOnPreferenceClickListener(this);
+        if(!isLibrary) {
+            if(BuildConfig.DEBUG || getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
+                findPreference("about").setSummary(R.string.pref_about_description_alt);
+            else {
+                findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+                findPreference("about").setOnPreferenceClickListener(this);
+            }
         }
 
         finishedLoadingPrefs = true;
@@ -85,10 +90,10 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle(R.string.app_name);
+        activity.setTitle(((MainActivity) getActivity()).getAboutFragmentTitle());
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(U.isLibrary(getActivity()));
     }
 
     @Override

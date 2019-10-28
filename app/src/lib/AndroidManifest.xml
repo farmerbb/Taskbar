@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- Manifest used for library builds of Taskbar, with the following changes:
+
+     * Certain permissions have been removed
+     * Certain activities have either had their intent filters removed, or their
+       entries removed entirely, as they're not needed
+     * All services and receivers are removed as they are never run
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.farmerbb.taskbar">
+
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <application>
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.InvisibleActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.InvisibleActivity"/>
+        <activity
+            android:name=".activity.InvisibleActivityAlt"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.dark.InvisibleActivityAltDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
+        <activity
+            android:name=".activity.InvisibleActivityFreeform"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:theme="@style/AppTheme.InvisibleActivity"/>
+        <activity
+            android:name=".activity.SecondaryHomeActivity"
+            android:label="@string/app_name"
+            android:enabled="true"
+            android:theme="@style/AppTheme.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.SECONDARY_HOME"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ContextMenuActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Dialog"/>
+        <activity
+            android:name=".activity.dark.ContextMenuActivityDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Dialog.Dark"/>
+        <activity
+            android:name=".activity.SelectAppActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.dark.SelectAppActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.DesktopIconSelectAppActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.dark.DesktopIconSelectAppActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.DummyActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.IconPackActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.dark.IconPackActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.ClearDataActivity"
+            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+        <activity
+            android:name=".activity.dark.ClearDataActivityDark"
+            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+        <activity
+            android:name=".activity.DashboardActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito"/>
+        <activity
+            android:name=".activity.dark.DashboardActivityDark"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Incognito.Dark"/>
+        <activity
+            android:name=".activity.TouchAbsorberActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:theme="@style/AppTheme.Incognito"/>
+    </application>
+
+</manifest>

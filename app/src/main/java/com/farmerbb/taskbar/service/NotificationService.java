@@ -95,10 +95,10 @@ public class NotificationService extends Service {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 Intent receiverIntent = new Intent("com.farmerbb.taskbar.SHOW_HIDE_TASKBAR");
-                receiverIntent.setPackage(BuildConfig.APPLICATION_ID);
+                receiverIntent.setPackage(getPackageName());
 
                 Intent receiverIntent2 = new Intent("com.farmerbb.taskbar.QUIT");
-                receiverIntent2.setPackage(BuildConfig.APPLICATION_ID);
+                receiverIntent2.setPackage(getPackageName());
 
                 PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                 PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -132,7 +132,7 @@ public class NotificationService extends Service {
                     String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.freeform_off : R.string.freeform_on);
 
                     Intent freeformIntent = new Intent("com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE");
-                    freeformIntent.setPackage(BuildConfig.APPLICATION_ID);
+                    freeformIntent.setPackage(getPackageName());
 
                     PendingIntent freeformPendingIntent = PendingIntent.getBroadcast(this, 0, freeformIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -150,7 +150,7 @@ public class NotificationService extends Service {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
+                    TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
 
                 DependencyUtils.requestTaskerQuery(this);
 
@@ -175,7 +175,7 @@ public class NotificationService extends Service {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                TileService.requestListeningState(this, new ComponentName(BuildConfig.APPLICATION_ID, QuickSettingsTileService.class.getName()));
+                TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
 
             DependencyUtils.requestTaskerQuery(this);
 

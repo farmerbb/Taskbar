@@ -77,21 +77,29 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         // Set OnClickListeners for certain preferences
         findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
-        findPreference("launcher").setOnPreferenceClickListener(this);
-        findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
         findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
-        findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
         findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
 
-        boolean isAndroidx86 = BuildConfig.APPLICATION_ID.equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
+        boolean isLibrary = U.isLibrary(getActivity());
+        boolean isAndroidx86 = getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
 
-        if(!isAndroidx86 && U.isPlayStoreInstalled(getActivity()) && U.isPlayStoreRelease(getActivity())) {
+        if(isLibrary) {
+            getPreferenceScreen().removePreference(findPreference("launcher"));
+            getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
+            getPreferenceScreen().removePreference(findPreference("navigation_bar_buttons"));
+        } else {
+            findPreference("launcher").setOnPreferenceClickListener(this);
+            findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
+            findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
+        }
+
+        if(!isAndroidx86 && !isLibrary && U.isPlayStoreInstalled(getActivity()) && U.isPlayStoreRelease(getActivity())) {
             findPreference("secondscreen").setOnPreferenceClickListener(this);
             secondScreenPrefEnabled = true;
         } else
             getPreferenceScreen().removePreference(findPreference("secondscreen"));
 
-        if(isAndroidx86)
+        if(isAndroidx86 || isLibrary)
             getPreferenceScreen().removePreference(findPreference("tasker_enabled"));
 
         bindPreferenceSummaryToValue(findPreference("dashboard"));
@@ -100,7 +108,8 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         boolean lockHomeToggle = pref.getBoolean("launcher", false)
                 && U.isLauncherPermanentlyEnabled(getActivity());
 
-        findPreference("launcher").setEnabled(!lockHomeToggle);
+        if(!isLibrary)
+            findPreference("launcher").setEnabled(!lockHomeToggle);
 
         finishedLoadingPrefs = true;
     }

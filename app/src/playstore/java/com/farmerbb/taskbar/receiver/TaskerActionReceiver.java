@@ -44,7 +44,7 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
             if(actionIntent != null) switch(action) {
                 case "tasker_on":
                 case "tasker_off":
-                    actionIntent.setPackage(BuildConfig.APPLICATION_ID);
+                    actionIntent.setPackage(context.getPackageName());
                     context.sendBroadcast(actionIntent);
                     break;
                 default:

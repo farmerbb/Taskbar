@@ -104,7 +104,7 @@ public class IconPackActivity extends AppCompatActivity {
             PackageManager pm = getPackageManager();
             ImageView imageView = convertView.findViewById(R.id.icon);
 
-            if(entry.getPackageName().equals(BuildConfig.APPLICATION_ID)) {
+            if(entry.getPackageName().equals(getPackageName())) {
                 imageView.setImageDrawable(null);
             } else {
                 try {
@@ -148,7 +148,7 @@ public class IconPackActivity extends AppCompatActivity {
             else {
                 List<IconPack> finalList = new ArrayList<>();
                 IconPack dummyIconPack = new IconPack();
-                dummyIconPack.setPackageName(BuildConfig.APPLICATION_ID);
+                dummyIconPack.setPackageName(getPackageName());
                 dummyIconPack.setName(getString(R.string.icon_pack_none));
 
                 Collections.sort(list, (ip1, ip2) -> Collator.getInstance().compare(ip1.getName(), ip2.getName()));

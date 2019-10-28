@@ -43,7 +43,7 @@ public class QuickSettingsTileService extends TileService {
         Intent intent = new Intent("com.farmerbb.taskbar."
                 + (U.isServiceRunning(this, NotificationService.class) ? "QUIT" : "START"));
 
-        intent.setPackage(BuildConfig.APPLICATION_ID);
+        intent.setPackage(getPackageName());
         sendBroadcast(intent);
 
         new Handler().postDelayed(this::updateState, 100);

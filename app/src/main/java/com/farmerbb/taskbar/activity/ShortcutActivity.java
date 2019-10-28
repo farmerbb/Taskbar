@@ -22,8 +22,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class ShortcutActivity extends Activity {
@@ -44,14 +44,14 @@ public class ShortcutActivity extends Activity {
                 }
 
                 Intent intent = new Intent("com.farmerbb.taskbar.START");
-                intent.setPackage(BuildConfig.APPLICATION_ID);
+                intent.setPackage(getPackageName());
                 sendBroadcast(intent);
 
                 new Handler().postDelayed(() -> U.startFreeformHack(this, true), 100);
             } else
                 U.showToastLong(this, R.string.no_freeform_support);
         } else
-            setResult(RESULT_OK, U.getShortcutIntent(this));
+            setResult(RESULT_OK, ShortcutUtils.getShortcutIntent(this));
 
         finish();
     }

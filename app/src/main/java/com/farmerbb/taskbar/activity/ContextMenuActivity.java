@@ -474,7 +474,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "quit_taskbar":
                 Intent quitIntent = new Intent("com.farmerbb.taskbar.QUIT");
-                quitIntent.setPackage(BuildConfig.APPLICATION_ID);
+                quitIntent.setPackage(getPackageName());
                 sendBroadcast(quitIntent);
 
                 showStartMenu = false;

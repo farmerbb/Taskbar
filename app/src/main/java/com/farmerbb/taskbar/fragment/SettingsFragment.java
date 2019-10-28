@@ -82,6 +82,8 @@ public abstract class SettingsFragment extends PreferenceFragment {
             if(finishedLoadingPrefs) {
                 switch(preference.getKey()) {
                     case "theme":
+                        if(U.isLibrary(getActivity())) break;
+
                         // Restart MainActivity
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

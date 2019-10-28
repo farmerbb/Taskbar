@@ -79,13 +79,15 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
 
-        switch(pref.getString("theme", "light")) {
-            case "light":
-                setTheme(R.style.AppTheme);
-                break;
-            case "dark":
-                setTheme(R.style.AppTheme_Dark);
-                break;
+        if(!U.isLibrary(this)) {
+            switch(pref.getString("theme", "light")) {
+                case "light":
+                    setTheme(R.style.AppTheme);
+                    break;
+                case "dark":
+                    setTheme(R.style.AppTheme_Dark);
+                    break;
+            }
         }
 
         if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
@@ -98,38 +100,40 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean("launcher", launcherEnabled);
         editor.apply();
 
-        ComponentName component = new ComponentName(this, HomeActivity.class);
-        getPackageManager().setComponentEnabledSetting(component,
-                launcherEnabled && !U.isDelegatingHomeActivity(this)
-                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+        if(!U.isLibrary(this)) {
+            ComponentName component = new ComponentName(this, HomeActivity.class);
+            getPackageManager().setComponentEnabledSetting(component,
+                    launcherEnabled && !U.isDelegatingHomeActivity(this)
+                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
 
-        ComponentName component2 = new ComponentName(this, KeyboardShortcutActivity.class);
-        getPackageManager().setComponentEnabledSetting(component2,
-                pref.getBoolean("keyboard_shortcut", false)
-                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+            ComponentName component2 = new ComponentName(this, KeyboardShortcutActivity.class);
+            getPackageManager().setComponentEnabledSetting(component2,
+                    pref.getBoolean("keyboard_shortcut", false)
+                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
 
-        ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
-        getPackageManager().setComponentEnabledSetting(component3,
-                U.enableFreeformModeShortcut(this)
-                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+            ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
+            getPackageManager().setComponentEnabledSetting(component3,
+                    U.enableFreeformModeShortcut(this)
+                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
 
-        ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
-        getPackageManager().setComponentEnabledSetting(component4,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+            ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
+            getPackageManager().setComponentEnabledSetting(component4,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
 
-        ComponentName component5 = new ComponentName(this, SecondaryHomeActivity.class);
-        getPackageManager().setComponentEnabledSetting(component5,
-                launcherEnabled && !U.isDelegatingHomeActivity(this) && FeatureFlags.SECONDARY_HOME
-                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+            ComponentName component5 = new ComponentName(this, SecondaryHomeActivity.class);
+            getPackageManager().setComponentEnabledSetting(component5,
+                    launcherEnabled && !U.isDelegatingHomeActivity(this) && FeatureFlags.SECONDARY_HOME
+                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
 
         if(!launcherEnabled)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
@@ -141,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             new Handler().postDelayed(() -> pref.edit().putBoolean("has_caption", hasCaption).apply(), 500);
         }
 
-        if(BuildConfig.APPLICATION_ID.equals(BuildConfig.PAID_APPLICATION_ID)) {
+        if(getPackageName().equals(BuildConfig.PAID_APPLICATION_ID)) {
             File file = new File(getFilesDir() + File.separator + "imported_successfully");
             if(freeVersionInstalled() && !file.exists()) {
                 startActivity(new Intent(this, ImportSettingsActivity.class));
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             PackageInfo pInfo = pm.getPackageInfo(BuildConfig.BASE_APPLICATION_ID, 0);
             return pInfo.versionCode >= 68
-                    && pm.checkSignatures(BuildConfig.BASE_APPLICATION_ID, BuildConfig.APPLICATION_ID)
+                    && pm.checkSignatures(BuildConfig.BASE_APPLICATION_ID, getPackageName())
                     == PackageManager.SIGNATURE_MATCH;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if(actionBar != null && !U.isLibrary(this)) {
             actionBar.setCustomView(R.layout.switch_layout);
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
         }
@@ -205,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!BuildConfig.APPLICATION_ID.equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
+        if(!getPackageName().equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
             if(!pref.getBoolean("dont_show_uninstall_dialog", false)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.settings_imported_successfully)
@@ -233,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
                 if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
-                    editor.putString("icon_pack", BuildConfig.APPLICATION_ID);
+                    editor.putString("icon_pack", getPackageName());
                 } else {
                     U.refreshPinnedIcons(this);
                 }
@@ -354,5 +358,13 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .commit();
+    }
+
+    public String getAboutFragmentTitle() {
+        if(!U.isLibrary(this))
+            return getString(R.string.app_name);
+
+        String title = getIntent().getStringExtra("title");
+        return title != null ? title : getString(R.string.settings);
     }
 }

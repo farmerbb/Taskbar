@@ -383,4 +383,7 @@
     <string name="pref_title_sys_tray">Show status icons and clock</string>
     <string name="pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
 
+    <string name="settings">Settings</string>
+    <string name="powered_by_taskbar">Powered by Taskbar</string>
+
 </resources>

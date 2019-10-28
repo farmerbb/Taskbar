@@ -47,7 +47,13 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
 
         // Set OnClickListeners for certain preferences
         findPreference("blacklist").setOnPreferenceClickListener(this);
-        findPreference("notification_settings").setOnPreferenceClickListener(this);
+
+        if(!U.isLibrary(getActivity()))
+            findPreference("notification_settings").setOnPreferenceClickListener(this);
+        else {
+            getPreferenceScreen().removePreference(findPreference("start_on_boot"));
+            getPreferenceScreen().removePreference(findPreference("notification_settings"));
+        }
 
         if(U.canEnableFreeform()
                 && !U.isChromeOs(getActivity())
@@ -122,9 +128,9 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
                 intent2.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
 
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
-                    intent2.putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID);
+                    intent2.putExtra(Settings.EXTRA_APP_PACKAGE, getActivity().getPackageName());
                 else {
-                    intent2.putExtra("app_package", BuildConfig.APPLICATION_ID);
+                    intent2.putExtra("app_package", getActivity().getPackageName());
                     intent2.putExtra("app_uid", getActivity().getApplicationInfo().uid);
                 }
 
