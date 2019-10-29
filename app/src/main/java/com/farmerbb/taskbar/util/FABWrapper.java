@@ -28,7 +28,7 @@ public class FABWrapper {
     public View view;
 
     public FABWrapper(Context context) {
-        view = !context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
+        view = context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
                 ? new ImageView(context)
                 : new FloatingActionButton(context);
 
