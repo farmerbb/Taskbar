@@ -34,7 +34,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.ColorUtils;
@@ -68,6 +67,7 @@ import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
+import com.farmerbb.taskbar.util.FABWrapper;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -89,7 +89,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     private FrameLayout layout;
     private GridLayout desktopIcons;
-    private FloatingActionButton fab;
+    private FABWrapper fab;
 
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
@@ -545,13 +545,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     private void initDesktopIcons() {
         desktopIcons = new GridLayout(this);
-        fab = new FloatingActionButton(this);
+        fab = new FABWrapper(this);
 
         updateMargins();
         refreshDesktopIcons();
 
         fab.setImageResource(R.drawable.ic_done_black_24dp);
-        fab.setOnClickListener(v -> {
+        fab.view.setOnClickListener(v -> {
             iconArrangeMode = false;
             fab.hide();
             refreshDesktopIcons();
@@ -560,7 +560,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(!iconArrangeMode) fab.hide();
 
         layout.addView(desktopIcons, 0);
-        layout.addView(fab, 1);
+        layout.addView(fab.view, 1);
     }
 
     private void refreshDesktopIcons() {
@@ -752,7 +752,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 return;
             }
 
-            fab.setBackgroundTintList(
+            fab.view.setBackgroundTintList(
                     ColorStateList.valueOf(ColorUtils.setAlphaComponent(U.getAccentColor(this), 255)));
 
             iconArrangeMode = true;
@@ -801,7 +801,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         params2.gravity = Gravity.BOTTOM | Gravity.END;
         params2.setMargins(left, top, right, bottom);
-        fab.setLayoutParams(params2);
+        fab.view.setLayoutParams(params2);
     }
 
     private int getIndex(DesktopIconInfo info) {

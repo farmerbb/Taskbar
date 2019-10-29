@@ -40,4 +40,5 @@
     <dimen name="caption_offset">48dp</dimen>
     <dimen name="desktop_icon_fab_margin">16dp</dimen>
     <dimen name="systray_size">180dp</dimen>
+    <dimen name="tb_fake_fab_padding">16dp</dimen>
 </resources>
