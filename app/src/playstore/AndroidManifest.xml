@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<!-- TODO when making changes to the manifest, be sure to update the Android-x86 manifest as well -->
+<!-- TODO when making changes, be sure to update the Android-x86 and libtaskbar manifests as well -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
