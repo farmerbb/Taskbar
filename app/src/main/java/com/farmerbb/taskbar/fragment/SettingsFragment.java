@@ -23,7 +23,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.view.View;
@@ -127,7 +126,7 @@ public abstract class SettingsFragment extends PreferenceFragment {
         // current value.
         if(!(preference instanceof CheckBoxPreference))
             sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
+                    U.getSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
     }
 
     @Override
