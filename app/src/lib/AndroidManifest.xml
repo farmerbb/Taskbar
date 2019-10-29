@@ -37,8 +37,7 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/tb_app_name"
-            android:launchMode="singleTask"/>
+            android:label="@string/tb_app_name"/>
         <activity
             android:name=".activity.InvisibleActivity"
             android:documentLaunchMode="always"

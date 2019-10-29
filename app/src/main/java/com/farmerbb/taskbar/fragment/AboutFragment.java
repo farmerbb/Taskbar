@@ -93,7 +93,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         activity.setTitle(((MainActivity) getActivity()).getAboutFragmentTitle());
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(U.isLibrary(getActivity()));
+            actionBar.setDisplayHomeAsUpEnabled(((MainActivity) getActivity()).getAboutFragmentBackArrow());
     }
 
     @Override

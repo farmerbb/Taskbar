@@ -47,7 +47,6 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
-import com.farmerbb.taskbar.util.FeatureFlags;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
             ComponentName component5 = new ComponentName(this, SecondaryHomeActivity.class);
             getPackageManager().setComponentEnabledSetting(component5,
-                    launcherEnabled && !U.isDelegatingHomeActivity(this) && FeatureFlags.SECONDARY_HOME
+                    launcherEnabled && !U.isDelegatingHomeActivity(this) && BuildConfig.DEBUG
                             ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
@@ -173,7 +172,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void proceedWithAppLaunch(Bundle savedInstanceState) {
-        setContentView(R.layout.tb_main);
+        try {
+            setContentView(R.layout.tb_main);
+        } catch (IllegalStateException e) {
+            setTheme(R.style.Theme_AppCompat_Light);
+            setContentView(R.layout.tb_main);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null && !U.isLibrary(this)) {
@@ -370,5 +374,12 @@ public class MainActivity extends AppCompatActivity {
 
         String title = getIntent().getStringExtra("title");
         return title != null ? title : getString(R.string.tb_settings);
+    }
+
+    public boolean getAboutFragmentBackArrow() {
+        if(!U.isLibrary(this))
+            return false;
+
+        return getIntent().getBooleanExtra("back_arrow", false);
     }
 }

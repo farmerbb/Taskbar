@@ -265,10 +265,13 @@ public class StartMenuController implements UIController {
             startMenu.setRecyclerListener(view -> view.setBackgroundColor(0));
 
         int columns = context.getResources().getInteger(R.integer.tb_start_menu_columns);
+        boolean isGrid = pref.getString("start_menu_layout", "grid").equals("grid");
 
-        ViewGroup.LayoutParams startMenuParams = startMenu.getLayoutParams();
-        startMenuParams.width = (int) (startMenuParams.width * (columns / 3f));
-        startMenu.setLayoutParams(startMenuParams);
+        if(isGrid) {
+            ViewGroup.LayoutParams startMenuParams = startMenu.getLayoutParams();
+            startMenuParams.width = (int) (startMenuParams.width * (columns / 3f));
+            startMenu.setLayoutParams(startMenuParams);
+        }
 
         searchView = layout.findViewById(R.id.search);
         searchViewClicked = false;
@@ -397,9 +400,11 @@ public class StartMenuController implements UIController {
             if(pref.getBoolean("transparent_start_menu", false))
                 childLayout.setBackgroundColor(0);
 
-            ViewGroup.LayoutParams childLayoutParams = childLayout.getLayoutParams();
-            childLayoutParams.width = (int) (childLayoutParams.width * (columns / 3f));
-            childLayout.setLayoutParams(childLayoutParams);
+            if(isGrid) {
+                ViewGroup.LayoutParams childLayoutParams = childLayout.getLayoutParams();
+                childLayoutParams.width = (int) (childLayoutParams.width * (columns / 3f));
+                childLayout.setLayoutParams(childLayoutParams);
+            }
         } else
             searchViewLayout.setVisibility(View.GONE);
 

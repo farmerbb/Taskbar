@@ -332,7 +332,7 @@ public class TaskbarController implements UIController {
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
                 break;
             case "custom":
-                File file = new File(context.getFilesDir() + "/images", "custom_image");
+                File file = new File(context.getFilesDir() + "/tb_images", "custom_image");
                 if(file.exists()) {
                     try {
                         startButton.setImageURI(Uri.fromFile(file));
@@ -564,30 +564,32 @@ public class TaskbarController implements UIController {
             time.setVisibility(View.VISIBLE);
             sysTrayLayout.setLayoutParams(sysTrayParams);
 
-            sysTrayLayout.setOnClickListener(v -> {
-                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
-                if(U.shouldCollapse(context, false))
-                    hideTaskbar(true);
-            });
-
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                sysTrayLayout.setOnLongClickListener(v -> {
-                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+            if(!U.isLibrary(context)) {
+                sysTrayLayout.setOnClickListener(v -> {
+                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
                     if(U.shouldCollapse(context, false))
                         hideTaskbar(true);
-
-                    return true;
                 });
 
-                sysTrayLayout.setOnGenericMotionListener((view, motionEvent) -> {
-                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    sysTrayLayout.setOnLongClickListener(v -> {
                         U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
                         if(U.shouldCollapse(context, false))
                             hideTaskbar(true);
-                    }
-                    return true;
-                });
+
+                        return true;
+                    });
+
+                    sysTrayLayout.setOnGenericMotionListener((view, motionEvent) -> {
+                        if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                                && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                            U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+                            if (U.shouldCollapse(context, false))
+                                hideTaskbar(true);
+                        }
+                        return true;
+                    });
+                }
             }
 
             sysTrayParentLayout = layout.findViewById(R.id.add_systray_here);

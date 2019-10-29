@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
@@ -42,6 +43,9 @@ public abstract class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(U.isLibrary(getActivity()))
+            getPreferenceManager().setSharedPreferencesName(BuildConfig.APPLICATION_ID + "_preferences");
 
         // Set values
         setRetainInstance(true);

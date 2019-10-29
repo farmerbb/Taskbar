@@ -278,7 +278,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             addPreferencesFromResource(R.xml.tb_pref_context_menu_overflow);
             findPreference("volume").setOnPreferenceClickListener(this);
             findPreference("system_settings").setOnPreferenceClickListener(this);
-            findPreference("power_menu").setOnPreferenceClickListener(this);
+
+            if(!U.isLibrary(this))
+                findPreference("power_menu").setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference("power_menu"));
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 findPreference("file_manager").setOnPreferenceClickListener(this);

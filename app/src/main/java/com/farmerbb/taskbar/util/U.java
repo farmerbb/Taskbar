@@ -1550,7 +1550,7 @@ public class U {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static boolean importCustomStartButtonImage(Context context, Uri uri) {
         try {
-            File imagesDir = new File(context.getFilesDir(), "images");
+            File imagesDir = new File(context.getFilesDir(), "tb_images");
             imagesDir.mkdirs();
 
             File importedFile = new File(imagesDir, "custom_image_new");

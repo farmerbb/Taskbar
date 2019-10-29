@@ -41,6 +41,7 @@ import com.farmerbb.taskbar.activity.MainActivity;
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("theme", theme);
+        intent.putExtra("back_arrow", true);
 
         if(!(context instanceof Activity))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
