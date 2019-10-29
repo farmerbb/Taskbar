@@ -15,5 +15,5 @@
 -->
 
 <resources>
-    <dimen name="context_menu_width">240dp</dimen>
+    <dimen name="tb_context_menu_width">240dp</dimen>
 </resources>

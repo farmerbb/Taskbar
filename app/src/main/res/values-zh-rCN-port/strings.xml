@@ -16,7 +16,7 @@
 
 <resources>
 
-    <string name="window_size_half_left">半屏 (顶部)</string>
-    <string name="window_size_half_right">半屏 (底部)</string>
+    <string name="tb_window_size_half_left">半屏 (顶部)</string>
+    <string name="tb_window_size_half_right">半屏 (底部)</string>
 
 </resources>

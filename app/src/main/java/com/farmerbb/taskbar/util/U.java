@@ -122,9 +122,9 @@ public class U {
                 : onError;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.permission_dialog_title)
-                .setMessage(R.string.permission_dialog_message)
-                .setPositiveButton(R.string.action_grant_permission, (dialog, which) -> {
+        builder.setTitle(R.string.tb_permission_dialog_title)
+                .setMessage(R.string.tb_permission_dialog_message)
+                .setPositiveButton(R.string.tb_action_grant_permission, (dialog, which) -> {
                     try {
                         context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                 Uri.parse("package:" + context.getPackageName())));
@@ -152,9 +152,9 @@ public class U {
                 : onFinish;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.error_dialog_title)
-                .setMessage(context.getString(R.string.error_dialog_message, context.getPackageName(), appopCmd))
-                .setPositiveButton(R.string.action_ok, (dialog, which) -> finalOnFinish.run());
+        builder.setTitle(R.string.tb_error_dialog_title)
+                .setMessage(context.getString(R.string.tb_error_dialog_message, context.getPackageName(), appopCmd))
+                .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> finalOnFinish.run());
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -450,7 +450,7 @@ public class U {
 
         int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
                 ? 0
-                : context.getResources().getDimensionPixelSize(R.dimen.icon_size);
+                : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
         if(position.contains("vertical_left"))
             left = left + iconSize;
@@ -482,9 +482,9 @@ public class U {
         DisplayInfo display = getDisplayInfo(context);
 
         int width1 = display.width / 2;
-        int width2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_width) / 2;
+        int width2 = context.getResources().getDimensionPixelSize(R.dimen.tb_phone_size_width) / 2;
         int height1 = display.height / 2;
-        int height2 = context.getResources().getDimensionPixelSize(R.dimen.phone_size_height) / 2;
+        int height2 = context.getResources().getDimensionPixelSize(R.dimen.tb_phone_size_height) / 2;
 
         return getActivityOptions(context, type, view).setLaunchBounds(new Rect(
                 width1 - width2,
@@ -563,7 +563,7 @@ public class U {
         int right = display.width;
         int bottom = display.height;
 
-        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
         if(position.contains("vertical_left"))
             right = iconSize;
@@ -772,7 +772,7 @@ public class U {
                 ? (display.height - getStatusBarHeight(context)) / density
                 : display.width / density;
 
-        float iconSize = context.getResources().getDimension(R.dimen.icon_size) / density;
+        float iconSize = context.getResources().getDimension(R.dimen.tb_icon_size) / density;
 
         int userMaxNumOfColumns = Integer.valueOf(pref.getString("max_num_of_recents", "10"));
 
@@ -928,12 +928,12 @@ public class U {
             editor.apply();
         }
 
-        return pref.getInt("background_tint", context.getResources().getInteger(R.integer.translucent_gray));
+        return pref.getInt("background_tint", context.getResources().getInteger(R.integer.tb_translucent_gray));
     }
 
     public static int getAccentColor(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getInt("accent_color", context.getResources().getInteger(R.integer.translucent_white));
+        return pref.getInt("accent_color", context.getResources().getInteger(R.integer.tb_translucent_white));
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -1031,7 +1031,7 @@ public class U {
     public static Bundle getActivityOptionsBundle(Context context, ApplicationType type, View view) {
         SharedPreferences pref = getSharedPreferences(context);
 
-        return getActivityOptionsBundle(context, type, pref.getString("window_size", context.getString(R.string.def_window_size)), view);
+        return getActivityOptionsBundle(context, type, pref.getString("window_size", context.getString(R.string.tb_def_window_size)), view);
     }
 
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
@@ -1110,32 +1110,32 @@ public class U {
 
     private static float getBaseTaskbarSizeFloat(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        float baseTaskbarSize = context.getResources().getDimension(R.dimen.base_taskbar_size);
+        float baseTaskbarSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         boolean navbarButtonsEnabled = false;
 
-        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.def_dashboard)))
-            baseTaskbarSize += context.getResources().getDimension(R.dimen.dashboard_button_size);
+        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard)))
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
 
         if(pref.getBoolean("button_back", false)) {
             navbarButtonsEnabled = true;
-            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_icon_size);
         }
 
         if(pref.getBoolean("button_home", false)) {
             navbarButtonsEnabled = true;
-            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_icon_size);
         }
 
         if(pref.getBoolean("button_recents", false)) {
             navbarButtonsEnabled = true;
-            baseTaskbarSize += context.getResources().getDimension(R.dimen.icon_size);
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_icon_size);
         }
 
         if(navbarButtonsEnabled)
-            baseTaskbarSize += context.getResources().getDimension(R.dimen.navbar_buttons_margin);
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_navbar_buttons_margin);
 
         if(isSystemTrayEnabled(context))
-            baseTaskbarSize += context.getResources().getDimension(R.dimen.systray_size);
+            baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_systray_size);
 
         return baseTaskbarSize;
     }
@@ -1319,7 +1319,7 @@ public class U {
 
                 mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
             } else
-                showToastLong(context, R.string.pin_shortcut_not_supported);
+                showToastLong(context, R.string.tb_pin_shortcut_not_supported);
         } else {
             Intent intent = ShortcutUtils.getShortcutIntent(context);
             intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
@@ -1332,7 +1332,7 @@ public class U {
             intent.setPackage(defaultLauncher.activityInfo.packageName);
             context.sendBroadcast(intent);
 
-            showToast(context, R.string.shortcut_created);
+            showToast(context, R.string.tb_shortcut_created);
         }
     }
 
@@ -1437,19 +1437,19 @@ public class U {
 
                 if(mode != AppOpsManager.MODE_ALLOWED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(R.string.pref_header_recent_apps)
-                            .setMessage(R.string.enable_recent_apps)
-                            .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                    builder.setTitle(R.string.tb_pref_header_recent_apps)
+                            .setMessage(R.string.tb_enable_recent_apps)
+                            .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                                 try {
                                     context.startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                                    showToastLong(context, R.string.usage_stats_message);
+                                    showToastLong(context, R.string.tb_usage_stats_message);
 
                                     finalOnFinish.run();
                                 } catch (ActivityNotFoundException e) {
                                     finalOnError.run();
                                 }
                             })
-                            .setNegativeButton(R.string.action_cancel, (dialog, which) -> finalOnFinish.run());
+                            .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> finalOnFinish.run());
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
@@ -1470,10 +1470,10 @@ public class U {
         int theme = -1;
         switch(pref.getString("theme", "light")) {
             case "light":
-                theme = R.style.AppTheme;
+                theme = R.style.Taskbar;
                 break;
             case "dark":
-                theme = R.style.AppTheme_Dark;
+                theme = R.style.Taskbar_Dark;
                 break;
         }
 
@@ -1486,7 +1486,7 @@ public class U {
 
     @SuppressLint("PackageManagerGetSignatures")
     public static boolean isPlayStoreRelease(Context context, String packageName) {
-        Signature playStoreSignature = new Signature(context.getString(R.string.signature));
+        Signature playStoreSignature = new Signature(context.getString(R.string.tb_signature));
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo info = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
@@ -1596,8 +1596,8 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
 
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.def_sys_tray))
-                && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.def_full_length))
+                && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.tb_def_sys_tray))
+                && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length))
                 && !getTaskbarPosition(context).contains("vertical");
     }
 

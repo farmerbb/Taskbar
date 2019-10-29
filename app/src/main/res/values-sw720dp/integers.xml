@@ -15,6 +15,6 @@
 -->
 
 <resources>
-    <integer name="dashboard_width">4</integer>
-    <integer name="start_menu_columns">5</integer>
+    <integer name="tb_dashboard_width">4</integer>
+    <integer name="tb_start_menu_columns">5</integer>
 </resources>

@@ -1,4 +1,0 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/shortcut_icon_background" />
-    <item android:drawable="@drawable/ic_web_asset_black_24dp_alt" />
-</layer-list>

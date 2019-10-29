@@ -136,7 +136,7 @@ public class TaskbarController implements UIController {
     private String sortOrder = "false";
     private boolean runningAppsOnly = false;
 
-    private int layoutId = R.layout.taskbar_left;
+    private int layoutId = R.layout.tb_taskbar_left;
     private int currentTaskbarPosition = 0;
     private boolean showHideAutomagically = false;
     private boolean positionIsVertical = false;
@@ -246,42 +246,42 @@ public class TaskbarController implements UIController {
         // Determine where to show the taskbar on screen
         switch(U.getTaskbarPosition(context)) {
             case "bottom_left":
-                layoutId = R.layout.taskbar_left;
+                layoutId = R.layout.tb_taskbar_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 positionIsVertical = false;
                 break;
             case "bottom_vertical_left":
-                layoutId = R.layout.taskbar_vertical;
+                layoutId = R.layout.tb_taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 positionIsVertical = true;
                 break;
             case "bottom_right":
-                layoutId = R.layout.taskbar_right;
+                layoutId = R.layout.tb_taskbar_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 positionIsVertical = false;
                 break;
             case "bottom_vertical_right":
-                layoutId = R.layout.taskbar_vertical;
+                layoutId = R.layout.tb_taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 positionIsVertical = true;
                 break;
             case "top_left":
-                layoutId = R.layout.taskbar_left;
+                layoutId = R.layout.tb_taskbar_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 positionIsVertical = false;
                 break;
             case "top_vertical_left":
-                layoutId = R.layout.taskbar_top_vertical;
+                layoutId = R.layout.tb_taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 positionIsVertical = true;
                 break;
             case "top_right":
-                layoutId = R.layout.taskbar_right;
+                layoutId = R.layout.tb_taskbar_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 positionIsVertical = false;
                 break;
             case "top_vertical_right":
-                layoutId = R.layout.taskbar_top_vertical;
+                layoutId = R.layout.tb_taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 positionIsVertical = true;
                 break;
@@ -313,14 +313,14 @@ public class TaskbarController implements UIController {
 
         switch(pref.getString("start_button_image", U.getDefaultStartButtonImage(context))) {
             case "default":
-                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
-                padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
+                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;
             case "app_logo":
                 Drawable drawable;
 
                 if(U.isBlissOs(context)) {
-                    drawable = ContextCompat.getDrawable(context, R.drawable.bliss);
+                    drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
                     drawable.setTint(accentColor);
                 } else {
                     LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
@@ -329,7 +329,7 @@ public class TaskbarController implements UIController {
                 }
 
                 startButton.setImageDrawable(drawable);
-                padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding_alt);
+                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
                 break;
             case "custom":
                 File file = new File(context.getFilesDir() + "/images", "custom_image");
@@ -337,13 +337,13 @@ public class TaskbarController implements UIController {
                     try {
                         startButton.setImageURI(Uri.fromFile(file));
                     } catch (Exception e) {
-                        U.showToastLong(context, R.string.error_reading_custom_start_image);
-                        startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
+                        U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
+                        startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
                     }
                 } else
-                    startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.all_apps_button_icon));
+                    startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
 
-                padding = context.getResources().getDimensionPixelSize(R.dimen.app_drawer_icon_padding);
+                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;
         }
 
@@ -416,7 +416,7 @@ public class TaskbarController implements UIController {
         dashboardButton = layout.findViewById(R.id.dashboard_button);
         navbarButtons = layout.findViewById(R.id.navbar_buttons);
 
-        dashboardEnabled = pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.def_dashboard));
+        dashboardEnabled = pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard));
         if(dashboardEnabled) {
             layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
@@ -546,14 +546,14 @@ public class TaskbarController implements UIController {
         sysTrayEnabled = U.isSystemTrayEnabled(context);
 
         if(sysTrayEnabled) {
-            sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.system_tray, null);
+            sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.tb_system_tray, null);
 
             FrameLayout.LayoutParams sysTrayParams = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
-                    context.getResources().getDimensionPixelSize(R.dimen.icon_size)
+                    context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size)
             );
 
-            if(layoutId == R.layout.taskbar_right) {
+            if(layoutId == R.layout.tb_taskbar_right) {
                 time = sysTrayLayout.findViewById(R.id.time_left);
                 sysTrayParams.gravity = Gravity.START;
             } else {
@@ -699,7 +699,7 @@ public class TaskbarController implements UIController {
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(context);
         int realNumOfPinnedApps = 0;
-        boolean fullLength = pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.def_full_length));
+        boolean fullLength = pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length));
 
         if(runningAppsOnly)
             currentRunningAppIds.clear();
@@ -966,7 +966,7 @@ public class TaskbarController implements UIController {
                     if(numOfEntries > 0 || fullLength) {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                         DisplayInfo display = U.getDisplayInfo(context, true);
-                        int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size) * numOfEntries;
+                        int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
                         if(U.getTaskbarPosition(context).contains("vertical")) {
@@ -975,7 +975,7 @@ public class TaskbarController implements UIController {
                                     - U.getBaseTaskbarSize(context));
 
                             params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
-                                    + context.getResources().getDimensionPixelSize(R.dimen.divider_size);
+                                    + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
 
                             if(fullLength) {
                                 try {
@@ -1006,7 +1006,7 @@ public class TaskbarController implements UIController {
                             int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
 
                             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
-                                    + context.getResources().getDimensionPixelSize(R.dimen.divider_size);
+                                    + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
 
                             if(fullLength) {
                                 try {
@@ -1096,7 +1096,7 @@ public class TaskbarController implements UIController {
         if(userInitiated && Build.BRAND.equalsIgnoreCase("essential")) {
             SharedPreferences pref = U.getSharedPreferences(context);
             if(!pref.getBoolean("grip_rejection_toast_shown", false)) {
-                U.showToastLong(context, R.string.essential_phone_grip_rejection);
+                U.showToastLong(context, R.string.tb_essential_phone_grip_rejection);
                 pref.edit().putBoolean("grip_rejection_toast_shown", true).apply();
             }
         }
@@ -1310,7 +1310,7 @@ public class TaskbarController implements UIController {
         SharedPreferences pref = U.getSharedPreferences(context);
         boolean hide = pref.getBoolean("invisible_button", false);
 
-        if(button != null) button.setText(context.getString(isCollapsed ? R.string.right_arrow : R.string.left_arrow));
+        if(button != null) button.setText(context.getString(isCollapsed ? R.string.tb_right_arrow : R.string.tb_left_arrow));
         if(layout != null) layout.setAlpha(isCollapsed && hide ? 0 : 1);
     }
 
@@ -1336,7 +1336,7 @@ public class TaskbarController implements UIController {
     }
 
     private View getView(List<AppEntry> list, int position) {
-        View convertView = View.inflate(context, R.layout.icon, null);
+        View convertView = View.inflate(context, R.layout.tb_icon, null);
 
         final AppEntry entry = list.get(position);
         final SharedPreferences pref = U.getSharedPreferences(context);
@@ -1562,7 +1562,7 @@ public class TaskbarController implements UIController {
             ImageView cellular = sysTrayLayout.findViewById(R.id.cellular);
             cellular.setImageDrawable(getCellularDrawable());
 
-            time.setText(context.getString(R.string.systray_clock,
+            time.setText(context.getString(R.string.tb_systray_clock,
                     DateFormat.getTimeFormat(context).format(new Date()),
                     DateFormat.getDateFormat(context).format(new Date())));
             time.setTextColor(U.getAccentColor(context));
@@ -1608,7 +1608,7 @@ public class TaskbarController implements UIController {
         else
             charging = "";
 
-        String batRes = "ic_battery_" + charging + batDrawable + "_black_24dp";
+        String batRes = "tb_battery_" + charging + batDrawable;
         int id = getResourceIdFor(batRes);
 
         return applyTintTo(ContextCompat.getDrawable(context, id));
@@ -1620,7 +1620,7 @@ public class TaskbarController implements UIController {
 
         NetworkInfo ethernet = manager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
         if(ethernet != null && ethernet.isConnected())
-            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.ic_settings_ethernet_black_24dp));
+            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.tb_settings_ethernet));
 
         NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if(wifi == null || !wifi.isConnected())
@@ -1632,7 +1632,7 @@ public class TaskbarController implements UIController {
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int level = WifiManager.calculateSignalLevel(wifiInfo.getRssi(), numberOfLevels);
 
-        String wifiRes = "ic_signal_wifi_" + level + "_bar_black_24dp";
+        String wifiRes = "tb_signal_wifi_" + level + "_bar";
         int id = getResourceIdFor(wifiRes);
 
         return applyTintTo(ContextCompat.getDrawable(context, id));
@@ -1641,7 +1641,7 @@ public class TaskbarController implements UIController {
     private Drawable getBluetoothDrawable() {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if(adapter != null && adapter.isEnabled())
-            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.ic_bluetooth_black_24dp));
+            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.tb_bluetooth));
 
         return null;
     }
@@ -1649,12 +1649,12 @@ public class TaskbarController implements UIController {
     @TargetApi(Build.VERSION_CODES.M)
     private Drawable getCellularDrawable() {
         if(Settings.Global.getInt(context.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0)
-            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.ic_airplanemode_active_black_24dp));
+            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.tb_airplanemode_active));
 
         if(cellStrength == -1)
             return null;
 
-        String cellRes = "ic_signal_cellular_" + cellStrength + "_bar_black_24dp";
+        String cellRes = "tb_signal_cellular_" + cellStrength + "_bar";
         int id = getResourceIdFor(cellRes);
 
         return applyTintTo(ContextCompat.getDrawable(context, id));
@@ -1668,7 +1668,7 @@ public class TaskbarController implements UIController {
     }
 
     private int getResourceIdFor(String name) {
-        String packageName = context.getResources().getResourcePackageName(R.drawable.dummy);
+        String packageName = context.getResources().getResourcePackageName(R.drawable.tb_dummy);
         return context.getResources().getIdentifier(name, "drawable", packageName);
     }
 }

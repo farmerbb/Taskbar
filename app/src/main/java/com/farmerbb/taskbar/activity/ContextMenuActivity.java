@@ -131,7 +131,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         if(showStartMenu || desktopIcon != null) {
             int x = args.getInt("x", 0);
             int y = args.getInt("y", 0);
-            int offset = getResources().getDimensionPixelSize(isOverflowMenu ? R.dimen.context_menu_offset_overflow : R.dimen.context_menu_offset);
+            int offset = getResources().getDimensionPixelSize(isOverflowMenu ? R.dimen.tb_context_menu_offset_overflow : R.dimen.tb_context_menu_offset);
 
             switch(U.getTaskbarPosition(this)) {
                 case "bottom_left":
@@ -143,7 +143,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 case "bottom_right":
                 case "bottom_vertical_right":
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
+                    params.x = x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width) + offset + offset;
                     params.y = display.height - y - offset;
                     break;
                 case "top_left":
@@ -155,7 +155,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 case "top_right":
                 case "top_vertical_right":
                     params.gravity = Gravity.TOP | Gravity.LEFT;
-                    params.x = x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset + offset;
+                    params.x = x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width) + offset + offset;
                     params.y = y - offset + statusBarHeight;
                     break;
             }
@@ -164,7 +164,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             int x = args.getInt("x", display.width);
             int y = args.getInt("y", display.height);
-            int offset = getResources().getDimensionPixelSize(R.dimen.icon_size);
+            int offset = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
             switch(U.getTaskbarPosition(this)) {
                 case "bottom_left":
@@ -210,10 +210,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             }
 
             if(!U.getTaskbarPosition(this).contains("vertical") && (params.x > display.width / 2))
-                params.x = params.x - getResources().getDimensionPixelSize(R.dimen.context_menu_width) + offset;
+                params.x = params.x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width) + offset;
         }
 
-        params.width = getResources().getDimensionPixelSize(R.dimen.context_menu_width);
+        params.width = getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
         params.dimAmount = 0;
 
         if(U.isChromeOs(this) && U.getTaskbarPosition(this).contains("bottom")) {
@@ -221,7 +221,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
             if(pref.getBoolean("chrome_os_context_menu_fix", true)
                     && !pref.getBoolean("has_caption", false))
-                params.y = params.y - getResources().getDimensionPixelSize(R.dimen.caption_offset);
+                params.y = params.y - getResources().getDimensionPixelSize(R.dimen.tb_caption_offset);
         }
 
         getWindow().setAttributes(params);
@@ -247,7 +247,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         SharedPreferences pref = U.getSharedPreferences(this);
 
         if(isStartButton) {
-            addPreferencesFromResource(R.xml.pref_context_menu_open_settings);
+            addPreferencesFromResource(R.xml.tb_pref_context_menu_open_settings);
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
@@ -258,24 +258,24 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     && FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     || (U.isOverridingFreeformHack(this)
                     && LauncherHelper.getInstance().isOnHomeScreen()))) {
-                addPreferencesFromResource(R.xml.pref_context_menu_change_wallpaper);
+                addPreferencesFromResource(R.xml.tb_pref_context_menu_change_wallpaper);
                 findPreference("change_wallpaper").setOnPreferenceClickListener(this);
             }
 
             if(showQuitOption) {
-                addPreferencesFromResource(R.xml.pref_context_menu_quit);
+                addPreferencesFromResource(R.xml.tb_pref_context_menu_quit);
                 findPreference("quit_taskbar").setOnPreferenceClickListener(this);
             }
         } else if(isOverflowMenu) {
             if(getResources().getConfiguration().screenWidthDp >= 600
                     && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
-                setTitle(R.string.tools);
+                setTitle(R.string.tb_tools);
             else {
-                addPreferencesFromResource(R.xml.pref_context_menu_header);
-                findPreference("header").setTitle(R.string.tools);
+                addPreferencesFromResource(R.xml.tb_pref_context_menu_header);
+                findPreference("header").setTitle(R.string.tb_tools);
             }
 
-            addPreferencesFromResource(R.xml.pref_context_menu_overflow);
+            addPreferencesFromResource(R.xml.tb_pref_context_menu_overflow);
             findPreference("volume").setOnPreferenceClickListener(this);
             findPreference("system_settings").setOnPreferenceClickListener(this);
             findPreference("power_menu").setOnPreferenceClickListener(this);
@@ -285,7 +285,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             else
                 getPreferenceScreen().removePreference(findPreference("file_manager"));
         } else if(desktopIcon != null && entry == null) {
-            addPreferencesFromResource(R.xml.pref_context_menu_desktop_icons);
+            addPreferencesFromResource(R.xml.tb_pref_context_menu_desktop_icons);
             findPreference("add_icon_to_desktop").setOnPreferenceClickListener(this);
             findPreference("arrange_icons").setOnPreferenceClickListener(this);
             findPreference("sort_by_name").setOnPreferenceClickListener(this);
@@ -295,14 +295,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
                 setTitle(entry.getLabel());
             else {
-                addPreferencesFromResource(R.xml.pref_context_menu_header);
+                addPreferencesFromResource(R.xml.tb_pref_context_menu_header);
                 findPreference("header").setTitle(entry.getLabel());
             }
 
             if(U.hasFreeformSupport(this)
                     && pref.getBoolean("freeform_hack", false)
                     && !U.isGame(this, entry.getPackageName())) {
-                addPreferencesFromResource(R.xml.pref_context_menu_show_window_sizes);
+                addPreferencesFromResource(R.xml.tb_pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
             }
 
@@ -310,7 +310,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 int shortcutCount = getLauncherShortcuts();
 
                 if(shortcutCount > 1) {
-                    addPreferencesFromResource(R.xml.pref_context_menu_shortcuts);
+                    addPreferencesFromResource(R.xml.tb_pref_context_menu_shortcuts);
                     findPreference("app_shortcuts").setOnPreferenceClickListener(this);
                 } else if(shortcutCount == 1)
                     generateShortcuts();
@@ -322,7 +322,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             ResolveInfo defaultLauncher = pm.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
             if(desktopIcon != null) {
-                addPreferencesFromResource(R.xml.pref_context_menu_remove_desktop_icon);
+                addPreferencesFromResource(R.xml.tb_pref_context_menu_remove_desktop_icon);
                 findPreference("arrange_icons").setOnPreferenceClickListener(this);
                 findPreference("remove_desktop_icon").setOnPreferenceClickListener(this);
             } else if(!entry.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
@@ -330,29 +330,29 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 PinnedBlockedApps pba = PinnedBlockedApps.getInstance(this);
 
                 if(pba.isPinned(entry.getComponentName())) {
-                    addPreferencesFromResource(R.xml.pref_context_menu_pin);
+                    addPreferencesFromResource(R.xml.tb_pref_context_menu_pin);
                     findPreference("pin_app").setOnPreferenceClickListener(this);
-                    findPreference("pin_app").setTitle(R.string.unpin_app);
+                    findPreference("pin_app").setTitle(R.string.tb_unpin_app);
                 } else if(pba.isBlocked(entry.getComponentName())) {
-                    addPreferencesFromResource(R.xml.pref_context_menu_block);
+                    addPreferencesFromResource(R.xml.tb_pref_context_menu_block);
                     findPreference("block_app").setOnPreferenceClickListener(this);
-                    findPreference("block_app").setTitle(R.string.unblock_app);
+                    findPreference("block_app").setTitle(R.string.tb_unblock_app);
                 } else {
                     final int MAX_NUM_OF_COLUMNS = U.getMaxNumOfEntries(this);
 
                     if(pba.getPinnedApps().size() < MAX_NUM_OF_COLUMNS) {
-                        addPreferencesFromResource(R.xml.pref_context_menu_pin);
+                        addPreferencesFromResource(R.xml.tb_pref_context_menu_pin);
                         findPreference("pin_app").setOnPreferenceClickListener(this);
-                        findPreference("pin_app").setTitle(R.string.pin_app);
+                        findPreference("pin_app").setTitle(R.string.tb_pin_app);
                     }
 
-                    addPreferencesFromResource(R.xml.pref_context_menu_block);
+                    addPreferencesFromResource(R.xml.tb_pref_context_menu_block);
                     findPreference("block_app").setOnPreferenceClickListener(this);
-                    findPreference("block_app").setTitle(R.string.block_app);
+                    findPreference("block_app").setTitle(R.string.tb_block_app);
                 }
             }
 
-            addPreferencesFromResource(R.xml.pref_context_menu);
+            addPreferencesFromResource(R.xml.tb_pref_context_menu);
 
             findPreference("app_info").setOnPreferenceClickListener(this);
             findPreference("uninstall").setOnPreferenceClickListener(this);
@@ -361,7 +361,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @SuppressWarnings("deprecation")
     private void generateShortcuts() {
-        addPreferencesFromResource(R.xml.pref_context_menu_shortcut_list);
+        addPreferencesFromResource(R.xml.tb_pref_context_menu_shortcut_list);
         switch(shortcuts.size()) {
             case 5:
                 findPreference("shortcut_5").setTitle(getShortcutTitle(shortcuts.get(4)));
@@ -398,7 +398,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     private void generateWindowSizes() {
         getPreferenceScreen().removeAll();
 
-        addPreferencesFromResource(R.xml.pref_context_menu_window_size_list);
+        addPreferencesFromResource(R.xml.tb_pref_context_menu_window_size_list);
         findPreference("window_size_standard").setOnPreferenceClickListener(this);
         findPreference("window_size_large").setOnPreferenceClickListener(this);
         findPreference("window_size_fullscreen").setOnPreferenceClickListener(this);
@@ -514,7 +514,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 generateWindowSizes();
 
                 if(U.hasBrokenSetLaunchBoundsApi())
-                    U.showToastLong(this, R.string.window_sizes_not_available);
+                    U.showToastLong(this, R.string.tb_window_sizes_not_available);
 
                 getListView().setOnItemLongClickListener((parent, view, position, id) -> {
                     String[] windowSizes = { "standard", "large", "fullscreen", "half_left", "half_right", "phone_size" };
@@ -635,7 +635,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         startActivity(fileManagerIntent,
                                 U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
-                        U.showToast(this, R.string.lock_device_not_supported);
+                        U.showToast(this, R.string.tb_lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
@@ -652,7 +652,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         startActivity(settingsIntent,
                                 U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
-                        U.showToast(this, R.string.lock_device_not_supported);
+                        U.showToast(this, R.string.tb_lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
@@ -710,7 +710,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(LauncherHelper.getInstance().isOnHomeScreen())
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
-                Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper));
+                Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 U.startActivityMaximized(getApplicationContext(), intent3);
 

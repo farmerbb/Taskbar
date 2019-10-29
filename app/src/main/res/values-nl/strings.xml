@@ -16,81 +16,81 @@
 
 <resources>
 
-    <string name="app_name">Taakbalk</string>
-    <string name="app_name_debug">Taakbalk (foutopsporing)</string>
+    <string name="tb_app_name">Taakbalk</string>
+    <string name="tb_app_name_debug">Taakbalk (foutopsporing)</string>
 
-    <string name="taskbar_is_active">Taakbalk is actief</string>
-    <string name="click_to_open_settings">Druk om instellingen te openen</string>
-    <string name="action_show">Taakbalk tonen</string>
-    <string name="action_hide">Taakbalk verbergen</string>
-    <string name="action_show_alt">Tonen</string>
-    <string name="action_hide_alt">Verbergen</string>
-    <string name="action_quit">Afsluiten</string>
-    <string name="action_grant_permission">Machtiging verlenen</string>
+    <string name="tb_taskbar_is_active">Taakbalk is actief</string>
+    <string name="tb_click_to_open_settings">Druk om instellingen te openen</string>
+    <string name="tb_action_show">Taakbalk tonen</string>
+    <string name="tb_action_hide">Taakbalk verbergen</string>
+    <string name="tb_action_show_alt">Tonen</string>
+    <string name="tb_action_hide_alt">Verbergen</string>
+    <string name="tb_action_quit">Afsluiten</string>
+    <string name="tb_action_grant_permission">Machtiging verlenen</string>
 
-    <string name="permission_dialog_title">Machtiging vereist</string>
-    <string name="permission_dialog_message">Taakbalk vereist de machtiging om over andere apps te mogen worden getoond voordat de app kan worden gestart.\n\nDruk op \"Machtiging verlenen\" en zorg ervoor dat \"Weergeven over andere apps\" is ingeschakeld.</string>
+    <string name="tb_permission_dialog_title">Machtiging vereist</string>
+    <string name="tb_permission_dialog_message">Taakbalk vereist de machtiging om over andere apps te mogen worden getoond voordat de app kan worden gestart.\n\nDruk op \"Machtiging verlenen\" en zorg ervoor dat \"Weergeven over andere apps\" is ingeschakeld.</string>
 
-    <string name="pref_header_general">Algemene instellingen</string>
-    <string name="pref_title_start_menu_layout">Startmenu-indeling</string>
-    <string name="pref_title_background_tint">Achtergrondtint</string>
-    <string name="pref_title_scrollbar">Snelle scrollbalk gebruiken in startmenu</string>
-    <string name="pref_title_start_on_boot">Opstarten met telefoonopstart</string>
+    <string name="tb_pref_header_general">Algemene instellingen</string>
+    <string name="tb_pref_title_start_menu_layout">Startmenu-indeling</string>
+    <string name="tb_pref_title_background_tint">Achtergrondtint</string>
+    <string name="tb_pref_title_scrollbar">Snelle scrollbalk gebruiken in startmenu</string>
+    <string name="tb_pref_title_start_on_boot">Opstarten met telefoonopstart</string>
 
-    <string-array name="pref_start_menu_list">
+    <string-array name="tb_pref_start_menu_list">
         <item>Lijst</item>
         <item>Raster</item>
     </string-array>
 
-    <string name="pref_header_recent_apps">Recente apps</string>
+    <string name="tb_pref_header_recent_apps">Recente apps</string>
 
-    <string name="pref_title_enable_recents">Gebruikstoegang in-/uitschakelen</string>
-    <string name="pref_title_recents_refresh_interval">Ververstussenpoos</string>
+    <string name="tb_pref_title_enable_recents">Gebruikstoegang in-/uitschakelen</string>
+    <string name="tb_pref_title_recents_refresh_interval">Ververstussenpoos</string>
 
-    <string name="pref_title_amount_of_recents">Te tonen recente apps</string>
-    <string-array name="pref_recents_amount">
+    <string name="tb_pref_title_amount_of_recents">Te tonen recente apps</string>
+    <string-array name="tb_pref_recents_amount">
         <item>Apps die je gisteren gebruikt hebt</item>
         <item>Apps die je gebruikt hebt na het opstarten van Taakbalk</item>
         <item>Alle apps (kan de prestaties beïnvloeden)</item>
     </string-array>
-    <string-array name="pref_recents_amount_alt">
+    <string-array name="tb_pref_recents_amount_alt">
         <item>Apps die je gisteren gebruikt hebt</item>
         <item>Apps die je gebruikt hebt na het opstarten van Taakbalk</item>
         <item>Alle apps (kan de prestaties beïnvloeden)</item>
         <item>Alleen actieve apps</item>
     </string-array>
 
-    <string name="pref_title_sort_order">Sorteervolgorde</string>
-    <string-array name="pref_sort_order">
+    <string name="tb_pref_title_sort_order">Sorteervolgorde</string>
+    <string-array name="tb_pref_sort_order">
         <item>Recent gebruikt (aflopend)</item>
         <item>Recent gebruikt (oplopend)</item>
         <item>Meest gebruikt (aflopend)</item>
         <item>Meest gebruikt (oplopend)</item>
     </string-array>
-    <string-array name="pref_sort_order_alt">
+    <string-array name="tb_pref_sort_order_alt">
         <item>Recent gestart (aflopend)</item>
         <item>Recent gestart (oplopend)</item>
     </string-array>
 
-    <string name="pref_header_advanced">Geavanceerde functies</string>
+    <string name="tb_pref_header_advanced">Geavanceerde functies</string>
 
-    <string name="pref_title_freeform_hack">Vrije venstermodus</string>
-    <string name="pref_description_freeform_hack">Staat Taakbalk toe om op te starten in vrije venstermodus. Dit zorgt voor een bureaubladachtige gebruikservaring.\n\nDeze functie is experimenteel en kan problemen veroorzaken met de standaard split-screen multitasking.</string>
+    <string name="tb_pref_title_freeform_hack">Vrije venstermodus</string>
+    <string name="tb_pref_description_freeform_hack">Staat Taakbalk toe om op te starten in vrije venstermodus. Dit zorgt voor een bureaubladachtige gebruikservaring.\n\nDeze functie is experimenteel en kan problemen veroorzaken met de standaard split-screen multitasking.</string>
 
-    <string name="pref_header_about">Over Taakbalk</string>
-    <string name="pref_about_description">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2019 Braden Farmer\nApp-logo door Mark Morilla\n\nDruk hier om te controleren op updates of laat een beoordeling achter! %1$s</string>
-    <string name="pref_about_description_alt">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2019 Braden Farmer\nApp-logo door Mark Morilla</string>
+    <string name="tb_pref_header_about">Over Taakbalk</string>
+    <string name="tb_pref_about_description">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2019 Braden Farmer\nApp-logo door Mark Morilla\n\nDruk hier om te controleren op updates of laat een beoordeling achter! %1$s</string>
+    <string name="tb_pref_about_description_alt">Taakbalk: productiviteit op Android in PC-stijl\n\n&#169; 2019 Braden Farmer\nApp-logo door Mark Morilla</string>
 
-    <string name="pref_title_hide_taskbar">Taakbalk inklappen na drukken op item</string>
+    <string name="tb_pref_title_hide_taskbar">Taakbalk inklappen na drukken op item</string>
 
-    <string name="pref_title_launcher">Beginscherm vervangen</string>
-    <string name="pref_description_launcher">Gebruik Taakbalk als je beginscherm</string>
+    <string name="tb_pref_title_launcher">Beginscherm vervangen</string>
+    <string name="tb_pref_description_launcher">Gebruik Taakbalk als je beginscherm</string>
 
-    <string name="set_wallpaper">Stel achtergrond in via&#8230;</string>
-    <string name="pref_disable_animations">Sneller schakelen tussen apps</string>
+    <string name="tb_set_wallpaper">Stel achtergrond in via&#8230;</string>
+    <string name="tb_pref_disable_animations">Sneller schakelen tussen apps</string>
 
-    <string name="pref_title_position">Locatie op scherm</string>
-    <string-array name="pref_position_list">
+    <string name="tb_pref_title_position">Locatie op scherm</string>
+    <string-array name="tb_pref_position_list">
         <item>Linksonder (horizontaal)</item>
         <item>Linksonder (verticaal)</item>
         <item>Rechtsonder (horizontaal)</item>
@@ -101,289 +101,289 @@
         <item>Rechtsboven (verticaal)</item>
     </string-array>
 
-    <string name="app_info">App-informatie</string>
-    <string name="uninstall">Verwijderen</string>
-    <string name="open_taskbar_settings">Instellingen openen</string>
-    <string name="quit_taskbar">Afsluiten</string>
+    <string name="tb_app_info">App-informatie</string>
+    <string name="tb_uninstall">Verwijderen</string>
+    <string name="tb_open_taskbar_settings">Instellingen openen</string>
+    <string name="tb_quit_taskbar">Afsluiten</string>
 
-    <string name="pref_title_keyboard_shortcut">Sneltoetsen inschakelen</string>
-    <string name="pref_description_keyboard_shortcut">Taakbalk starten/stoppen: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nStartmenu tonen: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
-    <string name="pref_description_keyboard_shortcut_alt">Taakbalk starten/stoppen\n&#8226; WinKey+M / Search+M\n\nStartmenu tonen\n&#8226; WinKey / Search\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
-    <string name="loading_apps">Bezig met laden van apps&#8230;</string>
-    <string name="press_enter">Geen apps aangetroffen\n\nDruk op Enter om te zoeken met Google</string>
-    <string name="nothing_to_see_here">Niks te zien, loop maar door&#8230;</string>
+    <string name="tb_pref_title_keyboard_shortcut">Sneltoetsen inschakelen</string>
+    <string name="tb_pref_description_keyboard_shortcut">Taakbalk starten/stoppen: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nStartmenu tonen: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
+    <string name="tb_pref_description_keyboard_shortcut_alt">Taakbalk starten/stoppen\n&#8226; WinKey+M / Search+M\n\nStartmenu tonen\n&#8226; WinKey / Search\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
+    <string name="tb_loading_apps">Bezig met laden van apps&#8230;</string>
+    <string name="tb_press_enter">Geen apps aangetroffen\n\nDruk op Enter om te zoeken met Google</string>
+    <string name="tb_nothing_to_see_here">Niks te zien, loop maar door&#8230;</string>
 
-    <string name="error_dialog_title">Fout</string>
-    <string name="error_dialog_message">Door OEM-beperkingen kan deze functie helaas niet worden ingeschakeld op je apparaat.\n\nJe kunt proberen dit alsnog in te schakelen met deze adb shell-opdracht:\n\nappops set %1$s %2$s allow</string>
-    <string name="action_ok">Oké</string>
-    <string name="action_cancel">Annuleren</string>
+    <string name="tb_error_dialog_title">Fout</string>
+    <string name="tb_error_dialog_message">Door OEM-beperkingen kan deze functie helaas niet worden ingeschakeld op je apparaat.\n\nJe kunt proberen dit alsnog in te schakelen met deze adb shell-opdracht:\n\nappops set %1$s %2$s allow</string>
+    <string name="tb_action_ok">Oké</string>
+    <string name="tb_action_cancel">Annuleren</string>
 
-    <string name="pin_app">Vastmaken aan recente apps</string>
-    <string name="unpin_app">Losmaken van recente apps</string>
-    <string name="block_app">Niet tonen in recente apps</string>
-    <string name="unblock_app">Tonen in recente apps</string>
-    <string name="clear_pinned_apps">Standaardwaarden</string>
+    <string name="tb_pin_app">Vastmaken aan recente apps</string>
+    <string name="tb_unpin_app">Losmaken van recente apps</string>
+    <string name="tb_block_app">Niet tonen in recente apps</string>
+    <string name="tb_unblock_app">Tonen in recente apps</string>
+    <string name="tb_clear_pinned_apps">Standaardwaarden</string>
 
-    <string name="pref_title_hide_foreground">Pictogram verbergen voor app op voorgrond</string>
-    <string name="pref_summary_hide_foreground">Kan de prestaties beïnvloeden</string>
+    <string name="tb_pref_title_hide_foreground">Pictogram verbergen voor app op voorgrond</string>
+    <string name="tb_pref_summary_hide_foreground">Kan de prestaties beïnvloeden</string>
 
-    <string name="pref_title_theme">Thema</string>
-    <string-array name="pref_theme_list">
+    <string name="tb_pref_title_theme">Thema</string>
+    <string-array name="tb_pref_theme_list">
         <item>Licht</item>
         <item>Donker</item>
     </string-array>
 
-    <string name="lock_device_not_supported">Niet ondersteund op dit apparaat</string>
+    <string name="tb_lock_device_not_supported">Niet ondersteund op dit apparaat</string>
 
-    <string name="pref_title_shortcut_icon">Snelkoppelingspictogram tonen voor vastgemaakte apps</string>
+    <string name="tb_pref_title_shortcut_icon">Snelkoppelingspictogram tonen voor vastgemaakte apps</string>
 
-    <string name="freeform_dialog_title">Vrije venstermodus inschakelen</string>
-    <string name="freeform_dialog_message">Om Taakbalk apps te laten opstarten in vrije venstermodus, moet je deze stappen doorlopen:\n\n&#8226; Ga naar Ontwikkelaarsopties\n\n&#8226; Scroll naar onderen en schakel \"%s\" in\n\n&#8226; Herstart je apparaat</string>
+    <string name="tb_freeform_dialog_title">Vrije venstermodus inschakelen</string>
+    <string name="tb_freeform_dialog_message">Om Taakbalk apps te laten opstarten in vrije venstermodus, moet je deze stappen doorlopen:\n\n&#8226; Ga naar Ontwikkelaarsopties\n\n&#8226; Scroll naar onderen en schakel \"%s\" in\n\n&#8226; Herstart je apparaat</string>
 
-    <string name="pref_title_invisible_button">Knop verbergen als Taakbalk is ingeklapt</string>
-    <string name="pref_title_freeform_mode_help">Hulp en instructies over vrije venstermodus</string>
-    <string name="freeform_help_dialog_title">Hulp en instructies</string>
-    <string name="freeform_help_dialog_message"><b>Over vrije venstermodus</b>\n\nTaakbalk stelt je in staat om apps op te starten in vrije, verplaatsbare vensters op apparaten met Android 7.0 en hoger; hiervoor is roottoegang vereist.  Op apparaten met Android 8.0 en hoger is alleen een adb shell-opdracht vereist.\n\nVolg deze stappen om je apparaat in te stellen zodat apps kunnen worden opgestart in vrije venstermodus:\n\n<b>1.</b> Schakel \"Vrije venstermodus-ondersteuning\" in in de Taakbalk-app\n\n<b>2.</b> Volg de instructies in het pop-upvenster om de juiste instellingen te activeren op je apparaat (eenmalig)\n\n<b>3.</b> Ga naar het recente apps-overzicht en sluit alle recente apps\n\n<b>4.</b> Start Taakbalk en kies een app om deze op te starten in vrije venstermodus\n\n<i>Voor het beste resultaat, vooral op Android 8.0 en hoger, herstart je je apparaat vóórdat je vrije venstermodus gebruikt</i>\n\n<b>Voorinstellingen voor vensterafmetingen</b>\n\nTaakbalk kan app-vensters openen met een voorinstelling.  Kies een vensterafmeting door een app-pictogram lang ingedrukt te houden of door er met de rechtermuisknop op te klikken en kies \"Nieuw venster.\"\n\nOm een voorinstelling op te slaan voor een specifieke app, houd je de voorinstelling lang ingedrukt. Er verschijnt dan een vinkje, wat aangeeft dat het de standaardinstelling is geworden.  Taakbalk start de app voortaan op met de gekozen afmetingen.\n\nLet op: dit werkt niet altijd juist op Android 8.0 en 8.1.  Je kunt dit verbeteren door de app op te starten, daarna direct te minimaliseren en weer te openen via het recente apps-overzicht.\n\n<b>Probleemoplossing</b>\n\n<i>&#8226; Apps starten nog steeds op in volledig scherm-modus</i>\n\nAls een app wordt opgestart die al in het geheugen is geladen, dan brengt Taakbalk hem naar de voorgrond. Om de app op te starten in vrije venstermodus, moet de app een koude start krijgen.\n\nVeeg de app weg uit het recente apps-overzicht en start de app opnieuw. Als dit niet werkt, houd dan het app-pictogram lang ingedrukt, kies \"App-informatie\" en sluit de app geforceerd af.  Ook kun je je apparaat herstarten.\n\n<i>&#8226; Gemaximaliseerde apps kunnen niet worden verkleind naar een venster</i>\n\nAls je op de maximaliseer-knop drukt, dan haalt Android de app uit de vrije venstermodus en toont hem op het volledige scherm. Zoals hierboven beschreven, kan Taakbalk alleen apps starten in vrije venstermodus als de apps koud worden gestart.\n\nOm dit te omzeilen, kun je vensters maximaliseren door net buiten het vensterframe te drukken of klikken.  Dit zorgt ervoor dat de app alle beschikbare ruimte opvult zonder dat deze uit de vrije venstermodus wordt gehaald.\n\n<i>&#8226; Vensters maximaliseren werkt niet op Android 9</i>\n\nDit ligt buiten de macht van Taakbalk en is iets dat Google moet oplossen. Gebruik bovenstaande methode om een venster te maximaliseren op Android 9.\n\n<i>&#8226; App-overgangen werken niet goed, vooral op Android 9</i>\n\nOok dit is iets dat Google moet oplossen. Echter, je kunt dit omzeilen door app-overgangen uit te schakelen.\n\nDit kan door naar de recente app-instellingen in de Taakbalk-instellingen te gaan en de optie \"Sneller schakelen tussen apps\" in te schakelen. Je kunt dit ook systeembreed doen door in de instellingen te gaan naar Ontwikkelaarsopties en bij \"Vensterovergangsschaal\" te kiezen voor \"Geen animaties.\"</string>
+    <string name="tb_pref_title_invisible_button">Knop verbergen als Taakbalk is ingeklapt</string>
+    <string name="tb_pref_title_freeform_mode_help">Hulp en instructies over vrije venstermodus</string>
+    <string name="tb_freeform_help_dialog_title">Hulp en instructies</string>
+    <string name="tb_freeform_help_dialog_message"><b>Over vrije venstermodus</b>\n\nTaakbalk stelt je in staat om apps op te starten in vrije, verplaatsbare vensters op apparaten met Android 7.0 en hoger; hiervoor is roottoegang vereist.  Op apparaten met Android 8.0 en hoger is alleen een adb shell-opdracht vereist.\n\nVolg deze stappen om je apparaat in te stellen zodat apps kunnen worden opgestart in vrije venstermodus:\n\n<b>1.</b> Schakel \"Vrije venstermodus-ondersteuning\" in in de Taakbalk-app\n\n<b>2.</b> Volg de instructies in het pop-upvenster om de juiste instellingen te activeren op je apparaat (eenmalig)\n\n<b>3.</b> Ga naar het recente apps-overzicht en sluit alle recente apps\n\n<b>4.</b> Start Taakbalk en kies een app om deze op te starten in vrije venstermodus\n\n<i>Voor het beste resultaat, vooral op Android 8.0 en hoger, herstart je je apparaat vóórdat je vrije venstermodus gebruikt</i>\n\n<b>Voorinstellingen voor vensterafmetingen</b>\n\nTaakbalk kan app-vensters openen met een voorinstelling.  Kies een vensterafmeting door een app-pictogram lang ingedrukt te houden of door er met de rechtermuisknop op te klikken en kies \"Nieuw venster.\"\n\nOm een voorinstelling op te slaan voor een specifieke app, houd je de voorinstelling lang ingedrukt. Er verschijnt dan een vinkje, wat aangeeft dat het de standaardinstelling is geworden.  Taakbalk start de app voortaan op met de gekozen afmetingen.\n\nLet op: dit werkt niet altijd juist op Android 8.0 en 8.1.  Je kunt dit verbeteren door de app op te starten, daarna direct te minimaliseren en weer te openen via het recente apps-overzicht.\n\n<b>Probleemoplossing</b>\n\n<i>&#8226; Apps starten nog steeds op in volledig scherm-modus</i>\n\nAls een app wordt opgestart die al in het geheugen is geladen, dan brengt Taakbalk hem naar de voorgrond. Om de app op te starten in vrije venstermodus, moet de app een koude start krijgen.\n\nVeeg de app weg uit het recente apps-overzicht en start de app opnieuw. Als dit niet werkt, houd dan het app-pictogram lang ingedrukt, kies \"App-informatie\" en sluit de app geforceerd af.  Ook kun je je apparaat herstarten.\n\n<i>&#8226; Gemaximaliseerde apps kunnen niet worden verkleind naar een venster</i>\n\nAls je op de maximaliseer-knop drukt, dan haalt Android de app uit de vrije venstermodus en toont hem op het volledige scherm. Zoals hierboven beschreven, kan Taakbalk alleen apps starten in vrije venstermodus als de apps koud worden gestart.\n\nOm dit te omzeilen, kun je vensters maximaliseren door net buiten het vensterframe te drukken of klikken.  Dit zorgt ervoor dat de app alle beschikbare ruimte opvult zonder dat deze uit de vrije venstermodus wordt gehaald.\n\n<i>&#8226; Vensters maximaliseren werkt niet op Android 9</i>\n\nDit ligt buiten de macht van Taakbalk en is iets dat Google moet oplossen. Gebruik bovenstaande methode om een venster te maximaliseren op Android 9.\n\n<i>&#8226; App-overgangen werken niet goed, vooral op Android 9</i>\n\nOok dit is iets dat Google moet oplossen. Echter, je kunt dit omzeilen door app-overgangen uit te schakelen.\n\nDit kan door naar de recente app-instellingen in de Taakbalk-instellingen te gaan en de optie \"Sneller schakelen tussen apps\" in te schakelen. Je kunt dit ook systeembreed doen door in de instellingen te gaan naar Ontwikkelaarsopties en bij \"Vensterovergangsschaal\" te kiezen voor \"Geen animaties.\"</string>
 
-    <string name="action_developer_options">Ontwikkelaarsopties openen</string>
-    <string name="action_close">Sluiten</string>
+    <string name="tb_action_developer_options">Ontwikkelaarsopties openen</string>
+    <string name="tb_action_close">Sluiten</string>
 
-    <string name="pref_header_freeform">Vrije venstermodus</string>
-    <string name="pref_title_window_size">Standaard vensterafmetingen</string>
+    <string name="tb_pref_header_freeform">Vrije venstermodus</string>
+    <string name="tb_pref_title_window_size">Standaard vensterafmetingen</string>
 
-    <string name="window_size_standard">Standaard</string>
-    <string name="window_size_fullscreen">Gemaximaliseerd</string>
-    <string name="window_size_phone_size">Telefoongrootte</string>
-    <string name="window_size_large">Groot</string>
-    <string name="window_size_half_left">@string/window_size_half_left_alt</string>
-    <string name="window_size_half_left_alt">Helft van scherm (links/boven)</string>
-    <string name="window_size_half_right">@string/window_size_half_right_alt</string>
-    <string name="window_size_half_right_alt">Helft van scherm (rechts/onder)</string>
+    <string name="tb_window_size_standard">Standaard</string>
+    <string name="tb_window_size_fullscreen">Gemaximaliseerd</string>
+    <string name="tb_window_size_phone_size">Telefoongrootte</string>
+    <string name="tb_window_size_large">Groot</string>
+    <string name="tb_window_size_half_left">@string/tb_window_size_half_left_alt</string>
+    <string name="tb_window_size_half_left_alt">Helft van scherm (links/boven)</string>
+    <string name="tb_window_size_half_right">@string/tb_window_size_half_right_alt</string>
+    <string name="tb_window_size_half_right_alt">Helft van scherm (rechts/onder)</string>
 
-    <string name="pref_title_blacklist">Startmenu-apps instellen</string>
-    <string name="app_hidden">1 verborgen app</string>
-    <string name="apps_hidden">%1$d verborgen apps</string>
-    <string name="blacklist_dialog_title">Verborgen</string>
-    <string name="top_app">1 top-app</string>
-    <string name="top_apps">%1$d top-apps</string>
-    <string name="top_apps_dialog_title">Top-apps</string>
-    <string name="start_menu_apps">Startmenu-apps</string>
+    <string name="tb_pref_title_blacklist">Startmenu-apps instellen</string>
+    <string name="tb_app_hidden">1 verborgen app</string>
+    <string name="tb_apps_hidden">%1$d verborgen apps</string>
+    <string name="tb_blacklist_dialog_title">Verborgen</string>
+    <string name="tb_top_app">1 top-app</string>
+    <string name="tb_top_apps">%1$d top-apps</string>
+    <string name="tb_top_apps_dialog_title">Top-apps</string>
+    <string name="tb_start_menu_apps">Startmenu-apps</string>
 
-    <string name="reboot_required">Herstart je apparaat om vrije venstermodus in te schakelen</string>
-    <string name="enable_force_activities_resizable">Scroll naar onderen en schakel \"%s\" in</string>
-    <string name="set_as_default_home">Druk op \"Altijd\" om Taakbalk in te stellen als je standaard beginscherm</string>
-    <string name="enable_developer_options">Schakel Ontwikkelaarsopties in door 7 keer op de bouwversie te drukken</string>
+    <string name="tb_reboot_required">Herstart je apparaat om vrije venstermodus in te schakelen</string>
+    <string name="tb_enable_force_activities_resizable">Scroll naar onderen en schakel \"%s\" in</string>
+    <string name="tb_set_as_default_home">Druk op \"Altijd\" om Taakbalk in te stellen als je standaard beginscherm</string>
+    <string name="tb_enable_developer_options">Schakel Ontwikkelaarsopties in door 7 keer op de bouwversie te drukken</string>
 
-    <string name="pref_title_anchor">Taakbalk meedraaien bij draaien van scherm</string>
-    <string name="pref_title_donate">Doneren</string>
-    <string name="pref_summary_donate">Ondersteun de ontwikkeling van Taakbalk door middel van een kleine donatie door het aanschaffen van de Donatieversie</string>
-    <string name="dialog_donate_message">Ondersteun de ontwikkeling van Taakbalk door te upgraden naar de Donatieversie voor maar %1$s!\n\nDe Donatieversie is identiek aan de gratis versie en je voorkeuren worden automatisch overgeheveld.\n\nTaakbalk is en zal altijd 100%% gratis, open source en reclamevrij blijven.  Maaar je ondesteuning wordt zeer gewaardeerd!</string>
-    <string name="action_no_thanks">Nee, bedankt</string>
+    <string name="tb_pref_title_anchor">Taakbalk meedraaien bij draaien van scherm</string>
+    <string name="tb_pref_title_donate">Doneren</string>
+    <string name="tb_pref_summary_donate">Ondersteun de ontwikkeling van Taakbalk door middel van een kleine donatie door het aanschaffen van de Donatieversie</string>
+    <string name="tb_dialog_donate_message">Ondersteun de ontwikkeling van Taakbalk door te upgraden naar de Donatieversie voor maar %1$s!\n\nDe Donatieversie is identiek aan de gratis versie en je voorkeuren worden automatisch overgeheveld.\n\nTaakbalk is en zal altijd 100%% gratis, open source en reclamevrij blijven.  Maaar je ondesteuning wordt zeer gewaardeerd!</string>
+    <string name="tb_action_no_thanks">Nee, bedankt</string>
 
-    <string name="importing_settings">Bezig met importeren van instellingen&#8230; even geduld.</string>
-    <string name="settings_imported_successfully">Instellingen zijn geïmporteerd</string>
-    <string name="import_dialog_message">Bedankt voor het aanschaffen van de Donatieversie van Taakbalk!\n\nJe instellingen zijn geïmporteerd; je kunt de gratis versie nu verwijderen.</string>
-    <string name="action_uninstall">Verwijderen</string>
+    <string name="tb_importing_settings">Bezig met importeren van instellingen&#8230; even geduld.</string>
+    <string name="tb_settings_imported_successfully">Instellingen zijn geïmporteerd</string>
+    <string name="tb_import_dialog_message">Bedankt voor het aanschaffen van de Donatieversie van Taakbalk!\n\nJe instellingen zijn geïmporteerd; je kunt de gratis versie nu verwijderen.</string>
+    <string name="tb_action_uninstall">Verwijderen</string>
 
-    <string name="pref_title_hide_when_keyboard_shown">Taakbalk automatisch inklappen</string>
-    <string name="pref_description_hide_when_keyboard_shown">Als het virtuele toetsenbord wordt getoond</string>
+    <string name="tb_pref_title_hide_when_keyboard_shown">Taakbalk automatisch inklappen</string>
+    <string name="tb_pref_description_hide_when_keyboard_shown">Als het virtuele toetsenbord wordt getoond</string>
 
-    <string name="pref_max_num_of_recents">Max. aantal vastgemaakte/recente apps</string>
+    <string name="tb_pref_max_num_of_recents">Max. aantal vastgemaakte/recente apps</string>
 
-    <string name="show_window_sizes">Nieuw venster&#8230;</string>
+    <string name="tb_show_window_sizes">Nieuw venster&#8230;</string>
 
-    <string name="icon_pack">Pictogramthema</string>
-    <string name="icon_pack_none">Geen</string>
-    <string name="no_icon_packs_installed">Geen geïnstalleerde pictogramthema\'s</string>
+    <string name="tb_icon_pack">Pictogramthema</string>
+    <string name="tb_icon_pack_none">Geen</string>
+    <string name="tb_no_icon_packs_installed">Geen geïnstalleerde pictogramthema\'s</string>
 
-    <string name="apply_icon_pack">Pictogramthema toepassen</string>
-    <string name="apply_icon_pack_description">\"%1$s\" toepassen op Taakbalk?</string>
-    <string name="must_specify_extra">Intent.EXTRA_PACKAGE_NAME moet worden opgegeven</string>
-    <string name="invalid_package_name">Ongeldige pakketnaam</string>
+    <string name="tb_apply_icon_pack">Pictogramthema toepassen</string>
+    <string name="tb_apply_icon_pack_description">\"%1$s\" toepassen op Taakbalk?</string>
+    <string name="tb_must_specify_extra">Intent.EXTRA_PACKAGE_NAME moet worden opgegeven</string>
+    <string name="tb_invalid_package_name">Ongeldige pakketnaam</string>
 
-    <string name="pref_title_use_mask">Ontbrekende pictogrammen van thema automatisch toevoegen</string>
-    <string name="pref_description_use_mask">Kan de prestaties beïnvloeden</string>
+    <string name="tb_pref_title_use_mask">Ontbrekende pictogrammen van thema automatisch toevoegen</string>
+    <string name="tb_pref_description_use_mask">Kan de prestaties beïnvloeden</string>
 
-    <string name="pref_title_app_drawer_icon">Taakbalk-logo gebruiken als startmenu-pictogram</string>
-    <string name="pref_title_app_drawer_icon_bliss">Bliss-logo gebruiken als startmenu-pictogram</string>
+    <string name="tb_pref_title_app_drawer_icon">Taakbalk-logo gebruiken als startmenu-pictogram</string>
+    <string name="tb_pref_title_app_drawer_icon_bliss">Bliss-logo gebruiken als startmenu-pictogram</string>
 
-    <string name="already_blacklisted">%1$s kan niet worden gekozen omdat hij op de verborgen apps-lijst staat</string>
-    <string name="already_top_app">%1$s kan niet worden gekozen omdat hij op de top-apps-lijst staat</string>
+    <string name="tb_already_blacklisted">%1$s kan niet worden gekozen omdat hij op de verborgen apps-lijst staat</string>
+    <string name="tb_already_top_app">%1$s kan niet worden gekozen omdat hij op de top-apps-lijst staat</string>
 
-    <string name="alt_button_config">Alternatieve locatie voor inklapknop</string>
-    <string name="pref_title_save_window_sizes">Vensterafmetingen van apps altijd opslaan</string>
-    <string name="pref_description_save_window_sizes">Bij het openen van nieuwe apps via het rechtermuisknopmenu</string>
+    <string name="tb_alt_button_config">Alternatieve locatie voor inklapknop</string>
+    <string name="tb_pref_title_save_window_sizes">Vensterafmetingen van apps altijd opslaan</string>
+    <string name="tb_pref_description_save_window_sizes">Bij het openen van nieuwe apps via het rechtermuisknopmenu</string>
 
-    <string name="add_shortcut">Snelkoppeling toevoegen op beginscherm</string>
-    <string name="shortcut_created">Snelkoppeling voor vrije venstermodus gecreëerd</string>
+    <string name="tb_add_shortcut">Snelkoppeling toevoegen op beginscherm</string>
+    <string name="tb_shortcut_created">Snelkoppeling voor vrije venstermodus gecreëerd</string>
 
-    <string name="start_taskbar">Taakbalk starten/stoppen</string>
-    <string name="no_freeform_support">Vrije venstermodus is niet ingeschakeld op je apparaat &#8211; open Taakbalk en schakel dit in</string>
-    <string name="enable_recent_apps">Taakbalk kan, optioneel, aan de zijkant pictogrammen tonen van je recent gebruikte apps.  Als je dit wilt, dan heeft Taakbalk de machtiging gebruikstoegang nodig.\n\nOndersteuning inschakelen voor recente apps?</string>
+    <string name="tb_start_taskbar">Taakbalk starten/stoppen</string>
+    <string name="tb_no_freeform_support">Vrije venstermodus is niet ingeschakeld op je apparaat &#8211; open Taakbalk en schakel dit in</string>
+    <string name="tb_enable_recent_apps">Taakbalk kan, optioneel, aan de zijkant pictogrammen tonen van je recent gebruikte apps.  Als je dit wilt, dan heeft Taakbalk de machtiging gebruikstoegang nodig.\n\nOndersteuning inschakelen voor recente apps?</string>
 
-    <string name="disable_scrolling_list">Scrollijst uitschakelen</string>
+    <string name="tb_disable_scrolling_list">Scrollijst uitschakelen</string>
 
-    <string name="action_dont_show_again">Niet meer tonen</string>
+    <string name="tb_action_dont_show_again">Niet meer tonen</string>
 
-    <string name="app_shortcuts">Meer acties&#8230;</string>
+    <string name="tb_app_shortcuts">Meer acties&#8230;</string>
 
-    <string name="usage_stats_message">Zorg ervoor dat Taakbalk is ingeschakeld (\"Aan\")</string>
+    <string name="tb_usage_stats_message">Zorg ervoor dat Taakbalk is ingeschakeld (\"Aan\")</string>
 
-    <string name="volume">Volumebeheer</string>
-    <string name="file_manager">Bestandsbeheer</string>
-    <string name="system_settings">Systeeminstellingen</string>
-    <string name="power_menu">Energiemenu</string>
+    <string name="tb_volume">Volumebeheer</string>
+    <string name="tb_file_manager">Bestandsbeheer</string>
+    <string name="tb_system_settings">Systeeminstellingen</string>
+    <string name="tb_power_menu">Energiemenu</string>
 
-    <string name="show_search_bar">Zichtbaarheid van zoekvak</string>
-    <string-array name="pref_show_search_bar_list">
+    <string name="tb_show_search_bar">Zichtbaarheid van zoekvak</string>
+    <string-array name="tb_pref_show_search_bar_list">
         <item>Bij hardware- of softwarematig toetsenbord</item>
         <item>Alleen bij hardwarematig toetsenbord</item>
         <item>Zoekvak altijd verbergen</item>
     </string-array>
 
-    <string name="clear_pba">Vastgemaakte/uitgesloten recente apps</string>
-    <string name="clear_hidden_apps">Startmenu &#8211; Verborgen apps</string>
-    <string name="clear_top_apps">Startmenu &#8211; Top-apps</string>
-    <string name="clear_window_sizes">Opgeslagen vensterafmetingen</string>
-    <string name="action_reset">Standaardwaarden</string>
+    <string name="tb_clear_pba">Vastgemaakte/uitgesloten recente apps</string>
+    <string name="tb_clear_hidden_apps">Startmenu &#8211; Verborgen apps</string>
+    <string name="tb_clear_top_apps">Startmenu &#8211; Top-apps</string>
+    <string name="tb_clear_window_sizes">Opgeslagen vensterafmetingen</string>
+    <string name="tb_action_reset">Standaardwaarden</string>
 
-    <string name="tools">Hulpmiddelen</string>
+    <string name="tb_tools">Hulpmiddelen</string>
 
-    <string name="enable_accessibility">@string/accessibility_service_description</string>
-    <string name="accessibility_service_summary">Staat Taakbalk toe om knopacties uit te voeren</string>
-    <string name="accessibility_service_description">Om knopacties uit te voeren, zoals terug, beginscherm, recente apps en het tonen van het energiemenu, moet Taakbalk worden geactiveerd in de toegankelijkheidsinstellingen.\n\nDeze machtiging wordt alleen gebruikt voor het uitvoeren van knopacties en nergens anders voor.</string>
+    <string name="tb_enable_accessibility">@string/tb_accessibility_service_description</string>
+    <string name="tb_accessibility_service_summary">Staat Taakbalk toe om knopacties uit te voeren</string>
+    <string name="tb_accessibility_service_description">Om knopacties uit te voeren, zoals terug, beginscherm, recente apps en het tonen van het energiemenu, moet Taakbalk worden geactiveerd in de toegankelijkheidsinstellingen.\n\nDeze machtiging wordt alleen gebruikt voor het uitvoeren van knopacties en nergens anders voor.</string>
     
-    <string name="pref_title_force_new_window">Apps altijd openen in nieuwe vensters</string>
-    <string name="pref_description_force_new_window">Dwingt nieuwe vensters af, telkens als een app wordt geopend via het startmenu of uit de recente apps (als de app in kwestie ondersteuning heeft voor meerdere vensters)</string>
-    <string name="change_wallpaper">Achtergrond wijzigen</string>
+    <string name="tb_pref_title_force_new_window">Apps altijd openen in nieuwe vensters</string>
+    <string name="tb_pref_description_force_new_window">Dwingt nieuwe vensters af, telkens als een app wordt geopend via het startmenu of uit de recente apps (als de app in kwestie ondersteuning heeft voor meerdere vensters)</string>
+    <string name="tb_change_wallpaper">Achtergrond wijzigen</string>
 
-    <string name="notification_settings">Meldingsinstellingen</string>
+    <string name="tb_notification_settings">Meldingsinstellingen</string>
 
-    <string name="pref_header_appearance">Uiterlijk</string>
-    <string name="dashboard">Widgetondersteuning inschakelen</string>
-    <string name="dashboard_description">Voegt een knop toe aan de taakbalk om widgets te tonen</string>
-    <string name="dashboard_grid_size">Afmetingen van widgetoverzicht</string>
+    <string name="tb_pref_header_appearance">Uiterlijk</string>
+    <string name="tb_dashboard">Widgetondersteuning inschakelen</string>
+    <string name="tb_dashboard_description">Voegt een knop toe aan de taakbalk om widgets te tonen</string>
+    <string name="tb_dashboard_grid_size">Afmetingen van widgetoverzicht</string>
 
-    <string name="click_to_add_widget">Druk om widget toe te voegen</string>
-    <string name="remove_widget">Widget verwijderen</string>
-    <string name="are_you_sure">Weet je het zeker?</string>
-    <string name="dashboard_tutorial">Druk ergens op het scherm om een widget toe te voegen aan het overzicht</string>
+    <string name="tb_click_to_add_widget">Druk om widget toe te voegen</string>
+    <string name="tb_remove_widget">Widget verwijderen</string>
+    <string name="tb_are_you_sure">Weet je het zeker?</string>
+    <string name="tb_dashboard_tutorial">Druk ergens op het scherm om een widget toe te voegen aan het overzicht</string>
 
-    <string name="pref_title_accent_color">Accentkleur</string>
-    <string name="reset_colors">Standaardwaarden</string>
+    <string name="tb_pref_title_accent_color">Accentkleur</string>
+    <string name="tb_reset_colors">Standaardwaarden</string>
 
-    <string name="visual_feedback">Visuele feedback bij het kiezen van pictogrammen</string>
+    <string name="tb_visual_feedback">Visuele feedback bij het kiezen van pictogrammen</string>
 
-    <string name="num_of_recents_blurb">Zorg ervoor dat gebruikstoegang is ingeschakeld vóórdat je deze instelling wijzigt.\n\nHogere waardes kunnen de prestaties beïnvloeden.</string>
-    <string name="max_num_of_recents">%1$d apps</string>
-    <string name="max_num_of_recents_singular">1 app</string>
-    <string name="max_num_of_recents_unlimited">Ongelimiteerd</string>
+    <string name="tb_num_of_recents_blurb">Zorg ervoor dat gebruikstoegang is ingeschakeld vóórdat je deze instelling wijzigt.\n\nHogere waardes kunnen de prestaties beïnvloeden.</string>
+    <string name="tb_max_num_of_recents">%1$d apps</string>
+    <string name="tb_max_num_of_recents_singular">1 app</string>
+    <string name="tb_max_num_of_recents_unlimited">Ongelimiteerd</string>
 
-    <string name="refresh_frequency_blurb">Zorg ervoor dat gebruikstoegang is ingeschakeld vóórdat je deze instelling wijzigt.\n\nLagere waardes verhogen het CPU-gebruik en kunnen de batterij sneller doen leeglopen.</string>
-    <string name="refresh_frequency">%1$s seconden</string>
-    <string name="refresh_frequency_singular">1 seconde</string>
-    <string name="refresh_frequency_continuous">Doorlopend</string>
+    <string name="tb_refresh_frequency_blurb">Zorg ervoor dat gebruikstoegang is ingeschakeld vóórdat je deze instelling wijzigt.\n\nLagere waardes verhogen het CPU-gebruik en kunnen de batterij sneller doen leeglopen.</string>
+    <string name="tb_refresh_frequency">%1$s seconden</string>
+    <string name="tb_refresh_frequency_singular">1 seconde</string>
+    <string name="tb_refresh_frequency_continuous">Doorlopend</string>
 
-    <string name="power_button_warning_title">Waarschuwing</string>
-    <string name="power_button_warning_message">Aangepaste ROM\'s die gebaseerd zijn op CyanogenMod / LineageOS, hebben last van een probleem: de aan-/uitknop werkt niet als het apparaat zich bevindt in vrije venstermodus.\n\nTest je aan-/uitknop nu.  Als deze niet werkt, wees dan voorzichtig met het gebruiken van vrije venstermodus, aangezien je het scherm niet meer kunt inschakelen als het is uitgeschakeld.</string>
-    <string name="action_i_understand">Ik begrijp het</string>
+    <string name="tb_power_button_warning_title">Waarschuwing</string>
+    <string name="tb_power_button_warning_message">Aangepaste ROM\'s die gebaseerd zijn op CyanogenMod / LineageOS, hebben last van een probleem: de aan-/uitknop werkt niet als het apparaat zich bevindt in vrije venstermodus.\n\nTest je aan-/uitknop nu.  Als deze niet werkt, wees dan voorzichtig met het gebruiken van vrije venstermodus, aangezien je het scherm niet meer kunt inschakelen als het is uitgeschakeld.</string>
+    <string name="tb_action_i_understand">Ik begrijp het</string>
 
-    <string name="hide_taskbar_disclaimer">Niet van toepassing op apps in vrije venstermodus</string>
-    <string name="transparent_start_menu">Doorzichtig startmenu</string>
+    <string name="tb_hide_taskbar_disclaimer">Niet van toepassing op apps in vrije venstermodus</string>
+    <string name="tb_transparent_start_menu">Doorzichtig startmenu</string>
 
-    <string name="launch_games_fullscreen_title">Spellen starten in volledige scherm-modus</string>
-    <string name="launch_games_fullscreen_message">Als een app zich bekendmaakt als spel, dan wordt deze niet opgestart in vrije venstermodus</string>
+    <string name="tb_launch_games_fullscreen_title">Spellen starten in volledige scherm-modus</string>
+    <string name="tb_launch_games_fullscreen_message">Als een app zich bekendmaakt als spel, dan wordt deze niet opgestart in vrije venstermodus</string>
 
-    <string name="invalid_grid_size">Ongeldige rastergrootte</string>
+    <string name="tb_invalid_grid_size">Ongeldige rastergrootte</string>
 
-    <string name="window_sizes_not_available">Vensterafmetingen werken niet goed op deze Android-versie - bekijk de \"Help en instructies\" om dit probleem te omzeilen</string>
+    <string name="tb_window_sizes_not_available">Vensterafmetingen werken niet goed op deze Android-versie - bekijk de \"Help en instructies\" om dit probleem te omzeilen</string>
 
-    <string name="navigation_bar_buttons">Navigatiebalkknoppen</string>
-    <string name="navigation_bar_buttons_description">Voeg extra knoppen toe aan Taakbalk die navigatiebalkacties uitvoeren</string>
-    <string name="button_back">Terug</string>
-    <string name="button_home">Beginscherm</string>
-    <string name="button_recents">Recente apps</string>
+    <string name="tb_navigation_bar_buttons">Navigatiebalkknoppen</string>
+    <string name="tb_navigation_bar_buttons_description">Voeg extra knoppen toe aan Taakbalk die navigatiebalkacties uitvoeren</string>
+    <string name="tb_button_back">Terug</string>
+    <string name="tb_button_home">Beginscherm</string>
+    <string name="tb_button_recents">Recente apps</string>
 
-    <string name="full_length">Gebied opvullen met witruimte</string>
+    <string name="tb_full_length">Gebied opvullen met witruimte</string>
 
-    <string name="restore_widget">Widget herstellen</string>
+    <string name="tb_restore_widget">Widget herstellen</string>
 
-    <string name="samsung_freeform_title">Let op</string>
-    <string name="samsung_freeform_message">Taakbalk kan op sommige Samsung-apparaten problemen hebben met het openen van apps in vrije venstermodus. Dit komt doordat Samsung aanpassingen heeft gedaan aan het vensterbeleid.\n\nAls dit het geval is, dan moet je waarschijnlijk een aangepaste ROM gebruiken als je vrije venstermodus wilt gebruiken op dit apparaat.</string>
+    <string name="tb_samsung_freeform_title">Let op</string>
+    <string name="tb_samsung_freeform_message">Taakbalk kan op sommige Samsung-apparaten problemen hebben met het openen van apps in vrije venstermodus. Dit komt doordat Samsung aanpassingen heeft gedaan aan het vensterbeleid.\n\nAls dit het geval is, dan moet je waarschijnlijk een aangepaste ROM gebruiken als je vrije venstermodus wilt gebruiken op dit apparaat.</string>
 
-    <string name="widget_restore_toast">Kies \"%1$s\" om deze widget te herstellen</string>
+    <string name="tb_widget_restore_toast">Kies \"%1$s\" om deze widget te herstellen</string>
 
-    <string name="freeform_on">Vrije venstermodus aan</string>
-    <string name="freeform_off">Vrije venstermodus uit</string>
+    <string name="tb_freeform_on">Vrije venstermodus aan</string>
+    <string name="tb_freeform_off">Vrije venstermodus uit</string>
 
-    <string name="auto_hide_navbar">Systeemnavigatiebalk automtisch beheren</string>
-    <string name="auto_hide_navbar_description">Verberg de navigatiebalk als Taakbalk actief is en toon de balk als Taakbalk inactief is</string>
+    <string name="tb_auto_hide_navbar">Systeemnavigatiebalk automtisch beheren</string>
+    <string name="tb_auto_hide_navbar_description">Verberg de navigatiebalk als Taakbalk actief is en toon de balk als Taakbalk inactief is</string>
 
-    <string name="press_enter_alt">Geen apps aangetroffen\n\nDruk op Enter om te openen in webbrowser</string>
+    <string name="tb_press_enter_alt">Geen apps aangetroffen\n\nDruk op Enter om te openen in webbrowser</string>
 
-    <string name="freeform_dialog_message_alt">Om Taakbalk apps te laten opstarten in vrije venstermodus, moet je deze stappen volgen:\n\n&#8226; Ga naar Ontwikkelaarsopties en schakel USB-foutopsporing in\n\n&#8226; Verbind je apparaat met een computer waarop de Android SDK is geïnstalleerd en voer de volgende opdracht uit (één regel):\n\nadb shell settings put global enable_freeform_support 1\n\n&#8226; Herstart je apparaat</string>
+    <string name="tb_freeform_dialog_message_alt">Om Taakbalk apps te laten opstarten in vrije venstermodus, moet je deze stappen volgen:\n\n&#8226; Ga naar Ontwikkelaarsopties en schakel USB-foutopsporing in\n\n&#8226; Verbind je apparaat met een computer waarop de Android SDK is geïnstalleerd en voer de volgende opdracht uit (één regel):\n\nadb shell settings put global enable_freeform_support 1\n\n&#8226; Herstart je apparaat</string>
 
-    <string name="color_picker_alpha">Alfa</string>
-    <string name="color_picker_red">Rood</string>
-    <string name="color_picker_green">Groen</string>
-    <string name="color_picker_blue">Blauw</string>
+    <string name="tb_color_picker_alpha">Alfa</string>
+    <string name="tb_color_picker_red">Rood</string>
+    <string name="tb_color_picker_green">Groen</string>
+    <string name="tb_color_picker_blue">Blauw</string>
 
-    <string name="pref_title_chrome_os_context_menu_fix">Chrome OS-dockcomptabiliteit</string>
-    <string name="pref_description_chrome_os_context_menu_fix">Schakel dit in als je Taakbalk tegelijk gebruikt met het Chrome OS-dock</string>
+    <string name="tb_pref_title_chrome_os_context_menu_fix">Chrome OS-dockcomptabiliteit</string>
+    <string name="tb_pref_description_chrome_os_context_menu_fix">Schakel dit in als je Taakbalk tegelijk gebruikt met het Chrome OS-dock</string>
 
-    <string name="pin_shortcut_not_supported">Je launcher heeft geen ondersteuning voor het toevoegen van snelkoppelingen uit andere apps apps.\n\nVoeg de snelkoppeling handmatig toe via het \"Widgets\"-menu van je launcher.</string>
+    <string name="tb_pin_shortcut_not_supported">Je launcher heeft geen ondersteuning voor het toevoegen van snelkoppelingen uit andere apps apps.\n\nVoeg de snelkoppeling handmatig toe via het \"Widgets\"-menu van je launcher.</string>
 
-    <string name="action_activate">Activeren</string>
+    <string name="tb_action_activate">Activeren</string>
 
-    <string name="pref_secondscreen_title_open">SecondScreen openen</string>
-    <string name="pref_secondscreen_title_install">SecondScreen installeren</string>
-    <string name="pref_secondscreen_description">Wijzig de apparaatresolutie en -dichtheid als je verbonden bent met een extern scherm, voor een Continuum- of Dex-achtige gebruikservaring</string>
+    <string name="tb_pref_secondscreen_title_open">SecondScreen openen</string>
+    <string name="tb_pref_secondscreen_title_install">SecondScreen installeren</string>
+    <string name="tb_pref_secondscreen_description">Wijzig de apparaatresolutie en -dichtheid als je verbonden bent met een extern scherm, voor een Continuum- of Dex-achtige gebruikservaring</string>
 
-    <string name="use_default">Standaard gebruiken</string>
+    <string name="tb_use_default">Standaard gebruiken</string>
 
-    <string name="action_continue">Doorgaan</string>
+    <string name="tb_action_continue">Doorgaan</string>
 
-    <string name="tasker_action_title">Actie kiezen</string>
-    <string name="tasker_condition_title">Omstandigheid kiezen</string>
-    <string name="tasker_on">Taakbalk aan</string>
-    <string name="tasker_off">Taakbalk uit</string>
-    <string name="on">Aan</string>
-    <string name="off">Uit</string>
+    <string name="tb_tasker_action_title">Actie kiezen</string>
+    <string name="tb_tasker_condition_title">Omstandigheid kiezen</string>
+    <string name="tb_tasker_on">Taakbalk aan</string>
+    <string name="tb_tasker_off">Taakbalk uit</string>
+    <string name="tb_on">Aan</string>
+    <string name="tb_off">Uit</string>
 
-    <string name="pref_title_tasker_enabled">Externe app-integratie toestaan</string>
-    <string name="pref_summary_tasker_enabled">Schakel dit uit voor verhoogde veiligheid</string>
+    <string name="tb_pref_title_tasker_enabled">Externe app-integratie toestaan</string>
+    <string name="tb_pref_summary_tasker_enabled">Schakel dit uit voor verhoogde veiligheid</string>
 
-    <string name="essential_phone_grip_rejection">Op de Essential Phone moet je grip rejection uitschakelen (in de Ontwikkelaarsopties) om Taakbalk te kunnen openen/sluiten</string>
+    <string name="tb_essential_phone_grip_rejection">Op de Essential Phone moet je grip rejection uitschakelen (in de Ontwikkelaarsopties) om Taakbalk te kunnen openen/sluiten</string>
 
-    <string name="toggle_start_menu">Startmenu tonen/verbergen</string>
-    <string name="toggle_dashboard">Widgetoverzicht tonen/verbergen</string>
+    <string name="tb_toggle_start_menu">Startmenu tonen/verbergen</string>
+    <string name="tb_toggle_dashboard">Widgetoverzicht tonen/verbergen</string>
 
-    <string name="force_activities_resizable">Formaat activiteiten geforceerd aanpasbaar maken</string>
-    <string name="enable_freeform_windows">Enable freeform windows</string>
+    <string name="tb_force_activities_resizable">Formaat activiteiten geforceerd aanpasbaar maken</string>
+    <string name="tb_enable_freeform_windows">Enable freeform windows</string>
 
-    <string name="filepicker_select_an_image_file">Select an image file</string>
-    <string name="filepicker_install_file_manager">Please install a file manager.</string>
-    <string name="error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
+    <string name="tb_filepicker_select_an_image_file">Select an image file</string>
+    <string name="tb_filepicker_install_file_manager">Please install a file manager.</string>
+    <string name="tb_error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
 
-    <string name="add_icon_to_desktop">Add icon to desktop</string>
-    <string name="arrange_icons">Move icons</string>
-    <string name="arrange_icons_alt">Move icon</string>
-    <string name="select_an_app">Select an app</string>
-    <string name="remove_desktop_icon">Remove from desktop</string>
-    <string name="sort_by_name">Sort icons by name</string>
-    <string name="no_icons_to_arrange">No icons to arrange</string>
-    <string name="no_icons_to_sort">No icons to sort</string>
-    <string name="clear_desktop_icons">Desktop icons</string>
+    <string name="tb_add_icon_to_desktop">Add icon to desktop</string>
+    <string name="tb_arrange_icons">Move icons</string>
+    <string name="tb_arrange_icons_alt">Move icon</string>
+    <string name="tb_select_an_app">Select an app</string>
+    <string name="tb_remove_desktop_icon">Remove from desktop</string>
+    <string name="tb_sort_by_name">Sort icons by name</string>
+    <string name="tb_no_icons_to_arrange">No icons to arrange</string>
+    <string name="tb_no_icons_to_sort">No icons to sort</string>
+    <string name="tb_clear_desktop_icons">Desktop icons</string>
 
-    <string name="pref_title_start_button_image">Start button image</string>
-    <string name="start_button_image_default">Default</string>
-    <string name="start_button_image_custom">Custom</string>
+    <string name="tb_pref_title_start_button_image">Start button image</string>
+    <string name="tb_start_button_image_default">Default</string>
+    <string name="tb_start_button_image_custom">Custom</string>
 
-    <string name="pref_centered_icons">Center icons within whitespace</string>
-    <string name="pref_title_sys_tray">Show status icons and clock</string>
-    <string name="pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
+    <string name="tb_pref_centered_icons">Center icons within whitespace</string>
+    <string name="tb_pref_title_sys_tray">Show status icons and clock</string>
+    <string name="tb_pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
 
-    <string name="settings">Settings</string>
-    <string name="powered_by_taskbar">Powered by Taskbar</string>
+    <string name="tb_settings">Settings</string>
+    <string name="tb_powered_by_taskbar">Powered by Taskbar</string>
 
 </resources>

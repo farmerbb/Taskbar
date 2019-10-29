@@ -74,7 +74,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
     public StartMenuAdapter(Context context, int layout, List<AppEntry> list) {
         super(context, layout, list);
-        isGrid = layout == R.layout.row_alt;
+        isGrid = layout == R.layout.tb_row_alt;
 
         updateList(list, true);
     }
@@ -83,7 +83,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
         if(convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(isGrid ? R.layout.row_alt : R.layout.row, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(isGrid ? R.layout.tb_row_alt : R.layout.tb_row, parent, false);
 
         final AppEntry entry = getItem(position);
         assert entry != null;
@@ -96,10 +96,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
         switch(pref.getString("theme", "light")) {
             case "light":
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text_color));
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.tb_text_color));
                 break;
             case "dark":
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text_color_dark));
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.tb_text_color_dark));
                 break;
         }
 

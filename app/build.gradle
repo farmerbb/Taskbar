@@ -51,7 +51,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            manifestPlaceholders = [appName: "@string/app_name_debug"]
+            manifestPlaceholders = [appName: "@string/tb_app_name_debug"]
         }
 
         release {
@@ -59,7 +59,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            manifestPlaceholders = [appName: "@string/app_name"]
+            manifestPlaceholders = [appName: "@string/tb_app_name"]
 
             applicationVariants.all { variant ->
                 variant.outputs.all {

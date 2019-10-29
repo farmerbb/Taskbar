@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
         if(!U.isLibrary(this)) {
             switch(pref.getString("theme", "light")) {
                 case "light":
-                    setTheme(R.style.AppTheme);
+                    setTheme(R.style.Taskbar);
                     break;
                 case "dark":
-                    setTheme(R.style.AppTheme_Dark);
+                    setTheme(R.style.Taskbar_Dark);
                     break;
             }
         }
@@ -169,11 +169,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void proceedWithAppLaunch(Bundle savedInstanceState) {
-        setContentView(R.layout.main);
+        setContentView(R.layout.tb_main);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null && !U.isLibrary(this)) {
-            actionBar.setCustomView(R.layout.switch_layout);
+            actionBar.setCustomView(R.layout.tb_switch_layout);
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
         }
 
@@ -212,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
         if(!getPackageName().equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
             if(!pref.getBoolean("dont_show_uninstall_dialog", false)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.settings_imported_successfully)
-                        .setMessage(R.string.import_dialog_message)
-                        .setPositiveButton(R.string.action_uninstall, (dialog, which) -> {
+                builder.setTitle(R.string.tb_settings_imported_successfully)
+                        .setMessage(R.string.tb_import_dialog_message)
+                        .setPositiveButton(R.string.tb_action_uninstall, (dialog, which) -> {
                             pref.edit().putBoolean("uninstall_dialog_shown", true).apply();
 
                             try {
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                         });
 
                 if(pref.getBoolean("uninstall_dialog_shown", false))
-                    builder.setNegativeButton(R.string.action_dont_show_again, (dialogInterface, i) -> pref.edit().putBoolean("dont_show_uninstall_dialog", true).apply());
+                    builder.setNegativeButton(R.string.tb_action_dont_show_again, (dialogInterface, i) -> pref.edit().putBoolean("dont_show_uninstall_dialog", true).apply());
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -256,8 +256,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("is_launching_shortcut", true);
 
                 ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
-                        .setShortLabel(getString(R.string.start_taskbar))
-                        .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_start))
+                        .setShortLabel(getString(R.string.tb_start_taskbar))
+                        .setIcon(Icon.createWithResource(this, R.drawable.tb_shortcut_icon_start))
                         .setIntent(intent)
                         .build();
 
@@ -267,8 +267,8 @@ public class MainActivity extends AppCompatActivity {
                     intent2.putExtra("is_launching_shortcut", true);
 
                     ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
-                            .setShortLabel(getString(R.string.pref_header_freeform))
-                            .setIcon(Icon.createWithResource(this, R.drawable.shortcut_icon_freeform))
+                            .setShortLabel(getString(R.string.tb_pref_header_freeform))
+                            .setIcon(Icon.createWithResource(this, R.drawable.tb_shortcut_icon_freeform))
                             .setIntent(intent2)
                             .build();
 
@@ -362,9 +362,9 @@ public class MainActivity extends AppCompatActivity {
 
     public String getAboutFragmentTitle() {
         if(!U.isLibrary(this))
-            return getString(R.string.app_name);
+            return getString(R.string.tb_app_name);
 
         String title = getIntent().getStringExtra("title");
-        return title != null ? title : getString(R.string.settings);
+        return title != null ? title : getString(R.string.tb_settings);
     }
 }

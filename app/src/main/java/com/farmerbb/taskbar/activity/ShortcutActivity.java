@@ -49,7 +49,7 @@ public class ShortcutActivity extends Activity {
 
                 new Handler().postDelayed(() -> U.startFreeformHack(this, true), 100);
             } else
-                U.showToastLong(this, R.string.no_freeform_support);
+                U.showToastLong(this, R.string.tb_no_freeform_support);
         } else
             setResult(RESULT_OK, ShortcutUtils.getShortcutIntent(this));
 

@@ -15,30 +15,30 @@
 -->
 
 <resources>
-    <dimen name="icon_size">60dp</dimen>
-    <dimen name="start_menu_width">180dp</dimen>
-    <dimen name="start_menu_height">240dp</dimen>
-    <dimen name="start_menu_height_half">120dp</dimen>
-    <dimen name="start_menu_grid_width">60dp</dimen>
-    <dimen name="start_menu_grid_text_size">11sp</dimen>
-    <dimen name="start_menu_grid_padding">1dp</dimen>
-    <dimen name="start_menu_icon_padding">12dp</dimen>
-    <dimen name="start_menu_no_apps_found_text">10sp</dimen>
-    <dimen name="context_menu_width">240dp</dimen>
-    <dimen name="context_menu_offset">48dp</dimen>
-    <dimen name="context_menu_offset_overflow">24dp</dimen>
-    <dimen name="phone_size_width">320dp</dimen>
-    <dimen name="phone_size_height">480dp</dimen>
-    <dimen name="max_width">@dimen/match_parent</dimen>
-    <dimen name="app_drawer_icon_padding">4dp</dimen>
-    <dimen name="app_drawer_icon_padding_alt">7dp</dimen>
-    <dimen name="base_taskbar_size">93dp</dimen>
-    <dimen name="dashboard_button_size">48dp</dimen>
-    <dimen name="divider_size">5dp</dimen>
-    <dimen name="navbar_buttons_margin">8dp</dimen>
-    <dimen name="toast_y_offset">64dp</dimen>
-    <dimen name="caption_offset">48dp</dimen>
-    <dimen name="desktop_icon_fab_margin">16dp</dimen>
-    <dimen name="systray_size">180dp</dimen>
+    <dimen name="tb_icon_size">60dp</dimen>
+    <dimen name="tb_start_menu_width">180dp</dimen>
+    <dimen name="tb_start_menu_height">240dp</dimen>
+    <dimen name="tb_start_menu_height_half">120dp</dimen>
+    <dimen name="tb_start_menu_grid_width">60dp</dimen>
+    <dimen name="tb_start_menu_grid_text_size">11sp</dimen>
+    <dimen name="tb_start_menu_grid_padding">1dp</dimen>
+    <dimen name="tb_start_menu_icon_padding">12dp</dimen>
+    <dimen name="tb_start_menu_no_apps_found_text">10sp</dimen>
+    <dimen name="tb_context_menu_width">240dp</dimen>
+    <dimen name="tb_context_menu_offset">48dp</dimen>
+    <dimen name="tb_context_menu_offset_overflow">24dp</dimen>
+    <dimen name="tb_phone_size_width">320dp</dimen>
+    <dimen name="tb_phone_size_height">480dp</dimen>
+    <dimen name="tb_max_width">@dimen/tb_match_parent</dimen>
+    <dimen name="tb_app_drawer_icon_padding">4dp</dimen>
+    <dimen name="tb_app_drawer_icon_padding_alt">7dp</dimen>
+    <dimen name="tb_base_taskbar_size">93dp</dimen>
+    <dimen name="tb_dashboard_button_size">48dp</dimen>
+    <dimen name="tb_divider_size">5dp</dimen>
+    <dimen name="tb_navbar_buttons_margin">8dp</dimen>
+    <dimen name="tb_toast_y_offset">64dp</dimen>
+    <dimen name="tb_caption_offset">48dp</dimen>
+    <dimen name="tb_desktop_icon_fab_margin">16dp</dimen>
+    <dimen name="tb_systray_size">180dp</dimen>
     <dimen name="tb_fake_fab_padding">16dp</dimen>
 </resources>

@@ -16,7 +16,7 @@
 
 <resources>
 
-    <string name="window_size_half_left">ハーフ画面 (左)</string>
-    <string name="window_size_half_right">ハーフ画面 (右)</string>
+    <string name="tb_window_size_half_left">ハーフ画面 (左)</string>
+    <string name="tb_window_size_half_right">ハーフ画面 (右)</string>
 
 </resources>

@@ -55,18 +55,18 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:icon="@mipmap/tb_launcher"
+        android:label="@string/tb_app_name"
+        android:theme="@style/Taskbar" >
 
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/app_name"
+            android:label="@string/tb_app_name"
             android:launchMode="singleTask"/>
         <activity-alias
             android:name=".MainActivity"
             android:targetActivity=".activity.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/tb_app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
@@ -79,32 +79,32 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.InvisibleActivity"/>
+            android:theme="@style/Taskbar.InvisibleActivity"/>
         <activity
             android:name=".activity.InvisibleActivityAlt"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Incognito"/>
+            android:theme="@style/Taskbar.Incognito"/>
         <activity
             android:name=".activity.dark.InvisibleActivityAltDark"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Incognito.Dark"/>
+            android:theme="@style/Taskbar.Incognito.Dark"/>
         <activity
             android:name=".activity.InvisibleActivityFreeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
-            android:theme="@style/AppTheme.InvisibleActivity"/>
+            android:theme="@style/Taskbar.InvisibleActivity"/>
         <activity
             android:name=".activity.HomeActivity"
-            android:label="@string/app_name"
+            android:label="@string/tb_app_name"
             android:launchMode="singleTask"
             android:enabled="true"
-            android:theme="@style/AppTheme.HomeActivity">
+            android:theme="@style/Taskbar.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -114,9 +114,9 @@
         </activity>
         <activity
             android:name=".activity.SecondaryHomeActivity"
-            android:label="@string/app_name"
+            android:label="@string/tb_app_name"
             android:enabled="true"
-            android:theme="@style/AppTheme.HomeActivity">
+            android:theme="@style/Taskbar.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -126,12 +126,12 @@
         </activity>
         <activity
             android:name=".activity.HomeActivityDelegate"
-            android:label="@string/app_name"
+            android:label="@string/tb_app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.HomeActivity" />
+            android:theme="@style/Taskbar.HomeActivity" />
         <activity
             android:name=".activity.KeyboardShortcutActivity"
-            android:label="@string/app_name"
+            android:label="@string/tb_app_name"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
@@ -149,42 +149,42 @@
             android:name=".activity.ContextMenuActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.Dialog"/>
+            android:theme="@style/Taskbar.Dialog"/>
         <activity
             android:name=".activity.dark.ContextMenuActivityDark"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.Dialog.Dark"/>
+            android:theme="@style/Taskbar.Dialog.Dark"/>
         <activity
             android:name=".activity.SelectAppActivity"
-            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist"/>
         <activity
             android:name=".activity.dark.SelectAppActivityDark"
-            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DesktopIconSelectAppActivity"
-            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist"/>
         <activity
             android:name=".activity.dark.DesktopIconSelectAppActivityDark"
-            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DummyActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.Incognito"/>
+            android:theme="@style/Taskbar.Incognito"/>
         <activity
             android:name=".activity.ImportSettingsActivity"
-            android:theme="@style/AppTheme.Dialog"/>
+            android:theme="@style/Taskbar.Dialog"/>
         <activity
             android:name=".activity.IconPackActivity"
-            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist"/>
         <activity
             android:name=".activity.dark.IconPackActivityDark"
-            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.ShortcutActivity"
-            android:icon="@mipmap/ic_freeform_mode"
-            android:label="@string/pref_header_freeform"
+            android:icon="@mipmap/tb_freeform_mode"
+            android:label="@string/tb_pref_header_freeform"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:enabled="false"
@@ -198,7 +198,7 @@
         </activity>
         <activity
             android:name=".activity.StartTaskbarActivity"
-            android:label="@string/start_taskbar"
+            android:label="@string/tb_start_taskbar"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:enabled="true"
@@ -212,35 +212,35 @@
         </activity>
         <activity
             android:name=".activity.ClearDataActivity"
-            android:theme="@style/AppTheme.Dialog.Blacklist"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist"/>
         <activity
             android:name=".activity.dark.ClearDataActivityDark"
-            android:theme="@style/AppTheme.Dialog.Blacklist.Dark"/>
+            android:theme="@style/Taskbar.Dialog.Blacklist.Dark"/>
         <activity
             android:name=".activity.DashboardActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Incognito"/>
+            android:theme="@style/Taskbar.Incognito"/>
         <activity
             android:name=".activity.dark.DashboardActivityDark"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Incognito.Dark"/>
+            android:theme="@style/Taskbar.Incognito.Dark"/>
         <activity
             android:name=".activity.NavigationBarButtonsActivity"
-            android:theme="@style/AppTheme.Dialog.Preference"/>
+            android:theme="@style/Taskbar.Dialog.Preference"/>
         <activity
             android:name=".activity.dark.NavigationBarButtonsActivityDark"
-            android:theme="@style/AppTheme.Dialog.Preference.Dark"/>
+            android:theme="@style/Taskbar.Dialog.Preference.Dark"/>
         <activity
             android:name=".activity.TouchAbsorberActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
-            android:theme="@style/AppTheme.Incognito"/>
+            android:theme="@style/Taskbar.Incognito"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>
@@ -255,12 +255,12 @@
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
             <meta-data android:name="android.accessibilityservice"
-                       android:resource="@xml/accessibility_service" />
+                       android:resource="@xml/tb_accessibility_service" />
         </service>
         <service
             android:name=".service.QuickSettingsTileService"
-            android:label="@string/app_name"
-            android:icon="@drawable/ic_allapps"
+            android:label="@string/tb_app_name"
+            android:icon="@drawable/tb_allapps"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

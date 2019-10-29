@@ -16,7 +16,7 @@
 
 <resources>
 
-    <string name="window_size_half_left">Helft van scherm (links/boven)</string>
-    <string name="window_size_half_right">Helft van scherm (rechts/onder)</string>
+    <string name="tb_window_size_half_left">Helft van scherm (links/boven)</string>
+    <string name="tb_window_size_half_right">Helft van scherm (rechts/onder)</string>
 
 </resources>

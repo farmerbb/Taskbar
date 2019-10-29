@@ -94,7 +94,7 @@ public class StartMenuController implements UIController {
     private boolean hasHardwareKeyboard = false;
     private boolean searchViewClicked = false;
 
-    private int layoutId = R.layout.start_menu_left;
+    private int layoutId = R.layout.tb_start_menu_left;
 
     private List<String> currentStartMenuIds = new ArrayList<>();
 
@@ -211,35 +211,35 @@ public class StartMenuController implements UIController {
         // Determine where to show the start menu on screen
         switch(U.getTaskbarPosition(context)) {
             case "bottom_left":
-                layoutId = R.layout.start_menu_left;
+                layoutId = R.layout.tb_start_menu_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
             case "bottom_vertical_left":
-                layoutId = R.layout.start_menu_vertical_left;
+                layoutId = R.layout.tb_start_menu_vertical_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
             case "bottom_right":
-                layoutId = R.layout.start_menu_right;
+                layoutId = R.layout.tb_start_menu_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
             case "bottom_vertical_right":
-                layoutId = R.layout.start_menu_vertical_right;
+                layoutId = R.layout.tb_start_menu_vertical_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
             case "top_left":
-                layoutId = R.layout.start_menu_top_left;
+                layoutId = R.layout.tb_start_menu_top_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 break;
             case "top_vertical_left":
-                layoutId = R.layout.start_menu_vertical_left;
+                layoutId = R.layout.tb_start_menu_vertical_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 break;
             case "top_right":
-                layoutId = R.layout.start_menu_top_right;
+                layoutId = R.layout.tb_start_menu_top_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 break;
             case "top_vertical_right":
-                layoutId = R.layout.start_menu_vertical_right;
+                layoutId = R.layout.tb_start_menu_vertical_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 break;
         }
@@ -264,7 +264,7 @@ public class StartMenuController implements UIController {
         if(U.visualFeedbackEnabled(context))
             startMenu.setRecyclerListener(view -> view.setBackgroundColor(0));
 
-        int columns = context.getResources().getInteger(R.integer.start_menu_columns);
+        int columns = context.getResources().getInteger(R.integer.tb_start_menu_columns);
 
         ViewGroup.LayoutParams startMenuParams = startMenu.getLayoutParams();
         startMenuParams.width = (int) (startMenuParams.width * (columns / 3f));
@@ -558,10 +558,10 @@ public class StartMenuController implements UIController {
                         if(firstDraw) {
                             SharedPreferences pref = U.getSharedPreferences(context);
                             if(pref.getString("start_menu_layout", "grid").equals("grid")) {
-                                startMenu.setNumColumns(context.getResources().getInteger(R.integer.start_menu_columns));
-                                adapter = new StartMenuAdapter(context, R.layout.row_alt, entries);
+                                startMenu.setNumColumns(context.getResources().getInteger(R.integer.tb_start_menu_columns));
+                                adapter = new StartMenuAdapter(context, R.layout.tb_row_alt, entries);
                             } else
-                                adapter = new StartMenuAdapter(context, R.layout.row, entries);
+                                adapter = new StartMenuAdapter(context, R.layout.tb_row, entries);
 
                             startMenu.setAdapter(adapter);
                         }
@@ -576,9 +576,9 @@ public class StartMenuController implements UIController {
                         if(adapter != null && adapter.getCount() > 0)
                             textView.setText(null);
                         else if(query != null)
-                            textView.setText(context.getString(Patterns.WEB_URL.matcher(query).matches() ? R.string.press_enter_alt : R.string.press_enter));
+                            textView.setText(context.getString(Patterns.WEB_URL.matcher(query).matches() ? R.string.tb_press_enter_alt : R.string.tb_press_enter));
                         else
-                            textView.setText(context.getString(R.string.nothing_to_see_here));
+                            textView.setText(context.getString(R.string.tb_nothing_to_see_here));
                     }
                 });
             }
@@ -658,8 +658,8 @@ public class StartMenuController implements UIController {
                         ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
                         params1.height = context.getResources().getDimensionPixelSize(
                                 b && !isSecondScreenDisablingKeyboard()
-                                        ? R.dimen.start_menu_height_half
-                                        : R.dimen.start_menu_height);
+                                        ? R.dimen.tb_start_menu_height_half
+                                        : R.dimen.tb_start_menu_height);
                         startMenu.setLayoutParams(params1);
                     }
 

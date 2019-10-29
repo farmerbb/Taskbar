@@ -55,7 +55,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
             pref.edit().putString("start_button_image", U.getDefaultStartButtonImage(getActivity())).apply();
 
         // Add preferences
-        addPreferencesFromResource(R.xml.pref_appearance);
+        addPreferencesFromResource(R.xml.tb_pref_appearance);
 
         // Set OnClickListeners for certain preferences
         findPreference("icon_pack_list").setOnPreferenceClickListener(this);
@@ -75,7 +75,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
 
         if(U.isBlissOs(getActivity()))
-            ((ListPreference) findPreference("start_button_image")).setEntries(R.array.pref_start_button_image_list_alt);
+            ((ListPreference) findPreference("start_button_image")).setEntries(R.array.tb_pref_start_button_image_list_alt);
 
         finishedLoadingPrefs = true;
     }
@@ -85,7 +85,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle(R.string.pref_header_appearance);
+        activity.setTitle(R.string.tb_pref_header_appearance);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -109,7 +109,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
             }
 
             if(!iconPackValid || iconPackPackage.equals(getActivity().getPackageName())) {
-                iconPackListPref.setSummary(getString(R.string.icon_pack_none));
+                iconPackListPref.setSummary(getString(R.string.tb_icon_pack_none));
             } else {
                 try {
                     iconPackListPref.setSummary(pm.getApplicationLabel(pm.getApplicationInfo(iconPackPackage, 0)));
@@ -139,10 +139,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
                 break;
             case "reset_colors":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.reset_colors)
-                        .setMessage(R.string.are_you_sure)
-                        .setNegativeButton(R.string.action_cancel, null)
-                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                builder.setTitle(R.string.tb_reset_colors)
+                        .setMessage(R.string.tb_are_you_sure)
+                        .setNegativeButton(R.string.tb_action_cancel, null)
+                        .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                             finishedLoadingPrefs = false;
 
                             pref.edit().remove("background_tint").remove("accent_color").apply();
@@ -174,10 +174,10 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.filepicker_select_an_image_file)), 1001);
+            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.tb_filepicker_select_an_image_file)), 1001);
         } catch (ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
-            U.showToast(getActivity(), getResources().getString(R.string.filepicker_install_file_manager), 50);
+            U.showToast(getActivity(), getResources().getString(R.string.tb_filepicker_install_file_manager), 50);
         }
     }
 
@@ -208,11 +208,11 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         switch(type) {
             case BACKGROUND_TINT:
                 color = U.getBackgroundTint(getActivity());
-                dialogTitle = R.string.pref_title_background_tint;
+                dialogTitle = R.string.tb_pref_title_background_tint;
                 break;
             case ACCENT_COLOR:
                 color = U.getAccentColor(getActivity());
-                dialogTitle = R.string.pref_title_accent_color;
+                dialogTitle = R.string.tb_pref_title_accent_color;
                 break;
         }
 
@@ -221,7 +221,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         green = Color.green(color);
         blue = Color.blue(color);
 
-        ScrollView dialogLayout = (ScrollView) View.inflate(getActivity(), R.layout.color_picker_pref, null);
+        ScrollView dialogLayout = (ScrollView) View.inflate(getActivity(), R.layout.tb_color_picker_pref, null);
 
         View colorPreview = dialogLayout.findViewById(R.id.color_preview);
         colorPreview.setBackgroundColor(Color.argb(alpha, red, green, blue));
@@ -324,7 +324,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(dialogLayout)
                 .setTitle(dialogTitle)
-                .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                     String preferenceId = null;
                     switch(type) {
                         case BACKGROUND_TINT:
@@ -342,7 +342,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
                     U.restartTaskbar(getActivity());
                 })
-                .setNegativeButton(R.string.action_cancel, null);
+                .setNegativeButton(R.string.tb_action_cancel, null);
 
         AlertDialog dialog = builder.create();
         dialog.show();

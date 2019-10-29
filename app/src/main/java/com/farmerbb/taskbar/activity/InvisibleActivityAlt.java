@@ -41,7 +41,7 @@ public class InvisibleActivityAlt extends InvisibleActivity {
 
         DisplayInfo display = U.getDisplayInfo(this);
 
-        setContentView(R.layout.incognito);
+        setContentView(R.layout.tb_incognito);
 
         LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
@@ -52,9 +52,9 @@ public class InvisibleActivityAlt extends InvisibleActivity {
             new Handler().postDelayed(() -> {
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(R.string.power_button_warning_title)
-                            .setMessage(R.string.power_button_warning_message)
-                            .setPositiveButton(R.string.action_i_understand, (dialog, which) -> {
+                    builder.setTitle(R.string.tb_power_button_warning_title)
+                            .setMessage(R.string.tb_power_button_warning_message)
+                            .setPositiveButton(R.string.tb_action_i_understand, (dialog, which) -> {
                                 SharedPreferences pref = U.getSharedPreferences(this);
                                 pref.edit().putString("power_button_warning",
                                         Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)).apply();

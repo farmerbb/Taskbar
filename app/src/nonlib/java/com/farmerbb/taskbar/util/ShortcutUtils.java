@@ -33,8 +33,8 @@ public class ShortcutUtils {
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_freeform_mode));
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.pref_header_freeform));
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.tb_freeform_mode));
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.tb_pref_header_freeform));
 
         return intent;
     }
@@ -46,8 +46,8 @@ public class ShortcutUtils {
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_launcher));
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.start_taskbar));
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.mipmap.tb_launcher));
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.tb_start_taskbar));
 
         return intent;
     }

@@ -46,8 +46,8 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         super.onCreate(savedInstanceState);
 
         // Add preferences
-        addPreferencesFromResource(R.xml.pref_base);
-        addPreferencesFromResource(R.xml.pref_about);
+        addPreferencesFromResource(R.xml.tb_pref_base);
+        addPreferencesFromResource(R.xml.tb_pref_about);
 
         boolean isLibrary = U.isLibrary(getActivity());
         if(!isLibrary) {
@@ -75,9 +75,9 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
 
         if(!isLibrary) {
             if(BuildConfig.DEBUG || getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-                findPreference("about").setSummary(R.string.pref_about_description_alt);
+                findPreference("about").setSummary(R.string.tb_pref_about_description_alt);
             else {
-                findPreference("about").setSummary(getString(R.string.pref_about_description, new String(Character.toChars(0x1F601))));
+                findPreference("about").setSummary(getString(R.string.tb_pref_about_description, new String(Character.toChars(0x1F601))));
                 findPreference("about").setOnPreferenceClickListener(this);
             }
         }
@@ -109,9 +109,9 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                 format.setCurrency(Currency.getInstance(Locale.US));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.pref_title_donate)
-                        .setMessage(getString(R.string.dialog_donate_message, format.format(1.99)))
-                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                builder.setTitle(R.string.tb_pref_title_donate)
+                        .setMessage(getString(R.string.tb_dialog_donate_message, format.format(1.99)))
+                        .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                             Intent intent2 = new Intent(Intent.ACTION_VIEW);
                             intent2.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.PAID_APPLICATION_ID));
                             intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -120,7 +120,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                                 startActivity(intent2);
                             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         })
-                        .setNegativeButton(noThanksCount == 2 ? R.string.action_dont_show_again : R.string.action_no_thanks, (dialog, which) -> {
+                        .setNegativeButton(noThanksCount == 2 ? R.string.tb_action_dont_show_again : R.string.tb_action_no_thanks, (dialog, which) -> {
                             noThanksCount++;
 
                             if(noThanksCount == 3) {

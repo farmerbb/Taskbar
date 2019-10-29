@@ -56,9 +56,9 @@ public class IconPackActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.select_app);
+        setContentView(R.layout.tb_select_app);
         setFinishOnTouchOutside(false);
-        setTitle(R.string.icon_pack);
+        setTitle(R.string.tb_icon_pack);
 
         progressBar = findViewById(R.id.progress_bar);
         appList = findViewById(R.id.list);
@@ -93,7 +93,7 @@ public class IconPackActivity extends AppCompatActivity {
         public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
             // Check if an existing view is being reused, otherwise inflate the view
             if(convertView == null)
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.tb_row, parent, false);
 
             final IconPack entry = getItem(position);
             assert entry != null;
@@ -149,21 +149,21 @@ public class IconPackActivity extends AppCompatActivity {
                 List<IconPack> finalList = new ArrayList<>();
                 IconPack dummyIconPack = new IconPack();
                 dummyIconPack.setPackageName(getPackageName());
-                dummyIconPack.setName(getString(R.string.icon_pack_none));
+                dummyIconPack.setName(getString(R.string.tb_icon_pack_none));
 
                 Collections.sort(list, (ip1, ip2) -> Collator.getInstance().compare(ip1.getName(), ip2.getName()));
 
                 finalList.add(dummyIconPack);
                 finalList.addAll(list);
 
-                return new AppListAdapter(IconPackActivity.this, R.layout.row, finalList);
+                return new AppListAdapter(IconPackActivity.this, R.layout.tb_row, finalList);
             }
         }
 
         @Override
         protected void onPostExecute(AppListAdapter adapter) {
             if(adapter == null) {
-                U.showToast(IconPackActivity.this, R.string.no_icon_packs_installed);
+                U.showToast(IconPackActivity.this, R.string.tb_no_icon_packs_installed);
                 setResult(RESULT_CANCELED);
                 finish();
             } else {

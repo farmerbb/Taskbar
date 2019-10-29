@@ -58,7 +58,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         super.onCreate(savedInstanceState);
 
         // Add preferences
-        addPreferencesFromResource(R.xml.pref_freeform_hack);
+        addPreferencesFromResource(R.xml.tb_pref_freeform_hack);
 
         findPreference("freeform_hack").setOnPreferenceClickListener(this);
         findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
@@ -91,9 +91,9 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         // Dialog shown on devices which seem to not work correctly with freeform mode
         if(U.isSamsungDevice() && !pref.getBoolean("samsung_dialog_shown", false)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(R.string.samsung_freeform_title)
-                    .setMessage(R.string.samsung_freeform_message)
-                    .setPositiveButton(R.string.action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
+            builder.setTitle(R.string.tb_samsung_freeform_title)
+                    .setMessage(R.string.tb_samsung_freeform_message)
+                    .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
 
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -110,7 +110,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle(R.string.pref_header_freeform);
+        activity.setTitle(R.string.tb_pref_header_freeform);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -145,35 +145,35 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                     if(!U.hasFreeformSupport(getActivity())) {
                         try {
                             Settings.Global.putInt(getActivity().getContentResolver(), "enable_freeform_support", 1);
-                            U.showToastLong(getActivity(), R.string.reboot_required);
+                            U.showToastLong(getActivity(), R.string.tb_reboot_required);
                         } catch (Exception e) {
                             ((CheckBoxPreference) p).setChecked(false);
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
                                     && U.getCurrentApiVersion() <= 28.0f) {
-                                builder.setTitle(R.string.freeform_dialog_title)
-                                        .setMessage(R.string.freeform_dialog_message_alt)
-                                        .setPositiveButton(R.string.action_continue, (dialogInterface, i) -> freeformSetupComplete());
+                                builder.setTitle(R.string.tb_freeform_dialog_title)
+                                        .setMessage(R.string.tb_freeform_dialog_message_alt)
+                                        .setPositiveButton(R.string.tb_action_continue, (dialogInterface, i) -> freeformSetupComplete());
                             } else {
                                 String settingName = U.getCurrentApiVersion() > 28.0f
-                                        ? getString(R.string.enable_freeform_windows)
-                                        : getString(R.string.force_activities_resizable);
+                                        ? getString(R.string.tb_enable_freeform_windows)
+                                        : getString(R.string.tb_force_activities_resizable);
 
-                                builder.setTitle(R.string.freeform_dialog_title)
-                                        .setMessage(getString(R.string.freeform_dialog_message, settingName))
-                                        .setPositiveButton(R.string.action_developer_options, (dialogInterface, i) -> {
+                                builder.setTitle(R.string.tb_freeform_dialog_title)
+                                        .setMessage(getString(R.string.tb_freeform_dialog_message, settingName))
+                                        .setPositiveButton(R.string.tb_action_developer_options, (dialogInterface, i) -> {
                                             showReminderToast = true;
 
                                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
                                             try {
                                                 startActivity(intent);
-                                                U.showToast(getActivity(), getString(R.string.enable_force_activities_resizable, settingName), Toast.LENGTH_LONG);
+                                                U.showToast(getActivity(), getString(R.string.tb_enable_force_activities_resizable, settingName), Toast.LENGTH_LONG);
                                             } catch (ActivityNotFoundException e1) {
                                                 intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
                                                 try {
                                                     startActivity(intent);
-                                                    U.showToastLong(getActivity(), R.string.enable_developer_options);
+                                                    U.showToastLong(getActivity(), R.string.tb_enable_developer_options);
                                                 } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
                                             }
                                         });
@@ -199,9 +199,9 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 break;
             case "freeform_mode_help":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(View.inflate(getActivity(), R.layout.freeform_help_dialog, null))
-                        .setTitle(R.string.freeform_help_dialog_title)
-                        .setPositiveButton(R.string.action_close, null);
+                builder.setView(View.inflate(getActivity(), R.layout.tb_freeform_help_dialog, null))
+                        .setTitle(R.string.tb_freeform_help_dialog_title)
+                        .setPositiveButton(R.string.tb_action_close, null);
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -211,7 +211,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 break;
             case "window_size":
                 if(U.hasBrokenSetLaunchBoundsApi())
-                    U.showToastLong(getActivity(), R.string.window_sizes_not_available);
+                    U.showToastLong(getActivity(), R.string.tb_window_sizes_not_available);
                 break;
         }
 
@@ -222,7 +222,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
         ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
 
         if(U.hasFreeformSupport(getActivity())) {
-            U.showToastLong(getActivity(), R.string.reboot_required);
+            U.showToastLong(getActivity(), R.string.tb_reboot_required);
         }
     }
 }

@@ -162,7 +162,7 @@ public class DashboardController implements UIController {
     @Override
     public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.def_dashboard))) {
+        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard))) {
             if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
                 if(U.canDrawOverlays(context))
                     drawDashboard(host);
@@ -191,8 +191,8 @@ public class DashboardController implements UIController {
         layout.setAlpha(0);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        int width = pref.getInt("dashboard_width", context.getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
-        int height = pref.getInt("dashboard_height", context.getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
+        int width = pref.getInt("dashboard_width", context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
+        int height = pref.getInt("dashboard_height", context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
 
         boolean isPortrait = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -222,7 +222,7 @@ public class DashboardController implements UIController {
             layout2.setOrientation(LinearLayout.VERTICAL);
 
             for(int j = 0; j < rows; j++) {
-                DashboardCell cellLayout = (DashboardCell) View.inflate(context, R.layout.dashboard, null);
+                DashboardCell cellLayout = (DashboardCell) View.inflate(context, R.layout.tb_dashboard, null);
                 cellLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
                 cellLayout.setBackgroundColor(backgroundTint);
                 cellLayout.setOnClickListener(cellOcl);
@@ -274,7 +274,7 @@ public class DashboardController implements UIController {
         host.addView(layout, params);
 
         new Handler().postDelayed(() -> {
-            int paddingSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
+            int paddingSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
             switch(U.getTaskbarPosition(context)) {
                 case "top_vertical_left":
@@ -363,7 +363,7 @@ public class DashboardController implements UIController {
             }
 
             if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
-                U.showToastLong(context, R.string.dashboard_tutorial);
+                U.showToastLong(context, R.string.tb_dashboard_tutorial);
                 pref.edit().putBoolean("dashboard_tutorial_shown", true).apply();
             }
         }
@@ -479,7 +479,7 @@ public class DashboardController implements UIController {
                     List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
                     for(AppWidgetProviderInfo info : providerInfoList) {
                         if(info.provider.equals(componentName)) {
-                            U.showToast(context, context.getString(R.string.widget_restore_toast, info.loadLabel(context.getPackageManager())), Toast.LENGTH_SHORT);
+                            U.showToast(context, context.getString(R.string.tb_widget_restore_toast, info.loadLabel(context.getPackageManager())), Toast.LENGTH_SHORT);
                             break;
                         }
                     }

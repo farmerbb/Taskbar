@@ -15,14 +15,14 @@
 -->
 
 <resources>
-    <dimen name="start_menu_width">320dp</dimen>
-    <dimen name="start_menu_height">480dp</dimen>
-    <dimen name="start_menu_height_half">240dp</dimen>
-    <dimen name="start_menu_grid_width">106.6667dp</dimen>
-    <dimen name="start_menu_grid_text_size">14sp</dimen>
-    <dimen name="start_menu_grid_padding">4dp</dimen>
-    <dimen name="start_menu_icon_padding">6dp</dimen>
-    <dimen name="start_menu_no_apps_found_text">16sp</dimen>
-    <dimen name="phone_size_width">360dp</dimen>
-    <dimen name="phone_size_height">640dp</dimen>
+    <dimen name="tb_start_menu_width">320dp</dimen>
+    <dimen name="tb_start_menu_height">480dp</dimen>
+    <dimen name="tb_start_menu_height_half">240dp</dimen>
+    <dimen name="tb_start_menu_grid_width">106.6667dp</dimen>
+    <dimen name="tb_start_menu_grid_text_size">14sp</dimen>
+    <dimen name="tb_start_menu_grid_padding">4dp</dimen>
+    <dimen name="tb_start_menu_icon_padding">6dp</dimen>
+    <dimen name="tb_start_menu_no_apps_found_text">16sp</dimen>
+    <dimen name="tb_phone_size_width">360dp</dimen>
+    <dimen name="tb_phone_size_height">640dp</dimen>
 </resources>

@@ -16,81 +16,81 @@
 
 <resources>
 
-    <string name="app_name">Taskbar</string>
-    <string name="app_name_debug">Taskbar (デバッグ)</string>
+    <string name="tb_app_name">Taskbar</string>
+    <string name="tb_app_name_debug">Taskbar (デバッグ)</string>
 
-    <string name="taskbar_is_active">Taskbar はアクティブです</string>
-    <string name="click_to_open_settings">クリックすると設定を開きます</string>
-    <string name="action_show">Taskbar を表示</string>
-    <string name="action_hide">Taskbar を非表示</string>
-    <string name="action_show_alt">@string/action_show</string>
-    <string name="action_hide_alt">@string/action_hide</string>
-    <string name="action_quit">終了</string>
-    <string name="action_grant_permission">アクセス許可を付与</string>
+    <string name="tb_taskbar_is_active">Taskbar はアクティブです</string>
+    <string name="tb_click_to_open_settings">クリックすると設定を開きます</string>
+    <string name="tb_action_show">Taskbar を表示</string>
+    <string name="tb_action_hide">Taskbar を非表示</string>
+    <string name="tb_action_show_alt">@string/tb_action_show</string>
+    <string name="tb_action_hide_alt">@string/tb_action_hide</string>
+    <string name="tb_action_quit">終了</string>
+    <string name="tb_action_grant_permission">アクセス許可を付与</string>
 
-    <string name="permission_dialog_title">アクセス許可が必要です</string>
-    <string name="permission_dialog_message">Taskbar は他のアプリの上に描画するため、アプリの開始前にアクセス許可が必要です。\n\n\"アクセス許可を付与\" を押して、Taskbar を \"はい\" に設定することを確認してください</string>
+    <string name="tb_permission_dialog_title">アクセス許可が必要です</string>
+    <string name="tb_permission_dialog_message">Taskbar は他のアプリの上に描画するため、アプリの開始前にアクセス許可が必要です。\n\n\"アクセス許可を付与\" を押して、Taskbar を \"はい\" に設定することを確認してください</string>
 
-    <string name="pref_header_general">全般</string>
-    <string name="pref_title_start_menu_layout">スタートメニューのレイアウト</string>
-    <string name="pref_title_background_tint">Taskbar 背景の色合い</string>
-    <string name="pref_title_scrollbar">スタートメニューにスクロールバーを表示</string>
-    <string name="pref_title_start_on_boot">ブート時に起動</string>
+    <string name="tb_pref_header_general">全般</string>
+    <string name="tb_pref_title_start_menu_layout">スタートメニューのレイアウト</string>
+    <string name="tb_pref_title_background_tint">Taskbar 背景の色合い</string>
+    <string name="tb_pref_title_scrollbar">スタートメニューにスクロールバーを表示</string>
+    <string name="tb_pref_title_start_on_boot">ブート時に起動</string>
 
-    <string-array name="pref_start_menu_list">
+    <string-array name="tb_pref_start_menu_list">
         <item>リスト</item>
         <item>グリッド</item>
     </string-array>
 
-    <string name="pref_header_recent_apps">最近使用したアプリ</string>
+    <string name="tb_pref_header_recent_apps">最近使用したアプリ</string>
 
-    <string name="pref_title_enable_recents">使用状況アクセスを有効/無効にする</string>
-    <string name="pref_title_recents_refresh_interval">リストのリフレッシュ間隔</string>
+    <string name="tb_pref_title_enable_recents">使用状況アクセスを有効/無効にする</string>
+    <string name="tb_pref_title_recents_refresh_interval">リストのリフレッシュ間隔</string>
 
-    <string name="pref_title_amount_of_recents">起動したアプリの表示</string>
-    <string-array name="pref_recents_amount">
+    <string name="tb_pref_title_amount_of_recents">起動したアプリの表示</string>
+    <string-array name="tb_pref_recents_amount">
         <item>経過日内</item>
         <item>Taskbar 開始後</item>
         <item>All apps (may reduce performance)</item>
     </string-array>
-    <string-array name="pref_recents_amount_alt">
+    <string-array name="tb_pref_recents_amount_alt">
         <item>経過日内</item>
         <item>Taskbar 開始後</item>
         <item>All apps (may reduce performance)</item>
         <item>Running apps only</item>
     </string-array>
 
-    <string name="pref_title_sort_order">並び順</string>
-    <string-array name="pref_sort_order">
+    <string name="tb_pref_title_sort_order">並び順</string>
+    <string-array name="tb_pref_sort_order">
         <item>最近使用した (降順)</item>
         <item>最近使用した (昇順)</item>
         <item>長時間使用した (降順)</item>
         <item>長時間使用した (昇順)</item>
     </string-array>
-    <string-array name="pref_sort_order_alt">
+    <string-array name="tb_pref_sort_order_alt">
         <item>最近使用した (降順)</item>
         <item>最近使用した (昇順)</item>
     </string-array>
 
-    <string name="pref_header_advanced">詳細</string>
+    <string name="tb_pref_header_advanced">詳細</string>
 
-    <string name="pref_title_freeform_hack">フリーフォーム ウインドウ サポート</string>
-    <string name="pref_description_freeform_hack">Taskbar がよりデスクトップライクな操作のフリーフォーム ウインドウ モードでアプリを起動できるようにします。\n\nこの機能は実験的で、標準の分割画面マルチタスクで問題が発生する可能性があります。</string>
+    <string name="tb_pref_title_freeform_hack">フリーフォーム ウインドウ サポート</string>
+    <string name="tb_pref_description_freeform_hack">Taskbar がよりデスクトップライクな操作のフリーフォーム ウインドウ モードでアプリを起動できるようにします。\n\nこの機能は実験的で、標準の分割画面マルチタスクで問題が発生する可能性があります。</string>
 
-    <string name="pref_header_about">Taskbar について</string>
-    <string name="pref_about_description">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; 2019 Braden Farmer\n\nここをクリックして更新の確認、または評価してください! %1$s</string>
-    <string name="pref_about_description_alt">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; 2019 Braden Farmer</string>
+    <string name="tb_pref_header_about">Taskbar について</string>
+    <string name="tb_pref_about_description">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; 2019 Braden Farmer\n\nここをクリックして更新の確認、または評価してください! %1$s</string>
+    <string name="tb_pref_about_description_alt">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; 2019 Braden Farmer</string>
 
-    <string name="pref_title_hide_taskbar">アプリを選択したときに Taskbar を折りたたむ</string>
+    <string name="tb_pref_title_hide_taskbar">アプリを選択したときに Taskbar を折りたたむ</string>
 
-    <string name="pref_title_launcher">ホーム画面を置き換え</string>
-    <string name="pref_description_launcher">Taskbar をホーム画面の置き換えとして使用します</string>
+    <string name="tb_pref_title_launcher">ホーム画面を置き換え</string>
+    <string name="tb_pref_description_launcher">Taskbar をホーム画面の置き換えとして使用します</string>
 
-    <string name="set_wallpaper">壁紙を設定&#8230;</string>
-    <string name="pref_disable_animations">高速アプリ切り替え</string>
+    <string name="tb_set_wallpaper">壁紙を設定&#8230;</string>
+    <string name="tb_pref_disable_animations">高速アプリ切り替え</string>
 
-    <string name="pref_title_position">画面での位置</string>
-    <string-array name="pref_position_list">
+    <string name="tb_pref_title_position">画面での位置</string>
+    <string-array name="tb_pref_position_list">
         <item>左下 (横)</item>
         <item>左下 (縦)</item>
         <item>右下 (横)</item>
@@ -101,289 +101,289 @@
         <item>右上 (縦)</item>
     </string-array>
 
-    <string name="app_info">アプリ情報</string>
-    <string name="uninstall">アンインストール</string>
-    <string name="open_taskbar_settings">設定を開く</string>
-    <string name="quit_taskbar">終了</string>
+    <string name="tb_app_info">アプリ情報</string>
+    <string name="tb_uninstall">アンインストール</string>
+    <string name="tb_open_taskbar_settings">設定を開く</string>
+    <string name="tb_quit_taskbar">終了</string>
 
-    <string name="pref_title_keyboard_shortcut">キーボードショートカットを有効にする</string>
-    <string name="pref_description_keyboard_shortcut">Taskbar の開始/停止\n&#8226; Winキー+M, 検索+M\n\nスタートメニューを表示\n&#8226; Winキー, 検索\n(設定で Taskbar を検索アシスタントとして設定が必要)</string>
-    <string name="pref_description_keyboard_shortcut_alt">@string/pref_description_keyboard_shortcut</string>
-    <string name="loading_apps">アプリのロード中&#8230;</string>
-    <string name="press_enter">アプリが見つかりません\n\nEnter を押すと Google で検索します</string>
-    <string name="nothing_to_see_here">ここには何もありません&#8230;</string>
+    <string name="tb_pref_title_keyboard_shortcut">キーボードショートカットを有効にする</string>
+    <string name="tb_pref_description_keyboard_shortcut">Taskbar の開始/停止\n&#8226; Winキー+M, 検索+M\n\nスタートメニューを表示\n&#8226; Winキー, 検索\n(設定で Taskbar を検索アシスタントとして設定が必要)</string>
+    <string name="tb_pref_description_keyboard_shortcut_alt">@string/tb_pref_description_keyboard_shortcut</string>
+    <string name="tb_loading_apps">アプリのロード中&#8230;</string>
+    <string name="tb_press_enter">アプリが見つかりません\n\nEnter を押すと Google で検索します</string>
+    <string name="tb_nothing_to_see_here">ここには何もありません&#8230;</string>
 
-    <string name="error_dialog_title">エラー</string>
-    <string name="error_dialog_message">残念ながら OEM の制限のため、お使いのデバイスでこの機能を有効にできません。\n\nadb シェルコマンドを使用して有効にすることができる可能性があります:\n\nappops set %1$s %2$s allow</string>
-    <string name="action_ok">OK</string>
-    <string name="action_cancel">キャンセル</string>
+    <string name="tb_error_dialog_title">エラー</string>
+    <string name="tb_error_dialog_message">残念ながら OEM の制限のため、お使いのデバイスでこの機能を有効にできません。\n\nadb シェルコマンドを使用して有効にすることができる可能性があります:\n\nappops set %1$s %2$s allow</string>
+    <string name="tb_action_ok">OK</string>
+    <string name="tb_action_cancel">キャンセル</string>
 
-    <string name="pin_app">最近使用にピン止め</string>
-    <string name="unpin_app">最近使用からピン止め解除</string>
-    <string name="block_app">最近使用からブロック</string>
-    <string name="unblock_app">最近使用からブロック解除</string>
-    <string name="clear_pinned_apps">アプリのピン止め/ブロックをリセット</string>
+    <string name="tb_pin_app">最近使用にピン止め</string>
+    <string name="tb_unpin_app">最近使用からピン止め解除</string>
+    <string name="tb_block_app">最近使用からブロック</string>
+    <string name="tb_unblock_app">最近使用からブロック解除</string>
+    <string name="tb_clear_pinned_apps">アプリのピン止め/ブロックをリセット</string>
 
-    <string name="pref_title_hide_foreground">前面アプリケーションのアイコンを非表示</string>
-    <string name="pref_summary_hide_foreground">May reduce performance</string>
+    <string name="tb_pref_title_hide_foreground">前面アプリケーションのアイコンを非表示</string>
+    <string name="tb_pref_summary_hide_foreground">May reduce performance</string>
 
-    <string name="pref_title_theme">テーマ</string>
-    <string-array name="pref_theme_list">
+    <string name="tb_pref_title_theme">テーマ</string>
+    <string-array name="tb_pref_theme_list">
         <item>ライト</item>
         <item>ダーク</item>
     </string-array>
 
-    <string name="lock_device_not_supported">このデバイスでサポートされていません</string>
+    <string name="tb_lock_device_not_supported">このデバイスでサポートされていません</string>
 
-    <string name="pref_title_shortcut_icon">ピン止めしたアプリのショートカットアイコンを表示</string>
+    <string name="tb_pref_title_shortcut_icon">ピン止めしたアプリのショートカットアイコンを表示</string>
 
-    <string name="freeform_dialog_title">フリーフォームサポートを有効にする</string>
-    <string name="freeform_dialog_message">Taskbar がフリーフォーム ウインドウ モードでアプリを起動するために、次の手順に従ってください:\n\n&#8226; 開発者オプションに移動します\n\n&#8226; 最下部にスクロールして \"%s\" をオンにします\n\n&#8226; お使いのデバイスを再起動します</string>
+    <string name="tb_freeform_dialog_title">フリーフォームサポートを有効にする</string>
+    <string name="tb_freeform_dialog_message">Taskbar がフリーフォーム ウインドウ モードでアプリを起動するために、次の手順に従ってください:\n\n&#8226; 開発者オプションに移動します\n\n&#8226; 最下部にスクロールして \"%s\" をオンにします\n\n&#8226; お使いのデバイスを再起動します</string>
 
-    <string name="pref_title_invisible_button">Taskbar を折りたたんでいるときボタンを非表示</string>
-    <string name="pref_title_freeform_mode_help">ヘルプ &amp; フリーフォームモードの説明</string>
-    <string name="freeform_help_dialog_title">ヘルプ &amp; 説明</string>
-    <string name="freeform_help_dialog_message"><b>フリーフォームモードについて</b>\n\nTaskbar は Android 7.0+ (Nougat) 上でアプリをフリーフォーム フローティング ウインドウで起動することができます。ルート アクセス許可は必要がありません。フリーフォームモードでアプリを起動するには次の手順に従ってください:\n\n<b>1.</b> Taskbar アプリ内で \"フリーフォーム ウインドウ サポート\" のボックスをチェックします\n\n<b>2.</b> ポップアップで表示される向きに従って、お使いのデバイスに適切な設定を有効にします\n\n<b>3.</b> Taskbar をオンにして、お使いのデバイスの最近使用したアプリのページに移動します\n\n<b>4.</b> 最近使用したアプリをすべてクリアして、(空の) 最近使用したアプリのページに戻ります\n\n<b>5.</b> Taskbar の開始ボタンを押して、フリーフォーム ウインドウで起動するアプリを選択します\n\n<b>トラブルシューティング</b>\n\n<i>&#8226; アプリがまだ全画面モードで起動します</i>\n\n起動するアプリがすでにメモリにロードされている場合、Taskbar はそれをフォアグラウンドに移動します。フリーフォームモードでアプリを起動するため、新規の状態から起動する必要があります。\n\n最近使用したアプリからアプリをアプリを外にスワイプして、Taskbar を使用して最近使用したアプリのページから再起移動します。これが動作しない場合は、アプリのアイコンを長押しして、\"アプリ情報\" を選択し、アプリを強制的に停止します。\n\nTaskbar は、お使いのデバイスの最近使用したアプリから、ホーム画面から、フリーフォームワークスペース自身からのみアプリをフリーフォームモードで起動できることにご注意ください。別の全画面アプリからアプリを起動すると、同じく全画面モードで起動されます。\n\n<i>&#8226; 最大化されたアプリがウインドウに復元できません</i>\n\nアプリのタイトルバーで最大化ボタンを押した場合、Android はアプリをフリーフォームモードの外に出して、全画面モードに移動します。そのため、新規の状態から起動した場合のみ Taskbar はアプリをフリーフォームウインドウで起動することができます。\n\nこれを修正するために、アプリのウインドウ フレームの外側をクリックしてウインドウを最大化することができます。これによりフリーフォーム ウインドウ ワークスペースに残ったまま、利用可能なスペースすべてにウインドウを広げます。\n\n<b>完全にシステムレベルのフリーフォーム ウインドウ サポートを有効にする</b>\n\nAndroid SDK をインストールしたコンピュータが利用できる場合、次の adb シェルコマンドを実行して、システムレベルでフリーフォームモードのサポートを有効にすることができます:\n\nsettings put global enable_freeform_support 1\n\n上記のコマンドを実行した後、お使いのデバイスを再起動します。お使いのデバイスの最近使用したアプリのページで、アプリのエントリーに、指定したアプリをフリーフォームモードに入る/終了する新しいボタンが表示されます。</string>
+    <string name="tb_pref_title_invisible_button">Taskbar を折りたたんでいるときボタンを非表示</string>
+    <string name="tb_pref_title_freeform_mode_help">ヘルプ &amp; フリーフォームモードの説明</string>
+    <string name="tb_freeform_help_dialog_title">ヘルプ &amp; 説明</string>
+    <string name="tb_freeform_help_dialog_message"><b>フリーフォームモードについて</b>\n\nTaskbar は Android 7.0+ (Nougat) 上でアプリをフリーフォーム フローティング ウインドウで起動することができます。ルート アクセス許可は必要がありません。フリーフォームモードでアプリを起動するには次の手順に従ってください:\n\n<b>1.</b> Taskbar アプリ内で \"フリーフォーム ウインドウ サポート\" のボックスをチェックします\n\n<b>2.</b> ポップアップで表示される向きに従って、お使いのデバイスに適切な設定を有効にします\n\n<b>3.</b> Taskbar をオンにして、お使いのデバイスの最近使用したアプリのページに移動します\n\n<b>4.</b> 最近使用したアプリをすべてクリアして、(空の) 最近使用したアプリのページに戻ります\n\n<b>5.</b> Taskbar の開始ボタンを押して、フリーフォーム ウインドウで起動するアプリを選択します\n\n<b>トラブルシューティング</b>\n\n<i>&#8226; アプリがまだ全画面モードで起動します</i>\n\n起動するアプリがすでにメモリにロードされている場合、Taskbar はそれをフォアグラウンドに移動します。フリーフォームモードでアプリを起動するため、新規の状態から起動する必要があります。\n\n最近使用したアプリからアプリをアプリを外にスワイプして、Taskbar を使用して最近使用したアプリのページから再起移動します。これが動作しない場合は、アプリのアイコンを長押しして、\"アプリ情報\" を選択し、アプリを強制的に停止します。\n\nTaskbar は、お使いのデバイスの最近使用したアプリから、ホーム画面から、フリーフォームワークスペース自身からのみアプリをフリーフォームモードで起動できることにご注意ください。別の全画面アプリからアプリを起動すると、同じく全画面モードで起動されます。\n\n<i>&#8226; 最大化されたアプリがウインドウに復元できません</i>\n\nアプリのタイトルバーで最大化ボタンを押した場合、Android はアプリをフリーフォームモードの外に出して、全画面モードに移動します。そのため、新規の状態から起動した場合のみ Taskbar はアプリをフリーフォームウインドウで起動することができます。\n\nこれを修正するために、アプリのウインドウ フレームの外側をクリックしてウインドウを最大化することができます。これによりフリーフォーム ウインドウ ワークスペースに残ったまま、利用可能なスペースすべてにウインドウを広げます。\n\n<b>完全にシステムレベルのフリーフォーム ウインドウ サポートを有効にする</b>\n\nAndroid SDK をインストールしたコンピュータが利用できる場合、次の adb シェルコマンドを実行して、システムレベルでフリーフォームモードのサポートを有効にすることができます:\n\nsettings put global enable_freeform_support 1\n\n上記のコマンドを実行した後、お使いのデバイスを再起動します。お使いのデバイスの最近使用したアプリのページで、アプリのエントリーに、指定したアプリをフリーフォームモードに入る/終了する新しいボタンが表示されます。</string>
 
-    <string name="action_developer_options">開発者オプションを開く</string>
-    <string name="action_close">閉じる</string>
+    <string name="tb_action_developer_options">開発者オプションを開く</string>
+    <string name="tb_action_close">閉じる</string>
 
-    <string name="pref_header_freeform">フリーフォームモード</string>
-    <string name="pref_title_window_size">デフォルト ウインドウ サイズ</string>
+    <string name="tb_pref_header_freeform">フリーフォームモード</string>
+    <string name="tb_pref_title_window_size">デフォルト ウインドウ サイズ</string>
 
-    <string name="window_size_standard">標準</string>
-    <string name="window_size_fullscreen">全画面</string>
-    <string name="window_size_phone_size">電話サイズ</string>
-    <string name="window_size_large">大</string>
-    <string name="window_size_half_left">@string/window_size_half_left_alt</string>
-    <string name="window_size_half_left_alt">ハーフ画面 (左/上)</string>
-    <string name="window_size_half_right">@string/window_size_half_right_alt</string>
-    <string name="window_size_half_right_alt">ハーフ画面 (右/下)</string>
+    <string name="tb_window_size_standard">標準</string>
+    <string name="tb_window_size_fullscreen">全画面</string>
+    <string name="tb_window_size_phone_size">電話サイズ</string>
+    <string name="tb_window_size_large">大</string>
+    <string name="tb_window_size_half_left">@string/tb_window_size_half_left_alt</string>
+    <string name="tb_window_size_half_left_alt">ハーフ画面 (左/上)</string>
+    <string name="tb_window_size_half_right">@string/tb_window_size_half_right_alt</string>
+    <string name="tb_window_size_half_right_alt">ハーフ画面 (右/下)</string>
 
-    <string name="pref_title_blacklist">スタートメニューからアプリを非表示</string>
-    <string name="app_hidden">1 非表示アプリ</string>
-    <string name="apps_hidden">%1$d 非表示アプリ</string>
-    <string name="blacklist_dialog_title">非表示のアプリ</string>
-    <string name="top_app">1 トップアプリ</string>
-    <string name="top_apps">%1$d トップアプリ</string>
-    <string name="top_apps_dialog_title">トップアプリ</string>
-    <string name="start_menu_apps">スタートメニューアプリ</string>
+    <string name="tb_pref_title_blacklist">スタートメニューからアプリを非表示</string>
+    <string name="tb_app_hidden">1 非表示アプリ</string>
+    <string name="tb_apps_hidden">%1$d 非表示アプリ</string>
+    <string name="tb_blacklist_dialog_title">非表示のアプリ</string>
+    <string name="tb_top_app">1 トップアプリ</string>
+    <string name="tb_top_apps">%1$d トップアプリ</string>
+    <string name="tb_top_apps_dialog_title">トップアプリ</string>
+    <string name="tb_start_menu_apps">スタートメニューアプリ</string>
 
-    <string name="reboot_required">お使いのデバイスを再起動して、フリーフォームモードの設定を完了してください</string>
-    <string name="enable_force_activities_resizable">下部にスクロールして \"%s\" をオンにします</string>
-    <string name="set_as_default_home">\"常に\" を押して、Taskbar をお使いのデフォルトのランチャーとして設定します</string>
-    <string name="enable_developer_options">ビルド番号を 7 回タップして、開発者オプションを有効にします</string>
+    <string name="tb_reboot_required">お使いのデバイスを再起動して、フリーフォームモードの設定を完了してください</string>
+    <string name="tb_enable_force_activities_resizable">下部にスクロールして \"%s\" をオンにします</string>
+    <string name="tb_set_as_default_home">\"常に\" を押して、Taskbar をお使いのデフォルトのランチャーとして設定します</string>
+    <string name="tb_enable_developer_options">ビルド番号を 7 回タップして、開発者オプションを有効にします</string>
 
-    <string name="pref_title_anchor">画面の向きを変えたときに Taskbar を固定</string>
-    <string name="pref_title_donate">寄付</string>
-    <string name="pref_summary_donate">寄付バージョンにアップグレードすることによる少額の寄付で、Taskbar の開発をサポートします</string>
-    <string name="dialog_donate_message">%1$s の寄付バージョンにアップグレードすることで、Taskbar の開発をサポートします!\n\n寄付バージョンは無料バージョンと同じで、設定は自動的に引き継がれます。\n\nTaskbar は常に 100%% フリー、オープンソースで、まったく広告はありません。しかし、あなたのご支援は大変感謝します!</string>
-    <string name="action_no_thanks">いいえ結構です</string>
+    <string name="tb_pref_title_anchor">画面の向きを変えたときに Taskbar を固定</string>
+    <string name="tb_pref_title_donate">寄付</string>
+    <string name="tb_pref_summary_donate">寄付バージョンにアップグレードすることによる少額の寄付で、Taskbar の開発をサポートします</string>
+    <string name="tb_dialog_donate_message">%1$s の寄付バージョンにアップグレードすることで、Taskbar の開発をサポートします!\n\n寄付バージョンは無料バージョンと同じで、設定は自動的に引き継がれます。\n\nTaskbar は常に 100%% フリー、オープンソースで、まったく広告はありません。しかし、あなたのご支援は大変感謝します!</string>
+    <string name="tb_action_no_thanks">いいえ結構です</string>
 
-    <string name="importing_settings">設定のインポート中&#8230; しばらくお待ちください。</string>
-    <string name="settings_imported_successfully">設定を正常にインポートしました</string>
-    <string name="import_dialog_message">Taskbar の寄付バージョンをご購入いただきありがとうございます!\n\n設定を正常にインポートしました。無料バージョンのアプリをアンインストールすることができます。</string>
-    <string name="action_uninstall">アンインストール</string>
+    <string name="tb_importing_settings">設定のインポート中&#8230; しばらくお待ちください。</string>
+    <string name="tb_settings_imported_successfully">設定を正常にインポートしました</string>
+    <string name="tb_import_dialog_message">Taskbar の寄付バージョンをご購入いただきありがとうございます!\n\n設定を正常にインポートしました。無料バージョンのアプリをアンインストールすることができます。</string>
+    <string name="tb_action_uninstall">アンインストール</string>
 
-    <string name="pref_title_hide_when_keyboard_shown">Taskbar を自動的に折りたたむ</string>
-    <string name="pref_description_hide_when_keyboard_shown">オンスクリーン キーボードが表示され、Taskbar が横向きのとき、テキストフィールドがブロックされるのを防止するため自動的に Taskbar を折りたたみます。 (実験的)</string>
+    <string name="tb_pref_title_hide_when_keyboard_shown">Taskbar を自動的に折りたたむ</string>
+    <string name="tb_pref_description_hide_when_keyboard_shown">オンスクリーン キーボードが表示され、Taskbar が横向きのとき、テキストフィールドがブロックされるのを防止するため自動的に Taskbar を折りたたみます。 (実験的)</string>
 
-    <string name="pref_max_num_of_recents">最近使用したアプリの最大数</string>
+    <string name="tb_pref_max_num_of_recents">最近使用したアプリの最大数</string>
 
-    <string name="show_window_sizes">新しいウインドウ&#8230;</string>
+    <string name="tb_show_window_sizes">新しいウインドウ&#8230;</string>
 
-    <string name="icon_pack">アイコンパック</string>
-    <string name="icon_pack_none">なし</string>
-    <string name="no_icon_packs_installed">アイコンパックはインストールされていません</string>
+    <string name="tb_icon_pack">アイコンパック</string>
+    <string name="tb_icon_pack_none">なし</string>
+    <string name="tb_no_icon_packs_installed">アイコンパックはインストールされていません</string>
 
-    <string name="apply_icon_pack">アイコンパックを適用</string>
-    <string name="apply_icon_pack_description">\"%1$s\" を Taskbar に適用しますか?</string>
-    <string name="must_specify_extra">Intent.EXTRA_PACKAGE_NAME を指定する必要があります</string>
-    <string name="invalid_package_name">パッケージ名が正しくありません</string>
+    <string name="tb_apply_icon_pack">アイコンパックを適用</string>
+    <string name="tb_apply_icon_pack_description">\"%1$s\" を Taskbar に適用しますか?</string>
+    <string name="tb_must_specify_extra">Intent.EXTRA_PACKAGE_NAME を指定する必要があります</string>
+    <string name="tb_invalid_package_name">パッケージ名が正しくありません</string>
 
-    <string name="pref_title_use_mask">テーマではないアイコンにマスクを使用する</string>
-    <string name="pref_description_use_mask">アイコンパックが設定されているとパフォーマンスが低下することがあります</string>
+    <string name="tb_pref_title_use_mask">テーマではないアイコンにマスクを使用する</string>
+    <string name="tb_pref_description_use_mask">アイコンパックが設定されているとパフォーマンスが低下することがあります</string>
 
-    <string name="pref_title_app_drawer_icon">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
-    <string name="pref_title_app_drawer_icon_bliss">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
+    <string name="tb_pref_title_app_drawer_icon">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
+    <string name="tb_pref_title_app_drawer_icon_bliss">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
 
-    <string name="already_blacklisted">非表示アプリリストにあるため %1$s は選択できません</string>
-    <string name="already_top_app">トップアプリリストにあるため %1$s は選択できません</string>
+    <string name="tb_already_blacklisted">非表示アプリリストにあるため %1$s は選択できません</string>
+    <string name="tb_already_top_app">トップアプリリストにあるため %1$s は選択できません</string>
 
-    <string name="alt_button_config">折りたたみボタンの代わりの位置</string>
-    <string name="pref_title_save_window_sizes">アプリのウインドウサイズを保存</string>
-    <string name="pref_description_save_window_sizes">コンテキストメニューから新しいウインドウを開くとき</string>
+    <string name="tb_alt_button_config">折りたたみボタンの代わりの位置</string>
+    <string name="tb_pref_title_save_window_sizes">アプリのウインドウサイズを保存</string>
+    <string name="tb_pref_description_save_window_sizes">コンテキストメニューから新しいウインドウを開くとき</string>
 
-    <string name="add_shortcut">ホーム画面にショートカットを追加</string>
-    <string name="shortcut_created">フリーフォームモードのショートカットを作成しました</string>
+    <string name="tb_add_shortcut">ホーム画面にショートカットを追加</string>
+    <string name="tb_shortcut_created">フリーフォームモードのショートカットを作成しました</string>
 
-    <string name="start_taskbar">Taskbar を開始</string>
-    <string name="no_freeform_support">お使いのデバイスでフリーフォームモードは有効ではありません &#8211; Taskbar を開いて最初に有効にしてください</string>
-    <string name="enable_recent_apps">Taskbar は、オプションで画面の端に最近使用したアプリのアイコンを表示することができます。 これを行うには、Taskbar は使用状況のアクセス許可が必要です。\n\n最近使用したアプリのサポートを有効にしますか?</string>
+    <string name="tb_start_taskbar">Taskbar を開始</string>
+    <string name="tb_no_freeform_support">お使いのデバイスでフリーフォームモードは有効ではありません &#8211; Taskbar を開いて最初に有効にしてください</string>
+    <string name="tb_enable_recent_apps">Taskbar は、オプションで画面の端に最近使用したアプリのアイコンを表示することができます。 これを行うには、Taskbar は使用状況のアクセス許可が必要です。\n\n最近使用したアプリのサポートを有効にしますか?</string>
 
-    <string name="disable_scrolling_list">リストのスクロールを無効にする</string>
+    <string name="tb_disable_scrolling_list">リストのスクロールを無効にする</string>
 
-    <string name="action_dont_show_again">今後表示しない</string>
+    <string name="tb_action_dont_show_again">今後表示しない</string>
 
-    <string name="app_shortcuts">追加の操作&#8230;</string>
+    <string name="tb_app_shortcuts">追加の操作&#8230;</string>
 
-    <string name="usage_stats_message">Taskbar が \"オン\" に設定されていることを確認してください</string>
+    <string name="tb_usage_stats_message">Taskbar が \"オン\" に設定されていることを確認してください</string>
 
-    <string name="volume">ボリュームコントロール</string>
-    <string name="file_manager">ファイルマネージャー</string>
-    <string name="system_settings">システム設定</string>
-    <string name="power_menu">電源メニュー</string>
+    <string name="tb_volume">ボリュームコントロール</string>
+    <string name="tb_file_manager">ファイルマネージャー</string>
+    <string name="tb_system_settings">システム設定</string>
+    <string name="tb_power_menu">電源メニュー</string>
 
-    <string name="show_search_bar">検索バーの表示</string>
-    <string-array name="pref_show_search_bar_list">
+    <string name="tb_show_search_bar">検索バーの表示</string>
+    <string-array name="tb_pref_show_search_bar_list">
         <item>ハードウェアまたはソフトウェアキーボード</item>
         <item>ハードウェアキーボードのみ</item>
         <item>検索バーを表示しない</item>
     </string-array>
 
-    <string name="clear_pba">ピン止め/ブロックした最近使用したアプリ</string>
-    <string name="clear_hidden_apps">スタートメニュー &#8211; 非表示アプリ</string>
-    <string name="clear_top_apps">スタートメニュー &#8211; トップアプリ</string>
-    <string name="clear_window_sizes">保存したウインドウサイズ</string>
-    <string name="action_reset">リセット</string>
+    <string name="tb_clear_pba">ピン止め/ブロックした最近使用したアプリ</string>
+    <string name="tb_clear_hidden_apps">スタートメニュー &#8211; 非表示アプリ</string>
+    <string name="tb_clear_top_apps">スタートメニュー &#8211; トップアプリ</string>
+    <string name="tb_clear_window_sizes">保存したウインドウサイズ</string>
+    <string name="tb_action_reset">リセット</string>
 
-    <string name="tools">ツール</string>
+    <string name="tb_tools">ツール</string>
 
-    <string name="enable_accessibility">電源メニューを表示するには Taskbar のアクセシビリティサービスを有効にする必要があります</string>
-    <string name="accessibility_service_summary">Taskbar がデバイスの電源メニューを表示できるようにします。</string>
-    <string name="accessibility_service_description">Taskbar がデバイスの電源メニューを表示できるようにします。\n\n(このサービスは他の目的には使用されません)</string>
+    <string name="tb_enable_accessibility">電源メニューを表示するには Taskbar のアクセシビリティサービスを有効にする必要があります</string>
+    <string name="tb_accessibility_service_summary">Taskbar がデバイスの電源メニューを表示できるようにします。</string>
+    <string name="tb_accessibility_service_description">Taskbar がデバイスの電源メニューを表示できるようにします。\n\n(このサービスは他の目的には使用されません)</string>
 
-    <string name="pref_title_force_new_window">新しいウインドウでアプリを開くことを許可</string>
-    <string name="pref_description_force_new_window">スタートメニューまたは最近使用したアプリから選択されるたびに、強制的に新しいウインドウでアプリを開きます (アプリがマルチウインドウを許可する場合)</string>
-    <string name="change_wallpaper">壁紙を変更</string>
+    <string name="tb_pref_title_force_new_window">新しいウインドウでアプリを開くことを許可</string>
+    <string name="tb_pref_description_force_new_window">スタートメニューまたは最近使用したアプリから選択されるたびに、強制的に新しいウインドウでアプリを開きます (アプリがマルチウインドウを許可する場合)</string>
+    <string name="tb_change_wallpaper">壁紙を変更</string>
 
-    <string name="notification_settings">システム通知設定</string>
+    <string name="tb_notification_settings">システム通知設定</string>
 
-    <string name="pref_header_appearance">外観</string>
-    <string name="dashboard">ダッシュボードを有効にする</string>
-    <string name="dashboard_description">Taskbar に、ウィジェットが表示されるボタンを追加します</string>
-    <string name="dashboard_grid_size">ダッシュボードのグリッドサイズ</string>
+    <string name="tb_pref_header_appearance">外観</string>
+    <string name="tb_dashboard">ダッシュボードを有効にする</string>
+    <string name="tb_dashboard_description">Taskbar に、ウィジェットが表示されるボタンを追加します</string>
+    <string name="tb_dashboard_grid_size">ダッシュボードのグリッドサイズ</string>
 
-    <string name="click_to_add_widget">クリックしてウィジェットを追加</string>
-    <string name="remove_widget">ウィジェットを削除</string>
-    <string name="are_you_sure">よろしいですか?</string>
-    <string name="dashboard_tutorial">画面のどこかをクリックすると、ダッシュボードにウィジェットを追加します</string>
+    <string name="tb_click_to_add_widget">クリックしてウィジェットを追加</string>
+    <string name="tb_remove_widget">ウィジェットを削除</string>
+    <string name="tb_are_you_sure">よろしいですか?</string>
+    <string name="tb_dashboard_tutorial">画面のどこかをクリックすると、ダッシュボードにウィジェットを追加します</string>
 
-    <string name="pref_title_accent_color">アクセント色</string>
-    <string name="reset_colors">色をデフォルトにリセット</string>
+    <string name="tb_pref_title_accent_color">アクセント色</string>
+    <string name="tb_reset_colors">色をデフォルトにリセット</string>
 
-    <string name="visual_feedback">アイコンの選択時にビジュアルフィードバック</string>
+    <string name="tb_visual_feedback">アイコンの選択時にビジュアルフィードバック</string>
 
-    <string name="num_of_recents_blurb">この設定を変更する前に、使用状況のアクセスを有効になっていることを確認してください。\n\n値を大きくするほどパフォーマンスが低下する可能性があります。</string>
-    <string name="max_num_of_recents">%1$d アプリ</string>
-    <string name="max_num_of_recents_singular">1 アプリ</string>
-    <string name="max_num_of_recents_unlimited">無制限</string>
+    <string name="tb_num_of_recents_blurb">この設定を変更する前に、使用状況のアクセスを有効になっていることを確認してください。\n\n値を大きくするほどパフォーマンスが低下する可能性があります。</string>
+    <string name="tb_max_num_of_recents">%1$d アプリ</string>
+    <string name="tb_max_num_of_recents_singular">1 アプリ</string>
+    <string name="tb_max_num_of_recents_unlimited">無制限</string>
 
-    <string name="refresh_frequency_blurb">この設定を変更する前に、使用状況のアクセスを有効になっていることを確認してください。\n\n値を小さくすると CPU 使用率が高くなり、バッテリ寿命が短くなる可能性があります。</string>
-    <string name="refresh_frequency">%1$s 秒</string>
-    <string name="refresh_frequency_singular">1 秒</string>
-    <string name="refresh_frequency_continuous">連続</string>
+    <string name="tb_refresh_frequency_blurb">この設定を変更する前に、使用状況のアクセスを有効になっていることを確認してください。\n\n値を小さくすると CPU 使用率が高くなり、バッテリ寿命が短くなる可能性があります。</string>
+    <string name="tb_refresh_frequency">%1$s 秒</string>
+    <string name="tb_refresh_frequency_singular">1 秒</string>
+    <string name="tb_refresh_frequency_continuous">連続</string>
 
-    <string name="power_button_warning_title">注意</string>
-    <string name="power_button_warning_message">CyanogenMod / LineageOS をベースにしたカスタム ROM は、デバイスがフリーフォームモードの間に電源ボタンが機能しない問題があります。\n\n今すぐ電源ボタンをテストしてください。 それが機能しない場合は、画面がタイムアウトした場合にデバイスをスリープ状態から復帰させる機能が失われる可能性があるため、フリーフォームモードを使用する場合は注意が必要です。</string>
-    <string name="action_i_understand">理解しました</string>
+    <string name="tb_power_button_warning_title">注意</string>
+    <string name="tb_power_button_warning_message">CyanogenMod / LineageOS をベースにしたカスタム ROM は、デバイスがフリーフォームモードの間に電源ボタンが機能しない問題があります。\n\n今すぐ電源ボタンをテストしてください。 それが機能しない場合は、画面がタイムアウトした場合にデバイスをスリープ状態から復帰させる機能が失われる可能性があるため、フリーフォームモードを使用する場合は注意が必要です。</string>
+    <string name="tb_action_i_understand">理解しました</string>
 
-    <string name="hide_taskbar_disclaimer">フリーフォームモードのアプリには適用しないでください</string>
-    <string name="transparent_start_menu">透明なスタートメニュー</string>
+    <string name="tb_hide_taskbar_disclaimer">フリーフォームモードのアプリには適用しないでください</string>
+    <string name="tb_transparent_start_menu">透明なスタートメニュー</string>
 
-    <string name="launch_games_fullscreen_title">ゲームを全画面で起動</string>
-    <string name="launch_games_fullscreen_message">アプリケーションがゲームであると宣言した場合、フリーフォームモードで起動できないようにします</string>
+    <string name="tb_launch_games_fullscreen_title">ゲームを全画面で起動</string>
+    <string name="tb_launch_games_fullscreen_message">アプリケーションがゲームであると宣言した場合、フリーフォームモードで起動できないようにします</string>
 
-    <string name="invalid_grid_size">グリッドサイズが無効です</string>
+    <string name="tb_invalid_grid_size">グリッドサイズが無効です</string>
 
-    <string name="window_sizes_not_available">ウィンドウサイズは現在、Android 8.0 で動作ません</string>
+    <string name="tb_window_sizes_not_available">ウィンドウサイズは現在、Android 8.0 で動作ません</string>
 
-    <string name="navigation_bar_buttons">ナビゲーションバーボタン</string>
-    <string name="navigation_bar_buttons_description">ナビゲーションバーの操作を実行する追加のボタンをタスクバーに追加します</string>
-    <string name="button_back">戻る</string>
-    <string name="button_home">ホーム</string>
-    <string name="button_recents">最近使用した</string>
+    <string name="tb_navigation_bar_buttons">ナビゲーションバーボタン</string>
+    <string name="tb_navigation_bar_buttons_description">ナビゲーションバーの操作を実行する追加のボタンをタスクバーに追加します</string>
+    <string name="tb_button_back">戻る</string>
+    <string name="tb_button_home">ホーム</string>
+    <string name="tb_button_recents">最近使用した</string>
 
-    <string name="full_length">領域を空白で拡張する</string>
+    <string name="tb_full_length">領域を空白で拡張する</string>
 
-    <string name="restore_widget">ウィジェットを復元</string>
+    <string name="tb_restore_widget">ウィジェットを復元</string>
 
-    <string name="samsung_freeform_title">注意</string>
-    <string name="samsung_freeform_message">マルチウィンドウモードのシステム変更により、フリーフォームモードが Samsung デバイスで動作しない可能性があります。\n\nこのデバイスでフリーフォームモードを使用するにはカスタム ROM をフラッシュする必要があります。</string>
+    <string name="tb_samsung_freeform_title">注意</string>
+    <string name="tb_samsung_freeform_message">マルチウィンドウモードのシステム変更により、フリーフォームモードが Samsung デバイスで動作しない可能性があります。\n\nこのデバイスでフリーフォームモードを使用するにはカスタム ROM をフラッシュする必要があります。</string>
 
-    <string name="widget_restore_toast">\"%1$s\" を選択してこのウィジェットを復元します</string>
+    <string name="tb_widget_restore_toast">\"%1$s\" を選択してこのウィジェットを復元します</string>
 
-    <string name="freeform_on">Freeform on</string>
-    <string name="freeform_off">Freeform off</string>
+    <string name="tb_freeform_on">Freeform on</string>
+    <string name="tb_freeform_off">Freeform off</string>
 
-    <string name="auto_hide_navbar">Automatically control the system navigation bar</string>
-    <string name="auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
+    <string name="tb_auto_hide_navbar">Automatically control the system navigation bar</string>
+    <string name="tb_auto_hide_navbar_description">Hide the navigation bar when Taskbar is active, and show it when Taskbar is inactive</string>
 
-    <string name="press_enter_alt">@string/press_enter</string>
+    <string name="tb_press_enter_alt">@string/tb_press_enter</string>
 
-    <string name="freeform_dialog_message_alt">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options and enable USB debugging\n\n&#8226; Connect your device to a computer with the Android SDK installed, and run the following command (one-line):\n\nadb shell settings put global enable_freeform_support 1\n\n&#8226; Reboot your device</string>
+    <string name="tb_freeform_dialog_message_alt">In order for Taskbar to launch apps in freeform window mode, please follow these steps:\n\n&#8226; Go to Developer Options and enable USB debugging\n\n&#8226; Connect your device to a computer with the Android SDK installed, and run the following command (one-line):\n\nadb shell settings put global enable_freeform_support 1\n\n&#8226; Reboot your device</string>
 
-    <string name="color_picker_alpha">Alpha</string>
-    <string name="color_picker_red">Red</string>
-    <string name="color_picker_green">Green</string>
-    <string name="color_picker_blue">Blue</string>
+    <string name="tb_color_picker_alpha">Alpha</string>
+    <string name="tb_color_picker_red">Red</string>
+    <string name="tb_color_picker_green">Green</string>
+    <string name="tb_color_picker_blue">Blue</string>
 
-    <string name="pref_title_chrome_os_context_menu_fix">Chrome OS dock compatibility fix</string>
-    <string name="pref_description_chrome_os_context_menu_fix">Enable this if using Taskbar alongside the Chrome OS dock</string>
+    <string name="tb_pref_title_chrome_os_context_menu_fix">Chrome OS dock compatibility fix</string>
+    <string name="tb_pref_description_chrome_os_context_menu_fix">Enable this if using Taskbar alongside the Chrome OS dock</string>
 
-    <string name="pin_shortcut_not_supported">Your launcher doesn\'t support adding shortcuts from other apps.\n\nPlease manually add the shortcut from your launcher\'s \"Widgets\" menu.</string>
+    <string name="tb_pin_shortcut_not_supported">Your launcher doesn\'t support adding shortcuts from other apps.\n\nPlease manually add the shortcut from your launcher\'s \"Widgets\" menu.</string>
 
-    <string name="action_activate">Activate</string>
+    <string name="tb_action_activate">Activate</string>
 
-    <string name="pref_secondscreen_title_open">Open SecondScreen</string>
-    <string name="pref_secondscreen_title_install">Install SecondScreen</string>
-    <string name="pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
+    <string name="tb_pref_secondscreen_title_open">Open SecondScreen</string>
+    <string name="tb_pref_secondscreen_title_install">Install SecondScreen</string>
+    <string name="tb_pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
 
-    <string name="use_default">Use default</string>
+    <string name="tb_use_default">Use default</string>
 
-    <string name="action_continue">Continue</string>
+    <string name="tb_action_continue">Continue</string>
 
-    <string name="tasker_action_title">Select action</string>
-    <string name="tasker_condition_title">Select condition</string>
-    <string name="tasker_on">Taskbar On</string>
-    <string name="tasker_off">Taskbar Off</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
+    <string name="tb_tasker_action_title">Select action</string>
+    <string name="tb_tasker_condition_title">Select condition</string>
+    <string name="tb_tasker_on">Taskbar On</string>
+    <string name="tb_tasker_off">Taskbar Off</string>
+    <string name="tb_on">On</string>
+    <string name="tb_off">Off</string>
 
-    <string name="pref_title_tasker_enabled">Allow third-party app integration</string>
-    <string name="pref_summary_tasker_enabled">Disable for improved security</string>
+    <string name="tb_pref_title_tasker_enabled">Allow third-party app integration</string>
+    <string name="tb_pref_summary_tasker_enabled">Disable for improved security</string>
 
-    <string name="essential_phone_grip_rejection">On the Essential Phone, disable grip rejection (in developer options) to assist with opening/closing Taskbar</string>
+    <string name="tb_essential_phone_grip_rejection">On the Essential Phone, disable grip rejection (in developer options) to assist with opening/closing Taskbar</string>
 
-    <string name="toggle_start_menu">Toggle Start Menu</string>
-    <string name="toggle_dashboard">Toggle Dashboard</string>
+    <string name="tb_toggle_start_menu">Toggle Start Menu</string>
+    <string name="tb_toggle_dashboard">Toggle Dashboard</string>
 
-    <string name="force_activities_resizable">強制的にアクティビティをリサイズ可能にする</string>
-    <string name="enable_freeform_windows">Enable freeform windows</string>
+    <string name="tb_force_activities_resizable">強制的にアクティビティをリサイズ可能にする</string>
+    <string name="tb_enable_freeform_windows">Enable freeform windows</string>
 
-    <string name="filepicker_select_an_image_file">Select an image file</string>
-    <string name="filepicker_install_file_manager">Please install a file manager.</string>
-    <string name="error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
+    <string name="tb_filepicker_select_an_image_file">Select an image file</string>
+    <string name="tb_filepicker_install_file_manager">Please install a file manager.</string>
+    <string name="tb_error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
 
-    <string name="add_icon_to_desktop">Add icon to desktop</string>
-    <string name="arrange_icons">Move icons</string>
-    <string name="arrange_icons_alt">Move icon</string>
-    <string name="select_an_app">Select an app</string>
-    <string name="remove_desktop_icon">Remove from desktop</string>
-    <string name="sort_by_name">Sort icons by name</string>
-    <string name="no_icons_to_arrange">No icons to arrange</string>
-    <string name="no_icons_to_sort">No icons to sort</string>
-    <string name="clear_desktop_icons">Desktop icons</string>
+    <string name="tb_add_icon_to_desktop">Add icon to desktop</string>
+    <string name="tb_arrange_icons">Move icons</string>
+    <string name="tb_arrange_icons_alt">Move icon</string>
+    <string name="tb_select_an_app">Select an app</string>
+    <string name="tb_remove_desktop_icon">Remove from desktop</string>
+    <string name="tb_sort_by_name">Sort icons by name</string>
+    <string name="tb_no_icons_to_arrange">No icons to arrange</string>
+    <string name="tb_no_icons_to_sort">No icons to sort</string>
+    <string name="tb_clear_desktop_icons">Desktop icons</string>
 
-    <string name="pref_title_start_button_image">Start button image</string>
-    <string name="start_button_image_default">Default</string>
-    <string name="start_button_image_custom">Custom</string>
+    <string name="tb_pref_title_start_button_image">Start button image</string>
+    <string name="tb_start_button_image_default">Default</string>
+    <string name="tb_start_button_image_custom">Custom</string>
 
-    <string name="pref_centered_icons">Center icons within whitespace</string>
-    <string name="pref_title_sys_tray">Show status icons and clock</string>
-    <string name="pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
+    <string name="tb_pref_centered_icons">Center icons within whitespace</string>
+    <string name="tb_pref_title_sys_tray">Show status icons and clock</string>
+    <string name="tb_pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
 
-    <string name="settings">Settings</string>
-    <string name="powered_by_taskbar">Powered by Taskbar</string>
+    <string name="tb_settings">Settings</string>
+    <string name="tb_powered_by_taskbar">Powered by Taskbar</string>
 
 </resources>

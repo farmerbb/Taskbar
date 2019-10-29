@@ -30,7 +30,7 @@ class ToastCompatImpl implements ToastInterface {
         toast.setGravity(
                 Gravity.BOTTOM | Gravity.CENTER_VERTICAL,
                 0,
-                context.getResources().getDimensionPixelSize(R.dimen.toast_y_offset));
+                context.getResources().getDimensionPixelSize(R.dimen.tb_toast_y_offset));
     }
 
     @Override

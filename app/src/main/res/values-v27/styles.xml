@@ -16,16 +16,16 @@
 
 <resources>
 
-    <style name="AppTheme" parent="AppThemeBase">
+    <style name="Taskbar" parent="TaskbarBase">
         <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:navigationBarColor">@color/navbar_color_light</item>
-        <item name="android:navigationBarDividerColor">@color/navbar_divider_color_light</item>
+        <item name="android:navigationBarColor">@color/tb_navbar_color_light</item>
+        <item name="android:navigationBarDividerColor">@color/tb_navbar_divider_color_light</item>
     </style>
 
-    <style name="AppTheme.Dark" parent="AppThemeBase.Dark">
+    <style name="Taskbar.Dark" parent="TaskbarBase.Dark">
         <item name="android:windowLightNavigationBar">false</item>
-        <item name="android:navigationBarColor">@color/navbar_color_dark</item>
-        <item name="android:navigationBarDividerColor">@color/navbar_divider_color_dark</item>
+        <item name="android:navigationBarColor">@color/tb_navbar_color_dark</item>
+        <item name="android:navigationBarDividerColor">@color/tb_navbar_divider_color_dark</item>
     </style>
 
 </resources>

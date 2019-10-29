@@ -306,7 +306,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
         try {
-            startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.set_wallpaper)));
+            startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper)));
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
@@ -319,7 +319,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             if(U.launcherIsDefault(this))
                 startFreeformHack();
             else {
-                U.showToastLong(this, R.string.set_as_default_home);
+                U.showToastLong(this, R.string.tb_set_as_default_home);
 
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                 homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -550,7 +550,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         updateMargins();
         refreshDesktopIcons();
 
-        fab.setImageResource(R.drawable.ic_done_black_24dp);
+        fab.setImageResource(R.drawable.tb_done);
         fab.view.setOnClickListener(v -> {
             iconArrangeMode = false;
             fab.hide();
@@ -567,8 +567,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(desktopIcons == null) return;
 
         boolean taskbarIsVertical = U.getTaskbarPosition(this).contains("vertical");
-        int iconSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
-        int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.start_menu_grid_width);
+        int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+        int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.tb_start_menu_grid_width);
 
         int columns = (layout.getWidth() - (taskbarIsVertical ? iconSize : 0)) / desktopIconSize;
         int rows = (layout.getHeight() - (!taskbarIsVertical ? iconSize : 0)) / desktopIconSize;
@@ -682,7 +682,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
 
             if(jsonIcons.length() == 0) {
-                U.showToast(this, R.string.no_icons_to_sort);
+                U.showToast(this, R.string.tb_no_icons_to_sort);
                 return;
             }
 
@@ -748,7 +748,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             JSONArray jsonIcons = new JSONArray(pref.getString("desktop_icons", "[]"));
 
             if(jsonIcons.length() == 0) {
-                U.showToast(this, R.string.no_icons_to_arrange);
+                U.showToast(this, R.string.tb_no_icons_to_arrange);
                 return;
             }
 
@@ -764,7 +764,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(desktopIcons == null || fab == null) return;
 
         String position = U.getTaskbarPosition(this);
-        int iconSize = getResources().getDimensionPixelSize(R.dimen.icon_size);
+        int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
         int left = 0;
         int top = 0;
@@ -788,7 +788,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         params.setMargins(left, top, right, bottom);
         desktopIcons.setLayoutParams(params);
 
-        int fabMargin = getResources().getDimensionPixelSize(R.dimen.desktop_icon_fab_margin);
+        int fabMargin = getResources().getDimensionPixelSize(R.dimen.tb_desktop_icon_fab_margin);
         left += fabMargin;
         top += fabMargin;
         right += fabMargin;
@@ -823,12 +823,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private View inflateDesktopIcon(ViewGroup parent, AppEntry entry) {
-        View icon = LayoutInflater.from(this).inflate(R.layout.row_alt, parent, false);
+        View icon = LayoutInflater.from(this).inflate(R.layout.tb_row_alt, parent, false);
 
         TextView textView = icon.findViewById(R.id.name);
         textView.setText(entry.getLabel());
-        textView.setTextColor(ContextCompat.getColor(this, R.color.desktop_icon_text));
-        textView.setShadowLayer(10, 0, 0, R.color.desktop_icon_shadow);
+        textView.setTextColor(ContextCompat.getColor(this, R.color.tb_desktop_icon_text));
+        textView.setShadowLayer(10, 0, 0, R.color.tb_desktop_icon_shadow);
 
         ImageView imageView = icon.findViewById(R.id.icon);
         imageView.setImageDrawable(entry.getIcon(this));

@@ -15,6 +15,6 @@
 -->
 
 <resources>
-    <dimen name="phone_size_width">411dp</dimen>
-    <dimen name="phone_size_height">731dp</dimen>
+    <dimen name="tb_phone_size_width">411dp</dimen>
+    <dimen name="tb_phone_size_height">731dp</dimen>
 </resources>

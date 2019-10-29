@@ -45,7 +45,7 @@ public class ImportSettingsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.import_settings);
+        setContentView(R.layout.tb_import_settings);
         setFinishOnTouchOutside(false);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(settingsReceivedReceiver, new IntentFilter("com.farmerbb.taskbar.IMPORT_FINISHED"));

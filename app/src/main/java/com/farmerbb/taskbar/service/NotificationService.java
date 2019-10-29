@@ -107,7 +107,7 @@ public class NotificationService extends Service {
                 String id = "taskbar_notification_channel";
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    CharSequence name = getString(R.string.app_name);
+                    CharSequence name = getString(R.string.tb_app_name);
                     int importance = NotificationManager.IMPORTANCE_MIN;
 
                     NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -116,12 +116,12 @@ public class NotificationService extends Service {
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, id)
                         .setSmallIcon(pref.getString("start_button_image", U.getDefaultStartButtonImage(this)).equals("app_logo")
-                                ? R.drawable.ic_system
-                                : R.drawable.ic_allapps)
+                                ? R.drawable.tb_system
+                                : R.drawable.tb_allapps)
                         .setContentIntent(contentIntent)
-                        .setContentTitle(getString(R.string.taskbar_is_active))
-                        .setContentText(getString(R.string.click_to_open_settings))
-                        .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                        .setContentTitle(getString(R.string.tb_taskbar_is_active))
+                        .setContentText(getString(R.string.tb_click_to_open_settings))
+                        .setColor(ContextCompat.getColor(this, R.color.tb_colorPrimary))
                         .setPriority(Notification.PRIORITY_MIN)
                         .setShowWhen(false)
                         .setOngoing(true);
@@ -129,7 +129,7 @@ public class NotificationService extends Service {
                 String showHideLabel;
 
                 if(U.canEnableFreeform() && !U.isChromeOs(this)) {
-                    String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.freeform_off : R.string.freeform_on);
+                    String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.tb_freeform_off : R.string.tb_freeform_on);
 
                     Intent freeformIntent = new Intent("com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE");
                     freeformIntent.setPackage(getPackageName());
@@ -138,12 +138,12 @@ public class NotificationService extends Service {
 
                     mBuilder.addAction(0, freeformLabel, freeformPendingIntent);
 
-                    showHideLabel = getString(isHidden ? R.string.action_show_alt : R.string.action_hide_alt);
+                    showHideLabel = getString(isHidden ? R.string.tb_action_show_alt : R.string.tb_action_hide_alt);
                 } else
-                    showHideLabel = getString(isHidden ? R.string.action_show : R.string.action_hide);
+                    showHideLabel = getString(isHidden ? R.string.tb_action_show : R.string.tb_action_hide);
 
                 mBuilder.addAction(0, showHideLabel, receiverPendingIntent)
-                        .addAction(0, getString(R.string.action_quit), receiverPendingIntent2);
+                        .addAction(0, getString(R.string.tb_action_quit), receiverPendingIntent2);
 
                 startForeground(8675309, mBuilder.build());
 

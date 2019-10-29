@@ -32,7 +32,7 @@ public class PowerMenuService extends AccessibilityService {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(!performGlobalAction(intent.getIntExtra("action", -1)))
-                U.showToast(PowerMenuService.this, R.string.lock_device_not_supported);
+                U.showToast(PowerMenuService.this, R.string.tb_lock_device_not_supported);
         }
     };
 

@@ -30,9 +30,9 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setTitle(R.string.navigation_bar_buttons);
+        setTitle(R.string.tb_navigation_bar_buttons);
 
-        addPreferencesFromResource(R.xml.pref_navigation_bar_buttons);
+        addPreferencesFromResource(R.xml.tb_pref_navigation_bar_buttons);
 
         findPreference("button_back").setOnPreferenceClickListener(this);
         findPreference("button_home").setOnPreferenceClickListener(this);

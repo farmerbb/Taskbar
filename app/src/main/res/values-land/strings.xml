@@ -16,7 +16,7 @@
 
 <resources>
 
-    <string name="window_size_half_left">Half screen (left)</string>
-    <string name="window_size_half_right">Half screen (right)</string>
+    <string name="tb_window_size_half_left">Half screen (left)</string>
+    <string name="tb_window_size_half_right">Half screen (right)</string>
 
 </resources>

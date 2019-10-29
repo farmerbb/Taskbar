@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout android:layout_width="@dimen/tb_icon_size"
+                  android:layout_height="24dp"
+                  android:layout_gravity="center_horizontal"
+                  android:clickable="true"
+                  android:id="@+id/hide_taskbar_button_layout_alt" >
+
+        <Button
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="21dp"
+            android:textSize="20dp"
+            android:background="@null"
+            android:rotation="90"
+            android:id="@+id/hide_taskbar_button_alt" />
+
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/space_alt"
+        android:layout_height="4dp"
+        android:layout_width="match_parent" />
+
+    <ImageView
+        android:id="@+id/start_button"
+        android:layout_width="@dimen/tb_icon_size"
+        android:layout_height="@dimen/tb_icon_size" />
+
+    <FrameLayout
+        android:orientation="vertical"
+        android:id="@+id/dashboard_button"
+        android:layout_height="40dp"
+        android:layout_width="@dimen/tb_icon_size"
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <View
+                    android:id="@+id/square1"
+                    android:layout_width="8dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="1dp"/>
+
+                <View
+                    android:id="@+id/square2"
+                    android:layout_width="8dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="1dp"/>
+
+                <View
+                    android:id="@+id/square3"
+                    android:layout_width="8dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="1dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <View
+                    android:id="@+id/square4"
+                    android:layout_width="8dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="1dp"/>
+
+                <View
+                    android:id="@+id/square5"
+                    android:layout_width="8dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="1dp"/>
+
+                <View
+                    android:id="@+id/square6"
+                    android:layout_width="8dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="1dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/navbar_buttons"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_height="@dimen/tb_icon_size"
+            android:layout_width="match_parent"
+            android:src="@drawable/tb_sysbar_back"
+            android:scaleType="center"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/button_home"
+            android:layout_height="@dimen/tb_icon_size"
+            android:layout_width="match_parent"
+            android:src="@drawable/tb_sysbar_home"
+            android:scaleType="center"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/button_recents"
+            android:layout_height="@dimen/tb_icon_size"
+            android:layout_width="match_parent"
+            android:src="@drawable/tb_sysbar_recent"
+            android:scaleType="center"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/taskbar_scrollview"
+        android:layout_width="@dimen/tb_icon_size"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:requiresFadingEdge="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="false">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_height="1dp"
+                android:layout_width="44dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
+
+            <Space
+                android:id="@+id/whitespace_top"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <LinearLayout
+                android:id="@+id/taskbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clickable="false" />
+
+            <Space
+                android:id="@+id/whitespace_bottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/add_systray_here"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tb_systray_size"
+        android:visibility="gone"/>
+
+    <Space
+        android:id="@+id/space"
+        android:layout_height="4dp"
+        android:layout_width="match_parent" />
+
+    <LinearLayout
+        android:layout_width="@dimen/tb_icon_size"
+        android:layout_height="24dp"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:id="@+id/hide_taskbar_button_layout" >
+
+        <Button
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="21dp"
+            android:textSize="20dp"
+            android:background="@null"
+            android:rotation="90"
+            android:id="@+id/hide_taskbar_button" />
+
+    </LinearLayout>
+
+</LinearLayout>

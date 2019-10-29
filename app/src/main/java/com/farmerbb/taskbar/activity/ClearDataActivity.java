@@ -50,17 +50,17 @@ public class ClearDataActivity extends AppCompatActivity {
                     || topApps.isChecked()
                     || savedWindowSizes.isChecked()
                     || desktopIcons.isChecked())
-                button.setText(getResources().getString(R.string.action_reset).toUpperCase());
+                button.setText(getResources().getString(R.string.tb_action_reset).toUpperCase());
             else
-                button.setText(getResources().getString(R.string.action_close).toUpperCase());
+                button.setText(getResources().getString(R.string.tb_action_close).toUpperCase());
         }
     };
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.clear_data);
-        setTitle(R.string.clear_pinned_apps);
+        setContentView(R.layout.tb_clear_data);
+        setTitle(R.string.tb_clear_pinned_apps);
 
         pba = findViewById(R.id.clear_pba);
         pba.setOnCheckedChangeListener(listener);
@@ -81,7 +81,7 @@ public class ClearDataActivity extends AppCompatActivity {
         desktopIcons.setOnCheckedChangeListener(listener);
         
         button = findViewById(R.id.button);
-        button.setText(getResources().getString(R.string.action_close).toUpperCase());
+        button.setText(getResources().getString(R.string.tb_action_close).toUpperCase());
         button.setOnClickListener(view -> {
             if(pba.isChecked())
                 PinnedBlockedApps.getInstance(this).clear(this);

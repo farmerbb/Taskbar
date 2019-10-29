@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="light"
+        android:entries="@array/tb_pref_theme_list"
+        android:entryValues="@array/tb_pref_theme_list_values"
+        android:key="theme"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/tb_pref_title_theme"/>
+
+    <Preference
+        android:key="icon_pack_list"
+        android:title="@string/tb_icon_pack" />
+
+    <Preference
+        android:key="background_tint_pref"
+        android:title="@string/tb_pref_title_background_tint" />
+
+    <Preference
+        android:key="accent_color_pref"
+        android:title="@string/tb_pref_title_accent_color" />
+
+    <ListPreference
+        android:defaultValue="default"
+        android:entries="@array/tb_pref_start_button_image_list"
+        android:entryValues="@array/tb_pref_start_button_image_list_values"
+        android:key="start_button_image"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/tb_pref_title_start_button_image"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="invisible_button"
+        android:title="@string/tb_pref_title_invisible_button"/>
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="shortcut_icon"
+        android:title="@string/tb_pref_title_shortcut_icon"/>
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="visual_feedback"
+        android:title="@string/tb_visual_feedback"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="transparent_start_menu"
+        android:title="@string/tb_transparent_start_menu"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="icon_pack_use_mask"
+        android:title="@string/tb_pref_title_use_mask"
+        android:summary="@string/tb_pref_description_use_mask" />
+
+    <Preference
+        android:key="reset_colors"
+        android:title="@string/tb_reset_colors" />
+
+    <PreferenceCategory android:key="dummy" android:title="\n\n" />
+
+</PreferenceScreen>

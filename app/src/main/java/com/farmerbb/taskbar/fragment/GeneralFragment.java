@@ -43,7 +43,7 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
         super.onCreate(savedInstanceState);
 
         // Add preferences
-        addPreferencesFromResource(R.xml.pref_general);
+        addPreferencesFromResource(R.xml.tb_pref_general);
 
         // Set OnClickListeners for certain preferences
         findPreference("blacklist").setOnPreferenceClickListener(this);
@@ -58,7 +58,7 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
         if(U.canEnableFreeform()
                 && !U.isChromeOs(getActivity())
                 && !U.isOverridingFreeformHack(getActivity()))
-            findPreference("hide_taskbar").setSummary(R.string.hide_taskbar_disclaimer);
+            findPreference("hide_taskbar").setSummary(R.string.tb_hide_taskbar_disclaimer);
 
         bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
         bindPreferenceSummaryToValue(findPreference("scrollbar"));
@@ -81,7 +81,7 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
         super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle(R.string.pref_header_general);
+        activity.setTitle(R.string.tb_pref_header_general);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -92,10 +92,10 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
         super.onResume();
 
         int size = Blacklist.getInstance(getActivity()).getBlockedApps().size();
-        String summary = size == 1 ? getString(R.string.app_hidden) : getString(R.string.apps_hidden, size);
+        String summary = size == 1 ? getString(R.string.tb_app_hidden) : getString(R.string.tb_apps_hidden, size);
 
         size = TopApps.getInstance(getActivity()).getTopApps().size();
-        summary = summary + "\n" + (size == 1 ? getString(R.string.top_app) : getString(R.string.top_apps, size));
+        summary = summary + "\n" + (size == 1 ? getString(R.string.tb_top_app) : getString(R.string.tb_top_apps, size));
 
         Preference blacklistPref = findPreference("blacklist");
         if(blacklistPref != null) {

@@ -50,7 +50,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
     public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
         if(convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_blacklist, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.tb_row_blacklist, parent, false);
 
         switch(type) {
             case U.HIDDEN:
@@ -86,7 +86,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
                     || topApps.isTopApp(componentNameAlt)
                     || topApps.isTopApp(componentNameAlt2)) {
                 U.showToast(getContext(),
-                        getContext().getString(R.string.already_top_app, entry.getLabel()),
+                        getContext().getString(R.string.tb_already_top_app, entry.getLabel()),
                         Toast.LENGTH_LONG);
             } else if(blacklist.isBlocked(componentName)) {
                 blacklist.removeBlockedApp(getContext(), componentName);
@@ -126,7 +126,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
                     || blacklist.isBlocked(componentNameAlt)
                     || blacklist.isBlocked(componentNameAlt2)) {
                 U.showToast(getContext(),
-                        getContext().getString(R.string.already_blacklisted, entry.getLabel()),
+                        getContext().getString(R.string.tb_already_blacklisted, entry.getLabel()),
                         Toast.LENGTH_LONG);
             } else if(topApps.isTopApp(componentName)) {
                 topApps.removeTopApp(getContext(), componentName);

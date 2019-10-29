@@ -16,31 +16,31 @@
 
 <resources>
 
-    <style name="AppThemeBase" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="start_menu_background">@color/start_menu_background</item>
-        <item name="text_color">@color/text_color</item>
-        <item name="main_activity_background">@color/main_activity_background</item>
-        <item name="settings_icon_color">@color/settings_icon_color</item>
+    <style name="TaskbarBase" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/tb_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/tb_colorPrimaryDark</item>
+        <item name="colorAccent">@color/tb_colorAccent</item>
+        <item name="tb_start_menu_background">@color/tb_start_menu_background</item>
+        <item name="tb_text_color">@color/tb_text_color</item>
+        <item name="tb_main_activity_background">@color/tb_main_activity_background</item>
+        <item name="tb_settings_icon_color">@color/tb_settings_icon_color</item>
     </style>
 
-    <style name="AppThemeBase.Dark" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="start_menu_background">@color/start_menu_background_dark</item>
-        <item name="text_color">@color/text_color_dark</item>
-        <item name="main_activity_background">@color/main_activity_background_dark</item>
-        <item name="settings_icon_color">@color/settings_icon_color_dark</item>
+    <style name="TaskbarBase.Dark" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/tb_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/tb_colorPrimaryDark</item>
+        <item name="colorAccent">@color/tb_colorAccent</item>
+        <item name="tb_start_menu_background">@color/tb_start_menu_background_dark</item>
+        <item name="tb_text_color">@color/tb_text_color_dark</item>
+        <item name="tb_main_activity_background">@color/tb_main_activity_background_dark</item>
+        <item name="tb_settings_icon_color">@color/tb_settings_icon_color_dark</item>
     </style>
 
-    <style name="AppTheme" parent="AppThemeBase" />
+    <style name="Taskbar" parent="TaskbarBase" />
 
-    <style name="AppTheme.Dark" parent="AppThemeBase.Dark" />
+    <style name="Taskbar.Dark" parent="TaskbarBase.Dark" />
 
-    <style name="AppTheme.HomeActivity" parent="Theme.AppCompat.NoActionBar">
+    <style name="Taskbar.HomeActivity" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -48,54 +48,54 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.InvisibleActivity" parent="@android:style/Theme.Material.Dialog.NoActionBar">
+    <style name="Taskbar.InvisibleActivity" parent="@android:style/Theme.Material.Dialog.NoActionBar">
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="AppTheme.Dialog" parent="@android:style/Theme.Material.Light.Dialog">
+    <style name="Taskbar.Dialog" parent="@android:style/Theme.Material.Light.Dialog">
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Dialog.Dark" parent="@android:style/Theme.Material.Dialog">
+    <style name="Taskbar.Dialog.Dark" parent="@android:style/Theme.Material.Dialog">
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Dialog.Blacklist" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="Taskbar.Dialog.Blacklist" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/tb_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/tb_colorPrimaryDark</item>
+        <item name="colorAccent">@color/tb_colorAccent</item>
     </style>
 
-    <style name="AppTheme.Dialog.Blacklist.Dark" parent="Theme.AppCompat.Dialog">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="Taskbar.Dialog.Blacklist.Dark" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/tb_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/tb_colorPrimaryDark</item>
+        <item name="colorAccent">@color/tb_colorAccent</item>
     </style>
 
-    <style name="AppTheme.Incognito" parent="@android:style/Theme.Material.Light">
+    <style name="Taskbar.Incognito" parent="@android:style/Theme.Material.Light">
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:backgroundDimAmount">0</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.Incognito.Dark" parent="@android:style/Theme.Material">
+    <style name="Taskbar.Incognito.Dark" parent="@android:style/Theme.Material">
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:backgroundDimAmount">0</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.Dialog.Preference" parent="@android:style/Theme.Material.Light.Dialog">
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
+    <style name="Taskbar.Dialog.Preference" parent="@android:style/Theme.Material.Light.Dialog">
+        <item name="android:colorPrimary">@color/tb_colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/tb_colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/tb_colorAccent</item>
     </style>
 
-    <style name="AppTheme.Dialog.Preference.Dark" parent="@android:style/Theme.Material.Dialog">
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
+    <style name="Taskbar.Dialog.Preference.Dark" parent="@android:style/Theme.Material.Dialog">
+        <item name="android:colorPrimary">@color/tb_colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/tb_colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/tb_colorAccent</item>
     </style>
 
 </resources>

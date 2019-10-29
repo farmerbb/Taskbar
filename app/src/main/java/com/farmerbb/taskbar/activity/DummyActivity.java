@@ -70,10 +70,10 @@ public class DummyActivity extends Activity {
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             } else if(getIntent().hasExtra("accessibility")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
-                builder.setTitle(R.string.permission_dialog_title)
-                        .setMessage(R.string.enable_accessibility)
-                        .setNegativeButton(R.string.action_cancel, (dialog, which) -> new Handler().post(this::finish))
-                        .setPositiveButton(R.string.action_activate, (dialog, which) -> {
+                builder.setTitle(R.string.tb_permission_dialog_title)
+                        .setMessage(R.string.tb_enable_accessibility)
+                        .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> new Handler().post(this::finish))
+                        .setPositiveButton(R.string.tb_action_activate, (dialog, which) -> {
                             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
                             SharedPreferences pref = U.getSharedPreferences(this);
@@ -83,9 +83,9 @@ public class DummyActivity extends Activity {
                             U.launchApp(this, () -> {
                                 try {
                                     startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
-                                    U.showToastLong(this, R.string.usage_stats_message);
+                                    U.showToastLong(this, R.string.tb_usage_stats_message);
                                 } catch (ActivityNotFoundException e) {
-                                    U.showToast(this, R.string.lock_device_not_supported);
+                                    U.showToast(this, R.string.tb_lock_device_not_supported);
 
                                     finish();
                                 }

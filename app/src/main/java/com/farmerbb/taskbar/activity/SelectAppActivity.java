@@ -80,9 +80,9 @@ public class SelectAppActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch(position) {
                 case U.HIDDEN:
-                    return getString(R.string.blacklist_dialog_title);
+                    return getString(R.string.tb_blacklist_dialog_title);
                 case U.TOP_APPS:
-                    return getString(R.string.top_apps_dialog_title);
+                    return getString(R.string.tb_top_apps_dialog_title);
             }
 
             return null;
@@ -96,9 +96,9 @@ public class SelectAppActivity extends AppCompatActivity {
         boolean noShadow = getIntent().hasExtra("no_shadow");
 
         if(savedInstanceState == null) {
-            setContentView(R.layout.configure_start_menu);
+            setContentView(R.layout.tb_configure_start_menu);
             setFinishOnTouchOutside(false);
-            setTitle(R.string.start_menu_apps);
+            setTitle(R.string.tb_start_menu_apps);
 
             if(noShadow) {
                 WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -245,8 +245,8 @@ public class SelectAppActivity extends AppCompatActivity {
             }
 
             return new AppListAdapter[] {
-                    new AppListAdapter(SelectAppActivity.this, R.layout.row_blacklist, entries, U.HIDDEN),
-                    new AppListAdapter(SelectAppActivity.this, R.layout.row_blacklist, entries, U.TOP_APPS)
+                    new AppListAdapter(SelectAppActivity.this, R.layout.tb_row_blacklist, entries, U.HIDDEN),
+                    new AppListAdapter(SelectAppActivity.this, R.layout.tb_row_blacklist, entries, U.TOP_APPS)
             };
         }
 

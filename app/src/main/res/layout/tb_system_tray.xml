@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/tb_icon_size"
+    tools:background="#0000FF">
+
+    <TextView
+        android:id="@+id/time_left"
+        android:layout_width="84dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="16dp"
+        android:visibility="gone"
+        tools:ignore="SpUsage" />
+
+    <ImageView
+        android:id="@+id/bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        tools:src="@drawable/tb_bluetooth"/>
+
+    <ImageView
+        android:id="@+id/wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        tools:src="@drawable/tb_signal_wifi_3_bar"/>
+
+    <ImageView
+        android:id="@+id/cellular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        tools:src="@drawable/tb_signal_cellular_3_bar"/>
+
+    <ImageView
+        android:id="@+id/battery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        tools:src="@drawable/tb_battery_80"/>
+
+    <TextView
+        android:id="@+id/time_right"
+        android:layout_width="84dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="15.499dp"
+        android:visibility="gone"
+        tools:text="1:41 AM\n03/27/18"
+        tools:visibility="visible"
+        tools:ignore="SpUsage" />
+
+</LinearLayout>

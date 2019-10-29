@@ -15,34 +15,34 @@
 -->
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color> <!-- Indigo 500 -->
-    <color name="colorPrimaryDark">#303F9F</color> <!-- Indigo 700 -->
-    <color name="colorAccent">#FF7043</color> <!-- Deep Orange 400 -->
+    <color name="tb_colorPrimary">#3F51B5</color> <!-- Indigo 500 -->
+    <color name="tb_colorPrimaryDark">#303F9F</color> <!-- Indigo 700 -->
+    <color name="tb_colorAccent">#FF7043</color> <!-- Deep Orange 400 -->
 
-    <color name="text_color">#757575</color>
-    <color name="text_color_dark">#BEBEBE</color>
-    <color name="start_menu_background">#FAFAFA</color>
-    <color name="start_menu_background_dark">#303030</color>
-    <color name="main_activity_background">#F0F0F0</color>
-    <color name="main_activity_background_dark">#252525</color>
-    <color name="settings_icon_color">#000000</color>
-    <color name="settings_icon_color_dark">#FFFFFF</color>
+    <color name="tb_text_color">#757575</color>
+    <color name="tb_text_color_dark">#BEBEBE</color>
+    <color name="tb_start_menu_background">#FAFAFA</color>
+    <color name="tb_start_menu_background_dark">#303030</color>
+    <color name="tb_main_activity_background">#F0F0F0</color>
+    <color name="tb_main_activity_background_dark">#252525</color>
+    <color name="tb_settings_icon_color">#000000</color>
+    <color name="tb_settings_icon_color_dark">#FFFFFF</color>
 
-    <color name="red">#FF0000</color>
-    <color name="green">#00FF00</color>
-    <color name="blue">#0000FF</color>
-    <color name="alpha">#80808080</color>
+    <color name="tb_red">#FF0000</color>
+    <color name="tb_green">#00FF00</color>
+    <color name="tb_blue">#0000FF</color>
+    <color name="tb_alpha">#80808080</color>
 
-    <color name="ic_launcher_adaptive_bg">#4557A6</color>
-    <color name="ic_freeform_mode_adaptive_bg">#4790CD</color>
+    <color name="tb_launcher_adaptive_bg">#4557A6</color>
+    <color name="tb_freeform_mode_adaptive_bg">#4790CD</color>
 
-    <color name="app_shortcut_bg">#F5F5F5</color>
+    <color name="tb_app_shortcut_bg">#F5F5F5</color>
 
-    <color name="navbar_color_light">#FFFFFF</color>
-    <color name="navbar_color_dark">#000000</color>
-    <color name="navbar_divider_color_light">#DCDCDC</color>
-    <color name="navbar_divider_color_dark">#00000000</color>
+    <color name="tb_navbar_color_light">#FFFFFF</color>
+    <color name="tb_navbar_color_dark">#000000</color>
+    <color name="tb_navbar_divider_color_light">#DCDCDC</color>
+    <color name="tb_navbar_divider_color_dark">#00000000</color>
 
-    <color name="desktop_icon_text">#FFFFFF</color>
-    <color name="desktop_icon_shadow">#000000</color>
+    <color name="tb_desktop_icon_text">#FFFFFF</color>
+    <color name="tb_desktop_icon_shadow">#000000</color>
 </resources>

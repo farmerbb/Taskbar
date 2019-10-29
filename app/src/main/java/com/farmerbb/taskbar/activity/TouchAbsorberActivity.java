@@ -51,7 +51,7 @@ public class TouchAbsorberActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.incognito);
+        setContentView(R.layout.tb_incognito);
 
         DisplayInfo display = U.getDisplayInfo(this);
         LinearLayout layout = findViewById(R.id.incognitoLayout);

@@ -15,5 +15,5 @@
 -->
 
 <resources>
-    <dimen name="max_width">720dp</dimen>
+    <dimen name="tb_max_width">720dp</dimen>
 </resources>

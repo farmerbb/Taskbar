@@ -16,7 +16,7 @@
 
 <resources>
 
-    <string name="window_size_half_left">Половина экрана (левая)</string>
-    <string name="window_size_half_right">Половина экрана (правая)</string>
+    <string name="tb_window_size_half_left">Половина экрана (левая)</string>
+    <string name="tb_window_size_half_right">Половина экрана (правая)</string>
 
 </resources>

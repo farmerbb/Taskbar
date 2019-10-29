@@ -37,7 +37,7 @@ public class IconPackApplyActivity extends Activity {
         else if(getIntent().hasExtra(Intent.EXTRA_PACKAGE_NAME)) {
             SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getString("theme", "light").equals("dark"))
-                setTheme(R.style.AppTheme_Dialog_Dark);
+                setTheme(R.style.Taskbar_Dialog_Dark);
 
             @SuppressLint("InlinedApi")
             final String iconPackPackage = getIntent().getStringExtra(Intent.EXTRA_PACKAGE_NAME);
@@ -52,9 +52,9 @@ public class IconPackApplyActivity extends Activity {
 
             if(iconPackValid) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.apply_icon_pack)
-                        .setNegativeButton(R.string.action_cancel, (dialog, which) -> finish())
-                        .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                builder.setTitle(R.string.tb_apply_icon_pack)
+                        .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> finish())
+                        .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                             pref.edit().putString("icon_pack", iconPackPackage).apply();
 
                             U.refreshPinnedIcons(this);
@@ -64,7 +64,7 @@ public class IconPackApplyActivity extends Activity {
                         });
 
                 try {
-                    builder.setMessage(getString(R.string.apply_icon_pack_description,
+                    builder.setMessage(getString(R.string.tb_apply_icon_pack_description,
                             pm.getApplicationLabel(pm.getApplicationInfo(iconPackPackage, 0))));
                 } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
 
@@ -72,11 +72,11 @@ public class IconPackApplyActivity extends Activity {
                 dialog.show();
                 dialog.setCancelable(false);
             } else {
-                U.showToast(this, R.string.invalid_package_name);
+                U.showToast(this, R.string.tb_invalid_package_name);
                 finish();
             }
         } else {
-            U.showToast(this, R.string.must_specify_extra);
+            U.showToast(this, R.string.tb_must_specify_extra);
             finish();
         }
     }

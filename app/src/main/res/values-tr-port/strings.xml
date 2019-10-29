@@ -16,7 +16,7 @@
 
 <resources>
 
-    <string name="window_size_half_left">@string/window_size_half_left_alt</string>
-    <string name="window_size_half_right">@string/window_size_half_right_alt</string>
+    <string name="tb_window_size_half_left">@string/tb_window_size_half_left_alt</string>
+    <string name="tb_window_size_half_right">@string/tb_window_size_half_right_alt</string>
 
 </resources>

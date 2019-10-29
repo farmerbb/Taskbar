@@ -73,7 +73,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         super.onCreate(savedInstanceState);
 
         // Add preferences
-        addPreferencesFromResource(R.xml.pref_advanced);
+        addPreferencesFromResource(R.xml.tb_pref_advanced);
 
         // Set OnClickListeners for certain preferences
         findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
@@ -119,7 +119,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle(R.string.pref_header_advanced);
+        activity.setTitle(R.string.tb_pref_header_advanced);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -132,8 +132,8 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         if(secondScreenPrefEnabled) {
             findPreference("secondscreen").setTitle(
                     U.getSecondScreenPackageName(getActivity()) == null
-                            ? R.string.pref_secondscreen_title_install
-                            : R.string.pref_secondscreen_title_open);
+                            ? R.string.tb_pref_secondscreen_title_install
+                            : R.string.tb_pref_secondscreen_title_open);
         }
 
         updateDashboardGridSize(false);
@@ -205,7 +205,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 break;
             case "dashboard_grid_size":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.dashboard_size_dialog, null);
+                LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.tb_dashboard_size_dialog, null);
 
                 boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
                 boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -227,8 +227,8 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 final EditText editText2 = dialogLayout.findViewById(editText2Id);
 
                 builder.setView(dialogLayout)
-                        .setTitle(R.string.dashboard_grid_size)
-                        .setPositiveButton(R.string.action_ok, (dialog, id) -> {
+                        .setTitle(R.string.tb_dashboard_grid_size)
+                        .setPositiveButton(R.string.tb_action_ok, (dialog, id) -> {
                             boolean successfullyUpdated = false;
 
                             String widthString = editText.getText().toString();
@@ -250,16 +250,16 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                             }
 
                             if(!successfullyUpdated)
-                                U.showToast(getActivity(), R.string.invalid_grid_size);
+                                U.showToast(getActivity(), R.string.tb_invalid_grid_size);
                         })
-                        .setNegativeButton(R.string.action_cancel, null)
-                        .setNeutralButton(R.string.use_default, (dialog, id) -> {
+                        .setNegativeButton(R.string.tb_action_cancel, null)
+                        .setNeutralButton(R.string.tb_use_default, (dialog, id) -> {
                             pref.edit().remove("dashboard_width").remove("dashboard_height").apply();
                             updateDashboardGridSize(true);
                         });
 
-                editText.setText(Integer.toString(pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_width))));
-                editText2.setText(Integer.toString(pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_height))));
+                editText.setText(Integer.toString(pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width))));
+                editText2.setText(Integer.toString(pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height))));
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -311,8 +311,8 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
     private void updateDashboardGridSize(boolean restartTaskbar) {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        int width = pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_width));
-        int height = pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.dashboard_height));
+        int width = pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
+        int height = pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
 
         boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -330,7 +330,7 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
             second = height;
         }
 
-        findPreference("dashboard_grid_size").setSummary(getString(R.string.dashboard_grid_description, first, second));
+        findPreference("dashboard_grid_size").setSummary(getString(R.string.tb_dashboard_grid_description, first, second));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
     }

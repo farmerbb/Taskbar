@@ -56,6 +56,6 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
 
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
         } else
-            U.showToastLong(context, R.string.no_freeform_support);
+            U.showToastLong(context, R.string.tb_no_freeform_support);
     }
 }

@@ -45,7 +45,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
         super.onCreate(savedInstanceState);
 
         // Add preferences
-        addPreferencesFromResource(R.xml.pref_recent_apps);
+        addPreferencesFromResource(R.xml.tb_pref_recent_apps);
 
         // Set OnClickListeners for certain preferences
         findPreference("enable_recents").setOnPreferenceClickListener(this);
@@ -54,14 +54,14 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
         if(showRunningAppsOnly()) {
             ListPreference recentsAmountPref = ((ListPreference) findPreference("recents_amount"));
-            recentsAmountPref.setEntries(getResources().getStringArray(R.array.pref_recents_amount_alt));
-            recentsAmountPref.setEntryValues(getResources().getStringArray(R.array.pref_recents_amount_values_alt));
+            recentsAmountPref.setEntries(getResources().getStringArray(R.array.tb_pref_recents_amount_alt));
+            recentsAmountPref.setEntryValues(getResources().getStringArray(R.array.tb_pref_recents_amount_values_alt));
 
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             if(pref.getString("recents_amount", "past_day").equals("running_apps_only")) {
                 ListPreference sortOrderPref = ((ListPreference) findPreference("sort_order"));
-                sortOrderPref.setEntries(getResources().getStringArray(R.array.pref_sort_order_alt));
-                sortOrderPref.setEntryValues(getResources().getStringArray(R.array.pref_sort_order_values_alt));
+                sortOrderPref.setEntries(getResources().getStringArray(R.array.tb_pref_sort_order_alt));
+                sortOrderPref.setEntryValues(getResources().getStringArray(R.array.tb_pref_sort_order_values_alt));
             }
         }
 
@@ -87,7 +87,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
         super.onActivityCreated(savedInstanceState);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle(R.string.pref_header_recent_apps);
+        activity.setTitle(R.string.tb_pref_header_recent_apps);
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -110,7 +110,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                 final int max = 26;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.seekbar_pref, null);
+                LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.tb_seekbar_pref, null);
 
                 String value = pref.getString("max_num_of_recents", "10");
 
@@ -123,7 +123,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if(progress == max)
-                            textView.setText(R.string.infinity);
+                            textView.setText(R.string.tb_infinity);
                         else
                             textView.setText(Integer.toString(progress));
                     }
@@ -138,11 +138,11 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                 seekBar.setProgress(Integer.parseInt(value));
 
                 TextView blurb = dialogLayout.findViewById(R.id.blurb);
-                blurb.setText(R.string.num_of_recents_blurb);
+                blurb.setText(R.string.tb_num_of_recents_blurb);
 
                 builder.setView(dialogLayout)
-                        .setTitle(R.string.pref_max_num_of_recents)
-                        .setPositiveButton(R.string.action_ok, (dialog, id) -> {
+                        .setTitle(R.string.tb_pref_max_num_of_recents)
+                        .setPositiveButton(R.string.tb_action_ok, (dialog, id) -> {
                             int progress = seekBar.getProgress();
                             if(progress == max)
                                 progress = Integer.MAX_VALUE;
@@ -150,7 +150,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                             pref.edit().putString("max_num_of_recents", Integer.toString(progress)).apply();
                             updateMaxNumOfRecents(true);
                         })
-                        .setNegativeButton(R.string.action_cancel, null);
+                        .setNegativeButton(R.string.tb_action_cancel, null);
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -159,12 +159,12 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                 final int max2 = 20;
 
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
-                LinearLayout dialogLayout2 = (LinearLayout) View.inflate(getActivity(), R.layout.seekbar_pref, null);
+                LinearLayout dialogLayout2 = (LinearLayout) View.inflate(getActivity(), R.layout.tb_seekbar_pref, null);
 
                 String value2 = pref.getString("refresh_frequency", "1");
 
                 final TextView textView2 = dialogLayout2.findViewById(R.id.seekbar_value);
-                textView2.setText(R.string.infinity);
+                textView2.setText(R.string.tb_infinity);
 
                 final SeekBar seekBar2 = dialogLayout2.findViewById(R.id.seekbar);
                 seekBar2.setMax(max2);
@@ -172,7 +172,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if(progress == 0)
-                            textView2.setText(R.string.infinity);
+                            textView2.setText(R.string.tb_infinity);
                         else
                             textView2.setText(Double.toString(progress * 0.5));
                     }
@@ -187,17 +187,17 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                 seekBar2.setProgress((int) (Double.parseDouble(value2) * 2));
 
                 TextView blurb2 = dialogLayout2.findViewById(R.id.blurb);
-                blurb2.setText(R.string.refresh_frequency_blurb);
+                blurb2.setText(R.string.tb_refresh_frequency_blurb);
 
                 builder2.setView(dialogLayout2)
-                        .setTitle(R.string.pref_title_recents_refresh_interval)
-                        .setPositiveButton(R.string.action_ok, (dialog2, id) -> {
+                        .setTitle(R.string.tb_pref_title_recents_refresh_interval)
+                        .setPositiveButton(R.string.tb_action_ok, (dialog2, id) -> {
                             double progress = seekBar2.getProgress() * 0.5;
 
                             pref.edit().putString("refresh_frequency", Double.toString(progress)).apply();
                             updateRefreshFrequency(true);
                         })
-                        .setNegativeButton(R.string.action_cancel, null);
+                        .setNegativeButton(R.string.tb_action_cancel, null);
 
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();
@@ -213,13 +213,13 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
 
         switch(value) {
             case 1:
-                findPreference("max_num_of_recents").setSummary(R.string.max_num_of_recents_singular);
+                findPreference("max_num_of_recents").setSummary(R.string.tb_max_num_of_recents_singular);
                 break;
             case Integer.MAX_VALUE:
-                findPreference("max_num_of_recents").setSummary(R.string.max_num_of_recents_unlimited);
+                findPreference("max_num_of_recents").setSummary(R.string.tb_max_num_of_recents_unlimited);
                 break;
             default:
-                findPreference("max_num_of_recents").setSummary(getString(R.string.max_num_of_recents, value));
+                findPreference("max_num_of_recents").setSummary(getString(R.string.tb_max_num_of_recents, value));
                 break;
         }
 
@@ -233,13 +233,13 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
         int intValue = (int) doubleValue;
 
         if(doubleValue == 0)
-            findPreference("refresh_frequency").setSummary(R.string.refresh_frequency_continuous);
+            findPreference("refresh_frequency").setSummary(R.string.tb_refresh_frequency_continuous);
         else if(doubleValue == 1)
-            findPreference("refresh_frequency").setSummary(R.string.refresh_frequency_singular);
+            findPreference("refresh_frequency").setSummary(R.string.tb_refresh_frequency_singular);
         else if(doubleValue == (double) intValue)
-            findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, Integer.toString(intValue)));
+            findPreference("refresh_frequency").setSummary(getString(R.string.tb_refresh_frequency, Integer.toString(intValue)));
         else
-            findPreference("refresh_frequency").setSummary(getString(R.string.refresh_frequency, value));
+            findPreference("refresh_frequency").setSummary(getString(R.string.tb_refresh_frequency, value));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
     }
@@ -268,8 +268,8 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
             boolean useAlt = sharedPreferences.getString(key, "past_day").equals("running_apps_only");
 
             ListPreference sortOrderPref = ((ListPreference) findPreference("sort_order"));
-            sortOrderPref.setEntries(getResources().getStringArray(useAlt ? R.array.pref_sort_order_alt : R.array.pref_sort_order));
-            sortOrderPref.setEntryValues(getResources().getStringArray(useAlt ? R.array.pref_sort_order_values_alt : R.array.pref_sort_order_values));
+            sortOrderPref.setEntries(getResources().getStringArray(useAlt ? R.array.tb_pref_sort_order_alt : R.array.tb_pref_sort_order));
+            sortOrderPref.setEntryValues(getResources().getStringArray(useAlt ? R.array.tb_pref_sort_order_values_alt : R.array.tb_pref_sort_order_values));
 
             String sortOrderValue = sharedPreferences.getString("sort_order", "false");
             if(useAlt && sortOrderValue.startsWith("most_used_"))

@@ -15,12 +15,12 @@
 -->
 
 <resources>
-    <dimen name="start_menu_width">280dp</dimen>
-    <dimen name="start_menu_height">400dp</dimen>
-    <dimen name="start_menu_height_half">200dp</dimen>
-    <dimen name="start_menu_grid_width">93.3333dp</dimen>
-    <dimen name="start_menu_grid_text_size">13sp</dimen>
-    <dimen name="start_menu_grid_padding">3dp</dimen>
-    <dimen name="start_menu_icon_padding">7dp</dimen>
-    <dimen name="start_menu_no_apps_found_text">15sp</dimen>
+    <dimen name="tb_start_menu_width">280dp</dimen>
+    <dimen name="tb_start_menu_height">400dp</dimen>
+    <dimen name="tb_start_menu_height_half">200dp</dimen>
+    <dimen name="tb_start_menu_grid_width">93.3333dp</dimen>
+    <dimen name="tb_start_menu_grid_text_size">13sp</dimen>
+    <dimen name="tb_start_menu_grid_padding">3dp</dimen>
+    <dimen name="tb_start_menu_icon_padding">7dp</dimen>
+    <dimen name="tb_start_menu_no_apps_found_text">15sp</dimen>
 </resources>

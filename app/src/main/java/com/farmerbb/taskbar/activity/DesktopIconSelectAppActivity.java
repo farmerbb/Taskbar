@@ -65,9 +65,9 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
         desktopIcon = (DesktopIconInfo) getIntent().getSerializableExtra("desktop_icon");
         boolean noShadow = getIntent().hasExtra("no_shadow");
 
-        setContentView(R.layout.desktop_icon_select_app);
+        setContentView(R.layout.tb_desktop_icon_select_app);
         setFinishOnTouchOutside(false);
-        setTitle(getString(R.string.select_an_app));
+        setTitle(getString(R.string.tb_select_an_app));
 
         if(noShadow) {
             WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -163,7 +163,7 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
                 entries.add(entry);
             }
 
-            return new DesktopIconAppListAdapter(DesktopIconSelectAppActivity.this, R.layout.desktop_icon_row, entries);
+            return new DesktopIconAppListAdapter(DesktopIconSelectAppActivity.this, R.layout.tb_desktop_icon_row, entries);
         }
 
         @Override

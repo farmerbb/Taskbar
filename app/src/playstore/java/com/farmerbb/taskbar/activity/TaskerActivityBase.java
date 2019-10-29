@@ -42,9 +42,9 @@ public abstract class TaskerActivityBase extends PreferenceActivity implements P
         super.onPostCreate(savedInstanceState);
 
         if(this instanceof TaskerActionActivity) {
-            setTitle(R.string.tasker_action_title);
+            setTitle(R.string.tb_tasker_action_title);
 
-            addPreferencesFromResource(R.xml.pref_tasker_action);
+            addPreferencesFromResource(R.xml.tb_pref_tasker_action);
             findPreference("show_taskbar").setOnPreferenceClickListener(this);
             findPreference("hide_taskbar").setOnPreferenceClickListener(this);
             findPreference("toggle_start_menu").setOnPreferenceClickListener(this);
@@ -52,9 +52,9 @@ public abstract class TaskerActivityBase extends PreferenceActivity implements P
         }
 
         if(this instanceof TaskerConditionActivity) {
-            setTitle(R.string.tasker_condition_title);
+            setTitle(R.string.tb_tasker_condition_title);
 
-            addPreferencesFromResource(R.xml.pref_tasker_condition);
+            addPreferencesFromResource(R.xml.tb_pref_tasker_condition);
         }
 
         findPreference("tasker_on").setOnPreferenceClickListener(this);
@@ -82,10 +82,10 @@ public abstract class TaskerActivityBase extends PreferenceActivity implements P
         String extraName = com.twofortyfouram.locale.api.Intent.EXTRA_STRING_BLURB;
         switch(p.getKey()) {
             case "tasker_on":
-                resultIntent.putExtra(extraName, getString(R.string.on));
+                resultIntent.putExtra(extraName, getString(R.string.tb_on));
                 break;
             case "tasker_off":
-                resultIntent.putExtra(extraName, getString(R.string.off));
+                resultIntent.putExtra(extraName, getString(R.string.tb_off));
                 break;
             default:
                 resultIntent.putExtra(extraName, p.getTitle());

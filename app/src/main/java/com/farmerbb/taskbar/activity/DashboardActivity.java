@@ -71,7 +71,7 @@ public class DashboardActivity extends Activity {
                 startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
                 LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
             } catch (ActivityNotFoundException e) {
-                U.showToast(DashboardActivity.this, R.string.lock_device_not_supported);
+                U.showToast(DashboardActivity.this, R.string.tb_lock_device_not_supported);
                 finish();
             }
 
@@ -85,14 +85,14 @@ public class DashboardActivity extends Activity {
             cellId = intent.getIntExtra("cellId", -1);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
-            builder.setTitle(R.string.remove_widget)
-                    .setMessage(R.string.are_you_sure)
-                    .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
+            builder.setTitle(R.string.tb_remove_widget)
+                    .setMessage(R.string.tb_are_you_sure)
+                    .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> {
                         LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
 
                         shouldFinish = true;
                     })
-                    .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                    .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                         Intent intent1 = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
                         intent1.putExtra("cellId", cellId);
                         LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent1);
@@ -132,7 +132,7 @@ public class DashboardActivity extends Activity {
 
         DisplayInfo display = U.getDisplayInfo(this);
 
-        setContentView(R.layout.incognito);
+        setContentView(R.layout.tb_incognito);
 
         LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
