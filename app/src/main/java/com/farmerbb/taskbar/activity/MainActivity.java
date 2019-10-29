@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
                     setTheme(R.style.Taskbar_Dark);
                     break;
             }
+        } else {
+            int theme = getIntent().getIntExtra("theme", -1);
+            if(theme != -1)
+                setTheme(theme);
         }
 
         if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))

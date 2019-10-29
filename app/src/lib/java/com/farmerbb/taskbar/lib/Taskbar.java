@@ -27,12 +27,20 @@ import com.farmerbb.taskbar.activity.MainActivity;
     private Taskbar() {}
 
     @Keep public static void openSettings(Context context) {
-        openSettings(context, null);
+        openSettings(context, null, -1);
     }
 
     @Keep public static void openSettings(Context context, String title) {
+        openSettings(context, title, -1);
+    }
+    @Keep public static void openSettings(Context context, int theme) {
+        openSettings(context, null, theme);
+    }
+
+    @Keep public static void openSettings(Context context, String title, int theme) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("title", title);
+        intent.putExtra("theme", theme);
 
         if(!(context instanceof Activity))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
