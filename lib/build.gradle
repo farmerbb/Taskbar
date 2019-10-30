@@ -1,7 +1,18 @@
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
 
 repositories {
     google()
+}
+
+publish {
+    userOrg = 'farmerbb'
+    repoName = 'libtaskbar'
+    groupId = 'com.farmerbb'
+    artifactId = 'libtaskbar'
+    publishVersion = '1.0.0-alpha1'
+    desc = 'libtaskbar allows you to quickly and easily add support for Android 10\'s Desktop Mode to any third-party launcher, powered by the Taskbar app.'
+    website = 'https://github.com/farmerbb/Taskbar'
 }
 
 android {
@@ -31,6 +42,10 @@ android {
             res { srcDirs('../app/src/main/res', '../app/src/lib/res') }
             manifest.srcFile '../app/src/lib/AndroidManifest.xml'
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
