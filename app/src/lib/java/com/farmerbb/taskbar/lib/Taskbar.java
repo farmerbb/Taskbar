@@ -16,14 +16,17 @@
 package com.farmerbb.taskbar.lib;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 
 import com.farmerbb.taskbar.activity.MainActivity;
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 
 @Keep public class Taskbar {
 
@@ -77,5 +80,18 @@ import com.farmerbb.taskbar.activity.MainActivity;
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(intent);
+    }
+
+    /**
+     * Enables or disables Taskbar's desktop mode at runtime.
+     * @param context Context used to control component state
+     * @param enabled "true" to enable desktop mode, "false" to disable
+     */
+    @Keep public static void setEnabled(@NonNull Context context, boolean enabled) {
+        ComponentName component = new ComponentName(context, SecondaryHomeActivity.class);
+        context.getPackageManager().setComponentEnabledSetting(component, enabled
+                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 }
