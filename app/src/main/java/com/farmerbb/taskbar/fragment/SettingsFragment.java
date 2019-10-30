@@ -39,6 +39,7 @@ public abstract class SettingsFragment extends PreferenceFragment {
     boolean showReminderToast = false;
     boolean restartNotificationService = false;
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

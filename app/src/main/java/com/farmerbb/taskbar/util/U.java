@@ -1240,7 +1240,7 @@ public class U {
             editor.putBoolean("button_back", true);
             editor.putBoolean("button_home", true);
             editor.putBoolean("button_recents", true);
-            editor.putBoolean("auto_hide_navbar", true);
+         // editor.putBoolean("auto_hide_navbar", true);
          // editor.putBoolean("shortcut_icon", false);
             editor.putBoolean("bliss_os_prefs", true);
             editor.apply();

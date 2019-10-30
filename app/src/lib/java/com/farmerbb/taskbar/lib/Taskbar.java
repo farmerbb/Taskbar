@@ -19,6 +19,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Keep;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 
 import com.farmerbb.taskbar.activity.MainActivity;
 
@@ -26,18 +29,45 @@ import com.farmerbb.taskbar.activity.MainActivity;
 
     private Taskbar() {}
 
-    @Keep public static void openSettings(Context context) {
+    /**
+     * Opens the settings page for configuring Taskbar.
+     * @param context Context used to start the activity
+     */
+    @Keep public static void openSettings(@NonNull Context context) {
         openSettings(context, null, -1);
     }
 
-    @Keep public static void openSettings(Context context, String title) {
+    /**
+     * Opens the settings page for configuring Taskbar, using the specified title.
+     * @param context Context used to start the activity
+     * @param title Title to display in the top level of the settings hierarchy.
+     *              If null, defaults to "Settings".
+     */
+    @Keep public static void openSettings(@NonNull Context context, @Nullable String title) {
         openSettings(context, title, -1);
     }
-    @Keep public static void openSettings(Context context, int theme) {
+
+    /**
+     * Opens the settings page for configuring Taskbar, using the specified theme.
+     * @param context Context used to start the activity
+     * @param theme Theme to apply to the settings activity. If set to -1, the activity will
+     *              use the app's default theme if it is a derivative of Theme.AppCompat,
+     *              or Theme.AppCompat.Light otherwise.
+     */
+    @Keep public static void openSettings(@NonNull Context context, @StyleRes int theme) {
         openSettings(context, null, theme);
     }
 
-    @Keep public static void openSettings(Context context, String title, int theme) {
+    /**
+     * Opens the settings page for configuring Taskbar, using the specified title and theme.
+     * @param context Context used to start the activity
+     * @param title Title to display in the top level of the settings hierarchy.
+     *              If null, defaults to "Settings".
+     * @param theme Theme to apply to the settings activity. If set to -1, the activity will
+     *              use the app's default theme if it is a derivative of Theme.AppCompat,
+     *              or Theme.AppCompat.Light otherwise.
+     */
+    @Keep public static void openSettings(@NonNull Context context, @Nullable String title, @StyleRes int theme) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("theme", theme);
