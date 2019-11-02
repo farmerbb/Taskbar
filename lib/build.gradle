@@ -10,7 +10,7 @@ publish {
     repoName = 'libtaskbar'
     groupId = 'com.farmerbb'
     artifactId = 'libtaskbar'
-    publishVersion = '1.0.0-alpha1'
+    publishVersion = '1.0.0'
     desc = 'libtaskbar allows you to quickly and easily add support for Android 10\'s Desktop Mode to any third-party launcher, powered by the Taskbar app.'
     website = 'https://github.com/farmerbb/Taskbar/blob/master/lib/README.md'
 }
