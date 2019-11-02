@@ -35,7 +35,11 @@ public class LauncherHelper {
         return isOnHomeScreen(true, true);
     }
 
-    public boolean isOnHomeScreen(boolean checkPrimary, boolean checkSecondary) {
+    public boolean isOnSecondaryHomeScreen() {
+        return isOnHomeScreen(false, true);
+    }
+
+    private boolean isOnHomeScreen(boolean checkPrimary, boolean checkSecondary) {
         if(checkPrimary && checkSecondary)
             return onPrimaryHomeScreen || onSecondaryHomeScreen;
 

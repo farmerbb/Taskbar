@@ -41,6 +41,7 @@ import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -895,7 +896,7 @@ public class U {
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
-        if(LauncherHelper.getInstance().isOnHomeScreen(false, true)
+        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()
                 && (cls.equals(TaskbarService.class)
                 || cls.equals(StartMenuService.class)
                 || cls.equals(DashboardService.class)))
@@ -1266,48 +1267,65 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
-        if(LauncherHelper.getInstance().getSecondaryDisplayId() == -1)
-            context = context.getApplicationContext();
+        context = context.getApplicationContext();
 
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display disp = wm.getDefaultDisplay();
+        LauncherHelper helper = LauncherHelper.getInstance();
+        int displayID;
+
+        if(helper.isOnSecondaryHomeScreen())
+            displayID = helper.getSecondaryDisplayId();
+        else
+            displayID = Display.DEFAULT_DISPLAY;
+
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display currentDisplay = null;
+
+        for(Display display : dm.getDisplays()) {
+            if(display.getDisplayId() == displayID) {
+                currentDisplay = display;
+                break;
+            }
+        }
+
+        if(currentDisplay == null)
+            return new DisplayInfo(0, 0, 0);
 
         DisplayMetrics metrics = new DisplayMetrics();
-        disp.getMetrics(metrics);
+        currentDisplay.getMetrics(metrics);
 
         DisplayMetrics realMetrics = new DisplayMetrics();
-        disp.getRealMetrics(realMetrics);
+        currentDisplay.getRealMetrics(realMetrics);
 
-        DisplayInfo display = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+        DisplayInfo info = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
 
         if(isChromeOs(context)) {
             SharedPreferences pref = getSharedPreferences(context);
             if(!pref.getBoolean("chrome_os_context_menu_fix", true)) {
-                display.width = realMetrics.widthPixels;
-                display.height = realMetrics.heightPixels;
+                info.width = realMetrics.widthPixels;
+                info.height = realMetrics.heightPixels;
             }
 
-            return display;
+            return info;
         }
 
         // Workaround for incorrect display size on devices with notches in landscape mode
         if(fromTaskbar && context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-            return display;
+            return info;
 
         boolean sameWidth = metrics.widthPixels == realMetrics.widthPixels;
         boolean sameHeight = metrics.heightPixels == realMetrics.heightPixels;
 
         if(sameWidth && !sameHeight) {
-            display.width = realMetrics.widthPixels;
-            display.height = realMetrics.heightPixels - getNavbarHeight(context);
+            info.width = realMetrics.widthPixels;
+            info.height = realMetrics.heightPixels - getNavbarHeight(context);
         }
 
         if(!sameWidth && sameHeight) {
-            display.width = realMetrics.widthPixels - getNavbarHeight(context);
-            display.height = realMetrics.heightPixels;
+            info.width = realMetrics.widthPixels - getNavbarHeight(context);
+            info.height = realMetrics.heightPixels;
         }
 
-        return display;
+        return info;
     }
 
     public static void pinAppShortcut(Context context) {
