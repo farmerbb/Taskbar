@@ -10,13 +10,11 @@ Adding Desktop Mode support to your existing launcher is as easy as including th
 
 ```
 repositories {
-    maven {
-        url 'https://dl.bintray.com/farmerbb/libtaskbar'
-    }
+    jcenter()
 }
 
 dependencies {
-    implementation 'com.farmerbb:libtaskbar:1.0.0-alpha1'
+    implementation 'com.farmerbb:libtaskbar:1.0.0'
 }
 ```
 
