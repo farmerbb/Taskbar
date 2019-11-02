@@ -76,3 +76,8 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
 * OfficialMITX (German translation)
 * Whale Majida (Chinese translation)
 * Mesut Han (Turkish translation)
+
+#### Special Thanks
+* Mishaal Rahman (xda-developers)
+* Jon West (Team Bliss)
+* Chih-Wei Huang (Android-x86)
