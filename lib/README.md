@@ -32,7 +32,7 @@ If desired, you can also supply a title to show in the top level of the Taskbar 
 
 Finally, while Taskbar's desktop mode functionality is enabled out-of-the-box, it can be programmatically enabled and disabled by calling:
 
-    Taskbar.setEnabled(true)
+    Taskbar.setEnabled(context, true) // or false
 
 ### Things to consider
 
