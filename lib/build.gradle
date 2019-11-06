@@ -10,7 +10,7 @@ publish {
     repoName = 'libtaskbar'
     groupId = 'com.farmerbb'
     artifactId = 'libtaskbar'
-    publishVersion = '1.0.0'
+    publishVersion = getLibVersion()
     desc = 'libtaskbar allows you to quickly and easily add support for Android 10\'s Desktop Mode to any third-party launcher, powered by the Taskbar app.'
     website = 'https://github.com/farmerbb/Taskbar/blob/master/lib/README.md'
 }
@@ -53,4 +53,15 @@ dependencies {
     implementation "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+}
+
+def getLibVersion() {
+    def appVersion = VERSION_NAME
+    if(appVersion.split("\\.").length == 2)
+        appVersion = "$appVersion.0"
+
+    def libVersion = appVersion.split("\\.")
+    libVersion[0] = "${libVersion[0].toInteger() - 4}".toString()
+
+    return libVersion.join('.')
 }
