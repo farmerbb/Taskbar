@@ -34,13 +34,15 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
@@ -334,9 +336,12 @@ public class TaskbarController implements UIController {
             case "custom":
                 File file = new File(context.getFilesDir() + "/tb_images", "custom_image");
                 if(file.exists()) {
-                    try {
-                        startButton.setImageURI(Uri.fromFile(file));
-                    } catch (Exception e) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                    if(bitmap != null) {
+                        BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
+                        bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
+                        startButton.setImageDrawable(bitmapDrawable);
+                    } else {
                         U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
                         startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
                     }
