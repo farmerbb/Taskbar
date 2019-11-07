@@ -111,7 +111,6 @@
     <string name="tb_pref_description_keyboard_shortcut_alt">@string/tb_pref_description_keyboard_shortcut</string>
     <string name="tb_loading_apps">アプリのロード中&#8230;</string>
     <string name="tb_press_enter">アプリが見つかりません\n\nEnter を押すと Google で検索します</string>
-    <string name="tb_nothing_to_see_here">ここには何もありません&#8230;</string>
 
     <string name="tb_error_dialog_title">エラー</string>
     <string name="tb_error_dialog_message">残念ながら OEM の制限のため、お使いのデバイスでこの機能を有効にできません。\n\nadb シェルコマンドを使用して有効にすることができる可能性があります:\n\nappops set %1$s %2$s allow</string>

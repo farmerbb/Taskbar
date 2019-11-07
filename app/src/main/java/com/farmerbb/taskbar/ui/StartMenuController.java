@@ -571,6 +571,7 @@ public class StartMenuController implements UIController {
                                 adapter = new StartMenuAdapter(context, listener, false, entries);
                             }
 
+                            startMenu.setHasFixedSize(true);
                             startMenu.setLayoutManager(manager);
                             startMenu.setAdapter(adapter);
                         } else
@@ -588,7 +589,7 @@ public class StartMenuController implements UIController {
                         else if(query != null)
                             textView.setText(context.getString(Patterns.WEB_URL.matcher(query).matches() ? R.string.tb_press_enter_alt : R.string.tb_press_enter));
                         else
-                            textView.setText(context.getString(R.string.tb_nothing_to_see_here));
+                            textView.setText(context.getString(R.string.tb_loading_apps));
                     }
                 });
             }

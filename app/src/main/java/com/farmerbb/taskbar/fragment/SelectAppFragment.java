@@ -48,6 +48,7 @@ public class SelectAppFragment extends Fragment {
         RecyclerView appList = (RecyclerView) inflater.inflate(R.layout.tb_recyclerview, container, false);
         int type = getArguments().getInt(ARG_SECTION_NUMBER);
 
+        appList.setHasFixedSize(true);
         appList.setLayoutManager(new LinearLayoutManager(getActivity()));
         appList.setAdapter(activity.getAppListAdapter(type));
 

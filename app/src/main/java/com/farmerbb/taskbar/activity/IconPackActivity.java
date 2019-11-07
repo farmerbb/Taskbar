@@ -175,6 +175,7 @@ public class IconPackActivity extends AppCompatActivity {
                 finish();
             } else {
                 progressBar.setVisibility(View.GONE);
+                appList.setHasFixedSize(true);
                 appList.setLayoutManager(new LinearLayoutManager(IconPackActivity.this));
                 appList.setAdapter(adapter);
                 setFinishOnTouchOutside(true);

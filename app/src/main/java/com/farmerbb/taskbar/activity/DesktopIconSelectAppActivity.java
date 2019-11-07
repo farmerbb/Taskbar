@@ -170,6 +170,7 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(DesktopIconAppListAdapter adapter) {
             progressBar.setVisibility(View.GONE);
+            appList.setHasFixedSize(true);
             appList.setLayoutManager(new LinearLayoutManager(DesktopIconSelectAppActivity.this));
             appList.setAdapter(adapter);
             setFinishOnTouchOutside(true);

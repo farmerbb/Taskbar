@@ -111,7 +111,6 @@
     <string name="tb_pref_description_keyboard_shortcut_alt">Taakbalk starten/stoppen\n&#8226; WinKey+M / Search+M\n\nStartmenu tonen\n&#8226; WinKey / Search\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
     <string name="tb_loading_apps">Bezig met laden van apps&#8230;</string>
     <string name="tb_press_enter">Geen apps aangetroffen\n\nDruk op Enter om te zoeken met Google</string>
-    <string name="tb_nothing_to_see_here">Niks te zien, loop maar door&#8230;</string>
 
     <string name="tb_error_dialog_title">Fout</string>
     <string name="tb_error_dialog_message">Door OEM-beperkingen kan deze functie helaas niet worden ingeschakeld op je apparaat.\n\nJe kunt proberen dit alsnog in te schakelen met deze adb shell-opdracht:\n\nappops set %1$s %2$s allow</string>
