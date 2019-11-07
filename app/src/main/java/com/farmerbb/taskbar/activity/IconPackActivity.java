@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar.activity;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -24,18 +23,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.IconPack;
 import com.farmerbb.taskbar.util.IconPackManager;
@@ -50,7 +48,7 @@ public class IconPackActivity extends AppCompatActivity {
 
     private AppListGenerator appListGenerator;
     private ProgressBar progressBar;
-    private ListView appList;
+    private RecyclerView appList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,25 +82,31 @@ public class IconPackActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 
-    private class AppListAdapter extends ArrayAdapter<IconPack> {
-        AppListAdapter(Context context, int layout, List<IconPack> list) {
-            super(context, layout, list);
+    private class AppListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private List<IconPack> entries = new ArrayList<>();
+
+        AppListAdapter(List<IconPack> list) {
+            entries.addAll(list);
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            View view = LayoutInflater.from(IconPackActivity.this).inflate(R.layout.tb_desktop_icon_row, viewGroup, false);
+            return new RecyclerView.ViewHolder(view) {};
         }
 
         @Override
-        public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
-            // Check if an existing view is being reused, otherwise inflate the view
-            if(convertView == null)
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.tb_row, parent, false);
-
-            final IconPack entry = getItem(position);
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+            final IconPack entry = entries.get(i);
             assert entry != null;
 
-            TextView textView = convertView.findViewById(R.id.name);
+            TextView textView = viewHolder.itemView.findViewById(R.id.name);
             textView.setText(entry.getName());
 
             PackageManager pm = getPackageManager();
-            ImageView imageView = convertView.findViewById(R.id.icon);
+            ImageView imageView = viewHolder.itemView.findViewById(R.id.icon);
 
             if(entry.getPackageName().equals(getPackageName())) {
                 imageView.setImageDrawable(null);
@@ -114,7 +118,7 @@ public class IconPackActivity extends AppCompatActivity {
                 }
             }
 
-            LinearLayout layout = convertView.findViewById(R.id.entry);
+            LinearLayout layout = viewHolder.itemView.findViewById(R.id.entry);
             layout.setOnClickListener(view -> {
                 SharedPreferences pref = U.getSharedPreferences(IconPackActivity.this);
                 pref.edit().putString("icon_pack", entry.getPackageName()).apply();
@@ -134,8 +138,11 @@ public class IconPackActivity extends AppCompatActivity {
                 }
                 return false;
             });
+        }
 
-            return convertView;
+        @Override
+        public int getItemCount() {
+            return entries.size();
         }
     }
 
@@ -156,7 +163,7 @@ public class IconPackActivity extends AppCompatActivity {
                 finalList.add(dummyIconPack);
                 finalList.addAll(list);
 
-                return new AppListAdapter(IconPackActivity.this, R.layout.tb_row, finalList);
+                return new AppListAdapter(finalList);
             }
         }
 
@@ -168,6 +175,7 @@ public class IconPackActivity extends AppCompatActivity {
                 finish();
             } else {
                 progressBar.setVisibility(View.GONE);
+                appList.setLayoutManager(new LinearLayoutManager(IconPackActivity.this));
                 appList.setAdapter(adapter);
                 setFinishOnTouchOutside(true);
             }

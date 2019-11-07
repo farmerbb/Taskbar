@@ -28,9 +28,10 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
@@ -52,7 +53,7 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
 
     private DesktopIconAppListGenerator appListGenerator;
     private ProgressBar progressBar;
-    private ListView appList;
+    private RecyclerView appList;
 
     private DesktopIconInfo desktopIcon;
 
@@ -163,12 +164,13 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
                 entries.add(entry);
             }
 
-            return new DesktopIconAppListAdapter(DesktopIconSelectAppActivity.this, R.layout.tb_desktop_icon_row, entries);
+            return new DesktopIconAppListAdapter(DesktopIconSelectAppActivity.this, entries);
         }
 
         @Override
         protected void onPostExecute(DesktopIconAppListAdapter adapter) {
             progressBar.setVisibility(View.GONE);
+            appList.setLayoutManager(new LinearLayoutManager(DesktopIconSelectAppActivity.this));
             appList.setAdapter(adapter);
             setFinishOnTouchOutside(true);
         }

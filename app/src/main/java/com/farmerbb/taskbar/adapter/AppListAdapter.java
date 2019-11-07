@@ -17,10 +17,10 @@ package com.farmerbb.taskbar.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,40 +32,52 @@ import com.farmerbb.taskbar.util.BlacklistEntry;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
-    private final Blacklist blacklist = Blacklist.getInstance(getContext());
-    private final TopApps topApps = TopApps.getInstance(getContext());
+public class AppListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final Blacklist blacklist;
+    private final TopApps topApps;
 
+    private Context context;
+    private List<BlacklistEntry> entries = new ArrayList<>();
     private int type;
 
-    public AppListAdapter(Context context, int layout, List<BlacklistEntry> list, int type) {
-        super(context, layout, list);
-
+    public AppListAdapter(Context context, List<BlacklistEntry> list, int type) {
+        this.context = context;
+        entries.addAll(list);
         this.type = type;
+
+        blacklist = Blacklist.getInstance(context);
+        topApps = TopApps.getInstance(context);
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(context).inflate(R.layout.tb_row_blacklist, viewGroup, false);
+        return new RecyclerView.ViewHolder(view) {};
     }
 
     @Override
-    public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
-        // Check if an existing view is being reused, otherwise inflate the view
-        if(convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.tb_row_blacklist, parent, false);
-
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         switch(type) {
             case U.HIDDEN:
-                setupHidden(position, convertView);
+                setupHidden(i, viewHolder.itemView);
                 break;
             case U.TOP_APPS:
-                setupTopApps(position, convertView);
+                setupTopApps(i, viewHolder.itemView);
                 break;
         }
+    }
 
-        return convertView;
+    @Override
+    public int getItemCount() {
+        return entries.size();
     }
 
     private void setupHidden(int position, View convertView) {
-        final BlacklistEntry entry = getItem(position);
+        final BlacklistEntry entry = entries.get(position);
         assert entry != null;
 
         final String componentName = entry.getPackageName();
@@ -85,27 +97,27 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
             if(topApps.isTopApp(componentName)
                     || topApps.isTopApp(componentNameAlt)
                     || topApps.isTopApp(componentNameAlt2)) {
-                U.showToast(getContext(),
-                        getContext().getString(R.string.tb_already_top_app, entry.getLabel()),
+                U.showToast(context,
+                        context.getString(R.string.tb_already_top_app, entry.getLabel()),
                         Toast.LENGTH_LONG);
             } else if(blacklist.isBlocked(componentName)) {
-                blacklist.removeBlockedApp(getContext(), componentName);
+                blacklist.removeBlockedApp(context, componentName);
                 checkBox.setChecked(false);
             } else if(blacklist.isBlocked(componentNameAlt)) {
-                blacklist.removeBlockedApp(getContext(), componentNameAlt);
+                blacklist.removeBlockedApp(context, componentNameAlt);
                 checkBox.setChecked(false);
             } else if(blacklist.isBlocked(componentNameAlt2)) {
-                blacklist.removeBlockedApp(getContext(), componentNameAlt2);
+                blacklist.removeBlockedApp(context, componentNameAlt2);
                 checkBox.setChecked(false);
             } else {
-                blacklist.addBlockedApp(getContext(), entry);
+                blacklist.addBlockedApp(context, entry);
                 checkBox.setChecked(true);
             }
         });
     }
 
     private void setupTopApps(int position, View convertView) {
-        final BlacklistEntry entry = getItem(position);
+        final BlacklistEntry entry = entries.get(position);
         assert entry != null;
 
         final String componentName = entry.getPackageName();
@@ -125,20 +137,20 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
             if(blacklist.isBlocked(componentName)
                     || blacklist.isBlocked(componentNameAlt)
                     || blacklist.isBlocked(componentNameAlt2)) {
-                U.showToast(getContext(),
-                        getContext().getString(R.string.tb_already_blacklisted, entry.getLabel()),
+                U.showToast(context,
+                        context.getString(R.string.tb_already_blacklisted, entry.getLabel()),
                         Toast.LENGTH_LONG);
             } else if(topApps.isTopApp(componentName)) {
-                topApps.removeTopApp(getContext(), componentName);
+                topApps.removeTopApp(context, componentName);
                 checkBox.setChecked(false);
             } else if(topApps.isTopApp(componentNameAlt)) {
-                topApps.removeTopApp(getContext(), componentNameAlt);
+                topApps.removeTopApp(context, componentNameAlt);
                 checkBox.setChecked(false);
             } else if(topApps.isTopApp(componentNameAlt2)) {
-                topApps.removeTopApp(getContext(), componentNameAlt2);
+                topApps.removeTopApp(context, componentNameAlt2);
                 checkBox.setChecked(false);
             } else {
-                topApps.addTopApp(getContext(), entry);
+                topApps.addTopApp(context, entry);
                 checkBox.setChecked(true);
             }
         });
