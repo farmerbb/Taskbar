@@ -245,8 +245,8 @@ public class SelectAppActivity extends AppCompatActivity {
             }
 
             return new AppListAdapter[] {
-                    new AppListAdapter(SelectAppActivity.this, entries, U.HIDDEN),
-                    new AppListAdapter(SelectAppActivity.this, entries, U.TOP_APPS)
+                    new AppListAdapter(SelectAppActivity.this, R.layout.tb_row_blacklist, entries, U.HIDDEN),
+                    new AppListAdapter(SelectAppActivity.this, R.layout.tb_row_blacklist, entries, U.TOP_APPS)
             };
         }
 

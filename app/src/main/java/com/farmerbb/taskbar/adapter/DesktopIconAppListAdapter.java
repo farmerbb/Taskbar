@@ -16,11 +16,10 @@
 package com.farmerbb.taskbar.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,46 +28,34 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DesktopIconSelectAppActivity;
 import com.farmerbb.taskbar.util.AppEntry;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DesktopIconAppListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private Context context;
-    private List<AppEntry> entries = new ArrayList<>();
-
-    public DesktopIconAppListAdapter(Context context, List<AppEntry> list) {
-        this.context = context;
-        entries.addAll(list);
-    }
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.tb_desktop_icon_row, viewGroup, false);
-        return new RecyclerView.ViewHolder(view) {};
+public class DesktopIconAppListAdapter extends ArrayAdapter<AppEntry> {
+    public DesktopIconAppListAdapter(Context context, int layout, List<AppEntry> list) {
+        super(context, layout, list);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        final AppEntry entry = entries.get(i);
+    public View getView(int position, View convertView, final ViewGroup parent) {
+        // Check if an existing view is being reused, otherwise inflate the view
+        if(convertView == null)
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.tb_desktop_icon_row, parent, false);
+
+        final AppEntry entry = getItem(position);
         assert entry != null;
 
-        TextView textView = viewHolder.itemView.findViewById(R.id.name);
+        TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
 
-        ImageView imageView = viewHolder.itemView.findViewById(R.id.icon);
-        imageView.setImageDrawable(entry.getIcon(context));
+        ImageView imageView = convertView.findViewById(R.id.icon);
+        imageView.setImageDrawable(entry.getIcon(getContext()));
 
-        LinearLayout layout = viewHolder.itemView.findViewById(R.id.entry);
+        LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
-            DesktopIconSelectAppActivity activity = (DesktopIconSelectAppActivity) context;
+            DesktopIconSelectAppActivity activity = (DesktopIconSelectAppActivity) getContext();
             activity.selectApp(entry);
         });
-    }
 
-    @Override
-    public int getItemCount() {
-        return entries.size();
+        return convertView;
     }
 }

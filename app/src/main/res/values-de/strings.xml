@@ -111,6 +111,7 @@
     <string name="tb_pref_description_keyboard_shortcut_alt">@string/tb_pref_description_keyboard_shortcut</string>
     <string name="tb_loading_apps">Apps werden geladen&#8230;</string>
     <string name="tb_press_enter">Keine Apps gefunden\n\nDrücken Sie Enter, um mit Google zu suchen</string>
+    <string name="tb_nothing_to_see_here">Nichts zu sehen hier, gehen Sie weiter&#8230;</string>
 
     <string name="tb_error_dialog_title">Fehler</string>
     <string name="tb_error_dialog_message">Leider kann diese Option auf Ihrem Gerät wegen OEM Restriktionen nicht freigeschaltet werden.\n\nVielleicht können Sie aber sie durch folgenden den folgenden Befehl freigeben:\n\nappops set %1$s %2$s allow</string>

@@ -30,27 +30,13 @@
             android:layout_height="wrap_content"
             android:padding="1dp" >
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/start_menu_fast_scroll"
+                <GridView
+                    android:id="@+id/start_menu"
                     android:layout_width="@dimen/tb_start_menu_width"
                     android:layout_height="@dimen/tb_start_menu_height"
                     android:background="?tb_start_menu_background"
                     android:listSelector="@null"
-                    android:clickable="false"
-                    app:fastScrollEnabled="true"
-                    app:fastScrollHorizontalThumbDrawable="@drawable/tb_thumb_drawable"
-                    app:fastScrollHorizontalTrackDrawable="@drawable/tb_line_drawable"
-                    app:fastScrollVerticalThumbDrawable="@drawable/tb_thumb_drawable"
-                    app:fastScrollVerticalTrackDrawable="@drawable/tb_line_drawable"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/start_menu_no_fast_scroll"
-                    android:layout_width="@dimen/tb_start_menu_width"
-                    android:layout_height="@dimen/tb_start_menu_height"
-                    android:background="?tb_start_menu_background"
-                    android:listSelector="@null"
-                    android:clickable="false"
-                    android:scrollbars="vertical" />
+                    android:clickable="false" />
 
                 <TextView
                     android:id="@+id/no_apps_found"

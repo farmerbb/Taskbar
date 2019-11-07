@@ -111,6 +111,7 @@
     <string name="tb_pref_description_keyboard_shortcut_alt">开始/停止任务栏\n&#8226; WinKey+M / Search+M\n\n显示开始菜单\n&#8226; WinKey / Search\n(requires Taskbar to be set as the assist app in Settings)</string>
     <string name="tb_loading_apps">正在载入应用&#8230;</string>
     <string name="tb_press_enter">未找到应用\n\n点按 Enter 使用 Google 搜索</string>
+    <string name="tb_nothing_to_see_here">空空如也, 向前移动&#8230;</string>
 
     <string name="tb_error_dialog_title">出错</string>
     <string name="tb_error_dialog_message">不幸的是，由于OEM 的限制，该功能不能在你的设备上启用。\n\n你仍然可以使用这个 adb shell 命令启用它:\n\nappops set %1$s %2$s allow</string>

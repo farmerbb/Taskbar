@@ -17,7 +17,7 @@
 <LinearLayout
     android:id="@+id/entry"
     android:layout_width="@dimen/tb_start_menu_grid_width"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingLeft="@dimen/tb_start_menu_grid_padding"
     android:paddingRight="@dimen/tb_start_menu_grid_padding"
     android:orientation="vertical"

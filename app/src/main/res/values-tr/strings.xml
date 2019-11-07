@@ -178,6 +178,7 @@ Ayarlarınız başarıyla içe aktarıldı ve şimdi uygulamanın ücretsiz sür
 <string name="tb_navigation_bar_buttons_description">Gezinme çubuğu eylemlerini gerçekleştiren Taskbar a ek düğmeler ekleyin</string>
 <string name="tb_no_freeform_support">Serbest modu cihazınızda etkin değil - Taskbar açın ve önce etkinleştirin</string>
 <string name="tb_no_icon_packs_installed">Simge paketi yüklenmemiş</string>
+<string name="tb_nothing_to_see_here">Burada görülecek hiçbir şey yok...</string>
 <string name="tb_notification_settings">Sistem bildirim ayarları</string>
 <string name="tb_num_of_recents_blurb">"Bu ayarı değiştirmeden önce kullanım erişiminin etkinleştirildiğinden emin olun.
 

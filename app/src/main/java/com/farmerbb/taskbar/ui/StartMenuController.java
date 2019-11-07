@@ -38,9 +38,6 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -54,7 +51,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
@@ -81,12 +80,11 @@ public class StartMenuController implements UIController {
 
     private Context context;
     private StartMenuLayout layout;
-    private RecyclerView startMenu;
+    private GridView startMenu;
     private SearchView searchView;
     private TextView textView;
     private PackageManager pm;
     private StartMenuAdapter adapter;
-    private StartMenuAdapter.ItemClickListener listener;
 
     private Handler handler;
     private Thread thread;
@@ -140,7 +138,7 @@ public class StartMenuController implements UIController {
     private BroadcastReceiver resetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            startMenu.scrollToPosition(0);
+            startMenu.setSelection(0);
         }
     };
 
@@ -250,20 +248,21 @@ public class StartMenuController implements UIController {
         layout = (StartMenuLayout) LayoutInflater.from(U.wrapContext(context)).inflate(layoutId, null);
         layout.setAlpha(0);
 
-        boolean scrollbar = pref.getBoolean("scrollbar", false);
-        startMenu = layout.findViewById(scrollbar ? R.id.start_menu_fast_scroll : R.id.start_menu_no_fast_scroll);
-        layout.findViewById(scrollbar ? R.id.start_menu_no_fast_scroll : R.id.start_menu_fast_scroll).setVisibility(View.GONE);
+        startMenu = layout.findViewById(R.id.start_menu);
 
         if((shouldShowSearchBox && !hasHardwareKeyboard) || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             layout.viewHandlesBackButton();
 
+        boolean scrollbar = pref.getBoolean("scrollbar", false);
+        startMenu.setFastScrollEnabled(scrollbar);
+        startMenu.setFastScrollAlwaysVisible(scrollbar);
         startMenu.setScrollBarStyle(scrollbar ? View.SCROLLBARS_OUTSIDE_INSET : View.SCROLLBARS_INSIDE_OVERLAY);
 
         if(pref.getBoolean("transparent_start_menu", false))
             startMenu.setBackgroundColor(0);
 
-        if(pref.getBoolean("visual_feedback", true))
-            startMenu.setRecyclerListener(holder -> holder.itemView.setBackgroundColor(0));
+        if(U.visualFeedbackEnabled(context))
+            startMenu.setRecyclerListener(view -> view.setBackgroundColor(0));
 
         int columns = context.getResources().getInteger(R.integer.tb_start_menu_columns);
         boolean isGrid = pref.getString("start_menu_layout", "grid").equals("grid");
@@ -296,12 +295,12 @@ public class StartMenuController implements UIController {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     if(!hasSubmittedQuery) {
-                        RecyclerView.Adapter adapter = startMenu.getAdapter();
+                        ListAdapter adapter = startMenu.getAdapter();
                         if(adapter != null) {
                             hasSubmittedQuery = true;
 
-                            if(adapter.getItemCount() > 0) {
-                                View view = startMenu.getChildAt(0);
+                            if(adapter.getCount() > 0) {
+                                View view = adapter.getView(0, null, startMenu);
                                 LinearLayout layout = view.findViewById(R.id.entry);
                                 layout.performClick();
                             } else {
@@ -390,11 +389,12 @@ public class StartMenuController implements UIController {
 
             searchViewLayout.setOnClickListener(view -> searchView.setIconified(false));
 
-            listener = (view, entry) -> {
+            startMenu.setOnItemClickListener((viewParent, view, position, id) -> {
                 hideStartMenu(true);
 
+                AppEntry entry = (AppEntry) viewParent.getAdapter().getItem(position);
                 U.launchApp(context, entry, null, false, false, view);
-            };
+            });
 
             View childLayout = layout.findViewById(R.id.search_view_child_layout);
             if(pref.getBoolean("transparent_start_menu", false))
@@ -559,37 +559,31 @@ public class StartMenuController implements UIController {
                     String queryText = searchView.getQuery().toString();
                     if(query == null && queryText.length() == 0
                             || query != null && query.equals(queryText)) {
-                        LinearLayoutManager manager;
 
                         if(firstDraw) {
                             SharedPreferences pref = U.getSharedPreferences(context);
                             if(pref.getString("start_menu_layout", "grid").equals("grid")) {
-                                manager = new GridLayoutManager(context, context.getResources().getInteger(R.integer.tb_start_menu_columns));
-                                adapter = new StartMenuAdapter(context, listener, true, entries);
-                            } else {
-                                manager = new LinearLayoutManager(context);
-                                adapter = new StartMenuAdapter(context, listener, false, entries);
-                            }
+                                startMenu.setNumColumns(context.getResources().getInteger(R.integer.tb_start_menu_columns));
+                                adapter = new StartMenuAdapter(context, R.layout.tb_row_alt, entries);
+                            } else
+                                adapter = new StartMenuAdapter(context, R.layout.tb_row, entries);
 
-                            startMenu.setHasFixedSize(true);
-                            startMenu.setLayoutManager(manager);
                             startMenu.setAdapter(adapter);
-                        } else
-                            manager = (LinearLayoutManager) startMenu.getLayoutManager();
+                        }
 
-                        int position = manager == null ? 0 : manager.findFirstVisibleItemPosition();
+                        int position = startMenu.getFirstVisiblePosition();
 
                         if(!firstDraw && adapter != null)
                             adapter.updateList(entries);
 
-                        startMenu.scrollToPosition(position);
+                        startMenu.setSelection(position);
 
-                        if(adapter != null && adapter.getItemCount() > 0)
+                        if(adapter != null && adapter.getCount() > 0)
                             textView.setText(null);
                         else if(query != null)
                             textView.setText(context.getString(Patterns.WEB_URL.matcher(query).matches() ? R.string.tb_press_enter_alt : R.string.tb_press_enter));
                         else
-                            textView.setText(context.getString(R.string.tb_loading_apps));
+                            textView.setText(context.getString(R.string.tb_nothing_to_see_here));
                     }
                 });
             }
@@ -714,7 +708,7 @@ public class StartMenuController implements UIController {
 
                 if(shouldReset) {
                     startMenu.smoothScrollBy(0, 0);
-                    startMenu.scrollToPosition(0);
+                    startMenu.setSelection(0);
                 }
 
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

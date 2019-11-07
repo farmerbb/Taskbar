@@ -17,13 +17,11 @@ package com.farmerbb.taskbar.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
-import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 
 public class SelectAppFragment extends Fragment {
@@ -45,11 +43,9 @@ public class SelectAppFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SelectAppActivity activity = (SelectAppActivity) getActivity();
-        RecyclerView appList = (RecyclerView) inflater.inflate(R.layout.tb_recyclerview, container, false);
+        ListView appList = new ListView(activity);
         int type = getArguments().getInt(ARG_SECTION_NUMBER);
 
-        appList.setHasFixedSize(true);
-        appList.setLayoutManager(new LinearLayoutManager(getActivity()));
         appList.setAdapter(activity.getAppListAdapter(type));
 
         return appList;

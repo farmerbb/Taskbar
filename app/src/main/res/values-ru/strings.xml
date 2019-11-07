@@ -111,6 +111,7 @@
     <string name="tb_pref_description_keyboard_shortcut_alt">@string/tb_pref_description_keyboard_shortcut</string>
     <string name="tb_loading_apps">Загрузка&#8230;</string>
     <string name="tb_press_enter">Не найдено приложений\n\nНажмите Enter для поиска в Google</string>
+    <string name="tb_nothing_to_see_here">Здесь ничего нет&#8230;</string>
 
     <string name="tb_error_dialog_title">Ошибка</string>
     <string name="tb_error_dialog_message">К сожалению, эту функцию нельзя включить на вашем устройстве.\n\nВы можете включить ее самостоятельно используя adb shell:\n\nappops set %1$s %2$s allow</string>

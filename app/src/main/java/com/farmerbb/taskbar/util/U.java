@@ -1423,6 +1423,13 @@ public class U {
         }
     }
 
+    public static boolean visualFeedbackEnabled(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return (getCurrentApiVersion() < 26.0f || getCurrentApiVersion() >= 28.0f)
+                && pref.getBoolean("visual_feedback", true)
+                && !isNvidiaDevice();
+    }
+
     public static void showRecentAppsDialog(Context context) {
         showRecentAppsDialog(context, null, null);
     }
