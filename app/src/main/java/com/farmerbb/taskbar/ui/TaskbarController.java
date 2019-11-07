@@ -336,15 +336,20 @@ public class TaskbarController implements UIController {
             case "custom":
                 File file = new File(context.getFilesDir() + "/tb_images", "custom_image");
                 if(file.exists()) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                    if(bitmap != null) {
-                        BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
-                        bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
-                        startButton.setImageDrawable(bitmapDrawable);
-                    } else {
-                        U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
-                        startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
-                    }
+                    Handler handler = new Handler();
+                    new Thread(() -> {
+                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                        handler.post(() -> {
+                            if(bitmap != null) {
+                                BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
+                                bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
+                                startButton.setImageDrawable(bitmapDrawable);
+                            } else {
+                                U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
+                                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
+                            }
+                        });
+                    }).start();
                 } else
                     startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
 
