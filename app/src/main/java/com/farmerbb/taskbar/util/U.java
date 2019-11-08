@@ -109,7 +109,6 @@ public class U {
     }
 
     public static void showPermissionDialog(Context context) {
-        R
         showPermissionDialog(context, null, null);
     }
 
@@ -1387,7 +1386,7 @@ public class U {
         }
     }
 
-    public static float getCurrentApiVersion() {
+    private static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
         else
