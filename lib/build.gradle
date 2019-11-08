@@ -38,7 +38,7 @@ android {
 
     sourceSets {
         main {
-            java { srcDirs('../app/src/main/java', '../app/src/lib/java', '../app/src/nonplaystore/java', "../app/src/compat-${SDK_VERSION}/java") }
+            java { srcDirs('../app/src/main/java', '../app/src/lib/java', '../app/src/nonplaystore/java') }
             res { srcDirs('../app/src/main/res', '../app/src/lib/res') }
             manifest.srcFile '../app/src/lib/AndroidManifest.xml'
         }
@@ -50,9 +50,9 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
-    implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
-    implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+    implementation "androidx.legacy:legacy-support-v4:$SUPPORT_V4_VERSION"
+    implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
+    implementation "com.google.android.material:material:$MATERIAL_VERSION"
 }
 
 def getLibVersion() {

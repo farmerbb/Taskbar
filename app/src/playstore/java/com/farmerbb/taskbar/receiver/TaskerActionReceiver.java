@@ -19,9 +19,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.BundleScrubber;
 import com.farmerbb.taskbar.util.PluginBundleManager;
 import com.farmerbb.taskbar.util.U;

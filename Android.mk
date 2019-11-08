@@ -13,15 +13,14 @@ LOCAL_SRC_FILES := \
         $(call all-java-files-under, app/src/main/java) \
         $(call all-java-files-under, app/src/androidx86/java) \
         $(call all-java-files-under, app/src/nonlib/java) \
-        $(call all-java-files-under, app/src/nonplaystore/java) \
-        $(call all-java-files-under, app/src/compat-$(PLATFORM_SDK_VERSION)/java)
+        $(call all-java-files-under, app/src/nonplaystore/java)
 
 LOCAL_MANIFEST_FILE := app/src/androidx86/AndroidManifest.xml
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
-        android-support-v4 \
-        android-support-v7-appcompat \
-        android-support-design
+        androidx.legacy_legacy-support-v4 \
+        androidx.appcompat_appcompat \
+        com.google.android.material_material
 
 LOCAL_PROGUARD_ENABLED := disabled
 
@@ -36,7 +35,7 @@ LOCAL_PRIVILEGED_MODULE := true
 LOCAL_AAPT_FLAGS := \
         --auto-add-overlay \
         --rename-manifest-package com.farmerbb.taskbar.androidx86 \
-        --extra-packages android.support.v7.appcompat \
-        --extra-packages android.support.design
+        --extra-packages androidx.appcompat \
+        --extra-packages com.google.android.material
 
 include $(BUILD_PACKAGE)

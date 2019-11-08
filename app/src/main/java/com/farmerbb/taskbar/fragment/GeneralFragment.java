@@ -23,10 +23,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.provider.Settings;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.SelectAppActivity;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;

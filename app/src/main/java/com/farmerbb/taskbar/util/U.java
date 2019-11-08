@@ -50,8 +50,8 @@ import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.view.ContextThemeWrapper;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
@@ -109,6 +109,7 @@ public class U {
     }
 
     public static void showPermissionDialog(Context context) {
+        R
         showPermissionDialog(context, null, null);
     }
 
@@ -1622,5 +1623,14 @@ public class U {
     @SuppressWarnings("deprecation")
     public static boolean isLibrary(Context context) {
         return !context.getPackageName().equals(BuildConfig.APPLICATION_ID);
+    }
+
+    public static boolean applyDisplayCutoutModeTo(WindowManager.LayoutParams params) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            return true;
+        }
+
+        return false;
     }
 }

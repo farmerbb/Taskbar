@@ -30,11 +30,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
 import android.service.quicksettings.TileService;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.DependencyUtils;

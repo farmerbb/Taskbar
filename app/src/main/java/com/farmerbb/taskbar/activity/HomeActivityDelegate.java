@@ -34,10 +34,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.graphics.ColorUtils;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.DragEvent;
@@ -64,7 +64,6 @@ import com.farmerbb.taskbar.ui.ViewParams;
 import com.farmerbb.taskbar.ui.StartMenuController;
 import com.farmerbb.taskbar.ui.TaskbarController;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FABWrapper;
@@ -203,7 +202,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         hits = 0;
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        if(CompatUtils.applyDisplayCutoutModeTo(params))
+        if(U.applyDisplayCutoutModeTo(params))
             getWindow().setAttributes(params);
 
         SharedPreferences pref = U.getSharedPreferences(this);

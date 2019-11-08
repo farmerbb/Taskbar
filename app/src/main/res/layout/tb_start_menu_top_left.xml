@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:background="?tb_start_menu_background" >
 
-            <android.support.v7.widget.SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/search"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

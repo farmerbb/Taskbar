@@ -23,8 +23,8 @@ import android.content.pm.LauncherApps;
 import android.net.Uri;
 import android.os.Process;
 import android.os.UserManager;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.core.content.FileProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.util.AppEntry;

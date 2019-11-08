@@ -17,7 +17,7 @@ package com.farmerbb.taskbar.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;

@@ -38,7 +38,7 @@ import android.os.UserManager;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,7 +49,6 @@ import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
-import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -119,7 +118,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         WindowManager.LayoutParams params = getWindow().getAttributes();
         
         if(args.containsKey("x") && args.containsKey("y"))
-            CompatUtils.applyDisplayCutoutModeTo(params);
+            U.applyDisplayCutoutModeTo(params);
 
         DisplayInfo display = U.getDisplayInfo(this);
 

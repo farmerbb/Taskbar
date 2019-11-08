@@ -72,7 +72,7 @@ android {
 
     sourceSets {
         main {
-            java { srcDirs('src/main/java', 'src/playstore/java', 'src/nonlib/java', "src/compat-${SDK_VERSION}/java") }
+            java { srcDirs('src/main/java', 'src/playstore/java', 'src/nonlib/java') }
             res { srcDirs('src/main/res', 'src/playstore/res', 'src/nonlib/res') }
             manifest.srcFile 'src/playstore/AndroidManifest.xml'
         }
@@ -84,9 +84,9 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
-    implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
-    implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+    implementation "androidx.legacy:legacy-support-v4:$SUPPORT_V4_VERSION"
+    implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
+    implementation "com.google.android.material:material:$MATERIAL_VERSION"
     //noinspection GradleDependency
     implementation 'com.mikepenz:iconics-core:3.0.4'
     //noinspection GradleDependency
