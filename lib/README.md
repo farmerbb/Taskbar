@@ -1,5 +1,7 @@
 ## libtaskbar
 
+![Bintray](https://img.shields.io/bintray/v/farmerbb/libtaskbar/libtaskbar)
+
 **libtaskbar allows you to quickly and easily add support for Android 10’s Desktop Mode to any third-party launcher, powered by the Taskbar app.**
 
 It's a plug-and-play solution that is lightweight (less than 0.5 MB) and doesn't require Taskbar to already be installed.  libtaskbar gives your users on Android 10 a fully-featured desktop-style experience with a taskbar, start menu, desktop icons, and more, while being unobtrusive to your launcher's existing phone or tablet experience.
@@ -14,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.farmerbb:libtaskbar:1.0.0'
+    implementation 'com.farmerbb:libtaskbar:1.0.0' // see badge above for latest version
 }
 ```
 
@@ -40,9 +42,9 @@ Finally, while Taskbar's desktop mode functionality is enabled out-of-the-box, i
 
 * libtaskbar will add the `SYSTEM_ALERT_WINDOW` and `PACKAGE_USAGE_STATS` permissions to your app's manifest, as well as a small number of non-runtime permissions for additional functionality such as displaying a status area on the taskbar.  As a result, your app will appear inside the "Display over other apps" and "Usage access" sections of the "Special app access" page in Android's settings.
 
-* libtaskbar's only transitive dependencies are support-v4, appcompat-v7, and the design support library.  If you're using AndroidX, you'll need to make sure the Jetifier is enabled inside your gradle.properties file. (Taskbar doesn't use AndroidX because it must remain buildable from AOSP source on 8.1 and later; AndroidX wasn't included in AOSP until 9.0)
+* libtaskbar's only transitive dependencies are `androidx.legacy:legacy-support-v4`, `androidx.appcompat:appcompat`, and `com.google.android.material:material`.  As of version 1.0.1, libtaskbar uses AndroidX and therefore requires an AndroidX-based project.  If you're still using the older support libraries, use version 1.0.0 of libtaskbar instead.
 
-* If aapt complains about any resource conflicts, you may need to exclude the `com.android.support:design` transitive dependency from libtaskbar inside your build.gradle file.
+* If aapt complains about any resource conflicts, you may need to exclude the `com.google.android.material:material` transitive dependency from libtaskbar inside your build.gradle file.
 
 ### Example implementation
 
