@@ -1187,6 +1187,17 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, boolean show) {
+        if(hasSecondScreenSupportLibrary(context)) {
+            CommandDispatcher dispatcher = CommandDispatcher.getInstance();
+            int value = show ? 0 : getNavbarHeight(context) * -1;
+            String command = "wm overscan 0,0,0," + value + " -d " + getDisplayID();
+
+            if(dispatcher.addCommand(context, command)) {
+                dispatcher.dispatch(context);
+                return;
+            }
+        }
+
         // Show or hide the system navigation bar on Bliss-x86
         try {
             if(getCurrentApiVersion() >= 28.0f)
@@ -1241,8 +1252,8 @@ public class U {
             editor.putBoolean("button_back", true);
             editor.putBoolean("button_home", true);
             editor.putBoolean("button_recents", true);
-         // editor.putBoolean("auto_hide_navbar", true);
-         // editor.putBoolean("shortcut_icon", false);
+            editor.putBoolean("auto_hide_navbar", true);
+            editor.putBoolean("shortcut_icon", false);
             editor.putBoolean("bliss_os_prefs", true);
             editor.apply();
         }
@@ -1268,14 +1279,7 @@ public class U {
 
     public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
         context = context.getApplicationContext();
-
-        LauncherHelper helper = LauncherHelper.getInstance();
-        int displayID;
-
-        if(helper.isOnSecondaryHomeScreen())
-            displayID = helper.getSecondaryDisplayId();
-        else
-            displayID = Display.DEFAULT_DISPLAY;
+        int displayID = getDisplayID();
 
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display currentDisplay = null;
@@ -1326,6 +1330,15 @@ public class U {
         }
 
         return info;
+    }
+
+    private static int getDisplayID() {
+        LauncherHelper helper = LauncherHelper.getInstance();
+
+        if(helper.isOnSecondaryHomeScreen())
+            return helper.getSecondaryDisplayId();
+        else
+            return Display.DEFAULT_DISPLAY;
     }
 
     public static void pinAppShortcut(Context context) {
@@ -1631,5 +1644,16 @@ public class U {
         }
 
         return false;
+    }
+
+    public static boolean hasSecondScreenSupportLibrary(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(BuildConfig.SS_SUPPORT_APPLICATION_ID, 0);
+            return pm.checkSignatures(BuildConfig.SS_SUPPORT_APPLICATION_ID, context.getPackageName())
+                    == PackageManager.SIGNATURE_MATCH;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }

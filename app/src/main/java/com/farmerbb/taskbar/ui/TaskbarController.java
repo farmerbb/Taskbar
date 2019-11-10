@@ -929,7 +929,7 @@ public class TaskbarController implements UIController {
                 }
 
                 if(!shouldRedrawTaskbar && runningAppsOnly) {
-                    for(int i = 0; i < finalApplicationIds.size(); i++) {
+                    for(int i = 0; i < currentRunningAppIds.size(); i++) {
                         if(!currentRunningAppIds.get(i).equals(prevRunningAppIds.get(i))) {
                             shouldRedrawTaskbar = true;
                             break;
