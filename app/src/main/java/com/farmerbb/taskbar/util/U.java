@@ -1105,6 +1105,19 @@ public class U {
         }
     }
 
+    public static boolean hasSupportLibrary(Context context, int minVersion) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo pInfo = pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
+            return pInfo.versionCode >= minVersion
+                    && pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, context.getPackageName()) == PackageManager.SIGNATURE_MATCH
+                    && context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
+                    && isSystemApp(context);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
     public static int getBaseTaskbarSize(Context context) {
         return Math.round(getBaseTaskbarSizeFloat(context));
     }
@@ -1187,15 +1200,15 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, boolean show) {
-        if(hasSecondScreenSupportLibrary(context)) {
-            CommandDispatcher dispatcher = CommandDispatcher.getInstance();
-            int value = show ? 0 : getNavbarHeight(context) * -1;
-            String command = "wm overscan 0,0,0," + value + " -d " + getDisplayID();
+        if(hasSupportLibrary(context, 7)) {
+            Intent intent = new Intent(BuildConfig.SUPPORT_APPLICATION_ID + ".CHANGE_OVERSCAN");
+            intent.setPackage(BuildConfig.SUPPORT_APPLICATION_ID);
 
-            if(dispatcher.addCommand(context, command)) {
-                dispatcher.dispatch(context);
-                return;
-            }
+            intent.putExtra("display_id", getDisplayID());
+            intent.putExtra("value", show ? 0 : getNavbarHeight(context) * -1);
+
+            context.sendBroadcast(intent);
+            return;
         }
 
         // Show or hide the system navigation bar on Bliss-x86
@@ -1644,16 +1657,5 @@ public class U {
         }
 
         return false;
-    }
-
-    public static boolean hasSecondScreenSupportLibrary(Context context) {
-        PackageManager pm = context.getPackageManager();
-        try {
-            pm.getPackageInfo(BuildConfig.SS_SUPPORT_APPLICATION_ID, 0);
-            return pm.checkSignatures(BuildConfig.SS_SUPPORT_APPLICATION_ID, context.getPackageName())
-                    == PackageManager.SIGNATURE_MATCH;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 }

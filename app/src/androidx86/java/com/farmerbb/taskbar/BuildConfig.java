@@ -10,6 +10,5 @@ public final class BuildConfig {
   public static final String ANDROIDX86_APPLICATION_ID = "com.farmerbb.taskbar.androidx86";
   public static final String BASE_APPLICATION_ID = "com.farmerbb.taskbar";
   public static final String PAID_APPLICATION_ID = "com.farmerbb.taskbar.paid";
-  public static final String SS_SUPPORT_APPLICATION_ID = "com.farmerbb.secondscreen.support";
   public static final String SUPPORT_APPLICATION_ID = "com.farmerbb.taskbar.support";
 }
