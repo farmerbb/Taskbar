@@ -223,6 +223,8 @@
 
     <string name="tb_disable_scrolling_list">Scrollijst uitschakelen</string>
 
+    <string name="tb_double_tap_to_sleep">Dubbeltik om venster uit te schakelen</string>
+    <string name="tb_enable_double_tap_to_sleep">Dubbeltikken om venster uit te schakelen inschakelen?</string>
     <string name="tb_action_dont_show_again">Niet meer tonen</string>
 
     <string name="tb_app_shortcuts">Meer acties&#8230;</string>
@@ -232,6 +234,7 @@
     <string name="tb_volume">Volumebeheer</string>
     <string name="tb_file_manager">Bestandsbeheer</string>
     <string name="tb_system_settings">Systeeminstellingen</string>
+    <string name="tb_lock_device">Apparaat vergrendelen</string>
     <string name="tb_power_menu">Energiemenu</string>
 
     <string name="tb_show_search_bar">Zichtbaarheid van zoekvak</string>

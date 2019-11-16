@@ -78,8 +78,10 @@ Bağış sürümü ücretsiz sürümle aynıdır ve tercihleriniz otomatik olara
 
 Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak desteğiniz büyük beğeni topluyor!"</string>
 <string name="tb_disable_scrolling_list">Listeyi kaydırmayı devredışı bırak</string>
+<string name="tb_double_tap_to_sleep">Çift tıkla uyku</string>
 <string name="tb_enable_accessibility">@string/tb_accessibility_service_description</string>
 <string name="tb_enable_developer_options">Derleme numarasına 7 kez dokunarak Geliştirici seçeneklerini etkinleştirin</string>
+<string name="tb_enable_double_tap_to_sleep">Çift tıkla uykuya geçme aktif edilsin mi?</string>
 <string name="tb_enable_force_activities_resizable">Aşağı kaydırın ve \"%s\" yı açın.</string>
 <string name="tb_enable_recent_apps">"Taskbar, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için Taskbar, kullanım erişim izinleri gerektirir.
 
@@ -169,6 +171,7 @@ Ayarlarınız başarıyla içe aktarıldı ve şimdi uygulamanın ücretsiz sür
 <string name="tb_launch_games_fullscreen_message">Bir uygulama kendini bir oyun olarak ilan ederse, serbest form modunda başlatılmasına izin vermeyin</string>
 <string name="tb_launch_games_fullscreen_title">Oyunları tam ekran başlat</string>
 <string name="tb_loading_apps">Uygulamalar yükleniyor…</string>
+<string name="tb_lock_device">Cihaz kilitle</string>
 <string name="tb_lock_device_not_supported">Aygıt desteklenmiyor</string>
 <string name="tb_max_num_of_recents">%1$d uygulama</string>
 <string name="tb_max_num_of_recents_singular">1 uygulama</string>

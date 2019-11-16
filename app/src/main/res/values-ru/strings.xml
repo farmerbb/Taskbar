@@ -223,6 +223,8 @@
 
     <string name="tb_disable_scrolling_list">Отключить список</string>
 
+    <string name="tb_double_tap_to_sleep">Двойной тап для сна</string>
+    <string name="tb_enable_double_tap_to_sleep">Включить DT2S?</string>
     <string name="tb_action_dont_show_again">Не показывать снова</string>
 
     <string name="tb_app_shortcuts">Действия&#8230;</string>
@@ -232,6 +234,7 @@
     <string name="tb_volume">Настройка громкости</string>
     <string name="tb_file_manager">Проводник</string>
     <string name="tb_system_settings">Системные настройки</string>
+    <string name="tb_lock_device">Заблокировать устройство</string>
     <string name="tb_power_menu">Меню питания</string>
 
     <string name="tb_show_search_bar">Панель поиска</string>

@@ -223,6 +223,8 @@
 
     <string name="tb_disable_scrolling_list">Listenscrollen deaktivieren</string>
 
+    <string name="tb_double_tap_to_sleep">Doppelklick zum Schlafen</string>
+    <string name="tb_enable_double_tap_to_sleep">Doppelklick zum Schlafen aktivieren?</string>
     <string name="tb_action_dont_show_again">Nicht wieder anzeigen</string>
 
     <string name="tb_app_shortcuts">Mehr Optionen</string>
@@ -232,6 +234,7 @@
     <string name="tb_volume">Lautstärke</string>
     <string name="tb_file_manager">Dateimanager</string>
     <string name="tb_system_settings">Systemeinstellungen</string>
+    <string name="tb_lock_device">Gerät sperren</string>
     <string name="tb_power_menu">Energiemenü</string>
 
     <string name="tb_show_search_bar">Sichtbarkeit der Suchzeile</string>

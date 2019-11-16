@@ -223,6 +223,8 @@
 
     <string name="tb_disable_scrolling_list">停用滚动列表</string>
 
+    <string name="tb_double_tap_to_sleep">双击休眠</string>
+    <string name="tb_enable_double_tap_to_sleep">启用双击休眠?</string>
     <string name="tb_action_dont_show_again">不再显示</string>
 
     <string name="tb_app_shortcuts">更多操作&#8230;</string>
@@ -232,6 +234,7 @@
     <string name="tb_volume">音量控制</string>
     <string name="tb_file_manager">文件管理器</string>
     <string name="tb_system_settings">系统设置</string>
+    <string name="tb_lock_device">锁定设备</string>
     <string name="tb_power_menu">电源菜单</string>
 
     <string name="tb_show_search_bar">搜索栏可见性</string>
