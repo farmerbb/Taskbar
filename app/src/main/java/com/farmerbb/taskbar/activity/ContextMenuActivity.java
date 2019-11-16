@@ -283,6 +283,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             else
                 getPreferenceScreen().removePreference(findPreference("power_menu"));
 
+            if(!U.isLibrary(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                findPreference("lock_device").setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference("lock_device"));
+
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 findPreference("file_manager").setOnPreferenceClickListener(this);
             else
@@ -658,6 +663,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         U.showToast(this, R.string.tb_lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
+
+                showStartMenu = false;
+                shouldHideTaskbar = true;
+                contextMenuFix = false;
+                break;
+            case "lock_device":
+                U.lockDevice(this);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

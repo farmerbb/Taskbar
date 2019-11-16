@@ -41,6 +41,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.DragEvent;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -262,6 +263,84 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         }
 
         layout.setFitsSystemWindows(true);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P 
+                && isDesktopIconsEnabled
+                && !U.isLibrary(this)) {
+            final GestureDetector detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return false;
+                }
+
+                @Override
+                public void onShowPress(MotionEvent e) {}
+
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    return false;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {}
+
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    return false;
+                }
+
+                @Override
+                public boolean onDown(MotionEvent e) {
+                    return false;
+                }
+            });
+
+            detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    if(!pref.getBoolean("dont_show_double_tap_dialog", false)) {
+                        if(pref.getBoolean("double_tap_to_sleep", false)) {
+                            U.lockDevice(HomeActivityDelegate.this);
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(HomeActivityDelegate.this));
+                            builder.setTitle(R.string.tb_double_tap_to_sleep)
+                                    .setMessage(R.string.tb_enable_double_tap_to_sleep)
+                                    .setNegativeButton(pref.getBoolean("double_tap_dialog_shown", false)
+                                            ? R.string.tb_action_dont_show_again
+                                            : R.string.tb_action_cancel, (dialog, which) -> pref.edit().putBoolean(pref.getBoolean("double_tap_dialog_shown", false)
+                                            ? "dont_show_double_tap_dialog"
+                                            : "double_tap_dialog_shown", true).apply())
+                                    .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
+                                        pref.edit().putBoolean("double_tap_to_sleep", true).apply();
+                                        U.lockDevice(HomeActivityDelegate.this);
+                                    });
+
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public boolean onDoubleTapEvent(MotionEvent e) {
+                    return false;
+                }
+
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+                    return false;
+                }
+
+            });
+
+            layout.setOnTouchListener((v, event) -> {
+                detector.onTouchEvent(event);
+
+                return false;
+            });
+        }
 
         if((this instanceof HomeActivity ||
                 this instanceof SecondaryHomeActivity

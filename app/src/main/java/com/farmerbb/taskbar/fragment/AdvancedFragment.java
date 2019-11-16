@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
@@ -43,6 +44,7 @@ import android.widget.LinearLayout;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
+import com.farmerbb.taskbar.activity.KeyboardShortcutActivityLockDevice;
 import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
@@ -201,6 +203,13 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 getActivity().getPackageManager().setComponentEnabledSetting(component,
                         ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP);
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    ComponentName component2 = new ComponentName(getActivity(), KeyboardShortcutActivityLockDevice.class);
+                    getActivity().getPackageManager().setComponentEnabledSetting(component2,
+                            ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP);
+                }
                 break;
             case "dashboard_grid_size":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

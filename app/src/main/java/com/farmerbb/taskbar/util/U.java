@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.util;
 
 import android.Manifest;
+import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
@@ -162,6 +163,11 @@ public class U {
         dialog.setCancelable(false);
 
         return dialog;
+    }
+
+    @TargetApi(Build.VERSION_CODES.P)
+    public static void lockDevice(Context context) {
+        sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN);
     }
 
     public static void sendAccessibilityAction(Context context, int action) {

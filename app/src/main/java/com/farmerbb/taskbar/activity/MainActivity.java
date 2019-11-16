@@ -136,6 +136,15 @@ public class MainActivity extends AppCompatActivity {
                             ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ComponentName component6 = new ComponentName(this, KeyboardShortcutActivityLockDevice.class);
+                getPackageManager().setComponentEnabledSetting(component6,
+                        pref.getBoolean("keyboard_shortcut", false)
+                                ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                                : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
+            }
         }
 
         if(!launcherEnabled)

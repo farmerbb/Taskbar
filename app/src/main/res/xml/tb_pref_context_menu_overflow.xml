@@ -21,6 +21,10 @@
         android:title="@string/tb_volume" />
 
     <Preference
+        android:key="lock_device"
+        android:title="@string/tb_lock_device" />
+
+    <Preference
         android:key="file_manager"
         android:title="@string/tb_file_manager" />
 

@@ -146,6 +146,21 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.KeyboardShortcutActivityLockDevice"
+            android:label="${appName}"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:enabled="false"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.APP_CALENDAR" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.ContextMenuActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
