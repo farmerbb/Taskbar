@@ -103,6 +103,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private int startDragIndex;
     private int endDragIndex;
 
+    private GestureDetector detector;
+
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -267,7 +269,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P 
                 && isDesktopIconsEnabled
                 && !U.isLibrary(this)) {
-            final GestureDetector detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+            detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
                     return false;
@@ -333,12 +335,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     return false;
                 }
 
-            });
-
-            layout.setOnTouchListener((v, event) -> {
-                detector.onTouchEvent(event);
-
-                return false;
             });
         }
 
@@ -742,6 +738,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
                     openContextMenu(info, location);
                 }
+
+                return false;
+            });
+
+            iconContainer.setOnTouchListener((v, event) -> {
+                if(detector != null)
+                    detector.onTouchEvent(event);
 
                 return false;
             });
