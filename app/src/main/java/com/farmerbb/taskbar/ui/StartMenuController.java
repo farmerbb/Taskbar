@@ -261,7 +261,7 @@ public class StartMenuController implements UIController {
         if(pref.getBoolean("transparent_start_menu", false))
             startMenu.setBackgroundColor(0);
 
-        if(U.visualFeedbackEnabled(context))
+        if(pref.getBoolean("visual_feedback", true))
             startMenu.setRecyclerListener(view -> view.setBackgroundColor(0));
 
         int columns = context.getResources().getInteger(R.integer.tb_start_menu_columns);

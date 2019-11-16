@@ -55,7 +55,7 @@ import java.util.Map;
 
 public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionIndexer {
 
-    private boolean isGrid = false;
+    private boolean isGrid;
 
     private final List<Character> sections = new ArrayList<>();
     private final SparseIntArray gpfsCache = new SparseIntArray();
@@ -82,8 +82,10 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     @Override
     public @NonNull View getView(int position, View convertView, final @NonNull ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
-        if(convertView == null)
+        if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(isGrid ? R.layout.tb_row_alt : R.layout.tb_row, parent, false);
+            convertView.setBackgroundColor(0);
+        }
 
         final AppEntry entry = getItem(position);
         assert entry != null;
@@ -119,6 +121,8 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
             return true;
         });
 
+        boolean visualFeedbackEnabled = pref.getBoolean("visual_feedback", true);
+
         layout.setOnGenericMotionListener((view, motionEvent) -> {
             int action = motionEvent.getAction();
 
@@ -129,13 +133,13 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
                 openContextMenu(entry, location);
             }
 
-            if(action == MotionEvent.ACTION_SCROLL && U.visualFeedbackEnabled(getContext()))
+            if(action == MotionEvent.ACTION_SCROLL && visualFeedbackEnabled)
                 view.setBackgroundColor(0);
 
             return false;
         });
 
-        if(U.visualFeedbackEnabled(getContext())) {
+        if(visualFeedbackEnabled) {
             layout.setOnHoverListener((v, event) -> {
                 if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
                     int backgroundTint = pref.getBoolean("transparent_start_menu", false)
