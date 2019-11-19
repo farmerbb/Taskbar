@@ -62,6 +62,9 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
         findPreference("background_tint_pref").setOnPreferenceClickListener(this);
         findPreference("accent_color_pref").setOnPreferenceClickListener(this);
 
+        if(U.isBlissOs(getActivity()))
+            ((ListPreference) findPreference("start_button_image")).setEntries(R.array.tb_pref_start_button_image_list_alt);
+
         bindPreferenceSummaryToValue(findPreference("theme"));
         bindPreferenceSummaryToValue(findPreference("invisible_button"));
         bindPreferenceSummaryToValue(findPreference("start_button_image"));
@@ -72,9 +75,6 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
 
         findPreference("background_tint_pref").setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
         findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
-
-        if(U.isBlissOs(getActivity()))
-            ((ListPreference) findPreference("start_button_image")).setEntries(R.array.tb_pref_start_button_image_list_alt);
 
         finishedLoadingPrefs = true;
     }
