@@ -34,6 +34,7 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -1623,7 +1624,7 @@ public class TaskbarController implements UIController {
         String batRes = "tb_battery_" + charging + batDrawable;
         int id = getResourceIdFor(batRes);
 
-        return applyTintTo(ContextCompat.getDrawable(context, id));
+        return getDrawableForSysTray(id);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -1632,7 +1633,7 @@ public class TaskbarController implements UIController {
 
         NetworkInfo ethernet = manager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
         if(ethernet != null && ethernet.isConnected())
-            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.tb_settings_ethernet));
+            return getDrawableForSysTray(R.drawable.tb_settings_ethernet);
 
         NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if(wifi == null || !wifi.isConnected())
@@ -1647,13 +1648,13 @@ public class TaskbarController implements UIController {
         String wifiRes = "tb_signal_wifi_" + level + "_bar";
         int id = getResourceIdFor(wifiRes);
 
-        return applyTintTo(ContextCompat.getDrawable(context, id));
+        return getDrawableForSysTray(id);
     }
 
     private Drawable getBluetoothDrawable() {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if(adapter != null && adapter.isEnabled())
-            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.tb_bluetooth));
+            return getDrawableForSysTray(R.drawable.tb_bluetooth);
 
         return null;
     }
@@ -1661,7 +1662,7 @@ public class TaskbarController implements UIController {
     @TargetApi(Build.VERSION_CODES.M)
     private Drawable getCellularDrawable() {
         if(Settings.Global.getInt(context.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0)
-            return applyTintTo(ContextCompat.getDrawable(context, R.drawable.tb_airplanemode_active));
+            return getDrawableForSysTray(R.drawable.tb_airplanemode_active);
 
         if(cellStrength == -1)
             return null;
@@ -1669,10 +1670,15 @@ public class TaskbarController implements UIController {
         String cellRes = "tb_signal_cellular_" + cellStrength + "_bar";
         int id = getResourceIdFor(cellRes);
 
-        return applyTintTo(ContextCompat.getDrawable(context, id));
+        return getDrawableForSysTray(id);
     }
     
-    private Drawable applyTintTo(Drawable drawable) {
+    private Drawable getDrawableForSysTray(int id) {
+        Drawable drawable = null;
+        try {
+            drawable = ContextCompat.getDrawable(context, id);
+        } catch (Resources.NotFoundException e) { /* Gracefully fail */ }
+        
         if(drawable == null) return null;
 
         drawable.setTint(U.getAccentColor(context));
