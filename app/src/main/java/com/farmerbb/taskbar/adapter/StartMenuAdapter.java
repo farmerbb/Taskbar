@@ -242,6 +242,9 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         if(isTopApp(entry))
             return '\u2605';
 
+        if(entry.getLabel().equals(""))
+            return ' ';
+
         char origChar = entry.getLabel().charAt(0);
         if(uppercase.contains(origChar))
             return origChar;
