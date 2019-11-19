@@ -78,6 +78,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -967,13 +968,22 @@ public class U {
         return getActivityOptions(null, null, view);
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     private static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType, View view) {
         ActivityOptions options;
         if(view != null)
             options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
-        else
+        else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             options = ActivityOptions.makeBasic();
+        else {
+            try {
+                Constructor<ActivityOptions> constructor = ActivityOptions.class.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                options = constructor.newInstance();
+            } catch (Exception e) {
+                // If this ever happens, the app will likely crash at this point due to NPE
+                return null;
+            }
+        }
 
         if(applicationType == null)
             return options;
