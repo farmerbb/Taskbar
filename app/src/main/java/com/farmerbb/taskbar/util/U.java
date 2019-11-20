@@ -424,7 +424,6 @@ public class U {
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode1(Context context, ApplicationType type, View view) {
         DisplayInfo display = getDisplayInfo(context);
 
@@ -433,15 +432,14 @@ public class U {
         int height1 = display.height / 8;
         int height2 = display.height - height1;
 
-        return getActivityOptions(context, type, view).setLaunchBounds(new Rect(
+        return getActivityOptionsBundle(context, type, view,
                 width1,
                 height1,
                 width2,
                 height2
-        )).toBundle();
+        );
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode2(Context context, int launchType, ApplicationType type, View view) {
         DisplayInfo display = getDisplayInfo(context);
 
@@ -481,11 +479,9 @@ public class U {
         else if(launchType == LEFT && isPortrait)
             bottom = halfPortrait;
 
-        return getActivityOptions(context, type, view)
-                .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
+        return getActivityOptionsBundle(context, type, view, left, top, right, bottom);
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     private static Bundle launchMode3(Context context, ApplicationType type, View view) {
         DisplayInfo display = getDisplayInfo(context);
 
@@ -494,12 +490,12 @@ public class U {
         int height1 = display.height / 2;
         int height2 = context.getResources().getDimensionPixelSize(R.dimen.tb_phone_size_height) / 2;
 
-        return getActivityOptions(context, type, view).setLaunchBounds(new Rect(
+        return getActivityOptionsBundle(context, type, view,
                 width1 - width2,
                 height1 - height2,
                 width1 + width2,
                 height1 + height2
-        )).toBundle();
+        );
     }
 
     private static void launchAndroidForWork(Context context, ComponentName componentName, Bundle bundle, long userId) {
@@ -546,22 +542,19 @@ public class U {
         prepareToStartActivity(context, false, () -> context.startActivity(intent, bundle));
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     public static void startActivityLowerRight(Context context, Intent intent) {
         DisplayInfo display = getDisplayInfo(context);
         try {
             context.startActivity(intent,
-                    getActivityOptions(context, ApplicationType.FREEFORM_HACK, null)
-                            .setLaunchBounds(new Rect(
-                                    display.width,
-                                    display.height,
-                                    display.width + 1,
-                                    display.height + 1
-                            )).toBundle());
+                    getActivityOptionsBundle(context, ApplicationType.FREEFORM_HACK, null,
+                            display.width,
+                            display.height,
+                            display.width + 1,
+                            display.height + 1
+                    ));
         } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     public static void startTouchAbsorberActivity(Context context) {
         String position = getTaskbarPosition(context);
         DisplayInfo display = getDisplayInfo(context);
@@ -588,8 +581,8 @@ public class U {
 
         try {
             context.startActivity(intent,
-                    getActivityOptions(context, ApplicationType.FREEFORM_HACK, null)
-                            .setLaunchBounds(new Rect(left, top, right, bottom)).toBundle());
+                    getActivityOptionsBundle(context, ApplicationType.FREEFORM_HACK, null,
+                            left, top, right, bottom));
         } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
     }
 
@@ -618,10 +611,8 @@ public class U {
                 intent.putExtra("context_menu_fix", true);
 
             context.startActivity(intent,
-                    getActivityOptions(context, ApplicationType.CONTEXT_MENU, null)
-                            .setLaunchBounds(
-                                    new Rect(0, 0, display.width, display.height)
-                            ).toBundle());
+                    getActivityOptionsBundle(context, ApplicationType.CONTEXT_MENU, null,
+                            0, 0, display.width, display.height));
         } else
             context.startActivity(intent);
     }
@@ -944,7 +935,6 @@ public class U {
         return pref.getInt("accent_color", context.getResources().getInteger(R.integer.tb_translucent_white));
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public static boolean canDrawOverlays(Context context) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
@@ -980,7 +970,6 @@ public class U {
                 constructor.setAccessible(true);
                 options = constructor.newInstance();
             } catch (Exception e) {
-                // If this ever happens, the app will likely crash at this point due to NPE
                 return null;
             }
         }
@@ -1070,6 +1059,18 @@ public class U {
         }
 
         return getActivityOptions(context, type, view).toBundle();
+    }
+
+    private static Bundle getActivityOptionsBundle(Context context, ApplicationType applicationType, View view,
+                                                   int left, int top, int right, int bottom) {
+        ActivityOptions options = getActivityOptions(context, applicationType, view);
+        if(options == null)
+            return null;
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            return options.toBundle();
+
+        return options.setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
     }
 
     private static ApplicationType getApplicationType(Context context, String packageName) {

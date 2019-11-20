@@ -208,7 +208,11 @@ public class TaskbarController implements UIController {
     private PhoneStateListener listener = new PhoneStateListener() {
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            cellStrength = signalStrength.getLevel();
+            try {
+                cellStrength = signalStrength.getLevel();
+            } catch (SecurityException e) {
+                cellStrength = -1;
+            }
         }
     };
 
