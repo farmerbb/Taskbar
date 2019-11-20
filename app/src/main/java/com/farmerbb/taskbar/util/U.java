@@ -504,7 +504,8 @@ public class U {
 
         try {
             launcherApps.startMainActivity(componentName, userManager.getUserForSerialNumber(userId), null, bundle);
-        } catch (ActivityNotFoundException | NullPointerException | SecurityException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException | NullPointerException
+                | IllegalStateException | SecurityException e) { /* Gracefully fail */ }
     }
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
@@ -514,7 +515,8 @@ public class U {
         if(launcherApps.hasShortcutHostPermission()) {
             try {
                 launcherApps.startShortcut(shortcut, null, bundle);
-            } catch (ActivityNotFoundException | NullPointerException | SecurityException e) { /* Gracefully fail */ }
+            } catch (ActivityNotFoundException | NullPointerException
+                    | IllegalStateException | SecurityException e) { /* Gracefully fail */ }
         }
     }
 
