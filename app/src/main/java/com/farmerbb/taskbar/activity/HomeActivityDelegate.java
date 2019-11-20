@@ -463,9 +463,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             dashboardController.onCreateHost(this);
         } else {
             // We always start the Taskbar and Start Menu services, even if the app isn't normally running
-            startService(new Intent(this, TaskbarService.class));
-            startService(new Intent(this, StartMenuService.class));
-            startService(new Intent(this, DashboardService.class));
+            try {
+                startService(new Intent(this, TaskbarService.class));
+                startService(new Intent(this, StartMenuService.class));
+                startService(new Intent(this, DashboardService.class));
+            } catch (IllegalStateException e) { /* Gracefully fail */ }
         }
 
         if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
