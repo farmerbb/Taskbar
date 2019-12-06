@@ -33,12 +33,15 @@ import com.farmerbb.taskbar.util.U;
 public class ShowHideTaskbarReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        SharedPreferences pref = U.getSharedPreferences(context);
+        if(!pref.getBoolean("taskbar_active", false))
+            return;
+
         Intent taskbarIntent = new Intent(context, TaskbarService.class);
         Intent startMenuIntent = new Intent(context, StartMenuService.class);
         Intent dashboardIntent = new Intent(context, DashboardService.class);
         Intent notificationIntent = new Intent(context, NotificationService.class);
 
-        SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean("is_hidden", false)) {
             pref.edit().putBoolean("is_hidden", false).apply();
 
