@@ -148,8 +148,6 @@ public class TaskbarController implements UIController {
     private boolean sysTrayEnabled = false;
 
     private List<String> currentTaskbarIds = new ArrayList<>();
-    private List<String> currentRunningAppIds = new ArrayList<>();
-    private List<String> prevRunningAppIds = new ArrayList<>();
     private int numOfPinnedApps = -1;
 
     private int cellStrength = -1;
@@ -718,11 +716,8 @@ public class TaskbarController implements UIController {
         int realNumOfPinnedApps = 0;
         boolean fullLength = pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length));
 
-        if(runningAppsOnly)
-            currentRunningAppIds.clear();
-
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
-        List<AppEntry> pinnedApps = setTimeLastUsedFor(pba.getPinnedApps());
+        List<AppEntry> pinnedApps = pba.getPinnedApps();
         List<AppEntry> blockedApps = pba.getBlockedApps();
         List<String> applicationIdsToRemove = new ArrayList<>();
 
@@ -922,7 +917,6 @@ public class TaskbarController implements UIController {
             }
 
             if(finalApplicationIds.size() != currentTaskbarIds.size()
-                    || (runningAppsOnly && currentRunningAppIds.size() != prevRunningAppIds.size())
                     || numOfPinnedApps != realNumOfPinnedApps)
                 shouldRedrawTaskbar = true;
             else {
@@ -932,25 +926,11 @@ public class TaskbarController implements UIController {
                         break;
                     }
                 }
-
-                if(!shouldRedrawTaskbar && runningAppsOnly) {
-                    for(int i = 0; i < currentRunningAppIds.size(); i++) {
-                        if(!currentRunningAppIds.get(i).equals(prevRunningAppIds.get(i))) {
-                            shouldRedrawTaskbar = true;
-                            break;
-                        }
-                    }
-                }
             }
 
             if(shouldRedrawTaskbar) {
                 currentTaskbarIds = finalApplicationIds;
                 numOfPinnedApps = realNumOfPinnedApps;
-
-                if(runningAppsOnly) {
-                    prevRunningAppIds.clear();
-                    prevRunningAppIds.addAll(currentRunningAppIds);
-                }
 
                 UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
 
@@ -1059,6 +1039,9 @@ public class TaskbarController implements UIController {
                             taskbar.addView(getView(entries, i));
                         }
 
+                        if(runningAppsOnly)
+                            updateRunningAppIndicators(pinnedApps, usageStatsList, entries);
+
                         isShowingRecents = true;
                         if(shouldRefreshRecents && scrollView.getVisibility() != View.VISIBLE) {
                             if(firstRefresh)
@@ -1099,13 +1082,41 @@ public class TaskbarController implements UIController {
                         scrollView.setVisibility(View.GONE);
                     }
                 });
-            }
+            } else if(runningAppsOnly)
+                handler.post(() -> updateRunningAppIndicators(pinnedApps, usageStatsList, entries));
         } else if(firstRefresh || currentTaskbarIds.size() > 0) {
             currentTaskbarIds.clear();
             handler.post(() -> {
                 isShowingRecents = false;
                 scrollView.setVisibility(View.GONE);
             });
+        }
+    }
+
+    private void updateRunningAppIndicators(List<AppEntry> pinnedApps, List<AppEntry> usageStatsList, List<AppEntry> entries) {
+        if(taskbar.getChildCount() != entries.size())
+            return;
+
+        List<String> pinnedPackageList = new ArrayList<>();
+        List<String> runningPackageList = new ArrayList<>();
+
+        for(AppEntry entry : pinnedApps)
+            pinnedPackageList.add(entry.getPackageName());
+
+        for(AppEntry entry : usageStatsList)
+            runningPackageList.add(entry.getPackageName());
+
+        for(int i = 0; i < taskbar.getChildCount(); i++) {
+            View convertView = taskbar.getChildAt(i);
+            String packageName = entries.get(i).getPackageName();
+
+            ImageView runningAppIndicator = convertView.findViewById(R.id.running_app_indicator);
+            if(pinnedPackageList.contains(packageName) && !runningPackageList.contains(packageName))
+                runningAppIndicator.setVisibility(View.GONE);
+            else {
+                runningAppIndicator.setVisibility(View.VISIBLE);
+                runningAppIndicator.setColorFilter(U.getAccentColor(context));
+            }
         }
     }
 
@@ -1435,15 +1446,6 @@ public class TaskbarController implements UIController {
             });
         }
 
-        if(runningAppsOnly) {
-            ImageView runningAppIndicator = convertView.findViewById(R.id.running_app_indicator);
-            if(entry.getLastTimeUsed() > 0) {
-                runningAppIndicator.setVisibility(View.VISIBLE);
-                runningAppIndicator.setColorFilter(U.getAccentColor(context));
-            } else
-                runningAppIndicator.setVisibility(View.GONE);
-        }
-
         return convertView;
     }
 
@@ -1486,7 +1488,6 @@ public class TaskbarController implements UIController {
                 try {
                     Field field = ActivityManager.RecentTaskInfo.class.getField("firstActiveTime");
                     newEntry.setLastTimeUsed(field.getLong(recentTaskInfo));
-                    currentRunningAppIds.add(packageName);
                 } catch (Exception e) {
                     newEntry.setLastTimeUsed(i);
                 }
@@ -1496,31 +1497,6 @@ public class TaskbarController implements UIController {
         }
 
         return entries;
-    }
-
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.M)
-    private List<AppEntry> setTimeLastUsedFor(List<AppEntry> pinnedApps) {
-        if(!runningAppsOnly || pinnedApps.size() == 0)
-            return pinnedApps;
-
-        ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RecentTaskInfo> recentTasks = mActivityManager.getRecentTasks(Integer.MAX_VALUE, 0);
-
-        for(AppEntry entry : pinnedApps) {
-            for(ActivityManager.RecentTaskInfo task : recentTasks) {
-                if(task.id != -1 && task.baseActivity.getPackageName().equals(entry.getPackageName())) {
-                    try {
-                        Field field = ActivityManager.RecentTaskInfo.class.getField("firstActiveTime");
-                        entry.setLastTimeUsed(field.getLong(task));
-                        currentRunningAppIds.add(entry.getPackageName());
-                        break;
-                    } catch (Exception e) { /* Gracefully fail */ }
-                }
-            }
-        }
-
-        return pinnedApps;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
