@@ -76,12 +76,11 @@ Uprawnienie to jest używane tylko do wykonywania czynności naciśnięcia przyc
 <string name="tb_dashboard_description">Dodaj przycisk do Taskbar, który wyświetli widżety po naciśnięciu</string>
 <string name="tb_dashboard_grid_size">Rozmiar siatki pulpitu widżetów</string>
 <string name="tb_dashboard_tutorial">Kliknij w dowolnym miejscu ekranu, aby dodać widżet do pulpitu</string>
-<string name="tb_def_window_size">standard</string>
 <string name="tb_dialog_donate_message">"Wspieraj rozwój Taskbar poprzez aktualizację do Wersji dla darczyńców dla %1$s!
 
 Wersja dla darczyńców jest identyczna z bezpłatną wersją, a Twoje preferencje zostaną automatycznie przeniesione.
 
-Taskbar jest i zawsze będzie w 100% darmowy, open source, bez reklam. Jednak wasze wsparcie jest bardzo doceniane!"</string>
+Taskbar jest i zawsze będzie w 100%% darmowy, open source, bez reklam. Jednak wasze wsparcie jest bardzo doceniane!"</string>
 <string name="tb_disable_scrolling_list">Wyłącz przewijanie listy</string>
 <string name="tb_double_tap_to_sleep">Dwukrotne stuknięcie w tryb uśpienia</string>
 <string name="tb_enable_accessibility">@string/tb_accessibility_service_description</string>
