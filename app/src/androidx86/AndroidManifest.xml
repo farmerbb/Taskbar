@@ -147,7 +147,7 @@
         </activity>
         <activity
             android:name=".activity.KeyboardShortcutActivityLockDevice"
-            android:label="${appName}"
+            android:label="@string/tb_app_name"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
