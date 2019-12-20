@@ -362,48 +362,48 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 <string name="tb_window_sizes_not_available">"Rozmiary okien nie działają poprawnie na tej wersji Androida - zobacz \"Pomoc i instrukcje\" jak to obejść"</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>List</item>
-        <item>Grid</item>
+        <item>Lista</item>
+        <item>Siatka</item>
     </string-array>
     <string-array name="tb_pref_recents_amount">
-        <item>Apps used within the past day</item>
-        <item>Apps used after Taskbar start</item>
-        <item>All apps (may reduce performance)</item>
+        <item>Aplikacje używane w ciągu ostatniego dnia</item>
+        <item>Aplikacje używane po uruchomieniu Taskbar</item>
+        <item>Wszystkie aplikacje (może zmniejszyć wydajność)</item>
     </string-array>
     <string-array name="tb_pref_recents_amount_alt">
-        <item>Apps used within the past day</item>
-        <item>Apps used after Taskbar start</item>
-        <item>All apps (may reduce performance)</item>
-        <item>Running apps only</item>
+        <item>Aplikacje używane w ciągu ostatniego dnia</item>
+        <item>Aplikacje używane po uruchomieniu Taskbar</item>
+        <item>Wszystkie aplikacje (może zmniejszyć wydajność)</item>
+        <item>Tylko uruchomione aplikacje</item>
     </string-array>
     <string-array name="tb_pref_sort_order">
-        <item>Recently used (descending)</item>
-        <item>Recently used (ascending)</item>
-        <item>Most time used (descending)</item>
-        <item>Most time used (ascending)</item>
+        <item>Ostatnio używane (malejąco)</item>
+        <item>Ostatnio używane (rosnąco)</item>
+        <item>Najczęściej używane (malejąco)</item>
+        <item>Najczęściej używane (rosnąco)</item>
     </string-array>
     <string-array name="tb_pref_sort_order_alt">
-        <item>Recently launched (descending)</item>
-        <item>Recently launched (ascending)</item>
+        <item>Ostatnio uruchomione (malejąco)</item>
+        <item>Ostatnio uruchomione (rosnąco)</item>
     </string-array>
     <string-array name="tb_pref_position_list">
-        <item>Bottom left (horizontal)</item>
-        <item>Bottom left (vertical)</item>
-        <item>Bottom right (horizontal)</item>
-        <item>Bottom right (vertical)</item>
-        <item>Top left (horizontal)</item>
-        <item>Top left (vertical)</item>
-        <item>Top right (horizontal)</item>
-        <item>Top right (vertical)</item>
+        <item>Lewy dolny (poziomo)</item>
+        <item>Lewy dolny (pionowo)</item>
+        <item>Prawy dolny (poziomo)</item>
+        <item>Prawy dolny (pionowo)</item>
+        <item>Lewy górny (poziomo)</item>
+        <item>Lewy górny (pionowo)</item>
+        <item>Prawy górny (poziomo)</item>
+        <item>Prawy górny (pionowo)</item>
     </string-array>
     <string-array name="tb_pref_theme_list">
-        <item>Light</item>
-        <item>Dark</item>
+        <item>Jasny</item>
+        <item>Ciemny</item>
     </string-array>
     <string-array name="tb_pref_show_search_bar_list">
-        <item>Hardware or software keyboard</item>
-        <item>Hardware keyboard only</item>
-        <item>Never show search bar</item>
+        <item>Klawiatura sprzętowa lub programowa</item>
+        <item>Tylko klawiatura sprzętowa</item>
+        <item>Nigdy nie pokazuj paska wyszukiwania</item>
     </string-array>
 
 </resources>
