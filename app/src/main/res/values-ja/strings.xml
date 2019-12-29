@@ -78,8 +78,8 @@
     <string name="tb_pref_description_freeform_hack">Taskbar がよりデスクトップライクな操作のフリーフォーム ウインドウ モードでアプリを起動できるようにします。\n\nこの機能は実験的で、標準の分割画面マルチタスクで問題が発生する可能性があります。</string>
 
     <string name="tb_pref_header_about">Taskbar について</string>
-    <string name="tb_pref_about_description">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; 2019 Braden Farmer\n\nここをクリックして更新の確認、または評価してください! %1$s</string>
-    <string name="tb_pref_about_description_alt">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; 2019 Braden Farmer</string>
+    <string name="tb_pref_about_description">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; %1$d Braden Farmer\n\nここをクリックして更新の確認、または評価してください! %2$s</string>
+    <string name="tb_pref_about_description_alt">Taskbar: 指先でスタートメニューと最近使用したアプリ\n\n&#169; %1$d Braden Farmer</string>
 
     <string name="tb_pref_title_hide_taskbar">アプリを選択したときに Taskbar を折りたたむ</string>
 

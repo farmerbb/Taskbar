@@ -204,15 +204,15 @@ Lütfen güç düğmenizi şimdi test edin. Çalışmıyorsa, ekran zaman aşım
 <string name="tb_power_menu">Güç menüsü</string>
 <string name="tb_pref_about_description">"Taskbar: Android için PC görünümü
 
-© 2019 Braden Farmer
+© %1$d Braden Farmer
 Uygulama simgesi: Mark Morilla
 
-Güncellemeleri kontrol etmek veya derecelendirme bırakmak için buraya tıklayın! %1$s
+Güncellemeleri kontrol etmek veya derecelendirme bırakmak için buraya tıklayın! %2$s
 
 Türkçe: Mesut Aktaş - MaxiCep"</string>
 <string name="tb_pref_about_description_alt">"Taskbar: Android için PC görünümü
 
-© 2019 Braden Farmer
+© %1$d Braden Farmer
 Uygulama simgesi: Mark Morilla
 
 Türkçe: Mesut Aktaş - MaxiCep"</string>

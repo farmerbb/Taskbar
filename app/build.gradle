@@ -24,6 +24,8 @@ android {
         buildConfigField "String", "PAID_APPLICATION_ID", "\"com.farmerbb.taskbar.paid\""
         buildConfigField "String", "SUPPORT_APPLICATION_ID", "\"com.farmerbb.taskbar.support\""
         buildConfigField "String", "ANDROIDX86_APPLICATION_ID", "\"com.farmerbb.taskbar.androidx86\""
+
+        buildConfigField "long", "TIMESTAMP", "${System.currentTimeMillis()}L"
     }
 
     compileOptions {

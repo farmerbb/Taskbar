@@ -219,13 +219,13 @@ Proszę przetestować przycisk zasilania teraz. Jeśli nie działa, zachowaj ost
 <string name="tb_powered_by_taskbar">Wspierane przez Taskbar</string>
 <string name="tb_pref_about_description">"Taskbar: PC-style productivity for Android
 
-© 2019 Braden Farmer
+© %1$d Braden Farmer
 Logo aplikacji przez Mark Morilla
 
-Kliknij tutaj, aby sprawdzić aktualizacje lub pozostawić ocenę! %1$s"</string>
+Kliknij tutaj, aby sprawdzić aktualizacje lub pozostawić ocenę! %2$s"</string>
 <string name="tb_pref_about_description_alt">"Taskbar: produktywność w stylu PC dla Androida
 
-© 2019 Braden Farmer
+© %1$d Braden Farmer
 Logo aplikacji Mark Morilla"</string>
 <string name="tb_pref_centered_icons">Wyśrodkuj ikony w obrębie przestrzeni</string>
 <string name="tb_pref_description_chrome_os_context_menu_fix">Włącz tę opcję, jeśli korzystasz z Taskbar obok stacji dokującej Chrome OS</string>

@@ -32,6 +32,7 @@ import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.util.U;
 
 import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -74,10 +75,16 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
 
         if(!isLibrary) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(BuildConfig.TIMESTAMP);
+
+            int year = calendar.get(Calendar.YEAR);
             if(BuildConfig.DEBUG || getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-                findPreference("about").setSummary(R.string.tb_pref_about_description_alt);
+                findPreference("about").setSummary(getString(R.string.tb_pref_about_description_alt, year));
             else {
-                findPreference("about").setSummary(getString(R.string.tb_pref_about_description, new String(Character.toChars(0x1F601))));
+                String emoji = new String(Character.toChars(0x1F601));
+
+                findPreference("about").setSummary(getString(R.string.tb_pref_about_description, year, emoji));
                 findPreference("about").setOnPreferenceClickListener(this);
             }
         }
