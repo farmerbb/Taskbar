@@ -35,6 +35,7 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class AboutFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
 
@@ -75,7 +76,7 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
         findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
 
         if(!isLibrary) {
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Denver"));
             calendar.setTimeInMillis(BuildConfig.TIMESTAMP);
 
             int year = calendar.get(Calendar.YEAR);
