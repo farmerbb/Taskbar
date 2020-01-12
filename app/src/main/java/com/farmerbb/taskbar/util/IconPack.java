@@ -282,16 +282,14 @@ public class IconPack {
         return result;
     }
 
-    private long generateSeed(String packageName) {
-        long seed = 0;
-
-        for(int i = 0; i < packageName.length(); i++) {
-            char ch = packageName.charAt(i);
-            seed = seed + (long) ch;
-        }
-
-        return seed;
-    }
+    private static long generateSeed(String packageName) {
+		long seed = 0;
+		for (int i = 0; i < packageName.length(); i++) {
+			char ch = packageName.charAt(i);
+			seed = seed + (long) ch;
+		}
+		return seed;
+	}
     
     private Resources getResources(Context context) {
         if(iconPackres == null)
