@@ -444,7 +444,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "uninstall":
-                if(U.hasFreeformSupport(this) && isInMultiWindowMode() && !U.isChromeOs(this)) {
+                if(U.hasFreeformSupport(this) && isInMultiWindowMode()) {
                     Intent intent2 = new Intent(this, DummyActivity.class);
                     intent2.putExtra("uninstall", entry.getPackageName());
                     intent2.putExtra("user_id", entry.getUserId(this));
