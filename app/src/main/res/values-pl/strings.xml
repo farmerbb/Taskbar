@@ -408,7 +408,7 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string name="tb_manage_app_data">Manage app data</string>
     <string name="tb_manage_app_data_description">@string/tb_clear_pinned_apps</string>
-    <string name="tb_backup_settings">Backup settings</string>
-    <string name="tb_restore_settings">Restore settings</string>
+    <string name="tb_backup_settings">Backup settings to file&#8230;</string>
+    <string name="tb_restore_settings">Restore settings from file&#8230;</string>
 
 </resources>

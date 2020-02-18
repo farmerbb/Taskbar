@@ -19,10 +19,13 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.U;
 
 public class ManageAppDataFragment extends SettingsFragment {
 
@@ -60,7 +63,7 @@ public class ManageAppDataFragment extends SettingsFragment {
         switch(p.getKey()) {
             case "backup_settings":
             case "restore_settings":
-                // TODO
+                U.showToast(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT);
                 break;
         }
 

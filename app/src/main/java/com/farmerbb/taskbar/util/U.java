@@ -1583,6 +1583,8 @@ public class U {
     }
 
     public static boolean isExternalAccessDisabled(Context context) {
+        if(isLibrary(context)) return true;
+
         SharedPreferences pref = getSharedPreferences(context);
         return !pref.getBoolean("tasker_enabled", true);
     }

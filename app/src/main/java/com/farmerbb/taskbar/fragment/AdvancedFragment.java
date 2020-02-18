@@ -54,7 +54,7 @@ import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.U;
 
-public class AdvancedFragment extends SettingsFragment {
+public class AdvancedFragment extends SettingsFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     boolean secondScreenPrefEnabled = false;
 
@@ -84,19 +84,13 @@ public class AdvancedFragment extends SettingsFragment {
         boolean isAndroidx86 = getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
 
         if(isLibrary) {
-            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
-
             getPreferenceScreen().removePreference(findPreference("launcher"));
             getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
             getPreferenceScreen().removePreference(findPreference("navigation_bar_buttons"));
-            getPreferenceScreen().removePreference(findPreference("manage_app_data"));
         } else {
             findPreference("launcher").setOnPreferenceClickListener(this);
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
-            findPreference("manage_app_data").setOnPreferenceClickListener(this);
-
-            getPreferenceScreen().removePreference(findPreference("clear_pinned_apps"));
         }
 
         if(!isAndroidx86 && !isLibrary && U.isPlayStoreInstalled(getActivity()) && U.isPlayStoreRelease(getActivity())) {
@@ -123,6 +117,14 @@ public class AdvancedFragment extends SettingsFragment {
                 ListView list = rootView.findViewById(android.R.id.list);
                 if(list != null) list.scrollTo(0, Integer.MAX_VALUE);
             }
+        }
+
+        if(U.isExternalAccessDisabled(getActivity())) {
+            addPreferencesFromResource(R.xml.tb_pref_advanced_extra_1);
+            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
+        } else {
+            addPreferencesFromResource(R.xml.tb_pref_advanced_extra_2);
+            findPreference("manage_app_data").setOnPreferenceClickListener(this);
         }
 
         finishedLoadingPrefs = true;
@@ -347,5 +349,22 @@ public class AdvancedFragment extends SettingsFragment {
         findPreference("dashboard_grid_size").setSummary(getString(R.string.tb_dashboard_grid_description, first, second));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(!U.isLibrary(getActivity()) && key.equals("tasker_enabled")) {
+            boolean enabled = sharedPreferences.getBoolean(key, true);
+
+            if(enabled) {
+                getPreferenceScreen().removePreference(findPreference("clear_pinned_apps"));
+                addPreferencesFromResource(R.xml.tb_pref_advanced_extra_2);
+                findPreference("manage_app_data").setOnPreferenceClickListener(this);
+            } else {
+                getPreferenceScreen().removePreference(findPreference("manage_app_data"));
+                addPreferencesFromResource(R.xml.tb_pref_advanced_extra_1);
+                findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
+            }
+        }
     }
 }
