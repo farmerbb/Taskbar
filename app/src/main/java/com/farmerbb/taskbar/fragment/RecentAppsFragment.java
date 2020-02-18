@@ -36,7 +36,7 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
-public class RecentAppsFragment extends SettingsFragment implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class RecentAppsFragment extends SettingsFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -204,7 +204,7 @@ public class RecentAppsFragment extends SettingsFragment implements Preference.O
                 break;
         }
 
-        return true;
+        return super.onPreferenceClick(p);
     }
 
     private void updateMaxNumOfRecents(boolean restartTaskbar) {

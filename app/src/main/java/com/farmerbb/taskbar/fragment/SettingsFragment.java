@@ -15,6 +15,7 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,11 +30,13 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.MainActivity;
+import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
-public abstract class SettingsFragment extends PreferenceFragment {
+public abstract class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
     boolean finishedLoadingPrefs;
     boolean showReminderToast = false;
@@ -151,5 +154,27 @@ public abstract class SettingsFragment extends PreferenceFragment {
 
             U.restartNotificationService(getActivity());
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public boolean onPreferenceClick(final Preference p) {
+        if(p.getKey().equals("clear_pinned_apps")) {
+            Intent clearIntent = null;
+
+            SharedPreferences pref = U.getSharedPreferences(getActivity());
+            switch(pref.getString("theme", "light")) {
+                case "light":
+                    clearIntent = new Intent(getActivity(), ClearDataActivity.class);
+                    break;
+                case "dark":
+                    clearIntent = new Intent(getActivity(), ClearDataActivityDark.class);
+                    break;
+            }
+
+            startActivity(clearIntent);
+        }
+
+        return true;
     }
 }

@@ -389,4 +389,9 @@
     <string name="tb_settings">Settings</string>
     <string name="tb_powered_by_taskbar">Powered by Taskbar</string>
 
+    <string name="tb_manage_app_data">Manage app data</string>
+    <string name="tb_manage_app_data_description">Backup and restore settings, or reset per-app preferences</string>
+    <string name="tb_backup_settings">Backup settings</string>
+    <string name="tb_restore_settings">Restore settings</string>
+
 </resources>

@@ -38,7 +38,7 @@ import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.activity.dark.IconPackActivityDark;
 import com.farmerbb.taskbar.util.U;
 
-public class AppearanceFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+public class AppearanceFragment extends SettingsFragment {
     private int alpha, red, green, blue;
 
     private enum ColorPickerType { BACKGROUND_TINT, ACCENT_COLOR }
@@ -164,7 +164,7 @@ public class AppearanceFragment extends SettingsFragment implements Preference.O
                 break;
         }
 
-        return true;
+        return super.onPreferenceClick(p);
     }
 
     protected void showFileChooser() {

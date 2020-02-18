@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -40,21 +41,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivityLockDevice;
 import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
-import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.U;
 
-public class AdvancedFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+public class AdvancedFragment extends SettingsFragment {
 
     boolean secondScreenPrefEnabled = false;
 
@@ -77,7 +77,6 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         addPreferencesFromResource(R.xml.tb_pref_advanced);
 
         // Set OnClickListeners for certain preferences
-        findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
         findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
         findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
 
@@ -85,13 +84,19 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         boolean isAndroidx86 = getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
 
         if(isLibrary) {
+            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
+
             getPreferenceScreen().removePreference(findPreference("launcher"));
             getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
             getPreferenceScreen().removePreference(findPreference("navigation_bar_buttons"));
+            getPreferenceScreen().removePreference(findPreference("manage_app_data"));
         } else {
             findPreference("launcher").setOnPreferenceClickListener(this);
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
+            findPreference("manage_app_data").setOnPreferenceClickListener(this);
+
+            getPreferenceScreen().removePreference(findPreference("clear_pinned_apps"));
         }
 
         if(!isAndroidx86 && !isLibrary && U.isPlayStoreInstalled(getActivity()) && U.isPlayStoreRelease(getActivity())) {
@@ -111,6 +116,14 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
 
         if(!isLibrary)
             findPreference("launcher").setEnabled(!lockHomeToggle);
+
+        if(getArguments() != null && getArguments().getBoolean("from_manage_app_data", false)) {
+            View rootView = getView();
+            if(rootView != null) {
+                ListView list = rootView.findViewById(android.R.id.list);
+                if(list != null) list.scrollTo(0, Integer.MAX_VALUE);
+            }
+        }
 
         finishedLoadingPrefs = true;
     }
@@ -161,20 +174,6 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
 
         switch(p.getKey()) {
-            case "clear_pinned_apps":
-                Intent clearIntent = null;
-
-                switch(pref.getString("theme", "light")) {
-                    case "light":
-                        clearIntent = new Intent(getActivity(), ClearDataActivity.class);
-                        break;
-                    case "dark":
-                        clearIntent = new Intent(getActivity(), ClearDataActivityDark.class);
-                        break;
-                }
-
-                startActivity(clearIntent);
-                break;
             case "launcher":
                 if(U.canDrawOverlays(getActivity())) {
                     ComponentName component = new ComponentName(getActivity(), HomeActivity.class);
@@ -312,9 +311,16 @@ public class AdvancedFragment extends SettingsFragment implements Preference.OnP
                 }
 
                 break;
+            case "manage_app_data":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new ManageAppDataFragment(), "ManageAppDataFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
         }
 
-        return true;
+        return super.onPreferenceClick(p);
     }
 
     private void updateDashboardGridSize(boolean restartTaskbar) {

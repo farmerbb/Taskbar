@@ -33,7 +33,7 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
-public class GeneralFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+public class GeneralFragment extends SettingsFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -140,6 +140,6 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
                 break;
         }
 
-        return true;
+        return super.onPreferenceClick(p);
     }
 }

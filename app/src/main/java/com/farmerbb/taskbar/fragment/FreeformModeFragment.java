@@ -38,7 +38,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
-public class FreeformModeFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+public class FreeformModeFragment extends SettingsFragment {
 
     private BroadcastReceiver checkBoxReceiver = new BroadcastReceiver() {
         @Override
@@ -215,7 +215,7 @@ public class FreeformModeFragment extends SettingsFragment implements Preference
                 break;
         }
 
-        return true;
+        return super.onPreferenceClick(p);
     }
 
     private void freeformSetupComplete() {

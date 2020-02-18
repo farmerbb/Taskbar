@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -42,7 +43,9 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.fragment.AboutFragment;
+import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;
+import com.farmerbb.taskbar.fragment.ManageAppDataFragment;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -367,14 +370,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof AboutFragment)
+        Fragment oldFragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
+
+        if(oldFragment instanceof AboutFragment)
             super.onBackPressed();
-        else
+        else {
+            Fragment newFragment;
+            String tag;
+
+            if(oldFragment instanceof ManageAppDataFragment) {
+                newFragment = new AdvancedFragment();
+                tag = "AdvancedFragment";
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("from_manage_app_data", true);
+                newFragment.setArguments(bundle);
+            } else {
+                newFragment = new AboutFragment();
+                tag = "AboutFragment";
+            }
+
             getFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment")
+                    .replace(R.id.fragmentContainer, newFragment, tag)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .commit();
+        }
     }
 
     public String getAboutFragmentTitle() {

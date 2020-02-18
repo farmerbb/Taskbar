@@ -37,7 +37,7 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class AboutFragment extends SettingsFragment implements Preference.OnPreferenceClickListener {
+public class AboutFragment extends SettingsFragment {
 
     private int noThanksCount = 0;
 
@@ -177,6 +177,6 @@ public class AboutFragment extends SettingsFragment implements Preference.OnPref
                 break;
         }
 
-        return true;
+        return super.onPreferenceClick(p);
     }
 }
