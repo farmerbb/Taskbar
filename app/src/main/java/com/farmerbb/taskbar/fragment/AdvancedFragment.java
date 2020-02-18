@@ -37,11 +37,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
@@ -110,14 +111,6 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
 
         if(!isLibrary)
             findPreference("launcher").setEnabled(!lockHomeToggle);
-
-        if(getArguments() != null && getArguments().getBoolean("from_manage_app_data", false)) {
-            View rootView = getView();
-            if(rootView != null) {
-                ListView list = rootView.findViewById(android.R.id.list);
-                if(list != null) list.scrollTo(0, Integer.MAX_VALUE);
-            }
-        }
 
         if(U.isExternalAccessDisabled(getActivity())) {
             addPreferencesFromResource(R.xml.tb_pref_advanced_extra_1);
@@ -352,8 +345,28 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // Register listener to check for changed preferences
+        if(!U.isLibrary(getActivity()))
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Unregister listener
+        if(!U.isLibrary(getActivity()))
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(!U.isLibrary(getActivity()) && key.equals("tasker_enabled")) {
+        if(key.equals("tasker_enabled")) {
+            getPreferenceScreen().removePreference(findPreference("dummy"));
+
             boolean enabled = sharedPreferences.getBoolean(key, true);
 
             if(enabled) {

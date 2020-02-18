@@ -381,10 +381,6 @@ public class MainActivity extends AppCompatActivity {
             if(oldFragment instanceof ManageAppDataFragment) {
                 newFragment = new AdvancedFragment();
                 tag = "AdvancedFragment";
-
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("from_manage_app_data", true);
-                newFragment.setArguments(bundle);
             } else {
                 newFragment = new AboutFragment();
                 tag = "AboutFragment";
