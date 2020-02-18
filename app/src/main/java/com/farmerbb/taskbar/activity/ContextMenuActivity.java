@@ -437,7 +437,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                                 ComponentName.unflattenFromString(entry.getComponentName()),
                                 userManager.getUserForSerialNumber(entry.getUserId(this)),
                                 null,
-                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder()))));
+                                U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, getListView().getChildAt(p.getOrder()))));
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
@@ -472,7 +472,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                     try {
                         startActivity(intent2,
-                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
+                                U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, getListView().getChildAt(p.getOrder())));
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 });
 
@@ -641,7 +641,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                     try {
                         startActivity(fileManagerIntent,
-                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
+                                U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.tb_lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
@@ -658,7 +658,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                     try {
                         startActivity(settingsIntent,
-                                U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, getListView().getChildAt(p.getOrder())));
+                                U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.tb_lock_device_not_supported);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }

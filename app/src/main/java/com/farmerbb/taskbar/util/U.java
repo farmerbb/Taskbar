@@ -227,7 +227,7 @@ public class U {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 try {
-                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APPLICATION, null));
+                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APP_PORTRAIT, null));
                 } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             });
         }
@@ -396,7 +396,7 @@ public class U {
             }
         }
 
-        ApplicationType type = getApplicationType(context, entry.getPackageName());
+        ApplicationType type = getApplicationType(context, entry);
 
         if(windowSize == null)
             windowSize = SavedWindowSizes.getInstance(context).getWindowSize(context, entry.getPackageName());
@@ -485,10 +485,14 @@ public class U {
     private static Bundle launchMode3(Context context, ApplicationType type, View view) {
         DisplayInfo display = getDisplayInfo(context);
 
+        boolean isLandscape = type == ApplicationType.APP_LANDSCAPE;
+        int widthDimen = isLandscape ? R.dimen.tb_phone_size_height : R.dimen.tb_phone_size_width;
+        int heightDimen = isLandscape ? R.dimen.tb_phone_size_width : R.dimen.tb_phone_size_height;
+
         int width1 = display.width / 2;
-        int width2 = context.getResources().getDimensionPixelSize(R.dimen.tb_phone_size_width) / 2;
+        int width2 = context.getResources().getDimensionPixelSize(widthDimen) / 2;
         int height1 = display.height / 2;
-        int height2 = context.getResources().getDimensionPixelSize(R.dimen.tb_phone_size_height) / 2;
+        int height2 = context.getResources().getDimensionPixelSize(heightDimen) / 2;
 
         return getActivityOptionsBundle(context, type, view,
                 width1 - width2,
@@ -979,7 +983,8 @@ public class U {
         int stackId = -1;
 
         switch(applicationType) {
-            case APPLICATION:
+            case APP_PORTRAIT:
+            case APP_LANDSCAPE:
                 if(FreeformHackHelper.getInstance().isFreeformHackActive())
                     stackId = getFreeformWindowModeId();
                 else
@@ -1072,8 +1077,27 @@ public class U {
         return options.setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
     }
 
-    private static ApplicationType getApplicationType(Context context, String packageName) {
-        return isGame(context, packageName) ? ApplicationType.GAME : ApplicationType.APPLICATION;
+    @SuppressLint("SwitchIntDef")
+    private static ApplicationType getApplicationType(Context context, AppEntry entry) {
+        if(isGame(context, entry.getPackageName()))
+            return ApplicationType.GAME;
+
+        try {
+            ActivityInfo info = context.getPackageManager().getActivityInfo(
+                    ComponentName.unflattenFromString(entry.getComponentName()),
+                    0
+            );
+
+            switch(info.screenOrientation) {
+                case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                case ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:
+                case ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE:
+                    return ApplicationType.APP_LANDSCAPE;
+            }
+        } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+
+        return ApplicationType.APP_PORTRAIT;
     }
 
     public static boolean isSystemApp(Context context) {

@@ -82,7 +82,7 @@ public class DummyActivity extends Activity {
 
                             U.launchApp(this, () -> {
                                 try {
-                                    startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APPLICATION, null));
+                                    startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, null));
                                     U.showToastLong(this, R.string.tb_usage_stats_message);
                                 } catch (ActivityNotFoundException e) {
                                     U.showToast(this, R.string.tb_lock_device_not_supported);
