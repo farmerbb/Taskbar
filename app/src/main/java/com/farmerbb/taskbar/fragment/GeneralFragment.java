@@ -56,7 +56,7 @@ public class GeneralFragment extends SettingsFragment implements Preference.OnPr
 
         if(U.canEnableFreeform()
                 && !U.isChromeOs(getActivity())
-                && !U.isOverridingFreeformHack(getActivity()))
+                && !U.isOverridingFreeformHack(getActivity(), false))
             findPreference("hide_taskbar").setSummary(R.string.tb_hide_taskbar_disclaimer);
 
         bindPreferenceSummaryToValue(findPreference("start_menu_layout"));

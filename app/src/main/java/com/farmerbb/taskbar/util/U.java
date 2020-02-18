@@ -352,7 +352,7 @@ public class U {
     public static void stopFreeformHack(Context context) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
 
-        if(isOverridingFreeformHack(context)) {
+        if(isOverridingFreeformHack(context, false)) {
             FreeformHackHelper helper = FreeformHackHelper.getInstance();
             helper.setFreeformHackActive(false);
             helper.setInFreeformWorkspace(false);
@@ -881,10 +881,7 @@ public class U {
     }
 
     public static boolean canBootToFreeform(Context context) {
-        SharedPreferences pref = getSharedPreferences(context);
-        return hasFreeformSupport(context)
-                && pref.getBoolean("freeform_hack", false)
-                && !isOverridingFreeformHack(context);
+        return hasFreeformSupport(context) && !isOverridingFreeformHack(context);
     }
 
     public static boolean isSamsungDevice() {
@@ -1402,7 +1399,9 @@ public class U {
     public static boolean shouldCollapse(Context context, boolean pendingAppLaunch) {
         SharedPreferences pref = getSharedPreferences(context);
         if(pref.getBoolean("hide_taskbar", true)) {
-            if(isOverridingFreeformHack(context))
+            if(!pref.getBoolean("freeform_hack", false))
+                return true;
+            else if(isOverridingFreeformHack(context, false))
                 return !LauncherHelper.getInstance().isOnHomeScreen();
             else {
                 FreeformHackHelper helper = FreeformHackHelper.getInstance();
@@ -1416,8 +1415,12 @@ public class U {
     }
 
     public static boolean isOverridingFreeformHack(Context context) {
+        return isOverridingFreeformHack(context, true);
+    }
+
+    public static boolean isOverridingFreeformHack(Context context, boolean checkPref) {
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getBoolean("freeform_hack", false)
+        return (!checkPref || pref.getBoolean("freeform_hack", false))
                 && ((isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true))
                 || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
     }

@@ -253,9 +253,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             if(pref.getBoolean("freeform_hack", false)
                     && !U.isDesktopIconsEnabled(this)
                     && ((U.launcherIsDefault(this)
-                    && !U.isOverridingFreeformHack(this)
+                    && !U.isOverridingFreeformHack(this, false)
                     && FreeformHackHelper.getInstance().isInFreeformWorkspace())
-                    || (U.isOverridingFreeformHack(this)
+                    || (U.isOverridingFreeformHack(this, false)
                     && LauncherHelper.getInstance().isOnHomeScreen()))) {
                 addPreferencesFromResource(R.xml.tb_pref_context_menu_change_wallpaper);
                 findPreference("change_wallpaper").setOnPreferenceClickListener(this);
