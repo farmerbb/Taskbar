@@ -1423,9 +1423,8 @@ public class U {
     public static boolean shouldCollapse(Context context, boolean pendingAppLaunch) {
         SharedPreferences pref = getSharedPreferences(context);
         if(pref.getBoolean("hide_taskbar", true)) {
-            if(!pref.getBoolean("freeform_hack", false))
-                return true;
-            else if(isOverridingFreeformHack(context, false))
+            if(!pref.getBoolean("freeform_hack", false)
+                    || isOverridingFreeformHack(context, false))
                 return !LauncherHelper.getInstance().isOnHomeScreen();
             else {
                 FreeformHackHelper helper = FreeformHackHelper.getInstance();
