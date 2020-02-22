@@ -66,6 +66,7 @@
         android:xlargeScreens="true"/>
 
     <application
+        android:name=".TaskbarApplication"
         android:allowBackup="true"
         android:icon="@mipmap/tb_launcher"
         android:label="${appName}"

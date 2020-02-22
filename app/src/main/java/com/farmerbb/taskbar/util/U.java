@@ -424,12 +424,12 @@ public class U {
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
     }
 
-    private static Bundle launchMode1(Context context, ApplicationType type, View view) {
+    private static Bundle launchMode1(Context context, ApplicationType type, View view, int factor) {
         DisplayInfo display = getDisplayInfo(context);
 
-        int width1 = display.width / 8;
+        int width1 = display.width / factor;
         int width2 = display.width - width1;
-        int height1 = display.height / 8;
+        int height1 = display.height / factor;
         int height2 = display.height - height1;
 
         return getActivityOptionsBundle(context, type, view,
@@ -1050,8 +1050,12 @@ public class U {
             return getActivityOptions(view).toBundle();
 
         switch(windowSize) {
+            case "standard":
+                if(getCurrentApiVersion() > 29.0f)
+                    return launchMode1(context, type, view, 4);
+                break;
             case "large":
-                return launchMode1(context, type, view);
+                return launchMode1(context, type, view, 8);
             case "fullscreen":
                 return launchMode2(context, MAXIMIZED, type, view);
             case "half_left":
@@ -1457,7 +1461,7 @@ public class U {
         }
     }
 
-    private static float getCurrentApiVersion() {
+    public static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
         else

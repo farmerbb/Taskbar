@@ -93,6 +93,7 @@ dependencies {
     implementation 'com.mikepenz:iconics-core:3.0.4'
     //noinspection GradleDependency
     implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.4'
+    implementation 'me.weishu:free_reflection:2.2.0'
     implementation 'moe.banana:toast-compat:1.0.5'
     implementation group:'com.twofortyfouram', name:'android-plugin-api-for-locale', version:'[1.0.2,2.0['
 }
