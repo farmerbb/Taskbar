@@ -404,9 +404,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     finish();
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             }
-        } else {
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
-        }
+        } else if(U.shouldCollapse(this, false))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
     }
 
     @Override
@@ -474,7 +473,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             pref.edit().putBoolean("taskbar_active", false).apply();
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
-        new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR")), 100);
+        if(U.shouldCollapse(this, false))
+            new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR")), 100);
     }
 
     private void startFreeformHack() {
@@ -491,7 +491,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!U.canBootToFreeform(this)) {
             setOnHomeScreen(false);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+
+            if(U.shouldCollapse(this, false))
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
 
             if(this instanceof SecondaryHomeActivity) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);
