@@ -1098,10 +1098,18 @@ public class U {
                 case ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:
                 case ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE:
                     return ApplicationType.APP_LANDSCAPE;
+
+                case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                case ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT:
+                case ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT:
+                    return ApplicationType.APP_PORTRAIT;
             }
         } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
 
-        return ApplicationType.APP_PORTRAIT;
+        return context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
+                ? ApplicationType.APP_LANDSCAPE
+                : ApplicationType.APP_PORTRAIT;
     }
 
     public static boolean isSystemApp(Context context) {
