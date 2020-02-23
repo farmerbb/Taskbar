@@ -59,6 +59,9 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
 
     boolean secondScreenPrefEnabled = false;
 
+    // TODO remove this field once backup & restore is finished
+    boolean backupAndRestoreEnabled = BuildConfig.DEBUG;
+
     private BroadcastReceiver homeToggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -84,35 +87,33 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
         boolean isLibrary = U.isLibrary(getActivity());
         boolean isAndroidx86 = getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
 
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        boolean lockHomeToggle = pref.getBoolean("launcher", false)
+                && U.isLauncherPermanentlyEnabled(getActivity());
+
         if(isLibrary) {
+            getPreferenceScreen().removePreference(findPreference("tasker_enabled"));
             getPreferenceScreen().removePreference(findPreference("launcher"));
             getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
             getPreferenceScreen().removePreference(findPreference("navigation_bar_buttons"));
         } else {
+            findPreference("launcher").setEnabled(!lockHomeToggle);
             findPreference("launcher").setOnPreferenceClickListener(this);
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
         }
 
-        if(!isAndroidx86 && !isLibrary && U.isPlayStoreInstalled(getActivity()) && U.isPlayStoreRelease(getActivity())) {
+        if(!isAndroidx86 && !isLibrary
+                && U.isPlayStoreInstalled(getActivity())
+                && U.isPlayStoreRelease(getActivity())) {
             findPreference("secondscreen").setOnPreferenceClickListener(this);
             secondScreenPrefEnabled = true;
         } else
             getPreferenceScreen().removePreference(findPreference("secondscreen"));
 
-        if(isAndroidx86 || isLibrary)
-            getPreferenceScreen().removePreference(findPreference("tasker_enabled"));
-
         bindPreferenceSummaryToValue(findPreference("dashboard"));
 
-        SharedPreferences pref = U.getSharedPreferences(getActivity());
-        boolean lockHomeToggle = pref.getBoolean("launcher", false)
-                && U.isLauncherPermanentlyEnabled(getActivity());
-
-        if(!isLibrary)
-            findPreference("launcher").setEnabled(!lockHomeToggle);
-
-        if(U.isExternalAccessDisabled(getActivity())) {
+        if(!backupAndRestoreEnabled || U.isExternalAccessDisabled(getActivity())) {
             addPreferencesFromResource(R.xml.tb_pref_advanced_extra_1);
             findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
         } else {
@@ -349,7 +350,7 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
         super.onStart();
 
         // Register listener to check for changed preferences
-        if(!U.isLibrary(getActivity()))
+        if(backupAndRestoreEnabled && !U.isLibrary(getActivity()))
             PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -358,7 +359,7 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
         super.onStop();
 
         // Unregister listener
-        if(!U.isLibrary(getActivity()))
+        if(backupAndRestoreEnabled && !U.isLibrary(getActivity()))
             PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 
