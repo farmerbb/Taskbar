@@ -95,7 +95,7 @@ Włączyć obsługę ostatnio używanych aplikacji?"</string>
 
 Nadal możesz być w stanie ją włączyć za pomocą tego polecenia powłoki adb:
 
-ustaw appops %1$s %2$s na zezwalaj"</string>
+appops set %1$s %2$s allow"</string>
 <string name="tb_error_dialog_title">Błąd</string>
 <string name="tb_error_reading_custom_start_image">Błąd odczytu obrazu niestandardowego dla menu startowego. Spróbuj innego pliku.</string>
 <string name="tb_essential_phone_grip_rejection">Na Essential Phone, wyłącz odrzucenie uchwytu (w opcjach programisty), aby pomóc w otwarciu/zamknięciu Taskbar</string>
@@ -116,7 +116,7 @@ ustaw appops %1$s %2$s na zezwalaj"</string>
 
 - Podłącz urządzenie do komputera z zainstalowanym pakietem Android SDK i wykonaj następujące polecenie (jedna linia):
 
-ustawienia powłoki adb umieścić globalnie enable_freeform_support 1
+adb shell settings put global enable_freeform_support 1
 
 - Zrestartuj urządzenie"</string>
 <string name="tb_freeform_dialog_title">Włącz obsługę Freeform</string>
