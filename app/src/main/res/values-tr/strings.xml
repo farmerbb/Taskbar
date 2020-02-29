@@ -391,13 +391,4 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_window_size">Window size</string>
     <string name="tb_invalid_shortcut">Invalid shortcut</string>
 
-    <string-array name="tb_window_size_list">
-        <item>@string/tb_window_size_standard</item>
-        <item>@string/tb_window_size_large</item>
-        <item>@string/tb_window_size_fullscreen</item>
-        <item>@string/tb_window_size_half_left_alt</item>
-        <item>@string/tb_window_size_half_right_alt</item>
-        <item>@string/tb_window_size_phone_size</item>
-    </string-array>
-
 </resources>
