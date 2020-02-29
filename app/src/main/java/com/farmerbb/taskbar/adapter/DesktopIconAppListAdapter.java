@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.DesktopIconSelectAppActivity;
+import com.farmerbb.taskbar.activity.AbstractSelectAppActivity;
 import com.farmerbb.taskbar.util.AppEntry;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public class DesktopIconAppListAdapter extends ArrayAdapter<AppEntry> {
 
         LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
-            DesktopIconSelectAppActivity activity = (DesktopIconSelectAppActivity) getContext();
+            AbstractSelectAppActivity activity = (AbstractSelectAppActivity) getContext();
             activity.selectApp(entry);
         });
 

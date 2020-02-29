@@ -275,8 +275,10 @@ public class U {
                 null,
                 false,
                 false,
+                false,
                 shortcut,
-                view);
+                view,
+                null);
     }
 
     public static void launchApp(final Context context,
@@ -289,27 +291,47 @@ public class U {
                 entry,
                 windowSize,
                 launchedFromTaskbar,
+                false,
                 openInNewWindow,
                 null,
-                view);
+                view,
+                null);
+    }
+
+    public static void launchApp(final Context context,
+                                 final AppEntry entry,
+                                 final String windowSize,
+                                 final Runnable onError) {
+        launchApp(context,
+                entry,
+                windowSize,
+                false,
+                true,
+                false,
+                null,
+                null,
+                onError);
     }
 
     private static void launchApp(final Context context,
                                   final AppEntry entry,
                                   final String windowSize,
                                   final boolean launchedFromTaskbar,
+                                  final boolean isPersistentShortcut,
                                   final boolean openInNewWindow,
                                   final ShortcutInfo shortcut,
-                                  final View view) {
-        launchApp(context, launchedFromTaskbar, () -> continueLaunchingApp(context, entry,
-                windowSize, openInNewWindow, shortcut, view));
+                                  final View view,
+                                  final Runnable onError) {
+        launchApp(context, launchedFromTaskbar, isPersistentShortcut, () ->
+                continueLaunchingApp(context, entry, windowSize, openInNewWindow, shortcut, view, onError)
+        );
     }
 
     public static void launchApp(Context context, Runnable runnable) {
-        launchApp(context, true, runnable);
+        launchApp(context, true, false, runnable);
     }
 
-    private static void launchApp(Context context, boolean launchedFromTaskbar, Runnable runnable) {
+    private static void launchApp(Context context, boolean launchedFromTaskbar, boolean isPersistentShortcut, Runnable runnable) {
         SharedPreferences pref = getSharedPreferences(context);
         FreeformHackHelper helper = FreeformHackHelper.getInstance();
 
@@ -320,7 +342,7 @@ public class U {
         boolean noAnimation = pref.getBoolean("disable_animations", false);
 
         if(hasFreeformSupport(context)
-                && pref.getBoolean("freeform_hack", false)
+                && (pref.getBoolean("freeform_hack", false) || isPersistentShortcut)
                 && (!helper.isInFreeformWorkspace() || specialLaunch)) {
             new Handler().postDelayed(() -> {
                 startFreeformHack(context, true);
@@ -365,7 +387,8 @@ public class U {
                                              String windowSize,
                                              boolean openInNewWindow,
                                              ShortcutInfo shortcut,
-                                             View view) {
+                                             View view,
+                                             Runnable onError) {
         SharedPreferences pref = getSharedPreferences(context);
         Intent intent = new Intent();
         intent.setComponent(ComponentName.unflattenFromString(entry.getComponentName()));
@@ -410,12 +433,12 @@ public class U {
                     try {
                         context.startActivity(intent, bundle);
                     } catch (ActivityNotFoundException e) {
-                        launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context));
+                        launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context), onError);
                     } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
                 } else
-                    launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context));
+                    launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context), onError);
             } else
-                launchShortcut(context, shortcut, bundle);
+                launchShortcut(context, shortcut, bundle, onError);
         });
 
         if(shouldCollapse(context, true))
@@ -502,25 +525,29 @@ public class U {
         );
     }
 
-    private static void launchAndroidForWork(Context context, ComponentName componentName, Bundle bundle, long userId) {
+    private static void launchAndroidForWork(Context context, ComponentName componentName, Bundle bundle, long userId, Runnable onError) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
         try {
             launcherApps.startMainActivity(componentName, userManager.getUserForSerialNumber(userId), null, bundle);
         } catch (ActivityNotFoundException | NullPointerException
-                | IllegalStateException | SecurityException e) { /* Gracefully fail */ }
+                | IllegalStateException | SecurityException e) {
+            if(onError != null) launchApp(context, onError);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
-    private static void launchShortcut(Context context, ShortcutInfo shortcut, Bundle bundle) {
+    private static void launchShortcut(Context context, ShortcutInfo shortcut, Bundle bundle, Runnable onError) {
         LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
         if(launcherApps.hasShortcutHostPermission()) {
             try {
                 launcherApps.startShortcut(shortcut, null, bundle);
             } catch (ActivityNotFoundException | NullPointerException
-                    | IllegalStateException | SecurityException e) { /* Gracefully fail */ }
+                    | IllegalStateException | SecurityException e) {
+                if(onError != null) launchApp(context, onError);
+            }
         }
     }
 

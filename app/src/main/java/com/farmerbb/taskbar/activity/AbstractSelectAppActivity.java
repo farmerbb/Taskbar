@@ -36,25 +36,19 @@ import android.widget.ProgressBar;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.adapter.DesktopIconAppListAdapter;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DesktopIconSelectAppActivity extends AppCompatActivity {
+public abstract class AbstractSelectAppActivity extends AppCompatActivity {
 
     private DesktopIconAppListGenerator appListGenerator;
     private ProgressBar progressBar;
     private ListView appList;
-
-    private DesktopIconInfo desktopIcon;
 
     private boolean isCollapsed;
 
@@ -62,7 +56,6 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        desktopIcon = (DesktopIconInfo) getIntent().getSerializableExtra("desktop_icon");
         boolean noShadow = getIntent().hasExtra("no_shadow");
 
         setContentView(R.layout.tb_desktop_icon_select_app);
@@ -102,20 +95,7 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
         super.finish();
     }
 
-    public void selectApp(AppEntry entry) {
-        desktopIcon.entry = entry;
-
-        try {
-            SharedPreferences pref = U.getSharedPreferences(this);
-            JSONArray icons = new JSONArray(pref.getString("desktop_icons", "[]"));
-            icons.put(desktopIcon.toJson(this));
-
-            pref.edit().putString("desktop_icons", icons.toString()).apply();
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
-        } catch (JSONException e) { /* Gracefully fail */ }
-
-        finish();
-    }
+    public abstract void selectApp(AppEntry entry);
 
     private final class DesktopIconAppListGenerator extends AsyncTask<Void, Void, DesktopIconAppListAdapter> {
         @Override
@@ -155,15 +135,15 @@ public class DesktopIconSelectAppActivity extends AppCompatActivity {
                                 appInfo.getApplicationInfo().packageName,
                                 appInfo.getName()).flattenToString(),
                         appInfo.getLabel().toString(),
-                        IconCache.getInstance(DesktopIconSelectAppActivity.this)
-                                .getIcon(DesktopIconSelectAppActivity.this, appInfo),
+                        IconCache.getInstance(AbstractSelectAppActivity.this)
+                                .getIcon(AbstractSelectAppActivity.this, appInfo),
                         false);
 
                 entry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
                 entries.add(entry);
             }
 
-            return new DesktopIconAppListAdapter(DesktopIconSelectAppActivity.this, R.layout.tb_desktop_icon_row, entries);
+            return new DesktopIconAppListAdapter(AbstractSelectAppActivity.this, R.layout.tb_desktop_icon_row, entries);
         }
 
         @Override

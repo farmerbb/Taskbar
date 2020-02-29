@@ -386,4 +386,18 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_backup_settings">Backup settings to file&#8230;</string>
     <string name="tb_restore_settings">Restore settings from file&#8230;</string>
 
+    <string name="tb_new_shortcut">Launch app</string>
+    <string name="tb_allow_freeform_mode">Launch app in freeform mode</string>
+    <string name="tb_window_size">Window size</string>
+    <string name="tb_invalid_shortcut">Invalid shortcut</string>
+
+    <string-array name="tb_window_size_list">
+        <item>@string/tb_window_size_standard</item>
+        <item>@string/tb_window_size_large</item>
+        <item>@string/tb_window_size_fullscreen</item>
+        <item>@string/tb_window_size_half_left_alt</item>
+        <item>@string/tb_window_size_half_right_alt</item>
+        <item>@string/tb_window_size_phone_size</item>
+    </string-array>
+
 </resources>
