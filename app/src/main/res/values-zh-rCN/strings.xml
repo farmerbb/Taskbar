@@ -27,9 +27,11 @@
     <string name="tb_action_hide_alt">隐藏</string>
     <string name="tb_action_quit">退出</string>
     <string name="tb_action_grant_permission">授予权限</string>
+    <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">需要权限</string>
     <string name="tb_permission_dialog_message">任务栏需要在其他应用之上显示的权限才能开始。\n\n请点击 \"授予权限\" 并确保 \"允许在其他应用之上显示\" 已启用。</string>
+    <string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 
     <string name="tb_pref_header_general">常规设置</string>
     <string name="tb_pref_title_start_menu_layout">开始菜单布局</string>
@@ -220,6 +222,7 @@
     <string name="tb_start_taskbar">开始/停止 任务栏 </string>
     <string name="tb_no_freeform_support">自由式模式未在你的设备上启用 &#8211; 请先打开 任务栏 并启用</string>
     <string name="tb_enable_recent_apps">任务栏 可以选择在屏幕边缘显示最常用应用的图标。要做到这个，任务栏 需要使用情况访问权限。\n\n启用对最近应用的支持?</string>
+    <string name="tb_enable_recent_apps_alt">@string/tb_enable_recent_apps</string>
 
     <string name="tb_disable_scrolling_list">停用滚动列表</string>
 

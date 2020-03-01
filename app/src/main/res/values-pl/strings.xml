@@ -31,6 +31,7 @@ Uprawnienie to jest używane tylko do wykonywania czynności naciśnięcia przyc
 <string name="tb_action_i_understand">Rozumiem</string>
 <string name="tb_action_no_thanks">Nie, dziękuję</string>
 <string name="tb_action_ok">OK</string>
+<string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 <string name="tb_action_quit">Wyjdź</string>
 <string name="tb_action_reset">Resetuj</string>
 <string name="tb_action_show">Pokaż Taskbar</string>
@@ -91,6 +92,7 @@ Taskbar jest i zawsze będzie w 100%% darmowy, open source, bez reklam. Jednak w
 <string name="tb_enable_recent_apps">"Na pasku zadań można opcjonalnie wyświetlać ikony ostatnio używanych aplikacji wzdłuż krawędzi ekranu. W tym celu Taskbar wymaga uprawnień dostępu do użytkowania.
 
 Włączyć obsługę ostatnio używanych aplikacji?"</string>
+<string name="tb_enable_recent_apps_alt">@string/tb_enable_recent_apps</string>
 <string name="tb_error_dialog_message">"Niestety, z powodu ograniczeń OEM, funkcja ta nie może być włączona w urządzeniu.
 
 Nadal możesz być w stanie ją włączyć za pomocą tego polecenia powłoki adb:
@@ -206,6 +208,7 @@ Wyższe wartości mogą zmniejszyć wydajność."</string>
 <string name="tb_permission_dialog_message">"Taskbar wymaga uprawnienia do rysowania nad innymi aplikacjami.
 
 Proszę nacisnąć \"Udziel uprawnień\" i upewnij się, że \"Zezwalaj na rysowanie nad innymi aplikacjami\" jest włączone."</string>
+<string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 <string name="tb_permission_dialog_title">Potrzebne jest pozwolenie</string>
 <string name="tb_pin_app">Przypnij do ostatnich</string>
 <string name="tb_pin_shortcut_not_supported">"Twój launcher nie obsługuje dodawania skrótów z innych aplikacji.

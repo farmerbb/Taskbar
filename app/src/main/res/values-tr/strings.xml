@@ -31,6 +31,7 @@ Bu izin sadece düğme basma eylemlerini gerçekleştirmek için kullanılır ve
 <string name="tb_action_i_understand">Anladım</string>
 <string name="tb_action_no_thanks">Hayır teşekkürler</string>
 <string name="tb_action_ok">Tamam</string>
+<string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 <string name="tb_action_quit">Kapat</string>
 <string name="tb_action_reset">Sıfırla</string>
 <string name="tb_action_show">Taskbar göster</string>
@@ -86,6 +87,7 @@ Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak
 <string name="tb_enable_recent_apps">"Taskbar, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için Taskbar, kullanım erişim izinleri gerektirir.
 
 Son kullanılan uygulamalar için desteği etkinleştirilsin mi?"</string>
+<string name="tb_enable_recent_apps_alt">@string/tb_enable_recent_apps</string>
 <string name="tb_error_dialog_message">"Ne yazık ki, OEM kısıtlamaları nedeniyle, bu özellik cihazınızda etkinleştirilemiyor.
 
 Bu adb shell komutunu kullanarak bunu yine de etkinleştirebilirsiniz:
@@ -192,6 +194,7 @@ Daha yüksek değerler performansı düşürebilir."</string>
 <string name="tb_permission_dialog_message">"Taskbar, başlamadan önce diğer uygulamaların üzerine çizim izni gerektirir.
 
 Lütfen \"İzin Ver\" e basın ve \"Diğer uygulamaların üzerine çizim izni verme\" özelliğinin etkinleştirildiğinden emin olun."</string>
+<string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 <string name="tb_permission_dialog_title">İzin gereklidir</string>
 <string name="tb_pin_app">Son kullanılanlara al</string>
 <string name="tb_pin_shortcut_not_supported">"Ana ekran uygulaması, diğer uygulamalardan kısayol eklemeyi desteklemiyor.

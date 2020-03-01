@@ -27,9 +27,11 @@
     <string name="tb_action_hide_alt">Verbergen</string>
     <string name="tb_action_quit">Afsluiten</string>
     <string name="tb_action_grant_permission">Machtiging verlenen</string>
+    <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">Machtiging vereist</string>
     <string name="tb_permission_dialog_message">Taakbalk vereist de machtiging om over andere apps te mogen worden getoond voordat de app kan worden gestart.\n\nDruk op \"Machtiging verlenen\" en zorg ervoor dat \"Weergeven over andere apps\" is ingeschakeld.</string>
+    <string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 
     <string name="tb_pref_header_general">Algemene instellingen</string>
     <string name="tb_pref_title_start_menu_layout">Startmenu-indeling</string>
@@ -220,6 +222,7 @@
     <string name="tb_start_taskbar">Taakbalk starten/stoppen</string>
     <string name="tb_no_freeform_support">Vrije venstermodus is niet ingeschakeld op je apparaat &#8211; open Taakbalk en schakel dit in</string>
     <string name="tb_enable_recent_apps">Taakbalk kan, optioneel, aan de zijkant pictogrammen tonen van je recent gebruikte apps.  Als je dit wilt, dan heeft Taakbalk de machtiging gebruikstoegang nodig.\n\nOndersteuning inschakelen voor recente apps?</string>
+    <string name="tb_enable_recent_apps_alt">@string/tb_enable_recent_apps</string>
 
     <string name="tb_disable_scrolling_list">Scrollijst uitschakelen</string>
 

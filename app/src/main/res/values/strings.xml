@@ -27,9 +27,11 @@
     <string name="tb_action_hide_alt">Hide</string>
     <string name="tb_action_quit">Quit</string>
     <string name="tb_action_grant_permission">Grant permission</string>
+    <string name="tb_action_open_settings">Open Settings</string>
 
     <string name="tb_permission_dialog_title">Permission needed</string>
     <string name="tb_permission_dialog_message">Taskbar requires permission to draw over other apps before it can start.\n\nPlease press \"Grant Permission\" and ensure that \"Permit drawing over other apps\" is enabled.</string>
+    <string name="tb_permission_dialog_message_alt">Taskbar requires permission to draw over other apps before it can start.\n\nPlease press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
 
     <string name="tb_pref_header_general">General settings</string>
     <string name="tb_pref_title_start_menu_layout">Start menu layout</string>
@@ -220,6 +222,7 @@
     <string name="tb_start_taskbar">Start/stop Taskbar</string>
     <string name="tb_no_freeform_support">Freeform mode is not enabled on your device &#8211; open Taskbar and enable it first</string>
     <string name="tb_enable_recent_apps">Taskbar can optionally show icons for your most recently used apps along the edge of your screen.  To do this, Taskbar requires usage access permissions.\n\nEnable support for recent apps?</string>
+    <string name="tb_enable_recent_apps_alt">Taskbar can optionally show icons for your most recently used apps along the edge of your screen.  To do this, Taskbar requires usage access permissions.\n\nTo enable support for recent apps, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Usage access\" and ensure that Taskbar is enabled.</string>
 
     <string name="tb_disable_scrolling_list">Disable scrolling list</string>
 
