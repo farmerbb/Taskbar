@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.backup;
+package com.farmerbb.taskbar.util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
