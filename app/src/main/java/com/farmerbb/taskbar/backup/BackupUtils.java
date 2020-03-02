@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.util;
+package com.farmerbb.taskbar.backup;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,6 +21,16 @@ import android.content.Intent;
 import android.content.pm.LauncherApps;
 import android.os.Process;
 import android.os.UserManager;
+
+import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.Blacklist;
+import com.farmerbb.taskbar.util.BlacklistEntry;
+import com.farmerbb.taskbar.util.IconCache;
+import com.farmerbb.taskbar.util.PinnedBlockedApps;
+import com.farmerbb.taskbar.util.SavedWindowSizes;
+import com.farmerbb.taskbar.util.SavedWindowSizesEntry;
+import com.farmerbb.taskbar.util.TopApps;
+import com.farmerbb.taskbar.util.U;
 
 import java.io.BufferedReader;
 import java.io.File;
