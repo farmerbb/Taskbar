@@ -16,18 +16,44 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.U;
+import com.farmerbb.taskbar.activity.MainActivity;
+import com.farmerbb.taskbar.backup.BackupUtils;
+import com.farmerbb.taskbar.backup.JSONBackupAgent;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class ManageAppDataFragment extends SettingsFragment {
+
+    private int EXPORT = 123;
+    private int IMPORT = 456;
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-kkmmss", Locale.US);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,11 +88,120 @@ public class ManageAppDataFragment extends SettingsFragment {
     public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
             case "backup_settings":
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_TITLE, "Taskbar-" + dateFormat.format(new Date()) + ".bak");
+
+                try {
+                    startActivityForResult(intent, EXPORT);
+                } catch (ActivityNotFoundException e) {
+                    // TODO
+                }
+                break;
             case "restore_settings":
-                U.showToast(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT);
+                Intent intent2 = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent2.addCategory(Intent.CATEGORY_OPENABLE);
+                intent2.setType("*/*");
+
+                try {
+                    startActivityForResult(intent2, IMPORT);
+                } catch (ActivityNotFoundException e) {
+                    // TODO
+                }
                 break;
         }
 
         return super.onPreferenceClick(p);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if(resultCode != Activity.RESULT_OK || resultData == null) return;
+
+        if(requestCode == EXPORT) try {
+            exportData(resultData.getData());
+        } catch (IOException e) {
+            // TODO
+        }
+
+        if(requestCode == IMPORT) try {
+            importData(resultData.getData());
+
+            Intent restartIntent = new Intent(getActivity(), MainActivity.class);
+            restartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(restartIntent);
+            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            System.exit(0);
+        } catch (IOException | JSONException e) {
+            System.out.println("test");
+        }
+    }
+
+    private void exportData(Uri uri) throws IOException {
+        ZipOutputStream output = new ZipOutputStream(getActivity().getContentResolver().openOutputStream(uri));
+
+        output.putNextEntry(new ZipEntry("backup.json"));
+        JSONObject json = new JSONObject();
+
+        BackupUtils.backup(getActivity(), new JSONBackupAgent(json));
+
+        output.write(json.toString().getBytes());
+        output.closeEntry();
+
+        File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
+        imagesDir.mkdirs();
+
+        File customImage = new File(imagesDir, "custom_image");
+        if(customImage.exists()) {
+            output.putNextEntry(new ZipEntry("tb_images/custom_image"));
+
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(customImage));
+            byte[] data = new byte[input.available()];
+
+            if(data.length > 0) {
+                input.read(data);
+                input.close();
+            }
+
+            output.write(data);
+            output.closeEntry();
+        }
+
+        output.close();
+    }
+
+    private void importData(Uri uri) throws IOException, JSONException {
+        ZipInputStream input = new ZipInputStream(getActivity().getContentResolver().openInputStream(uri));
+
+        ZipEntry entry;
+        while((entry = input.getNextEntry()) != null) {
+            byte[] data = new byte[input.available()]; // TODO
+            input.read(data);
+
+            switch(entry.getName()) {
+                case "backup.json":
+                    BackupUtils.restore(getActivity(), new JSONBackupAgent(new JSONObject(new String(data))));
+                    break;
+                case "tb_images/custom_image":
+                    File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
+                    imagesDir.mkdirs();
+
+                    File customImage = new File(imagesDir, "custom_image");
+                    if(customImage.exists()) customImage.delete();
+
+                    BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(customImage));
+                    if(data.length > 0) {
+                        output.write(data);
+                        output.close();
+                    }
+                    break;
+            }
+
+            input.closeEntry();
+        }
+
+        input.close();
     }
 }
