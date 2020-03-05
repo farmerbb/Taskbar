@@ -168,7 +168,7 @@ public class ManageAppDataFragment extends SettingsFragment {
             }
 
             output.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             // TODO
         }
     }
@@ -196,6 +196,7 @@ public class ManageAppDataFragment extends SettingsFragment {
                 byte[] data = new byte[(int) backupJsonEntry.getSize()];
                 InputStream input = zipFile.getInputStream(backupJsonEntry);
                 input.read(data);
+                input.close();
 
                 BackupUtils.restore(getActivity(), new JSONBackupAgent(new JSONObject(new String(data))));
             }
@@ -210,6 +211,7 @@ public class ManageAppDataFragment extends SettingsFragment {
                 byte[] data = new byte[(int) customImageEntry.getSize()];
                 InputStream input = zipFile.getInputStream(customImageEntry);
                 input.read(data);
+                input.close();
 
                 BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(customImage));
                 if(data.length > 0) {
@@ -217,7 +219,7 @@ public class ManageAppDataFragment extends SettingsFragment {
                     output.close();
                 }
             }
-        } catch (IOException | JSONException e) {
+        } catch (Exception e) {
             // TODO
         } finally {
             importedFile.delete();
