@@ -92,7 +92,7 @@ public class ManageAppDataFragment extends SettingsFragment {
             case "backup_settings":
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("application/octet-stream");
+                intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_TITLE, "Taskbar-" + dateFormat.format(new Date()) + ".bak");
 
                 try {
@@ -104,7 +104,7 @@ public class ManageAppDataFragment extends SettingsFragment {
             case "restore_settings":
                 Intent intent2 = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent2.addCategory(Intent.CATEGORY_OPENABLE);
-                intent2.setType("application/octet-stream");
+                intent2.setType("*/*");
 
                 try {
                     startActivityForResult(intent2, IMPORT);
