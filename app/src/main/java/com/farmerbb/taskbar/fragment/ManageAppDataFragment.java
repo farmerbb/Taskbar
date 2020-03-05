@@ -30,6 +30,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.backup.BackupUtils;
 import com.farmerbb.taskbar.backup.JSONBackupAgent;
+import com.farmerbb.taskbar.backup.XorInputStream;
+import com.farmerbb.taskbar.backup.XorOutputStream;
 import com.farmerbb.taskbar.util.U;
 
 import org.json.JSONObject;
@@ -129,7 +131,9 @@ public class ManageAppDataFragment extends SettingsFragment {
 
     private void exportData(Uri uri) {
         try {
-            ZipOutputStream output = new ZipOutputStream(getActivity().getContentResolver().openOutputStream(uri));
+            ZipOutputStream output = new ZipOutputStream(new XorOutputStream(
+                    getActivity().getContentResolver().openOutputStream(uri)
+            ));
 
             output.putNextEntry(new ZipEntry("backup.json"));
             JSONObject json = new JSONObject();
@@ -173,7 +177,10 @@ public class ManageAppDataFragment extends SettingsFragment {
         try {
             statusFile.createNewFile();
 
-            InputStream is = getActivity().getContentResolver().openInputStream(uri);
+            InputStream is = new XorInputStream(
+                    getActivity().getContentResolver().openInputStream(uri)
+            );
+
             byte[] zipData = new byte[is.available()];
 
             if(zipData.length > 0) {

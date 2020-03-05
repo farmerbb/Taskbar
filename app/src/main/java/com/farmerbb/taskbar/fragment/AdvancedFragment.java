@@ -59,9 +59,6 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
 
     boolean secondScreenPrefEnabled = false;
 
-    // TODO remove this field once backup & restore is finished
-    boolean backupAndRestoreEnabled = BuildConfig.DEBUG;
-
     private BroadcastReceiver homeToggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -113,7 +110,7 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
 
         bindPreferenceSummaryToValue(findPreference("dashboard"));
 
-        if(!backupAndRestoreEnabled || U.isExternalAccessDisabled(getActivity())) {
+        if(U.isExternalAccessDisabled(getActivity())) {
             addPreferencesFromResource(R.xml.tb_pref_advanced_extra_1);
             findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
         } else {
@@ -350,7 +347,7 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
         super.onStart();
 
         // Register listener to check for changed preferences
-        if(backupAndRestoreEnabled && !U.isLibrary(getActivity()))
+        if(!U.isLibrary(getActivity()))
             PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -359,7 +356,7 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
         super.onStop();
 
         // Unregister listener
-        if(backupAndRestoreEnabled && !U.isLibrary(getActivity()))
+        if(!U.isLibrary(getActivity()))
             PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 
