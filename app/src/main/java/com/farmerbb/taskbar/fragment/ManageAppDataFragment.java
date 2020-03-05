@@ -41,11 +41,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ManageAppDataFragment extends SettingsFragment {
@@ -119,13 +121,10 @@ public class ManageAppDataFragment extends SettingsFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if(resultCode != Activity.RESULT_OK || resultData == null) return;
 
-        if(requestCode == EXPORT) try {
+        if(requestCode == EXPORT)
             exportData(resultData.getData());
-        } catch (IOException e) {
-            // TODO
-        }
 
-        if(requestCode == IMPORT) try {
+        if(requestCode == IMPORT) {
             importData(resultData.getData());
 
             Intent restartIntent = new Intent(getActivity(), MainActivity.class);
@@ -134,74 +133,94 @@ public class ManageAppDataFragment extends SettingsFragment {
             getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
             System.exit(0);
-        } catch (IOException | JSONException e) {
-            System.out.println("test");
         }
     }
 
-    private void exportData(Uri uri) throws IOException {
-        ZipOutputStream output = new ZipOutputStream(getActivity().getContentResolver().openOutputStream(uri));
+    private void exportData(Uri uri) {
+        try {
+            ZipOutputStream output = new ZipOutputStream(getActivity().getContentResolver().openOutputStream(uri));
 
-        output.putNextEntry(new ZipEntry("backup.json"));
-        JSONObject json = new JSONObject();
+            output.putNextEntry(new ZipEntry("backup.json"));
+            JSONObject json = new JSONObject();
 
-        BackupUtils.backup(getActivity(), new JSONBackupAgent(json));
+            BackupUtils.backup(getActivity(), new JSONBackupAgent(json));
 
-        output.write(json.toString().getBytes());
-        output.closeEntry();
-
-        File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
-        imagesDir.mkdirs();
-
-        File customImage = new File(imagesDir, "custom_image");
-        if(customImage.exists()) {
-            output.putNextEntry(new ZipEntry("tb_images/custom_image"));
-
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(customImage));
-            byte[] data = new byte[input.available()];
-
-            if(data.length > 0) {
-                input.read(data);
-                input.close();
-            }
-
-            output.write(data);
+            output.write(json.toString().getBytes());
             output.closeEntry();
-        }
 
-        output.close();
-    }
+            File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
+            imagesDir.mkdirs();
 
-    private void importData(Uri uri) throws IOException, JSONException {
-        ZipInputStream input = new ZipInputStream(getActivity().getContentResolver().openInputStream(uri));
+            File customImage = new File(imagesDir, "custom_image");
+            if(customImage.exists()) {
+                output.putNextEntry(new ZipEntry("tb_images/custom_image"));
 
-        ZipEntry entry;
-        while((entry = input.getNextEntry()) != null) {
-            byte[] data = new byte[input.available()]; // TODO
-            input.read(data);
+                BufferedInputStream input = new BufferedInputStream(new FileInputStream(customImage));
+                byte[] data = new byte[input.available()];
 
-            switch(entry.getName()) {
-                case "backup.json":
-                    BackupUtils.restore(getActivity(), new JSONBackupAgent(new JSONObject(new String(data))));
-                    break;
-                case "tb_images/custom_image":
-                    File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
-                    imagesDir.mkdirs();
+                if(data.length > 0) {
+                    input.read(data);
+                    input.close();
+                }
 
-                    File customImage = new File(imagesDir, "custom_image");
-                    if(customImage.exists()) customImage.delete();
-
-                    BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(customImage));
-                    if(data.length > 0) {
-                        output.write(data);
-                        output.close();
-                    }
-                    break;
+                output.write(data);
+                output.closeEntry();
             }
 
-            input.closeEntry();
+            output.close();
+        } catch (IOException e) {
+            // TODO
         }
+    }
 
-        input.close();
+    private void importData(Uri uri) {
+        File importedFile = new File(getActivity().getFilesDir(), "temp.zip");
+
+        try {
+            InputStream is = getActivity().getContentResolver().openInputStream(uri);
+            byte[] zipData = new byte[is.available()];
+
+            if(zipData.length > 0) {
+                OutputStream os = new FileOutputStream(importedFile);
+                is.read(zipData);
+                os.write(zipData);
+                is.close();
+                os.close();
+            }
+
+            ZipFile zipFile = new ZipFile(importedFile);
+            ZipEntry backupJsonEntry = zipFile.getEntry("backup.json");
+            ZipEntry customImageEntry = zipFile.getEntry("tb_images/custom_image");
+
+            if(backupJsonEntry != null) {
+                byte[] data = new byte[(int) backupJsonEntry.getSize()];
+                InputStream input = zipFile.getInputStream(backupJsonEntry);
+                input.read(data);
+
+                BackupUtils.restore(getActivity(), new JSONBackupAgent(new JSONObject(new String(data))));
+            }
+
+            File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
+            imagesDir.mkdirs();
+
+            File customImage = new File(imagesDir, "custom_image");
+            if(customImage.exists()) customImage.delete();
+
+            if(customImageEntry != null) {
+                byte[] data = new byte[(int) customImageEntry.getSize()];
+                InputStream input = zipFile.getInputStream(customImageEntry);
+                input.read(data);
+
+                BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(customImage));
+                if(data.length > 0) {
+                    output.write(data);
+                    output.close();
+                }
+            }
+        } catch (IOException | JSONException e) {
+            // TODO
+        } finally {
+            importedFile.delete();
+        }
     }
 }
