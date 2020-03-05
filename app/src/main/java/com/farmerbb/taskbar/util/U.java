@@ -19,6 +19,7 @@ import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -65,6 +66,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
+import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.service.DashboardService;
@@ -1790,5 +1792,18 @@ public class U {
     private static boolean hasAndroidTVSettings(Context context) {
         return getInstalledPackage(context, "com.android.tv.settings") != null
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+    }
+
+    public static void restartApp(Activity activity, boolean shouldFade) {
+        Intent restartIntent = new Intent(activity, MainActivity.class);
+        restartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(restartIntent);
+
+        activity.overridePendingTransition(
+                shouldFade ? android.R.anim.fade_in : 0,
+                shouldFade ? android.R.anim.fade_out : 0
+        );
+
+        System.exit(0);
     }
 }

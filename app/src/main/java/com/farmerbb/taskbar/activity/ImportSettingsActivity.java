@@ -25,6 +25,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.U;
 
 public class ImportSettingsActivity extends Activity {
 
@@ -33,12 +34,7 @@ public class ImportSettingsActivity extends Activity {
     private BroadcastReceiver settingsReceivedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Intent restartIntent = new Intent(ImportSettingsActivity.this, MainActivity.class);
-            restartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(restartIntent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
-            System.exit(0);
+            U.restartApp(ImportSettingsActivity.this, true);
         }
     };
 

@@ -388,6 +388,11 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_manage_app_data_description">@string/tb_clear_pinned_apps</string>
     <string name="tb_backup_settings">Backup settings to file&#8230;</string>
     <string name="tb_restore_settings">Restore settings from file&#8230;</string>
+    <string name="tb_backup_successful">Backup successful</string>
+    <string name="tb_restore_successful">Restore successful</string>
+    <string name="tb_backup_failed">An error occurred when creating backup</string>
+    <string name="tb_restore_failed">An error occurred when restoring backup</string>
+    <string name="tb_backup_restore_not_available">Backup and restore is not available on this device</string>
 
     <string name="tb_new_shortcut">Launch app</string>
     <string name="tb_allow_freeform_mode">Launch app in freeform mode</string>

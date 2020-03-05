@@ -28,11 +28,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.backup.BackupUtils;
 import com.farmerbb.taskbar.backup.JSONBackupAgent;
+import com.farmerbb.taskbar.util.U;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -40,7 +39,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -92,24 +90,24 @@ public class ManageAppDataFragment extends SettingsFragment {
             case "backup_settings":
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
+                intent.setType("application/octet-stream");
                 intent.putExtra(Intent.EXTRA_TITLE, "Taskbar-" + dateFormat.format(new Date()) + ".bak");
 
                 try {
                     startActivityForResult(intent, EXPORT);
                 } catch (ActivityNotFoundException e) {
-                    // TODO
+                    U.showToastLong(getActivity(), R.string.tb_backup_restore_not_available);
                 }
                 break;
             case "restore_settings":
                 Intent intent2 = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent2.addCategory(Intent.CATEGORY_OPENABLE);
-                intent2.setType("*/*");
+                intent2.setType("application/octet-stream");
 
                 try {
                     startActivityForResult(intent2, IMPORT);
                 } catch (ActivityNotFoundException e) {
-                    // TODO
+                    U.showToastLong(getActivity(), R.string.tb_backup_restore_not_available);
                 }
                 break;
         }
@@ -119,21 +117,14 @@ public class ManageAppDataFragment extends SettingsFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if(resultCode != Activity.RESULT_OK || resultData == null) return;
+        if(resultCode != Activity.RESULT_OK || resultData == null)
+            return;
 
         if(requestCode == EXPORT)
             exportData(resultData.getData());
 
-        if(requestCode == IMPORT) {
+        if(requestCode == IMPORT)
             importData(resultData.getData());
-
-            Intent restartIntent = new Intent(getActivity(), MainActivity.class);
-            restartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(restartIntent);
-            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
-            System.exit(0);
-        }
     }
 
     private void exportData(Uri uri) {
@@ -168,15 +159,20 @@ public class ManageAppDataFragment extends SettingsFragment {
             }
 
             output.close();
+
+            U.showToast(getActivity(), R.string.tb_backup_successful);
         } catch (Exception e) {
-            // TODO
+            U.showToastLong(getActivity(), R.string.tb_backup_failed);
         }
     }
 
     private void importData(Uri uri) {
         File importedFile = new File(getActivity().getFilesDir(), "temp.zip");
+        File statusFile = new File(getActivity().getFilesDir(), "restore_in_progress");
 
         try {
+            statusFile.createNewFile();
+
             InputStream is = getActivity().getContentResolver().openInputStream(uri);
             byte[] zipData = new byte[is.available()];
 
@@ -192,14 +188,17 @@ public class ManageAppDataFragment extends SettingsFragment {
             ZipEntry backupJsonEntry = zipFile.getEntry("backup.json");
             ZipEntry customImageEntry = zipFile.getEntry("tb_images/custom_image");
 
-            if(backupJsonEntry != null) {
-                byte[] data = new byte[(int) backupJsonEntry.getSize()];
-                InputStream input = zipFile.getInputStream(backupJsonEntry);
-                input.read(data);
-                input.close();
-
-                BackupUtils.restore(getActivity(), new JSONBackupAgent(new JSONObject(new String(data))));
+            if(backupJsonEntry == null) {
+                // Backup file is invalid; fail immediately
+                throw new Exception();
             }
+
+            byte[] data = new byte[(int) backupJsonEntry.getSize()];
+            InputStream input = zipFile.getInputStream(backupJsonEntry);
+            input.read(data);
+            input.close();
+
+            BackupUtils.restore(getActivity(), new JSONBackupAgent(new JSONObject(new String(data))));
 
             File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
             imagesDir.mkdirs();
@@ -208,8 +207,8 @@ public class ManageAppDataFragment extends SettingsFragment {
             if(customImage.exists()) customImage.delete();
 
             if(customImageEntry != null) {
-                byte[] data = new byte[(int) customImageEntry.getSize()];
-                InputStream input = zipFile.getInputStream(customImageEntry);
+                data = new byte[(int) customImageEntry.getSize()];
+                input = zipFile.getInputStream(customImageEntry);
                 input.read(data);
                 input.close();
 
@@ -219,10 +218,13 @@ public class ManageAppDataFragment extends SettingsFragment {
                     output.close();
                 }
             }
+
+            statusFile.renameTo(new File(getActivity().getFilesDir(), "restore_successful"));
         } catch (Exception e) {
-            // TODO
+            // no-op
         } finally {
             importedFile.delete();
+            U.restartApp(getActivity(), false);
         }
     }
 }

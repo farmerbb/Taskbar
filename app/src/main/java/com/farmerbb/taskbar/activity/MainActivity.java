@@ -222,7 +222,22 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             U.initPrefs(this);
 
-            if(!getIntent().hasExtra("theme_change"))
+            File restoreInProgress = new File(getFilesDir(), "restore_in_progress");
+            File restoreSuccessful = new File(getFilesDir(), "restore_successful");
+
+            if(restoreInProgress.exists() || restoreSuccessful.exists()) {
+                if(restoreInProgress.exists()) {
+                    U.showToastLong(this, R.string.tb_restore_failed);
+                    restoreInProgress.delete();
+                }
+
+                if(restoreSuccessful.exists()) {
+                    U.showToast(this, R.string.tb_restore_successful);
+                    restoreSuccessful.delete();
+                }
+
+                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ManageAppDataFragment(), "ManageAppDataFragment").commit();
+            } else if(!getIntent().hasExtra("theme_change"))
                 getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment").commit();
             else
                 getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment").commit();
