@@ -418,6 +418,7 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
     <string name="tb_backup_failed">An error occurred when creating backup</string>
     <string name="tb_restore_failed">An error occurred when restoring backup</string>
     <string name="tb_backup_restore_not_available">Backup and restore is not available on this device</string>
+    <string name="tb_backup_file_invalid">The backup file you selected is invalid. Please try again.</string>
 
     <string name="tb_new_shortcut">Launch app</string>
     <string name="tb_allow_freeform_mode">Launch app in freeform mode</string>

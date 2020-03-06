@@ -38,7 +38,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -55,7 +54,7 @@ import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.U;
 
-public class AdvancedFragment extends SettingsFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AdvancedFragment extends SettingsFragment {
 
     boolean secondScreenPrefEnabled = false;
 
@@ -93,11 +92,17 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
             getPreferenceScreen().removePreference(findPreference("launcher"));
             getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
             getPreferenceScreen().removePreference(findPreference("navigation_bar_buttons"));
+            getPreferenceScreen().removePreference(findPreference("manage_app_data"));
+
+            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
         } else {
             findPreference("launcher").setEnabled(!lockHomeToggle);
             findPreference("launcher").setOnPreferenceClickListener(this);
             findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
+            findPreference("manage_app_data").setOnPreferenceClickListener(this);
+
+            getPreferenceScreen().removePreference(findPreference("clear_pinned_apps"));
         }
 
         if(!isAndroidx86 && !isLibrary
@@ -109,14 +114,6 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
             getPreferenceScreen().removePreference(findPreference("secondscreen"));
 
         bindPreferenceSummaryToValue(findPreference("dashboard"));
-
-        if(U.isExternalAccessDisabled(getActivity())) {
-            addPreferencesFromResource(R.xml.tb_pref_advanced_extra_1);
-            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
-        } else {
-            addPreferencesFromResource(R.xml.tb_pref_advanced_extra_2);
-            findPreference("manage_app_data").setOnPreferenceClickListener(this);
-        }
 
         finishedLoadingPrefs = true;
     }
@@ -340,42 +337,5 @@ public class AdvancedFragment extends SettingsFragment implements SharedPreferen
         findPreference("dashboard_grid_size").setSummary(getString(R.string.tb_dashboard_grid_description, first, second));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // Register listener to check for changed preferences
-        if(!U.isLibrary(getActivity()))
-            PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // Unregister listener
-        if(!U.isLibrary(getActivity()))
-            PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals("tasker_enabled")) {
-            getPreferenceScreen().removePreference(findPreference("dummy"));
-
-            boolean enabled = sharedPreferences.getBoolean(key, true);
-
-            if(enabled) {
-                getPreferenceScreen().removePreference(findPreference("clear_pinned_apps"));
-                addPreferencesFromResource(R.xml.tb_pref_advanced_extra_2);
-                findPreference("manage_app_data").setOnPreferenceClickListener(this);
-            } else {
-                getPreferenceScreen().removePreference(findPreference("manage_app_data"));
-                addPreferencesFromResource(R.xml.tb_pref_advanced_extra_1);
-                findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
-            }
-        }
     }
 }

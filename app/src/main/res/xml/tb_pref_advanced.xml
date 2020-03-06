@@ -53,6 +53,15 @@
         android:summary="@string/tb_pref_secondscreen_description"
         android:widgetLayout="@layout/tb_secondscreen_pref_widget"/>
 
-    <!-- tb_pref_advanced_extra_1.xml or tb_pref_advanced_extra_2.xml gets added here -->
+    <Preference
+        android:key="manage_app_data"
+        android:title="@string/tb_manage_app_data"
+        android:summary="@string/tb_manage_app_data_description"/>
+
+    <Preference
+        android:key="clear_pinned_apps"
+        android:title="@string/tb_clear_pinned_apps"/>
+
+    <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

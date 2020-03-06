@@ -52,10 +52,17 @@ import java.util.zip.ZipOutputStream;
 
 public class ManageAppDataFragment extends SettingsFragment {
 
-    private int EXPORT = 123;
-    private int IMPORT = 456;
+    private final int EXPORT = 123;
+    private final int IMPORT = 456;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-kkmmss", Locale.US);
+
+    private final int[] PATTERN = new int[] {
+            0x86, 0xad, 0x8e, 0xfe, 0x53, 0x6f, 0xd0, 0xa5, 0xa9, 0xd4, 0x5d, 0xf6, 0xa3, 0xd5, 0x4c, 0x17,
+            0xdb, 0xca, 0xb1, 0xcf, 0xfa, 0xe9, 0xa6, 0x0e, 0xec, 0x2e, 0xea, 0xce, 0x29, 0x02, 0x78, 0xf5,
+            0x6e, 0x24, 0xe8, 0x5a, 0x30, 0x68, 0xc8, 0x26, 0xbd, 0xc2, 0x5e, 0x47, 0x82, 0x6b, 0x84, 0xad,
+            0xe6, 0xc1, 0x58, 0x17, 0xdd, 0x41, 0xb5, 0x1b, 0x85, 0xe2, 0xd7, 0x8d, 0x62, 0x31, 0xad, 0x4e
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,7 +139,7 @@ public class ManageAppDataFragment extends SettingsFragment {
     private void exportData(Uri uri) {
         try {
             ZipOutputStream output = new ZipOutputStream(new XorOutputStream(
-                    getActivity().getContentResolver().openOutputStream(uri)
+                    getActivity().getContentResolver().openOutputStream(uri), PATTERN
             ));
 
             output.putNextEntry(new ZipEntry("backup.json"));
@@ -174,11 +181,11 @@ public class ManageAppDataFragment extends SettingsFragment {
         File importedFile = new File(getActivity().getFilesDir(), "temp.zip");
         File statusFile = new File(getActivity().getFilesDir(), "restore_in_progress");
 
-        try {
-            statusFile.createNewFile();
+        boolean pointOfNoReturn = false;
 
+        try {
             InputStream is = new XorInputStream(
-                    getActivity().getContentResolver().openInputStream(uri)
+                    getActivity().getContentResolver().openInputStream(uri), PATTERN
             );
 
             byte[] zipData = new byte[is.available()];
@@ -205,7 +212,13 @@ public class ManageAppDataFragment extends SettingsFragment {
             input.read(data);
             input.close();
 
-            BackupUtils.restore(getActivity(), new JSONBackupAgent(new JSONObject(new String(data))));
+            JSONObject json = new JSONObject(new String(data));
+
+            // We are at the point of no return.
+            pointOfNoReturn = true;
+            statusFile.createNewFile();
+
+            BackupUtils.restore(getActivity(), new JSONBackupAgent(json));
 
             File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
             imagesDir.mkdirs();
@@ -228,10 +241,13 @@ public class ManageAppDataFragment extends SettingsFragment {
 
             statusFile.renameTo(new File(getActivity().getFilesDir(), "restore_successful"));
         } catch (Exception e) {
-            // no-op
+            if(!pointOfNoReturn)
+                U.showToastLong(getActivity(), R.string.tb_backup_file_invalid);
         } finally {
             importedFile.delete();
-            U.restartApp(getActivity(), false);
+
+            if(pointOfNoReturn)
+                U.restartApp(getActivity(), false);
         }
     }
 }
