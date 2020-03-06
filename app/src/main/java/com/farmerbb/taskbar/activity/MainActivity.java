@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
             ComponentName component5 = new ComponentName(this, SecondaryHomeActivity.class);
             getPackageManager().setComponentEnabledSetting(component5,
-                    launcherEnabled && !U.isDelegatingHomeActivity(this) && BuildConfig.DEBUG
+                    U.isDesktopModeSupported(this)
                             ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);

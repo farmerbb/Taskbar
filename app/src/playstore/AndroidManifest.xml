@@ -131,6 +131,7 @@
             android:name=".activity.SecondaryHomeActivity"
             android:label="${appName}"
             android:enabled="false"
+            android:excludeFromRecents="true"
             android:theme="@style/Taskbar.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

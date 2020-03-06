@@ -1012,7 +1012,7 @@ public class U {
         return getActivityOptions(null, null, view);
     }
 
-    private static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType, View view) {
+    public static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType, View view) {
         ActivityOptions options;
         if(view != null)
             options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
@@ -1808,5 +1808,31 @@ public class U {
         );
 
         System.exit(0);
+    }
+
+    public static boolean isDesktopModeSupported(Context context) {
+        return Build.VERSION.SDK_INT > Build.VERSION_CODES.P
+                && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_ACTIVITIES_ON_SECONDARY_DISPLAYS);
+    }
+
+    public static boolean isDesktopModeActive(Context context) {
+        if(!isDesktopModeSupported(context)) return false;
+
+        boolean desktopModePrefEnabled;
+
+        try {
+            desktopModePrefEnabled = Settings.Global.getInt(context.getContentResolver(), "force_desktop_mode_on_external_displays") == 1;
+        } catch (Settings.SettingNotFoundException e) {
+            desktopModePrefEnabled = false;
+        }
+
+        return desktopModePrefEnabled && getExternalDisplayID(context) != Display.DEFAULT_DISPLAY;
+    }
+
+    public static int getExternalDisplayID(Context context) {
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display[] displays = dm.getDisplays();
+
+        return displays[displays.length - 1].getDisplayId();
     }
 }

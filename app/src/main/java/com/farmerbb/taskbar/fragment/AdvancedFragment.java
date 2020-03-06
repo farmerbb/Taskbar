@@ -47,7 +47,6 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivityLockDevice;
 import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
-import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
@@ -169,13 +168,6 @@ public class AdvancedFragment extends SettingsFragment {
                     ComponentName component = new ComponentName(getActivity(), HomeActivity.class);
                     getActivity().getPackageManager().setComponentEnabledSetting(component,
                             ((CheckBoxPreference) p).isChecked()
-                                    ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                                    : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
-
-                    ComponentName component2 = new ComponentName(getActivity(), SecondaryHomeActivity.class);
-                    getActivity().getPackageManager().setComponentEnabledSetting(component2,
-                            ((CheckBoxPreference) p).isChecked() && BuildConfig.DEBUG
                                     ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                                     : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);

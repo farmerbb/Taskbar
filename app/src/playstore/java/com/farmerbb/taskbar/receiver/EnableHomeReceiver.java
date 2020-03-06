@@ -25,7 +25,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.activity.HomeActivity;
-import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.util.U;
 
 public class EnableHomeReceiver extends BroadcastReceiver {
@@ -42,13 +41,6 @@ public class EnableHomeReceiver extends BroadcastReceiver {
             ComponentName component = new ComponentName(context, HomeActivity.class);
             context.getPackageManager().setComponentEnabledSetting(component,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-
-            ComponentName component2 = new ComponentName(context, SecondaryHomeActivity.class);
-            context.getPackageManager().setComponentEnabledSetting(component2,
-                    BuildConfig.DEBUG
-                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
 
             LocalBroadcastManager.getInstance(context)
