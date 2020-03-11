@@ -22,8 +22,6 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.backup.BackupUtils;
 import com.farmerbb.taskbar.backup.JSONBackupAgent;
-import com.farmerbb.taskbar.backup.XorInputStream;
-import com.farmerbb.taskbar.backup.XorOutputStream;
 import com.farmerbb.taskbar.util.U;
 
 import org.json.JSONObject;
@@ -40,13 +38,6 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class BackupRestoreActivity extends AbstractProgressActivity {
-
-    private final int[] PATTERN = new int[] {
-            0x86, 0xad, 0x8e, 0xfe, 0x53, 0x6f, 0xd0, 0xa5, 0xa9, 0xd4, 0x5d, 0xf6, 0xa3, 0xd5, 0x4c, 0x17,
-            0xdb, 0xca, 0xb1, 0xcf, 0xfa, 0xe9, 0xa6, 0x0e, 0xec, 0x2e, 0xea, 0xce, 0x29, 0x02, 0x78, 0xf5,
-            0x6e, 0x24, 0xe8, 0x5a, 0x30, 0x68, 0xc8, 0x26, 0xbd, 0xc2, 0x5e, 0x47, 0x82, 0x6b, 0x84, 0xad,
-            0xe6, 0xc1, 0x58, 0x17, 0xdd, 0x41, 0xb5, 0x1b, 0x85, 0xe2, 0xd7, 0x8d, 0x62, 0x31, 0xad, 0x4e
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +65,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
 
     private void exportData(Uri uri) {
         try {
-            ZipOutputStream output = new ZipOutputStream(new XorOutputStream(
-                    getContentResolver().openOutputStream(uri), PATTERN
-            ));
+            ZipOutputStream output = new ZipOutputStream(getContentResolver().openOutputStream(uri));
 
             output.putNextEntry(new ZipEntry("backup.json"));
             JSONObject json = new JSONObject();
@@ -120,10 +109,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
         boolean pointOfNoReturn = false;
 
         try {
-            InputStream is = new XorInputStream(
-                    getContentResolver().openInputStream(uri), PATTERN
-            );
-
+            InputStream is = getContentResolver().openInputStream(uri);
             byte[] zipData = new byte[is.available()];
 
             if(zipData.length > 0) {
