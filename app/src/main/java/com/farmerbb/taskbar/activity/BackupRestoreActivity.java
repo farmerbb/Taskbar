@@ -65,7 +65,9 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
 
     private void exportData(Uri uri) {
         try {
-            ZipOutputStream output = new ZipOutputStream(getContentResolver().openOutputStream(uri));
+            ZipOutputStream output = new ZipOutputStream(
+                    new BufferedOutputStream(getContentResolver().openOutputStream(uri))
+            );
 
             output.putNextEntry(new ZipEntry("backup.json"));
             JSONObject json = new JSONObject();
@@ -109,11 +111,11 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
         boolean pointOfNoReturn = false;
 
         try {
-            InputStream is = getContentResolver().openInputStream(uri);
+            InputStream is = new BufferedInputStream(getContentResolver().openInputStream(uri));
             byte[] zipData = new byte[is.available()];
 
             if(zipData.length > 0) {
-                OutputStream os = new FileOutputStream(importedFile);
+                OutputStream os = new BufferedOutputStream(new FileOutputStream(importedFile));
                 is.read(zipData);
                 os.write(zipData);
                 is.close();
@@ -130,7 +132,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
             }
 
             byte[] data = new byte[(int) backupJsonEntry.getSize()];
-            InputStream input = zipFile.getInputStream(backupJsonEntry);
+            InputStream input = new BufferedInputStream(zipFile.getInputStream(backupJsonEntry));
             input.read(data);
             input.close();
 
@@ -150,7 +152,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
 
             if(customImageEntry != null) {
                 data = new byte[(int) customImageEntry.getSize()];
-                input = zipFile.getInputStream(customImageEntry);
+                input = new BufferedInputStream(zipFile.getInputStream(customImageEntry));
                 input.read(data);
                 input.close();
 
