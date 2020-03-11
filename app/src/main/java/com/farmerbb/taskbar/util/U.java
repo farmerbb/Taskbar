@@ -107,6 +107,9 @@ public class U {
     private static final int WINDOWING_MODE_FULLSCREEN = 1;
     private static final int WINDOWING_MODE_FREEFORM = 5;
 
+    public static final int EXPORT = 123;
+    public static final int IMPORT = 456;
+
     @SuppressWarnings("deprecation")
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);

@@ -333,6 +333,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.BackupRestoreActivity"
+            android:theme="@style/Taskbar.Dialog"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

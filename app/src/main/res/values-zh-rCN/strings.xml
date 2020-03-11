@@ -408,4 +408,7 @@
     <string name="tb_window_size">窗口大小</string>
     <string name="tb_invalid_shortcut">无效快捷方式</string>
 
+    <string name="tb_backing_up_settings">Backing up settings&#8230;</string>
+    <string name="tb_restoring_settings">Restoring settings&#8230;</string>
+
 </resources>

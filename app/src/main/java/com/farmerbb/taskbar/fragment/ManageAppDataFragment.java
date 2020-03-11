@@ -19,7 +19,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -28,41 +27,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.backup.BackupUtils;
-import com.farmerbb.taskbar.backup.JSONBackupAgent;
-import com.farmerbb.taskbar.backup.XorInputStream;
-import com.farmerbb.taskbar.backup.XorOutputStream;
+import com.farmerbb.taskbar.activity.BackupRestoreActivity;
 import com.farmerbb.taskbar.util.U;
 
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 public class ManageAppDataFragment extends SettingsFragment {
 
-    private final int EXPORT = 123;
-    private final int IMPORT = 456;
-
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-kkmmss", Locale.US);
-
-    private final int[] PATTERN = new int[] {
-            0x86, 0xad, 0x8e, 0xfe, 0x53, 0x6f, 0xd0, 0xa5, 0xa9, 0xd4, 0x5d, 0xf6, 0xa3, 0xd5, 0x4c, 0x17,
-            0xdb, 0xca, 0xb1, 0xcf, 0xfa, 0xe9, 0xa6, 0x0e, 0xec, 0x2e, 0xea, 0xce, 0x29, 0x02, 0x78, 0xf5,
-            0x6e, 0x24, 0xe8, 0x5a, 0x30, 0x68, 0xc8, 0x26, 0xbd, 0xc2, 0x5e, 0x47, 0x82, 0x6b, 0x84, 0xad,
-            0xe6, 0xc1, 0x58, 0x17, 0xdd, 0x41, 0xb5, 0x1b, 0x85, 0xe2, 0xd7, 0x8d, 0x62, 0x31, 0xad, 0x4e
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +77,7 @@ public class ManageAppDataFragment extends SettingsFragment {
                 intent.putExtra(Intent.EXTRA_TITLE, "Taskbar-" + dateFormat.format(new Date()) + ".bak");
 
                 try {
-                    startActivityForResult(intent, EXPORT);
+                    startActivityForResult(intent, U.EXPORT);
                 } catch (ActivityNotFoundException e) {
                     U.showToastLong(getActivity(), R.string.tb_backup_restore_not_available);
                 }
@@ -114,7 +88,7 @@ public class ManageAppDataFragment extends SettingsFragment {
                 intent2.setType("*/*");
 
                 try {
-                    startActivityForResult(intent2, IMPORT);
+                    startActivityForResult(intent2, U.IMPORT);
                 } catch (ActivityNotFoundException e) {
                     U.showToastLong(getActivity(), R.string.tb_backup_restore_not_available);
                 }
@@ -126,128 +100,18 @@ public class ManageAppDataFragment extends SettingsFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if(resultCode != Activity.RESULT_OK || resultData == null)
+        int performBackupRestore = 789;
+        if(requestCode == performBackupRestore) {
+            U.showToastLong(getActivity(), resultCode);
             return;
-
-        if(requestCode == EXPORT)
-            exportData(resultData.getData());
-
-        if(requestCode == IMPORT)
-            importData(resultData.getData());
-    }
-
-    private void exportData(Uri uri) {
-        try {
-            ZipOutputStream output = new ZipOutputStream(new XorOutputStream(
-                    getActivity().getContentResolver().openOutputStream(uri), PATTERN
-            ));
-
-            output.putNextEntry(new ZipEntry("backup.json"));
-            JSONObject json = new JSONObject();
-
-            BackupUtils.backup(getActivity(), new JSONBackupAgent(json));
-
-            output.write(json.toString().getBytes());
-            output.closeEntry();
-
-            File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
-            imagesDir.mkdirs();
-
-            File customImage = new File(imagesDir, "custom_image");
-            if(customImage.exists()) {
-                output.putNextEntry(new ZipEntry("tb_images/custom_image"));
-
-                BufferedInputStream input = new BufferedInputStream(new FileInputStream(customImage));
-                byte[] data = new byte[input.available()];
-
-                if(data.length > 0) {
-                    input.read(data);
-                    input.close();
-                }
-
-                output.write(data);
-                output.closeEntry();
-            }
-
-            output.close();
-
-            U.showToast(getActivity(), R.string.tb_backup_successful);
-        } catch (Exception e) {
-            U.showToastLong(getActivity(), R.string.tb_backup_failed);
         }
-    }
 
-    private void importData(Uri uri) {
-        File importedFile = new File(getActivity().getFilesDir(), "temp.zip");
-        File statusFile = new File(getActivity().getFilesDir(), "restore_in_progress");
+        if(resultCode != Activity.RESULT_OK || resultData == null) return;
 
-        boolean pointOfNoReturn = false;
+        Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
+        intent.putExtra("request_code", requestCode);
+        intent.putExtra("uri", resultData.getData());
 
-        try {
-            InputStream is = new XorInputStream(
-                    getActivity().getContentResolver().openInputStream(uri), PATTERN
-            );
-
-            byte[] zipData = new byte[is.available()];
-
-            if(zipData.length > 0) {
-                OutputStream os = new FileOutputStream(importedFile);
-                is.read(zipData);
-                os.write(zipData);
-                is.close();
-                os.close();
-            }
-
-            ZipFile zipFile = new ZipFile(importedFile);
-            ZipEntry backupJsonEntry = zipFile.getEntry("backup.json");
-            ZipEntry customImageEntry = zipFile.getEntry("tb_images/custom_image");
-
-            if(backupJsonEntry == null) {
-                // Backup file is invalid; fail immediately
-                throw new Exception();
-            }
-
-            byte[] data = new byte[(int) backupJsonEntry.getSize()];
-            InputStream input = zipFile.getInputStream(backupJsonEntry);
-            input.read(data);
-            input.close();
-
-            JSONObject json = new JSONObject(new String(data));
-
-            // We are at the point of no return.
-            pointOfNoReturn = true;
-            statusFile.createNewFile();
-
-            BackupUtils.restore(getActivity(), new JSONBackupAgent(json));
-
-            File imagesDir = new File(getActivity().getFilesDir(), "tb_images");
-            imagesDir.mkdirs();
-
-            File customImage = new File(imagesDir, "custom_image");
-            if(customImage.exists()) customImage.delete();
-
-            if(customImageEntry != null) {
-                data = new byte[(int) customImageEntry.getSize()];
-                input = zipFile.getInputStream(customImageEntry);
-                input.read(data);
-                input.close();
-
-                BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(customImage));
-                if(data.length > 0) {
-                    output.write(data);
-                    output.close();
-                }
-            }
-
-            statusFile.renameTo(new File(getActivity().getFilesDir(), "restore_successful"));
-        } catch (Exception e) {
-            if(!pointOfNoReturn)
-                U.showToastLong(getActivity(), R.string.tb_backup_file_invalid);
-        } finally {
-            importedFile.delete();
-
-            if(pointOfNoReturn)
-                U.restartApp(getActivity(), false);
-        }
+        startActivityForResult(intent, performBackupRestore);
     }
 }
