@@ -1798,16 +1798,13 @@ public class U {
     }
 
     public static void restartApp(Activity activity, boolean shouldFade) {
-        int enter = activity.getResources().getIdentifier("activity_close_enter", "anim", "android");
-        int exit = activity.getResources().getIdentifier("activity_close_exit", "anim", "android");
-
         Intent restartIntent = new Intent(activity, MainActivity.class);
         restartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(restartIntent);
 
         activity.overridePendingTransition(
-                shouldFade ? android.R.anim.fade_in : enter,
-                shouldFade ? android.R.anim.fade_out : exit
+                shouldFade ? android.R.anim.fade_in : 0,
+                shouldFade ? android.R.anim.fade_out : 0
         );
 
         System.exit(0);

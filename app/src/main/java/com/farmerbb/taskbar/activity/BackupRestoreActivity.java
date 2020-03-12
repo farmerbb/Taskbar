@@ -43,6 +43,10 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        int enter = getResources().getIdentifier("activity_close_enter", "anim", "android");
+        int exit = getResources().getIdentifier("activity_close_exit", "anim", "android");
+        overridePendingTransition(enter, exit);
+
         int requestCode = getIntent().getIntExtra("request_code", -1);
         Uri uri = getIntent().getParcelableExtra("uri");
 
@@ -60,6 +64,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
             if(isImport) importData(uri);
 
             finish();
+            overridePendingTransition(enter, exit);
         }).start();
     }
 

@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(restoreSuccessful.exists()) {
-                    U.showToast(this, R.string.tb_restore_successful);
+                    U.showToastLong(this, R.string.tb_restore_successful);
                     restoreSuccessful.delete();
                 }
 
