@@ -32,6 +32,10 @@ LOCAL_SDK_VERSION := current
 
 LOCAL_PRIVILEGED_MODULE := true
 
+ifeq ($(EANBLE_TASKBAR_REPLACE),true)
+LOCAL_OVERRIDES_PACKAGES := Home Launcher2 Launcher3 Launcher3QuickStep
+endif
+
 LOCAL_AAPT_FLAGS := \
         --auto-add-overlay \
         --rename-manifest-package com.farmerbb.taskbar.androidx86 \
