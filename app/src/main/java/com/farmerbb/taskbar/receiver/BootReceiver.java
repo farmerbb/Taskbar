@@ -51,7 +51,7 @@ public class BootReceiver extends BroadcastReceiver {
                         intent2.putExtra("start_freeform_hack", true);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        context.startActivity(intent2);
+                        U.startActivityLowerRight(context, intent2);
                     }
 
                     startServices = true;
