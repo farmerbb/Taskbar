@@ -180,7 +180,7 @@ public class NotificationService extends Service {
                     registerReceiver(userBackgroundReceiver, new IntentFilter(Intent.ACTION_USER_BACKGROUND));
                 }
 
-                if(U.isDesktopModeSupported(this)) {
+                if(U.shouldStartDesktopMode(this)) {
                     startDesktopMode(U.getExternalDisplayID(this), false);
 
                     DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
@@ -218,7 +218,7 @@ public class NotificationService extends Service {
             unregisterReceiver(userBackgroundReceiver);
         }
 
-        if(U.isDesktopModeSupported(this)) {
+        if(U.shouldStartDesktopMode(this)) {
             DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
             manager.unregisterDisplayListener(listener);
 

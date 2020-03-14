@@ -1811,6 +1811,8 @@ public class U {
     }
 
     public static boolean isDesktopModeSupported(Context context) {
+        if(isLauncherPermanentlyEnabled(context)) return false;
+
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.P
                 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_ACTIVITIES_ON_SECONDARY_DISPLAYS);
     }
@@ -1827,6 +1829,14 @@ public class U {
         }
 
         return desktopModePrefEnabled && getExternalDisplayID(context) != Display.DEFAULT_DISPLAY;
+    }
+
+    public static boolean shouldStartDesktopMode(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+
+        return isDesktopModeSupported(context)
+                && pref.getBoolean("desktop_mode", false)
+                && !pref.getBoolean("launcher", false);
     }
 
     public static int getExternalDisplayID(Context context) {
