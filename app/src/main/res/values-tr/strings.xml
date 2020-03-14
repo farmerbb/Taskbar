@@ -369,7 +369,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_select_an_app">Select an app</string>
     <string name="tb_remove_desktop_icon">Remove from desktop</string>
     <string name="tb_sort_by_name">Sort icons by name</string>
-    <string name="tb_no_icons_to_arrange">No icons to arrange</string>
+    <string name="tb_no_icons_to_arrange">No icons to move</string>
     <string name="tb_no_icons_to_sort">No icons to sort</string>
     <string name="tb_clear_desktop_icons">Desktop icons</string>
 
