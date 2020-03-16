@@ -491,7 +491,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!U.canBootToFreeform(this)) {
             setOnHomeScreen(false);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+
+            if(U.shouldCollapse(this, false))
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
 
             if(this instanceof SecondaryHomeActivity) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);
