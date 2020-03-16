@@ -242,7 +242,7 @@
 
     <string name="tb_show_search_bar">Search bar visibility</string>
     <string-array name="tb_pref_show_search_bar_list">
-        <item>Hardware or software keyboard</item>
+        <item>Always show search bar</item>
         <item>Hardware keyboard only</item>
         <item>Never show search bar</item>
     </string-array>
