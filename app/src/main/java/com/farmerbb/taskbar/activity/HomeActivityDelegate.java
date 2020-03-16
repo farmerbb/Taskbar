@@ -404,7 +404,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     finish();
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             }
-        } else if(U.shouldCollapse(this, false, true))
+        } else if(U.shouldCollapse(this, false))
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
     }
 
@@ -473,7 +473,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             pref.edit().putBoolean("taskbar_active", false).apply();
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
-        if(U.shouldCollapse(this, false, true))
+        if(U.shouldCollapse(this, false))
             new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR")), 100);
     }
 
@@ -492,7 +492,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(!U.canBootToFreeform(this)) {
             setOnHomeScreen(false);
 
-            if(U.shouldCollapse(this, false, true))
+            if(U.shouldCollapse(this, false))
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
 
             if(this instanceof SecondaryHomeActivity) {
