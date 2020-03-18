@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <Preference
         android:key="pref_screen_general"
@@ -38,7 +39,7 @@
 
     <Preference
         android:key="pref_screen_desktop_mode"
-        android:icon="@drawable/tb_desktop_mode"
+        tools:icon="@drawable/tb_desktop_mode"
         android:title="@string/tb_pref_header_desktop_mode" />
 
     <Preference

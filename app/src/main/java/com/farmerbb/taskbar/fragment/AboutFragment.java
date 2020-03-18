@@ -19,12 +19,17 @@ import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
@@ -70,9 +75,10 @@ public class AboutFragment extends SettingsFragment {
         else
             getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));
 
-        if(U.isDesktopModeSupported(getActivity()))
+        if(U.isDesktopModeSupported(getActivity())) {
             findPreference("pref_screen_desktop_mode").setOnPreferenceClickListener(this);
-        else
+            findPreference("pref_screen_desktop_mode").setIcon(getDesktopModeDrawable());
+        } else
             getPreferenceScreen().removePreference(findPreference("pref_screen_desktop_mode"));
 
         findPreference("pref_screen_general").setOnPreferenceClickListener(this);
@@ -190,5 +196,22 @@ public class AboutFragment extends SettingsFragment {
         }
 
         return super.onPreferenceClick(p);
+    }
+
+    private Drawable getDesktopModeDrawable() {
+        Drawable loadedIcon = ContextCompat.getDrawable(getActivity(), R.drawable.tb_desktop_mode);
+        int width = Math.max(1, loadedIcon.getIntrinsicWidth());
+        int height = Math.max(1, loadedIcon.getIntrinsicHeight());
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        loadedIcon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        loadedIcon.draw(canvas);
+
+        int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_settings_icon_size);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
+
+        return new BitmapDrawable(getResources(), resizedBitmap);
     }
 }
