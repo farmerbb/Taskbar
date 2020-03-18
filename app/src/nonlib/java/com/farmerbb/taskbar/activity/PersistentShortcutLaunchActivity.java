@@ -41,7 +41,7 @@ public class PersistentShortcutLaunchActivity extends Activity {
             intent.putExtra("show_permission_dialog", true);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            U.startActivityMaximized(getApplicationContext(), intent);
+            startActivity(intent);
         } else if(packageName != null && componentName != null) {
             final AppEntry entry = new AppEntry(packageName, componentName, null, null, false);
 

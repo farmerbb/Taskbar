@@ -254,7 +254,7 @@ public class U {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 try {
-                    startActivityMaximized(context, intent);
+                    context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APP_PORTRAIT, null));
                 } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
             });
         }

@@ -205,7 +205,7 @@ public class InvisibleActivityFreeform extends Activity {
                     intent.putExtra("show_recent_apps_dialog", true);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    U.startActivityMaximized(getApplicationContext(), intent);
+                    startActivity(intent);
                 }, 250);
             }
 

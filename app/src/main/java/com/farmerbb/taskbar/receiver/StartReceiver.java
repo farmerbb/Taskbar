@@ -39,7 +39,7 @@ public class StartReceiver extends BroadcastReceiver {
                 intent2.putExtra("show_permission_dialog", true);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                U.startActivityMaximized(context, intent2);
+                context.startActivity(intent2);
             }, 250);
         } else if(taskbarNotActive || taskbarActiveButHidden) {
             U.initPrefs(context);
@@ -57,7 +57,7 @@ public class StartReceiver extends BroadcastReceiver {
                         intent2.putExtra("show_recent_apps_dialog", true);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        U.startActivityMaximized(context, intent2);
+                        context.startActivity(intent2);
                     }, 250);
                 }
 
@@ -75,7 +75,7 @@ public class StartReceiver extends BroadcastReceiver {
                 intent2.putExtra("start_freeform_hack", true);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                U.startActivityLowerRight(context, intent2);
+                context.startActivity(intent2);
             }
 
             Intent notificationIntent = new Intent(context, NotificationService.class);

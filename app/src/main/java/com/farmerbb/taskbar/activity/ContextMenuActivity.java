@@ -450,7 +450,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.putExtra("user_id", entry.getUserId(this));
 
                     try {
-                        U.startActivityMaximized(getApplicationContext(), intent2);
+                        startActivity(intent2);
                     } catch (IllegalArgumentException e) { /* Gracefully fail */ }
                 } else {
                     Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + entry.getPackageName()));
