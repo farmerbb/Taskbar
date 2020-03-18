@@ -343,7 +343,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 || U.isLauncherPermanentlyEnabled(this))
                 && !U.isChromeOs(this)) {
             setContentView(layout);
-            pref.edit().putBoolean("launcher", true).apply();
+            pref.edit().putBoolean("launcher", !(this instanceof SecondaryHomeActivity)).apply();
         } else
             killHomeActivity();
 

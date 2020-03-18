@@ -50,6 +50,7 @@ import com.farmerbb.taskbar.util.U;
 public class NotificationService extends Service {
 
     private boolean isHidden = true;
+    private boolean desktopModeStarted = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -98,7 +99,7 @@ public class NotificationService extends Service {
 
         @Override
         public void onDisplayRemoved(int displayId) {
-            LocalBroadcastManager.getInstance(NotificationService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+            stopDesktopMode();
         }
     };
 
@@ -218,11 +219,11 @@ public class NotificationService extends Service {
             unregisterReceiver(userBackgroundReceiver);
         }
 
-        if(U.shouldStartDesktopMode(this)) {
+        if(desktopModeStarted) {
             DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
             manager.unregisterDisplayListener(listener);
 
-            LocalBroadcastManager.getInstance(NotificationService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+            stopDesktopMode();
         }
     }
 
@@ -243,5 +244,12 @@ public class NotificationService extends Service {
             new Handler().postDelayed(desktopModeLaunch, 500);
         else
             desktopModeLaunch.run();
+
+        desktopModeStarted = true;
+    }
+
+    private void stopDesktopMode() {
+        LocalBroadcastManager.getInstance(NotificationService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+        desktopModeStarted = false;
     }
 }

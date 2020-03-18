@@ -37,6 +37,11 @@
         android:title="@string/tb_pref_header_freeform" />
 
     <Preference
+        android:key="pref_screen_desktop_mode"
+        android:icon="@drawable/tb_desktop_mode"
+        android:title="@string/tb_pref_header_desktop_mode" />
+
+    <Preference
         android:key="pref_screen_advanced"
         android:icon="@drawable/tb_error_outline"
         android:title="@string/tb_pref_header_advanced" />

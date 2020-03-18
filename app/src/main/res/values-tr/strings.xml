@@ -403,4 +403,6 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_backing_up_settings">Backing up settings&#8230;</string>
     <string name="tb_restoring_settings">Restoring settings&#8230;</string>
 
+    <string name="tb_pref_header_desktop_mode">Desktop mode</string>
+
 </resources>

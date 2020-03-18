@@ -70,6 +70,11 @@ public class AboutFragment extends SettingsFragment {
         else
             getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));
 
+        if(U.isDesktopModeSupported(getActivity()))
+            findPreference("pref_screen_desktop_mode").setOnPreferenceClickListener(this);
+        else
+            getPreferenceScreen().removePreference(findPreference("pref_screen_desktop_mode"));
+
         findPreference("pref_screen_general").setOnPreferenceClickListener(this);
         findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
         findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
@@ -165,6 +170,13 @@ public class AboutFragment extends SettingsFragment {
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragmentContainer, new FreeformModeFragment(), "FreeformModeFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case "pref_screen_desktop_mode":
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new DesktopModeFragment(), "DesktopModeFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;

@@ -428,4 +428,6 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
     <string name="tb_backing_up_settings">Backing up settings&#8230;</string>
     <string name="tb_restoring_settings">Restoring settings&#8230;</string>
 
+    <string name="tb_pref_header_desktop_mode">Desktop mode</string>
+
 </resources>

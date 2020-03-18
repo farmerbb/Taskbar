@@ -1815,7 +1815,11 @@ public class U {
     }
 
     public static boolean isDesktopModeSupported(Context context) {
-        if(isLauncherPermanentlyEnabled(context)) return false;
+        if(isLauncherPermanentlyEnabled(context)
+                || isLibrary(context)
+                || !BuildConfig.DEBUG // TODO remove this line
+                || isChromeOs(context))
+            return false;
 
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.P
                 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_ACTIVITIES_ON_SECONDARY_DISPLAYS);

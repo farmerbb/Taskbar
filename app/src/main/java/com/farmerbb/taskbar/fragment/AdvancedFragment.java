@@ -83,8 +83,9 @@ public class AdvancedFragment extends SettingsFragment {
         boolean isAndroidx86 = getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        boolean lockHomeToggle = pref.getBoolean("launcher", false)
-                && U.isLauncherPermanentlyEnabled(getActivity());
+        boolean lockHomeToggle = (pref.getBoolean("launcher", false)
+                && U.isLauncherPermanentlyEnabled(getActivity()))
+                || pref.getBoolean("desktop_mode", false);
 
         if(isLibrary) {
             getPreferenceScreen().removePreference(findPreference("tasker_enabled"));
