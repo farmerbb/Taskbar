@@ -939,7 +939,11 @@ public class U {
     }
 
     public static boolean canBootToFreeform(Context context) {
-        return hasFreeformSupport(context) && !isOverridingFreeformHack(context);
+        return canBootToFreeform(context, true);
+    }
+
+    private static boolean canBootToFreeform(Context context, boolean checkPref) {
+        return hasFreeformSupport(context) && !isOverridingFreeformHack(context, checkPref);
     }
 
     public static boolean isSamsungDevice() {
@@ -1683,7 +1687,7 @@ public class U {
 
     public static boolean enableFreeformModeShortcut(Context context) {
         return canEnableFreeform()
-                && !isOverridingFreeformHack(context)
+                && !isOverridingFreeformHack(context, false)
                 && !isChromeOs(context);
     }
 
@@ -1766,7 +1770,7 @@ public class U {
     }
 
     public static boolean isDesktopIconsEnabled(Context context) {
-        return !canBootToFreeform(context) && !shouldLaunchTouchAbsorber(context);
+        return !canBootToFreeform(context, false) && !shouldLaunchTouchAbsorber(context);
     }
 
     public static boolean isSystemTrayEnabled(Context context) {
