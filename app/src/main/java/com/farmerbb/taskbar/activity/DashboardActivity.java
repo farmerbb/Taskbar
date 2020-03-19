@@ -38,6 +38,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -174,10 +175,15 @@ public class DashboardActivity extends Activity {
 
         if(shouldFinish) {
             if(shouldCollapse) {
-                if(U.shouldCollapse(this, true))
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                else
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                if(U.shouldCollapse(this, true)) {
+                    LocalBroadcastManager
+                            .getInstance(this)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                } else {
+                    LocalBroadcastManager
+                            .getInstance(this)
+                            .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                }
             }
 
             contextMenuFix = false;

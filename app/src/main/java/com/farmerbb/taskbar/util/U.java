@@ -69,6 +69,7 @@ import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
@@ -468,10 +469,15 @@ public class U {
                 launchShortcut(context, shortcut, bundle, onError);
         });
 
-        if(shouldCollapse(context, true))
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-        else
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        if(shouldCollapse(context, true)) {
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+        } else {
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        }
     }
 
     private static Bundle launchMode1(Context context, ApplicationType type, View view, int factor) {

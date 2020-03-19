@@ -95,6 +95,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -639,7 +640,7 @@ public class TaskbarController implements UIController {
         lbm.unregisterReceiver(startMenuDisappearReceiver);
 
         lbm.registerReceiver(showReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_TASKBAR"));
-        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_TASKBAR"));
+        lbm.registerReceiver(hideReceiver, new IntentFilter(TaskbarIntent.ACTION_HIDE_TASKBAR));
         lbm.registerReceiver(tempShowReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
         lbm.registerReceiver(tempHideReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
         lbm.registerReceiver(startMenuAppearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));

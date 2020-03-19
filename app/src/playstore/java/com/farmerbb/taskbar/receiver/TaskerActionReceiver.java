@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.BundleScrubber;
 import com.farmerbb.taskbar.util.PluginBundleManager;
 import com.farmerbb.taskbar.util.U;
@@ -62,7 +63,7 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
             case "show_taskbar":
                 return new Intent("com.farmerbb.taskbar.SHOW_TASKBAR");
             case "hide_taskbar":
-                return new Intent("com.farmerbb.taskbar.HIDE_TASKBAR");
+                return new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR);
             case "toggle_start_menu":
                 return new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
             case "toggle_dashboard":

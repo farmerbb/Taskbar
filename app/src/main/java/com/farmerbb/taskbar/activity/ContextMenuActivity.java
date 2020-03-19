@@ -47,6 +47,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
@@ -778,8 +779,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             else {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.RESET_START_MENU"));
 
-                if(shouldHideTaskbar && U.shouldCollapse(this, true))
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+                if(shouldHideTaskbar && U.shouldCollapse(this, true)) {
+                    LocalBroadcastManager
+                            .getInstance(this)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                }
             }
         }
 
