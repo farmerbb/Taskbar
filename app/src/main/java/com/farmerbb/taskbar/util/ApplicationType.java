@@ -15,4 +15,4 @@
 
 package com.farmerbb.taskbar.util;
 
-public enum ApplicationType { APP_PORTRAIT, APP_LANDSCAPE, GAME, FREEFORM_HACK, CONTEXT_MENU }
+public enum ApplicationType { APP_PORTRAIT, APP_LANDSCAPE, APP_FULLSCREEN, FREEFORM_HACK, CONTEXT_MENU }

@@ -1048,7 +1048,7 @@ public class U {
                 else
                     stackId = getFullscreenWindowModeId();
                 break;
-            case GAME:
+            case APP_FULLSCREEN:
                 stackId = getFullscreenWindowModeId();
                 break;
             case FREEFORM_HACK:
@@ -1142,7 +1142,7 @@ public class U {
     @SuppressLint("SwitchIntDef")
     private static ApplicationType getApplicationType(Context context, AppEntry entry) {
         if(isGame(context, entry.getPackageName()))
-            return ApplicationType.GAME;
+            return ApplicationType.APP_FULLSCREEN;
 
         try {
             ActivityInfo info = context.getPackageManager().getActivityInfo(

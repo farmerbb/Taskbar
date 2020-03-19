@@ -21,6 +21,10 @@
         android:key="desktop_mode"
         android:title="@string/tb_pref_header_desktop_mode"/>
 
+    <Preference
+        android:key="set_as_default"
+        android:title="Set as default"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

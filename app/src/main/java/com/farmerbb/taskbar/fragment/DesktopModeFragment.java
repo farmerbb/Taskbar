@@ -15,8 +15,12 @@
 
 package com.farmerbb.taskbar.fragment;
 
+import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +38,9 @@ public class DesktopModeFragment extends SettingsFragment {
 
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_desktop_mode);
+
+        // Set OnClickListeners for certain preferences
+        findPreference("set_as_default").setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean("launcher", false))
@@ -53,5 +60,26 @@ public class DesktopModeFragment extends SettingsFragment {
         ActionBar actionBar = activity.getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @TargetApi(29)
+    @Override
+    public boolean onPreferenceClick(final Preference p) {
+        final SharedPreferences pref = U.getSharedPreferences(getActivity());
+
+        switch(p.getKey()) {
+            case "set_as_default":
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_SECONDARY_HOME);
+
+                try {
+                    startActivity(intent);
+                } catch (Exception e) { /* Gracefully fail */ }
+
+                break;
+        }
+
+        return super.onPreferenceClick(p);
     }
 }

@@ -103,6 +103,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private int startDragIndex;
     private int endDragIndex;
 
+    private boolean dcvRemoved;
+
     private GestureDetector detector;
 
     private BroadcastReceiver killReceiver = new BroadcastReceiver() {
@@ -198,8 +200,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(this instanceof SecondaryHomeActivity)
+        if(this instanceof SecondaryHomeActivity) {
+            if(!U.isDesktopModeActive(this)) {
+                finish();
+                return;
+            }
+
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        }
 
         shouldDelayFreeformHack = true;
         hits = 0;
@@ -343,6 +351,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 || U.isLauncherPermanentlyEnabled(this))
                 && !U.isChromeOs(this)) {
             setContentView(layout);
+
+            if(this instanceof SecondaryHomeActivity) {
+                dcvRemoved = false;
+                traverseAndRemoveDecorCaption(getWindow().getDecorView());
+            }
+
             pref.edit().putBoolean("launcher", !(this instanceof SecondaryHomeActivity)).apply();
         } else
             killHomeActivity();
@@ -1002,5 +1016,37 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             helper.setOnSecondaryHomeScreen(value, disp.getDisplayId());
         } else
             helper.setOnPrimaryHomeScreen(value);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @SuppressLint("PrivateApi")
+    private void traverseAndRemoveDecorCaption(View view) {
+        if(dcvRemoved || !(view instanceof ViewGroup))
+            return;
+
+        Class dcvClass;
+        try {
+            dcvClass = Class.forName("com.android.internal.widget.DecorCaptionView");
+        } catch (ClassNotFoundException e) {
+            return;
+        }
+
+        ViewGroup viewGroup = (ViewGroup) view;
+        int position = -1;
+
+        for(int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+
+            if(dcvClass.isInstance(child)) {
+                position = i;
+                break;
+            } else
+                traverseAndRemoveDecorCaption(child);
+        }
+
+        if(position >= 0) {
+            viewGroup.removeViewAt(position);
+            dcvRemoved = true;
+        }
     }
 }

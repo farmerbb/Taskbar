@@ -237,7 +237,7 @@ public class NotificationService extends Service {
             Intent intent = new Intent(this, SecondaryHomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            startActivity(intent, U.getActivityOptions(this, ApplicationType.GAME, null).toBundle());
+            startActivity(intent, U.getActivityOptions(this, ApplicationType.APP_FULLSCREEN, null).toBundle());
         };
 
         if(shouldDelay)
