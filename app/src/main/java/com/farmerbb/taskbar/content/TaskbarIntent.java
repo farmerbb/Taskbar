@@ -11,4 +11,8 @@ public class TaskbarIntent {
     public static final String ACTION_RESET_START_MENU = "com.farmerbb.taskbar.RESET_START_MENU";
     public static final String ACTION_HIDE_START_MENU_NO_RESET =
             "com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET";
+    public static final String ACTION_SHOW_START_MENU_SPACE =
+            "com.farmerbb.taskbar.SHOW_START_MENU_SPACE";
+    public static final String ACTION_HIDE_START_MENU_SPACE =
+            "com.farmerbb.taskbar.HIDE_START_MENU_SPACE";
 }

@@ -1172,7 +1172,11 @@ public class TaskbarController implements UIController {
 
             updateButton(false);
 
-            new Handler().post(() -> LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_START_MENU_SPACE")));
+            new Handler().post(() ->
+                    LocalBroadcastManager
+                            .getInstance(context)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_START_MENU_SPACE))
+            );
         }
     }
 
@@ -1213,7 +1217,11 @@ public class TaskbarController implements UIController {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
             }
 
-            new Handler().post(() -> LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_SPACE")));
+            new Handler().post(() ->
+                    LocalBroadcastManager
+                            .getInstance(context)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU_SPACE))
+            );
         }
     }
 
@@ -1661,13 +1669,13 @@ public class TaskbarController implements UIController {
 
         return getDrawableForSysTray(id);
     }
-    
+
     private Drawable getDrawableForSysTray(int id) {
         Drawable drawable = null;
         try {
             drawable = ContextCompat.getDrawable(context, id);
         } catch (Resources.NotFoundException e) { /* Gracefully fail */ }
-        
+
         if(drawable == null) return null;
 
         drawable.setTint(U.getAccentColor(context));

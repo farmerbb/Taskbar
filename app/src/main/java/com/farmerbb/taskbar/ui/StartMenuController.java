@@ -436,8 +436,14 @@ public class StartMenuController implements UIController {
                 hideReceiverNoReset,
                 new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET)
         );
-        lbm.registerReceiver(showSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_START_MENU_SPACE"));
-        lbm.registerReceiver(hideSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_SPACE"));
+        lbm.registerReceiver(
+                showSpaceReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_SHOW_START_MENU_SPACE)
+        );
+        lbm.registerReceiver(
+                hideSpaceReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU_SPACE)
+        );
         lbm.registerReceiver(
                 resetReceiver,
                 new IntentFilter(TaskbarIntent.ACTION_RESET_START_MENU)
