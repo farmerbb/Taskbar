@@ -65,7 +65,7 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
             case "hide_taskbar":
                 return new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR);
             case "toggle_start_menu":
-                return new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
+                return new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU);
             case "toggle_dashboard":
                 return new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD");
         }

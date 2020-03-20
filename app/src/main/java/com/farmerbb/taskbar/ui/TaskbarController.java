@@ -154,7 +154,7 @@ public class TaskbarController implements UIController {
     private int cellStrength = -1;
 
     private View.OnClickListener ocl = view -> {
-        Intent intent = new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
+        Intent intent = new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     };
 
