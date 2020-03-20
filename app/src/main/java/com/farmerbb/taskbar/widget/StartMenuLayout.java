@@ -22,6 +22,8 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
+import com.farmerbb.taskbar.content.TaskbarIntent;
+
 public class StartMenuLayout extends LinearLayout {
     private boolean viewHandlesBackButton = false;
 
@@ -44,7 +46,9 @@ public class StartMenuLayout extends LinearLayout {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if(viewHandlesBackButton && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager
+                    .getInstance(getContext())
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
             return true;
         }
 

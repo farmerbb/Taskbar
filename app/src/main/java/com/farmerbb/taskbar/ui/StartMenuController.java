@@ -312,7 +312,7 @@ public class StartMenuController implements UIController {
                                 } else {
                                     LocalBroadcastManager
                                             .getInstance(context)
-                                            .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
                                 }
                                 Intent intent;
 
@@ -425,7 +425,10 @@ public class StartMenuController implements UIController {
         lbm.unregisterReceiver(resetReceiver);
 
         lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
-        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.registerReceiver(
+                hideReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU)
+        );
         lbm.registerReceiver(hideReceiverNoReset, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
         lbm.registerReceiver(showSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_START_MENU_SPACE"));
         lbm.registerReceiver(hideSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_SPACE"));
@@ -673,10 +676,12 @@ public class StartMenuController implements UIController {
                         startMenu.setLayoutParams(params1);
                     }
 
-                    if(!b) {
-                        if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                        else {
+                    if (!b) {
+                        if (hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                            LocalBroadcastManager
+                                    .getInstance(context)
+                                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+                        } else {
                             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         }

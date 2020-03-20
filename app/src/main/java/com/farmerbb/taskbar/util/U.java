@@ -476,7 +476,7 @@ public class U {
         } else {
             LocalBroadcastManager
                     .getInstance(context)
-                    .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
         }
     }
 

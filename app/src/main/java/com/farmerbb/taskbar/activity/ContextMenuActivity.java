@@ -160,7 +160,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
         } else {
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
 
             int x = args.getInt("x", display.width);
             int y = args.getInt("y", display.height);

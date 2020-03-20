@@ -55,6 +55,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -253,7 +254,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 }
             });
         } else {
-            layout.setOnClickListener(view1 -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU")));
+            layout.setOnClickListener(
+                    view1 ->
+                            LocalBroadcastManager
+                                    .getInstance(this)
+                                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU)));
 
             layout.setOnLongClickListener(view2 -> {
                 if(!pref.getBoolean("freeform_hack", false))
@@ -427,7 +432,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     protected void onStart() {
         super.onStart();
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
 
         if(U.canDrawOverlays(this)) {
             if(!U.canBootToFreeform(this)) {
@@ -573,7 +580,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     @Override
     public void onBackPressed() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
     }
 
     private void killHomeActivity() {
@@ -717,7 +726,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
             iconContainer.setOnClickListener(view -> {
                 boolean isStartMenuOpen = MenuHelper.getInstance().isStartMenuOpen();
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
 
                 DesktopIconInfo info = icons.get(index);
                 if(!isStartMenuOpen && info != null && info.entry != null) {

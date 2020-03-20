@@ -26,6 +26,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
+import com.farmerbb.taskbar.content.TaskbarIntent;
+
 public class InvisibleActivity extends Activity {
 
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
@@ -54,7 +56,9 @@ public class InvisibleActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
     }
 
     @Override

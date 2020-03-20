@@ -399,7 +399,7 @@ public class TaskbarController implements UIController {
         }
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
         lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
 
         if(altButtonConfig) {
@@ -1201,7 +1201,9 @@ public class TaskbarController implements UIController {
             updateButton(true);
 
             if(clearVariables) {
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                LocalBroadcastManager
+                        .getInstance(context)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
             }
 
