@@ -22,8 +22,9 @@
         android:title="@string/tb_pref_header_desktop_mode"/>
 
     <Preference
-        android:key="set_as_default"
-        android:title="Set as default"/>
+        android:key="primary_launcher"
+        android:title="@string/tb_primary_launcher"
+        android:dependency="desktop_mode"/>
 
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 

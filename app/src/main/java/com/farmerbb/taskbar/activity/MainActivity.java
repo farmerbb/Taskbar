@@ -103,7 +103,11 @@ public class MainActivity extends AppCompatActivity {
         boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this))
                 || U.isLauncherPermanentlyEnabled(this);
 
+        boolean desktopModeEnabled = U.isDesktopModeSupported(this)
+                && pref.getBoolean("desktop_mode", false);
+
         editor.putBoolean("launcher", launcherEnabled);
+        editor.putBoolean("desktop_mode", desktopModeEnabled);
         editor.apply();
 
         if(!U.isLibrary(this)) {
@@ -135,14 +139,21 @@ public class MainActivity extends AppCompatActivity {
 
             ComponentName component5 = new ComponentName(this, SecondaryHomeActivity.class);
             getPackageManager().setComponentEnabledSetting(component5,
-                    U.isDesktopModeSupported(this)
+                    desktopModeEnabled
+                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+
+            ComponentName component6 = new ComponentName(this, HSLActivity.class);
+            getPackageManager().setComponentEnabledSetting(component6,
+                    desktopModeEnabled
                             ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ComponentName component6 = new ComponentName(this, KeyboardShortcutActivityLockDevice.class);
-                getPackageManager().setComponentEnabledSetting(component6,
+                ComponentName component7 = new ComponentName(this, KeyboardShortcutActivityLockDevice.class);
+                getPackageManager().setComponentEnabledSetting(component7,
                         pref.getBoolean("keyboard_shortcut", false)
                                 ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                                 : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
