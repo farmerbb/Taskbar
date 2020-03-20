@@ -704,7 +704,9 @@ public class StartMenuController implements UIController {
 
             MenuHelper.getInstance().setStartMenuOpen(false);
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
 
             layout.postDelayed(() -> {
                 layout.setVisibility(View.GONE);
@@ -746,7 +748,7 @@ public class StartMenuController implements UIController {
         lbm.unregisterReceiver(hideSpaceReceiver);
         lbm.unregisterReceiver(resetReceiver);
 
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
     }
 
     @TargetApi(Build.VERSION_CODES.M)

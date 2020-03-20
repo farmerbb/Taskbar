@@ -45,7 +45,12 @@ public class InvisibleActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        finishReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_START_MENU_DISAPPEARING)
+                );
     }
 
     @Override

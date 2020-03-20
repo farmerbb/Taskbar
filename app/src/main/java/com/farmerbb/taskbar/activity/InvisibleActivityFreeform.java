@@ -114,7 +114,7 @@ public class InvisibleActivityFreeform extends Activity {
         appearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
         IntentFilter disappearingReceiverFilter = new IntentFilter();
-        disappearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_DISAPPEARING");
+        disappearingReceiverFilter.addAction(TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
         disappearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING");
         disappearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING");
 

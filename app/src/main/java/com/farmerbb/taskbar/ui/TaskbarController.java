@@ -644,7 +644,10 @@ public class TaskbarController implements UIController {
         lbm.registerReceiver(tempShowReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
         lbm.registerReceiver(tempHideReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
         lbm.registerReceiver(startMenuAppearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));
-        lbm.registerReceiver(startMenuDisappearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        lbm.registerReceiver(
+                startMenuDisappearReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_START_MENU_DISAPPEARING)
+        );
 
         startRefreshingRecents();
 
