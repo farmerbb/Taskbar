@@ -8,4 +8,5 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.START_MENU_DISAPPEARING";
     public static final String ACTION_START_MENU_APPEARING =
             "com.farmerbb.taskbar.START_MENU_APPEARING";
+    public static final String ACTION_RESET_START_MENU = "com.farmerbb.taskbar.RESET_START_MENU";
 }

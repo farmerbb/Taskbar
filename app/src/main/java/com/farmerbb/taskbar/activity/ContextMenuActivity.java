@@ -781,7 +781,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         .getInstance(this)
                         .sendBroadcast(new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU));
             } else {
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.RESET_START_MENU"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_RESET_START_MENU));
 
                 if(shouldHideTaskbar && U.shouldCollapse(this, true)) {
                     LocalBroadcastManager
