@@ -60,6 +60,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -304,11 +305,15 @@ public class StartMenuController implements UIController {
                                 LinearLayout layout = view.findViewById(R.id.entry);
                                 layout.performClick();
                             } else {
-                                if(U.shouldCollapse(context, true))
-                                    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                                else
-                                    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-
+                                if(U.shouldCollapse(context, true)) {
+                                    LocalBroadcastManager
+                                            .getInstance(context)
+                                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                                } else {
+                                    LocalBroadcastManager
+                                            .getInstance(context)
+                                            .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                                }
                                 Intent intent;
 
                                 if(Patterns.WEB_URL.matcher(query).matches()) {

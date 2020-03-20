@@ -31,6 +31,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.activity.dark.InvisibleActivityAltDark;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -266,10 +267,15 @@ public class InvisibleActivityFreeform extends Activity {
     private void possiblyHideTaskbar() {
         if(!doNotHide) {
             new Handler().postDelayed(() -> {
-                if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen())
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
-                else
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen()) {
+                    LocalBroadcastManager
+                            .getInstance(this)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                } else {
+                    LocalBroadcastManager
+                            .getInstance(this)
+                            .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                }
             }, 100);
         }
     }

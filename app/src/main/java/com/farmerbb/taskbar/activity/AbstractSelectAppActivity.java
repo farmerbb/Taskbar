@@ -35,6 +35,7 @@ import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.adapter.DesktopIconAppListAdapter;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
@@ -74,8 +75,11 @@ public abstract class AbstractSelectAppActivity extends AppCompatActivity {
         SharedPreferences pref = U.getSharedPreferences(this);
         isCollapsed = !pref.getBoolean("collapsed", false);
 
-        if(!isCollapsed)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_TASKBAR"));
+        if(!isCollapsed) {
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+        }
 
         progressBar = findViewById(R.id.progress_bar);
         appList = findViewById(R.id.list);
