@@ -197,7 +197,9 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     }
 
     private void openContextMenu(final AppEntry entry, final int[] location) {
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
+        LocalBroadcastManager
+                .getInstance(getContext())
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET));
 
         Bundle args = new Bundle();
         args.putSerializable("app_entry", entry);
