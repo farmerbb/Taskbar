@@ -621,7 +621,9 @@ public class StartMenuController implements UIController {
 
             MenuHelper.getInstance().setStartMenuOpen(true);
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_APPEARING));
 
             boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();

@@ -109,7 +109,7 @@ public class InvisibleActivityFreeform extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
         IntentFilter appearingReceiverFilter = new IntentFilter();
-        appearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
+        appearingReceiverFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
         appearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING");
         appearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
