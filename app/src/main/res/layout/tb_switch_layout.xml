@@ -14,9 +14,27 @@
      limitations under the License.
 -->
 
-<androidx.appcompat.widget.SwitchCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    android:animateLayoutChanges="true">
+
+    <ImageView
+        android:id="@+id/help_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:src="@drawable/tb_action_help"
+        android:visibility="invisible"/>
+
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/the_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="8dp" />
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>

@@ -35,6 +35,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.ImageView;
+
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,7 +49,10 @@ import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;
+import com.farmerbb.taskbar.fragment.DesktopModeFragment;
+import com.farmerbb.taskbar.fragment.FreeformModeFragment;
 import com.farmerbb.taskbar.fragment.ManageAppDataFragment;
+import com.farmerbb.taskbar.fragment.SettingsFragment;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -63,6 +69,7 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity {
 
     private SwitchCompat theSwitch;
+    private ImageView helpButton;
 
     private BroadcastReceiver switchReceiver = new BroadcastReceiver() {
         @Override
@@ -210,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         theSwitch = findViewById(R.id.the_switch);
+        helpButton = findViewById(R.id.help_button);
+
         if(theSwitch != null) {
             final SharedPreferences pref = U.getSharedPreferences(this);
             theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
@@ -436,5 +445,28 @@ public class MainActivity extends AppCompatActivity {
             return false;
 
         return getIntent().getBooleanExtra("back_arrow", false);
+    }
+
+    public void updateHelpButton(SettingsFragment fragment) {
+        if(fragment instanceof FreeformModeFragment) {
+            helpButton.setVisibility(View.VISIBLE);
+            helpButton.setOnClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setView(View.inflate(MainActivity.this, R.layout.tb_freeform_help_dialog, null))
+                        .setTitle(R.string.tb_freeform_help_dialog_title)
+                        .setPositiveButton(R.string.tb_action_close, null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            });
+        } else if(fragment instanceof DesktopModeFragment) {
+            helpButton.setVisibility(View.VISIBLE);
+            helpButton.setOnClickListener(v -> {
+                // TODO
+            });
+        } else {
+            helpButton.setVisibility(View.INVISIBLE);
+            helpButton.setOnClickListener(null);
+        }
     }
 }

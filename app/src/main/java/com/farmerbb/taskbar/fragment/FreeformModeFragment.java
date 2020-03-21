@@ -62,7 +62,6 @@ public class FreeformModeFragment extends SettingsFragment {
         addPreferencesFromResource(R.xml.tb_pref_freeform_hack);
 
         findPreference("freeform_hack").setOnPreferenceClickListener(this);
-        findPreference("freeform_mode_help").setOnPreferenceClickListener(this);
         findPreference("window_size").setOnPreferenceClickListener(this);
 
         boolean enableFreeformModeShortcut = U.enableFreeformModeShortcut(getActivity());
@@ -204,15 +203,6 @@ public class FreeformModeFragment extends SettingsFragment {
                 LocalBroadcastManager
                         .getInstance(getActivity())
                         .sendBroadcast(new Intent(TaskbarIntent.ACTION_FREEFORM_PREF_CHANGED));
-                break;
-            case "freeform_mode_help":
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(View.inflate(getActivity(), R.layout.tb_freeform_help_dialog, null))
-                        .setTitle(R.string.tb_freeform_help_dialog_title)
-                        .setPositiveButton(R.string.tb_action_close, null);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
                 break;
             case "add_shortcut":
                 U.pinAppShortcut(getActivity());

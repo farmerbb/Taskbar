@@ -53,10 +53,6 @@
         android:key="add_shortcut"
         android:title="@string/tb_add_shortcut" />
 
-    <Preference
-        android:key="freeform_mode_help"
-        android:title="@string/tb_pref_title_freeform_mode_help" />
-
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>
