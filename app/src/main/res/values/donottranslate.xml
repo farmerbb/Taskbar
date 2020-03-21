@@ -109,4 +109,10 @@
         <item>custom</item>
     </string-array>
 
+    <string-array name="tb_pref_display_density_list_values">
+        <item>reset</item>
+        <item>160</item>
+        <item>320</item>
+    </string-array>
+
 </resources>

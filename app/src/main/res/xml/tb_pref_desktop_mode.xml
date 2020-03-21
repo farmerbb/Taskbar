@@ -22,9 +22,37 @@
         android:title="@string/tb_pref_header_desktop_mode"/>
 
     <Preference
+        android:key="set_launcher_default"
+        android:title="@string/tb_set_launcher_default_title"
+        android:summary="@string/tb_set_launcher_default_summary"/>
+
+    <Preference
         android:key="primary_launcher"
         android:title="@string/tb_primary_launcher"
         android:dependency="desktop_mode"/>
+
+    <PreferenceCategory
+        android:key="additional_settings">
+
+        <Preference
+            android:key="enable_additional_settings"
+            android:title="@string/tb_enable_additional_settings"/>
+
+        <ListPreference
+            android:defaultValue="reset"
+            android:entries="@array/tb_pref_display_density_list"
+            android:entryValues="@array/tb_pref_display_density_list_values"
+            android:key="display_density"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/tb_display_density"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="auto_hide_navbar"
+            android:title="@string/tb_auto_hide_navbar_alt"/>
+
+    </PreferenceCategory>
 
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 

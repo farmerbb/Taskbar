@@ -430,9 +430,21 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string name="tb_pref_header_desktop_mode">Desktop mode</string>
     <string name="tb_primary_launcher">Primary launcher</string>
+    <string name="tb_set_launcher_default_title">Set Taskbar as default Home app</string>
+    <string name="tb_set_launcher_default_summary">Required for desktop mode to work</string>
+    <string name="tb_unable_to_set_default_home">Unable to set default Home app. Please do so manually via system settings.</string>
+    <string name="tb_display_density">Display density</string>
+    <string name="tb_auto_hide_navbar_alt">Hide navbar while on desktop</string>
+    <string name="tb_enable_additional_settings">Enable additional settings</string>
 
-    <string name="tb_hsl_no_launchers_found">No third-party launchers were found.\n\nPlease download and install one, then re-open this application.</string>
+    <string name="tb_hsl_no_launchers_found">No primary launchers were found. Please download and install one, then try again.</string>
     <string name="tb_hsl_launcher_uninstalled">%1$s was uninstalled. Please select a different launcher from the list.</string>
-    <string name="tb_hsl_main_activity_text">Select your primary launcher from the list below.\n\nYou can change this selection at any time from within Taskbar\'s desktop mode settings.</string>
+    <string name="tb_hsl_main_activity_text">Select your primary launcher from the list below. You can change this selection at any time from within Taskbar\'s desktop mode settings.</string>
+
+    <string-array name="tb_pref_display_density_list">
+        <item>Default</item>
+        <item>Low-density (160dpi)</item>
+        <item>High-density (320dpi)</item>
+    </string-array>
 
 </resources>

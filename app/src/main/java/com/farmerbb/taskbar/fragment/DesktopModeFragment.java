@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.provider.Settings;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +48,7 @@ public class DesktopModeFragment extends SettingsFragment {
 
         // Set OnClickListeners for certain preferences
         findPreference("desktop_mode").setOnPreferenceClickListener(this);
+        findPreference("set_launcher_default").setOnPreferenceClickListener(this);
         findPreference("primary_launcher").setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
@@ -53,6 +56,12 @@ public class DesktopModeFragment extends SettingsFragment {
             findPreference("desktop_mode").setEnabled(false);
         else
             bindPreferenceSummaryToValue(findPreference("desktop_mode"));
+
+        bindPreferenceSummaryToValue(findPreference("display_density"));
+
+        boolean writeSecureSettings = U.hasWriteSecureSettingsPermission(getActivity());
+        findPreference("display_density").setEnabled(writeSecureSettings);
+        findPreference("auto_hide_navbar").setEnabled(writeSecureSettings);
 
         finishedLoadingPrefs = true;
     }
@@ -76,10 +85,18 @@ public class DesktopModeFragment extends SettingsFragment {
         if(primaryLauncherPref != null) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             String primaryLauncherName = pref.getString("hsl_name", "null");
+            String primaryLauncherPackage = pref.getString("hsl_id", "null");
 
-            primaryLauncherPref.setSummary(primaryLauncherName.equals("null")
-                    ? getString(R.string.tb_icon_pack_none)
-                    : primaryLauncherName
+            boolean primaryLauncherValid = true;
+            try {
+                getActivity().getPackageManager().getPackageInfo(primaryLauncherPackage, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                primaryLauncherValid = false;
+            }
+
+            primaryLauncherPref.setSummary(primaryLauncherValid
+                    ? primaryLauncherName
+                    : getString(R.string.tb_icon_pack_none)
             );
         }
     }
@@ -104,6 +121,14 @@ public class DesktopModeFragment extends SettingsFragment {
                         PackageManager.DONT_KILL_APP);
 
                break;
+            case "set_launcher_default":
+                try {
+                    startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+                } catch (ActivityNotFoundException e) {
+                    U.showToastLong(getActivity(), R.string.tb_unable_to_set_default_home);
+                }
+
+                break;
             case "primary_launcher":
                 Intent intent = new Intent(getActivity(), HSLConfigActivity.class);
                 intent.putExtra("return_to_settings", true);
