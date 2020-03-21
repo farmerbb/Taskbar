@@ -39,4 +39,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX";
     public static final String ACTION_FINISH_FREEFORM_ACTIVITY =
             "com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY";
+    public static final String ACTION_FREEFORM_PREF_CHANGED =
+            "com.farmerbb.taskbar.FREEFORM_PREF_CHANGED";
 }

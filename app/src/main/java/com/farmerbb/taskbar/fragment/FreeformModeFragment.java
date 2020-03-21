@@ -201,7 +201,9 @@ public class FreeformModeFragment extends SettingsFragment {
                 }
 
                 U.restartNotificationService(getActivity());
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FREEFORM_PREF_CHANGED"));
+                LocalBroadcastManager
+                        .getInstance(getActivity())
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_FREEFORM_PREF_CHANGED));
                 break;
             case "freeform_mode_help":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
