@@ -58,7 +58,7 @@ public class HSLConfigActivity extends AppCompatActivity {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.tb_hsl_row_layout, parent, false);
             }
             // Lookup view for data population
-            TextView launcherTitle = (TextView) convertView.findViewById(R.id.launcherTitle);
+            TextView launcherTitle = convertView.findViewById(R.id.launcherTitle);
             // Populate the data into the template view using the data object
             launcherTitle.setText(launcher);
 
@@ -117,8 +117,8 @@ public class HSLConfigActivity extends AppCompatActivity {
             }
         }
 
-        ListView listView = (ListView) findViewById(R.id.listView);
-        TextView textView = (TextView) findViewById(R.id.textView);
+        ListView listView = findViewById(R.id.listView);
+        TextView textView = findViewById(R.id.textView);
 
         // Display the list of launchers
         if(packageNames.size() > 0) {
