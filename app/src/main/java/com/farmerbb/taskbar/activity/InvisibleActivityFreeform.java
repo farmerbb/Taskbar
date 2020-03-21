@@ -120,7 +120,12 @@ public class InvisibleActivityFreeform extends Activity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, appearingReceiverFilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        finishReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY)
+                );
 
         helper.setFreeformHackActive(true);
 

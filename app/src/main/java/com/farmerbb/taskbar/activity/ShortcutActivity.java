@@ -23,6 +23,7 @@ import android.os.Handler;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
 
@@ -40,7 +41,9 @@ public class ShortcutActivity extends Activity {
                 if(!pref.getBoolean("freeform_hack", false)) {
                     pref.edit().putBoolean("freeform_hack", true).apply();
 
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+                    LocalBroadcastManager
+                            .getInstance(this)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX));
                 }
 
                 Intent intent = new Intent("com.farmerbb.taskbar.START");

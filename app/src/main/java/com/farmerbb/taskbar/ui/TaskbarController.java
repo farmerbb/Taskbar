@@ -627,7 +627,7 @@ public class TaskbarController implements UIController {
             U.showHideNavigationBar(context, false);
 
         if(FreeformHackHelper.getInstance().isTouchAbsorberActive()) {
-            lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+            lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY));
 
             new Handler().postDelayed(() -> U.startTouchAbsorberActivity(context), 500);
         }

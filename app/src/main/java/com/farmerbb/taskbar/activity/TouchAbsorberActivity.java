@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
@@ -59,7 +60,10 @@ public class TouchAbsorberActivity extends Activity {
         if(BuildConfig.DEBUG) layout.setBackgroundColor(0x800000FF);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        lbm.registerReceiver(
+                finishReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY)
+        );
 
         FreeformHackHelper.getInstance().setTouchAbsorberActive(true);
         lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED"));

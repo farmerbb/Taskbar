@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 public class EnableFreeformReceiver extends BroadcastReceiver {
@@ -36,7 +37,9 @@ public class EnableFreeformReceiver extends BroadcastReceiver {
 
             pref.edit().putBoolean("freeform_hack", true).apply();
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX));
         }
     }
 }

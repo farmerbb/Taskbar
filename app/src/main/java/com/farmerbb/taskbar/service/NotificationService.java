@@ -41,6 +41,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.IconCache;
@@ -153,7 +154,7 @@ public class NotificationService extends Service {
                 if(U.canEnableFreeform() && !U.isChromeOs(this)) {
                     String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.tb_freeform_off : R.string.tb_freeform_on);
 
-                    Intent freeformIntent = new Intent("com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE");
+                    Intent freeformIntent = new Intent(TaskbarIntent.ACTION_TOGGLE_FREEFORM_MODE);
                     freeformIntent.setPackage(getPackageName());
 
                     PendingIntent freeformPendingIntent = PendingIntent.getBroadcast(this, 0, freeformIntent, PendingIntent.FLAG_UPDATE_CURRENT);

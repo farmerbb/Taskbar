@@ -400,7 +400,9 @@ public class U {
     }
 
     public static void stopFreeformHack(Context context) {
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY"));
+        LocalBroadcastManager
+                .getInstance(context)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY));
 
         if(isOverridingFreeformHack(context, false)) {
             FreeformHackHelper helper = FreeformHackHelper.getInstance();
