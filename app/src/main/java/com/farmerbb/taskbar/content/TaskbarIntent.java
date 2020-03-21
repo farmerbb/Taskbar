@@ -37,4 +37,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.HIDE_START_MENU_SPACE";
     public static final String ACTION_UPDATE_FREEFORM_CHECKBOX =
             "com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX";
+    public static final String ACTION_FINISH_FREEFORM_ACTIVITY =
+            "com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY";
 }
