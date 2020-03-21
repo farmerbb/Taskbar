@@ -54,6 +54,11 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
         // Set values
         setRetainInstance(true);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         ((MainActivity) getActivity()).updateHelpButton(this);
     }

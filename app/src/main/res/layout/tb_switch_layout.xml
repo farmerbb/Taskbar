@@ -17,17 +17,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="end"
-    android:animateLayoutChanges="true">
+    android:layout_gravity="end">
 
     <ImageView
         android:id="@+id/help_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="?android:attr/actionBarSize"
+        android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="6dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
+        android:scaleType="center"
         android:src="@drawable/tb_action_help"
         android:visibility="invisible"/>
 
