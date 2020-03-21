@@ -37,6 +37,8 @@ import com.farmerbb.taskbar.util.U;
 
 public class DesktopModeFragment extends SettingsFragment {
 
+    public static boolean isConfiguringHomeApp;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
@@ -80,6 +82,7 @@ public class DesktopModeFragment extends SettingsFragment {
     @Override
     public void onResume() {
         super.onResume();
+        isConfiguringHomeApp = false;
 
         Preference primaryLauncherPref = findPreference("primary_launcher");
         if(primaryLauncherPref != null) {
@@ -124,6 +127,7 @@ public class DesktopModeFragment extends SettingsFragment {
             case "set_launcher_default":
                 try {
                     startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+                    isConfiguringHomeApp = true;
                 } catch (ActivityNotFoundException e) {
                     U.showToastLong(getActivity(), R.string.tb_unable_to_set_default_home);
                 }

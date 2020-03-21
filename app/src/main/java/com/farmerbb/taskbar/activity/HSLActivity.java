@@ -24,9 +24,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.fragment.DesktopModeFragment;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
@@ -36,6 +38,17 @@ public class HSLActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(DesktopModeFragment.isConfiguringHomeApp) {
+            int enter = getResources().getIdentifier("activity_close_enter", "anim", "android");
+            int exit = getResources().getIdentifier("activity_close_exit", "anim", "android");
+
+            startActivity(new Intent(this, MainActivity.class));
+            overridePendingTransition(enter, exit);
+
+            finish();
+            return;
+        }
 
         SharedPreferences pref = U.getSharedPreferences(this);
         String activityToLaunch = pref.getString("hsl_id", "null");
