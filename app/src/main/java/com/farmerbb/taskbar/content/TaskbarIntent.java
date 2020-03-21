@@ -17,7 +17,9 @@ package com.farmerbb.taskbar.content;
 
 public class TaskbarIntent {
 
-    private TaskbarIntent() {}
+    private TaskbarIntent() {
+        // Empty constructor
+    }
 
     public static final String ACTION_HIDE_TASKBAR = "com.farmerbb.taskbar.HIDE_TASKBAR";
     public static final String ACTION_HIDE_START_MENU = "com.farmerbb.taskbar.HIDE_START_MENU";
@@ -33,4 +35,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.SHOW_START_MENU_SPACE";
     public static final String ACTION_HIDE_START_MENU_SPACE =
             "com.farmerbb.taskbar.HIDE_START_MENU_SPACE";
+    public static final String ACTION_UPDATE_FREEFORM_CHECKBOX =
+            "com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX";
 }

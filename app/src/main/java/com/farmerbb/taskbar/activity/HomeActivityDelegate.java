@@ -373,7 +373,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         lbm.registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
 
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX");
+        intentFilter.addAction(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
         intentFilter.addAction("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED");
         intentFilter.addAction("com.farmerbb.taskbar.FREEFORM_PREF_CHANGED");
 

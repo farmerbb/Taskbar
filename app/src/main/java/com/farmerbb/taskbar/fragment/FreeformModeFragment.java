@@ -35,6 +35,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -100,7 +101,12 @@ public class FreeformModeFragment extends SettingsFragment {
             dialog.setCancelable(false);
         }
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(checkBoxReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+        LocalBroadcastManager
+                .getInstance(getActivity())
+                .registerReceiver(
+                        checkBoxReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX)
+                );
 
         finishedLoadingPrefs = true;
     }

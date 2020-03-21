@@ -23,6 +23,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.U;
 
@@ -43,7 +44,9 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
             U.startForegroundService(context, notificationIntent);
 
             U.stopFreeformHack(context);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX));
         } else if(U.hasFreeformSupport(context)) {
             pref.edit().putBoolean("freeform_hack", true).apply();
 
@@ -57,7 +60,9 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
 
             U.startForegroundService(context, notificationIntent);
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX));
         } else
             U.showToastLong(context, R.string.tb_no_freeform_support);
     }
