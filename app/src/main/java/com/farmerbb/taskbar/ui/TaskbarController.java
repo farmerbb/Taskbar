@@ -154,7 +154,7 @@ public class TaskbarController implements UIController {
     private int cellStrength = -1;
 
     private View.OnClickListener ocl = view -> {
-        Intent intent = new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU");
+        Intent intent = new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     };
 
@@ -399,7 +399,7 @@ public class TaskbarController implements UIController {
         }
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
         lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
 
         if(altButtonConfig) {
@@ -643,8 +643,14 @@ public class TaskbarController implements UIController {
         lbm.registerReceiver(hideReceiver, new IntentFilter(TaskbarIntent.ACTION_HIDE_TASKBAR));
         lbm.registerReceiver(tempShowReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
         lbm.registerReceiver(tempHideReceiver, new IntentFilter("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
-        lbm.registerReceiver(startMenuAppearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_APPEARING"));
-        lbm.registerReceiver(startMenuDisappearReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        lbm.registerReceiver(
+                startMenuAppearReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_START_MENU_APPEARING)
+        );
+        lbm.registerReceiver(
+                startMenuDisappearReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_START_MENU_DISAPPEARING)
+        );
 
         startRefreshingRecents();
 
@@ -1166,7 +1172,11 @@ public class TaskbarController implements UIController {
 
             updateButton(false);
 
-            new Handler().post(() -> LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_START_MENU_SPACE")));
+            new Handler().post(() ->
+                    LocalBroadcastManager
+                            .getInstance(context)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_START_MENU_SPACE))
+            );
         }
     }
 
@@ -1201,11 +1211,17 @@ public class TaskbarController implements UIController {
             updateButton(true);
 
             if(clearVariables) {
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                LocalBroadcastManager
+                        .getInstance(context)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
             }
 
-            new Handler().post(() -> LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_SPACE")));
+            new Handler().post(() ->
+                    LocalBroadcastManager
+                            .getInstance(context)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU_SPACE))
+            );
         }
     }
 
@@ -1653,13 +1669,13 @@ public class TaskbarController implements UIController {
 
         return getDrawableForSysTray(id);
     }
-    
+
     private Drawable getDrawableForSysTray(int id) {
         Drawable drawable = null;
         try {
             drawable = ContextCompat.getDrawable(context, id);
         } catch (Resources.NotFoundException e) { /* Gracefully fail */ }
-        
+
         if(drawable == null) return null;
 
         drawable.setTint(U.getAccentColor(context));

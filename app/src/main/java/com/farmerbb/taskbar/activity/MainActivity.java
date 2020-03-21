@@ -42,6 +42,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;
@@ -381,7 +382,9 @@ public class MainActivity extends AppCompatActivity {
 
             IconCache.getInstance(this).clearCache();
 
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
         }
 
         stopService(new Intent(this, NotificationService.class));

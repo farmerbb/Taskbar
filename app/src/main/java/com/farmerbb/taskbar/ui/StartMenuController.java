@@ -312,7 +312,7 @@ public class StartMenuController implements UIController {
                                 } else {
                                     LocalBroadcastManager
                                             .getInstance(context)
-                                            .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
                                 }
                                 Intent intent;
 
@@ -424,12 +424,30 @@ public class StartMenuController implements UIController {
         lbm.unregisterReceiver(hideSpaceReceiver);
         lbm.unregisterReceiver(resetReceiver);
 
-        lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_START_MENU"));
-        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU"));
-        lbm.registerReceiver(hideReceiverNoReset, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
-        lbm.registerReceiver(showSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_START_MENU_SPACE"));
-        lbm.registerReceiver(hideSpaceReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_START_MENU_SPACE"));
-        lbm.registerReceiver(resetReceiver, new IntentFilter("com.farmerbb.taskbar.RESET_START_MENU"));
+        lbm.registerReceiver(
+                toggleReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_TOGGLE_START_MENU)
+        );
+        lbm.registerReceiver(
+                hideReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU)
+        );
+        lbm.registerReceiver(
+                hideReceiverNoReset,
+                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET)
+        );
+        lbm.registerReceiver(
+                showSpaceReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_SHOW_START_MENU_SPACE)
+        );
+        lbm.registerReceiver(
+                hideSpaceReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU_SPACE)
+        );
+        lbm.registerReceiver(
+                resetReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_RESET_START_MENU)
+        );
 
         handler = new Handler();
         refreshApps(true);
@@ -615,7 +633,9 @@ public class StartMenuController implements UIController {
 
             MenuHelper.getInstance().setStartMenuOpen(true);
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_APPEARING"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_APPEARING));
 
             boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
@@ -673,10 +693,12 @@ public class StartMenuController implements UIController {
                         startMenu.setLayoutParams(params1);
                     }
 
-                    if(!b) {
-                        if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
-                        else {
+                    if (!b) {
+                        if (hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                            LocalBroadcastManager
+                                    .getInstance(context)
+                                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+                        } else {
                             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         }
@@ -696,7 +718,9 @@ public class StartMenuController implements UIController {
 
             MenuHelper.getInstance().setStartMenuOpen(false);
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
 
             layout.postDelayed(() -> {
                 layout.setVisibility(View.GONE);
@@ -738,7 +762,7 @@ public class StartMenuController implements UIController {
         lbm.unregisterReceiver(hideSpaceReceiver);
         lbm.unregisterReceiver(resetReceiver);
 
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -761,7 +785,9 @@ public class StartMenuController implements UIController {
     }
 
     private void openContextMenu(final int[] location) {
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU_NO_RESET"));
+        LocalBroadcastManager
+                .getInstance(context)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET));
 
         Bundle args = new Bundle();
         args.putBoolean("launched_from_start_menu", true);

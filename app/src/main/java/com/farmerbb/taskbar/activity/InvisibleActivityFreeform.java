@@ -109,12 +109,12 @@ public class InvisibleActivityFreeform extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
         IntentFilter appearingReceiverFilter = new IntentFilter();
-        appearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
+        appearingReceiverFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
         appearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING");
         appearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
         IntentFilter disappearingReceiverFilter = new IntentFilter();
-        disappearingReceiverFilter.addAction("com.farmerbb.taskbar.START_MENU_DISAPPEARING");
+        disappearingReceiverFilter.addAction(TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
         disappearingReceiverFilter.addAction("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING");
         disappearingReceiverFilter.addAction("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING");
 
@@ -274,7 +274,7 @@ public class InvisibleActivityFreeform extends Activity {
                 } else {
                     LocalBroadcastManager
                             .getInstance(this)
-                            .sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
                 }
             }, 100);
         }

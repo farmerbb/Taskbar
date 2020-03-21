@@ -160,7 +160,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
         } else {
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
 
             int x = args.getInt("x", display.width);
             int y = args.getInt("y", display.height);
@@ -235,7 +237,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         generateMenu();
 
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.farmerbb.taskbar.START_MENU_APPEARING");
+        intentFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
         intentFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
         LocalBroadcastManager.getInstance(this).registerReceiver(dashboardOrStartMenuAppearingReceiver, intentFilter);
@@ -774,10 +776,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         MenuHelper.getInstance().setContextMenuOpen(false);
 
         if(!dashboardOrStartMenuAppearing) {
-            if(showStartMenu)
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_START_MENU"));
-            else {
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.RESET_START_MENU"));
+            if (showStartMenu) {
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU));
+            } else {
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_RESET_START_MENU));
 
                 if(shouldHideTaskbar && U.shouldCollapse(this, true)) {
                     LocalBroadcastManager

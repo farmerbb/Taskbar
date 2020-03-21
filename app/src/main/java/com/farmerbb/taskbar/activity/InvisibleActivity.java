@@ -26,6 +26,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
+import com.farmerbb.taskbar.content.TaskbarIntent;
+
 public class InvisibleActivity extends Activity {
 
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
@@ -43,7 +45,12 @@ public class InvisibleActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.START_MENU_DISAPPEARING"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        finishReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_START_MENU_DISAPPEARING)
+                );
     }
 
     @Override
@@ -54,7 +61,9 @@ public class InvisibleActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_START_MENU"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
     }
 
     @Override
