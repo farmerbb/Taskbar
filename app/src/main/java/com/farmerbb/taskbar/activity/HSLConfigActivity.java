@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar.activity;
 
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -140,15 +139,8 @@ public class HSLConfigActivity extends AppCompatActivity {
                 for(ResolveInfo launcher : listOfLaunchers) {
                     if(packageIds.get(position).equals(launcher.activityInfo.packageName)) {
                         if(!returnToSettings) {
-                            Intent intent = new Intent(Intent.ACTION_MAIN);
-                            intent.setComponent(ComponentName.unflattenFromString(packageIds.get(position) + "/" + launcher.activityInfo.name));
-                            intent.addCategory(Intent.CATEGORY_HOME);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                    | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
                             try {
-                                startActivity(intent);
+                                startActivity(homeIntent);
                             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         }
 

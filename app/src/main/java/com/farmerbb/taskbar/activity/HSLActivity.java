@@ -71,12 +71,8 @@ public class HSLActivity extends Activity {
         if(activityToLaunch.equals("null")) {
             launcherNotFound();
         } else {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
+            Intent intent = getIntent();
             intent.setComponent(ComponentName.unflattenFromString(activityToLaunch));
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
             try {
                 startActivity(intent);
