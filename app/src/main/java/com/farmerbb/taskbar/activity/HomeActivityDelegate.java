@@ -396,7 +396,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void setWallpaper() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
 
         try {
             startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper)));
@@ -513,8 +515,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(!U.canBootToFreeform(this)) {
             setOnHomeScreen(false);
 
-            if(U.shouldCollapse(this, false))
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+            if(U.shouldCollapse(this, false)) {
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
+            }
 
             if(this instanceof SecondaryHomeActivity) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);

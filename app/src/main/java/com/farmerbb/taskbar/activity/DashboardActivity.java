@@ -70,7 +70,9 @@ public class DashboardActivity extends Activity {
 
             try {
                 startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
-                LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+                LocalBroadcastManager
+                        .getInstance(DashboardActivity.this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
             } catch (ActivityNotFoundException e) {
                 U.showToast(DashboardActivity.this, R.string.tb_lock_device_not_supported);
                 finish();
