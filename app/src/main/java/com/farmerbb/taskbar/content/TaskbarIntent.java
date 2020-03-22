@@ -22,6 +22,7 @@ public class TaskbarIntent {
     }
 
     public static final String ACTION_HIDE_TASKBAR = "com.farmerbb.taskbar.HIDE_TASKBAR";
+    public static final String ACTION_SHOW_TASKBAR = "com.farmerbb.taskbar.SHOW_TASKBAR";
     public static final String ACTION_TEMP_HIDE_TASKBAR = "com.farmerbb.taskbar.TEMP_HIDE_TASKBAR";
     public static final String ACTION_TEMP_SHOW_TASKBAR = "com.farmerbb.taskbar.TEMP_SHOW_TASKBAR";
     public static final String ACTION_HIDE_START_MENU = "com.farmerbb.taskbar.HIDE_START_MENU";

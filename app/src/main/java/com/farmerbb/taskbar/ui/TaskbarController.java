@@ -639,7 +639,7 @@ public class TaskbarController implements UIController {
         lbm.unregisterReceiver(startMenuAppearReceiver);
         lbm.unregisterReceiver(startMenuDisappearReceiver);
 
-        lbm.registerReceiver(showReceiver, new IntentFilter("com.farmerbb.taskbar.SHOW_TASKBAR"));
+        lbm.registerReceiver(showReceiver, new IntentFilter(TaskbarIntent.ACTION_SHOW_TASKBAR));
         lbm.registerReceiver(hideReceiver, new IntentFilter(TaskbarIntent.ACTION_HIDE_TASKBAR));
         lbm.registerReceiver(
                 tempShowReceiver,
