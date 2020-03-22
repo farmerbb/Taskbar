@@ -24,8 +24,8 @@
     <string name="tb_systray_clock">%1$s\n%2$s</string>
 
     <string-array name="tb_pref_start_menu_list_values">
-        <item>list</item>
         <item>grid</item>
+        <item>list</item>
     </string-array>
 
     <string-array name="tb_pref_recents_amount_values">

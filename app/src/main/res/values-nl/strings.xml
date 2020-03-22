@@ -40,8 +40,8 @@
     <string name="tb_pref_title_start_on_boot">Opstarten met telefoonopstart</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>Lijst</item>
         <item>Raster</item>
+        <item>Lijst</item>
     </string-array>
 
     <string name="tb_pref_header_recent_apps">Recente apps</string>

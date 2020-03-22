@@ -365,8 +365,8 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 <string name="tb_window_sizes_not_available">"Rozmiary okien nie działają poprawnie na tej wersji Androida - zobacz \"Pomoc i instrukcje\" jak to obejść"</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>Lista</item>
         <item>Siatka</item>
+        <item>Lista</item>
     </string-array>
     <string-array name="tb_pref_recents_amount">
         <item>Aplikacje używane w ciągu ostatniego dnia</item>

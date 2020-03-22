@@ -40,8 +40,8 @@
     <string name="tb_pref_title_start_on_boot">Beim Hochfahren starten</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>Liste</item>
         <item>Gitter</item>
+        <item>Liste</item>
     </string-array>
 
     <string name="tb_pref_header_recent_apps">Letzte Apps</string>

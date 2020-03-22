@@ -40,8 +40,8 @@
     <string name="tb_pref_title_start_on_boot">Launch on boot</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>List</item>
         <item>Grid</item>
+        <item>List</item>
     </string-array>
 
     <string name="tb_pref_header_recent_apps">Recent apps</string>

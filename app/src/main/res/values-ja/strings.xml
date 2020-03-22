@@ -40,8 +40,8 @@
     <string name="tb_pref_title_start_on_boot">ブート時に起動</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>リスト</item>
         <item>グリッド</item>
+        <item>リスト</item>
     </string-array>
 
     <string name="tb_pref_header_recent_apps">最近使用したアプリ</string>

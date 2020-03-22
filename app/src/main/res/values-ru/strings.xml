@@ -40,8 +40,8 @@
     <string name="tb_pref_title_start_on_boot">Запускать при загрузке</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>Список</item>
         <item>Сетка</item>
+        <item>Список</item>
     </string-array>
 
     <string name="tb_pref_header_recent_apps">Недавние приложения</string>

@@ -345,7 +345,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 <string-array name="tb_pref_show_search_bar_list"><item>Donanım veya yazılım klavyesi</item><item>Sadece donanım klavyesi</item><item>Arama çubuğunu hiçbir zaman göstermer</item></string-array>
 <string-array name="tb_pref_sort_order"><item>Son zamanlarda kullanılan (azalan)</item><item>Son kullanılan (artan)</item><item>En çok zaman kullanılan (azalan)</item><item>En çok zaman kullanılan (artan)</item></string-array>
 <string-array name="tb_pref_sort_order_alt"><item>Yakın zamanda başlatılan (azalan)</item><item>Yakın zamanda başlatılan (artan)</item></string-array>
-<string-array name="tb_pref_start_menu_list"><item>Liste</item><item>Izgara</item></string-array>
+<string-array name="tb_pref_start_menu_list"><item>Izgara</item><item>Liste</item></string-array>
 <string-array name="tb_pref_theme_list"><item>Açık</item><item>Koyu</item></string-array>
 
     <string name="tb_pref_title_tasker_enabled">Allow third-party app integration</string>

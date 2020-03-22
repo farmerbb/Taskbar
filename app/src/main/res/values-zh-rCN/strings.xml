@@ -40,8 +40,8 @@
     <string name="tb_pref_title_start_on_boot">开机自启</string>
 
     <string-array name="tb_pref_start_menu_list">
-        <item>列表</item>
         <item>网格</item>
+        <item>列表</item>
     </string-array>
 
     <string name="tb_pref_header_recent_apps">最近应用</string>
