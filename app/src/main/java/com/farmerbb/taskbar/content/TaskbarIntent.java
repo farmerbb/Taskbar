@@ -53,4 +53,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.CONTEXT_MENU_APPEARING";
     public static final String ACTION_CONTEXT_MENU_DISAPPEARING =
             "com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING";
+    public static final String ACTION_HIDE_CONTEXT_MENU =
+            "com.farmerbb.taskbar.HIDE_CONTEXT_MENU";
 }
