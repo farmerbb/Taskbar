@@ -51,4 +51,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE";
     public static final String ACTION_CONTEXT_MENU_APPEARING =
             "com.farmerbb.taskbar.CONTEXT_MENU_APPEARING";
+    public static final String ACTION_CONTEXT_MENU_DISAPPEARING =
+            "com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING";
 }

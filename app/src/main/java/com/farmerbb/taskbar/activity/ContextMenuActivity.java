@@ -777,7 +777,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @Override
     public void finish() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING));
         MenuHelper.getInstance().setContextMenuOpen(false);
 
         if(!dashboardOrStartMenuAppearing) {
