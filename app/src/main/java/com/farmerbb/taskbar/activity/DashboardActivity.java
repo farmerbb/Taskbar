@@ -70,7 +70,9 @@ public class DashboardActivity extends Activity {
 
             try {
                 startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
-                LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+                LocalBroadcastManager
+                        .getInstance(DashboardActivity.this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
             } catch (ActivityNotFoundException e) {
                 U.showToast(DashboardActivity.this, R.string.tb_lock_device_not_supported);
                 finish();
@@ -217,7 +219,9 @@ public class DashboardActivity extends Activity {
             }
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
 
             shouldFinish = true;
         }
@@ -252,7 +256,7 @@ public class DashboardActivity extends Activity {
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.sendBroadcast(intent);
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
 
         shouldFinish = true;
     }

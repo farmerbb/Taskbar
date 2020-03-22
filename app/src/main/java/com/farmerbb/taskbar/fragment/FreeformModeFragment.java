@@ -196,7 +196,9 @@ public class FreeformModeFragment extends SettingsFragment {
                     }
                 } else {
                     U.stopFreeformHack(getActivity());
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+                    LocalBroadcastManager
+                            .getInstance(getActivity())
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART));
                 }
 
                 U.restartNotificationService(getActivity());

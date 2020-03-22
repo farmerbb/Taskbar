@@ -90,12 +90,15 @@ public abstract class AbstractSelectAppActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
-        if(appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING)
+        if (appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING) {
             appListGenerator.cancel(true);
+        }
 
-        if(!isCollapsed)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
-
+        if (!isCollapsed) {
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR));
+        }
         super.finish();
     }
 

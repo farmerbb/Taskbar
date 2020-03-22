@@ -370,7 +370,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-        lbm.registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+        lbm.registerReceiver(
+                forceTaskbarStartReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART)
+        );
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
@@ -396,7 +399,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void setWallpaper() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
 
         try {
             startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper)));
@@ -424,7 +429,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             }
         } else {
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
         }
     }
 
@@ -495,7 +502,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             pref.edit().putBoolean("taskbar_active", false).apply();
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
-        new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR")), 100);
+        new Handler().postDelayed(() ->
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR)),
+                100
+        );
     }
 
     private void startFreeformHack() {
@@ -513,8 +525,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(!U.canBootToFreeform(this)) {
             setOnHomeScreen(false);
 
-            if(U.shouldCollapse(this, false))
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+            if(U.shouldCollapse(this, false)) {
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
+            }
 
             if(this instanceof SecondaryHomeActivity) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);

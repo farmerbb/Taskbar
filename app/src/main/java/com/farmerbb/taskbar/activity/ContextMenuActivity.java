@@ -725,8 +725,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
                 break;
             case "change_wallpaper":
-                if(LauncherHelper.getInstance().isOnHomeScreen())
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_HIDE_TASKBAR"));
+                if(LauncherHelper.getInstance().isOnHomeScreen()) {
+                    LocalBroadcastManager
+                            .getInstance(this)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
+                }
 
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -166,11 +166,15 @@ public class InvisibleActivityFreeform extends Activity {
         super.onResume();
 
         // Show the taskbar when activity is resumed (no other freeform windows are active)
-        if(showTaskbar)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+        if (showTaskbar) {
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR));
+        }
 
-        if(!isInMultiWindowMode() && !initialLaunch)
+        if (!isInMultiWindowMode() && !initialLaunch) {
             reallyFinish();
+        }
 
         initialLaunch = false;
     }
@@ -224,13 +228,22 @@ public class InvisibleActivityFreeform extends Activity {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
             // Show the taskbar when activity is started
-            if(showTaskbar)
-                new Handler().postDelayed(() -> LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR")), 100);
+            if (showTaskbar) {
+                new Handler().postDelayed(() ->
+                        LocalBroadcastManager
+                                .getInstance(this)
+                                .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR)),
+                        100
+                );
+            }
         }
 
         // Show the taskbar when activity is started
-        if(showTaskbar)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SHOW_TASKBAR"));
+        if (showTaskbar) {
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR));
+        }
     }
 
     @Override
