@@ -370,7 +370,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-        lbm.registerReceiver(forceTaskbarStartReceiver, new IntentFilter("com.farmerbb.taskbar.FORCE_TASKBAR_RESTART"));
+        lbm.registerReceiver(
+                forceTaskbarStartReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART)
+        );
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
