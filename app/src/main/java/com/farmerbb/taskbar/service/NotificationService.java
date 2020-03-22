@@ -117,7 +117,7 @@ public class NotificationService extends Service {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                Intent receiverIntent = new Intent("com.farmerbb.taskbar.SHOW_HIDE_TASKBAR");
+                Intent receiverIntent = new Intent(TaskbarIntent.ACTION_SHOW_HIDE_TASKBAR);
                 receiverIntent.setPackage(getPackageName());
 
                 Intent receiverIntent2 = new Intent("com.farmerbb.taskbar.QUIT");
