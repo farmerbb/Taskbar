@@ -102,7 +102,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING));
         MenuHelper.getInstance().setContextMenuOpen(true);
 
         Bundle args = getIntent().getBundleExtra("args");
