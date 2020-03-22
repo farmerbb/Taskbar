@@ -219,7 +219,9 @@ public class DashboardActivity extends Activity {
             }
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
 
             shouldFinish = true;
         }
@@ -254,7 +256,7 @@ public class DashboardActivity extends Activity {
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.sendBroadcast(intent);
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TEMP_SHOW_TASKBAR"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
 
         shouldFinish = true;
     }
