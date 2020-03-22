@@ -102,7 +102,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_APPEARING"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING));
         MenuHelper.getInstance().setContextMenuOpen(true);
 
         Bundle args = getIntent().getBundleExtra("args");
@@ -240,8 +242,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         intentFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
         intentFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(dashboardOrStartMenuAppearingReceiver, intentFilter);
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_CONTEXT_MENU"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(dashboardOrStartMenuAppearingReceiver, intentFilter);
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        finishReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_HIDE_CONTEXT_MENU)
+                );
     }
 
     @SuppressWarnings("deprecation")
@@ -775,7 +784,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @Override
     public void finish() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING));
         MenuHelper.getInstance().setContextMenuOpen(false);
 
         if(!dashboardOrStartMenuAppearing) {
