@@ -731,7 +731,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
                 break;
             case "sort_by_name":
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_SORT_DESKTOP_ICONS));
                 break;
             case "change_wallpaper":
                 if(LauncherHelper.getInstance().isOnHomeScreen()) {

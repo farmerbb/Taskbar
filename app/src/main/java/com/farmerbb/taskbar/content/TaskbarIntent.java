@@ -65,4 +65,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED";
     public static final String ACTION_REFRESH_DESKTOP_ICONS =
             "com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS";
+    public static final String ACTION_SORT_DESKTOP_ICONS =
+            "com.farmerbb.taskbar.SORT_DESKTOP_ICONS";
 }
