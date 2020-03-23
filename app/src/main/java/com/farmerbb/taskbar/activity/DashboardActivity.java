@@ -156,7 +156,12 @@ public class DashboardActivity extends Activity {
                         removeWidgetReceiver,
                         new IntentFilter(TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED)
                 );
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        finishReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING)
+                );
 
         if(!DashboardHelper.getInstance().isDashboardOpen()) finish();
     }

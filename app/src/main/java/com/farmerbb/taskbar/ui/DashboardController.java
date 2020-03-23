@@ -421,7 +421,13 @@ public class DashboardController implements UIController {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         layout.setVisibility(View.GONE);
-                        if(sendIntent) LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+                        if(sendIntent) {
+                            LocalBroadcastManager
+                                    .getInstance(context)
+                                    .sendBroadcast(
+                                            new Intent(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING)
+                                    );
+                        }
                     }
                 });
     }
@@ -459,7 +465,7 @@ public class DashboardController implements UIController {
         lbm.unregisterReceiver(removeWidgetReceiver);
         lbm.unregisterReceiver(hideReceiver);
 
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING));
 
         SharedPreferences pref = U.getSharedPreferences(context);
         pref.edit().remove("dont_stop_dashboard").apply();
