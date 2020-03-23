@@ -67,4 +67,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS";
     public static final String ACTION_SORT_DESKTOP_ICONS =
             "com.farmerbb.taskbar.SORT_DESKTOP_ICONS";
+    public static final String ACTION_ENTER_ICON_ARRANGE_MODE =
+            "com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE";
 }

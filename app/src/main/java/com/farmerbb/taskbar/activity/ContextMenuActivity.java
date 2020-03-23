@@ -728,7 +728,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "arrange_icons":
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(
+                                new Intent(TaskbarIntent.ACTION_ENTER_ICON_ARRANGE_MODE)
+                        );
                 break;
             case "sort_by_name":
                 LocalBroadcastManager
