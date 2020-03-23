@@ -94,4 +94,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS";
     public static final String ACTION_LAUNCHER_PREF_CHANGED =
             "com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED";
+    public static final String ACTION_ACCESSIBILITY_ACTION =
+            "com.farmerbb.taskbar.ACCESSIBILITY_ACTION";
 }
