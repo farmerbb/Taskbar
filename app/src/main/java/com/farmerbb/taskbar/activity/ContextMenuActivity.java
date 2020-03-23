@@ -23,7 +23,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
@@ -38,7 +37,6 @@ import android.os.UserManager;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -102,9 +100,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING));
+        U.sendBroadcast(this, TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING);
         MenuHelper.getInstance().setContextMenuOpen(true);
 
         Bundle args = getIntent().getBundleExtra("args");
@@ -162,9 +158,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
         } else {
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+            U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_START_MENU);
 
             int x = args.getInt("x", display.width);
             int y = args.getInt("y", display.height);
@@ -238,19 +232,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         generateMenu();
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
-        intentFilter.addAction(TaskbarIntent.ACTION_DASHBOARD_APPEARING);
+        U.registerReceiver(this, dashboardOrStartMenuAppearingReceiver,
+                TaskbarIntent.ACTION_START_MENU_APPEARING,
+                TaskbarIntent.ACTION_DASHBOARD_APPEARING);
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(dashboardOrStartMenuAppearingReceiver, intentFilter);
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        finishReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_HIDE_CONTEXT_MENU)
-                );
+        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_HIDE_CONTEXT_MENU);
     }
 
     @SuppressWarnings("deprecation")
@@ -728,22 +714,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "arrange_icons":
-                LocalBroadcastManager
-                        .getInstance(this)
-                        .sendBroadcast(
-                                new Intent(TaskbarIntent.ACTION_ENTER_ICON_ARRANGE_MODE)
-                        );
+                U.sendBroadcast(this, TaskbarIntent.ACTION_ENTER_ICON_ARRANGE_MODE);
                 break;
             case "sort_by_name":
-                LocalBroadcastManager
-                        .getInstance(this)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_SORT_DESKTOP_ICONS));
+                U.sendBroadcast(this, TaskbarIntent.ACTION_SORT_DESKTOP_ICONS);
                 break;
             case "change_wallpaper":
                 if(LauncherHelper.getInstance().isOnHomeScreen()) {
-                    LocalBroadcastManager
-                            .getInstance(this)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
+                    U.sendBroadcast(this, TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR);
                 }
 
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper));
@@ -772,11 +750,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         jsonIcons.remove(iconToRemove);
 
                         pref5.edit().putString("desktop_icons", jsonIcons.toString()).apply();
-                        LocalBroadcastManager
-                                .getInstance(this)
-                                .sendBroadcast(
-                                        new Intent(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS)
-                                );
+                        U.sendBroadcast(this, TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS);
                     }
                 } catch (JSONException e) { /* Gracefully fail */ }
                 break;
@@ -794,25 +768,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @Override
     public void finish() {
-        LocalBroadcastManager
-                .getInstance(this)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING));
+        U.sendBroadcast(this, TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING);
         MenuHelper.getInstance().setContextMenuOpen(false);
 
         if(!dashboardOrStartMenuAppearing) {
-            if (showStartMenu) {
-                LocalBroadcastManager
-                        .getInstance(this)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU));
+            if(showStartMenu) {
+                U.sendBroadcast(this, TaskbarIntent.ACTION_TOGGLE_START_MENU);
             } else {
-                LocalBroadcastManager
-                        .getInstance(this)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_RESET_START_MENU));
+                U.sendBroadcast(this, TaskbarIntent.ACTION_RESET_START_MENU);
 
                 if(shouldHideTaskbar && U.shouldCollapse(this, true)) {
-                    LocalBroadcastManager
-                            .getInstance(this)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_TASKBAR);
                 }
             }
         }
@@ -880,7 +846,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     protected void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(dashboardOrStartMenuAppearingReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+        U.unregisterReceiver(this, dashboardOrStartMenuAppearingReceiver);
+        U.unregisterReceiver(this, finishReceiver);
     }
 }

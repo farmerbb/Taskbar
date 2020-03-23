@@ -19,8 +19,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.BundleScrubber;
 import com.farmerbb.taskbar.util.PluginBundleManager;
@@ -39,35 +37,36 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
         if(bundle.containsKey(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE)
                 && PluginBundleManager.isBundleValid(bundle)) {
             String action = bundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE);
-            Intent actionIntent = generateIntent(action);
+            String intentAction = getIntentAction(action);
 
-            if(actionIntent != null) switch(action) {
+            if(intentAction != null) switch(action) {
                 case "tasker_on":
                 case "tasker_off":
+                    Intent actionIntent = new Intent(intentAction);
                     actionIntent.setPackage(context.getPackageName());
                     context.sendBroadcast(actionIntent);
                     break;
                 default:
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(actionIntent);
+                    U.sendBroadcast(context, intentAction);
                     break;
             }
         }
     }
     
-    private Intent generateIntent(String action) {
+    private String getIntentAction(String action) {
         if(action != null) switch(action) {
             case "tasker_on":
-                return new Intent(TaskbarIntent.ACTION_START);
+                return TaskbarIntent.ACTION_START;
             case "tasker_off":
-                return new Intent(TaskbarIntent.ACTION_QUIT);
+                return TaskbarIntent.ACTION_QUIT;
             case "show_taskbar":
-                return new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR);
+                return TaskbarIntent.ACTION_SHOW_TASKBAR;
             case "hide_taskbar":
-                return new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR);
+                return TaskbarIntent.ACTION_HIDE_TASKBAR;
             case "toggle_start_menu":
-                return new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU);
+                return TaskbarIntent.ACTION_TOGGLE_START_MENU;
             case "toggle_dashboard":
-                return new Intent(TaskbarIntent.ACTION_TOGGLE_DASHBOARD);
+                return TaskbarIntent.ACTION_TOGGLE_DASHBOARD;
         }
 
         return null;

@@ -24,7 +24,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -38,7 +37,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -84,12 +82,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        switchReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_UPDATE_SWITCH)
-                );
+        U.registerReceiver(this, switchReceiver, TaskbarIntent.ACTION_UPDATE_SWITCH);
 
         final SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
@@ -174,11 +167,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (!launcherEnabled) {
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY));
+        if(!launcherEnabled) {
+            U.sendBroadcast(this, TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
         }
+
         // Update caption state
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this)) {
             getWindow().setRestrictedCaptionAreaListener(rect -> hasCaption = true);
@@ -351,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(switchReceiver);
+        U.unregisterReceiver(this, switchReceiver);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this))
             getWindow().setRestrictedCaptionAreaListener(null);
@@ -398,9 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
             IconCache.getInstance(this).clearCache();
 
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
+            U.sendBroadcast(this, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
         }
 
         stopService(new Intent(this, NotificationService.class));

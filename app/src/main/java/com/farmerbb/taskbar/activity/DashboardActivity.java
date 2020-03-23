@@ -27,10 +27,8 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -70,9 +68,7 @@ public class DashboardActivity extends Activity {
 
             try {
                 startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
-                LocalBroadcastManager
-                        .getInstance(DashboardActivity.this)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR));
+                U.sendBroadcast(DashboardActivity.this, TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR);
             } catch (ActivityNotFoundException e) {
                 U.showToast(DashboardActivity.this, R.string.tb_lock_device_not_supported);
                 finish();
@@ -91,18 +87,14 @@ public class DashboardActivity extends Activity {
             builder.setTitle(R.string.tb_remove_widget)
                     .setMessage(R.string.tb_are_you_sure)
                     .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> {
-                        LocalBroadcastManager
-                                .getInstance(DashboardActivity.this)
-                                .sendBroadcast(
-                                        new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED)
-                                );
+                        U.sendBroadcast(DashboardActivity.this, TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED);
 
                         shouldFinish = true;
                     })
                     .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                         Intent intent1 = new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED);
                         intent1.putExtra("cellId", cellId);
-                        LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent1);
+                        U.sendBroadcast(DashboardActivity.this, intent1);
 
                         shouldFinish = true;
                     });
@@ -144,24 +136,9 @@ public class DashboardActivity extends Activity {
         LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        addWidgetReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_ADD_WIDGET_REQUESTED)
-                );
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        removeWidgetReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED)
-                );
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        finishReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING)
-                );
+        U.registerReceiver(this, addWidgetReceiver, TaskbarIntent.ACTION_ADD_WIDGET_REQUESTED);
+        U.registerReceiver(this, removeWidgetReceiver, TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED);
+        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
 
         if(!DashboardHelper.getInstance().isDashboardOpen()) finish();
     }
@@ -174,13 +151,11 @@ public class DashboardActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (contextMenuFix) {
+        if(contextMenuFix) {
             U.startFreeformHack(this);
         }
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_DASHBOARD));
+        U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_DASHBOARD);
     }
 
     @Override
@@ -200,13 +175,9 @@ public class DashboardActivity extends Activity {
         if(shouldFinish) {
             if(shouldCollapse) {
                 if(U.shouldCollapse(this, true)) {
-                    LocalBroadcastManager
-                            .getInstance(this)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_TASKBAR);
                 } else {
-                    LocalBroadcastManager
-                            .getInstance(this)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_START_MENU);
                 }
             }
 
@@ -219,9 +190,9 @@ public class DashboardActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(addWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(removeWidgetReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+        U.unregisterReceiver(this, addWidgetReceiver);
+        U.unregisterReceiver(this, removeWidgetReceiver);
+        U.unregisterReceiver(this, finishReceiver);
     }
 
     @Override
@@ -240,12 +211,8 @@ public class DashboardActivity extends Activity {
                 }
             }
 
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED));
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
+            U.sendBroadcast(this, TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED);
+            U.sendBroadcast(this, TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR);
 
             shouldFinish = true;
         }
@@ -278,9 +245,8 @@ public class DashboardActivity extends Activity {
         intent.putExtra("appWidgetId", data.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1));
         intent.putExtra("cellId", cellId);
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.sendBroadcast(intent);
-        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
+        U.sendBroadcast(this, intent);
+        U.sendBroadcast(this, TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR);
 
         shouldFinish = true;
     }

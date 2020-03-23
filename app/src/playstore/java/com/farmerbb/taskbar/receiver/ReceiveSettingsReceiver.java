@@ -19,8 +19,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.backup.BackupUtils;
 import com.farmerbb.taskbar.backup.IntentBackupAgent;
@@ -46,10 +44,8 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
             // Finish import
             try {
                 File file = new File(context.getFilesDir() + File.separator + "imported_successfully");
-                if (file.createNewFile()) {
-                    LocalBroadcastManager
-                            .getInstance(context)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_IMPORT_FINISHED));
+                if(file.createNewFile()) {
+                    U.sendBroadcast(context, TaskbarIntent.ACTION_IMPORT_FINISHED);
                 }
             } catch (IOException e) { /* Gracefully fail */ }
         }

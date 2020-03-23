@@ -23,7 +23,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -33,7 +32,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -148,17 +146,12 @@ public class AdvancedFragment extends SettingsFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        LocalBroadcastManager
-                .getInstance(getActivity())
-                .registerReceiver(
-                        homeToggleReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED)
-                );
+        U.registerReceiver(getActivity(), homeToggleReceiver, TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED);
     }
 
     @Override
     public void onDetach() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(homeToggleReceiver);
+        U.unregisterReceiver(getActivity(), homeToggleReceiver);
 
         super.onDetach();
     }
@@ -182,10 +175,8 @@ public class AdvancedFragment extends SettingsFragment {
                     ((CheckBoxPreference) p).setChecked(false);
                 }
 
-                if (!((CheckBoxPreference) p).isChecked()) {
-                    LocalBroadcastManager
-                            .getInstance(getActivity())
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY));
+                if(!((CheckBoxPreference) p).isChecked()) {
+                    U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
                 }
                 break;
             case "keyboard_shortcut":

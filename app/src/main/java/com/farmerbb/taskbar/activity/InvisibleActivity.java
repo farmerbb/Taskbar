@@ -19,14 +19,13 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.U;
 
 public class InvisibleActivity extends Activity {
 
@@ -45,12 +44,7 @@ public class InvisibleActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        finishReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_START_MENU_DISAPPEARING)
-                );
+        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
     }
 
     @Override
@@ -61,9 +55,7 @@ public class InvisibleActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        LocalBroadcastManager
-                .getInstance(this)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+        U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_START_MENU);
     }
 
     @Override
@@ -86,6 +78,6 @@ public class InvisibleActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+        U.unregisterReceiver(this, finishReceiver);
     }
 }

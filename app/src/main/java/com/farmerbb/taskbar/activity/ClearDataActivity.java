@@ -15,10 +15,8 @@
 
 package com.farmerbb.taskbar.activity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -99,11 +97,7 @@ public class ClearDataActivity extends AppCompatActivity {
             if(desktopIcons.isChecked()) {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 pref.edit().remove("desktop_icons").apply();
-                LocalBroadcastManager
-                        .getInstance(this)
-                        .sendBroadcast(
-                                new Intent(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS)
-                        );
+                U.sendBroadcast(this, TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS);
             }
 
             finish();

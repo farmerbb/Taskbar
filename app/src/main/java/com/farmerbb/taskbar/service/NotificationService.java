@@ -36,8 +36,6 @@ import android.view.Display;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.R;
@@ -170,9 +168,7 @@ public class NotificationService extends Service {
 
                 startForeground(8675309, mBuilder.build());
 
-                LocalBroadcastManager
-                        .getInstance(this)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_SWITCH));
+                U.sendBroadcast(this, TaskbarIntent.ACTION_UPDATE_SWITCH);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
@@ -204,9 +200,7 @@ public class NotificationService extends Service {
         if(pref.getBoolean("is_restarting", false))
             pref.edit().remove("is_restarting").apply();
         else {
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_SWITCH));
+            U.sendBroadcast(this, TaskbarIntent.ACTION_UPDATE_SWITCH);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
@@ -254,9 +248,7 @@ public class NotificationService extends Service {
     }
 
     private void stopDesktopMode() {
-        LocalBroadcastManager
-                .getInstance(NotificationService.this)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY));
+        U.sendBroadcast(this, TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
         desktopModeStarted = false;
     }
 }

@@ -26,9 +26,11 @@ import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.Service;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -232,7 +234,7 @@ public class U {
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(TaskbarIntent.ACTION_ACCESSIBILITY_ACTION);
                 intent.putExtra("action", action);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                sendBroadcast(context, intent);
 
                 try {
                     Settings.Secure.putString(context.getContentResolver(),
@@ -245,7 +247,7 @@ public class U {
         } else if(isAccessibilityServiceEnabled) {
             Intent intent = new Intent(TaskbarIntent.ACTION_ACCESSIBILITY_ACTION);
             intent.putExtra("action", action);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            sendBroadcast(context, intent);
 
             if(onComplete != null) onComplete.run();
         } else {
@@ -400,9 +402,7 @@ public class U {
     }
 
     public static void stopFreeformHack(Context context) {
-        LocalBroadcastManager
-                .getInstance(context)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY));
+        sendBroadcast(context, TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
 
         if(isOverridingFreeformHack(context, false)) {
             FreeformHackHelper helper = FreeformHackHelper.getInstance();
@@ -472,13 +472,9 @@ public class U {
         });
 
         if(shouldCollapse(context, true)) {
-            LocalBroadcastManager
-                    .getInstance(context)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+            sendBroadcast(context, TaskbarIntent.ACTION_HIDE_TASKBAR);
         } else {
-            LocalBroadcastManager
-                    .getInstance(context)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+            sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU);
         }
     }
 
@@ -587,9 +583,7 @@ public class U {
     }
 
     private static void prepareToStartActivity(Context context, boolean openInNewWindow, Runnable runnable) {
-        LocalBroadcastManager
-                .getInstance(context)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_CONTEXT_MENU));
+        sendBroadcast(context, TaskbarIntent.ACTION_HIDE_CONTEXT_MENU);
 
         if(!FreeformHackHelper.getInstance().isTouchAbsorberActive()
                 && shouldLaunchTouchAbsorber(context)) {
@@ -1297,9 +1291,7 @@ public class U {
             startTaskbarService(context, false);
         }
 
-        LocalBroadcastManager
-                .getInstance(context)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_RESTART));
+        sendBroadcast(context, TaskbarIntent.ACTION_RESTART);
     }
 
     public static void restartNotificationService(Context context) {
@@ -1909,5 +1901,28 @@ public class U {
         Class.forName("android.view.IWindowManager")
                 .getMethod("setOverscan", int.class, int.class, int.class, int.class, int.class)
                 .invoke(getWindowManagerService(), displayID, 0, 0, 0, value);
+    }
+
+    public static void registerReceiver(Context context, BroadcastReceiver receiver, String... actions) {
+        unregisterReceiver(context, receiver);
+
+        IntentFilter intentFilter = new IntentFilter();
+        for(String action : actions) {
+            intentFilter.addAction(action);
+        }
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, intentFilter);
+    }
+
+    public static void unregisterReceiver(Context context, BroadcastReceiver receiver) {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
+    }
+
+    public static void sendBroadcast(Context context, String action) {
+       sendBroadcast(context, new Intent(action));
+    }
+
+    public static void sendBroadcast(Context context, Intent intent) {
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

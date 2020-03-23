@@ -19,8 +19,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -49,9 +47,7 @@ public class QuitReceiver extends BroadcastReceiver {
 
                 IconCache.getInstance(context).clearCache();
 
-                LocalBroadcastManager
-                        .getInstance(context)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
+                U.sendBroadcast(context, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
             }
 
             context.stopService(notificationIntent);

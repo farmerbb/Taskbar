@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.core.graphics.ColorUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -111,9 +110,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
         LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
-            LocalBroadcastManager
-                    .getInstance(getContext())
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+            U.sendBroadcast(getContext(), TaskbarIntent.ACTION_HIDE_START_MENU);
             U.launchApp(getContext(), entry, null, false, false, view);
         });
 
@@ -197,9 +194,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     }
 
     private void openContextMenu(final AppEntry entry, final int[] location) {
-        LocalBroadcastManager
-                .getInstance(getContext())
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET));
+        U.sendBroadcast(getContext(), TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET);
 
         Bundle args = new Bundle();
         args.putSerializable("app_entry", entry);

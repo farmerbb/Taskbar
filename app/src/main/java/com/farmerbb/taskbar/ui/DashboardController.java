@@ -30,7 +30,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -42,7 +41,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.core.graphics.ColorUtils;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -260,29 +258,15 @@ public class DashboardController implements UIController {
 
         mAppWidgetHost.stopListening();
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+        U.unregisterReceiver(context, toggleReceiver);
+        U.unregisterReceiver(context, addWidgetReceiver);
+        U.unregisterReceiver(context, removeWidgetReceiver);
+        U.unregisterReceiver(context, hideReceiver);
 
-        lbm.unregisterReceiver(toggleReceiver);
-        lbm.unregisterReceiver(addWidgetReceiver);
-        lbm.unregisterReceiver(removeWidgetReceiver);
-        lbm.unregisterReceiver(hideReceiver);
-
-        lbm.registerReceiver(
-                toggleReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_TOGGLE_DASHBOARD)
-        );
-        lbm.registerReceiver(
-                addWidgetReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED)
-        );
-        lbm.registerReceiver(
-                removeWidgetReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED)
-        );
-        lbm.registerReceiver(
-                hideReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_HIDE_DASHBOARD)
-        );
+        U.registerReceiver(context, toggleReceiver, TaskbarIntent.ACTION_TOGGLE_DASHBOARD);
+        U.registerReceiver(context, addWidgetReceiver, TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED);
+        U.registerReceiver(context, removeWidgetReceiver, TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED);
+        U.registerReceiver(context, hideReceiver, TaskbarIntent.ACTION_HIDE_DASHBOARD);
 
         host.addView(layout, params);
 
@@ -323,12 +307,8 @@ public class DashboardController implements UIController {
             layout.setOnClickListener(ocl);
             fadeIn();
 
-            LocalBroadcastManager
-                    .getInstance(context)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_DASHBOARD_APPEARING));
-            LocalBroadcastManager
-                    .getInstance(context)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+            U.sendBroadcast(context, TaskbarIntent.ACTION_DASHBOARD_APPEARING);
+            U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU);
 
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
@@ -425,11 +405,7 @@ public class DashboardController implements UIController {
                     public void onAnimationEnd(Animator animation) {
                         layout.setVisibility(View.GONE);
                         if(sendIntent) {
-                            LocalBroadcastManager
-                                    .getInstance(context)
-                                    .sendBroadcast(
-                                            new Intent(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING)
-                                    );
+                            U.sendBroadcast(context, TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
                         }
                     }
                 });
@@ -461,14 +437,12 @@ public class DashboardController implements UIController {
                 host.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+        U.unregisterReceiver(context, toggleReceiver);
+        U.unregisterReceiver(context, addWidgetReceiver);
+        U.unregisterReceiver(context, removeWidgetReceiver);
+        U.unregisterReceiver(context, hideReceiver);
 
-        lbm.unregisterReceiver(toggleReceiver);
-        lbm.unregisterReceiver(addWidgetReceiver);
-        lbm.unregisterReceiver(removeWidgetReceiver);
-        lbm.unregisterReceiver(hideReceiver);
-
-        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING));
+        U.sendBroadcast(context, TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
 
         SharedPreferences pref = U.getSharedPreferences(context);
         pref.edit().remove("dont_stop_dashboard").apply();
@@ -492,7 +466,7 @@ public class DashboardController implements UIController {
             Intent intent = new Intent(TaskbarIntent.ACTION_ADD_WIDGET_REQUESTED);
             intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
             intent.putExtra("cellId", cellId);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            U.sendBroadcast(context, intent);
 
             if(shouldShowPlaceholder) {
                 String providerName = pref.getString("dashboard_widget_" + cellId + "_provider", "null");
@@ -528,7 +502,7 @@ public class DashboardController implements UIController {
 
         Intent intent = new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED);
         intent.putExtra("cellId", cellId);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        U.sendBroadcast(context, intent);
     }
 
     private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {

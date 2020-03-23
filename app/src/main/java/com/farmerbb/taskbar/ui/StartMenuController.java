@@ -23,7 +23,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
@@ -37,7 +36,6 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.widget.SearchView;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -306,25 +304,22 @@ public class StartMenuController implements UIController {
                                 layout.performClick();
                             } else {
                                 if(U.shouldCollapse(context, true)) {
-                                    LocalBroadcastManager
-                                            .getInstance(context)
-                                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                                    U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_TASKBAR);
                                 } else {
-                                    LocalBroadcastManager
-                                            .getInstance(context)
-                                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+                                    U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU);
                                 }
+
                                 Intent intent;
 
                                 if(Patterns.WEB_URL.matcher(query).matches()) {
                                     intent = new Intent(Intent.ACTION_VIEW);
                                     intent.setData(Uri.parse(URLUtil.guessUrl(query)));
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 } else {
                                     intent = new Intent(Intent.ACTION_WEB_SEARCH);
                                     intent.putExtra(SearchManager.QUERY, query);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 }
+
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                 if(intent.resolveActivity(context.getPackageManager()) != null)
                                     context.startActivity(intent);
@@ -415,39 +410,19 @@ public class StartMenuController implements UIController {
 
         textView = layout.findViewById(R.id.no_apps_found);
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+        U.unregisterReceiver(context, toggleReceiver);
+        U.unregisterReceiver(context, hideReceiver);
+        U.unregisterReceiver(context, hideReceiverNoReset);
+        U.unregisterReceiver(context, showSpaceReceiver);
+        U.unregisterReceiver(context, hideSpaceReceiver);
+        U.unregisterReceiver(context, resetReceiver);
 
-        lbm.unregisterReceiver(toggleReceiver);
-        lbm.unregisterReceiver(hideReceiver);
-        lbm.unregisterReceiver(hideReceiverNoReset);
-        lbm.unregisterReceiver(showSpaceReceiver);
-        lbm.unregisterReceiver(hideSpaceReceiver);
-        lbm.unregisterReceiver(resetReceiver);
-
-        lbm.registerReceiver(
-                toggleReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_TOGGLE_START_MENU)
-        );
-        lbm.registerReceiver(
-                hideReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU)
-        );
-        lbm.registerReceiver(
-                hideReceiverNoReset,
-                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET)
-        );
-        lbm.registerReceiver(
-                showSpaceReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_SHOW_START_MENU_SPACE)
-        );
-        lbm.registerReceiver(
-                hideSpaceReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_HIDE_START_MENU_SPACE)
-        );
-        lbm.registerReceiver(
-                resetReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_RESET_START_MENU)
-        );
+        U.registerReceiver(context, toggleReceiver, TaskbarIntent.ACTION_TOGGLE_START_MENU);
+        U.registerReceiver(context, hideReceiver, TaskbarIntent.ACTION_HIDE_START_MENU);
+        U.registerReceiver(context, hideReceiverNoReset, TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET);
+        U.registerReceiver(context, showSpaceReceiver, TaskbarIntent.ACTION_SHOW_START_MENU_SPACE);
+        U.registerReceiver(context, hideSpaceReceiver, TaskbarIntent.ACTION_HIDE_START_MENU_SPACE);
+        U.registerReceiver(context, resetReceiver, TaskbarIntent.ACTION_RESET_START_MENU);
 
         handler = new Handler();
         refreshApps(true);
@@ -633,9 +608,7 @@ public class StartMenuController implements UIController {
 
             MenuHelper.getInstance().setStartMenuOpen(true);
 
-            LocalBroadcastManager
-                    .getInstance(context)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_APPEARING));
+            U.sendBroadcast(context, TaskbarIntent.ACTION_START_MENU_APPEARING);
 
             boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
@@ -693,11 +666,9 @@ public class StartMenuController implements UIController {
                         startMenu.setLayoutParams(params1);
                     }
 
-                    if (!b) {
-                        if (hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                            LocalBroadcastManager
-                                    .getInstance(context)
-                                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+                    if(!b) {
+                        if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                            U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU);
                         } else {
                             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -718,9 +689,7 @@ public class StartMenuController implements UIController {
 
             MenuHelper.getInstance().setStartMenuOpen(false);
 
-            LocalBroadcastManager
-                    .getInstance(context)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
+            U.sendBroadcast(context, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
 
             layout.postDelayed(() -> {
                 layout.setVisibility(View.GONE);
@@ -753,16 +722,14 @@ public class StartMenuController implements UIController {
                 host.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+        U.unregisterReceiver(context, toggleReceiver);
+        U.unregisterReceiver(context, hideReceiver);
+        U.unregisterReceiver(context, hideReceiverNoReset);
+        U.unregisterReceiver(context, showSpaceReceiver);
+        U.unregisterReceiver(context, hideSpaceReceiver);
+        U.unregisterReceiver(context, resetReceiver);
 
-        lbm.unregisterReceiver(toggleReceiver);
-        lbm.unregisterReceiver(hideReceiver);
-        lbm.unregisterReceiver(hideReceiverNoReset);
-        lbm.unregisterReceiver(showSpaceReceiver);
-        lbm.unregisterReceiver(hideSpaceReceiver);
-        lbm.unregisterReceiver(resetReceiver);
-
-        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_START_MENU_DISAPPEARING));
+        U.sendBroadcast(context, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -785,9 +752,7 @@ public class StartMenuController implements UIController {
     }
 
     private void openContextMenu(final int[] location) {
-        LocalBroadcastManager
-                .getInstance(context)
-                .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET));
+        U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET);
 
         Bundle args = new Bundle();
         args.putBoolean("launched_from_start_menu", true);

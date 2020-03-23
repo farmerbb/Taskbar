@@ -18,10 +18,7 @@ package com.farmerbb.taskbar.activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
@@ -41,14 +38,9 @@ public class ImportSettingsActivity extends AbstractProgressActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        settingsReceivedReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_IMPORT_FINISHED)
-                );
+        U.registerReceiver(this, settingsReceivedReceiver, TaskbarIntent.ACTION_IMPORT_FINISHED);
 
-        if (!broadcastSent) {
+        if(!broadcastSent) {
             Intent intent = new Intent(TaskbarIntent.ACTION_RECEIVE_SETTINGS);
             intent.setPackage(BuildConfig.BASE_APPLICATION_ID);
             sendBroadcast(intent);
@@ -61,6 +53,6 @@ public class ImportSettingsActivity extends AbstractProgressActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(settingsReceivedReceiver);
+        U.unregisterReceiver(this, settingsReceivedReceiver);
     }
 }

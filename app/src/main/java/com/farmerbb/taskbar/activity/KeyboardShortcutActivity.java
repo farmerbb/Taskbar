@@ -22,8 +22,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -66,10 +64,8 @@ public class KeyboardShortcutActivity extends Activity {
 
                 break;
             case Intent.ACTION_ASSIST:
-                if (U.isServiceRunning(this, StartMenuService.class)) {
-                    LocalBroadcastManager
-                            .getInstance(this)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU));
+                if(U.isServiceRunning(this, StartMenuService.class)) {
+                    U.sendBroadcast(this, TaskbarIntent.ACTION_TOGGLE_START_MENU);
                 } else {
                     Intent intent = new Intent("com.google.android.googlequicksearchbox.TEXT_ASSIST");
                     if(intent.resolveActivity(getPackageManager()) == null)

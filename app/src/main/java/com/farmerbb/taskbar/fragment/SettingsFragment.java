@@ -24,7 +24,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -111,13 +110,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         helper.setFreeformHackActive(false);
                         helper.setInFreeformWorkspace(false);
 
-                        LocalBroadcastManager
-                                .getInstance(getActivity())
-                                .sendBroadcast(
-                                        new Intent(
-                                                TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY
-                                        )
-                                );
+                        U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
 
                         SharedPreferences pref = U.getSharedPreferences(getActivity());
                         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false))

@@ -20,18 +20,15 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.provider.Settings;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
@@ -100,12 +97,7 @@ public class FreeformModeFragment extends SettingsFragment {
             dialog.setCancelable(false);
         }
 
-        LocalBroadcastManager
-                .getInstance(getActivity())
-                .registerReceiver(
-                        checkBoxReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX)
-                );
+        U.registerReceiver(getActivity(), checkBoxReceiver, TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
 
         finishedLoadingPrefs = true;
     }
@@ -136,7 +128,7 @@ public class FreeformModeFragment extends SettingsFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(checkBoxReceiver);
+        U.unregisterReceiver(getActivity(), checkBoxReceiver);
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -196,15 +188,11 @@ public class FreeformModeFragment extends SettingsFragment {
                     }
                 } else {
                     U.stopFreeformHack(getActivity());
-                    LocalBroadcastManager
-                            .getInstance(getActivity())
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART));
+                    U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART);
                 }
 
                 U.restartNotificationService(getActivity());
-                LocalBroadcastManager
-                        .getInstance(getActivity())
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_FREEFORM_PREF_CHANGED));
+                U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_FREEFORM_PREF_CHANGED);
                 break;
             case "add_shortcut":
                 U.pinAppShortcut(getActivity());

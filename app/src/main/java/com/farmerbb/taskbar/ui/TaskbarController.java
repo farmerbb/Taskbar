@@ -83,7 +83,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
@@ -153,10 +152,8 @@ public class TaskbarController implements UIController {
 
     private int cellStrength = -1;
 
-    private View.OnClickListener ocl = view -> {
-        Intent intent = new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    };
+    private View.OnClickListener ocl = view ->
+            U.sendBroadcast(context, TaskbarIntent.ACTION_TOGGLE_START_MENU);
 
     private BroadcastReceiver showReceiver = new BroadcastReceiver() {
         @Override
@@ -398,9 +395,8 @@ public class TaskbarController implements UIController {
                 break;
         }
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
-        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_HOME_SCREEN_MARGINS));
+        U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU);
+        U.sendBroadcast(context, TaskbarIntent.ACTION_UPDATE_HOME_SCREEN_MARGINS);
 
         if(altButtonConfig) {
             button = layout.findViewById(R.id.hide_taskbar_button_alt);
@@ -440,10 +436,7 @@ public class TaskbarController implements UIController {
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
             dashboardButton.setOnClickListener(v ->
-                    LocalBroadcastManager
-                            .getInstance(context)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_TOGGLE_DASHBOARD))
-            );
+                    U.sendBroadcast(context, TaskbarIntent.ACTION_TOGGLE_DASHBOARD));
         } else
             dashboardButton.setVisibility(View.GONE);
 
@@ -631,36 +624,24 @@ public class TaskbarController implements UIController {
             U.showHideNavigationBar(context, false);
 
         if(FreeformHackHelper.getInstance().isTouchAbsorberActive()) {
-            lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY));
+            U.sendBroadcast(context, TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
 
             new Handler().postDelayed(() -> U.startTouchAbsorberActivity(context), 500);
         }
 
-        lbm.unregisterReceiver(showReceiver);
-        lbm.unregisterReceiver(hideReceiver);
-        lbm.unregisterReceiver(tempShowReceiver);
-        lbm.unregisterReceiver(tempHideReceiver);
-        lbm.unregisterReceiver(startMenuAppearReceiver);
-        lbm.unregisterReceiver(startMenuDisappearReceiver);
+        U.unregisterReceiver(context, showReceiver);
+        U.unregisterReceiver(context, hideReceiver);
+        U.unregisterReceiver(context, tempShowReceiver);
+        U.unregisterReceiver(context, tempHideReceiver);
+        U.unregisterReceiver(context, startMenuAppearReceiver);
+        U.unregisterReceiver(context, startMenuDisappearReceiver);
 
-        lbm.registerReceiver(showReceiver, new IntentFilter(TaskbarIntent.ACTION_SHOW_TASKBAR));
-        lbm.registerReceiver(hideReceiver, new IntentFilter(TaskbarIntent.ACTION_HIDE_TASKBAR));
-        lbm.registerReceiver(
-                tempShowReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR)
-        );
-        lbm.registerReceiver(
-                tempHideReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR)
-        );
-        lbm.registerReceiver(
-                startMenuAppearReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_START_MENU_APPEARING)
-        );
-        lbm.registerReceiver(
-                startMenuDisappearReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_START_MENU_DISAPPEARING)
-        );
+        U.registerReceiver(context, showReceiver, TaskbarIntent.ACTION_SHOW_TASKBAR);
+        U.registerReceiver(context, hideReceiver, TaskbarIntent.ACTION_HIDE_TASKBAR);
+        U.registerReceiver(context, tempShowReceiver, TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR);
+        U.registerReceiver(context, tempHideReceiver, TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR);
+        U.registerReceiver(context, startMenuAppearReceiver, TaskbarIntent.ACTION_START_MENU_APPEARING);
+        U.registerReceiver(context, startMenuDisappearReceiver, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
 
         startRefreshingRecents();
 
@@ -1183,10 +1164,7 @@ public class TaskbarController implements UIController {
             updateButton(false);
 
             new Handler().post(() ->
-                    LocalBroadcastManager
-                            .getInstance(context)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_START_MENU_SPACE))
-            );
+                    U.sendBroadcast(context, TaskbarIntent.ACTION_SHOW_START_MENU_SPACE));
         }
     }
 
@@ -1221,19 +1199,12 @@ public class TaskbarController implements UIController {
             updateButton(true);
 
             if(clearVariables) {
-                LocalBroadcastManager
-                        .getInstance(context)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
-                LocalBroadcastManager
-                        .getInstance(context)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_DASHBOARD));
+                U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU);
+                U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_DASHBOARD);
             }
 
             new Handler().post(() ->
-                    LocalBroadcastManager
-                            .getInstance(context)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU_SPACE))
-            );
+                    U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU_SPACE));
         }
     }
 
@@ -1334,14 +1305,12 @@ public class TaskbarController implements UIController {
         } else if(pref.getBoolean("auto_hide_navbar", false))
             U.showHideNavigationBar(context, true);
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-
-        lbm.unregisterReceiver(showReceiver);
-        lbm.unregisterReceiver(hideReceiver);
-        lbm.unregisterReceiver(tempShowReceiver);
-        lbm.unregisterReceiver(tempHideReceiver);
-        lbm.unregisterReceiver(startMenuAppearReceiver);
-        lbm.unregisterReceiver(startMenuDisappearReceiver);
+        U.unregisterReceiver(context, showReceiver);
+        U.unregisterReceiver(context, hideReceiver);
+        U.unregisterReceiver(context, tempShowReceiver);
+        U.unregisterReceiver(context, tempHideReceiver);
+        U.unregisterReceiver(context, startMenuAppearReceiver);
+        U.unregisterReceiver(context, startMenuDisappearReceiver);
 
         if(sysTrayEnabled) {
             TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

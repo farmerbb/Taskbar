@@ -19,8 +19,6 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.farmerbb.taskbar.R;
@@ -47,18 +45,13 @@ public class PowerMenuService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
 
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        powerMenuReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_ACCESSIBILITY_ACTION)
-                );
+        U.registerReceiver(this, powerMenuReceiver, TaskbarIntent.ACTION_ACCESSIBILITY_ACTION);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(powerMenuReceiver);
+        U.unregisterReceiver(this, powerMenuReceiver);
     }
 }

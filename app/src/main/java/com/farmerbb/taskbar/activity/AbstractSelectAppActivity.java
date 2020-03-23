@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.activity;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
@@ -26,7 +25,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -76,9 +74,7 @@ public abstract class AbstractSelectAppActivity extends AppCompatActivity {
         isCollapsed = !pref.getBoolean("collapsed", false);
 
         if(!isCollapsed) {
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+            U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_TASKBAR);
         }
 
         progressBar = findViewById(R.id.progress_bar);
@@ -90,14 +86,12 @@ public abstract class AbstractSelectAppActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
-        if (appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING) {
+        if(appListGenerator != null && appListGenerator.getStatus() == AsyncTask.Status.RUNNING) {
             appListGenerator.cancel(true);
         }
 
-        if (!isCollapsed) {
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR));
+        if(!isCollapsed) {
+            U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR);
         }
         super.finish();
     }

@@ -21,13 +21,11 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.activity.dark.InvisibleActivityAltDark;
@@ -108,24 +106,17 @@ public class InvisibleActivityFreeform extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
-        IntentFilter appearingReceiverFilter = new IntentFilter();
-        appearingReceiverFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
-        appearingReceiverFilter.addAction(TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING);
-        appearingReceiverFilter.addAction(TaskbarIntent.ACTION_DASHBOARD_APPEARING);
+        U.registerReceiver(this, appearingReceiver,
+                TaskbarIntent.ACTION_START_MENU_APPEARING,
+                TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING,
+                TaskbarIntent.ACTION_DASHBOARD_APPEARING);
 
-        IntentFilter disappearingReceiverFilter = new IntentFilter();
-        disappearingReceiverFilter.addAction(TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
-        disappearingReceiverFilter.addAction(TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING);
-        disappearingReceiverFilter.addAction(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
+        U.registerReceiver(this, disappearingReceiver,
+                TaskbarIntent.ACTION_START_MENU_DISAPPEARING,
+                TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING,
+                TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(appearingReceiver, appearingReceiverFilter);
-        LocalBroadcastManager.getInstance(this).registerReceiver(disappearingReceiver, disappearingReceiverFilter);
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(
-                        finishReceiver,
-                        new IntentFilter(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY)
-                );
+        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
 
         helper.setFreeformHackActive(true);
 
@@ -166,13 +157,11 @@ public class InvisibleActivityFreeform extends Activity {
         super.onResume();
 
         // Show the taskbar when activity is resumed (no other freeform windows are active)
-        if (showTaskbar) {
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR));
+        if(showTaskbar) {
+            U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR);
         }
 
-        if (!isInMultiWindowMode() && !initialLaunch) {
+        if(!isInMultiWindowMode() && !initialLaunch) {
             reallyFinish();
         }
 
@@ -186,9 +175,9 @@ public class InvisibleActivityFreeform extends Activity {
         if(!proceedWithOnCreate)
             return;
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(appearingReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(disappearingReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishReceiver);
+        U.unregisterReceiver(this, appearingReceiver);
+        U.unregisterReceiver(this, disappearingReceiver);
+        U.unregisterReceiver(this, finishReceiver);
 
         cleanup();
     }
@@ -228,21 +217,15 @@ public class InvisibleActivityFreeform extends Activity {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
             // Show the taskbar when activity is started
-            if (showTaskbar) {
+            if(showTaskbar) {
                 new Handler().postDelayed(() ->
-                        LocalBroadcastManager
-                                .getInstance(this)
-                                .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR)),
-                        100
-                );
+                        U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR), 100);
             }
         }
 
         // Show the taskbar when activity is started
-        if (showTaskbar) {
-            LocalBroadcastManager
-                    .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR));
+        if(showTaskbar) {
+            U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR);
         }
     }
 
@@ -286,13 +269,9 @@ public class InvisibleActivityFreeform extends Activity {
         if(!doNotHide) {
             new Handler().postDelayed(() -> {
                 if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen()) {
-                    LocalBroadcastManager
-                            .getInstance(this)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_TASKBAR));
+                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_TASKBAR);
                 } else {
-                    LocalBroadcastManager
-                            .getInstance(this)
-                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
+                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_START_MENU);
                 }
             }, 100);
         }

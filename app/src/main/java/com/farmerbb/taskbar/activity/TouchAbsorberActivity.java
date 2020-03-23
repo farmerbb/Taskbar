@@ -21,11 +21,9 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -59,16 +57,10 @@ public class TouchAbsorberActivity extends Activity {
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
         if(BuildConfig.DEBUG) layout.setBackgroundColor(0x800000FF);
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.registerReceiver(
-                finishReceiver,
-                new IntentFilter(TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY)
-        );
+        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
 
         FreeformHackHelper.getInstance().setTouchAbsorberActive(true);
-        lbm.sendBroadcast(
-                new Intent(TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED)
-        );
+        U.sendBroadcast(this, TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
 
         lastStartTime = System.currentTimeMillis();
     }
@@ -106,11 +98,10 @@ public class TouchAbsorberActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.unregisterReceiver(finishReceiver);
+        U.unregisterReceiver(this, finishReceiver);
 
         FreeformHackHelper.getInstance().setTouchAbsorberActive(false);
-        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED));
+        U.sendBroadcast(this, TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
 
         super.onDestroy();
     }
