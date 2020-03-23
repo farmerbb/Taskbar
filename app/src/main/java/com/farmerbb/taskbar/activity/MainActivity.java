@@ -84,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(switchReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_SWITCH"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        switchReceiver,
+                        new IntentFilter(TaskbarIntent.ACTOIN_UPDATE_SWITCH)
+                );
 
         final SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();

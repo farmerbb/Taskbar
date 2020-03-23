@@ -170,7 +170,9 @@ public class NotificationService extends Service {
 
                 startForeground(8675309, mBuilder.build());
 
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTOIN_UPDATE_SWITCH));
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
@@ -202,7 +204,9 @@ public class NotificationService extends Service {
         if(pref.getBoolean("is_restarting", false))
             pref.edit().remove("is_restarting").apply();
         else {
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_SWITCH"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTOIN_UPDATE_SWITCH));
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));

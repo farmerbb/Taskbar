@@ -96,4 +96,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED";
     public static final String ACTION_ACCESSIBILITY_ACTION =
             "com.farmerbb.taskbar.ACCESSIBILITY_ACTION";
+    public static final String ACTOIN_UPDATE_SWITCH =
+            "com.farmerbb.taskbar.UPDATE_SWITCH";
 }
