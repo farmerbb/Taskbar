@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.U;
@@ -47,7 +48,9 @@ public class DesktopIconSelectAppActivity extends AbstractSelectAppActivity {
             icons.put(desktopIcon.toJson(this));
 
             pref.edit().putString("desktop_icons", icons.toString()).apply();
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS));
         } catch (JSONException e) { /* Gracefully fail */ }
 
         finish();

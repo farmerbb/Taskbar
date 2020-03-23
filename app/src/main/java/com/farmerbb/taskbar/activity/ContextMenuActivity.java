@@ -240,7 +240,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
-        intentFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
+        intentFilter.addAction(TaskbarIntent.ACTION_DASHBOARD_APPEARING);
 
         LocalBroadcastManager
                 .getInstance(this)
@@ -493,7 +493,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "quit_taskbar":
-                Intent quitIntent = new Intent("com.farmerbb.taskbar.QUIT");
+                Intent quitIntent = new Intent(TaskbarIntent.ACTION_QUIT);
                 quitIntent.setPackage(getPackageName());
                 sendBroadcast(quitIntent);
 
@@ -728,10 +728,16 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "arrange_icons":
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(
+                                new Intent(TaskbarIntent.ACTION_ENTER_ICON_ARRANGE_MODE)
+                        );
                 break;
             case "sort_by_name":
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_SORT_DESKTOP_ICONS));
                 break;
             case "change_wallpaper":
                 if(LauncherHelper.getInstance().isOnHomeScreen()) {
@@ -766,7 +772,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         jsonIcons.remove(iconToRemove);
 
                         pref5.edit().putString("desktop_icons", jsonIcons.toString()).apply();
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
+                        LocalBroadcastManager
+                                .getInstance(this)
+                                .sendBroadcast(
+                                        new Intent(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS)
+                                );
                     }
                 } catch (JSONException e) { /* Gracefully fail */ }
                 break;

@@ -46,7 +46,7 @@ public class ShortcutActivity extends Activity {
                             .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX));
                 }
 
-                Intent intent = new Intent("com.farmerbb.taskbar.START");
+                Intent intent = new Intent(TaskbarIntent.ACTION_START);
                 intent.setPackage(getPackageName());
                 sendBroadcast(intent);
 

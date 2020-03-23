@@ -57,9 +57,9 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
     private Intent generateIntent(String action) {
         if(action != null) switch(action) {
             case "tasker_on":
-                return new Intent("com.farmerbb.taskbar.START");
+                return new Intent(TaskbarIntent.ACTION_START);
             case "tasker_off":
-                return new Intent("com.farmerbb.taskbar.QUIT");
+                return new Intent(TaskbarIntent.ACTION_QUIT);
             case "show_taskbar":
                 return new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR);
             case "hide_taskbar":
@@ -67,7 +67,7 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
             case "toggle_start_menu":
                 return new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU);
             case "toggle_dashboard":
-                return new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD");
+                return new Intent(TaskbarIntent.ACTION_TOGGLE_DASHBOARD);
         }
 
         return null;

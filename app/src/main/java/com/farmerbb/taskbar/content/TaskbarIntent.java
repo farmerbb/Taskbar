@@ -55,4 +55,47 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING";
     public static final String ACTION_HIDE_CONTEXT_MENU =
             "com.farmerbb.taskbar.HIDE_CONTEXT_MENU";
+    public static final String ACTION_ADD_WIDGET_COMPLETED =
+            "com.farmerbb.taskbar.ADD_WIDGET_COMPLETED";
+    public static final String ACTION_REMOVE_WIDGET_COMPLETED =
+            "com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED";
+    public static final String ACTION_ADD_WIDGET_REQUESTED =
+            "com.farmerbb.taskbar.ADD_WIDGET_REQUESTED";
+    public static final String ACTION_REMOVE_WIDGET_REQUESTED =
+            "com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED";
+    public static final String ACTION_REFRESH_DESKTOP_ICONS =
+            "com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS";
+    public static final String ACTION_SORT_DESKTOP_ICONS =
+            "com.farmerbb.taskbar.SORT_DESKTOP_ICONS";
+    public static final String ACTION_ENTER_ICON_ARRANGE_MODE =
+            "com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE";
+    public static final String ACTION_TOGGLE_DASHBOARD =
+            "com.farmerbb.taskbar.TOGGLE_DASHBOARD";
+    public static final String ACTION_HIDE_DASHBOARD =
+            "com.farmerbb.taskbar.HIDE_DASHBOARD";
+    public static final String ACTION_DASHBOARD_APPEARING =
+            "com.farmerbb.taskbar.DASHBOARD_APPEARING";
+    public static final String ACTION_DASHBOARD_DISAPPEARING =
+            "com.farmerbb.taskbar.DASHBOARD_DISAPPEARING";
+    public static final String ACTION_TOUCH_ABSORBER_STATE_CHANGED =
+            "com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED";
+    public static final String ACTION_IMPORT_FINISHED =
+            "com.farmerbb.taskbar.IMPORT_FINISHED";
+    public static final String ACTION_SEND_SETTINGS =
+            "com.farmerbb.taskbar.SEND_SETTINGS";
+    public static final String ACTION_RECEIVE_SETTINGS =
+            "com.farmerbb.taskbar.RECEIVE_SETTINGS";
+    public static final String ACTION_START = "com.farmerbb.taskbar.START";
+    public static final String ACTION_RESTART = "com.farmerbb.taskbar.RESTART";
+    public static final String ACTION_QUIT = "com.farmerbb.taskbar.QUIT";
+    public static final String ACTION_KILL_HOME_ACTIVITY =
+            "com.farmerbb.taskbar.KILL_HOME_ACTIVITY";
+    public static final String ACTION_UPDATE_HOME_SCREEN_MARGINS =
+            "com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS";
+    public static final String ACTION_LAUNCHER_PREF_CHANGED =
+            "com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED";
+    public static final String ACTION_ACCESSIBILITY_ACTION =
+            "com.farmerbb.taskbar.ACCESSIBILITY_ACTION";
+    public static final String ACTOIN_UPDATE_SWITCH =
+            "com.farmerbb.taskbar.UPDATE_SWITCH";
 }

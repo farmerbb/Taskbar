@@ -369,7 +369,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         updateWindowFlags();
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+        lbm.registerReceiver(
+                killReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY)
+        );
         lbm.registerReceiver(
                 forceTaskbarStartReceiver,
                 new IntentFilter(TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART)
@@ -377,19 +380,35 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
-        intentFilter.addAction("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED");
+        intentFilter.addAction(TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
         intentFilter.addAction(TaskbarIntent.ACTION_FREEFORM_PREF_CHANGED);
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);
 
-        if(this instanceof SecondaryHomeActivity)
-            lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
+        if (this instanceof SecondaryHomeActivity) {
+            lbm.registerReceiver(
+                    restartReceiver,
+                    new IntentFilter(TaskbarIntent.ACTION_RESTART)
+            );
+        }
 
-        if(isDesktopIconsEnabled) {
-            lbm.registerReceiver(refreshDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
-            lbm.registerReceiver(iconArrangeModeReceiver, new IntentFilter("com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE"));
-            lbm.registerReceiver(sortDesktopIconsReceiver, new IntentFilter("com.farmerbb.taskbar.SORT_DESKTOP_ICONS"));
-            lbm.registerReceiver(updateMarginsReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
+        if (isDesktopIconsEnabled) {
+            lbm.registerReceiver(
+                    refreshDesktopIconsReceiver,
+                    new IntentFilter(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS)
+            );
+            lbm.registerReceiver(
+                    iconArrangeModeReceiver,
+                    new IntentFilter(TaskbarIntent.ACTION_ENTER_ICON_ARRANGE_MODE)
+            );
+            lbm.registerReceiver(
+                    sortDesktopIconsReceiver,
+                    new IntentFilter(TaskbarIntent.ACTION_SORT_DESKTOP_ICONS)
+            );
+            lbm.registerReceiver(
+                    updateMarginsReceiver,
+                    new IntentFilter(TaskbarIntent.ACTION_UPDATE_HOME_SCREEN_MARGINS)
+            );
 
             LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
             launcherApps.registerCallback(callback);

@@ -24,6 +24,7 @@ import androidx.core.content.FileProvider;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.backup.BackupUtils;
 import com.farmerbb.taskbar.backup.IntentBackupAgent;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public class SendSettingsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Ignore this broadcast if this is the paid version
         if(context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)) {
-            Intent sendSettingsIntent = new Intent("com.farmerbb.taskbar.SEND_SETTINGS");
+            Intent sendSettingsIntent = new Intent(TaskbarIntent.ACTION_SEND_SETTINGS);
             sendSettingsIntent.setPackage(BuildConfig.PAID_APPLICATION_ID);
 
             BackupUtils.backup(context, new IntentBackupAgent(sendSettingsIntent));

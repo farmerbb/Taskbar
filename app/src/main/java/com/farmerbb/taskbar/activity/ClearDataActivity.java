@@ -26,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
@@ -98,8 +99,11 @@ public class ClearDataActivity extends AppCompatActivity {
             if(desktopIcons.isChecked()) {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 pref.edit().remove("desktop_icons").apply();
-                LocalBroadcastManager.getInstance(this).sendBroadcast(
-                        new Intent("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
+                LocalBroadcastManager
+                        .getInstance(this)
+                        .sendBroadcast(
+                                new Intent(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS)
+                        );
             }
 
             finish();

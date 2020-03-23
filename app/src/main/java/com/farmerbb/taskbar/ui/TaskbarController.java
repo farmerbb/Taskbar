@@ -400,7 +400,7 @@ public class TaskbarController implements UIController {
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
         lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_HOME_SCREEN_MARGINS));
 
         if(altButtonConfig) {
             button = layout.findViewById(R.id.hide_taskbar_button_alt);
@@ -439,7 +439,11 @@ public class TaskbarController implements UIController {
             layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
-            dashboardButton.setOnClickListener(v -> LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD")));
+            dashboardButton.setOnClickListener(v ->
+                    LocalBroadcastManager
+                            .getInstance(context)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_TOGGLE_DASHBOARD))
+            );
         } else
             dashboardButton.setVisibility(View.GONE);
 
@@ -1220,7 +1224,9 @@ public class TaskbarController implements UIController {
                 LocalBroadcastManager
                         .getInstance(context)
                         .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+                LocalBroadcastManager
+                        .getInstance(context)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_DASHBOARD));
             }
 
             new Handler().post(() ->

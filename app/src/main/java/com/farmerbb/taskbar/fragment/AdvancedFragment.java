@@ -50,6 +50,7 @@ import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.U;
 
@@ -147,8 +148,12 @@ public class AdvancedFragment extends SettingsFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(homeToggleReceiver,
-                new IntentFilter("com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED"));
+        LocalBroadcastManager
+                .getInstance(getActivity())
+                .registerReceiver(
+                        homeToggleReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED)
+                );
     }
 
     @Override
@@ -177,8 +182,11 @@ public class AdvancedFragment extends SettingsFragment {
                     ((CheckBoxPreference) p).setChecked(false);
                 }
 
-                if(!((CheckBoxPreference) p).isChecked())
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+                if (!((CheckBoxPreference) p).isChecked()) {
+                    LocalBroadcastManager
+                            .getInstance(getActivity())
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY));
+                }
                 break;
             case "keyboard_shortcut":
                 ComponentName component = new ComponentName(getActivity(), KeyboardShortcutActivity.class);

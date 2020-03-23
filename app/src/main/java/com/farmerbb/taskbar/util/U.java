@@ -230,7 +230,7 @@ public class U {
             }
 
             new Handler().postDelayed(() -> {
-                Intent intent = new Intent("com.farmerbb.taskbar.ACCESSIBILITY_ACTION");
+                Intent intent = new Intent(TaskbarIntent.ACTION_ACCESSIBILITY_ACTION);
                 intent.putExtra("action", action);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
@@ -243,7 +243,7 @@ public class U {
                 if(onComplete != null) onComplete.run();
             }, 100);
         } else if(isAccessibilityServiceEnabled) {
-            Intent intent = new Intent("com.farmerbb.taskbar.ACCESSIBILITY_ACTION");
+            Intent intent = new Intent(TaskbarIntent.ACTION_ACCESSIBILITY_ACTION);
             intent.putExtra("action", action);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
@@ -1297,7 +1297,9 @@ public class U {
             startTaskbarService(context, false);
         }
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.RESTART"));
+        LocalBroadcastManager
+                .getInstance(context)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_RESTART));
     }
 
     public static void restartNotificationService(Context context) {

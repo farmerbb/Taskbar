@@ -267,10 +267,22 @@ public class DashboardController implements UIController {
         lbm.unregisterReceiver(removeWidgetReceiver);
         lbm.unregisterReceiver(hideReceiver);
 
-        lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
-        lbm.registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
-        lbm.registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
-        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+        lbm.registerReceiver(
+                toggleReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_TOGGLE_DASHBOARD)
+        );
+        lbm.registerReceiver(
+                addWidgetReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED)
+        );
+        lbm.registerReceiver(
+                removeWidgetReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED)
+        );
+        lbm.registerReceiver(
+                hideReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_HIDE_DASHBOARD)
+        );
 
         host.addView(layout, params);
 
@@ -311,7 +323,9 @@ public class DashboardController implements UIController {
             layout.setOnClickListener(ocl);
             fadeIn();
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_DASHBOARD_APPEARING));
             LocalBroadcastManager
                     .getInstance(context)
                     .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
@@ -410,7 +424,13 @@ public class DashboardController implements UIController {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         layout.setVisibility(View.GONE);
-                        if(sendIntent) LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+                        if(sendIntent) {
+                            LocalBroadcastManager
+                                    .getInstance(context)
+                                    .sendBroadcast(
+                                            new Intent(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING)
+                                    );
+                        }
                     }
                 });
     }
@@ -448,7 +468,7 @@ public class DashboardController implements UIController {
         lbm.unregisterReceiver(removeWidgetReceiver);
         lbm.unregisterReceiver(hideReceiver);
 
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING));
 
         SharedPreferences pref = U.getSharedPreferences(context);
         pref.edit().remove("dont_stop_dashboard").apply();
@@ -469,7 +489,7 @@ public class DashboardController implements UIController {
             FrameLayout frameLayout = cells.get(currentlySelectedCell);
             frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
 
-            Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED");
+            Intent intent = new Intent(TaskbarIntent.ACTION_ADD_WIDGET_REQUESTED);
             intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
             intent.putExtra("cellId", cellId);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -506,7 +526,7 @@ public class DashboardController implements UIController {
         Bundle bundle = (Bundle) view.getTag();
         int cellId = bundle.getInt("cellId");
 
-        Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
+        Intent intent = new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED);
         intent.putExtra("cellId", cellId);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

@@ -54,10 +54,11 @@ public class KeyboardShortcutActivity extends Activity {
 
                     Intent startStopIntent;
 
-                    if(pref.getBoolean("taskbar_active", false))
-                        startStopIntent = new Intent("com.farmerbb.taskbar.QUIT");
-                    else
-                        startStopIntent = new Intent("com.farmerbb.taskbar.START");
+                    if (pref.getBoolean("taskbar_active", false)) {
+                        startStopIntent = new Intent(TaskbarIntent.ACTION_QUIT);
+                    } else {
+                        startStopIntent = new Intent(TaskbarIntent.ACTION_START);
+                    }
 
                     startStopIntent.setPackage(getPackageName());
                     sendBroadcast(startStopIntent);
