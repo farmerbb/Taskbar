@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 .getInstance(this)
                 .registerReceiver(
                         switchReceiver,
-                        new IntentFilter(TaskbarIntent.ACTOIN_UPDATE_SWITCH)
+                        new IntentFilter(TaskbarIntent.ACTION_UPDATE_SWITCH)
                 );
 
         final SharedPreferences pref = U.getSharedPreferences(this);

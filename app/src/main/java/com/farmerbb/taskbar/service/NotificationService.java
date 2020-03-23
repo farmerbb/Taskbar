@@ -172,7 +172,7 @@ public class NotificationService extends Service {
 
                 LocalBroadcastManager
                         .getInstance(this)
-                        .sendBroadcast(new Intent(TaskbarIntent.ACTOIN_UPDATE_SWITCH));
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_SWITCH));
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
@@ -206,7 +206,7 @@ public class NotificationService extends Service {
         else {
             LocalBroadcastManager
                     .getInstance(this)
-                    .sendBroadcast(new Intent(TaskbarIntent.ACTOIN_UPDATE_SWITCH));
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_UPDATE_SWITCH));
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
