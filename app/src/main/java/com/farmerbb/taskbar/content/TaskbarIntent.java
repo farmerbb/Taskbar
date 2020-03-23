@@ -88,4 +88,6 @@ public class TaskbarIntent {
     public static final String ACTION_QUIT = "com.farmerbb.taskbar.QUIT";
     public static final String ACTION_KILL_HOME_ACTIVITY =
             "com.farmerbb.taskbar.KILL_HOME_ACTIVITY";
+    public static final String ACTION_UPDATE_HOME_SCREEN_MARGINS =
+            "com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS";
 }

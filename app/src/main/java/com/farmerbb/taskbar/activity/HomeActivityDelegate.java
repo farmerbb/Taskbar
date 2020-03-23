@@ -405,7 +405,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     sortDesktopIconsReceiver,
                     new IntentFilter(TaskbarIntent.ACTION_SORT_DESKTOP_ICONS)
             );
-            lbm.registerReceiver(updateMarginsReceiver, new IntentFilter("com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS"));
+            lbm.registerReceiver(
+                    updateMarginsReceiver,
+                    new IntentFilter(TaskbarIntent.ACTION_UPDATE_HOME_SCREEN_MARGINS)
+            );
 
             LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
             launcherApps.registerCallback(callback);
