@@ -81,4 +81,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED";
     public static final String ACTION_IMPORT_FINISHED =
             "com.farmerbb.taskbar.IMPORT_FINISHED";
+    public static final String ACTION_RECEIVE_SETTINGS =
+            "com.farmerbb.taskbar.RECEIVE_SETTINGS";
 }

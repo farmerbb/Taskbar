@@ -49,7 +49,7 @@ public class ImportSettingsActivity extends AbstractProgressActivity {
                 );
 
         if (!broadcastSent) {
-            Intent intent = new Intent("com.farmerbb.taskbar.RECEIVE_SETTINGS");
+            Intent intent = new Intent(TaskbarIntent.ACTION_RECEIVE_SETTINGS);
             intent.setPackage(BuildConfig.BASE_APPLICATION_ID);
             sendBroadcast(intent);
 
