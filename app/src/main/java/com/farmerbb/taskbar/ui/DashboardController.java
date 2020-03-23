@@ -279,7 +279,10 @@ public class DashboardController implements UIController {
                 removeWidgetReceiver,
                 new IntentFilter(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED)
         );
-        lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+        lbm.registerReceiver(
+                hideReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_HIDE_DASHBOARD)
+        );
 
         host.addView(layout, params);
 

@@ -1224,7 +1224,9 @@ public class TaskbarController implements UIController {
                 LocalBroadcastManager
                         .getInstance(context)
                         .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.HIDE_DASHBOARD"));
+                LocalBroadcastManager
+                        .getInstance(context)
+                        .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_DASHBOARD));
             }
 
             new Handler().post(() ->
