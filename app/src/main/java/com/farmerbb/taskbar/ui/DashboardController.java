@@ -268,8 +268,14 @@ public class DashboardController implements UIController {
         lbm.unregisterReceiver(hideReceiver);
 
         lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
-        lbm.registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
-        lbm.registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+        lbm.registerReceiver(
+                addWidgetReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED)
+        );
+        lbm.registerReceiver(
+                removeWidgetReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED)
+        );
         lbm.registerReceiver(hideReceiver, new IntentFilter("com.farmerbb.taskbar.HIDE_DASHBOARD"));
 
         host.addView(layout, params);
@@ -469,7 +475,7 @@ public class DashboardController implements UIController {
             FrameLayout frameLayout = cells.get(currentlySelectedCell);
             frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
 
-            Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED");
+            Intent intent = new Intent(TaskbarIntent.ACTION_ADD_WIDGET_REQUESTED);
             intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
             intent.putExtra("cellId", cellId);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -506,7 +512,7 @@ public class DashboardController implements UIController {
         Bundle bundle = (Bundle) view.getTag();
         int cellId = bundle.getInt("cellId");
 
-        Intent intent = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED");
+        Intent intent = new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED);
         intent.putExtra("cellId", cellId);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

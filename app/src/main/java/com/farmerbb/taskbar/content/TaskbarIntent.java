@@ -55,4 +55,12 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.CONTEXT_MENU_DISAPPEARING";
     public static final String ACTION_HIDE_CONTEXT_MENU =
             "com.farmerbb.taskbar.HIDE_CONTEXT_MENU";
+    public static final String ACTION_ADD_WIDGET_COMPLETED =
+            "com.farmerbb.taskbar.ADD_WIDGET_COMPLETED";
+    public static final String ACTION_REMOVE_WIDGET_COMPLETED =
+            "com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED";
+    public static final String ACTION_ADD_WIDGET_REQUESTED =
+            "com.farmerbb.taskbar.ADD_WIDGET_REQUESTED";
+    public static final String ACTION_REMOVE_WIDGET_REQUESTED =
+            "com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED";
 }

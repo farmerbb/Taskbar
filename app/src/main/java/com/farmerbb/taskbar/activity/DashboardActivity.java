@@ -91,12 +91,16 @@ public class DashboardActivity extends Activity {
             builder.setTitle(R.string.tb_remove_widget)
                     .setMessage(R.string.tb_are_you_sure)
                     .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> {
-                        LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED"));
+                        LocalBroadcastManager
+                                .getInstance(DashboardActivity.this)
+                                .sendBroadcast(
+                                        new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED)
+                                );
 
                         shouldFinish = true;
                     })
                     .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
-                        Intent intent1 = new Intent("com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED");
+                        Intent intent1 = new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED);
                         intent1.putExtra("cellId", cellId);
                         LocalBroadcastManager.getInstance(DashboardActivity.this).sendBroadcast(intent1);
 
@@ -140,8 +144,18 @@ public class DashboardActivity extends Activity {
         LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(addWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.ADD_WIDGET_REQUESTED"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(removeWidgetReceiver, new IntentFilter("com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED"));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        addWidgetReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_ADD_WIDGET_REQUESTED)
+                );
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(
+                        removeWidgetReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED)
+                );
         LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, new IntentFilter("com.farmerbb.taskbar.DASHBOARD_DISAPPEARING"));
 
         if(!DashboardHelper.getInstance().isDashboardOpen()) finish();
@@ -218,7 +232,9 @@ public class DashboardActivity extends Activity {
                 }
             }
 
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED"));
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED));
             LocalBroadcastManager
                     .getInstance(this)
                     .sendBroadcast(new Intent(TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR));
@@ -250,7 +266,7 @@ public class DashboardActivity extends Activity {
     }
 
     private void createWidget(Intent data) {
-        Intent intent = new Intent("com.farmerbb.taskbar.ADD_WIDGET_COMPLETED");
+        Intent intent = new Intent(TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED);
         intent.putExtra("appWidgetId", data.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1));
         intent.putExtra("cellId", cellId);
 
