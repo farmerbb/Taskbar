@@ -12,7 +12,7 @@ public class TaskbarApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
-        if(U.getCurrentApiVersion() > 29.0f)
+        if(U.getCurrentApiVersion() > 29.0f || U.isDesktopModeSupported(base))
             Reflection.unseal(base);
     }
 }

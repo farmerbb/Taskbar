@@ -1214,15 +1214,7 @@ public class U {
         if(context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
             return true;
 
-        PackageManager pm = context.getPackageManager();
-        try {
-            pm.getPackageInfo(BuildConfig.SUPPORT_APPLICATION_ID, 0);
-            return pm.checkSignatures(BuildConfig.SUPPORT_APPLICATION_ID, context.getPackageName()) == PackageManager.SIGNATURE_MATCH
-                    && context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
-                    && isSystemApp(context);
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
+        return hasSupportLibrary(context, 0);
     }
 
     public static boolean hasSupportLibrary(Context context, int minVersion) {
@@ -1320,18 +1312,38 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, boolean show) {
+        if(!isDesktopModeActive(context)
+                && !isBlissOs(context)
+                && !hasSupportLibrary(context, 7)) {
+            return;
+        }
+
+        int displayID = getDisplayID();
+        int value = show ? 0 : getNavbarHeight(context) * -1;
+
+        if(hasWriteSecureSettingsPermission(context)) {
+            try {
+                setOverscan(displayID, value);
+                return;
+            } catch (Exception e) {
+                // Fallback to next method
+            }
+        }
+
         if(hasSupportLibrary(context, 7)) {
             Intent intent = new Intent(BuildConfig.SUPPORT_APPLICATION_ID + ".CHANGE_OVERSCAN");
             intent.setPackage(BuildConfig.SUPPORT_APPLICATION_ID);
 
-            intent.putExtra("display_id", getDisplayID());
-            intent.putExtra("value", show ? 0 : getNavbarHeight(context) * -1);
+            intent.putExtra("display_id", displayID);
+            intent.putExtra("value", value);
 
             context.sendBroadcast(intent);
             return;
         }
 
         // Show or hide the system navigation bar on Bliss-x86
+        if(!isBlissOs(context)) return;
+
         try {
             if(getCurrentApiVersion() >= 28.0f)
                 Settings.Secure.putInt(context.getContentResolver(), "navigation_bar_visible", show ? 1 : 0);
@@ -1857,10 +1869,43 @@ public class U {
                 && !pref.getBoolean("launcher", false);
     }
 
+    // TODO remove this in favor of the existing getDisplayID method?
     public static int getExternalDisplayID(Context context) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display[] displays = dm.getDisplays();
 
         return displays[displays.length - 1].getDisplayId();
+    }
+
+    @SuppressLint("PrivateApi")
+    private static Object getWindowManagerService() throws Exception {
+        return Class.forName("android.view.WindowManagerGlobal")
+                .getMethod("getWindowManagerService")
+                .invoke(null);
+    }
+
+    @SuppressLint("PrivateApi")
+    private static void setDensity(int displayID, String value) throws Exception {
+        // From android.os.UserHandle
+        final int USER_CURRENT_OR_SELF = -3;
+
+        if(value.equals("reset")) {
+            Class.forName("android.view.IWindowManager")
+                    .getMethod("clearForcedDisplayDensityForUser", int.class, int.class)
+                    .invoke(getWindowManagerService(), displayID, USER_CURRENT_OR_SELF);
+        } else {
+            int density = Integer.parseInt(value);
+
+            Class.forName("android.view.IWindowManager")
+                    .getMethod("setForcedDisplayDensityForUser", int.class, int.class, int.class)
+                    .invoke(getWindowManagerService(), displayID, density, USER_CURRENT_OR_SELF);
+        }
+    }
+
+    @SuppressLint("PrivateApi")
+    private static void setOverscan(int displayID, int value) throws Exception {
+        Class.forName("android.view.IWindowManager")
+                .getMethod("setOverscan", int.class, int.class, int.class, int.class, int.class)
+                .invoke(getWindowManagerService(), displayID, 0, 0, 0, value);
     }
 }
