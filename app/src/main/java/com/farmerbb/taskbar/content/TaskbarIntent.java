@@ -90,4 +90,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.KILL_HOME_ACTIVITY";
     public static final String ACTION_UPDATE_HOME_SCREEN_MARGINS =
             "com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS";
+    public static final String ACTION_LAUNCHER_PREF_CHANGED =
+            "com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED";
 }

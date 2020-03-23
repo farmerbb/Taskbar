@@ -148,8 +148,12 @@ public class AdvancedFragment extends SettingsFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(homeToggleReceiver,
-                new IntentFilter("com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED"));
+        LocalBroadcastManager
+                .getInstance(getActivity())
+                .registerReceiver(
+                        homeToggleReceiver,
+                        new IntentFilter(TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED)
+                );
     }
 
     @Override

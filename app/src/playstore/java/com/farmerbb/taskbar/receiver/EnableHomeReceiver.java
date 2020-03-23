@@ -25,6 +25,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.activity.HomeActivity;
+import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 public class EnableHomeReceiver extends BroadcastReceiver {
@@ -43,8 +44,9 @@ public class EnableHomeReceiver extends BroadcastReceiver {
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP);
 
-            LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(new Intent("com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED));
         }
     }
 }

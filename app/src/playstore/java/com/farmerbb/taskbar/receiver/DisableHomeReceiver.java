@@ -43,7 +43,7 @@ public class DisableHomeReceiver extends BroadcastReceiver {
 
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
             lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY));
-            lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED"));
+            lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED));
         }
     }
 }
