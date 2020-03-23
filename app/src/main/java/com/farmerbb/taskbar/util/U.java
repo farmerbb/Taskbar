@@ -206,9 +206,7 @@ public class U {
     }
 
     public static void sendAccessibilityAction(Context context, int action, Runnable onComplete) {
-        ComponentName component = new ComponentName(context, PowerMenuService.class);
-        context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+        setComponentEnabled(context, PowerMenuService.class, true);
 
         boolean isAccessibilityServiceEnabled = isAccessibilityServiceEnabled(context);
 
@@ -1924,5 +1922,14 @@ public class U {
 
     public static void sendBroadcast(Context context, Intent intent) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static void setComponentEnabled(Context context, Class clazz, boolean enabled) {
+        ComponentName component = new ComponentName(context, clazz);
+        context.getPackageManager().setComponentEnabledSetting(component,
+                enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 }

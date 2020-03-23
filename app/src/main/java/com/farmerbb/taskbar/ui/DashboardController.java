@@ -258,11 +258,6 @@ public class DashboardController implements UIController {
 
         mAppWidgetHost.stopListening();
 
-        U.unregisterReceiver(context, toggleReceiver);
-        U.unregisterReceiver(context, addWidgetReceiver);
-        U.unregisterReceiver(context, removeWidgetReceiver);
-        U.unregisterReceiver(context, hideReceiver);
-
         U.registerReceiver(context, toggleReceiver, TaskbarIntent.ACTION_TOGGLE_DASHBOARD);
         U.registerReceiver(context, addWidgetReceiver, TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED);
         U.registerReceiver(context, removeWidgetReceiver, TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED);

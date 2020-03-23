@@ -21,7 +21,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -117,53 +116,22 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
         if(!U.isLibrary(this)) {
-            ComponentName component = new ComponentName(this, HomeActivity.class);
-            getPackageManager().setComponentEnabledSetting(component,
-                    launcherEnabled && !U.isDelegatingHomeActivity(this)
-                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
+            U.setComponentEnabled(this, HomeActivity.class,
+                    launcherEnabled && !U.isDelegatingHomeActivity(this));
 
-            ComponentName component2 = new ComponentName(this, KeyboardShortcutActivity.class);
-            getPackageManager().setComponentEnabledSetting(component2,
-                    pref.getBoolean("keyboard_shortcut", false)
-                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
+            U.setComponentEnabled(this, KeyboardShortcutActivity.class,
+                    pref.getBoolean("keyboard_shortcut", false));
 
-            ComponentName component3 = new ComponentName(this, ShortcutActivity.class);
-            getPackageManager().setComponentEnabledSetting(component3,
-                    U.enableFreeformModeShortcut(this)
-                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
+            U.setComponentEnabled(this, ShortcutActivity.class,
+                    U.enableFreeformModeShortcut(this));
 
-            ComponentName component4 = new ComponentName(this, StartTaskbarActivity.class);
-            getPackageManager().setComponentEnabledSetting(component4,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-
-            ComponentName component5 = new ComponentName(this, SecondaryHomeActivity.class);
-            getPackageManager().setComponentEnabledSetting(component5,
-                    desktopModeEnabled
-                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-
-            ComponentName component6 = new ComponentName(this, HSLActivity.class);
-            getPackageManager().setComponentEnabledSetting(component6,
-                    desktopModeEnabled
-                            ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
+            U.setComponentEnabled(this, StartTaskbarActivity.class, true);
+            U.setComponentEnabled(this, SecondaryHomeActivity.class, desktopModeEnabled);
+            U.setComponentEnabled(this, HSLActivity.class, desktopModeEnabled);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ComponentName component7 = new ComponentName(this, KeyboardShortcutActivityLockDevice.class);
-                getPackageManager().setComponentEnabledSetting(component7,
-                        pref.getBoolean("keyboard_shortcut", false)
-                                ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                                : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+                U.setComponentEnabled(this, KeyboardShortcutActivityLockDevice.class,
+                        pref.getBoolean("keyboard_shortcut", false));
             }
         }
 

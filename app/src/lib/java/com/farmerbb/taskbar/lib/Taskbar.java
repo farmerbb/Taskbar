@@ -16,10 +16,8 @@
 package com.farmerbb.taskbar.lib;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +25,7 @@ import androidx.annotation.StyleRes;
 
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
+import com.farmerbb.taskbar.util.U;
 
 @Keep public class Taskbar {
 
@@ -88,10 +87,6 @@ import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
      * @param enabled "true" to enable desktop mode, "false" to disable
      */
     @Keep public static void setEnabled(@NonNull Context context, boolean enabled) {
-        ComponentName component = new ComponentName(context, SecondaryHomeActivity.class);
-        context.getPackageManager().setComponentEnabledSetting(component, enabled
-                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+        U.setComponentEnabled(context, SecondaryHomeActivity.class, enabled);
     }
 }

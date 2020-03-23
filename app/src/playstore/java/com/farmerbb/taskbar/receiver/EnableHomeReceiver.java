@@ -16,12 +16,9 @@
 package com.farmerbb.taskbar.receiver;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.content.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
@@ -37,11 +34,7 @@ public class EnableHomeReceiver extends BroadcastReceiver {
             editor.putBoolean("launcher", true);
             editor.apply();
 
-            ComponentName component = new ComponentName(context, HomeActivity.class);
-            context.getPackageManager().setComponentEnabledSetting(component,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-
+            U.setComponentEnabled(context, HomeActivity.class, true);
             U.sendBroadcast(context, TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED);
         }
     }

@@ -629,13 +629,6 @@ public class TaskbarController implements UIController {
             new Handler().postDelayed(() -> U.startTouchAbsorberActivity(context), 500);
         }
 
-        U.unregisterReceiver(context, showReceiver);
-        U.unregisterReceiver(context, hideReceiver);
-        U.unregisterReceiver(context, tempShowReceiver);
-        U.unregisterReceiver(context, tempHideReceiver);
-        U.unregisterReceiver(context, startMenuAppearReceiver);
-        U.unregisterReceiver(context, startMenuDisappearReceiver);
-
         U.registerReceiver(context, showReceiver, TaskbarIntent.ACTION_SHOW_TASKBAR);
         U.registerReceiver(context, hideReceiver, TaskbarIntent.ACTION_HIDE_TASKBAR);
         U.registerReceiver(context, tempShowReceiver, TaskbarIntent.ACTION_TEMP_SHOW_TASKBAR);

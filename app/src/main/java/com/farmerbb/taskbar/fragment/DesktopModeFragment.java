@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -109,19 +108,11 @@ public class DesktopModeFragment extends SettingsFragment {
     public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
             case "desktop_mode":
-                ComponentName component = new ComponentName(getActivity(), SecondaryHomeActivity.class);
-                getActivity().getPackageManager().setComponentEnabledSetting(component,
-                        ((CheckBoxPreference) p).isChecked()
-                                ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                                : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+                U.setComponentEnabled(getActivity(), SecondaryHomeActivity.class,
+                        ((CheckBoxPreference) p).isChecked());
 
-                ComponentName component2 = new ComponentName(getActivity(), HSLActivity.class);
-                getActivity().getPackageManager().setComponentEnabledSetting(component2,
-                        ((CheckBoxPreference) p).isChecked()
-                                ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                                : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+                U.setComponentEnabled(getActivity(), HSLActivity.class,
+                        ((CheckBoxPreference) p).isChecked());
 
                break;
             case "set_launcher_default":

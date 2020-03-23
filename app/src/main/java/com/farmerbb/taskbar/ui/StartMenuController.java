@@ -410,13 +410,6 @@ public class StartMenuController implements UIController {
 
         textView = layout.findViewById(R.id.no_apps_found);
 
-        U.unregisterReceiver(context, toggleReceiver);
-        U.unregisterReceiver(context, hideReceiver);
-        U.unregisterReceiver(context, hideReceiverNoReset);
-        U.unregisterReceiver(context, showSpaceReceiver);
-        U.unregisterReceiver(context, hideSpaceReceiver);
-        U.unregisterReceiver(context, resetReceiver);
-
         U.registerReceiver(context, toggleReceiver, TaskbarIntent.ACTION_TOGGLE_START_MENU);
         U.registerReceiver(context, hideReceiver, TaskbarIntent.ACTION_HIDE_START_MENU);
         U.registerReceiver(context, hideReceiverNoReset, TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET);

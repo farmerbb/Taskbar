@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -157,6 +156,7 @@ public class AdvancedFragment extends SettingsFragment {
     }
 
     @SuppressLint("SetTextI18n")
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onPreferenceClick(final Preference p) {
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
@@ -164,12 +164,8 @@ public class AdvancedFragment extends SettingsFragment {
         switch(p.getKey()) {
             case "launcher":
                 if(U.canDrawOverlays(getActivity())) {
-                    ComponentName component = new ComponentName(getActivity(), HomeActivity.class);
-                    getActivity().getPackageManager().setComponentEnabledSetting(component,
-                            ((CheckBoxPreference) p).isChecked()
-                                    ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                                    : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
+                    U.setComponentEnabled(getActivity(), HomeActivity.class,
+                            ((CheckBoxPreference) p).isChecked());
                 } else {
                     U.showPermissionDialog(getActivity());
                     ((CheckBoxPreference) p).setChecked(false);
@@ -180,16 +176,12 @@ public class AdvancedFragment extends SettingsFragment {
                 }
                 break;
             case "keyboard_shortcut":
-                ComponentName component = new ComponentName(getActivity(), KeyboardShortcutActivity.class);
-                getActivity().getPackageManager().setComponentEnabledSetting(component,
-                        ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+                U.setComponentEnabled(getActivity(), KeyboardShortcutActivity.class,
+                        ((CheckBoxPreference) p).isChecked());
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ComponentName component2 = new ComponentName(getActivity(), KeyboardShortcutActivityLockDevice.class);
-                    getActivity().getPackageManager().setComponentEnabledSetting(component2,
-                            ((CheckBoxPreference) p).isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
+                    U.setComponentEnabled(getActivity(), KeyboardShortcutActivityLockDevice.class,
+                            ((CheckBoxPreference) p).isChecked());
                 }
                 break;
             case "dashboard_grid_size":
