@@ -67,7 +67,7 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
             case "toggle_start_menu":
                 return new Intent(TaskbarIntent.ACTION_TOGGLE_START_MENU);
             case "toggle_dashboard":
-                return new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD");
+                return new Intent(TaskbarIntent.ACTION_TOGGLE_DASHBOARD);
         }
 
         return null;

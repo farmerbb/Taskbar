@@ -439,7 +439,11 @@ public class TaskbarController implements UIController {
             layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
-            dashboardButton.setOnClickListener(v -> LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.TOGGLE_DASHBOARD")));
+            dashboardButton.setOnClickListener(v ->
+                    LocalBroadcastManager
+                            .getInstance(context)
+                            .sendBroadcast(new Intent(TaskbarIntent.ACTION_TOGGLE_DASHBOARD))
+            );
         } else
             dashboardButton.setVisibility(View.GONE);
 

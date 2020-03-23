@@ -267,7 +267,10 @@ public class DashboardController implements UIController {
         lbm.unregisterReceiver(removeWidgetReceiver);
         lbm.unregisterReceiver(hideReceiver);
 
-        lbm.registerReceiver(toggleReceiver, new IntentFilter("com.farmerbb.taskbar.TOGGLE_DASHBOARD"));
+        lbm.registerReceiver(
+                toggleReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_TOGGLE_DASHBOARD)
+        );
         lbm.registerReceiver(
                 addWidgetReceiver,
                 new IntentFilter(TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED)

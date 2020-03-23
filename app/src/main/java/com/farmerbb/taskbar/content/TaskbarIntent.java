@@ -69,4 +69,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.SORT_DESKTOP_ICONS";
     public static final String ACTION_ENTER_ICON_ARRANGE_MODE =
             "com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE";
+    public static final String ACTION_TOGGLE_DASHBOARD =
+            "com.farmerbb.taskbar.TOGGLE_DASHBOARD";
 }
