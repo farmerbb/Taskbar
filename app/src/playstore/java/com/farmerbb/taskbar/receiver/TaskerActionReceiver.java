@@ -57,9 +57,9 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
     private Intent generateIntent(String action) {
         if(action != null) switch(action) {
             case "tasker_on":
-                return new Intent("com.farmerbb.taskbar.START");
+                return new Intent(TaskbarIntent.ACTION_START);
             case "tasker_off":
-                return new Intent("com.farmerbb.taskbar.QUIT");
+                return new Intent(TaskbarIntent.ACTION_QUIT);
             case "show_taskbar":
                 return new Intent(TaskbarIntent.ACTION_SHOW_TASKBAR);
             case "hide_taskbar":

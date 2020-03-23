@@ -1305,7 +1305,9 @@ public class U {
             startTaskbarService(context, false);
         }
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.RESTART"));
+        LocalBroadcastManager
+                .getInstance(context)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_RESTART));
     }
 
     public static void restartNotificationService(Context context) {

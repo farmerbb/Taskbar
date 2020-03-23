@@ -382,10 +382,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);
 
-        if(this instanceof SecondaryHomeActivity)
-            lbm.registerReceiver(restartReceiver, new IntentFilter("com.farmerbb.taskbar.RESTART"));
+        if (this instanceof SecondaryHomeActivity) {
+            lbm.registerReceiver(
+                    restartReceiver,
+                    new IntentFilter(TaskbarIntent.ACTION_RESTART)
+            );
+        }
 
-        if(isDesktopIconsEnabled) {
+        if (isDesktopIconsEnabled) {
             lbm.registerReceiver(
                     refreshDesktopIconsReceiver,
                     new IntentFilter(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS)

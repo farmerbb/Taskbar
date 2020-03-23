@@ -493,7 +493,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "quit_taskbar":
-                Intent quitIntent = new Intent("com.farmerbb.taskbar.QUIT");
+                Intent quitIntent = new Intent(TaskbarIntent.ACTION_QUIT);
                 quitIntent.setPackage(getPackageName());
                 sendBroadcast(quitIntent);
 

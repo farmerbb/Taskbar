@@ -83,4 +83,7 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.IMPORT_FINISHED";
     public static final String ACTION_RECEIVE_SETTINGS =
             "com.farmerbb.taskbar.RECEIVE_SETTINGS";
+    public static final String ACTION_START = "com.farmerbb.taskbar.START";
+    public static final String ACTION_RESTART = "com.farmerbb.taskbar.RESTART";
+    public static final String ACTION_QUIT = "com.farmerbb.taskbar.QUIT";
 }
