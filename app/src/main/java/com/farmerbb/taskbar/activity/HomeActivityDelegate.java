@@ -377,7 +377,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
-        intentFilter.addAction("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED");
+        intentFilter.addAction(TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
         intentFilter.addAction(TaskbarIntent.ACTION_FREEFORM_PREF_CHANGED);
 
         lbm.registerReceiver(freeformToggleReceiver, intentFilter);

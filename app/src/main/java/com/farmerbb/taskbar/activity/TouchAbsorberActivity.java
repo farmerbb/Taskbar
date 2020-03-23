@@ -66,7 +66,9 @@ public class TouchAbsorberActivity extends Activity {
         );
 
         FreeformHackHelper.getInstance().setTouchAbsorberActive(true);
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED"));
+        lbm.sendBroadcast(
+                new Intent(TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED)
+        );
 
         lastStartTime = System.currentTimeMillis();
     }
@@ -108,7 +110,7 @@ public class TouchAbsorberActivity extends Activity {
         lbm.unregisterReceiver(finishReceiver);
 
         FreeformHackHelper.getInstance().setTouchAbsorberActive(false);
-        lbm.sendBroadcast(new Intent("com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED"));
+        lbm.sendBroadcast(new Intent(TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED));
 
         super.onDestroy();
     }
