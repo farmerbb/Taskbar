@@ -369,7 +369,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         updateWindowFlags();
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.registerReceiver(killReceiver, new IntentFilter("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+        lbm.registerReceiver(
+                killReceiver,
+                new IntentFilter(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY)
+        );
         lbm.registerReceiver(
                 forceTaskbarStartReceiver,
                 new IntentFilter(TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART)

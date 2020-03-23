@@ -169,9 +169,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if(!launcherEnabled)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
-
+        if (!launcherEnabled) {
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY));
+        }
         // Update caption state
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this)) {
             getWindow().setRestrictedCaptionAreaListener(rect -> hasCaption = true);

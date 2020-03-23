@@ -86,4 +86,6 @@ public class TaskbarIntent {
     public static final String ACTION_START = "com.farmerbb.taskbar.START";
     public static final String ACTION_RESTART = "com.farmerbb.taskbar.RESTART";
     public static final String ACTION_QUIT = "com.farmerbb.taskbar.QUIT";
+    public static final String ACTION_KILL_HOME_ACTIVITY =
+            "com.farmerbb.taskbar.KILL_HOME_ACTIVITY";
 }

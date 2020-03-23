@@ -250,7 +250,9 @@ public class NotificationService extends Service {
     }
 
     private void stopDesktopMode() {
-        LocalBroadcastManager.getInstance(NotificationService.this).sendBroadcast(new Intent("com.farmerbb.taskbar.KILL_HOME_ACTIVITY"));
+        LocalBroadcastManager
+                .getInstance(NotificationService.this)
+                .sendBroadcast(new Intent(TaskbarIntent.ACTION_KILL_HOME_ACTIVITY));
         desktopModeStarted = false;
     }
 }
