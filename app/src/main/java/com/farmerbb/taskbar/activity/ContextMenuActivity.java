@@ -240,7 +240,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TaskbarIntent.ACTION_START_MENU_APPEARING);
-        intentFilter.addAction("com.farmerbb.taskbar.DASHBOARD_APPEARING");
+        intentFilter.addAction(TaskbarIntent.ACTION_DASHBOARD_APPEARING);
 
         LocalBroadcastManager
                 .getInstance(this)

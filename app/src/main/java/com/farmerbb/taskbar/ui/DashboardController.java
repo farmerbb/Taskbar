@@ -320,7 +320,9 @@ public class DashboardController implements UIController {
             layout.setOnClickListener(ocl);
             fadeIn();
 
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("com.farmerbb.taskbar.DASHBOARD_APPEARING"));
+            LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(new Intent(TaskbarIntent.ACTION_DASHBOARD_APPEARING));
             LocalBroadcastManager
                     .getInstance(context)
                     .sendBroadcast(new Intent(TaskbarIntent.ACTION_HIDE_START_MENU));

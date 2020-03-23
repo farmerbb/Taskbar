@@ -71,4 +71,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE";
     public static final String ACTION_TOGGLE_DASHBOARD =
             "com.farmerbb.taskbar.TOGGLE_DASHBOARD";
+    public static final String ACTION_DASHBOARD_APPEARING =
+            "com.farmerbb.taskbar.DASHBOARD_APPEARING";
 }
