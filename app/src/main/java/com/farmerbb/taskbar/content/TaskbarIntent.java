@@ -79,4 +79,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.DASHBOARD_DISAPPEARING";
     public static final String ACTION_TOUCH_ABSORBER_STATE_CHANGED =
             "com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED";
+    public static final String ACTION_IMPORT_FINISHED =
+            "com.farmerbb.taskbar.IMPORT_FINISHED";
 }
