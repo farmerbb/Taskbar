@@ -766,7 +766,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         jsonIcons.remove(iconToRemove);
 
                         pref5.edit().putString("desktop_icons", jsonIcons.toString()).apply();
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS"));
+                        LocalBroadcastManager
+                                .getInstance(this)
+                                .sendBroadcast(
+                                        new Intent(TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS)
+                                );
                     }
                 } catch (JSONException e) { /* Gracefully fail */ }
                 break;

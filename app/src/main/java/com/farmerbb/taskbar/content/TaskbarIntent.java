@@ -63,4 +63,6 @@ public class TaskbarIntent {
             "com.farmerbb.taskbar.ADD_WIDGET_REQUESTED";
     public static final String ACTION_REMOVE_WIDGET_REQUESTED =
             "com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED";
+    public static final String ACTION_REFRESH_DESKTOP_ICONS =
+            "com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS";
 }
