@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
 
 repositories {
     google()
@@ -47,6 +48,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
+            testCoverageEnabled true
             manifestPlaceholders = [appName: "@string/tb_app_name_debug"]
         }
 
@@ -86,6 +88,25 @@ android {
 
     testOptions {
         unitTests {
+            all {
+                testLogging {
+                    events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+
+                    outputs.upToDateWhen {
+                        false
+                    }
+
+                    showStandardStreams = false
+                    exceptionFormat = 'full'
+                }
+
+                //noinspection GrDeprecatedAPIUsage
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+            
             includeAndroidResources = true
         }
     }
@@ -106,4 +127,29 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation "org.robolectric:robolectric:4.3.1"
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeDebugUnitTest']) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        csv.enabled = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.class'
+    ]
+
+    def debugTree = fileTree(dir: "$buildDir/intermediates/javac/freeDebug/classes", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = files("$buildDir/jacoco/testFreeDebugUnitTest.exec")
+
+    doLast {
+        println("Test report link: file://$buildDir/reports/jacoco/jacocoTestReport/html/index.html")
+    }
 }
