@@ -19,9 +19,9 @@ import android.view.Surface;
 public class TaskbarPosition {
     // TODO Change string to enum to get more security checking.
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";
+    public static final String POSITION_BOTTOM_RIGHT = "bottom_right";
     public static final String POSITION_BOTTOM_VERTICAL_LEFT = "bottom_vertical_left";
     public static final String POSITION_BOTTOM_VERTICAL_RIGHT = "bottom_vertical_right";
-    public static final String POSITION_BOTTOM_RIGHT = "bottom_right";
     public static final String POSITION_TOP_LEFT = "top_left";
     public static final String POSITION_TOP_RIGHT = "top_right";
     public static final String POSITION_TOP_VERTICAL_LEFT = "top_vertical_left";
@@ -138,5 +138,61 @@ public class TaskbarPosition {
                 break;
         }
         return POSITION_BOTTOM_LEFT;
+    }
+
+    public static boolean isVertical(String position) {
+        switch (position) {
+            case POSITION_TOP_VERTICAL_LEFT:
+            case POSITION_TOP_VERTICAL_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isLeft(String position) {
+        switch (position) {
+            case POSITION_TOP_LEFT:
+            case POSITION_TOP_VERTICAL_LEFT:
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isRight(String position) {
+        switch (position) {
+            case POSITION_TOP_RIGHT:
+            case POSITION_TOP_VERTICAL_RIGHT:
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isBottom(String position) {
+        switch (position) {
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isVerticalLeft(String position) {
+        return isVertical(position) && isLeft(position);
+    }
+
+    public static boolean isVerticalRight(String position) {
+        return isVertical(position) && isRight(position);
     }
 }

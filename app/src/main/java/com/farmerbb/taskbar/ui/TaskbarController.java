@@ -903,7 +903,7 @@ public class TaskbarController implements UIController {
             }
 
             // Determine if we need to reverse the order again
-            if(U.getTaskbarPosition(context).contains("vertical")) {
+            if(TaskbarPosition.isVertical(U.getTaskbarPosition(context))) {
                 Collections.reverse(entries);
                 Collections.reverse(launcherAppCache);
             }
@@ -967,7 +967,7 @@ public class TaskbarController implements UIController {
                         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
-                        if(U.getTaskbarPosition(context).contains("vertical")) {
+                        if(TaskbarPosition.isVertical(U.getTaskbarPosition(context))) {
                             int maxScreenSize = Math.max(0, display.height
                                     - U.getStatusBarHeight(context)
                                     - U.getBaseTaskbarSize(context));
@@ -989,7 +989,7 @@ public class TaskbarController implements UIController {
                                         ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
                                         bottomParams.height = height / 2;
                                         whitespaceBottom.setLayoutParams(bottomParams);
-                                    } else if(U.getTaskbarPosition(context).contains("bottom")) {
+                                    } else if (TaskbarPosition.isBottom(U.getTaskbarPosition(context))) {
                                         ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
                                         topParams.height = height;
                                         whitespaceTop.setLayoutParams(topParams);
@@ -1012,7 +1012,7 @@ public class TaskbarController implements UIController {
                                     Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
                                     int width = maxScreenSize - recentsSize;
 
-                                    if(pref.getBoolean("centered_icons", false)) {
+                                    if (pref.getBoolean("centered_icons", false)) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width / 2;
                                         whitespaceLeft.setLayoutParams(leftParams);
@@ -1020,7 +1020,7 @@ public class TaskbarController implements UIController {
                                         ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
                                         rightParams.width = width / 2;
                                         whitespaceRight.setLayoutParams(rightParams);
-                                    } else if(U.getTaskbarPosition(context).contains("right")) {
+                                    } else if (TaskbarPosition.isRight(U.getTaskbarPosition(context))) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width;
                                         whitespaceLeft.setLayoutParams(leftParams);
@@ -1386,7 +1386,8 @@ public class TaskbarController implements UIController {
             if(shouldShowShortcutIcon) imageView2.setVisibility(View.VISIBLE);
         }
 
-        if(taskbarPosition.equals("bottom_right") || taskbarPosition.equals("top_right")) {
+        if (POSITION_BOTTOM_RIGHT.equals(taskbarPosition)
+                || POSITION_TOP_RIGHT.equals(taskbarPosition)) {
             imageView.setRotationY(180);
             imageView2.setRotationY(180);
         }

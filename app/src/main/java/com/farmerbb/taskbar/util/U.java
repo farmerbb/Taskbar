@@ -89,6 +89,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
+
 public class U {
 
     private U() {}
@@ -492,44 +495,57 @@ public class U {
         );
     }
 
-    private static Bundle launchMode2(Context context, int launchType, ApplicationType type, View view) {
+    private static Bundle launchMode2(Context context,
+                                      int launchType,
+                                      ApplicationType type,
+                                      View view) {
         DisplayInfo display = getDisplayInfo(context);
 
         int statusBarHeight = getStatusBarHeight(context);
         String position = getTaskbarPosition(context);
 
-        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        int orientation = context.getResources().getConfiguration().orientation;
+        boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         int left = 0;
         int top = statusBarHeight;
         int right = display.width;
         int bottom = display.height;
 
-        int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
-                ? 0
-                : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+        int iconSize =
+                isOverridingFreeformHack(context)
+                        && !LauncherHelper.getInstance().isOnHomeScreen()
+                        ? 0
+                        : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-        if(position.contains("vertical_left"))
+        if (TaskbarPosition.isVerticalLeft(position)) {
             left = left + iconSize;
-        else if(position.contains("vertical_right"))
+        } else if (TaskbarPosition.isVerticalRight(position)) {
             right = right - iconSize;
-        else if(position.contains("bottom"))
+        } else if (TaskbarPosition.isBottom(position)) {
             bottom = bottom - iconSize;
-        else
+        } else {
             top = top + iconSize;
+        }
 
-        int halfLandscape = (right / 2) + ((iconSize / 2) * (position.contains("vertical_left") ? 1 : 0));
-        int halfPortrait = (bottom / 2) + ((iconSize / 2) * ((position.equals("top_left") || position.equals("top_right")) ? 1 : 0));
+        int halfLandscape =
+                (right / 2)
+                        + ((iconSize / 2) * (TaskbarPosition.isVerticalLeft(position) ? 1 : 0));
+        boolean isTopLeft = POSITION_TOP_LEFT.equals(position);
+        boolean isTopRight = POSITION_TOP_RIGHT.equals(position);
+        int halfPortrait =
+                (bottom / 2) + ((iconSize / 2) * ((isTopLeft || isTopRight) ? 1 : 0));
 
-        if(launchType == RIGHT && isLandscape)
+        if (launchType == RIGHT && isLandscape) {
             left = halfLandscape;
-        else if(launchType == RIGHT && isPortrait)
+        } else if (launchType == RIGHT && isPortrait) {
             top = halfPortrait;
-        else if(launchType == LEFT && isLandscape)
+        } else if (launchType == LEFT && isLandscape) {
             right = halfLandscape;
-        else if(launchType == LEFT && isPortrait)
+        } else if (launchType == LEFT && isPortrait) {
             bottom = halfPortrait;
+        }
 
         return getActivityOptionsBundle(context, type, view, left, top, right, bottom);
     }
@@ -628,14 +644,15 @@ public class U {
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-        if(position.contains("vertical_left"))
+        if (TaskbarPosition.isVerticalLeft(position)) {
             right = iconSize;
-        else if(position.contains("vertical_right"))
+        } else if (TaskbarPosition.isVerticalRight(position)) {
             left = right - iconSize;
-        else if(position.contains("bottom"))
+        } else if (TaskbarPosition.isBottom(position)) {
             top = bottom - iconSize;
-        else
+        } else {
             bottom = iconSize;
+        }
 
         Intent intent = new Intent(context, TouchAbsorberActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -733,7 +750,7 @@ public class U {
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
         int numOfColumns = 0;
 
-        float maxScreenSize = getTaskbarPosition(context).contains("vertical")
+        float maxScreenSize = TaskbarPosition.isVertical(getTaskbarPosition(context))
                 ? (display.height - getStatusBarHeight(context)) / density
                 : display.width / density;
 
@@ -1033,14 +1050,21 @@ public class U {
         return getActivityOptions(context, type, view).toBundle();
     }
 
-    private static Bundle getActivityOptionsBundle(Context context, ApplicationType applicationType, View view,
-                                                   int left, int top, int right, int bottom) {
+    private static Bundle getActivityOptionsBundle(Context context,
+                                                   ApplicationType applicationType,
+                                                   View view,
+                                                   int left,
+                                                   int top,
+                                                   int right,
+                                                   int bottom) {
         ActivityOptions options = getActivityOptions(context, applicationType, view);
-        if(options == null)
+        if (options == null) {
             return null;
+        }
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             return options.toBundle();
+        }
 
         return options.setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
     }
@@ -1697,7 +1721,7 @@ public class U {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.tb_def_sys_tray))
                 && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length))
-                && !getTaskbarPosition(context).contains("vertical");
+                && !TaskbarPosition.isVertical(getTaskbarPosition(context));
     }
 
     @SuppressWarnings("deprecation")

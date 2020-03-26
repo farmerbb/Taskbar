@@ -54,6 +54,7 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -657,7 +658,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void refreshDesktopIcons() {
         if(desktopIcons == null) return;
 
-        boolean taskbarIsVertical = U.getTaskbarPosition(this).contains("vertical");
+        boolean taskbarIsVertical = TaskbarPosition.isVertical(U.getTaskbarPosition(this));
         int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
         int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.tb_start_menu_grid_width);
 
@@ -869,14 +870,15 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         int right = 0;
         int bottom = 0;
 
-        if(position.contains("vertical_left"))
+        if (TaskbarPosition.isVerticalLeft(position)) {
             left = iconSize;
-        else if(position.contains("vertical_right"))
+        } else if (TaskbarPosition.isVerticalRight(position)) {
             right = iconSize;
-        else if(position.contains("bottom"))
+        } else if (TaskbarPosition.isBottom(position)) {
             bottom = iconSize;
-        else
+        } else {
             top = iconSize;
+        }
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,

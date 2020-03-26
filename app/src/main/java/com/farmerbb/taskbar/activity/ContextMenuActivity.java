@@ -46,6 +46,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
@@ -225,7 +226,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
 
-            if (!U.getTaskbarPosition(this).contains("vertical")
+            if (!TaskbarPosition.isVertical(U.getTaskbarPosition(this))
                     && (params.x > display.width / 2)) {
                 int contextMenuWidth =
                         getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
@@ -236,7 +237,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         params.width = getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
         params.dimAmount = 0;
 
-        if(U.isChromeOs(this) && U.getTaskbarPosition(this).contains("bottom")) {
+        if(U.isChromeOs(this)
+                && TaskbarPosition.isBottom(U.getTaskbarPosition(this))) {
             SharedPreferences pref = U.getSharedPreferences(this);
 
             if(pref.getBoolean("chrome_os_context_menu_fix", true)
