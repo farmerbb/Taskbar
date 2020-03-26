@@ -153,6 +153,19 @@ public class UTest {
         );
     }
 
+    @Test
+    public void testGetTaskbarPositionWithAnchorAndInvalidPosition() {
+        checkTaskbarPositionWithDifferentRotation(
+                "invalid-position",
+                new ArrayList<String>() {{
+                    add(POSITION_BOTTOM_LEFT);
+                    add(POSITION_BOTTOM_LEFT);
+                    add(POSITION_BOTTOM_LEFT);
+                    add(POSITION_BOTTOM_LEFT);
+                }}
+        );
+    }
+
     private void checkTaskbarPositionWithDifferentRotation(String originPosition,
                                                            List<String> changedPositions) {
         assertEquals(4, changedPositions.size());

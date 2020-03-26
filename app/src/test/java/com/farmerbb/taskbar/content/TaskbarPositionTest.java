@@ -121,6 +121,18 @@ public class TaskbarPositionTest {
         );
     }
 
+    public void testTransferPositionWithInvalidPosition() {
+        checkTaskbarPositionWithDifferentRotation(
+                "invalid-position",
+                new ArrayList<String>() {{
+                    add(null);
+                    add(null);
+                    add(null);
+                    add(null);
+                }}
+        );
+    }
+
     @Test
     public void testIsVertical() {
         assertFalse(isVertical(POSITION_BOTTOM_LEFT));
