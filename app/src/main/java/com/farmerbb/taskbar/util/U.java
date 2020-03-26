@@ -58,7 +58,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -72,6 +71,7 @@ import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
@@ -713,110 +713,14 @@ public class U {
 
     public static String getTaskbarPosition(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        String position = pref.getString("position", "bottom_left");
+        String position = pref.getString("position", TaskbarPosition.POSITION_BOTTOM_LEFT);
 
-        if(pref.getBoolean("anchor", false)) {
+        if (pref.getBoolean("anchor", false)) {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             int rotation = cachedRotation != null ? cachedRotation : windowManager.getDefaultDisplay().getRotation();
 
-            switch(position) {
-                case "bottom_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_vertical_right";
-                        case Surface.ROTATION_180:
-                            return "top_right";
-                        case Surface.ROTATION_270:
-                            return "top_vertical_left";
-                    }
-                    break;
-                case "bottom_vertical_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_vertical_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_right";
-                        case Surface.ROTATION_180:
-                            return "top_vertical_right";
-                        case Surface.ROTATION_270:
-                            return "top_left";
-                    }
-                    break;
-                case "bottom_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_right";
-                        case Surface.ROTATION_90:
-                            return "top_vertical_right";
-                        case Surface.ROTATION_180:
-                            return "top_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_vertical_left";
-                    }
-                    break;
-                case "bottom_vertical_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_vertical_right";
-                        case Surface.ROTATION_90:
-                            return "top_right";
-                        case Surface.ROTATION_180:
-                            return "top_vertical_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_left";
-                    }
-                    break;
-                case "top_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_vertical_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_right";
-                        case Surface.ROTATION_270:
-                            return "top_vertical_right";
-                    }
-                    break;
-                case "top_vertical_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_vertical_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_vertical_right";
-                        case Surface.ROTATION_270:
-                            return "top_right";
-                    }
-                    break;
-                case "top_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_right";
-                        case Surface.ROTATION_90:
-                            return "top_vertical_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_vertical_right";
-                    }
-                    break;
-                case "top_vertical_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_vertical_right";
-                        case Surface.ROTATION_90:
-                            return "top_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_vertical_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_right";
-                    }
-                    break;
-            }
+            String finalPosition = TaskbarPosition.transferPositionWithRotation(position, rotation);
+            return finalPosition == null ? position : finalPosition;
         }
 
         return position;

@@ -95,6 +95,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -103,6 +104,15 @@ import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
 public class TaskbarController implements UIController {
 
@@ -248,42 +258,42 @@ public class TaskbarController implements UIController {
 
         // Determine where to show the taskbar on screen
         switch(U.getTaskbarPosition(context)) {
-            case "bottom_left":
+            case POSITION_BOTTOM_LEFT:
                 layoutId = R.layout.tb_taskbar_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 positionIsVertical = false;
                 break;
-            case "bottom_vertical_left":
+            case POSITION_BOTTOM_VERTICAL_LEFT:
                 layoutId = R.layout.tb_taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 positionIsVertical = true;
                 break;
-            case "bottom_right":
+            case POSITION_BOTTOM_RIGHT:
                 layoutId = R.layout.tb_taskbar_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 positionIsVertical = false;
                 break;
-            case "bottom_vertical_right":
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
                 layoutId = R.layout.tb_taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 positionIsVertical = true;
                 break;
-            case "top_left":
+            case POSITION_TOP_LEFT:
                 layoutId = R.layout.tb_taskbar_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 positionIsVertical = false;
                 break;
-            case "top_vertical_left":
+            case POSITION_TOP_VERTICAL_LEFT:
                 layoutId = R.layout.tb_taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 positionIsVertical = true;
                 break;
-            case "top_right":
+            case POSITION_TOP_RIGHT:
                 layoutId = R.layout.tb_taskbar_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 positionIsVertical = false;
                 break;
-            case "top_vertical_right":
+            case POSITION_TOP_VERTICAL_RIGHT:
                 layoutId = R.layout.tb_taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 positionIsVertical = true;
@@ -823,8 +833,8 @@ public class TaskbarController implements UIController {
                 // Determine if we need to reverse the order
                 boolean needToReverseOrder;
                 switch(U.getTaskbarPosition(context)) {
-                    case "bottom_right":
-                    case "top_right":
+                    case POSITION_BOTTOM_RIGHT:
+                    case POSITION_TOP_RIGHT:
                         needToReverseOrder = sortOrder.contains("false");
                         break;
                     default:
@@ -1044,19 +1054,19 @@ public class TaskbarController implements UIController {
                         if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
                             new Handler().post(() -> {
                                 switch(U.getTaskbarPosition(context)) {
-                                    case "bottom_left":
-                                    case "bottom_right":
-                                    case "top_left":
-                                    case "top_right":
+                                    case POSITION_BOTTOM_LEFT:
+                                    case POSITION_BOTTOM_RIGHT:
+                                    case POSITION_TOP_LEFT:
+                                    case POSITION_TOP_RIGHT:
                                         if(sortOrder.contains("false"))
                                             scrollView.scrollTo(0, 0);
                                         else if(sortOrder.contains("true"))
                                             scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
                                         break;
-                                    case "bottom_vertical_left":
-                                    case "bottom_vertical_right":
-                                    case "top_vertical_left":
-                                    case "top_vertical_right":
+                                    case POSITION_BOTTOM_VERTICAL_LEFT:
+                                    case POSITION_BOTTOM_VERTICAL_RIGHT:
+                                    case POSITION_TOP_VERTICAL_LEFT:
+                                    case POSITION_TOP_VERTICAL_RIGHT:
                                         if(sortOrder.contains("false"))
                                             scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
                                         else if(sortOrder.contains("true"))

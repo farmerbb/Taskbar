@@ -75,6 +75,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+
 public class StartMenuController implements UIController {
 
     private Context context;
@@ -209,35 +218,35 @@ public class StartMenuController implements UIController {
 
         // Determine where to show the start menu on screen
         switch(U.getTaskbarPosition(context)) {
-            case "bottom_left":
+            case POSITION_BOTTOM_LEFT:
                 layoutId = R.layout.tb_start_menu_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
-            case "bottom_vertical_left":
+            case POSITION_BOTTOM_VERTICAL_LEFT:
                 layoutId = R.layout.tb_start_menu_vertical_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
-            case "bottom_right":
+            case POSITION_BOTTOM_RIGHT:
                 layoutId = R.layout.tb_start_menu_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
-            case "bottom_vertical_right":
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
                 layoutId = R.layout.tb_start_menu_vertical_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
-            case "top_left":
+            case POSITION_TOP_LEFT:
                 layoutId = R.layout.tb_start_menu_top_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 break;
-            case "top_vertical_left":
+            case POSITION_TOP_VERTICAL_LEFT:
                 layoutId = R.layout.tb_start_menu_vertical_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 break;
-            case "top_right":
+            case POSITION_TOP_RIGHT:
                 layoutId = R.layout.tb_start_menu_top_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 break;
-            case "top_vertical_right":
+            case POSITION_TOP_VERTICAL_RIGHT:
                 layoutId = R.layout.tb_start_menu_vertical_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 break;

@@ -63,6 +63,15 @@ import org.json.JSONException;
 
 import java.util.List;
 
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+
 public class ContextMenuActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 
     private AppEntry entry;
@@ -116,8 +125,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
         
-        if(args.containsKey("x") && args.containsKey("y"))
+        if (args.containsKey("x") && args.containsKey("y")) {
             U.applyDisplayCutoutModeTo(params);
+        }
 
         DisplayInfo display = U.getDisplayInfo(this);
 
@@ -126,34 +136,42 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         if(resourceId > 0)
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        if(showStartMenu || desktopIcon != null) {
+        if (showStartMenu || desktopIcon != null) {
             int x = args.getInt("x", 0);
             int y = args.getInt("y", 0);
-            int offset = getResources().getDimensionPixelSize(isOverflowMenu ? R.dimen.tb_context_menu_offset_overflow : R.dimen.tb_context_menu_offset);
+            int offsetResourceId =
+                    isOverflowMenu
+                            ? R.dimen.tb_context_menu_offset_overflow
+                            : R.dimen.tb_context_menu_offset;
+            int offset = getResources().getDimensionPixelSize(offsetResourceId);
 
-            switch(U.getTaskbarPosition(this)) {
-                case "bottom_left":
-                case "bottom_vertical_left":
+            switch (U.getTaskbarPosition(this)) {
+                case POSITION_BOTTOM_LEFT:
+                case POSITION_BOTTOM_VERTICAL_LEFT:
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = x;
                     params.y = display.height - y - offset;
                     break;
-                case "bottom_right":
-                case "bottom_vertical_right":
+                case POSITION_BOTTOM_RIGHT:
+                case POSITION_BOTTOM_VERTICAL_RIGHT:
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    params.x = x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width) + offset + offset;
+                    params.x =
+                            x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width)
+                                    + offset + offset;
                     params.y = display.height - y - offset;
                     break;
-                case "top_left":
-                case "top_vertical_left":
+                case POSITION_TOP_LEFT:
+                case POSITION_TOP_VERTICAL_LEFT:
                     params.gravity = Gravity.TOP | Gravity.LEFT;
                     params.x = x;
                     params.y = y - offset + statusBarHeight;
                     break;
-                case "top_right":
-                case "top_vertical_right":
+                case POSITION_TOP_RIGHT:
+                case POSITION_TOP_VERTICAL_RIGHT:
                     params.gravity = Gravity.TOP | Gravity.LEFT;
-                    params.x = x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width) + offset + offset;
+                    params.x =
+                            x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width)
+                                    + offset + offset;
                     params.y = y - offset + statusBarHeight;
                     break;
             }
@@ -165,50 +183,54 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             int offset = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
             switch(U.getTaskbarPosition(this)) {
-                case "bottom_left":
+                case POSITION_BOTTOM_LEFT:
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = isStartButton ? 0 : x;
                     params.y = offset;
                     break;
-                case "bottom_vertical_left":
+                case POSITION_BOTTOM_VERTICAL_LEFT:
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = offset;
                     params.y = display.height - y - (isStartButton ? 0 : offset);
                     break;
-                case "bottom_right":
+                case POSITION_BOTTOM_RIGHT:
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                     params.x = display.width - x;
                     params.y = offset;
                     break;
-                case "bottom_vertical_right":
+                case POSITION_BOTTOM_VERTICAL_RIGHT:
                     params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                     params.x = offset;
                     params.y = display.height - y - (isStartButton ? 0 : offset);
                     break;
-                case "top_left":
+                case POSITION_TOP_LEFT:
                     params.gravity = Gravity.TOP | Gravity.LEFT;
                     params.x = isStartButton ? 0 : x;
                     params.y = offset;
                     break;
-                case "top_vertical_left":
+                case POSITION_TOP_VERTICAL_LEFT:
                     params.gravity = Gravity.TOP | Gravity.LEFT;
                     params.x = offset;
                     params.y = isStartButton ? 0 : y - statusBarHeight;
                     break;
-                case "top_right":
+                case POSITION_TOP_RIGHT:
                     params.gravity = Gravity.TOP | Gravity.RIGHT;
                     params.x = display.width - x;
                     params.y = offset;
                     break;
-                case "top_vertical_right":
+                case POSITION_TOP_VERTICAL_RIGHT:
                     params.gravity = Gravity.TOP | Gravity.RIGHT;
                     params.x = offset;
                     params.y = isStartButton ? 0 : y - statusBarHeight;
                     break;
             }
 
-            if(!U.getTaskbarPosition(this).contains("vertical") && (params.x > display.width / 2))
-                params.x = params.x - getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width) + offset;
+            if (!U.getTaskbarPosition(this).contains("vertical")
+                    && (params.x > display.width / 2)) {
+                int contextMenuWidth =
+                        getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
+                params.x = params.x - contextMenuWidth + offset;
+            }
         }
 
         params.width = getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);

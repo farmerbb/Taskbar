@@ -66,6 +66,15 @@ import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
 
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+
 public class DashboardController implements UIController {
 
     private AppWidgetManager mAppWidgetManager;
@@ -269,20 +278,20 @@ public class DashboardController implements UIController {
             int paddingSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
             switch(U.getTaskbarPosition(context)) {
-                case "top_vertical_left":
-                case "bottom_vertical_left":
+                case POSITION_TOP_VERTICAL_LEFT:
+                case POSITION_BOTTOM_VERTICAL_LEFT:
                     layout.setPadding(paddingSize, 0, 0, 0);
                     break;
-                case "top_left":
-                case "top_right":
+                case POSITION_TOP_LEFT:
+                case POSITION_TOP_RIGHT:
                     layout.setPadding(0, paddingSize, 0, 0);
                     break;
-                case "top_vertical_right":
-                case "bottom_vertical_right":
+                case POSITION_TOP_VERTICAL_RIGHT:
+                case POSITION_BOTTOM_VERTICAL_RIGHT:
                     layout.setPadding(0, 0, paddingSize, 0);
                     break;
-                case "bottom_left":
-                case "bottom_right":
+                case POSITION_BOTTOM_LEFT:
+                case POSITION_BOTTOM_RIGHT:
                     layout.setPadding(0, 0, 0, paddingSize);
                     break;
             }
