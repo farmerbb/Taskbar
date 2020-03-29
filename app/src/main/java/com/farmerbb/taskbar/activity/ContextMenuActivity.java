@@ -226,7 +226,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
 
-            if (!TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(this))
+            if (!TaskbarPosition.isVertical(this)
                     && (params.x > display.width / 2)) {
                 int contextMenuWidth =
                         getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
@@ -238,7 +238,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         params.dimAmount = 0;
 
         if(U.isChromeOs(this)
-                && TaskbarPosition.isBottom(TaskbarPosition.getTaskbarPosition(this))) {
+                && TaskbarPosition.isBottom(this)) {
             SharedPreferences pref = U.getSharedPreferences(this);
 
             if(pref.getBoolean("chrome_os_context_menu_fix", true)

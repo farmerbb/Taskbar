@@ -18,6 +18,7 @@ import org.robolectric.shadows.ShadowDisplay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
@@ -63,6 +64,34 @@ public class TaskbarPositionTest {
     }
 
     @Test
+    public void testIsVerticalWithContext() {
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_LEFT, TaskbarPosition::isVertical, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_RIGHT, TaskbarPosition::isVertical, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_LEFT, TaskbarPosition::isVertical, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_RIGHT, TaskbarPosition::isVertical, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_LEFT, TaskbarPosition::isVertical, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_RIGHT, TaskbarPosition::isVertical, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_LEFT, TaskbarPosition::isVertical, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_RIGHT, TaskbarPosition::isVertical, true
+        );
+    }
+
+    @Test
     public void testIsLeft() {
         assertTrue(isLeft(POSITION_BOTTOM_LEFT));
         assertFalse(isLeft(POSITION_BOTTOM_RIGHT));
@@ -72,6 +101,34 @@ public class TaskbarPositionTest {
         assertFalse(isLeft(POSITION_TOP_RIGHT));
         assertTrue(isLeft(POSITION_TOP_VERTICAL_LEFT));
         assertFalse(isLeft(POSITION_TOP_VERTICAL_RIGHT));
+    }
+
+    @Test
+    public void testIsLeftWithContext() {
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_LEFT, TaskbarPosition::isLeft, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_RIGHT, TaskbarPosition::isLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_LEFT, TaskbarPosition::isLeft, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_RIGHT, TaskbarPosition::isLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_LEFT, TaskbarPosition::isLeft, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_RIGHT, TaskbarPosition::isLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_LEFT, TaskbarPosition::isLeft, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_RIGHT, TaskbarPosition::isLeft, false
+        );
     }
 
     @Test
@@ -87,6 +144,34 @@ public class TaskbarPositionTest {
     }
 
     @Test
+    public void testIsRightWithContext() {
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_LEFT, TaskbarPosition::isRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_RIGHT, TaskbarPosition::isRight, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_LEFT, TaskbarPosition::isRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_RIGHT, TaskbarPosition::isRight, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_LEFT, TaskbarPosition::isRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_RIGHT, TaskbarPosition::isRight, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_LEFT, TaskbarPosition::isRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_RIGHT, TaskbarPosition::isRight, true
+        );
+    }
+
+    @Test
     public void testIsBottom() {
         assertTrue(isBottom(POSITION_BOTTOM_LEFT));
         assertTrue(isBottom(POSITION_BOTTOM_RIGHT));
@@ -96,6 +181,34 @@ public class TaskbarPositionTest {
         assertFalse(isBottom(POSITION_TOP_RIGHT));
         assertFalse(isBottom(POSITION_TOP_VERTICAL_LEFT));
         assertFalse(isBottom(POSITION_TOP_VERTICAL_RIGHT));
+    }
+
+    @Test
+    public void testIsBottomWithContext() {
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_LEFT, TaskbarPosition::isBottom, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_RIGHT, TaskbarPosition::isBottom, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_LEFT, TaskbarPosition::isBottom, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_RIGHT, TaskbarPosition::isBottom, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_LEFT, TaskbarPosition::isBottom, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_RIGHT, TaskbarPosition::isBottom, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_LEFT, TaskbarPosition::isBottom, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_RIGHT, TaskbarPosition::isBottom, false
+        );
     }
 
     @Test
@@ -111,6 +224,34 @@ public class TaskbarPositionTest {
     }
 
     @Test
+    public void testIsVerticalLeftWithContext() {
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_LEFT, TaskbarPosition::isVerticalLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_RIGHT, TaskbarPosition::isVerticalLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_LEFT, TaskbarPosition::isVerticalLeft, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_RIGHT, TaskbarPosition::isVerticalLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_LEFT, TaskbarPosition::isVerticalLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_RIGHT, TaskbarPosition::isVerticalLeft, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_LEFT, TaskbarPosition::isVerticalLeft, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_RIGHT, TaskbarPosition::isVerticalLeft, false
+        );
+    }
+
+    @Test
     public void testIsVerticalRight() {
         assertFalse(isVerticalRight(POSITION_BOTTOM_LEFT));
         assertFalse(isVerticalRight(POSITION_BOTTOM_RIGHT));
@@ -120,6 +261,34 @@ public class TaskbarPositionTest {
         assertFalse(isVerticalRight(POSITION_TOP_RIGHT));
         assertFalse(isVerticalRight(POSITION_TOP_VERTICAL_LEFT));
         assertTrue(isVerticalRight(POSITION_TOP_VERTICAL_RIGHT));
+    }
+
+    @Test
+    public void testIsVerticalRightWithContext() {
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_LEFT, TaskbarPosition::isVerticalRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_RIGHT, TaskbarPosition::isVerticalRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_LEFT, TaskbarPosition::isVerticalRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_BOTTOM_VERTICAL_RIGHT, TaskbarPosition::isVerticalRight, true
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_LEFT, TaskbarPosition::isVerticalRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_RIGHT, TaskbarPosition::isVerticalRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_LEFT, TaskbarPosition::isVerticalRight, false
+        );
+        checkTaskbarPositionGroup(
+                POSITION_TOP_VERTICAL_RIGHT, TaskbarPosition::isVerticalRight, true
+        );
     }
 
     @Test
@@ -262,6 +431,19 @@ public class TaskbarPositionTest {
         assertEquals(changedPositions.get(2), TaskbarPosition.getTaskbarPosition(context));
         initializeRotation(Surface.ROTATION_270);
         assertEquals(changedPositions.get(3), TaskbarPosition.getTaskbarPosition(context));
+        U.getSharedPreferences(context).edit().putBoolean(SP_KEY_ANCHOR, oldAnchor).apply();
+        U.getSharedPreferences(context).edit().putString(SP_KEY_POSITION, oldPosition).apply();
+    }
+
+    private void checkTaskbarPositionGroup(String originPosition,
+                                           Predicate<Context> predicate,
+                                           boolean expectedResult) {
+        String oldPosition =
+                U.getSharedPreferences(context).getString(SP_KEY_POSITION, POSITION_BOTTOM_LEFT);
+        boolean oldAnchor =
+                U.getSharedPreferences(context).getBoolean(SP_KEY_ANCHOR, false);
+        initializeTaskbarPosition(originPosition);
+        assertEquals(expectedResult, predicate.test(context));
         U.getSharedPreferences(context).edit().putBoolean(SP_KEY_ANCHOR, oldAnchor).apply();
         U.getSharedPreferences(context).edit().putString(SP_KEY_POSITION, oldPosition).apply();
     }

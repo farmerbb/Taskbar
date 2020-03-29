@@ -156,6 +156,10 @@ public class TaskbarPosition {
         }
     }
 
+    public static boolean isVertical(Context context) {
+        return isVertical(getTaskbarPosition(context));
+    }
+
     public static boolean isLeft(String position) {
         switch (position) {
             case POSITION_TOP_LEFT:
@@ -166,6 +170,10 @@ public class TaskbarPosition {
             default:
                 return false;
         }
+    }
+
+    public static boolean isLeft(Context context) {
+        return isLeft(getTaskbarPosition(context));
     }
 
     public static boolean isRight(String position) {
@@ -180,6 +188,10 @@ public class TaskbarPosition {
         }
     }
 
+    public static boolean isRight(Context context) {
+        return isRight(getTaskbarPosition(context));
+    }
+
     public static boolean isBottom(String position) {
         switch (position) {
             case POSITION_BOTTOM_LEFT:
@@ -192,12 +204,24 @@ public class TaskbarPosition {
         }
     }
 
+    public static boolean isBottom(Context context) {
+        return isBottom(getTaskbarPosition(context));
+    }
+
     public static boolean isVerticalLeft(String position) {
         return isVertical(position) && isLeft(position);
     }
 
+    public static boolean isVerticalLeft(Context context) {
+        return isVerticalLeft(getTaskbarPosition(context));
+    }
+
     public static boolean isVerticalRight(String position) {
         return isVertical(position) && isRight(position);
+    }
+
+    public static boolean isVerticalRight(Context context) {
+        return isVerticalRight(getTaskbarPosition(context));
     }
 
     public static String getTaskbarPosition(Context context) {

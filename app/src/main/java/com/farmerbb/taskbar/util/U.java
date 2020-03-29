@@ -739,7 +739,7 @@ public class U {
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
         int numOfColumns = 0;
 
-        float maxScreenSize = TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(context))
+        float maxScreenSize = TaskbarPosition.isVertical(context)
                 ? (display.height - getStatusBarHeight(context)) / density
                 : display.width / density;
 
@@ -1710,7 +1710,7 @@ public class U {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.tb_def_sys_tray))
                 && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length))
-                && !TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(context));
+                && !TaskbarPosition.isVertical(context);
     }
 
     @SuppressWarnings("deprecation")

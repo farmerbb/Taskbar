@@ -903,7 +903,7 @@ public class TaskbarController implements UIController {
             }
 
             // Determine if we need to reverse the order again
-            if(TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(context))) {
+            if(TaskbarPosition.isVertical(context)) {
                 Collections.reverse(entries);
                 Collections.reverse(launcherAppCache);
             }
@@ -967,7 +967,7 @@ public class TaskbarController implements UIController {
                         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
-                        if(TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(context))) {
+                        if(TaskbarPosition.isVertical(context)) {
                             int maxScreenSize = Math.max(0, display.height
                                     - U.getStatusBarHeight(context)
                                     - U.getBaseTaskbarSize(context));
@@ -989,7 +989,7 @@ public class TaskbarController implements UIController {
                                         ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
                                         bottomParams.height = height / 2;
                                         whitespaceBottom.setLayoutParams(bottomParams);
-                                    } else if (TaskbarPosition.isBottom(TaskbarPosition.getTaskbarPosition(context))) {
+                                    } else if (TaskbarPosition.isBottom(context)) {
                                         ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
                                         topParams.height = height;
                                         whitespaceTop.setLayoutParams(topParams);
@@ -1020,7 +1020,7 @@ public class TaskbarController implements UIController {
                                         ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
                                         rightParams.width = width / 2;
                                         whitespaceRight.setLayoutParams(rightParams);
-                                    } else if (TaskbarPosition.isRight(TaskbarPosition.getTaskbarPosition(context))) {
+                                    } else if (TaskbarPosition.isRight(context)) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width;
                                         whitespaceLeft.setLayoutParams(leftParams);
