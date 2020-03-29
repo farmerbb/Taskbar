@@ -14,10 +14,14 @@
  */
 package com.farmerbb.taskbar.content;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.Surface;
+import android.view.WindowManager;
+
+import com.farmerbb.taskbar.util.U;
 
 public class TaskbarPosition {
-    // TODO Change string to enum to get more security checking.
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";
     public static final String POSITION_BOTTOM_RIGHT = "bottom_right";
     public static final String POSITION_BOTTOM_VERTICAL_LEFT = "bottom_vertical_left";
@@ -38,7 +42,7 @@ public class TaskbarPosition {
      * @param rotation The current rotation.
      * @return The new position transferred based on rotation.
      */
-    public static String transferPositionWithRotation(String position, int rotation) {
+    private static String transferPositionWithRotation(String position, int rotation) {
         switch (position) {
             case POSITION_BOTTOM_LEFT:
                 switch (rotation) {
@@ -194,5 +198,25 @@ public class TaskbarPosition {
 
     public static boolean isVerticalRight(String position) {
         return isVertical(position) && isRight(position);
+    }
+
+    public static String getTaskbarPosition(Context context) {
+        SharedPreferences pref = U.getSharedPreferences(context);
+        String position = pref.getString("position", POSITION_BOTTOM_LEFT);
+
+        if (pref.getBoolean("anchor", false)) {
+            WindowManager windowManager =
+                    (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Integer cachedRotation = U.getCachedRotation();
+            int rotation =
+                    cachedRotation != null
+                            ? cachedRotation
+                            : windowManager.getDefaultDisplay().getRotation();
+
+            String finalPosition = transferPositionWithRotation(position, rotation);
+            return finalPosition == null ? position : finalPosition;
+        }
+
+        return position;
     }
 }

@@ -658,7 +658,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void refreshDesktopIcons() {
         if(desktopIcons == null) return;
 
-        boolean taskbarIsVertical = TaskbarPosition.isVertical(U.getTaskbarPosition(this));
+        boolean taskbarIsVertical = TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(this));
         int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
         int desktopIconSize = getResources().getDimensionPixelSize(R.dimen.tb_start_menu_grid_width);
 
@@ -862,7 +862,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void updateMargins() {
         if(desktopIcons == null || fab == null) return;
 
-        String position = U.getTaskbarPosition(this);
+        String position = TaskbarPosition.getTaskbarPosition(this);
         int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
         int left = 0;

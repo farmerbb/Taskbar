@@ -58,6 +58,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -277,7 +278,7 @@ public class DashboardController implements UIController {
         new Handler().postDelayed(() -> {
             int paddingSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-            switch(U.getTaskbarPosition(context)) {
+            switch(TaskbarPosition.getTaskbarPosition(context)) {
                 case POSITION_TOP_VERTICAL_LEFT:
                 case POSITION_BOTTOM_VERTICAL_LEFT:
                     layout.setPadding(paddingSize, 0, 0, 0);

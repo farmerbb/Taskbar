@@ -59,6 +59,7 @@ import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -217,7 +218,7 @@ public class StartMenuController implements UIController {
         );
 
         // Determine where to show the start menu on screen
-        switch(U.getTaskbarPosition(context)) {
+        switch(TaskbarPosition.getTaskbarPosition(context)) {
             case POSITION_BOTTOM_LEFT:
                 layoutId = R.layout.tb_start_menu_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;

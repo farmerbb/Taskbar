@@ -502,7 +502,7 @@ public class U {
         DisplayInfo display = getDisplayInfo(context);
 
         int statusBarHeight = getStatusBarHeight(context);
-        String position = getTaskbarPosition(context);
+        String position = TaskbarPosition.getTaskbarPosition(context);
 
         int orientation = context.getResources().getConfiguration().orientation;
         boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
@@ -634,7 +634,7 @@ public class U {
     }
 
     public static void startTouchAbsorberActivity(Context context) {
-        String position = getTaskbarPosition(context);
+        String position = TaskbarPosition.getTaskbarPosition(context);
         DisplayInfo display = getDisplayInfo(context);
 
         int left = 0;
@@ -728,19 +728,8 @@ public class U {
         U.cachedRotation = cachedRotation;
     }
 
-    public static String getTaskbarPosition(Context context) {
-        SharedPreferences pref = getSharedPreferences(context);
-        String position = pref.getString("position", TaskbarPosition.POSITION_BOTTOM_LEFT);
-
-        if (pref.getBoolean("anchor", false)) {
-            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            int rotation = cachedRotation != null ? cachedRotation : windowManager.getDefaultDisplay().getRotation();
-
-            String finalPosition = TaskbarPosition.transferPositionWithRotation(position, rotation);
-            return finalPosition == null ? position : finalPosition;
-        }
-
-        return position;
+    public static Integer getCachedRotation() {
+        return cachedRotation;
     }
 
     private static int getMaxNumOfColumns(Context context) {
@@ -750,7 +739,7 @@ public class U {
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
         int numOfColumns = 0;
 
-        float maxScreenSize = TaskbarPosition.isVertical(getTaskbarPosition(context))
+        float maxScreenSize = TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(context))
                 ? (display.height - getStatusBarHeight(context)) / density
                 : display.width / density;
 
@@ -1721,7 +1710,7 @@ public class U {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.tb_def_sys_tray))
                 && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length))
-                && !TaskbarPosition.isVertical(getTaskbarPosition(context));
+                && !TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(context));
     }
 
     @SuppressWarnings("deprecation")

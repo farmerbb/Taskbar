@@ -146,7 +146,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                             : R.dimen.tb_context_menu_offset;
             int offset = getResources().getDimensionPixelSize(offsetResourceId);
 
-            switch (U.getTaskbarPosition(this)) {
+            switch (TaskbarPosition.getTaskbarPosition(this)) {
                 case POSITION_BOTTOM_LEFT:
                 case POSITION_BOTTOM_VERTICAL_LEFT:
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
@@ -183,7 +183,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             int y = args.getInt("y", display.height);
             int offset = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-            switch(U.getTaskbarPosition(this)) {
+            switch(TaskbarPosition.getTaskbarPosition(this)) {
                 case POSITION_BOTTOM_LEFT:
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                     params.x = isStartButton ? 0 : x;
@@ -226,7 +226,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
 
-            if (!TaskbarPosition.isVertical(U.getTaskbarPosition(this))
+            if (!TaskbarPosition.isVertical(TaskbarPosition.getTaskbarPosition(this))
                     && (params.x > display.width / 2)) {
                 int contextMenuWidth =
                         getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
@@ -238,7 +238,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         params.dimAmount = 0;
 
         if(U.isChromeOs(this)
-                && TaskbarPosition.isBottom(U.getTaskbarPosition(this))) {
+                && TaskbarPosition.isBottom(TaskbarPosition.getTaskbarPosition(this))) {
             SharedPreferences pref = U.getSharedPreferences(this);
 
             if(pref.getBoolean("chrome_os_context_menu_fix", true)
