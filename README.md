@@ -70,6 +70,9 @@ Taskbar includes support for ADW-style icon packs.  If you are an icon pack deve
     startActivity(intent);
 
 ## Contributors
+
+Pull requests are welcome!  See the [contributor guidelines](https://github.com/farmerbb/Taskbar/blob/master/CONTRIBUTING.md) for more details.
+
 * Mark Morilla (app logo)
 * naofum (Japanese translation)
 * HardSer (Russian translation)
