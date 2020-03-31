@@ -58,7 +58,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -72,6 +71,7 @@ import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
@@ -88,6 +88,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
 
 public class U {
 
@@ -492,44 +495,57 @@ public class U {
         );
     }
 
-    private static Bundle launchMode2(Context context, int launchType, ApplicationType type, View view) {
+    private static Bundle launchMode2(Context context,
+                                      int launchType,
+                                      ApplicationType type,
+                                      View view) {
         DisplayInfo display = getDisplayInfo(context);
 
         int statusBarHeight = getStatusBarHeight(context);
-        String position = getTaskbarPosition(context);
+        String position = TaskbarPosition.getTaskbarPosition(context);
 
-        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        int orientation = context.getResources().getConfiguration().orientation;
+        boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         int left = 0;
         int top = statusBarHeight;
         int right = display.width;
         int bottom = display.height;
 
-        int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
-                ? 0
-                : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+        int iconSize =
+                isOverridingFreeformHack(context)
+                        && !LauncherHelper.getInstance().isOnHomeScreen()
+                        ? 0
+                        : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-        if(position.contains("vertical_left"))
+        if (TaskbarPosition.isVerticalLeft(position)) {
             left = left + iconSize;
-        else if(position.contains("vertical_right"))
+        } else if (TaskbarPosition.isVerticalRight(position)) {
             right = right - iconSize;
-        else if(position.contains("bottom"))
+        } else if (TaskbarPosition.isBottom(position)) {
             bottom = bottom - iconSize;
-        else
+        } else {
             top = top + iconSize;
+        }
 
-        int halfLandscape = (right / 2) + ((iconSize / 2) * (position.contains("vertical_left") ? 1 : 0));
-        int halfPortrait = (bottom / 2) + ((iconSize / 2) * ((position.equals("top_left") || position.equals("top_right")) ? 1 : 0));
+        int halfLandscape =
+                (right / 2)
+                        + ((iconSize / 2) * (TaskbarPosition.isVerticalLeft(position) ? 1 : 0));
+        boolean isTopLeft = POSITION_TOP_LEFT.equals(position);
+        boolean isTopRight = POSITION_TOP_RIGHT.equals(position);
+        int halfPortrait =
+                (bottom / 2) + ((iconSize / 2) * ((isTopLeft || isTopRight) ? 1 : 0));
 
-        if(launchType == RIGHT && isLandscape)
+        if (launchType == RIGHT && isLandscape) {
             left = halfLandscape;
-        else if(launchType == RIGHT && isPortrait)
+        } else if (launchType == RIGHT && isPortrait) {
             top = halfPortrait;
-        else if(launchType == LEFT && isLandscape)
+        } else if (launchType == LEFT && isLandscape) {
             right = halfLandscape;
-        else if(launchType == LEFT && isPortrait)
+        } else if (launchType == LEFT && isPortrait) {
             bottom = halfPortrait;
+        }
 
         return getActivityOptionsBundle(context, type, view, left, top, right, bottom);
     }
@@ -618,7 +634,7 @@ public class U {
     }
 
     public static void startTouchAbsorberActivity(Context context) {
-        String position = getTaskbarPosition(context);
+        String position = TaskbarPosition.getTaskbarPosition(context);
         DisplayInfo display = getDisplayInfo(context);
 
         int left = 0;
@@ -628,14 +644,15 @@ public class U {
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-        if(position.contains("vertical_left"))
+        if (TaskbarPosition.isVerticalLeft(position)) {
             right = iconSize;
-        else if(position.contains("vertical_right"))
+        } else if (TaskbarPosition.isVerticalRight(position)) {
             left = right - iconSize;
-        else if(position.contains("bottom"))
+        } else if (TaskbarPosition.isBottom(position)) {
             top = bottom - iconSize;
-        else
+        } else {
             bottom = iconSize;
+        }
 
         Intent intent = new Intent(context, TouchAbsorberActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -711,115 +728,8 @@ public class U {
         U.cachedRotation = cachedRotation;
     }
 
-    public static String getTaskbarPosition(Context context) {
-        SharedPreferences pref = getSharedPreferences(context);
-        String position = pref.getString("position", "bottom_left");
-
-        if(pref.getBoolean("anchor", false)) {
-            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            int rotation = cachedRotation != null ? cachedRotation : windowManager.getDefaultDisplay().getRotation();
-
-            switch(position) {
-                case "bottom_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_vertical_right";
-                        case Surface.ROTATION_180:
-                            return "top_right";
-                        case Surface.ROTATION_270:
-                            return "top_vertical_left";
-                    }
-                    break;
-                case "bottom_vertical_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_vertical_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_right";
-                        case Surface.ROTATION_180:
-                            return "top_vertical_right";
-                        case Surface.ROTATION_270:
-                            return "top_left";
-                    }
-                    break;
-                case "bottom_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_right";
-                        case Surface.ROTATION_90:
-                            return "top_vertical_right";
-                        case Surface.ROTATION_180:
-                            return "top_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_vertical_left";
-                    }
-                    break;
-                case "bottom_vertical_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "bottom_vertical_right";
-                        case Surface.ROTATION_90:
-                            return "top_right";
-                        case Surface.ROTATION_180:
-                            return "top_vertical_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_left";
-                    }
-                    break;
-                case "top_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_vertical_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_right";
-                        case Surface.ROTATION_270:
-                            return "top_vertical_right";
-                    }
-                    break;
-                case "top_vertical_left":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_vertical_left";
-                        case Surface.ROTATION_90:
-                            return "bottom_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_vertical_right";
-                        case Surface.ROTATION_270:
-                            return "top_right";
-                    }
-                    break;
-                case "top_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_right";
-                        case Surface.ROTATION_90:
-                            return "top_vertical_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_vertical_right";
-                    }
-                    break;
-                case "top_vertical_right":
-                    switch(rotation) {
-                        case Surface.ROTATION_0:
-                            return "top_vertical_right";
-                        case Surface.ROTATION_90:
-                            return "top_left";
-                        case Surface.ROTATION_180:
-                            return "bottom_vertical_left";
-                        case Surface.ROTATION_270:
-                            return "bottom_right";
-                    }
-                    break;
-            }
-        }
-
-        return position;
+    public static Integer getCachedRotation() {
+        return cachedRotation;
     }
 
     private static int getMaxNumOfColumns(Context context) {
@@ -829,7 +739,7 @@ public class U {
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
         int numOfColumns = 0;
 
-        float maxScreenSize = getTaskbarPosition(context).contains("vertical")
+        float maxScreenSize = TaskbarPosition.isVertical(context)
                 ? (display.height - getStatusBarHeight(context)) / density
                 : display.width / density;
 
@@ -1129,14 +1039,21 @@ public class U {
         return getActivityOptions(context, type, view).toBundle();
     }
 
-    private static Bundle getActivityOptionsBundle(Context context, ApplicationType applicationType, View view,
-                                                   int left, int top, int right, int bottom) {
+    private static Bundle getActivityOptionsBundle(Context context,
+                                                   ApplicationType applicationType,
+                                                   View view,
+                                                   int left,
+                                                   int top,
+                                                   int right,
+                                                   int bottom) {
         ActivityOptions options = getActivityOptions(context, applicationType, view);
-        if(options == null)
+        if (options == null) {
             return null;
+        }
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             return options.toBundle();
+        }
 
         return options.setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
     }
@@ -1793,7 +1710,7 @@ public class U {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.tb_def_sys_tray))
                 && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length))
-                && !getTaskbarPosition(context).contains("vertical");
+                && !TaskbarPosition.isVertical(context);
     }
 
     @SuppressWarnings("deprecation")

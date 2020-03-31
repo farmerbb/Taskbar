@@ -95,6 +95,7 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -103,6 +104,15 @@ import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
 public class TaskbarController implements UIController {
 
@@ -247,43 +257,43 @@ public class TaskbarController implements UIController {
         );
 
         // Determine where to show the taskbar on screen
-        switch(U.getTaskbarPosition(context)) {
-            case "bottom_left":
+        switch(TaskbarPosition.getTaskbarPosition(context)) {
+            case POSITION_BOTTOM_LEFT:
                 layoutId = R.layout.tb_taskbar_left;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 positionIsVertical = false;
                 break;
-            case "bottom_vertical_left":
+            case POSITION_BOTTOM_VERTICAL_LEFT:
                 layoutId = R.layout.tb_taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 positionIsVertical = true;
                 break;
-            case "bottom_right":
+            case POSITION_BOTTOM_RIGHT:
                 layoutId = R.layout.tb_taskbar_right;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 positionIsVertical = false;
                 break;
-            case "bottom_vertical_right":
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
                 layoutId = R.layout.tb_taskbar_vertical;
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 positionIsVertical = true;
                 break;
-            case "top_left":
+            case POSITION_TOP_LEFT:
                 layoutId = R.layout.tb_taskbar_left;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 positionIsVertical = false;
                 break;
-            case "top_vertical_left":
+            case POSITION_TOP_VERTICAL_LEFT:
                 layoutId = R.layout.tb_taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 positionIsVertical = true;
                 break;
-            case "top_right":
+            case POSITION_TOP_RIGHT:
                 layoutId = R.layout.tb_taskbar_right;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 positionIsVertical = false;
                 break;
-            case "top_vertical_right":
+            case POSITION_TOP_VERTICAL_RIGHT:
                 layoutId = R.layout.tb_taskbar_top_vertical;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 positionIsVertical = true;
@@ -822,9 +832,9 @@ public class TaskbarController implements UIController {
 
                 // Determine if we need to reverse the order
                 boolean needToReverseOrder;
-                switch(U.getTaskbarPosition(context)) {
-                    case "bottom_right":
-                    case "top_right":
+                switch(TaskbarPosition.getTaskbarPosition(context)) {
+                    case POSITION_BOTTOM_RIGHT:
+                    case POSITION_TOP_RIGHT:
                         needToReverseOrder = sortOrder.contains("false");
                         break;
                     default:
@@ -893,7 +903,7 @@ public class TaskbarController implements UIController {
             }
 
             // Determine if we need to reverse the order again
-            if(U.getTaskbarPosition(context).contains("vertical")) {
+            if(TaskbarPosition.isVertical(context)) {
                 Collections.reverse(entries);
                 Collections.reverse(launcherAppCache);
             }
@@ -957,7 +967,7 @@ public class TaskbarController implements UIController {
                         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
                         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
-                        if(U.getTaskbarPosition(context).contains("vertical")) {
+                        if(TaskbarPosition.isVertical(context)) {
                             int maxScreenSize = Math.max(0, display.height
                                     - U.getStatusBarHeight(context)
                                     - U.getBaseTaskbarSize(context));
@@ -979,7 +989,7 @@ public class TaskbarController implements UIController {
                                         ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
                                         bottomParams.height = height / 2;
                                         whitespaceBottom.setLayoutParams(bottomParams);
-                                    } else if(U.getTaskbarPosition(context).contains("bottom")) {
+                                    } else if (TaskbarPosition.isBottom(context)) {
                                         ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
                                         topParams.height = height;
                                         whitespaceTop.setLayoutParams(topParams);
@@ -1002,7 +1012,7 @@ public class TaskbarController implements UIController {
                                     Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
                                     int width = maxScreenSize - recentsSize;
 
-                                    if(pref.getBoolean("centered_icons", false)) {
+                                    if (pref.getBoolean("centered_icons", false)) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width / 2;
                                         whitespaceLeft.setLayoutParams(leftParams);
@@ -1010,7 +1020,7 @@ public class TaskbarController implements UIController {
                                         ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
                                         rightParams.width = width / 2;
                                         whitespaceRight.setLayoutParams(rightParams);
-                                    } else if(U.getTaskbarPosition(context).contains("right")) {
+                                    } else if (TaskbarPosition.isRight(context)) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width;
                                         whitespaceLeft.setLayoutParams(leftParams);
@@ -1043,20 +1053,20 @@ public class TaskbarController implements UIController {
 
                         if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
                             new Handler().post(() -> {
-                                switch(U.getTaskbarPosition(context)) {
-                                    case "bottom_left":
-                                    case "bottom_right":
-                                    case "top_left":
-                                    case "top_right":
+                                switch(TaskbarPosition.getTaskbarPosition(context)) {
+                                    case POSITION_BOTTOM_LEFT:
+                                    case POSITION_BOTTOM_RIGHT:
+                                    case POSITION_TOP_LEFT:
+                                    case POSITION_TOP_RIGHT:
                                         if(sortOrder.contains("false"))
                                             scrollView.scrollTo(0, 0);
                                         else if(sortOrder.contains("true"))
                                             scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
                                         break;
-                                    case "bottom_vertical_left":
-                                    case "bottom_vertical_right":
-                                    case "top_vertical_left":
-                                    case "top_vertical_right":
+                                    case POSITION_BOTTOM_VERTICAL_LEFT:
+                                    case POSITION_BOTTOM_VERTICAL_RIGHT:
+                                    case POSITION_TOP_VERTICAL_LEFT:
+                                    case POSITION_TOP_VERTICAL_RIGHT:
                                         if(sortOrder.contains("false"))
                                             scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
                                         else if(sortOrder.contains("true"))
@@ -1365,7 +1375,7 @@ public class TaskbarController implements UIController {
         imageView.setImageDrawable(entry.getIcon(context));
         imageView2.setBackgroundColor(U.getAccentColor(context));
 
-        String taskbarPosition = U.getTaskbarPosition(context);
+        String taskbarPosition = TaskbarPosition.getTaskbarPosition(context);
         if(pref.getBoolean("shortcut_icon", true)) {
             boolean shouldShowShortcutIcon;
             if(taskbarPosition.contains("vertical"))
@@ -1376,7 +1386,8 @@ public class TaskbarController implements UIController {
             if(shouldShowShortcutIcon) imageView2.setVisibility(View.VISIBLE);
         }
 
-        if(taskbarPosition.equals("bottom_right") || taskbarPosition.equals("top_right")) {
+        if (POSITION_BOTTOM_RIGHT.equals(taskbarPosition)
+                || POSITION_TOP_RIGHT.equals(taskbarPosition)) {
             imageView.setRotationY(180);
             imageView2.setRotationY(180);
         }
