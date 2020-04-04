@@ -309,7 +309,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
-                    if(!pref.getBoolean("dont_show_double_tap_dialog", false)) {
+                    if(!pref.getBoolean("dont_show_double_tap_dialog", false)
+                            && !(HomeActivityDelegate.this instanceof SecondaryHomeActivity)) {
                         if(pref.getBoolean("double_tap_to_sleep", false)) {
                             U.lockDevice(HomeActivityDelegate.this);
                         } else {
