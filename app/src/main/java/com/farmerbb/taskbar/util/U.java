@@ -1225,7 +1225,7 @@ public class U {
             return;
         }
 
-        int displayID = getDisplayID();
+        int displayID = getTaskbarDisplayID();
         int value = show ? 0 : getNavbarHeight(context) * -1;
 
         if(hasWriteSecureSettingsPermission(context)) {
@@ -1331,7 +1331,7 @@ public class U {
 
     public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
         context = context.getApplicationContext();
-        int displayID = getDisplayID();
+        int displayID = getTaskbarDisplayID();
 
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display currentDisplay = null;
@@ -1384,7 +1384,7 @@ public class U {
         return info;
     }
 
-    private static int getDisplayID() {
+    private static int getTaskbarDisplayID() {
         LauncherHelper helper = LauncherHelper.getInstance();
 
         if(helper.isOnSecondaryHomeScreen())
@@ -1776,7 +1776,6 @@ public class U {
                 && !pref.getBoolean("launcher", false);
     }
 
-    // TODO remove this in favor of the existing getDisplayID method?
     public static int getExternalDisplayID(Context context) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display[] displays = dm.getDisplays();

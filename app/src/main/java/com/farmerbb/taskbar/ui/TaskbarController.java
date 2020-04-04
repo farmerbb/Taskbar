@@ -114,9 +114,8 @@ import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
-public class TaskbarController implements UIController {
+public class TaskbarController extends UIController {
 
-    private Context context;
     private LinearLayout layout;
     private ImageView startButton;
     private LinearLayout taskbar;
@@ -223,22 +222,13 @@ public class TaskbarController implements UIController {
     };
 
     public TaskbarController(Context context) {
-        this.context = context;
+        super(context);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCreateHost(UIHost host) {
-        SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(U.canDrawOverlays(context))
-                drawTaskbar(host);
-            else {
-                pref.edit().putBoolean("taskbar_active", false).apply();
-
-                host.terminate();
-            }
-        } else host.terminate();
+        init(context, host, () -> drawTaskbar(host));
     }
 
     @SuppressLint("RtlHardcoded")

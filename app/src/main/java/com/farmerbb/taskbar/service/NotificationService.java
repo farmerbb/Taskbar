@@ -27,29 +27,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.hardware.display.DisplayManager;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.service.quicksettings.TileService;
-import android.view.Display;
-
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import com.farmerbb.taskbar.activity.MainActivity;
-import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.TaskbarIntent;
-import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.IconCache;
-import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 public class NotificationService extends Service {
 
     private boolean isHidden = true;
-    private boolean desktopModeStarted = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -84,21 +76,6 @@ public class NotificationService extends Service {
             stopService(new Intent(context, DashboardService.class));
 
             IconCache.getInstance(context).clearCache();
-        }
-    };
-
-    DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
-        @Override
-        public void onDisplayAdded(int displayId) {
-            startDesktopMode(displayId, true);
-        }
-
-        @Override
-        public void onDisplayChanged(int displayId) {}
-
-        @Override
-        public void onDisplayRemoved(int displayId) {
-            stopDesktopMode();
         }
     };
 
@@ -179,13 +156,6 @@ public class NotificationService extends Service {
                     registerReceiver(userForegroundReceiver, new IntentFilter(Intent.ACTION_USER_FOREGROUND));
                     registerReceiver(userBackgroundReceiver, new IntentFilter(Intent.ACTION_USER_BACKGROUND));
                 }
-
-                if(U.shouldStartDesktopMode(this)) {
-                    startDesktopMode(U.getExternalDisplayID(this), false);
-
-                    DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-                    manager.registerDisplayListener(listener, null);
-                }
             } else {
                 pref.edit().putBoolean("taskbar_active", false).apply();
 
@@ -217,38 +187,5 @@ public class NotificationService extends Service {
             unregisterReceiver(userForegroundReceiver);
             unregisterReceiver(userBackgroundReceiver);
         }
-
-        if(desktopModeStarted) {
-            DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-            manager.unregisterDisplayListener(listener);
-
-            stopDesktopMode();
-        }
-    }
-
-    private void startDesktopMode(int displayId, boolean shouldDelay) {
-        LauncherHelper helper = LauncherHelper.getInstance();
-        if(displayId == Display.DEFAULT_DISPLAY || helper.isOnSecondaryHomeScreen()) return;
-
-        Runnable desktopModeLaunch = () -> {
-            helper.setOnSecondaryHomeScreen(true, displayId);
-
-            Intent intent = new Intent(this, SecondaryHomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            startActivity(intent, U.getActivityOptions(this, ApplicationType.APP_FULLSCREEN, null).toBundle());
-        };
-
-        if(shouldDelay)
-            new Handler().postDelayed(desktopModeLaunch, 500);
-        else
-            desktopModeLaunch.run();
-
-        desktopModeStarted = true;
-    }
-
-    private void stopDesktopMode() {
-        U.sendBroadcast(this, TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
-        desktopModeStarted = false;
     }
 }

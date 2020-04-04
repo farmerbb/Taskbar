@@ -15,8 +15,43 @@
 
 package com.farmerbb.taskbar.ui;
 
-public interface UIController {
-    void onCreateHost(UIHost host);
-    void onRecreateHost(UIHost host);
-    void onDestroyHost(UIHost host);
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
+import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.util.U;
+
+public abstract class UIController {
+    protected Context context;
+
+    public UIController(Context context) {
+        this.context = context;
+    }
+
+    abstract void onCreateHost(UIHost host);
+    abstract void onRecreateHost(UIHost host);
+    abstract void onDestroyHost(UIHost host);
+
+    protected void init(Context context, UIHost host, Runnable runnable) {
+        SharedPreferences pref = U.getSharedPreferences(context);
+        LauncherHelper helper = LauncherHelper.getInstance();
+
+        boolean shouldProceed;
+        if(helper.isOnSecondaryHomeScreen())
+            shouldProceed = host instanceof SecondaryHomeActivity;
+        else
+            shouldProceed = true;
+
+        if(shouldProceed && (pref.getBoolean("taskbar_active", false)
+                || helper.isOnHomeScreen())) {
+            if(U.canDrawOverlays(context))
+                runnable.run();
+            else {
+                pref.edit().putBoolean("taskbar_active", false).apply();
+                host.terminate();
+            }
+        } else
+            host.terminate();
+    }
 }

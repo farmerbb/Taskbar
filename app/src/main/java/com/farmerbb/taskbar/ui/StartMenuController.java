@@ -57,6 +57,7 @@ import android.widget.TextView;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
 import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.TaskbarPosition;
@@ -85,9 +86,8 @@ import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
-public class StartMenuController implements UIController {
+public class StartMenuController extends UIController {
 
-    private Context context;
     private StartMenuLayout layout;
     private GridView startMenu;
     private SearchView searchView;
@@ -169,7 +169,7 @@ public class StartMenuController implements UIController {
     };
 
     public StartMenuController(Context context) {
-        this.context = context;
+        super(context);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -177,16 +177,7 @@ public class StartMenuController implements UIController {
     public void onCreateHost(UIHost host) {
         hasHardwareKeyboard = context.getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS;
 
-        SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-            if(U.canDrawOverlays(context))
-                drawStartMenu(host);
-            else {
-                pref.edit().putBoolean("taskbar_active", false).apply();
-
-                host.terminate();
-            }
-        } else host.terminate();
+        init(context, host, () -> drawStartMenu(host));
     }
 
     @SuppressLint("RtlHardcoded")

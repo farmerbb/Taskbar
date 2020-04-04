@@ -56,6 +56,7 @@ import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
 import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.TaskbarPosition;
@@ -76,12 +77,11 @@ import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
-public class DashboardController implements UIController {
+public class DashboardController extends UIController {
 
     private AppWidgetManager mAppWidgetManager;
     private AppWidgetHost mAppWidgetHost;
 
-    private Context context;
     private LinearLayout layout;
 
     private SparseArray<DashboardCell> cells = new SparseArray<>();
@@ -164,24 +164,17 @@ public class DashboardController implements UIController {
     };
 
     public DashboardController(Context context) {
-        this.context = context;
+        super(context);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard))) {
-            if(pref.getBoolean("taskbar_active", false) || LauncherHelper.getInstance().isOnHomeScreen()) {
-                if(U.canDrawOverlays(context))
-                    drawDashboard(host);
-                else {
-                    pref.edit().putBoolean("taskbar_active", false).apply();
-
-                    host.terminate();
-                }
-            } else host.terminate();
-        } else host.terminate();
+        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard)))
+            init(context, host, () -> drawDashboard(host));
+        else
+            host.terminate();
     }
 
     @SuppressLint("RtlHardcoded")
