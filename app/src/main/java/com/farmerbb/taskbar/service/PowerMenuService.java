@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 public class PowerMenuService extends AccessibilityService {

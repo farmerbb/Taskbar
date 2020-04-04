@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 

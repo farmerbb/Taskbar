@@ -41,7 +41,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;

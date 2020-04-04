@@ -17,7 +17,7 @@ package com.farmerbb.taskbar.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.U;

@@ -94,8 +94,8 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
-import com.farmerbb.taskbar.content.TaskbarIntent;
-import com.farmerbb.taskbar.content.TaskbarPosition;
+import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -105,14 +105,14 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
 public class TaskbarController implements UIController {
 

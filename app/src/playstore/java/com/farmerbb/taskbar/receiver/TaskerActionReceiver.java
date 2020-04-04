@@ -19,7 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.BundleScrubber;
 import com.farmerbb.taskbar.util.PluginBundleManager;
 import com.farmerbb.taskbar.util.U;

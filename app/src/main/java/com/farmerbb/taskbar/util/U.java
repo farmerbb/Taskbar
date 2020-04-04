@@ -70,8 +70,6 @@ import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
-import com.farmerbb.taskbar.content.TaskbarIntent;
-import com.farmerbb.taskbar.content.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
@@ -89,8 +87,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
 
 public class U {
 

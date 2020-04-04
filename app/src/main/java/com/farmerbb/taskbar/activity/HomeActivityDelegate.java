@@ -53,8 +53,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.content.TaskbarIntent;
-import com.farmerbb.taskbar.content.TaskbarPosition;
+import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;

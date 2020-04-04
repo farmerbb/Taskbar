@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.content;
+package com.farmerbb.taskbar.util;
 
 public class TaskbarIntent {
 

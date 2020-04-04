@@ -29,7 +29,7 @@ import android.provider.Settings;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.activity.dark.InvisibleActivityAltDark;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;

@@ -1,4 +1,4 @@
-package com.farmerbb.taskbar.content;
+package com.farmerbb.taskbar.util;
 
 import android.content.Context;
 import android.view.Display;
@@ -6,8 +6,6 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import androidx.test.core.app.ApplicationProvider;
-
-import com.farmerbb.taskbar.util.U;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,20 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.isBottom;
-import static com.farmerbb.taskbar.content.TaskbarPosition.isLeft;
-import static com.farmerbb.taskbar.content.TaskbarPosition.isRight;
-import static com.farmerbb.taskbar.content.TaskbarPosition.isVertical;
-import static com.farmerbb.taskbar.content.TaskbarPosition.isVerticalLeft;
-import static com.farmerbb.taskbar.content.TaskbarPosition.isVerticalRight;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.isBottom;
+import static com.farmerbb.taskbar.util.TaskbarPosition.isLeft;
+import static com.farmerbb.taskbar.util.TaskbarPosition.isRight;
+import static com.farmerbb.taskbar.util.TaskbarPosition.isVertical;
+import static com.farmerbb.taskbar.util.TaskbarPosition.isVerticalLeft;
+import static com.farmerbb.taskbar.util.TaskbarPosition.isVerticalRight;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

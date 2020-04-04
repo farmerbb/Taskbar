@@ -42,7 +42,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;

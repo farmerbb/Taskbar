@@ -27,7 +27,7 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

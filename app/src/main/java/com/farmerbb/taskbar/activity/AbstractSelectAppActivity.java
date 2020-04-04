@@ -33,7 +33,7 @@ import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.adapter.DesktopIconAppListAdapter;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;

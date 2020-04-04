@@ -57,8 +57,8 @@ import android.widget.Toast;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
-import com.farmerbb.taskbar.content.TaskbarIntent;
-import com.farmerbb.taskbar.content.TaskbarPosition;
+import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -67,14 +67,14 @@ import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
 
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
 public class DashboardController implements UIController {
 

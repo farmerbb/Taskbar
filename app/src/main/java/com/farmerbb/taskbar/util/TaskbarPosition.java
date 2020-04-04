@@ -12,14 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.farmerbb.taskbar.content;
+package com.farmerbb.taskbar.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.Surface;
 import android.view.WindowManager;
-
-import com.farmerbb.taskbar.util.U;
 
 public class TaskbarPosition {
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";

@@ -58,8 +58,8 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
-import com.farmerbb.taskbar.content.TaskbarIntent;
-import com.farmerbb.taskbar.content.TaskbarPosition;
+import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
@@ -76,14 +76,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_RIGHT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.content.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 
 public class StartMenuController implements UIController {
 

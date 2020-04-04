@@ -24,7 +24,7 @@ import androidx.core.content.FileProvider;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.backup.BackupUtils;
 import com.farmerbb.taskbar.backup.IntentBackupAgent;
-import com.farmerbb.taskbar.content.TaskbarIntent;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
