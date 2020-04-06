@@ -17,9 +17,11 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -41,6 +43,23 @@ import com.farmerbb.taskbar.util.U;
 public class DesktopModeFragment extends SettingsFragment {
 
     public static boolean isConfiguringHomeApp;
+
+    private DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
+        @Override
+        public void onDisplayAdded(int displayId) {
+            updateAdditionalSettings();
+        }
+
+        @Override
+        public void onDisplayChanged(int displayId) {
+            updateAdditionalSettings();
+        }
+
+        @Override
+        public void onDisplayRemoved(int displayId) {
+            updateAdditionalSettings();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +83,10 @@ public class DesktopModeFragment extends SettingsFragment {
 
         bindPreferenceSummaryToValue(findPreference("display_density"));
 
-        boolean writeSecureSettings = U.hasWriteSecureSettingsPermission(getActivity());
-        findPreference("display_density").setEnabled(writeSecureSettings);
-        findPreference("auto_hide_navbar").setEnabled(writeSecureSettings);
+        updateAdditionalSettings();
+
+        DisplayManager manager = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
+        manager.registerDisplayListener(listener, null);
 
         finishedLoadingPrefs = true;
     }
@@ -107,6 +127,14 @@ public class DesktopModeFragment extends SettingsFragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        DisplayManager manager = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
+        manager.unregisterDisplayListener(listener);
+
+        super.onDestroy();
+    }
+
     @TargetApi(29)
     @Override
     public boolean onPreferenceClick(final Preference p) {
@@ -141,7 +169,7 @@ public class DesktopModeFragment extends SettingsFragment {
 
     @TargetApi(29)
     private void startStopDesktopMode(boolean start) {
-        if(!start) {
+        if(!start || !U.isDesktopModeActive(getActivity())) {
             U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
             return;
         }
@@ -157,5 +185,14 @@ public class DesktopModeFragment extends SettingsFragment {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 
         startActivity(intent, U.getActivityOptions(getActivity(), ApplicationType.APP_FULLSCREEN, null).toBundle());
+    }
+
+    private void updateAdditionalSettings() {
+        boolean writeSecureSettings = U.hasWriteSecureSettingsPermission(getActivity());
+        boolean desktopModeActive = U.isDesktopModeActive(getActivity());
+        boolean enabled = writeSecureSettings && desktopModeActive;
+
+        findPreference("display_density").setEnabled(enabled);
+        findPreference("auto_hide_navbar").setEnabled(enabled);
     }
 }
