@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.fragment;
 
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -199,7 +200,8 @@ public class AboutFragment extends SettingsFragment {
     }
 
     private Drawable getDesktopModeDrawable() {
-        Drawable loadedIcon = ContextCompat.getDrawable(getActivity(), R.drawable.tb_desktop_mode);
+        Context context = getActivity().getApplicationContext();
+        Drawable loadedIcon = ContextCompat.getDrawable(context, R.drawable.tb_desktop_mode);
         int width = Math.max(1, loadedIcon.getIntrinsicWidth());
         int height = Math.max(1, loadedIcon.getIntrinsicHeight());
 
@@ -209,7 +211,7 @@ public class AboutFragment extends SettingsFragment {
         loadedIcon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         loadedIcon.draw(canvas);
 
-        int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_settings_icon_size);
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.tb_settings_icon_size);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
 
         return new BitmapDrawable(getResources(), resizedBitmap);
