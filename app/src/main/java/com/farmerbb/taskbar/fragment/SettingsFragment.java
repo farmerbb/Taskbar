@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.farmerbb.taskbar.BuildConfig;
+import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
@@ -183,5 +185,13 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
         }
 
         return true;
+    }
+
+    protected void navigateTo(SettingsFragment fragment) {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, fragment, fragment.getClass().getSimpleName())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
     }
 }

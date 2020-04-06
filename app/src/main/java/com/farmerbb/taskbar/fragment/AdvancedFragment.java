@@ -286,11 +286,7 @@ public class AdvancedFragment extends SettingsFragment {
 
                 break;
             case "manage_app_data":
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new ManageAppDataFragment(), "ManageAppDataFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                navigateTo(new ManageAppDataFragment());
                 break;
         }
 

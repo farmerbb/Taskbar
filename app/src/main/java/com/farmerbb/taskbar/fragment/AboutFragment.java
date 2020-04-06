@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.fragment;
 
-import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -153,46 +152,22 @@ public class AboutFragment extends SettingsFragment {
                 dialog.show();
                 break;
             case "pref_screen_general":
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new GeneralFragment(), "GeneralFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                navigateTo(new GeneralFragment());
                 break;
             case "pref_screen_appearance":
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                navigateTo(new AppearanceFragment());
                 break;
             case "pref_screen_recent_apps":
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new RecentAppsFragment(), "RecentAppsFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                navigateTo(new RecentAppsFragment());
                 break;
             case "pref_screen_freeform":
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new FreeformModeFragment(), "FreeformModeFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                navigateTo(new FreeformModeFragment());
                 break;
             case "pref_screen_desktop_mode":
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new DesktopModeFragment(), "DesktopModeFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                navigateTo(new DesktopModeFragment());
                 break;
             case "pref_screen_advanced":
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new AdvancedFragment(), "AdvancedFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                navigateTo(new AdvancedFragment());
                 break;
         }
 

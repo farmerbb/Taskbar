@@ -379,19 +379,14 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         else {
             Fragment newFragment;
-            String tag;
-
-            if(oldFragment instanceof ManageAppDataFragment) {
+            if(oldFragment instanceof ManageAppDataFragment)
                 newFragment = new AdvancedFragment();
-                tag = "AdvancedFragment";
-            } else {
+            else
                 newFragment = new AboutFragment();
-                tag = "AboutFragment";
-            }
 
             getFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainer, newFragment, tag)
+                    .replace(R.id.fragmentContainer, newFragment, newFragment.getClass().getSimpleName())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .commit();
         }
