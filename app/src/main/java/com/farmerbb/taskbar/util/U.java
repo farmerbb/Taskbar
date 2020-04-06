@@ -87,6 +87,42 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ACCENT_COLOR;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ANDROID_X86_PREFS;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_APP_DRAWER_ICON;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_AUTO_HIDE_NAVBAR;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BACKGROUND_TINT;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BLISS_OS_PREFS;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_BACK;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_HOME;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_RECENTS;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_CHROME_OS_CONTEXT_MENU_FIX;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_DASHBOARD;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_DISABLE_ANIMATIONS;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_DISABLE_SCROLLING_LIST;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FORCE_NEW_WINDOW;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FREEFORM_HACK;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FREEFORM_HACK_OVERRIDE;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FULL_LENGTH;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_HIDE_TASKBAR;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_IS_HIDDEN;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_IS_RESTARTING;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_LAUNCH_GAMES_FULLSCREEN;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_MAX_NUM_OF_RECENTS;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_RECENTS_AMOUNT;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_REFRESH_FREQUENCY;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SAVE_WINDOW_SIZES;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHORTCUT_ICON;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHOW_BACKGROUND;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SKIP_AUTO_HIDE_NAVBAR;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SORT_ORDER;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_START_BUTTON_IMAGE;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SYS_TRAY;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_TASKBAR_ACTIVE;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_TASKER_ENABLED;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_THEME;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_WINDOW_SIZE;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
 
@@ -368,10 +404,11 @@ public class U {
                 && helper.isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
-        boolean noAnimation = pref.getBoolean("disable_animations", false);
+        boolean noAnimation =
+                pref.getBoolean(SP_KEY_DISABLE_ANIMATIONS, false);
 
         if(hasFreeformSupport(context)
-                && (pref.getBoolean("freeform_hack", false) || isPersistentShortcut)
+                && (pref.getBoolean(SP_KEY_FREEFORM_HACK, false) || isPersistentShortcut)
                 && (!helper.isInFreeformWorkspace() || specialLaunch)) {
             new Handler().postDelayed(() -> {
                 startFreeformHack(context, true);
@@ -430,10 +467,11 @@ public class U {
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
             intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
 
-        if(pref.getBoolean("disable_animations", false))
+        if(pref.getBoolean(SP_KEY_DISABLE_ANIMATIONS, false))
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        boolean realOpenInNewWindow = openInNewWindow || pref.getBoolean("force_new_window", false);
+        boolean realOpenInNewWindow =
+                openInNewWindow || pref.getBoolean(SP_KEY_FORCE_NEW_WINDOW, false);
         if(realOpenInNewWindow) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
@@ -667,7 +705,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         Intent intent = null;
 
-        switch(pref.getString("theme", "light")) {
+        switch(pref.getString(SP_KEY_THEME, "light")) {
             case "light":
                 intent = new Intent(context, ContextMenuActivity.class);
                 break;
@@ -743,7 +781,8 @@ public class U {
 
         float iconSize = context.getResources().getDimension(R.dimen.tb_icon_size) / density;
 
-        int userMaxNumOfColumns = Integer.valueOf(pref.getString("max_num_of_recents", "10"));
+        int userMaxNumOfColumns =
+                Integer.valueOf(pref.getString(SP_KEY_MAX_NUM_OF_RECENTS, "10"));
 
         while(baseTaskbarSize + iconSize < maxScreenSize
                 && numOfColumns < userMaxNumOfColumns) {
@@ -756,9 +795,9 @@ public class U {
 
     public static int getMaxNumOfEntries(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getBoolean("disable_scrolling_list", false)
+        return pref.getBoolean(SP_KEY_DISABLE_SCROLLING_LIST, false)
                 ? getMaxNumOfColumns(context)
-                : Integer.valueOf(pref.getString("max_num_of_recents", "10"));
+                : Integer.valueOf(pref.getString(SP_KEY_MAX_NUM_OF_RECENTS, "10"));
     }
 
     public static int getStatusBarHeight(Context context) {
@@ -888,22 +927,22 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
 
         // Import old background tint preference
-        if(pref.contains("show_background")) {
+        if(pref.contains(SP_KEY_SHOW_BACKGROUND)) {
             SharedPreferences.Editor editor = pref.edit();
 
-            if(!pref.getBoolean("show_background", true))
-                editor.putInt("background_tint", Color.TRANSPARENT).apply();
+            if(!pref.getBoolean(SP_KEY_SHOW_BACKGROUND, true))
+                editor.putInt(SP_KEY_BACKGROUND_TINT, Color.TRANSPARENT).apply();
 
-            editor.remove("show_background");
+            editor.remove(SP_KEY_SHOW_BACKGROUND);
             editor.apply();
         }
 
-        return pref.getInt("background_tint", context.getResources().getInteger(R.integer.tb_translucent_gray));
+        return pref.getInt(SP_KEY_BACKGROUND_TINT, context.getResources().getInteger(R.integer.tb_translucent_gray));
     }
 
     public static int getAccentColor(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getInt("accent_color", context.getResources().getInteger(R.integer.tb_translucent_white));
+        return pref.getInt(SP_KEY_ACCENT_COLOR, context.getResources().getInteger(R.integer.tb_translucent_white));
     }
 
     public static boolean canDrawOverlays(Context context) {
@@ -912,7 +951,7 @@ public class U {
 
     public static boolean isGame(Context context, String packageName) {
         SharedPreferences pref = getSharedPreferences(context);
-        if(pref.getBoolean("launch_games_fullscreen", true)) {
+        if(pref.getBoolean(SP_KEY_LAUNCH_GAMES_FULLSCREEN, true)) {
             PackageManager pm = context.getPackageManager();
 
             try {
@@ -1009,12 +1048,14 @@ public class U {
     public static Bundle getActivityOptionsBundle(Context context, ApplicationType type, View view) {
         SharedPreferences pref = getSharedPreferences(context);
 
-        return getActivityOptionsBundle(context, type, pref.getString("window_size", context.getString(R.string.tb_def_window_size)), view);
+        return getActivityOptionsBundle(
+                context, type, pref.getString(SP_KEY_WINDOW_SIZE, context.getString(R.string.tb_def_window_size)), view
+        );
     }
 
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
         SharedPreferences pref = getSharedPreferences(context);
-        if(!canEnableFreeform() || !pref.getBoolean("freeform_hack", false))
+        if(!canEnableFreeform() || !pref.getBoolean(SP_KEY_FREEFORM_HACK, false))
             return getActivityOptions(view).toBundle();
 
         switch(windowSize) {
@@ -1146,20 +1187,20 @@ public class U {
         float baseTaskbarSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         boolean navbarButtonsEnabled = false;
 
-        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard)))
+        if(pref.getBoolean(SP_KEY_DASHBOARD, context.getResources().getBoolean(R.bool.tb_def_dashboard)))
             baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
 
-        if(pref.getBoolean("button_back", false)) {
+        if(pref.getBoolean(SP_KEY_BUTTON_BACK, false)) {
             navbarButtonsEnabled = true;
             baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_icon_size);
         }
 
-        if(pref.getBoolean("button_home", false)) {
+        if(pref.getBoolean(SP_KEY_BUTTON_HOME, false)) {
             navbarButtonsEnabled = true;
             baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_icon_size);
         }
 
-        if(pref.getBoolean("button_recents", false)) {
+        if(pref.getBoolean(SP_KEY_BUTTON_RECENTS, false)) {
             navbarButtonsEnabled = true;
             baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_icon_size);
         }
@@ -1189,16 +1230,17 @@ public class U {
 
     public static void restartTaskbar(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+        if(pref.getBoolean(SP_KEY_TASKBAR_ACTIVE, false)
+                && !pref.getBoolean(SP_KEY_IS_HIDDEN, false)) {
             pref.edit()
-                    .putBoolean("is_restarting", true)
-                    .putBoolean("skip_auto_hide_navbar", true)
+                    .putBoolean(SP_KEY_IS_RESTARTING, true)
+                    .putBoolean(SP_KEY_SKIP_AUTO_HIDE_NAVBAR, true)
                     .apply();
 
             stopTaskbarService(context, true);
             startTaskbarService(context, true);
         } else if(isServiceRunning(context, StartMenuService.class)) {
-            pref.edit().putBoolean("skip_auto_hide_navbar", true).apply();
+            pref.edit().putBoolean(SP_KEY_SKIP_AUTO_HIDE_NAVBAR, true).apply();
 
             stopTaskbarService(context, false);
             startTaskbarService(context, false);
@@ -1210,7 +1252,7 @@ public class U {
     public static void restartNotificationService(Context context) {
         if(isServiceRunning(context, NotificationService.class)) {
             SharedPreferences pref = getSharedPreferences(context);
-            pref.edit().putBoolean("is_restarting", true).apply();
+            pref.edit().putBoolean(SP_KEY_IS_RESTARTING, true).apply();
 
             Intent intent = new Intent(context, NotificationService.class);
             context.stopService(intent);
@@ -1263,24 +1305,24 @@ public class U {
         // Enable freeform hack automatically on supported devices
         SharedPreferences pref = getSharedPreferences(context);
         if(canEnableFreeform()) {
-            if(!pref.getBoolean("freeform_hack_override", false)) {
+            if(!pref.getBoolean(SP_KEY_FREEFORM_HACK_OVERRIDE, false)) {
                 pref.edit()
-                        .putBoolean("freeform_hack", hasFreeformSupport(context) && !isSamsungDevice())
-                        .putBoolean("save_window_sizes", false)
-                        .putBoolean("freeform_hack_override", true)
+                        .putBoolean(SP_KEY_FREEFORM_HACK, hasFreeformSupport(context) && !isSamsungDevice())
+                        .putBoolean(SP_KEY_SAVE_WINDOW_SIZES, false)
+                        .putBoolean(SP_KEY_FREEFORM_HACK_OVERRIDE, true)
                         .apply();
             } else if(!hasFreeformSupport(context)) {
-                pref.edit().putBoolean("freeform_hack", false).apply();
+                pref.edit().putBoolean(SP_KEY_FREEFORM_HACK, false).apply();
 
                 stopFreeformHack(context);
             }
         } else {
-            boolean freeformWasEnabled = pref.getBoolean("freeform_hack", false)
-                    || pref.getBoolean("show_freeform_disabled_message", false);
+            boolean freeformWasEnabled = pref.getBoolean(SP_KEY_FREEFORM_HACK, false)
+                    || pref.getBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, false);
 
             pref.edit()
-                    .putBoolean("freeform_hack", false)
-                    .putBoolean("show_freeform_disabled_message", freeformWasEnabled)
+                    .putBoolean(SP_KEY_FREEFORM_HACK, false)
+                    .putBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, freeformWasEnabled)
                     .apply();
 
             SavedWindowSizes.getInstance(context).clear(context);
@@ -1289,38 +1331,38 @@ public class U {
 
         // Customizations for BlissOS
         if(isBlissOs(context) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !pref.getBoolean("bliss_os_prefs", false)) {
+                && !pref.getBoolean(SP_KEY_BLISS_OS_PREFS, false)) {
             SharedPreferences.Editor editor = pref.edit();
 
             if(hasFreeformSupport(context)) {
-                editor.putBoolean("freeform_hack", true);
+                editor.putBoolean(SP_KEY_FREEFORM_HACK, true);
             }
 
-            editor.putString("recents_amount", "running_apps_only");
-            editor.putString("refresh_frequency", "0");
-            editor.putString("max_num_of_recents", "2147483647");
-            editor.putString("sort_order", "true");
-            editor.putString("start_button_image", "app_logo");
-            editor.putBoolean("button_back", true);
-            editor.putBoolean("button_home", true);
-            editor.putBoolean("button_recents", true);
-            editor.putBoolean("auto_hide_navbar", true);
-            editor.putBoolean("shortcut_icon", false);
-            editor.putBoolean("bliss_os_prefs", true);
+            editor.putString(SP_KEY_RECENTS_AMOUNT, "running_apps_only");
+            editor.putString(SP_KEY_REFRESH_FREQUENCY, "0");
+            editor.putString(SP_KEY_MAX_NUM_OF_RECENTS, "2147483647");
+            editor.putString(SP_KEY_SORT_ORDER, "true");
+            editor.putString(SP_KEY_START_BUTTON_IMAGE, "app_logo");
+            editor.putBoolean(SP_KEY_BUTTON_BACK, true);
+            editor.putBoolean(SP_KEY_BUTTON_HOME, true);
+            editor.putBoolean(SP_KEY_BUTTON_RECENTS, true);
+            editor.putBoolean(SP_KEY_AUTO_HIDE_NAVBAR, true);
+            editor.putBoolean(SP_KEY_SHORTCUT_ICON, false);
+            editor.putBoolean(SP_KEY_BLISS_OS_PREFS, true);
             editor.apply();
         }
 
         // Customizations for Android-x86 devices (non-Bliss)
         if(context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
                 && isSystemApp(context)
-                && !pref.getBoolean("android_x86_prefs", false)) {
+                && !pref.getBoolean(SP_KEY_ANDROID_X86_PREFS, false)) {
             pref.edit()
-                    .putString("recents_amount", "running_apps_only")
-                    .putString("refresh_frequency", "0")
-                    .putString("max_num_of_recents", "2147483647")
-                    .putString("sort_order", "true")
-                    .putBoolean("shortcut_icon", false)
-                    .putBoolean("android_x86_prefs", true)
+                    .putString(SP_KEY_RECENTS_AMOUNT, "running_apps_only")
+                    .putString(SP_KEY_REFRESH_FREQUENCY, "0")
+                    .putString(SP_KEY_MAX_NUM_OF_RECENTS, "2147483647")
+                    .putString(SP_KEY_SORT_ORDER, "true")
+                    .putBoolean(SP_KEY_SHORTCUT_ICON, false)
+                    .putBoolean(SP_KEY_ANDROID_X86_PREFS, true)
                     .apply();
         }
     }
@@ -1356,7 +1398,7 @@ public class U {
 
         if(isChromeOs(context)) {
             SharedPreferences pref = getSharedPreferences(context);
-            if(!pref.getBoolean("chrome_os_context_menu_fix", true)) {
+            if(!pref.getBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, true)) {
                 info.width = realMetrics.widthPixels;
                 info.height = realMetrics.heightPixels;
             }
@@ -1421,8 +1463,8 @@ public class U {
 
     public static boolean shouldCollapse(Context context, boolean pendingAppLaunch) {
         SharedPreferences pref = getSharedPreferences(context);
-        if(pref.getBoolean("hide_taskbar", true)) {
-            if(!pref.getBoolean("freeform_hack", false)
+        if(pref.getBoolean(SP_KEY_HIDE_TASKBAR, true)) {
+            if(!pref.getBoolean(SP_KEY_FREEFORM_HACK, false)
                     || isOverridingFreeformHack(context, false))
                 return !LauncherHelper.getInstance().isOnHomeScreen();
             else {
@@ -1442,8 +1484,8 @@ public class U {
 
     public static boolean isOverridingFreeformHack(Context context, boolean checkPref) {
         SharedPreferences pref = getSharedPreferences(context);
-        return (!checkPref || pref.getBoolean("freeform_hack", false))
-                && ((isChromeOs(context) && pref.getBoolean("chrome_os_context_menu_fix", true))
+        return (!checkPref || pref.getBoolean(SP_KEY_FREEFORM_HACK, false))
+                && ((isChromeOs(context) && pref.getBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, true))
                 || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
     }
 
@@ -1576,7 +1618,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
 
         int theme = -1;
-        switch(pref.getString("theme", "light")) {
+        switch(pref.getString(SP_KEY_THEME, "light")) {
             case "light":
                 theme = R.style.Taskbar;
                 break;
@@ -1611,7 +1653,7 @@ public class U {
         if(isLibrary(context)) return true;
 
         SharedPreferences pref = getSharedPreferences(context);
-        return !pref.getBoolean("tasker_enabled", true);
+        return !pref.getBoolean(SP_KEY_TASKER_ENABLED, true);
     }
 
     public static boolean enableFreeformModeShortcut(Context context) {
@@ -1689,7 +1731,7 @@ public class U {
 
     public static String getDefaultStartButtonImage(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getBoolean("app_drawer_icon", false)
+        return pref.getBoolean(SP_KEY_APP_DRAWER_ICON, false)
                 ? "app_logo"
                 : "default";
     }
@@ -1706,8 +1748,8 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
 
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && pref.getBoolean("sys_tray", context.getResources().getBoolean(R.bool.tb_def_sys_tray))
-                && pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length))
+                && pref.getBoolean(SP_KEY_SYS_TRAY, context.getResources().getBoolean(R.bool.tb_def_sys_tray))
+                && pref.getBoolean(SP_KEY_FULL_LENGTH, context.getResources().getBoolean(R.bool.tb_def_full_length))
                 && !TaskbarPosition.isVertical(context);
     }
 
