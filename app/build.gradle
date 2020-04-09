@@ -149,9 +149,9 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeDebugUnitTest']) 
     def debugTree = fileTree(dir: "$buildDir/intermediates/javac/freeDebug/classes", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = files("$buildDir/jacoco/testFreeDebugUnitTest.exec")
+    sourceDirectories.from = [mainSrc]
+    classDirectories.from = [debugTree]
+    executionData.from = "$buildDir/jacoco/testFreeDebugUnitTest.exec"
 
     doLast {
         println("Test report link: file://$buildDir/reports/jacoco/jacocoTestReport/html/index.html")
