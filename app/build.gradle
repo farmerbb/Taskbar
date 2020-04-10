@@ -124,13 +124,13 @@ dependencies {
     implementation 'moe.banana:toast-compat:1.0.5'
     implementation group:'com.twofortyfouram', name:'android-plugin-api-for-locale', version:'[1.0.2,2.0['
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation "org.robolectric:robolectric:4.3.1"
-    testImplementation "org.powermock:powermock-module-junit4:1.6.6"
-    testImplementation "org.powermock:powermock-module-junit4-rule:1.6.6"
-    testImplementation "org.powermock:powermock-api-mockito:1.6.6"
-    testImplementation "org.powermock:powermock-classloading-xstream:1.6.6"
+    testImplementation "org.powermock:powermock-module-junit4:$POWERMOCK_VERSION"
+    testImplementation "org.powermock:powermock-module-junit4-rule:$POWERMOCK_VERSION"
+    testImplementation "org.powermock:powermock-api-mockito:1.7.4"
+    testImplementation "org.powermock:powermock-classloading-xstream:$POWERMOCK_VERSION"
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeDebugUnitTest']) {
