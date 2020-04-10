@@ -19,6 +19,9 @@ import android.content.SharedPreferences;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ANCHOR;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_POSITION;
+
 public class TaskbarPosition {
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";
     public static final String POSITION_BOTTOM_RIGHT = "bottom_right";
@@ -224,9 +227,9 @@ public class TaskbarPosition {
 
     public static String getTaskbarPosition(Context context) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        String position = pref.getString("position", POSITION_BOTTOM_LEFT);
+        String position = pref.getString(SP_KEY_POSITION, POSITION_BOTTOM_LEFT);
 
-        if (pref.getBoolean("anchor", false)) {
+        if (pref.getBoolean(SP_KEY_ANCHOR, false)) {
             WindowManager windowManager =
                     (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             Integer cachedRotation = U.getCachedRotation();
