@@ -193,6 +193,6 @@ public class DesktopModeFragment extends SettingsFragment {
         boolean enabled = writeSecureSettings && desktopModeActive;
 
         findPreference("display_density").setEnabled(enabled);
-        findPreference("auto_hide_navbar").setEnabled(enabled);
+        findPreference("auto_hide_navbar").setEnabled(enabled); // TODO disable on Android 11?
     }
 }
