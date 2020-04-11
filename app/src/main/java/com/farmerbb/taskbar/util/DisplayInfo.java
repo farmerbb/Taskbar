@@ -18,11 +18,13 @@ package com.farmerbb.taskbar.util;
 public class DisplayInfo {
     public int width;
     public int height;
-    int density;
+    public int currentDensity;
+    public int defaultDensity;
 
-    DisplayInfo(int width, int height, int density) {
+    DisplayInfo(int width, int height, int currentDensity, int defaultDensity) {
         this.width = width;
         this.height = height;
-        this.density = density;
+        this.currentDensity = currentDensity;
+        this.defaultDensity = defaultDensity;
     }
 }

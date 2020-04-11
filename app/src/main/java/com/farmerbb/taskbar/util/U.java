@@ -771,7 +771,7 @@ public class U {
     private static int getMaxNumOfColumns(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         DisplayInfo display = getDisplayInfo(context);
-        float density = display.density / 160;
+        float density = display.currentDensity / 160;
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
         int numOfColumns = 0;
 
@@ -1386,7 +1386,7 @@ public class U {
         }
 
         if(currentDisplay == null)
-            return new DisplayInfo(0, 0, 0);
+            return new DisplayInfo(0, 0, 0, 0);
 
         DisplayMetrics metrics = new DisplayMetrics();
         currentDisplay.getMetrics(metrics);
@@ -1394,7 +1394,7 @@ public class U {
         DisplayMetrics realMetrics = new DisplayMetrics();
         currentDisplay.getRealMetrics(realMetrics);
 
-        DisplayInfo info = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+        DisplayInfo info = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, 0);
 
         if(isChromeOs(context)) {
             SharedPreferences pref = getSharedPreferences(context);
@@ -1810,11 +1810,33 @@ public class U {
         return desktopModePrefEnabled && getExternalDisplayID(context) != Display.DEFAULT_DISPLAY;
     }
 
-    public static int getExternalDisplayID(Context context) {
+    private static Display getExternalDisplay(Context context) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display[] displays = dm.getDisplays();
 
-        return displays[displays.length - 1].getDisplayId();
+        return displays[displays.length - 1];
+    }
+
+    public static int getExternalDisplayID(Context context) {
+        return getExternalDisplay(context).getDisplayId();
+    }
+
+    public static DisplayInfo getExternalDisplayInfo(Context context) {
+        Display display = getExternalDisplay(context);
+        if(display == null)
+            return new DisplayInfo(0, 0, 0, 0);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getRealMetrics(metrics);
+
+        int defaultDensity;
+        try {
+            defaultDensity = getDefaultDensity(display.getDisplayId());
+        } catch (Exception e) {
+            defaultDensity = 0;
+        }
+
+        return new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, defaultDensity);
     }
 
     @SuppressLint("PrivateApi")
@@ -1847,6 +1869,13 @@ public class U {
         Class.forName("android.view.IWindowManager")
                 .getMethod("setOverscan", int.class, int.class, int.class, int.class, int.class)
                 .invoke(getWindowManagerService(), displayID, 0, 0, 0, value);
+    }
+
+    @SuppressLint("PrivateApi")
+    private static Integer getDefaultDensity(int displayID) throws Exception {
+        return (Integer) Class.forName("android.view.IWindowManager")
+                .getMethod("getInitialDisplayDensity", int.class)
+                .invoke(getWindowManagerService(), displayID);
     }
 
     public static void registerReceiver(Context context, BroadcastReceiver receiver, String... actions) {
