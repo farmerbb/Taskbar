@@ -64,14 +64,7 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.*;
 
 public class ContextMenuActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 

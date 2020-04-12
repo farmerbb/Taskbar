@@ -87,44 +87,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ACCENT_COLOR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ANDROID_X86_PREFS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_APP_DRAWER_ICON;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_AUTO_HIDE_NAVBAR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BACKGROUND_TINT;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BLISS_OS_PREFS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_BACK;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_HOME;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_RECENTS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_CHROME_OS_CONTEXT_MENU_FIX;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_DASHBOARD;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_DISABLE_ANIMATIONS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_DISABLE_SCROLLING_LIST;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FORCE_NEW_WINDOW;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FREEFORM_HACK;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FREEFORM_HACK_OVERRIDE;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FULL_LENGTH;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_HIDE_TASKBAR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_IS_HIDDEN;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_IS_RESTARTING;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_LAUNCH_GAMES_FULLSCREEN;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_MAX_NUM_OF_RECENTS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_RECENTS_AMOUNT;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_REFRESH_FREQUENCY;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SAVE_WINDOW_SIZES;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHORTCUT_ICON;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHOW_BACKGROUND;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SKIP_AUTO_HIDE_NAVBAR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SORT_ORDER;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_START_BUTTON_IMAGE;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SYS_TRAY;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_TASKBAR_ACTIVE;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_TASKER_ENABLED;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_THEME;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_WINDOW_SIZE;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.*;
+import static com.farmerbb.taskbar.util.TaskbarPosition.*;
 
 public class U {
 

@@ -19,8 +19,7 @@ import android.content.SharedPreferences;
 import android.view.Surface;
 import android.view.WindowManager;
 
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ANCHOR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_POSITION;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.*;
 
 public class TaskbarPosition {
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";

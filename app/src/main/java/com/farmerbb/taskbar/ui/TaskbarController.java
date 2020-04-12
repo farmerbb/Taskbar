@@ -105,14 +105,7 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.TaskbarPosition.*;
 
 public class TaskbarController extends UIController {
 
