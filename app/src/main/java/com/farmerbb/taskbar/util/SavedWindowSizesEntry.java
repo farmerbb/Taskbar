@@ -23,9 +23,9 @@ public class SavedWindowSizesEntry implements Serializable {
     private String componentName;
     private String windowSize;
 
-    SavedWindowSizesEntry(String componentName, String label) {
+    SavedWindowSizesEntry(String componentName, String windowSize) {
         this.componentName = componentName;
-        this.windowSize = label;
+        this.windowSize = windowSize;
     }
 
     public String getComponentName() {
