@@ -188,8 +188,13 @@ public class U {
                 .setMessage(R.string.tb_permission_dialog_message)
                 .setPositiveButton(R.string.tb_action_grant_permission, (dialog, which) -> {
                     try {
-                        context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:" + context.getPackageName())));
+                        Intent intent =
+                                new Intent(
+                                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                        Uri.parse("package:" + context.getPackageName())
+                                );
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
 
                         onFinish.run();
                     } catch (ActivityNotFoundException e) {
@@ -204,7 +209,9 @@ public class U {
                 .setMessage(R.string.tb_permission_dialog_message_alt)
                 .setPositiveButton(R.string.tb_action_open_settings, (dialog, which) -> {
                     try {
-                        context.startActivity(new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS));
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
                         onFinish.run();
                     } catch (ActivityNotFoundException e) {
                         onError.run();

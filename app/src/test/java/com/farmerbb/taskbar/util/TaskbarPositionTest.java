@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ANCHOR;
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_POSITION;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
@@ -39,8 +41,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class TaskbarPositionTest {
-    private static final String SP_KEY_ANCHOR = "anchor";
-    private static final String SP_KEY_POSITION = "position";
     private Context context;
 
     @Before

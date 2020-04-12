@@ -56,6 +56,9 @@ public class SharedPreferenceConstant {
     public static final String SP_KEY_SYS_TRAY = "sys_tray";
     public static final String SP_KEY_FULL_LENGTH = "full_length";
 
+    public static final String SP_KEY_POSITION = "position";
+    public static final String SP_KEY_ANCHOR = "anchor";
+
     private SharedPreferenceConstant() {
         // Empty constructor
     }
