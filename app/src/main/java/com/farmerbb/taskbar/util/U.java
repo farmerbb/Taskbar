@@ -1818,7 +1818,7 @@ public class U {
     }
 
     @SuppressLint("PrivateApi")
-    private static void setDensity(int displayID, String value) throws Exception {
+    public static void setDensity(int displayID, String value) throws Exception {
         // From android.os.UserHandle
         final int USER_CURRENT_OR_SELF = -3;
 

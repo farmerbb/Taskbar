@@ -447,4 +447,7 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
         <item>High-density (320dpi)</item>
     </string-array>
 
+    <string name="tb_density_custom">Custom (%ddpi)</string>
+    <string name="tb_unable_to_apply_density_change">Unable to apply density change</string>
+
 </resources>

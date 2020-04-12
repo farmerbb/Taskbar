@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.provider.Settings;
 import android.view.Display;
@@ -35,7 +36,9 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HSLActivity;
 import com.farmerbb.taskbar.activity.HSLConfigActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
+import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.ApplicationType;
+import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
@@ -83,10 +86,10 @@ public class DesktopModeFragment extends SettingsFragment {
 
         bindPreferenceSummaryToValue(findPreference("display_density"));
 
-        updateAdditionalSettings();
-
         DisplayManager manager = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
         manager.registerDisplayListener(listener, null);
+
+        updateAdditionalSettings();
 
         finishedLoadingPrefs = true;
     }
@@ -162,6 +165,11 @@ public class DesktopModeFragment extends SettingsFragment {
                 startActivity(intent);
 
                 break;
+            case "auto_hide_navbar":
+                if(U.isServiceRunning(getActivity(), TaskbarService.class))
+                    U.showHideNavigationBar(getActivity(), !((CheckBoxPreference) p).isChecked());
+
+                break;
         }
 
         return super.onPreferenceClick(p);
@@ -188,11 +196,31 @@ public class DesktopModeFragment extends SettingsFragment {
     }
 
     private void updateAdditionalSettings() {
+        finishedLoadingPrefs = false;
+
         boolean writeSecureSettings = U.hasWriteSecureSettingsPermission(getActivity());
         boolean desktopModeActive = U.isDesktopModeActive(getActivity());
         boolean enabled = writeSecureSettings && desktopModeActive;
 
         findPreference("display_density").setEnabled(enabled);
         findPreference("auto_hide_navbar").setEnabled(enabled);
+        findPreference("auto_hide_navbar").setOnPreferenceClickListener(this);
+
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        DisplayInfo info = U.getExternalDisplayInfo(getActivity());
+        String densityPrefValue = info.currentDensity == info.defaultDensity
+                ? "reset"
+                : Integer.toString(info.currentDensity);
+
+        pref.edit().putString("display_density", densityPrefValue).apply();
+
+        ListPreference densityPref = ((ListPreference) findPreference("display_density"));
+        densityPref.setValue(densityPrefValue);
+
+        bindPreferenceSummaryToValue(densityPref);
+        if(densityPref.getSummary().equals(""))
+            densityPref.setSummary(getString(R.string.tb_density_custom, info.currentDensity));
+
+        finishedLoadingPrefs = true;
     }
 }

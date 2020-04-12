@@ -96,6 +96,8 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
             }
 
             if(finishedLoadingPrefs) {
+                boolean shouldRestart = true;
+
                 switch(preference.getKey()) {
                     case "theme":
                         if(U.isLibrary(getActivity())) break;
@@ -122,9 +124,20 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         if(stringValue.equals("custom"))
                             ((AppearanceFragment) SettingsFragment.this).showFileChooser();
                         break;
+                    case "display_density":
+                        int displayID = U.getExternalDisplayID(getActivity());
+
+                        try {
+                            U.setDensity(displayID, stringValue);
+                        } catch (Exception e) {
+                            U.showToast(getActivity(), R.string.tb_unable_to_apply_density_change);
+                        }
+
+                        shouldRestart = false;
+                        break;
                 }
 
-                U.restartTaskbar(getActivity());
+                if(shouldRestart) U.restartTaskbar(getActivity());
             }
 
             return true;
