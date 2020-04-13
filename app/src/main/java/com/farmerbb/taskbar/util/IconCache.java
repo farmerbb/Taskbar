@@ -55,11 +55,11 @@ public class IconCache {
         return theInstance;
     }
 
-    public Drawable getIcon(Context context, LauncherActivityInfo appInfo) {
+    public BitmapDrawable getIcon(Context context, LauncherActivityInfo appInfo) {
         return getIcon(context, context.getPackageManager(), appInfo);
     }
 
-    public Drawable getIcon(Context context, PackageManager pm, LauncherActivityInfo appInfo) {
+    public BitmapDrawable getIcon(Context context, PackageManager pm, LauncherActivityInfo appInfo) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         String name = appInfo.getComponentName().flattenToString() + ":" + userManager.getSerialNumberForUser(appInfo.getUser());
 
