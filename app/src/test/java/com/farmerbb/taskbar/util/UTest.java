@@ -5,8 +5,11 @@ import android.accessibilityservice.AccessibilityService;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -17,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.R;
@@ -963,5 +967,30 @@ public class UTest {
                 "force_desktop_mode_on_external_displays",
                 0
         );
+    }
+
+    @Test
+    public void testSendBroadcast() {
+        TestBroadcastReceiver receiver = new TestBroadcastReceiver();
+        IntentFilter filter = new IntentFilter(TestBroadcastReceiver.ACTION);
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
+        U.sendBroadcast(context, TestBroadcastReceiver.ACTION);
+        assertTrue(receiver.onReceived);
+        receiver.onReceived = false;
+        U.sendBroadcast(context, new Intent(TestBroadcastReceiver.ACTION));
+        assertTrue(receiver.onReceived);
+    }
+
+    private static final class TestBroadcastReceiver extends BroadcastReceiver {
+        private static final String ACTION = "test-broadcast-receiver-action";
+        private boolean onReceived;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null || !ACTION.equals(intent.getAction())) {
+                return;
+            }
+            onReceived = true;
+        }
     }
 }
