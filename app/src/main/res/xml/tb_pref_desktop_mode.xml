@@ -37,7 +37,8 @@
 
         <Preference
             android:key="enable_additional_settings"
-            android:title="@string/tb_enable_additional_settings"/>
+            android:title="@string/tb_enable_additional_settings"
+            android:dependency="desktop_mode"/>
 
         <ListPreference
             android:defaultValue="reset"

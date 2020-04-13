@@ -148,6 +148,7 @@ public class DesktopModeFragment extends SettingsFragment {
                 U.setComponentEnabled(getActivity(), SecondaryHomeActivity.class, isChecked);
                 U.setComponentEnabled(getActivity(), HSLActivity.class, isChecked);
                 startStopDesktopMode(isChecked);
+                updateAdditionalSettings(isChecked);
 
                 break;
             case "set_launcher_default":
@@ -196,11 +197,16 @@ public class DesktopModeFragment extends SettingsFragment {
     }
 
     private void updateAdditionalSettings() {
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        updateAdditionalSettings(pref.getBoolean("desktop_mode", false));
+    }
+
+    private void updateAdditionalSettings(boolean desktopModeEnabled) {
         finishedLoadingPrefs = false;
 
-        boolean writeSecureSettings = U.hasWriteSecureSettingsPermission(getActivity());
-        boolean desktopModeActive = U.isDesktopModeActive(getActivity());
-        boolean enabled = writeSecureSettings && desktopModeActive;
+        boolean enabled = desktopModeEnabled
+                && U.hasWriteSecureSettingsPermission(getActivity())
+                && U.isDesktopModeActive(getActivity());
 
         findPreference("display_density").setEnabled(enabled);
         findPreference("auto_hide_navbar").setEnabled(enabled);
