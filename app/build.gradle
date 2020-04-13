@@ -131,6 +131,7 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4-rule:$POWERMOCK_VERSION"
     testImplementation "org.powermock:powermock-api-mockito2:$POWERMOCK_VERSION"
     testImplementation "org.powermock:powermock-classloading-xstream:$POWERMOCK_VERSION"
+    testImplementation 'org.apache.commons:commons-lang3:3.10'
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeDebugUnitTest']) {
