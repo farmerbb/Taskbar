@@ -32,7 +32,11 @@ import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 @TargetApi(Build.VERSION_CODES.N)
-public class FavoriteAppTileService extends TileService {
+public abstract class FavoriteAppTileService extends TileService {
+
+    protected abstract int tileNumber();
+
+    private String prefix = "qs_tile_" + tileNumber() + "_";
 
     private BroadcastReceiver tileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -61,13 +65,13 @@ public class FavoriteAppTileService extends TileService {
     @Override
     public void onTileRemoved() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("qs_tile_added", false).apply();
+        pref.edit().putBoolean(prefix + "added", false).apply();
     }
 
     @Override
     public void onClick() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!pref.getBoolean("qs_tile_added", false)) {
+        if(!pref.getBoolean(prefix + "added", false)) {
             selectApp();
             return;
         }
@@ -81,7 +85,7 @@ public class FavoriteAppTileService extends TileService {
     private void selectApp() {
         Intent intent = new Intent(this, PersistentShortcutSelectAppActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("qs_tile", true);
+        intent.putExtra("qs_tile", tileNumber());
         startActivityAndCollapse(intent);
     }
 
@@ -91,9 +95,9 @@ public class FavoriteAppTileService extends TileService {
         Intent shortcutIntent = new Intent(this, PersistentShortcutLaunchActivity.class);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra("package_name", pref.getString("qs_tile_package_name", null));
-        shortcutIntent.putExtra("component_name", pref.getString("qs_tile_component_name", null));
-        shortcutIntent.putExtra("window_size", pref.getString("qs_tile_window_size", null));
+        shortcutIntent.putExtra("package_name", pref.getString(prefix + "package_name", null));
+        shortcutIntent.putExtra("component_name", pref.getString(prefix + "component_name", null));
+        shortcutIntent.putExtra("window_size", pref.getString(prefix + "window_size", null));
 
         startActivityAndCollapse(shortcutIntent);
     }
@@ -105,9 +109,9 @@ public class FavoriteAppTileService extends TileService {
         SharedPreferences pref = U.getSharedPreferences(this);
         tile.setIcon(Icon.createWithResource(this, R.drawable.tb_favorite_app_tile));
 
-        if(pref.getBoolean("qs_tile_added", false)) {
+        if(pref.getBoolean(prefix + "added", false)) {
             tile.setState(Tile.STATE_ACTIVE);
-            tile.setLabel(pref.getString("qs_tile_label", getString(R.string.tb_new_shortcut)));
+            tile.setLabel(pref.getString(prefix + "label", getString(R.string.tb_new_shortcut)));
         } else {
             tile.setState(Tile.STATE_INACTIVE);
             tile.setLabel(getString(R.string.tb_new_shortcut));

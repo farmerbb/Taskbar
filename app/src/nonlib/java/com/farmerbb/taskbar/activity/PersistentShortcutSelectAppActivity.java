@@ -83,8 +83,9 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
     }
 
     private void createShortcut(String windowSize) {
-        if(getIntent().getBooleanExtra("qs_tile", false))
-            createQuickSettingTileShortcut(windowSize);
+        int num = getIntent().getIntExtra("qs_tile", 0);
+        if(num > 0)
+            createQuickSettingTileShortcut(windowSize, num);
         else
             createHomeScreenShortcut(windowSize);
 
@@ -112,15 +113,17 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
     }
 
-    private void createQuickSettingTileShortcut(String windowSize) {
+    private void createQuickSettingTileShortcut(String windowSize, int num) {
+        String prefix = "qs_tile_" + num + "_";
+
         SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
 
-        editor.putString("qs_tile_package_name", selectedEntry.getPackageName());
-        editor.putString("qs_tile_component_name", selectedEntry.getComponentName());
-        editor.putString("qs_tile_label", selectedEntry.getLabel());
-        editor.putString("qs_tile_window_size", windowSize);
-        editor.putBoolean("qs_tile_added", true);
+        editor.putString(prefix + "package_name", selectedEntry.getPackageName());
+        editor.putString(prefix + "component_name", selectedEntry.getComponentName());
+        editor.putString(prefix + "label", selectedEntry.getLabel());
+        editor.putString(prefix + "window_size", windowSize);
+        editor.putBoolean(prefix + "added", true);
         editor.apply();
 
         U.sendBroadcast(this, TaskbarIntent.ACTION_UPDATE_FAVORITE_APP_TILE);

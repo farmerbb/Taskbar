@@ -261,7 +261,7 @@
             android:name=".activity.PersistentShortcutSelectAppActivity"
             android:label="@string/tb_new_shortcut"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/Taskbar.Dialog.Blacklist" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -312,7 +312,29 @@
                        android:value="true" />
         </service>
         <service
-            android:name=".service.FavoriteAppTileService"
+            android:name=".service.FavoriteApp1"
+            android:label="@string/tb_new_shortcut"
+            android:icon="@drawable/tb_favorite_app_tile"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+                       android:value="true" />
+        </service>
+        <service
+            android:name=".service.FavoriteApp2"
+            android:label="@string/tb_new_shortcut"
+            android:icon="@drawable/tb_favorite_app_tile"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+                       android:value="true" />
+        </service>
+        <service
+            android:name=".service.FavoriteApp3"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
