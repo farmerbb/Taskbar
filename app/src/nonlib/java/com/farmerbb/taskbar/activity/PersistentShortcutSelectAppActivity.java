@@ -28,6 +28,7 @@ import android.widget.Spinner;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivity {
@@ -82,6 +83,15 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
     }
 
     private void createShortcut(String windowSize) {
+        if(getIntent().getBooleanExtra("qs_tile", false))
+            createQuickSettingTileShortcut(windowSize);
+        else
+            createHomeScreenShortcut(windowSize);
+
+        finish();
+    }
+
+    private void createHomeScreenShortcut(String windowSize) {
         try {
             Context packageContext = createPackageContext(selectedEntry.getPackageName(), Context.CONTEXT_IGNORE_SECURITY);
             ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(selectedEntry.getPackageName(), PackageManager.GET_META_DATA);
@@ -100,7 +110,19 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
 
             setResult(RESULT_OK, intent);
         } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+    }
 
-        finish();
+    private void createQuickSettingTileShortcut(String windowSize) {
+        SharedPreferences pref = U.getSharedPreferences(this);
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.putString("qs_tile_package_name", selectedEntry.getPackageName());
+        editor.putString("qs_tile_component_name", selectedEntry.getComponentName());
+        editor.putString("qs_tile_label", selectedEntry.getLabel());
+        editor.putString("qs_tile_window_size", windowSize);
+        editor.putBoolean("qs_tile_added", true);
+        editor.apply();
+
+        U.sendBroadcast(this, TaskbarIntent.ACTION_UPDATE_FAVORITE_APP_TILE);
     }
 }

@@ -309,6 +309,17 @@
             <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
                        android:value="true" />
         </service>
+        <service
+            android:name=".service.FavoriteAppTileService"
+            android:label="@string/tb_new_shortcut"
+            android:icon="@drawable/tb_favorite_app_tile"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+                       android:value="true" />
+        </service>
 
         <receiver
             android:name=".receiver.ShowHideTaskbarReceiver"
