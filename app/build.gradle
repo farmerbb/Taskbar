@@ -48,7 +48,6 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            testCoverageEnabled true
             manifestPlaceholders = [appName: "@string/tb_app_name_debug"]
         }
 
@@ -64,6 +63,11 @@ android {
                     outputFileName = "${project.parent.name}-${defaultConfig.versionName}.apk"
                 }
             }
+        }
+
+        jacoco {
+            initWith buildTypes.debug
+            testCoverageEnabled true
         }
     }
 
@@ -134,7 +138,7 @@ dependencies {
     testImplementation 'org.apache.commons:commons-lang3:3.10'
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeDebugUnitTest']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeJacocoUnitTest']) {
     reports {
         xml.enabled = true
         html.enabled = true
@@ -147,14 +151,14 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeDebugUnitTest']) 
             '**/BuildConfig.class'
     ]
 
-    def debugTree = fileTree(dir: "$buildDir/intermediates/javac/freeDebug/classes", excludes: fileFilter)
+    def jacocoTree = fileTree(dir: "$buildDir/intermediates/javac/freeJacoco/classes", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.from = [mainSrc]
-    classDirectories.from = [debugTree]
-    executionData.from = "$buildDir/jacoco/testFreeDebugUnitTest.exec"
+    classDirectories.from = [jacocoTree]
+    executionData.from = "$buildDir/jacoco/testFreeJacocoUnitTest.exec"
 
     doLast {
-        println("Test report link: file://$buildDir/reports/jacoco/jacocoTestReport/html/index.html")
+        println "Test report link: file://$buildDir/reports/jacoco/jacocoTestReport/html/index.html"
     }
 }
