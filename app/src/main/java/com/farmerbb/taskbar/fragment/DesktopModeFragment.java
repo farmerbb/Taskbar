@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -178,7 +179,7 @@ public class DesktopModeFragment extends SettingsFragment {
 
     @TargetApi(29)
     private void startStopDesktopMode(boolean start) {
-        if(!start || !U.isDesktopModeActive(getActivity())) {
+        if(!start || !U.isDesktopModeActive(getActivity()) || !U.launcherIsDefault(getActivity())) {
             U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
             return;
         }
