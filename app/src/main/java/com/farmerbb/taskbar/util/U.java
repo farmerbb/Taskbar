@@ -334,6 +334,7 @@ public class U {
                 null);
     }
 
+    // Used for launching Persistent Shortcuts via the home screen or quick settings
     public static void launchApp(final Context context,
                                  final AppEntry entry,
                                  final String windowSize,
@@ -343,7 +344,7 @@ public class U {
                 windowSize,
                 false,
                 true,
-                false,
+                true,
                 null,
                 null,
                 onError);
