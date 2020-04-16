@@ -27,7 +27,6 @@ import android.provider.Settings;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.DisplayInfo;
@@ -55,7 +54,6 @@ public class TouchAbsorberActivity extends Activity {
         DisplayInfo display = U.getDisplayInfo(this);
         LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
-        if(BuildConfig.DEBUG) layout.setBackgroundColor(0x800000FF);
 
         U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
 
