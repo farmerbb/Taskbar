@@ -128,6 +128,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             shortcutIntent.setAction(Intent.ACTION_MAIN);
             shortcutIntent.putExtra("package_name", selectedEntry.getPackageName());
             shortcutIntent.putExtra("component_name", selectedEntry.getComponentName());
+            shortcutIntent.putExtra("user_id", selectedEntry.getUserId(this));
 
             if(windowSize != null) shortcutIntent.putExtra("window_size", windowSize);
 
@@ -150,6 +151,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         editor.putString(prefix + "component_name", selectedEntry.getComponentName());
         editor.putString(prefix + "label", selectedEntry.getLabel());
         editor.putString(prefix + "window_size", windowSize);
+        editor.putLong(prefix + "user_id", selectedEntry.getUserId(this));
         editor.putFloat(prefix + "icon_threshold", threshold);
         editor.putBoolean(prefix + "added", true);
         editor.apply();

@@ -20,6 +20,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Process;
+import android.os.UserManager;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
@@ -31,10 +33,12 @@ public class PersistentShortcutLaunchActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
 
         String packageName = getIntent().getStringExtra("package_name");
         String componentName = getIntent().getStringExtra("component_name");
         String windowSize = getIntent().getStringExtra("window_size");
+        long userId = getIntent().getLongExtra("user_id", userManager.getSerialNumberForUser(Process.myUserHandle()));
 
         if(!U.canDrawOverlays(this) && windowSize != null) {
             Intent intent = new Intent(this, DummyActivity.class);
@@ -44,6 +48,7 @@ public class PersistentShortcutLaunchActivity extends Activity {
             startActivity(intent);
         } else if(packageName != null && componentName != null) {
             final AppEntry entry = new AppEntry(packageName, componentName, null, null, false);
+            entry.setUserId(userId);
 
             U.launchApp(this, entry, windowSize, () -> {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
