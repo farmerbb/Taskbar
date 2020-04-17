@@ -315,7 +315,6 @@
             android:label="@string/tb_new_shortcut"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:enabled="@bool/persistent_shortcuts_enabled"
             android:theme="@style/Taskbar.Dialog.Blacklist" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -328,7 +327,6 @@
             android:name=".activity.PersistentShortcutLaunchActivity"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"
-            android:enabled="@bool/persistent_shortcuts_enabled"
             android:theme="@android:style/Theme.NoDisplay" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -388,7 +386,6 @@
             android:name=".service.FavoriteApp1"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:enabled="@bool/persistent_shortcuts_enabled"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -400,7 +397,6 @@
             android:name=".service.FavoriteApp2"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:enabled="@bool/persistent_shortcuts_enabled"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -412,7 +408,6 @@
             android:name=".service.FavoriteApp3"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:enabled="@bool/persistent_shortcuts_enabled"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
