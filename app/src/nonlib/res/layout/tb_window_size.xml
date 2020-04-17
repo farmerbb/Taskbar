@@ -20,36 +20,65 @@
               android:orientation="vertical"
               android:padding="8dp" >
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:padding="4dp"
-        android:textSize="16sp"
-        android:text="@string/tb_allow_freeform_mode" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:padding="4dp"
-        android:textSize="16sp"
-        android:text="@string/tb_window_size" />
-
-    <Spinner
-        android:id="@+id/spinner"
+    <LinearLayout
+        android:id="@+id/window_size_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:padding="4dp"
-        android:entries="@array/tb_pref_window_size_list" />
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:padding="4dp"
+            android:textSize="16sp"
+            android:text="@string/tb_allow_freeform_mode" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:padding="4dp"
+            android:textSize="16sp"
+            android:text="@string/tb_window_size" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:padding="4dp"
+            android:entries="@array/tb_pref_window_size_list" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/icon_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:max="99"/>
+
+        <ImageButton
+            android:id="@+id/icon_preview"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/tb_circle_dark"/>
+
+    </LinearLayout>
 
 </LinearLayout>

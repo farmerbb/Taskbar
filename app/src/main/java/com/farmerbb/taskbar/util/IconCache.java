@@ -23,12 +23,11 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.UserManager;
 import android.util.LruCache;
-
-import com.farmerbb.taskbar.BuildConfig;
 
 public class IconCache {
 
@@ -69,21 +68,7 @@ public class IconCache {
             drawable = drawables.get(name);
             if(drawable == null) {
                 Drawable loadedIcon = loadIcon(context, pm, appInfo);
-
-                if(loadedIcon instanceof BitmapDrawable)
-                    drawable = (BitmapDrawable) loadedIcon;
-                else {
-                    int width = Math.max(loadedIcon.getIntrinsicWidth(), 1);
-                    int height = Math.max(loadedIcon.getIntrinsicHeight(), 1);
-
-                    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmap);
-
-                    loadedIcon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                    loadedIcon.draw(canvas);
-
-                    drawable = new BitmapDrawable(context.getResources(), bitmap);
-                }
+                drawable = convertToBitmapDrawable(context, loadedIcon);
 
                 drawables.put(name, drawable);
             }
@@ -140,5 +125,41 @@ public class IconCache {
         } catch (NullPointerException e) {
             return pm.getDefaultActivityIcon();
         }
+    }
+
+
+    public static BitmapDrawable convertToBitmapDrawable(Context context, Drawable drawable) {
+        if(drawable instanceof BitmapDrawable)
+            return (BitmapDrawable) drawable;
+
+        int width = Math.max(drawable.getIntrinsicWidth(), 1);
+        int height = Math.max(drawable.getIntrinsicHeight(), 1);
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return new BitmapDrawable(context.getResources(), bitmap);
+    }
+
+    public static BitmapDrawable convertToMonochrome(Context context, Drawable drawable, float threshold) {
+        Bitmap bitmap = convertToBitmapDrawable(context, drawable).getBitmap();
+        Bitmap monoBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+        float[] hsv = new float[3];
+        for(int col = 0; col < bitmap.getWidth(); col++) {
+            for(int row = 0; row < bitmap.getHeight(); row++) {
+                Color.colorToHSV(bitmap.getPixel(col, row), hsv);
+                if(hsv[2] > threshold) {
+                    monoBitmap.setPixel(col, row, 0xffffffff);
+                } else {
+                    monoBitmap.setPixel(col, row, 0x00000000);
+                }
+            }
+        }
+
+        return new BitmapDrawable(context.getResources(), monoBitmap);
     }
 }

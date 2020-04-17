@@ -21,19 +21,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivity {
 
     private AppEntry selectedEntry;
+    private float threshold;
 
     @Override
     public void selectApp(AppEntry entry) {
@@ -70,6 +75,28 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             if(!hasBrokenSetLaunchBoundsApi)
                 spinner.setEnabled(isChecked);
         });
+
+        SeekBar seekBar = layout.findViewById(R.id.seekbar);
+        ImageView imageView = layout.findViewById(R.id.icon_preview);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Context context = PersistentShortcutSelectAppActivity.this;
+                Drawable icon = selectedEntry.getIcon(context);
+                threshold = (float) Math.log10(progress + 1) / 2;
+
+                imageView.setImageDrawable(IconCache.convertToMonochrome(context, icon, threshold));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        seekBar.setProgress(50);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(selectedEntry.getLabel())
@@ -123,6 +150,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         editor.putString(prefix + "component_name", selectedEntry.getComponentName());
         editor.putString(prefix + "label", selectedEntry.getLabel());
         editor.putString(prefix + "window_size", windowSize);
+        editor.putFloat(prefix + "icon_threshold", threshold);
         editor.putBoolean(prefix + "added", true);
         editor.apply();
 
