@@ -23,6 +23,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -39,6 +40,9 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
 
     private AppEntry selectedEntry;
     private float threshold;
+
+    private boolean processing = false;
+    private float thresholdInProcess;
 
     @Override
     public void selectApp(AppEntry entry) {
@@ -91,9 +95,23 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
                     Drawable icon = selectedEntry.getIcon(context);
                     threshold = (float) Math.log10(progress + 1) / 2;
 
-                    // TODO move this to separate thread
-                    Drawable monoIcon = U.convertToMonochrome(context, icon, threshold);
-                    imageView.setImageDrawable(U.resizeDrawable(context, monoIcon, R.dimen.tb_qs_icon_preview_size));
+                    if(processing) return;
+
+                    Handler handler = new Handler();
+                    new Thread(() -> {
+                        processing = true;
+
+                        while(threshold != thresholdInProcess) {
+                            thresholdInProcess = threshold;
+
+                            Drawable monoIcon = U.convertToMonochrome(context, icon, thresholdInProcess);
+                            Drawable resizedIcon = U.resizeDrawable(context, monoIcon, R.dimen.tb_qs_icon_preview_size);
+
+                            handler.post(() -> imageView.setImageDrawable(resizedIcon));
+                        }
+
+                        processing = false;
+                    }).start();
                 }
 
                 @Override public void onStartTrackingTouch(SeekBar seekBar) {}
