@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -31,7 +32,6 @@ import android.widget.Spinner;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
@@ -44,65 +44,74 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
     public void selectApp(AppEntry entry) {
         selectedEntry = entry;
 
-        if(U.hasFreeformSupport(this))
-            showWindowSizeDialog();
-        else
-            createShortcut(null);
-    }
+        boolean windowSizeOptions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && U.hasFreeformSupport(this);
+        boolean iconOptions = getIntent().getIntExtra("qs_tile", 0) > 0;
 
-    private void showWindowSizeDialog() {
-        LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.tb_window_size, null);
+        if(!windowSizeOptions && !iconOptions) {
+            createShortcut(null);
+            return;
+        }
+
+        LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.tb_shortcut_options, null);
         final Spinner spinner = layout.findViewById(R.id.spinner);
         final CheckBox checkBox = layout.findViewById(R.id.checkBox);
 
-        SharedPreferences pref = U.getSharedPreferences(this);
-        boolean isFreeformEnabled = pref.getBoolean("freeform_hack", false);
-        boolean hasBrokenSetLaunchBoundsApi = U.hasBrokenSetLaunchBoundsApi();
-
-        checkBox.setChecked(isFreeformEnabled);
-        spinner.setEnabled(isFreeformEnabled && !hasBrokenSetLaunchBoundsApi);
-
-        String defaultWindowSize = pref.getString("window_size", getString(R.string.tb_def_window_size));
         String[] windowSizes = getResources().getStringArray(R.array.tb_pref_window_size_list_values);
-        for(int i = 0; i < windowSizes.length; i++) {
-            if(windowSizes[i].equals(defaultWindowSize)) {
-                spinner.setSelection(i);
-                break;
+
+        if(windowSizeOptions) {
+            layout.findViewById(R.id.window_size_options).setVisibility(View.VISIBLE);
+
+            SharedPreferences pref = U.getSharedPreferences(this);
+            boolean isFreeformEnabled = pref.getBoolean("freeform_hack", false);
+
+            checkBox.setChecked(isFreeformEnabled);
+            spinner.setEnabled(isFreeformEnabled);
+
+            String defaultWindowSize = pref.getString("window_size", getString(R.string.tb_def_window_size));
+            for(int i = 0; i < windowSizes.length; i++) {
+                if(windowSizes[i].equals(defaultWindowSize)) {
+                    spinner.setSelection(i);
+                    break;
+                }
             }
+
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> spinner.setEnabled(isChecked));
         }
 
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(!hasBrokenSetLaunchBoundsApi)
-                spinner.setEnabled(isChecked);
-        });
+        if(iconOptions) {
+            layout.findViewById(R.id.icon_options).setVisibility(View.VISIBLE);
 
-        SeekBar seekBar = layout.findViewById(R.id.seekbar);
-        ImageView imageView = layout.findViewById(R.id.icon_preview);
+            SeekBar seekBar = layout.findViewById(R.id.seekbar);
+            ImageView imageView = layout.findViewById(R.id.icon_preview);
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Context context = PersistentShortcutSelectAppActivity.this;
-                Drawable icon = selectedEntry.getIcon(context);
-                threshold = (float) Math.log10(progress + 1) / 2;
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    Context context = PersistentShortcutSelectAppActivity.this;
+                    Drawable icon = selectedEntry.getIcon(context);
+                    threshold = (float) Math.log10(progress + 1) / 2;
 
-                imageView.setImageDrawable(IconCache.convertToMonochrome(context, icon, threshold));
-            }
+                    // TODO move this to separate thread
+                    Drawable monoIcon = U.convertToMonochrome(context, icon, threshold);
+                    imageView.setImageDrawable(U.resizeDrawable(context, monoIcon, R.dimen.tb_qs_icon_preview_size));
+                }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        seekBar.setProgress(50);
+            seekBar.setProgress(50);
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(selectedEntry.getLabel())
                 .setView(layout)
-                .setPositiveButton(R.string.tb_action_ok, (dialog, which) ->
-                        createShortcut(checkBox.isChecked() ? windowSizes[spinner.getSelectedItemPosition()] : null))
+                .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
+                    if(windowSizeOptions)
+                        createShortcut(checkBox.isChecked() ? windowSizes[spinner.getSelectedItemPosition()] : null);
+                    else
+                        createShortcut(null);
+                })
                 .setNegativeButton(R.string.tb_action_cancel, null);
 
         AlertDialog dialog = builder.create();

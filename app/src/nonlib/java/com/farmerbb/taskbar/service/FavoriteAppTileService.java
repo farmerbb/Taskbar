@@ -133,7 +133,7 @@ public abstract class FavoriteAppTileService extends TileService {
                 LauncherActivityInfo info = launcherApps.resolveActivity(intent, userManager.getUserForSerialNumber(userId));
 
                 IconCache cache = IconCache.getInstance(this);
-                BitmapDrawable icon = IconCache.convertToMonochrome(this, cache.getIcon(this, info), threshold);
+                BitmapDrawable icon = U.convertToMonochrome(this, cache.getIcon(this, info), threshold);
 
                 tile.setIcon(Icon.createWithBitmap(icon.getBitmap()));
             } else

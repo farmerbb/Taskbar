@@ -425,4 +425,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_density_custom">Custom (%ddpi)</string>
     <string name="tb_unable_to_apply_density_change">Unable to apply density change</string>
 
+    <string name="tb_icon_preview">Icon preview</string>
+    <string name="tb_icon_preview_description">Use the slider to adjust the generated icon to your liking.</string>
+
 </resources>

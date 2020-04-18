@@ -450,4 +450,7 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
     <string name="tb_density_custom">Custom (%ddpi)</string>
     <string name="tb_unable_to_apply_density_change">Unable to apply density change</string>
 
+    <string name="tb_icon_preview">Icon preview</string>
+    <string name="tb_icon_preview_description">Use the slider to adjust the generated icon to your liking.</string>
+
 </resources>

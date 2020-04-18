@@ -43,8 +43,12 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
@@ -54,6 +58,8 @@ import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+
+import androidx.annotation.DimenRes;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
@@ -1880,5 +1886,57 @@ public class U {
                 enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                         : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
+    }
+
+    public static BitmapDrawable convertToBitmapDrawable(Context context, Drawable drawable) {
+        if(drawable instanceof BitmapDrawable)
+            return (BitmapDrawable) drawable;
+
+        int width = Math.max(drawable.getIntrinsicWidth(), 1);
+        int height = Math.max(drawable.getIntrinsicHeight(), 1);
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return new BitmapDrawable(context.getResources(), bitmap);
+    }
+
+    public static BitmapDrawable convertToMonochrome(Context context, Drawable drawable, float threshold) {
+        Bitmap bitmap = convertToBitmapDrawable(context, drawable).getBitmap();
+        Bitmap monoBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+        // From https://stackoverflow.com/a/38635239
+        float[] hsv = new float[3];
+        for(int col = 0; col < bitmap.getWidth(); col++) {
+            for(int row = 0; row < bitmap.getHeight(); row++) {
+                Color.colorToHSV(bitmap.getPixel(col, row), hsv);
+                if(hsv[2] > threshold) {
+                    monoBitmap.setPixel(col, row, 0xffffffff);
+                } else {
+                    monoBitmap.setPixel(col, row, 0x00000000);
+                }
+            }
+        }
+
+        return new BitmapDrawable(context.getResources(), monoBitmap);
+    }
+
+    public static BitmapDrawable resizeDrawable(Context context, Drawable drawable, @DimenRes int iconSizeRes) {
+        int width = Math.max(1, drawable.getIntrinsicWidth());
+        int height = Math.max(1, drawable.getIntrinsicHeight());
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        int iconSize = context.getApplicationContext().getResources().getDimensionPixelSize(iconSizeRes);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
+
+        return new BitmapDrawable(context.getResources(), resizedBitmap);
     }
 }
