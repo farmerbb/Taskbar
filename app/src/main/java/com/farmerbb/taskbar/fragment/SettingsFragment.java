@@ -184,8 +184,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
         if(p.getKey().equals("clear_pinned_apps")) {
             Intent clearIntent = null;
 
-            SharedPreferences pref = U.getSharedPreferences(getActivity());
-            switch(pref.getString("theme", "light")) {
+            switch(U.getCurrentTheme(getActivity())) {
                 case "light":
                     clearIntent = new Intent(getActivity(), ClearDataActivity.class);
                     break;

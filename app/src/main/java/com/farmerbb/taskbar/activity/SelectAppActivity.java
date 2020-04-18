@@ -129,7 +129,7 @@ public class SelectAppActivity extends AppCompatActivity {
                     Intent intent = null;
                     SharedPreferences pref3 = U.getSharedPreferences(this);
 
-                    switch(pref3.getString("theme", "light")) {
+                    switch(U.getCurrentTheme(this)) {
                         case "light":
                             intent = new Intent(this, SelectAppActivity.class);
                             break;

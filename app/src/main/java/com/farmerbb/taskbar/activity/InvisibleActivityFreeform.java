@@ -128,7 +128,7 @@ public class InvisibleActivityFreeform extends Activity {
                     if(helper.isInFreeformWorkspace()) {
                         Intent intent = null;
 
-                        switch(pref.getString("theme", "light")) {
+                        switch(U.getCurrentTheme(this)) {
                             case "light":
                                 intent = new Intent(this, InvisibleActivityAlt.class);
                                 break;

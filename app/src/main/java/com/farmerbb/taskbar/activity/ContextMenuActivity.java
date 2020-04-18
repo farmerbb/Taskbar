@@ -603,7 +603,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 Intent intent = null;
 
                 SharedPreferences pref3 = U.getSharedPreferences(this);
-                switch(pref3.getString("theme", "light")) {
+                switch(U.getCurrentTheme(this)) {
                     case "light":
                         intent = new Intent(this, SelectAppActivity.class);
                         break;
@@ -701,7 +701,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 Intent intent2 = null;
 
                 SharedPreferences pref4 = U.getSharedPreferences(this);
-                switch(pref4.getString("theme", "light")) {
+                switch(U.getCurrentTheme(this)) {
                     case "light":
                         intent2 = new Intent(this, DesktopIconSelectAppActivity.class);
                         break;

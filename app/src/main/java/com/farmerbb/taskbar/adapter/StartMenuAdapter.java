@@ -96,7 +96,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         textView.setText(entry.getLabel());
         textView.setTypeface(null, isTopApp(entry) ? Typeface.BOLD : Typeface.NORMAL);
 
-        switch(pref.getString("theme", "light")) {
+        switch(U.getCurrentTheme(getContext())) {
             case "light":
                 textView.setTextColor(ContextCompat.getColor(getContext(), R.color.tb_text_color));
                 break;

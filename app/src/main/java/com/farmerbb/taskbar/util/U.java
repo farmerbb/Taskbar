@@ -683,7 +683,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         Intent intent = null;
 
-        switch(pref.getString(SP_KEY_THEME, "light")) {
+        switch(getCurrentTheme(context)) {
             case "light":
                 intent = new Intent(context, ContextMenuActivity.class);
                 break;
@@ -1596,7 +1596,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
 
         int theme = -1;
-        switch(pref.getString(SP_KEY_THEME, "light")) {
+        switch(getCurrentTheme(context)) {
             case "light":
                 theme = R.style.Taskbar;
                 break;
@@ -1938,5 +1938,28 @@ public class U {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
 
         return new BitmapDrawable(context.getResources(), resizedBitmap);
+    }
+
+    public static String getCurrentTheme(Context context) {
+        String defaultTheme = context.getString(R.string.tb_pref_theme_default);
+
+        SharedPreferences pref = getSharedPreferences(context);
+        String themePref = pref.getString(SP_KEY_THEME, defaultTheme);
+
+        if(themePref.equals("system")) {
+            Configuration configuration = context.getResources().getConfiguration();
+            int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            switch(currentNightMode) {
+                case Configuration.UI_MODE_NIGHT_NO:
+                    // Night mode is not active, we're using the light theme
+                    return "light";
+                case Configuration.UI_MODE_NIGHT_YES:
+                    // Night mode is active, we're using dark theme
+                    return "dark";
+            }
+        } else
+            return themePref;
+
+        return defaultTheme;
     }
 }

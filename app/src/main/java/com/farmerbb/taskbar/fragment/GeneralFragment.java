@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.fragment;
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -105,13 +104,11 @@ public class GeneralFragment extends SettingsFragment {
     @TargetApi(Build.VERSION_CODES.O)
     @Override
     public boolean onPreferenceClick(final Preference p) {
-        final SharedPreferences pref = U.getSharedPreferences(getActivity());
-
         switch(p.getKey()) {
             case "blacklist":
                 Intent intent = null;
 
-                switch(pref.getString("theme", "light")) {
+                switch(U.getCurrentTheme(getActivity())) {
                     case "light":
                         intent = new Intent(getActivity(), SelectAppActivity.class);
                         break;

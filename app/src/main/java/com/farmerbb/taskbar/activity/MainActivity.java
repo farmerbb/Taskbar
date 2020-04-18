@@ -28,6 +28,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
 
         if(!U.isLibrary(this)) {
-            switch(pref.getString("theme", "light")) {
+            switch(U.getCurrentTheme(this)) {
                 case "light":
                     setTheme(R.style.Taskbar);
                     break;
@@ -224,12 +225,15 @@ public class MainActivity extends AppCompatActivity {
                     restoreSuccessful.delete();
                 }
 
-                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ManageAppDataFragment(), "ManageAppDataFragment").commit();
+                navigateTo(new ManageAppDataFragment());
             } else if(!getIntent().hasExtra("theme_change"))
-                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AboutFragment(), "AboutFragment").commit();
+                navigateTo(new AboutFragment());
             else
-                getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new AppearanceFragment(), "AppearanceFragment").commit();
-        }
+                navigateTo(new AppearanceFragment());
+        } else try {
+            Fragment oldFragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
+            navigateTo(oldFragment.getClass().newInstance());
+        } catch (IllegalAccessException | InstantiationException e) { /* Gracefully fail */ }
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!getPackageName().equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
@@ -428,5 +432,12 @@ public class MainActivity extends AppCompatActivity {
             helpButton.setVisibility(View.INVISIBLE);
             helpButton.setOnClickListener(null);
         }
+    }
+
+    private void navigateTo(Fragment fragment) {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, fragment, fragment.getClass().getSimpleName())
+                .commit();
     }
 }

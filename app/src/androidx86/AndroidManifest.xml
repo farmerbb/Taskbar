@@ -61,6 +61,7 @@
 
         <activity
             android:name=".activity.MainActivity"
+            android:exported="true"
             android:label="@string/tb_app_name"
             android:launchMode="singleTask"/>
         <activity-alias

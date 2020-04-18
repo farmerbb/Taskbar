@@ -306,7 +306,7 @@ public class DashboardController extends UIController {
             final SharedPreferences pref = U.getSharedPreferences(context);
             Intent intent = null;
 
-            switch(pref.getString("theme", "light")) {
+            switch(U.getCurrentTheme(context)) {
                 case "light":
                     intent = new Intent(context, DashboardActivity.class);
                     break;

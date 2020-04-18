@@ -67,6 +67,8 @@
         <item>dark</item>
     </string-array>
 
+    <string name="tb_pref_theme_default">light</string>
+
     <string-array name="tb_pref_window_size_list">
         <item>@string/tb_window_size_standard</item>
         <item>@string/tb_window_size_large</item>

@@ -125,7 +125,7 @@ public class AppearanceFragment extends SettingsFragment {
             case "icon_pack_list":
                 Intent intent = null;
 
-                switch(pref.getString("theme", "light")) {
+                switch(U.getCurrentTheme(getActivity())) {
                     case "light":
                         intent = new Intent(getActivity(), IconPackActivity.class);
                         break;
