@@ -185,7 +185,7 @@ public class UTest {
     }
 
     @Test
-    public void testSendAccessibilityActionWittServiceNoeEnabledAndWithoutPermission() {
+    public void testSendAccessibilityActionWithServiceNotEnabledAndWithoutPermission() {
         testSendAccessibilityAction(false, false, false);
     }
 
