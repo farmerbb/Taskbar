@@ -22,6 +22,8 @@ import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_TASKBAR_ACTIVE;
+
 public abstract class UIController {
     protected Context context;
 
@@ -43,12 +45,12 @@ public abstract class UIController {
         else
             shouldProceed = true;
 
-        if(shouldProceed && (pref.getBoolean("taskbar_active", false)
+        if(shouldProceed && (pref.getBoolean(SP_KEY_TASKBAR_ACTIVE, false)
                 || helper.isOnHomeScreen())) {
             if(U.canDrawOverlays(context))
                 runnable.run();
             else {
-                pref.edit().putBoolean("taskbar_active", false).apply();
+                pref.edit().putBoolean(SP_KEY_TASKBAR_ACTIVE, false).apply();
                 host.terminate();
             }
         } else
