@@ -19,4 +19,10 @@
     <string name="tb_pref_description_keyboard_shortcut">Start/stop Taskbar: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nLock device: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\nShow start menu: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(requires Taskbar to be set as the assist app in Settings)</string>
     <string name="tb_pref_description_keyboard_shortcut_alt">Start/stop Taskbar\n&#8226; WinKey+M / Search+M\n\nLock device\n&#8226; WinKey+L / Search+L\n\nShow start menu\n&#8226; WinKey / Search\n(requires Taskbar to be set as the assist app in Settings)</string>
 
+    <string-array name="tb_pref_theme_list">
+        <item>System</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
 </resources>

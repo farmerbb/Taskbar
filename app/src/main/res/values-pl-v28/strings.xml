@@ -26,4 +26,10 @@ Pokaż menu Start
 • WinKey / Search
 (wymaga, aby Taskbar był ustawiony jako aplikacja pomocnicza w Ustawieniach)"</string>
 
+    <string-array name="tb_pref_theme_list">
+        <item>System</item>
+        <item>Jasny</item>
+        <item>Ciemny</item>
+    </string-array>
+
 </resources>

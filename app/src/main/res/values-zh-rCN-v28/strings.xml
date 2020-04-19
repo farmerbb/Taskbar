@@ -19,4 +19,10 @@
     <string name="tb_pref_description_keyboard_shortcut">开始/停止任务栏: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\n锁定设备: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\n显示开始菜单: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(需要在设置中将任务栏设为辅助应用)</string>
     <string name="tb_pref_description_keyboard_shortcut_alt">开始/停止任务栏\n&#8226; WinKey+M / Search+M\n\n锁定设备\n&#8226; WinKey+L / Search+L\n\n显示开始菜单\n&#8226; WinKey / Search\n(requires Taskbar to be set as the assist app in Settings)</string>
 
+    <string-array name="tb_pref_theme_list">
+        <item>System</item>
+        <item>亮色</item>
+        <item>暗色</item>
+    </string-array>
+
 </resources>

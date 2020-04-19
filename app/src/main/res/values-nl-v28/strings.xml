@@ -19,4 +19,10 @@
     <string name="tb_pref_description_keyboard_shortcut">Taakbalk starten/stoppen: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nApparaat vergrendelen: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\nStartmenu tonen: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
     <string name="tb_pref_description_keyboard_shortcut_alt">Taakbalk starten/stoppen\n&#8226; WinKey+M / Search+M\n\nApparaat vergrendelen\n&#8226; WinKey+L / Search+L\n\nStartmenu tonen\n&#8226; WinKey / Search\n(Taakbalk moet hiervoor worden ingesteld als assistent-app in de Instellingen)</string>
 
+    <string-array name="tb_pref_theme_list">
+        <item>System</item>
+        <item>Licht</item>
+        <item>Donker</item>
+    </string-array>
+
 </resources>

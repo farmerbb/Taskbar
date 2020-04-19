@@ -31,4 +31,10 @@ Başlat menüsü gösterme
 • WinKey / Search
 (ayarlarda Taskbar yardımcı uygulaması olarak ayarlanmasını gerektirir)"</string>
 
+    <string-array name="tb_pref_theme_list">
+        <item>System</item>
+        <item>Açık</item>
+        <item>Koyu</item>
+    </string-array>
+
 </resources>

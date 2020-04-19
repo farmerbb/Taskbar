@@ -18,4 +18,10 @@
 
     <string name="tb_pref_description_keyboard_shortcut">Запуск/остановка Taskbar\n&#8226; WinKey+M, Search+M\n\nЗаблокировать устройство\n&#8226; WinKey+L, Search+L\n\nПоказать меню\n&#8226; WinKey, Search\n(нужно установить Taskbar ассистентом по умолчанию)</string>
 
+    <string-array name="tb_pref_theme_list">
+        <item>System</item>
+        <item>Светлая</item>
+        <item>Темная</item>
+    </string-array>
+
 </resources>

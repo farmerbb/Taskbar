@@ -18,4 +18,10 @@
 
     <string name="tb_pref_description_keyboard_shortcut">Taskbar starten / anhalten\n - Super + M / Suche + M\n\nGerät sperren\n - Super + L / Suche + L\n\nStartmenü anzeigen\n - Super / Suche\n(Muss in den Einstellungen als Suchassistent festgelegt werden)</string>
 
+    <string-array name="tb_pref_theme_list">
+        <item>System</item>
+        <item>Hell</item>
+        <item>Dunkel</item>
+    </string-array>
+
 </resources>
