@@ -1962,4 +1962,8 @@ public class U {
 
         return defaultTheme;
     }
+
+    public static boolean isFavoriteAppTilesEnabled(Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isChromeOs(context);
+    }
 }

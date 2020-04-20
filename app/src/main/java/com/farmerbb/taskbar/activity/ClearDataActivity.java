@@ -16,7 +16,6 @@
 package com.farmerbb.taskbar.activity;
 
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -81,10 +80,13 @@ public class ClearDataActivity extends AppCompatActivity {
             savedWindowSizes.setVisibility(View.GONE);
 
         desktopIcons = findViewById(R.id.clear_desktop_icons);
-        desktopIcons.setOnCheckedChangeListener(listener);
+        if(U.isDesktopIconsEnabled(this))
+            desktopIcons.setOnCheckedChangeListener(listener);
+        else
+            desktopIcons.setVisibility(View.GONE);
 
         qsShortcuts = findViewById(R.id.clear_qs_shortcuts);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !U.isChromeOs(this))
+        if(U.isFavoriteAppTilesEnabled(this))
             qsShortcuts.setOnCheckedChangeListener(listener);
         else
             qsShortcuts.setVisibility(View.GONE);
