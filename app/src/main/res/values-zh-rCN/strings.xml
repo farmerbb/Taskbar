@@ -436,4 +436,6 @@
     <string name="tb_icon_preview">Icon preview</string>
     <string name="tb_icon_preview_description">Use the slider to adjust the generated icon to your liking.</string>
 
+    <string name="tb_clear_qs_shortcuts">Quick settings shortcuts</string>
+
 </resources>

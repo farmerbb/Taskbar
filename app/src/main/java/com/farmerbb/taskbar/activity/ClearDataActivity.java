@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
@@ -38,6 +40,7 @@ public class ClearDataActivity extends AppCompatActivity {
     CheckBox topApps;
     CheckBox savedWindowSizes;
     CheckBox desktopIcons;
+    CheckBox qsShortcuts;
 
     Button button;
     
@@ -48,7 +51,8 @@ public class ClearDataActivity extends AppCompatActivity {
                     || hiddenApps.isChecked()
                     || topApps.isChecked()
                     || savedWindowSizes.isChecked()
-                    || desktopIcons.isChecked())
+                    || desktopIcons.isChecked()
+                    || qsShortcuts.isChecked())
                 button.setText(getResources().getString(R.string.tb_action_reset).toUpperCase());
             else
                 button.setText(getResources().getString(R.string.tb_action_close).toUpperCase());
@@ -78,7 +82,13 @@ public class ClearDataActivity extends AppCompatActivity {
 
         desktopIcons = findViewById(R.id.clear_desktop_icons);
         desktopIcons.setOnCheckedChangeListener(listener);
-        
+
+        qsShortcuts = findViewById(R.id.clear_qs_shortcuts);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !U.isChromeOs(this))
+            qsShortcuts.setOnCheckedChangeListener(listener);
+        else
+            qsShortcuts.setVisibility(View.GONE);
+
         button = findViewById(R.id.button);
         button.setText(getResources().getString(R.string.tb_action_close).toUpperCase());
         button.setOnClickListener(view -> {
@@ -98,6 +108,19 @@ public class ClearDataActivity extends AppCompatActivity {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 pref.edit().remove("desktop_icons").apply();
                 U.sendBroadcast(this, TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS);
+            }
+
+            if(qsShortcuts.isChecked()) {
+                SharedPreferences pref = U.getSharedPreferences(this);
+                pref.edit()
+                        .remove("qs_tile_1_added")
+                        .remove("qs_tile_2_added")
+                        .remove("qs_tile_3_added")
+                        .remove("qs_tile_4_added")
+                        .remove("qs_tile_5_added")
+                        .apply();
+
+                ShortcutUtils.initFavoriteAppTiles(this);
             }
 
             finish();

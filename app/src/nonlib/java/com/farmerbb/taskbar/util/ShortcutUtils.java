@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.util;
 
-import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +29,6 @@ import com.farmerbb.taskbar.service.FavoriteApp2;
 import com.farmerbb.taskbar.service.FavoriteApp3;
 import com.farmerbb.taskbar.service.FavoriteApp4;
 import com.farmerbb.taskbar.service.FavoriteApp5;
-import com.farmerbb.taskbar.service.QuickSettingsTileService;
 
 public class ShortcutUtils {
 
