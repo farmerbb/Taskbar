@@ -29,4 +29,6 @@ public class ShortcutUtils {
     public static Intent getStartStopIntent(Context context) {
         return null;
     }
+
+    public static void initFavoriteAppTiles(Context context) {}
 }

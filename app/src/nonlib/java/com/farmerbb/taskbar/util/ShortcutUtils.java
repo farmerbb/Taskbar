@@ -15,12 +15,22 @@
 
 package com.farmerbb.taskbar.util;
 
+import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.service.quicksettings.TileService;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ShortcutActivity;
 import com.farmerbb.taskbar.activity.StartTaskbarActivity;
+import com.farmerbb.taskbar.service.FavoriteApp1;
+import com.farmerbb.taskbar.service.FavoriteApp2;
+import com.farmerbb.taskbar.service.FavoriteApp3;
+import com.farmerbb.taskbar.service.FavoriteApp4;
+import com.farmerbb.taskbar.service.FavoriteApp5;
+import com.farmerbb.taskbar.service.QuickSettingsTileService;
 
 public class ShortcutUtils {
 
@@ -50,5 +60,21 @@ public class ShortcutUtils {
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.tb_start_taskbar));
 
         return intent;
+    }
+
+    public static void initFavoriteAppTiles(Context context) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+
+        Class[] tiles = new Class[] {
+                FavoriteApp1.class,
+                FavoriteApp2.class,
+                FavoriteApp3.class,
+                FavoriteApp4.class,
+                FavoriteApp5.class
+        };
+
+        for(Class tile : tiles) {
+            TileService.requestListeningState(context, new ComponentName(context, tile));
+        }
     }
 }

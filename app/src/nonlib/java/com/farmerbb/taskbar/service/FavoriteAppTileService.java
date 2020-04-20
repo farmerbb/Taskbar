@@ -16,9 +16,7 @@
 package com.farmerbb.taskbar.service;
 
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherActivityInfo;
@@ -35,7 +33,6 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.PersistentShortcutLaunchActivity;
 import com.farmerbb.taskbar.activity.PersistentShortcutSelectAppActivity;
 import com.farmerbb.taskbar.util.IconCache;
-import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 @TargetApi(Build.VERSION_CODES.N)
@@ -44,25 +41,6 @@ public abstract class FavoriteAppTileService extends TileService {
     protected abstract int tileNumber();
 
     private String prefix = "qs_tile_" + tileNumber() + "_";
-
-    private BroadcastReceiver tileUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateState();
-        }
-    };
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        U.registerReceiver(this, tileUpdateReceiver, TaskbarIntent.ACTION_UPDATE_FAVORITE_APP_TILE);
-    }
-
-    @Override
-    public void onDestroy() {
-        U.unregisterReceiver(this, tileUpdateReceiver);
-        super.onDestroy();
-    }
 
     @Override
     public void onStartListening() {

@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
+import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
 
 public class BootReceiver extends BroadcastReceiver {
@@ -65,6 +66,8 @@ public class BootReceiver extends BroadcastReceiver {
                 editor.putBoolean("taskbar_active", U.isServiceRunning(context, NotificationService.class));
                 editor.apply();
             }
+
+            ShortcutUtils.initFavoriteAppTiles(context);
         }
     }
 }

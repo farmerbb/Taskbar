@@ -15,7 +15,9 @@
 
 package com.farmerbb.taskbar.activity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
+import android.service.quicksettings.TileService;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -33,7 +36,6 @@ import android.widget.Spinner;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.TaskbarIntent;
 import com.farmerbb.taskbar.util.U;
 
 public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivity {
@@ -168,6 +170,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     private void createQuickSettingTileShortcut(String windowSize, int num) {
         String prefix = "qs_tile_" + num + "_";
 
@@ -183,6 +186,9 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         editor.putBoolean(prefix + "added", true);
         editor.apply();
 
-        U.sendBroadcast(this, TaskbarIntent.ACTION_UPDATE_FAVORITE_APP_TILE);
+        try {
+            Class clazz = Class.forName("com.farmerbb.taskbar.service.FavoriteApp" + num);
+            TileService.requestListeningState(this, new ComponentName(this, clazz));
+        } catch (ClassNotFoundException e) { /* Gracefully fail */ }
     }
 }
