@@ -96,9 +96,13 @@ public class AdvancedFragment extends SettingsFragment {
         } else {
             findPreference("launcher").setEnabled(!lockHomeToggle);
             findPreference("launcher").setOnPreferenceClickListener(this);
-            findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
             findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
             findPreference("manage_app_data").setOnPreferenceClickListener(this);
+
+            if(!U.isChromeOs(getActivity()))
+                findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
 
             getPreferenceScreen().removePreference(findPreference("clear_pinned_apps"));
         }

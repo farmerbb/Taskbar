@@ -455,5 +455,6 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string name="tb_clear_qs_shortcuts">Quick settings tiles</string>
     <string name="tb_pref_description_enable_recents">Required for recent apps to appear</string>
+    <string name="tb_chrome_os_wallpaper">Taskbar requests permission to read your storage in order to display the current wallpaper on Chrome OS.</string>
 
 </resources>

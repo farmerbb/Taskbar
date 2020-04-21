@@ -1463,7 +1463,8 @@ public class U {
     public static boolean isOverridingFreeformHack(Context context, boolean checkPref) {
         SharedPreferences pref = getSharedPreferences(context);
         return (!checkPref || pref.getBoolean(SP_KEY_FREEFORM_HACK, false))
-                && ((isChromeOs(context) && pref.getBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, true))
+                && ((isChromeOs(context) && (pref.getBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, true)
+                || (pref.getBoolean("launcher", false) && launcherIsDefault(context))))
                 || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
     }
 
