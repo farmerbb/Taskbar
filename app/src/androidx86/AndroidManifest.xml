@@ -22,7 +22,8 @@
 <manifest android:versionCode="198"
           android:versionName="5.0.1"
           xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.farmerbb.taskbar" >
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.farmerbb.taskbar">
 
     <permission android:name="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
         android:protectionLevel="signature" />
@@ -33,18 +34,21 @@
     <uses-permission android:name="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
+        android:required="false"/>
+
+    <uses-feature
+        android:name="android.hardware.type.pc"
         android:required="false"/>
 
     <supports-screens
@@ -58,7 +62,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/tb_launcher"
         android:label="@string/tb_app_name"
-        android:theme="@style/Taskbar" >
+        android:theme="@style/Taskbar"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity
             android:name=".activity.MainActivity"
@@ -75,6 +80,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="WindowManagerPreference:SuppressWindowControlNavigationButton"
+                android:value="true" />
         </activity-alias>
         <activity
             android:name=".activity.InvisibleActivity"

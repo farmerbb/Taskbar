@@ -358,7 +358,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 || U.isLauncherPermanentlyEnabled(this))) {
             setContentView(layout);
 
-            if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(this instanceof SecondaryHomeActivity) {
+                dcvRemoved = false;
+                traverseAndRemoveDecorCaption(getWindow().getDecorView());
+            } else if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
                     builder.setTitle(R.string.tb_permission_dialog_title)
@@ -371,11 +374,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     dialog.show();
                 } else
                     showWallpaperOnChromeOs();
-            }
-
-            if(this instanceof SecondaryHomeActivity) {
-                dcvRemoved = false;
-                traverseAndRemoveDecorCaption(getWindow().getDecorView());
             }
 
             pref.edit().putBoolean("launcher", !(this instanceof SecondaryHomeActivity)).apply();
