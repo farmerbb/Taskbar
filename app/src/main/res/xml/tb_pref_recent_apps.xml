@@ -18,7 +18,8 @@
 
     <Preference
         android:key="enable_recents"
-        android:title="@string/tb_pref_title_enable_recents"/>
+        android:title="@string/tb_pref_title_enable_recents"
+        android:summary="@string/tb_pref_description_enable_recents"/>
 
     <Preference
         android:key="refresh_frequency"
