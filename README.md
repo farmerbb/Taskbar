@@ -81,6 +81,7 @@ Pull requests are welcome!  See the [contributor guidelines](https://github.com/
 * Mesut Han (Turkish translation)
 * Zbigniew Zienko (Polish translation)
 * utzcoz (Additional Chinese translation, code cleanup + unit testing)
+* RaspberryPiFan (Additional German translation)
 
 #### Special Thanks
 * Mishaal Rahman (xda-developers)

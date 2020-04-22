@@ -76,7 +76,7 @@
 
     <string name="tb_pref_header_advanced">Fortgeschrittene Optionen</string>
 
-    <string name="tb_pref_title_freeform_hack">Unterstützung des Freiform Modus</string>
+    <string name="tb_pref_title_freeform_hack">Unterstützung des Freiform-Modus</string>
     <string name="tb_pref_description_freeform_hack">Erlaubt Taskbar, Apps im Freifenstermodus zu starten, für ein Desktop-ähnlicheres Erlebnis.\n\nDiese Funktion ist experemintell und kann u.U. Probleme mit standart Split-Screen Multitasking veraursachen.</string>
 
     <string name="tb_pref_header_about">Über Taskbar</string>
@@ -174,7 +174,7 @@
     <string name="tb_reboot_required">Starten Sie Ihr Gerät neu, um die Einrichtung des Freiform Modus abzuschließen</string>
     <string name="tb_enable_force_activities_resizable">Scrollen Sie auf zum Ende und aktivieren Sie \"%s\""</string>
     <string name="tb_set_as_default_home">Drücken Sie \"Immer\", um Taskbar als Ihren Standartlauncher festzulegen</string>
-    <string name="tb_enable_developer_options">Aktivieren Sie die Entwickleroptionen, indem Sie sieben mal auf die build Nummer tippen</string>
+    <string name="tb_enable_developer_options">Aktivieren Sie die Entwickleroptionen, indem Sie sieben mal auf die Buildnummer tippen</string>
 
     <string name="tb_pref_title_anchor">Taskbar bei Bildschirmrotationen anheften</string>
     <string name="tb_pref_title_donate">Spenden</string>
@@ -300,7 +300,7 @@
     <string name="tb_launch_games_fullscreen_title">Spiele im Vollbildmodus öffnen</string>
     <string name="tb_launch_games_fullscreen_message">Wenn eine Anwendung sich als Spiel deklariert, dann diesem verbieten im Freiform Modus zu starten.</string>
 
-    <string name="tb_invalid_grid_size">Unerlaubte Gitter Größe</string>
+    <string name="tb_invalid_grid_size">Ugültige Gittergröße</string>
 
     <string name="tb_window_sizes_not_available">Fenstergrößen funktionieren bei dieser Android-Version nicht richtig - siehe \"Hilfe &amp; Anweisungen\" für einen Workaround.</string>
 
@@ -367,76 +367,76 @@
     <string name="tb_force_activities_resizable">Erzwingen, dass Apps in der Größe veränderbar sind.</string>
     <string name="tb_enable_freeform_windows">Freiform-Fenster aktivieren</string>
 
-    <string name="tb_filepicker_select_an_image_file">Select an image file</string>
-    <string name="tb_filepicker_install_file_manager">Please install a file manager.</string>
-    <string name="tb_error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
+    <string name="tb_filepicker_select_an_image_file">Wählen Sie bitte eine Bilddatei aus.</string>
+    <string name="tb_filepicker_install_file_manager">Bitte installieren Sie einen Dateimanager.</string>
+    <string name="tb_error_reading_custom_start_image">Fehler beim Lesen des angepassten Startmenüsymbols. Bitte probieren Sie ein anderes Bild aus.</string>
 
-    <string name="tb_add_icon_to_desktop">Add icon to desktop</string>
-    <string name="tb_arrange_icons">Move icons</string>
-    <string name="tb_arrange_icons_alt">Move icon</string>
-    <string name="tb_select_an_app">Select an app</string>
-    <string name="tb_remove_desktop_icon">Remove from desktop</string>
-    <string name="tb_sort_by_name">Sort icons by name</string>
-    <string name="tb_no_icons_to_arrange">No icons to move</string>
-    <string name="tb_no_icons_to_sort">No icons to sort</string>
-    <string name="tb_clear_desktop_icons">Desktop icons</string>
+    <string name="tb_add_icon_to_desktop">Icon zum Desktop hinzufügen</string>
+    <string name="tb_arrange_icons">Icons verschieben</string>
+    <string name="tb_arrange_icons_alt">Icon verschieben</string>
+    <string name="tb_select_an_app">App auswählen</string>
+    <string name="tb_remove_desktop_icon">Vom Desktop entfernen</string>
+    <string name="tb_sort_by_name">Icons nach Namen sortieren</string>
+    <string name="tb_no_icons_to_arrange">Keine Icons zum Verschieben</string>
+    <string name="tb_no_icons_to_sort">Keine Icons zum Sortieren</string>
+    <string name="tb_clear_desktop_icons">Desktopicons</string>
 
-    <string name="tb_pref_title_start_button_image">Start button image</string>
-    <string name="tb_start_button_image_default">Default</string>
-    <string name="tb_start_button_image_custom">Custom</string>
+    <string name="tb_pref_title_start_button_image">Startknopf-Logo</string>
+    <string name="tb_start_button_image_default">Standard</string>
+    <string name="tb_start_button_image_custom">Benutzerdefiniert</string>
 
     <string name="tb_pref_centered_icons">Center icons within whitespace</string>
     <string name="tb_pref_title_sys_tray">Show status icons and clock</string>
     <string name="tb_pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
 
-    <string name="tb_settings">Settings</string>
-    <string name="tb_powered_by_taskbar">Powered by Taskbar</string>
+    <string name="tb_settings">Einstellungen</string>
+    <string name="tb_powered_by_taskbar">Ermöglicht durch Taskbar</string>
 
-    <string name="tb_manage_app_data">Manage app data</string>
+    <string name="tb_manage_app_data">App-Daten verwalten</string>
     <string name="tb_manage_app_data_description">@string/tb_clear_pinned_apps</string>
-    <string name="tb_backup_settings">Backup settings to file&#8230;</string>
-    <string name="tb_restore_settings">Restore settings from file&#8230;</string>
-    <string name="tb_backup_successful">Backup successful</string>
-    <string name="tb_restore_successful">Restore successful</string>
-    <string name="tb_backup_failed">An error occurred when creating backup</string>
-    <string name="tb_restore_failed">An error occurred when restoring backup</string>
-    <string name="tb_backup_restore_not_available">Backup and restore is not available on this device</string>
-    <string name="tb_backup_file_invalid">The backup file you selected is invalid. Please try again.</string>
+    <string name="tb_backup_settings">Einstellungen als Datei speichern&#8230;</string>
+    <string name="tb_restore_settings">Einstellungen aus Datei laden&#8230;</string>
+    <string name="tb_backup_successful">Backup erfolgreich</string>
+    <string name="tb_restore_successful">Wiederherstellung erfolgreich</string>
+    <string name="tb_backup_failed">Beim Erstellen des Backups ist ein Fehler aufgetreten</string>
+    <string name="tb_restore_failed">Beim Wiederherstellen des Backups ist ein Fehler aufgetreten</string>
+    <string name="tb_backup_restore_not_available">Sichern und Wiederherstellen ist auf diesem Gerät nicht verfügbar</string>
+    <string name="tb_backup_file_invalid">Die ausgewählte Backupdatei ist ungültig Bitte versuchen Sie es erneut.</string>
 
-    <string name="tb_new_shortcut">Launch app</string>
-    <string name="tb_allow_freeform_mode">Launch app in freeform mode</string>
-    <string name="tb_window_size">Window size</string>
-    <string name="tb_invalid_shortcut">Invalid shortcut</string>
+    <string name="tb_new_shortcut">App öffnen</string>
+    <string name="tb_allow_freeform_mode">App im Freiform-Modus öffnen</string>
+    <string name="tb_window_size">Fenstergröße</string>
+    <string name="tb_invalid_shortcut">Ungültige Vernüpfung</string>
 
-    <string name="tb_backing_up_settings">Backing up settings&#8230;</string>
-    <string name="tb_restoring_settings">Restoring settings&#8230;</string>
+    <string name="tb_backing_up_settings">Einstellungen sichern&#8230;</string>
+    <string name="tb_restoring_settings">Einstellungen wiederherstellen&#8230;</string>
 
-    <string name="tb_pref_header_desktop_mode">Desktop mode</string>
-    <string name="tb_primary_launcher">Primary launcher</string>
-    <string name="tb_set_launcher_default_title">Set Taskbar as default Home app</string>
-    <string name="tb_set_launcher_default_summary">Required for desktop mode to work</string>
-    <string name="tb_unable_to_set_default_home">Unable to set default Home app. Please do so manually via system settings.</string>
-    <string name="tb_display_density">Display density</string>
-    <string name="tb_auto_hide_navbar_alt">Hide navbar while on desktop</string>
-    <string name="tb_enable_additional_settings">Enable additional settings</string>
+    <string name="tb_pref_header_desktop_mode">Desktopmodus</string>
+    <string name="tb_primary_launcher">Standardlauncher</string>
+    <string name="tb_set_launcher_default_title">Taskbar als Standard-Launcher einstellen</string>
+    <string name="tb_set_launcher_default_summary">Benötigt für den Desktopmodus</string>
+    <string name="tb_unable_to_set_default_home">Der Standard-Launcher kann nicht eingestellt werden. Bitte erledigen Sie es manuell über die Einstellungen.</string>
+    <string name="tb_display_density">Anzeigedichte</string>
+    <string name="tb_auto_hide_navbar_alt">Navigationsleiste auf dem Desktop ausblenden</string>
+    <string name="tb_enable_additional_settings">Erweiterte Einstellungen aktivieren</string>
 
-    <string name="tb_hsl_no_launchers_found">No primary launchers were found. Please download and install one, then try again.</string>
-    <string name="tb_hsl_launcher_uninstalled">%1$s was uninstalled. Please select a different launcher from the list.</string>
-    <string name="tb_hsl_main_activity_text">Select your primary launcher from the list below. You can change this selection at any time from within Taskbar\'s desktop mode settings.</string>
+    <string name="tb_hsl_no_launchers_found">Kein Hauptlauncher gefunden. Bitte laden Sie einen herunter und installieren Sie uhn.</string>
+    <string name="tb_hsl_launcher_uninstalled">%1$s wurde deinstalliert. Bitte wählen Sie einen anderen Launcher aus der Liste.</string>
+    <string name="tb_hsl_main_activity_text">Bitte wählen Sie ihren primären Launcher aus. Diese Auswhl kann jederzeit aus Taskbars Desktopmodus-Einstellungen geändert werden.</string>
 
     <string-array name="tb_pref_display_density_list">
-        <item>Default</item>
-        <item>Low-density (160dpi)</item>
-        <item>High-density (320dpi)</item>
+        <item>Standard</item>
+        <item>Niedrige Auflösung (160dpi)</item>
+        <item>Hohe Auflösung (320dpi)</item>
     </string-array>
 
-    <string name="tb_density_custom">Custom (%ddpi)</string>
-    <string name="tb_unable_to_apply_density_change">Unable to apply density change</string>
+    <string name="tb_density_custom">Benutzerdefiniert (%ddpi)</string>
+    <string name="tb_unable_to_apply_density_change">Auflösungsänderung nicht möglich</string>
 
-    <string name="tb_icon_preview">Icon preview</string>
-    <string name="tb_icon_preview_description">Use the slider to adjust the generated icon to your liking.</string>
+    <string name="tb_icon_preview">Iconvorschau</string>
+    <string name="tb_icon_preview_description">Verwenden Sie den Schieberegler, um das generierte Icon so zu verändern, wie es Ihnen gefällt.</string>
 
-    <string name="tb_clear_qs_shortcuts">Quick settings tiles</string>
-    <string name="tb_pref_description_enable_recents">Required for recent apps to appear</string>
+    <string name="tb_clear_qs_shortcuts">Schnelleinstellungskacheln</string>
+    <string name="tb_pref_description_enable_recents">Benötigt, um zuletzt verwendete Apps anzuzeigen</string>
 
 </resources>
