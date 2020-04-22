@@ -438,5 +438,6 @@
 
     <string name="tb_clear_qs_shortcuts">Schnelleinstellungskacheln</string>
     <string name="tb_pref_description_enable_recents">Benötigt, um zuletzt verwendete Apps anzuzeigen</string>
+    <string name="tb_chrome_os_wallpaper">Taskbar requests permission to read your storage in order to display the current wallpaper on Chrome OS.</string>
 
 </resources>
