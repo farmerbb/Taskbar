@@ -58,8 +58,8 @@
     <string-array name="tb_pref_recents_amount_alt">
         <item>Seit dem letzten Tag</item>
         <item>Seit dem Start von Taskbar</item>
-        <item>Alle apps (kann die Leistung beeinträchtigen)</item>
-        <item>Running apps only</item>
+        <item>Alle Apps (kann die Leistung beeinträchtigen)</item>
+        <item>Nur Apps öffnen</item>
     </string-array>
 
     <string name="tb_pref_title_sort_order">Sortierungsreinfolge</string>
@@ -118,7 +118,7 @@
     <string name="tb_error_dialog_title">Fehler</string>
     <string name="tb_error_dialog_message">Leider kann diese Option auf Ihrem Gerät wegen OEM Restriktionen nicht freigeschaltet werden.\n\nVielleicht können Sie aber sie durch folgenden den folgenden Befehl freigeben:\n\nappops set %1$s %2$s allow</string>
     <string name="tb_action_ok">OK</string>
-    <string name="tb_action_cancel">Abbruch</string>
+    <string name="tb_action_cancel">Abbrechen</string>
 
     <string name="tb_pin_app">Zu Liste der letzten Apps anheften.</string>
     <string name="tb_unpin_app">Von der Liste der letzten Apps entfestigen</string>
@@ -127,7 +127,7 @@
     <string name="tb_clear_pinned_apps">Appeinstellungen zurücksetzen</string>
 
     <string name="tb_pref_title_hide_foreground">Symbol für Fordergrundapp verstecken</string>
-    <string name="tb_pref_summary_hide_foreground">May reduce performance</string>
+    <string name="tb_pref_summary_hide_foreground">Könnte die Leistung reduzieren</string>
 
     <string name="tb_pref_title_theme">Thema</string>
     <string-array name="tb_pref_theme_list">
@@ -150,7 +150,7 @@
     <string name="tb_action_developer_options">Entwickleroptionen anzeigen</string>
     <string name="tb_action_close">Schließen</string>
 
-    <string name="tb_pref_header_freeform">Freiform Modus</string>
+    <string name="tb_pref_header_freeform">Freiformmodus</string>
     <string name="tb_pref_title_window_size">Standartfenstergröße</string>
 
     <string name="tb_window_size_standard">Standart</string>
@@ -167,7 +167,7 @@
     <string name="tb_apps_hidden">%1$d Apps versteckt</string>
     <string name="tb_blacklist_dialog_title">Versteckt</string>
     <string name="tb_top_app">Eine Top App</string>
-    <string name="tb_top_apps">%1$d Top apps</string>
+    <string name="tb_top_apps">%1$d Top Apps</string>
     <string name="tb_top_apps_dialog_title">Top Apps</string>
     <string name="tb_start_menu_apps">Apps im Startmenü</string>
 
@@ -247,8 +247,8 @@
         <item>Nie die Suchleiste anzeigen</item>
     </string-array>
 
-    <string name="tb_clear_pba">Top/versteckte letzte Apps</string>
-    <string name="tb_clear_hidden_apps">Startmenü - versteckte Apps</string>
+    <string name="tb_clear_pba">Top/ausgeblendete letzte Apps</string>
+    <string name="tb_clear_hidden_apps">Startmenü - ausgeblendete Apps</string>
     <string name="tb_clear_top_apps">Startmenü - Top Apps</string>
     <string name="tb_clear_window_sizes">Gespeicherte Fenstergrößen</string>
     <string name="tb_action_reset">Zurückseten</string>
@@ -334,7 +334,7 @@
     <string name="tb_color_picker_green">Grün</string>
     <string name="tb_color_picker_blue">Blau</string>
 
-    <string name="tb_pref_title_chrome_os_context_menu_fix">Chrome OS Dock Kompatibilitätsfehler</string>
+    <string name="tb_pref_title_chrome_os_context_menu_fix">Chrome OS Dock Kompatibilitätsmodus</string>
     <string name="tb_pref_description_chrome_os_context_menu_fix">Aktivieren Sie dies, wenn Sie die Taskleiste neben dem Chrome OS Dock verwenden.</string>
 
     <string name="tb_pin_shortcut_not_supported">Ihr Launcher unterstützt das Hinzufügen von Verknüpfungen aus anderen Anwendungen nicht.\n\n\Bitte fügen Sie die Verknüpfung manuell aus dem Menü \"Widgets\" Ihres Launchers hinzu.</string>
@@ -438,6 +438,6 @@
 
     <string name="tb_clear_qs_shortcuts">Schnelleinstellungskacheln</string>
     <string name="tb_pref_description_enable_recents">Benötigt, um zuletzt verwendete Apps anzuzeigen</string>
-    <string name="tb_chrome_os_wallpaper">Taskbar requests permission to read your storage in order to display the current wallpaper on Chrome OS.</string>
+    <string name="tb_chrome_os_wallpaper">Taskbar fordert die Berechtigung an, ihren Speicher zu lesen, um das aktuelle Hintergrundbild in Chrome OS anzuzeigen.</string>
 
 </resources>
