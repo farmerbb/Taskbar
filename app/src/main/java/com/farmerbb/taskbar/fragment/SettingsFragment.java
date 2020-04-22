@@ -29,6 +29,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 import androidx.annotation.XmlRes;
@@ -219,6 +220,9 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
             PreferenceScreen screen = (PreferenceScreen) Class.forName("android.preference.PreferenceManager")
                     .getMethod("inflateFromResource", Context.class, int.class, PreferenceScreen.class)
                     .invoke(getPreferenceManager(), context, preferencesResId, getPreferenceScreen());
+
+            if(!(this instanceof AboutFragment))
+                screen.getDialog().getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
             setPreferenceScreen(screen);
         } catch (Exception e) {
