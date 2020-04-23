@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 public class PowerMenuService extends AccessibilityService {
@@ -45,7 +45,7 @@ public class PowerMenuService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
 
-        U.registerReceiver(this, powerMenuReceiver, TaskbarIntent.ACTION_ACCESSIBILITY_ACTION);
+        U.registerReceiver(this, powerMenuReceiver, Constants.ACTION_ACCESSIBILITY_ACTION);
     }
 
     @Override

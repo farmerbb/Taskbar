@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DummyActivity;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.U;
 
@@ -42,7 +42,7 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
             U.startForegroundService(context, notificationIntent);
 
             U.stopFreeformHack(context);
-            U.sendBroadcast(context, TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
+            U.sendBroadcast(context, Constants.ACTION_UPDATE_FREEFORM_CHECKBOX);
         } else if(U.hasFreeformSupport(context)) {
             pref.edit().putBoolean("freeform_hack", true).apply();
 
@@ -55,7 +55,7 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
             context.startActivity(intent2);
 
             U.startForegroundService(context, notificationIntent);
-            U.sendBroadcast(context, TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
+            U.sendBroadcast(context, Constants.ACTION_UPDATE_FREEFORM_CHECKBOX);
         } else
             U.showToastLong(context, R.string.tb_no_freeform_support);
     }

@@ -23,7 +23,7 @@ import org.robolectric.Shadows;
 import org.robolectric.android.controller.ServiceController;
 import org.robolectric.shadows.ShadowService;
 
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_TASKBAR_ACTIVE;
+import static com.farmerbb.taskbar.util.Constants.PREF_TASKBAR_ACTIVE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -90,14 +90,14 @@ public class UIControllerTest {
         ShadowService shadowService = Shadows.shadowOf(hostService);
         assertTrue(shadowService.isStoppedBySelf());
         assertFalse(
-                U.getSharedPreferences(context).getBoolean(SP_KEY_TASKBAR_ACTIVE, true)
+                U.getSharedPreferences(context).getBoolean(PREF_TASKBAR_ACTIVE, true)
         );
     }
 
     private void setTaskbarActive(boolean active) {
         U.getSharedPreferences(context)
                 .edit()
-                .putBoolean(SP_KEY_TASKBAR_ACTIVE, active)
+                .putBoolean(PREF_TASKBAR_ACTIVE, active)
                 .apply();
     }
 

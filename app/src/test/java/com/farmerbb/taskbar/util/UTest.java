@@ -49,33 +49,33 @@ import org.robolectric.shadows.ShadowToast;
 import org.robolectric.util.ReflectionHelpers;
 
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ACCENT_COLOR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ANCHOR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_APP_DRAWER_ICON;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_AUTO_HIDE_NAVBAR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BACKGROUND_TINT;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BLISS_OS_PREFS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_BACK;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_HOME;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_BUTTON_RECENTS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_CHROME_OS_CONTEXT_MENU_FIX;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_DASHBOARD;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FREEFORM_HACK;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FREEFORM_HACK_OVERRIDE;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_FULL_LENGTH;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_LAUNCH_GAMES_FULLSCREEN;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_MAX_NUM_OF_RECENTS;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_POSITION;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_RECENTS_AMOUNT;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_REFRESH_FREQUENCY;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SAVE_WINDOW_SIZES;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHORTCUT_ICON;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHOW_BACKGROUND;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SORT_ORDER;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_START_BUTTON_IMAGE;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_SYS_TRAY;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_THEME;
+import static com.farmerbb.taskbar.util.Constants.PREF_ACCENT_COLOR;
+import static com.farmerbb.taskbar.util.Constants.PREF_ANCHOR;
+import static com.farmerbb.taskbar.util.Constants.PREF_APP_DRAWER_ICON;
+import static com.farmerbb.taskbar.util.Constants.PREF_AUTO_HIDE_NAVBAR;
+import static com.farmerbb.taskbar.util.Constants.PREF_BACKGROUND_TINT;
+import static com.farmerbb.taskbar.util.Constants.PREF_BLISS_OS_PREFS;
+import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK;
+import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME;
+import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS;
+import static com.farmerbb.taskbar.util.Constants.PREF_CHROME_OS_CONTEXT_MENU_FIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD;
+import static com.farmerbb.taskbar.util.Constants.PREF_FREEFORM_HACK;
+import static com.farmerbb.taskbar.util.Constants.PREF_FREEFORM_HACK_OVERRIDE;
+import static com.farmerbb.taskbar.util.Constants.PREF_FULL_LENGTH;
+import static com.farmerbb.taskbar.util.Constants.PREF_LAUNCH_GAMES_FULLSCREEN;
+import static com.farmerbb.taskbar.util.Constants.PREF_MAX_NUM_OF_RECENTS;
+import static com.farmerbb.taskbar.util.Constants.PREF_POSITION;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT;
+import static com.farmerbb.taskbar.util.Constants.PREF_REFRESH_FREQUENCY;
+import static com.farmerbb.taskbar.util.Constants.PREF_SAVE_WINDOW_SIZES;
+import static com.farmerbb.taskbar.util.Constants.PREF_SHORTCUT_ICON;
+import static com.farmerbb.taskbar.util.Constants.PREF_SHOW_BACKGROUND;
+import static com.farmerbb.taskbar.util.Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE;
+import static com.farmerbb.taskbar.util.Constants.PREF_SORT_ORDER;
+import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
+import static com.farmerbb.taskbar.util.Constants.PREF_SYS_TRAY;
+import static com.farmerbb.taskbar.util.Constants.PREF_THEME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -385,16 +385,16 @@ public class UTest {
     public void testGetBackgroundTint() {
         SharedPreferences prefs = U.getSharedPreferences(context);
         prefs.edit()
-                .putInt(SP_KEY_BACKGROUND_TINT, Color.GREEN)
-                .putBoolean(SP_KEY_SHOW_BACKGROUND, false)
+                .putInt(PREF_BACKGROUND_TINT, Color.GREEN)
+                .putBoolean(PREF_SHOW_BACKGROUND, false)
                 .apply();
         // If the SHOW_BACKGROUND is false, it use transparent to replace origin tint.
         assertEquals(Color.TRANSPARENT, U.getBackgroundTint(context));
         prefs.edit()
-                .putInt(SP_KEY_BACKGROUND_TINT, Color.GREEN)
+                .putInt(PREF_BACKGROUND_TINT, Color.GREEN)
                 .apply();
         assertEquals(Color.GREEN, U.getBackgroundTint(context));
-        prefs.edit().remove(SP_KEY_BACKGROUND_TINT).apply();
+        prefs.edit().remove(PREF_BACKGROUND_TINT).apply();
         assertEquals(
                 context.getResources().getInteger(R.integer.tb_translucent_gray),
                 U.getBackgroundTint(context)
@@ -404,12 +404,12 @@ public class UTest {
     @Test
     public void testAccentColor() {
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().remove(SP_KEY_ACCENT_COLOR).apply();
+        prefs.edit().remove(PREF_ACCENT_COLOR).apply();
         assertEquals(
                 context.getResources().getInteger(R.integer.tb_translucent_white),
                 U.getAccentColor(context)
         );
-        prefs.edit().putInt(SP_KEY_ACCENT_COLOR, Color.GREEN).apply();
+        prefs.edit().putInt(PREF_ACCENT_COLOR, Color.GREEN).apply();
         assertEquals(Color.GREEN, U.getAccentColor(context));
     }
 
@@ -432,9 +432,9 @@ public class UTest {
         // We only test for un-support launching games fullscreen, because of
         // we don't have a good method to test code with ApplicationInfo.
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_LAUNCH_GAMES_FULLSCREEN, false).apply();
+        prefs.edit().putBoolean(PREF_LAUNCH_GAMES_FULLSCREEN, false).apply();
         assertFalse(U.isGame(context, context.getPackageName()));
-        prefs.edit().putBoolean(SP_KEY_LAUNCH_GAMES_FULLSCREEN, true).apply();
+        prefs.edit().putBoolean(PREF_LAUNCH_GAMES_FULLSCREEN, true).apply();
         assertFalse(U.isGame(context, context.getPackageName()));
         assertFalse(U.isGame(context, context.getPackageName() + "un-exist-package"));
     }
@@ -548,33 +548,33 @@ public class UTest {
         float initialSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context));
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_DASHBOARD, true).apply();
+        prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
         float dashboardButtonSize =
                 context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
         assertEquals(Math.round(initialSize + dashboardButtonSize), U.getBaseTaskbarSize(context));
-        prefs.edit().remove(SP_KEY_DASHBOARD).apply();
+        prefs.edit().remove(PREF_DASHBOARD).apply();
         float navbarButtonsMargin =
                 context.getResources().getDimension(R.dimen.tb_navbar_buttons_margin);
         float iconSize =
                 context.getResources().getDimension(R.dimen.tb_icon_size);
-        prefs.edit().putBoolean(SP_KEY_BUTTON_BACK, true).apply();
+        prefs.edit().putBoolean(PREF_BUTTON_BACK, true).apply();
         assertEquals(
                 Math.round(initialSize + navbarButtonsMargin + iconSize),
                 U.getBaseTaskbarSize(context)
         );
-        prefs.edit().remove(SP_KEY_BUTTON_BACK).apply();
-        prefs.edit().putBoolean(SP_KEY_BUTTON_HOME, true).apply();
+        prefs.edit().remove(PREF_BUTTON_BACK).apply();
+        prefs.edit().putBoolean(PREF_BUTTON_HOME, true).apply();
         assertEquals(
                 Math.round(initialSize + navbarButtonsMargin + iconSize),
                 U.getBaseTaskbarSize(context)
         );
-        prefs.edit().remove(SP_KEY_BUTTON_HOME).apply();
-        prefs.edit().putBoolean(SP_KEY_BUTTON_RECENTS, true).apply();
+        prefs.edit().remove(PREF_BUTTON_HOME).apply();
+        prefs.edit().putBoolean(PREF_BUTTON_RECENTS, true).apply();
         assertEquals(
                 Math.round(initialSize + navbarButtonsMargin + iconSize),
                 U.getBaseTaskbarSize(context)
         );
-        prefs.edit().remove(SP_KEY_BUTTON_RECENTS).apply();
+        prefs.edit().remove(PREF_BUTTON_RECENTS).apply();
         isSystemTrayEnabledAnswer.answer = true;
         float systemTraySize = context.getResources().getDimension(R.dimen.tb_systray_size);
         assertEquals(Math.round(initialSize + systemTraySize), U.getBaseTaskbarSize(context));
@@ -586,23 +586,23 @@ public class UTest {
         when(U.isBlissOs(any(Context.class))).thenReturn(true);
         assertTrue(U.isBlissOs(context));
         SharedPreferences prefs = U.getSharedPreferences(context);
-        assertFalse(prefs.getBoolean(SP_KEY_BLISS_OS_PREFS, false));
+        assertFalse(prefs.getBoolean(PREF_BLISS_OS_PREFS, false));
         U.initPrefs(context);
         assertEquals(
                 "running_apps_only",
-                prefs.getString(SP_KEY_RECENTS_AMOUNT, "")
+                prefs.getString(PREF_RECENTS_AMOUNT, "")
         );
-        assertEquals("0", prefs.getString(SP_KEY_REFRESH_FREQUENCY, ""));
-        assertEquals("2147483647", prefs.getString(SP_KEY_MAX_NUM_OF_RECENTS, ""));
-        assertEquals("true", prefs.getString(SP_KEY_SORT_ORDER, ""));
-        assertEquals("app_logo", prefs.getString(SP_KEY_START_BUTTON_IMAGE, ""));
-        assertTrue(prefs.getBoolean(SP_KEY_BUTTON_BACK, false));
-        assertTrue(prefs.getBoolean(SP_KEY_BUTTON_HOME, false));
-        assertTrue(prefs.getBoolean(SP_KEY_BUTTON_RECENTS, false));
-        assertTrue(prefs.getBoolean(SP_KEY_AUTO_HIDE_NAVBAR, false));
-        assertFalse(prefs.getBoolean(SP_KEY_SHORTCUT_ICON, true));
-        assertTrue(prefs.getBoolean(SP_KEY_BLISS_OS_PREFS, false));
-        prefs.edit().putBoolean(SP_KEY_BLISS_OS_PREFS, false);
+        assertEquals("0", prefs.getString(PREF_REFRESH_FREQUENCY, ""));
+        assertEquals("2147483647", prefs.getString(PREF_MAX_NUM_OF_RECENTS, ""));
+        assertEquals("true", prefs.getString(PREF_SORT_ORDER, ""));
+        assertEquals("app_logo", prefs.getString(PREF_START_BUTTON_IMAGE, ""));
+        assertTrue(prefs.getBoolean(PREF_BUTTON_BACK, false));
+        assertTrue(prefs.getBoolean(PREF_BUTTON_HOME, false));
+        assertTrue(prefs.getBoolean(PREF_BUTTON_RECENTS, false));
+        assertTrue(prefs.getBoolean(PREF_AUTO_HIDE_NAVBAR, false));
+        assertFalse(prefs.getBoolean(PREF_SHORTCUT_ICON, true));
+        assertTrue(prefs.getBoolean(PREF_BLISS_OS_PREFS, false));
+        prefs.edit().putBoolean(PREF_BLISS_OS_PREFS, false);
     }
 
     @Test
@@ -610,14 +610,14 @@ public class UTest {
         PowerMockito.spy(U.class);
         when(U.canEnableFreeform()).thenReturn(true);
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_FREEFORM_HACK_OVERRIDE, false).apply();
+        prefs.edit().putBoolean(PREF_FREEFORM_HACK_OVERRIDE, false).apply();
         U.initPrefs(context);
         assertEquals(
                 U.hasFreeformSupport(context) && !U.isSamsungDevice(),
-                prefs.getBoolean(SP_KEY_FREEFORM_HACK, false)
+                prefs.getBoolean(PREF_FREEFORM_HACK, false)
         );
-        assertFalse(prefs.getBoolean(SP_KEY_SAVE_WINDOW_SIZES, true));
-        assertTrue(prefs.getBoolean(SP_KEY_FREEFORM_HACK_OVERRIDE, false));
+        assertFalse(prefs.getBoolean(PREF_SAVE_WINDOW_SIZES, true));
+        assertTrue(prefs.getBoolean(PREF_FREEFORM_HACK_OVERRIDE, false));
     }
 
     @Test
@@ -625,10 +625,10 @@ public class UTest {
         PowerMockito.spy(U.class);
         when(U.canEnableFreeform()).thenReturn(true);
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_FREEFORM_HACK_OVERRIDE, true).apply();
+        prefs.edit().putBoolean(PREF_FREEFORM_HACK_OVERRIDE, true).apply();
         when(U.hasFreeformSupport(context)).thenReturn(false);
         U.initPrefs(context);
-        assertFalse(prefs.getBoolean(SP_KEY_FREEFORM_HACK, false));
+        assertFalse(prefs.getBoolean(PREF_FREEFORM_HACK, false));
     }
 
     @Test
@@ -637,31 +637,31 @@ public class UTest {
         when(U.canEnableFreeform()).thenReturn(false);
         SharedPreferences prefs = U.getSharedPreferences(context);
         U.initPrefs(context);
-        assertFalse(prefs.getBoolean(SP_KEY_FREEFORM_HACK, false));
+        assertFalse(prefs.getBoolean(PREF_FREEFORM_HACK, false));
         prefs.edit()
-                .putBoolean(SP_KEY_FREEFORM_HACK, false)
-                .putBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, false)
+                .putBoolean(PREF_FREEFORM_HACK, false)
+                .putBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false)
                 .apply();
         U.initPrefs(context);
-        assertFalse(prefs.getBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, false));
+        assertFalse(prefs.getBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false));
         prefs.edit()
-                .putBoolean(SP_KEY_FREEFORM_HACK, true)
-                .putBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, false)
+                .putBoolean(PREF_FREEFORM_HACK, true)
+                .putBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false)
                 .apply();
         U.initPrefs(context);
-        assertTrue(prefs.getBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, false));
+        assertTrue(prefs.getBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false));
         prefs.edit()
-                .putBoolean(SP_KEY_FREEFORM_HACK, false)
-                .putBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, true)
+                .putBoolean(PREF_FREEFORM_HACK, false)
+                .putBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, true)
                 .apply();
         U.initPrefs(context);
-        assertTrue(prefs.getBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, false));
+        assertTrue(prefs.getBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false));
         prefs.edit()
-                .putBoolean(SP_KEY_FREEFORM_HACK, true)
-                .putBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, true)
+                .putBoolean(PREF_FREEFORM_HACK, true)
+                .putBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, true)
                 .apply();
         U.initPrefs(context);
-        assertTrue(prefs.getBoolean(SP_KEY_SHOW_FREEFORM_DISABLED_MESSAGE, false));
+        assertTrue(prefs.getBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false));
     }
 
     @Test
@@ -671,9 +671,9 @@ public class UTest {
         // Check preferences
         assertFalse(U.isOverridingFreeformHack(context, true));
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_FREEFORM_HACK, true).apply();
+        prefs.edit().putBoolean(PREF_FREEFORM_HACK, true).apply();
         assertTrue(U.isOverridingFreeformHack(context, true));
-        prefs.edit().remove(SP_KEY_FREEFORM_HACK).apply();
+        prefs.edit().remove(PREF_FREEFORM_HACK).apply();
 
         // Don't check preferences
         assertTrue(U.isOverridingFreeformHack(context, false));
@@ -687,9 +687,9 @@ public class UTest {
         // Check preferences
         assertFalse(U.isOverridingFreeformHack(context, true));
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_FREEFORM_HACK, true).apply();
+        prefs.edit().putBoolean(PREF_FREEFORM_HACK, true).apply();
         assertFalse(U.isOverridingFreeformHack(context, true));
-        prefs.edit().remove(SP_KEY_FREEFORM_HACK).apply();
+        prefs.edit().remove(PREF_FREEFORM_HACK).apply();
 
         // Don't check preferences
         assertFalse(U.isOverridingFreeformHack(context, false));
@@ -702,23 +702,23 @@ public class UTest {
         // Check preferences
         assertFalse(U.isOverridingFreeformHack(context, true));
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_FREEFORM_HACK, true).apply();
-        // The default SP_KEY_CHROME_OS_CONTEXT_MENU_FIX is true
+        prefs.edit().putBoolean(PREF_FREEFORM_HACK, true).apply();
+        // The default PREF_CHROME_OS_CONTEXT_MENU_FIX is true
         assertTrue(U.isOverridingFreeformHack(context, true));
-        prefs.edit().putBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, false).apply();
+        prefs.edit().putBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, false).apply();
         assertFalse(U.isOverridingFreeformHack(context, true));
-        prefs.edit().putBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, true).apply();
+        prefs.edit().putBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true).apply();
         assertTrue(U.isOverridingFreeformHack(context, true));
-        prefs.edit().remove(SP_KEY_FREEFORM_HACK).apply();
-        prefs.edit().remove(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX).apply();
+        prefs.edit().remove(PREF_FREEFORM_HACK).apply();
+        prefs.edit().remove(PREF_CHROME_OS_CONTEXT_MENU_FIX).apply();
 
         // Don't check preferences
         assertTrue(U.isOverridingFreeformHack(context, false));
-        prefs.edit().putBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, false).apply();
+        prefs.edit().putBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, false).apply();
         assertFalse(U.isOverridingFreeformHack(context, false));
-        prefs.edit().putBoolean(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX, true).apply();
+        prefs.edit().putBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true).apply();
         assertTrue(U.isOverridingFreeformHack(context, false));
-        prefs.edit().remove(SP_KEY_CHROME_OS_CONTEXT_MENU_FIX).apply();
+        prefs.edit().remove(PREF_CHROME_OS_CONTEXT_MENU_FIX).apply();
     }
 
     @Test
@@ -769,20 +769,20 @@ public class UTest {
     @Test
     public void testWrapContext() {
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putString(SP_KEY_THEME, "light").apply();
+        prefs.edit().putString(PREF_THEME, "light").apply();
         Context newContext = U.wrapContext(context);
         Integer themeResource = ReflectionHelpers.getField(newContext, "mThemeResource");
         assertNotNull(themeResource);
         assertEquals(R.style.Taskbar, (int) themeResource);
-        prefs.edit().putString(SP_KEY_THEME, "dark").apply();
+        prefs.edit().putString(PREF_THEME, "dark").apply();
         newContext = U.wrapContext(context);
         themeResource = ReflectionHelpers.getField(newContext, "mThemeResource");
         assertNotNull(themeResource);
         assertEquals(R.style.Taskbar_Dark, (int) themeResource);
-        prefs.edit().putString(SP_KEY_THEME, "non-support").apply();
+        prefs.edit().putString(PREF_THEME, "non-support").apply();
         newContext = U.wrapContext(context);
         assertEquals(context, newContext);
-        prefs.edit().remove(SP_KEY_THEME).apply();
+        prefs.edit().remove(PREF_THEME).apply();
         newContext = U.wrapContext(context);
         themeResource = ReflectionHelpers.getField(newContext, "mThemeResource");
         assertNotNull(themeResource);
@@ -856,11 +856,11 @@ public class UTest {
     @Test
     public void testGetDefaultStartButtonImage() {
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(SP_KEY_APP_DRAWER_ICON, true).apply();
+        prefs.edit().putBoolean(PREF_APP_DRAWER_ICON, true).apply();
         assertEquals("app_logo", U.getDefaultStartButtonImage(context));
-        prefs.edit().putBoolean(SP_KEY_APP_DRAWER_ICON, false).apply();
+        prefs.edit().putBoolean(PREF_APP_DRAWER_ICON, false).apply();
         assertEquals("default", U.getDefaultStartButtonImage(context));
-        prefs.edit().remove(SP_KEY_APP_DRAWER_ICON).apply();
+        prefs.edit().remove(PREF_APP_DRAWER_ICON).apply();
         assertEquals("default", U.getDefaultStartButtonImage(context));
     }
 
@@ -896,27 +896,27 @@ public class UTest {
     public void testIsSystemTrayEnabledForMBelowVersion() {
         SharedPreferences prefs = U.getSharedPreferences(context);
         prefs.edit()
-                .putBoolean(SP_KEY_SYS_TRAY, true)
-                .putBoolean(SP_KEY_FULL_LENGTH, true)
+                .putBoolean(PREF_SYS_TRAY, true)
+                .putBoolean(PREF_FULL_LENGTH, true)
                 .apply();
         assertFalse(U.isSystemTrayEnabled(context));
-        prefs.edit().remove(SP_KEY_SYS_TRAY).remove(SP_KEY_FULL_LENGTH).apply();
+        prefs.edit().remove(PREF_SYS_TRAY).remove(PREF_FULL_LENGTH).apply();
     }
 
     @Test
     public void testIsSystemTrayEnabledForMAndAboveVersion() {
         SharedPreferences prefs = U.getSharedPreferences(context);
         assertFalse(U.isSystemTrayEnabled(context));
-        prefs.edit().putBoolean(SP_KEY_SYS_TRAY, true).apply();
+        prefs.edit().putBoolean(PREF_SYS_TRAY, true).apply();
         assertFalse(U.isSystemTrayEnabled(context));
-        prefs.edit().putBoolean(SP_KEY_FULL_LENGTH, true).apply();
+        prefs.edit().putBoolean(PREF_FULL_LENGTH, true).apply();
         assertTrue(U.isSystemTrayEnabled(context));
         prefs.edit()
-                .putString(SP_KEY_POSITION, TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT)
-                .putBoolean(SP_KEY_ANCHOR, false)
+                .putString(PREF_POSITION, TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT)
+                .putBoolean(PREF_ANCHOR, false)
                 .apply();
         assertFalse(U.isSystemTrayEnabled(context));
-        prefs.edit().remove(SP_KEY_POSITION).remove(SP_KEY_ANCHOR).apply();
+        prefs.edit().remove(PREF_POSITION).remove(PREF_ANCHOR).apply();
     }
 
     @Test

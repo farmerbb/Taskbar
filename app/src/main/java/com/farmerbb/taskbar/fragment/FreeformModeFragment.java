@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -97,7 +97,7 @@ public class FreeformModeFragment extends SettingsFragment {
             dialog.setCancelable(false);
         }
 
-        U.registerReceiver(getActivity(), checkBoxReceiver, TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
+        U.registerReceiver(getActivity(), checkBoxReceiver, Constants.ACTION_UPDATE_FREEFORM_CHECKBOX);
 
         finishedLoadingPrefs = true;
     }
@@ -188,11 +188,11 @@ public class FreeformModeFragment extends SettingsFragment {
                     }
                 } else {
                     U.stopFreeformHack(getActivity());
-                    U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_FORCE_TASKBAR_RESTART);
+                    U.sendBroadcast(getActivity(), Constants.ACTION_FORCE_TASKBAR_RESTART);
                 }
 
                 U.restartNotificationService(getActivity());
-                U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_FREEFORM_PREF_CHANGED);
+                U.sendBroadcast(getActivity(), Constants.ACTION_FREEFORM_PREF_CHANGED);
                 break;
             case "add_shortcut":
                 U.pinAppShortcut(getActivity());

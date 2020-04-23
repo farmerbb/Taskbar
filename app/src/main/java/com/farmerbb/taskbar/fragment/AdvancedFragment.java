@@ -47,7 +47,7 @@ import com.farmerbb.taskbar.activity.NavigationBarButtonsActivity;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.activity.dark.NavigationBarButtonsActivityDark;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.U;
 
@@ -149,7 +149,7 @@ public class AdvancedFragment extends SettingsFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        U.registerReceiver(getActivity(), homeToggleReceiver, TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED);
+        U.registerReceiver(getActivity(), homeToggleReceiver, Constants.ACTION_LAUNCHER_PREF_CHANGED);
     }
 
     @Override
@@ -176,7 +176,7 @@ public class AdvancedFragment extends SettingsFragment {
                 }
 
                 if(!((CheckBoxPreference) p).isChecked()) {
-                    U.sendBroadcast(getActivity(), TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
+                    U.sendBroadcast(getActivity(), Constants.ACTION_KILL_HOME_ACTIVITY);
                 }
                 break;
             case "keyboard_shortcut":

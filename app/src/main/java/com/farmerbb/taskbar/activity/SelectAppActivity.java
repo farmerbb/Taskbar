@@ -27,7 +27,7 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -114,7 +114,7 @@ public class SelectAppActivity extends AppCompatActivity {
             isCollapsed = !pref.getBoolean("collapsed", false);
 
             if(!isCollapsed) {
-                U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_TASKBAR);
+                U.sendBroadcast(this, Constants.ACTION_HIDE_TASKBAR);
             }
 
             progressBar = findViewById(R.id.progress_bar);
@@ -149,7 +149,7 @@ public class SelectAppActivity extends AppCompatActivity {
             appListGenerator.cancel(true);
 
         if(!isCollapsed) {
-            U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR);
+            U.sendBroadcast(this, Constants.ACTION_SHOW_TASKBAR);
         }
 
         super.finish();

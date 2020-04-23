@@ -41,7 +41,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;
@@ -110,7 +110,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
 
         LinearLayout layout = convertView.findViewById(R.id.entry);
         layout.setOnClickListener(view -> {
-            U.sendBroadcast(getContext(), TaskbarIntent.ACTION_HIDE_START_MENU);
+            U.sendBroadcast(getContext(), Constants.ACTION_HIDE_START_MENU);
             U.launchApp(getContext(), entry, null, false, false, view);
         });
 
@@ -194,7 +194,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     }
 
     private void openContextMenu(final AppEntry entry, final int[] location) {
-        U.sendBroadcast(getContext(), TaskbarIntent.ACTION_HIDE_START_MENU_NO_RESET);
+        U.sendBroadcast(getContext(), Constants.ACTION_HIDE_START_MENU_NO_RESET);
 
         Bundle args = new Bundle();
         args.putSerializable("app_entry", entry);

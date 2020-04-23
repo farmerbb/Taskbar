@@ -17,7 +17,7 @@ package com.farmerbb.taskbar.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.U;
@@ -45,7 +45,7 @@ public class DesktopIconSelectAppActivity extends AbstractSelectAppActivity {
             icons.put(desktopIcon.toJson(this));
 
             pref.edit().putString("desktop_icons", icons.toString()).apply();
-            U.sendBroadcast(this, TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS);
+            U.sendBroadcast(this, Constants.ACTION_REFRESH_DESKTOP_ICONS);
         } catch (JSONException e) { /* Gracefully fail */ }
 
         finish();

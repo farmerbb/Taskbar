@@ -24,7 +24,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 public class InvisibleActivity extends Activity {
@@ -44,7 +44,7 @@ public class InvisibleActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
-        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
+        U.registerReceiver(this, finishReceiver, Constants.ACTION_START_MENU_DISAPPEARING);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class InvisibleActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_START_MENU);
+        U.sendBroadcast(this, Constants.ACTION_HIDE_START_MENU);
     }
 
     @Override

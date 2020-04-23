@@ -19,7 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 public class DisableFreeformReceiver extends BroadcastReceiver {
@@ -35,7 +35,7 @@ public class DisableFreeformReceiver extends BroadcastReceiver {
 
             pref.edit().putBoolean("freeform_hack", false).apply();
 
-            U.sendBroadcast(context, TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
+            U.sendBroadcast(context, Constants.ACTION_UPDATE_FREEFORM_CHECKBOX);
         }
     }
 }

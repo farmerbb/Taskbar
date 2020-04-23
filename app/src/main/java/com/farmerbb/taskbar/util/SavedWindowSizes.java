@@ -28,7 +28,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_WINDOW_SIZE;
+import static com.farmerbb.taskbar.util.Constants.PREF_WINDOW_SIZE;
 
 public class SavedWindowSizes implements Serializable {
     static final long serialVersionUID = 7111185146180868281L;
@@ -62,7 +62,7 @@ public class SavedWindowSizes implements Serializable {
         }
 
         return U.getSharedPreferences(context)
-                .getString(SP_KEY_WINDOW_SIZE, context.getString(R.string.tb_def_window_size));
+                .getString(PREF_WINDOW_SIZE, context.getString(R.string.tb_def_window_size));
     }
 
     public void clear(Context context) {

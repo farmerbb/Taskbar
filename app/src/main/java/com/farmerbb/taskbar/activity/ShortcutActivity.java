@@ -21,7 +21,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
 
@@ -39,10 +39,10 @@ public class ShortcutActivity extends Activity {
                 if(!pref.getBoolean("freeform_hack", false)) {
                     pref.edit().putBoolean("freeform_hack", true).apply();
 
-                    U.sendBroadcast(this, TaskbarIntent.ACTION_UPDATE_FREEFORM_CHECKBOX);
+                    U.sendBroadcast(this, Constants.ACTION_UPDATE_FREEFORM_CHECKBOX);
                 }
 
-                Intent intent = new Intent(TaskbarIntent.ACTION_START);
+                Intent intent = new Intent(Constants.ACTION_START);
                 intent.setPackage(getPackageName());
                 sendBroadcast(intent);
 

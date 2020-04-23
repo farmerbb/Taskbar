@@ -45,7 +45,7 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
@@ -103,7 +103,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        U.sendBroadcast(this, TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING);
+        U.sendBroadcast(this, Constants.ACTION_CONTEXT_MENU_APPEARING);
         MenuHelper.getInstance().setContextMenuOpen(true);
 
         Bundle args = getIntent().getBundleExtra("args");
@@ -170,7 +170,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
         } else {
-            U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_START_MENU);
+            U.sendBroadcast(this, Constants.ACTION_HIDE_START_MENU);
 
             int x = args.getInt("x", display.width);
             int y = args.getInt("y", display.height);
@@ -250,10 +250,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         generateMenu();
 
         U.registerReceiver(this, dashboardOrStartMenuAppearingReceiver,
-                TaskbarIntent.ACTION_START_MENU_APPEARING,
-                TaskbarIntent.ACTION_DASHBOARD_APPEARING);
+                Constants.ACTION_START_MENU_APPEARING,
+                Constants.ACTION_DASHBOARD_APPEARING);
 
-        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_HIDE_CONTEXT_MENU);
+        U.registerReceiver(this, finishReceiver, Constants.ACTION_HIDE_CONTEXT_MENU);
     }
 
     @SuppressWarnings("deprecation")
@@ -496,7 +496,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "quit_taskbar":
-                Intent quitIntent = new Intent(TaskbarIntent.ACTION_QUIT);
+                Intent quitIntent = new Intent(Constants.ACTION_QUIT);
                 quitIntent.setPackage(getPackageName());
                 sendBroadcast(quitIntent);
 
@@ -731,14 +731,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "arrange_icons":
-                U.sendBroadcast(this, TaskbarIntent.ACTION_ENTER_ICON_ARRANGE_MODE);
+                U.sendBroadcast(this, Constants.ACTION_ENTER_ICON_ARRANGE_MODE);
                 break;
             case "sort_by_name":
-                U.sendBroadcast(this, TaskbarIntent.ACTION_SORT_DESKTOP_ICONS);
+                U.sendBroadcast(this, Constants.ACTION_SORT_DESKTOP_ICONS);
                 break;
             case "change_wallpaper":
                 if(LauncherHelper.getInstance().isOnHomeScreen()) {
-                    U.sendBroadcast(this, TaskbarIntent.ACTION_TEMP_HIDE_TASKBAR);
+                    U.sendBroadcast(this, Constants.ACTION_TEMP_HIDE_TASKBAR);
                 }
 
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper));
@@ -767,7 +767,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         jsonIcons.remove(iconToRemove);
 
                         pref5.edit().putString("desktop_icons", jsonIcons.toString()).apply();
-                        U.sendBroadcast(this, TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS);
+                        U.sendBroadcast(this, Constants.ACTION_REFRESH_DESKTOP_ICONS);
                     }
                 } catch (JSONException e) { /* Gracefully fail */ }
                 break;
@@ -785,17 +785,17 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @Override
     public void finish() {
-        U.sendBroadcast(this, TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING);
+        U.sendBroadcast(this, Constants.ACTION_CONTEXT_MENU_DISAPPEARING);
         MenuHelper.getInstance().setContextMenuOpen(false);
 
         if(!dashboardOrStartMenuAppearing) {
             if(showStartMenu) {
-                U.sendBroadcast(this, TaskbarIntent.ACTION_TOGGLE_START_MENU);
+                U.sendBroadcast(this, Constants.ACTION_TOGGLE_START_MENU);
             } else {
-                U.sendBroadcast(this, TaskbarIntent.ACTION_RESET_START_MENU);
+                U.sendBroadcast(this, Constants.ACTION_RESET_START_MENU);
 
                 if(shouldHideTaskbar && U.shouldCollapse(this, true)) {
-                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_TASKBAR);
+                    U.sendBroadcast(this, Constants.ACTION_HIDE_TASKBAR);
                 }
             }
         }

@@ -25,7 +25,7 @@ import android.widget.CompoundButton;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.ShortcutUtils;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.SavedWindowSizes;
@@ -109,7 +109,7 @@ public class ClearDataActivity extends AppCompatActivity {
             if(desktopIcons.isChecked()) {
                 SharedPreferences pref = U.getSharedPreferences(this);
                 pref.edit().remove("desktop_icons").apply();
-                U.sendBroadcast(this, TaskbarIntent.ACTION_REFRESH_DESKTOP_ICONS);
+                U.sendBroadcast(this, Constants.ACTION_REFRESH_DESKTOP_ICONS);
             }
 
             if(qsShortcuts.isChecked()) {

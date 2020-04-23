@@ -19,7 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.BundleScrubber;
 import com.farmerbb.taskbar.util.PluginBundleManager;
 import com.farmerbb.taskbar.util.U;
@@ -56,17 +56,17 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
     private String getIntentAction(String action) {
         if(action != null) switch(action) {
             case "tasker_on":
-                return TaskbarIntent.ACTION_START;
+                return Constants.ACTION_START;
             case "tasker_off":
-                return TaskbarIntent.ACTION_QUIT;
+                return Constants.ACTION_QUIT;
             case "show_taskbar":
-                return TaskbarIntent.ACTION_SHOW_TASKBAR;
+                return Constants.ACTION_SHOW_TASKBAR;
             case "hide_taskbar":
-                return TaskbarIntent.ACTION_HIDE_TASKBAR;
+                return Constants.ACTION_HIDE_TASKBAR;
             case "toggle_start_menu":
-                return TaskbarIntent.ACTION_TOGGLE_START_MENU;
+                return Constants.ACTION_TOGGLE_START_MENU;
             case "toggle_dashboard":
-                return TaskbarIntent.ACTION_TOGGLE_DASHBOARD;
+                return Constants.ACTION_TOGGLE_DASHBOARD;
         }
 
         return null;

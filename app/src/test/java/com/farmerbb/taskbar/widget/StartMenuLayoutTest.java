@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import static com.farmerbb.taskbar.util.TaskbarIntent.ACTION_HIDE_START_MENU;
+import static com.farmerbb.taskbar.util.Constants.ACTION_HIDE_START_MENU;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

@@ -29,7 +29,7 @@ import android.provider.Settings;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.activity.dark.InvisibleActivityAltDark;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -107,16 +107,16 @@ public class InvisibleActivityFreeform extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
         U.registerReceiver(this, appearingReceiver,
-                TaskbarIntent.ACTION_START_MENU_APPEARING,
-                TaskbarIntent.ACTION_CONTEXT_MENU_APPEARING,
-                TaskbarIntent.ACTION_DASHBOARD_APPEARING);
+                Constants.ACTION_START_MENU_APPEARING,
+                Constants.ACTION_CONTEXT_MENU_APPEARING,
+                Constants.ACTION_DASHBOARD_APPEARING);
 
         U.registerReceiver(this, disappearingReceiver,
-                TaskbarIntent.ACTION_START_MENU_DISAPPEARING,
-                TaskbarIntent.ACTION_CONTEXT_MENU_DISAPPEARING,
-                TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
+                Constants.ACTION_START_MENU_DISAPPEARING,
+                Constants.ACTION_CONTEXT_MENU_DISAPPEARING,
+                Constants.ACTION_DASHBOARD_DISAPPEARING);
 
-        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
+        U.registerReceiver(this, finishReceiver, Constants.ACTION_FINISH_FREEFORM_ACTIVITY);
 
         helper.setFreeformHackActive(true);
 
@@ -158,7 +158,7 @@ public class InvisibleActivityFreeform extends Activity {
 
         // Show the taskbar when activity is resumed (no other freeform windows are active)
         if(showTaskbar) {
-            U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR);
+            U.sendBroadcast(this, Constants.ACTION_SHOW_TASKBAR);
         }
 
         if(!isInMultiWindowMode() && !initialLaunch) {
@@ -219,13 +219,13 @@ public class InvisibleActivityFreeform extends Activity {
             // Show the taskbar when activity is started
             if(showTaskbar) {
                 new Handler().postDelayed(() ->
-                        U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR), 100);
+                        U.sendBroadcast(this, Constants.ACTION_SHOW_TASKBAR), 100);
             }
         }
 
         // Show the taskbar when activity is started
         if(showTaskbar) {
-            U.sendBroadcast(this, TaskbarIntent.ACTION_SHOW_TASKBAR);
+            U.sendBroadcast(this, Constants.ACTION_SHOW_TASKBAR);
         }
     }
 
@@ -269,9 +269,9 @@ public class InvisibleActivityFreeform extends Activity {
         if(!doNotHide) {
             new Handler().postDelayed(() -> {
                 if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen()) {
-                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_TASKBAR);
+                    U.sendBroadcast(this, Constants.ACTION_HIDE_TASKBAR);
                 } else {
-                    U.sendBroadcast(this, TaskbarIntent.ACTION_HIDE_START_MENU);
+                    U.sendBroadcast(this, Constants.ACTION_HIDE_START_MENU);
                 }
             }, 100);
         }

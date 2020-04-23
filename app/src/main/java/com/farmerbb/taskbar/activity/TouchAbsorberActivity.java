@@ -28,7 +28,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
@@ -55,10 +55,10 @@ public class TouchAbsorberActivity extends Activity {
         LinearLayout layout = findViewById(R.id.incognitoLayout);
         layout.setLayoutParams(new FrameLayout.LayoutParams(display.width, display.height));
 
-        U.registerReceiver(this, finishReceiver, TaskbarIntent.ACTION_FINISH_FREEFORM_ACTIVITY);
+        U.registerReceiver(this, finishReceiver, Constants.ACTION_FINISH_FREEFORM_ACTIVITY);
 
         FreeformHackHelper.getInstance().setTouchAbsorberActive(true);
-        U.sendBroadcast(this, TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
+        U.sendBroadcast(this, Constants.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
 
         lastStartTime = System.currentTimeMillis();
     }
@@ -99,7 +99,7 @@ public class TouchAbsorberActivity extends Activity {
         U.unregisterReceiver(this, finishReceiver);
 
         FreeformHackHelper.getInstance().setTouchAbsorberActive(false);
-        U.sendBroadcast(this, TaskbarIntent.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
+        U.sendBroadcast(this, Constants.ACTION_TOUCH_ABSORBER_STATE_CHANGED);
 
         super.onDestroy();
     }

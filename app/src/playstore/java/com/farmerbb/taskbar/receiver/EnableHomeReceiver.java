@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import com.farmerbb.taskbar.activity.HomeActivity;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 public class EnableHomeReceiver extends BroadcastReceiver {
@@ -35,7 +35,7 @@ public class EnableHomeReceiver extends BroadcastReceiver {
             editor.apply();
 
             U.setComponentEnabled(context, HomeActivity.class, true);
-            U.sendBroadcast(context, TaskbarIntent.ACTION_LAUNCHER_PREF_CHANGED);
+            U.sendBroadcast(context, Constants.ACTION_LAUNCHER_PREF_CHANGED);
         }
     }
 }

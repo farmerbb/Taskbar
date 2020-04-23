@@ -22,7 +22,7 @@ import android.net.Uri;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.backup.BackupUtils;
 import com.farmerbb.taskbar.backup.IntentBackupAgent;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 import java.io.File;
@@ -45,7 +45,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
             try {
                 File file = new File(context.getFilesDir() + File.separator + "imported_successfully");
                 if(file.createNewFile()) {
-                    U.sendBroadcast(context, TaskbarIntent.ACTION_IMPORT_FINISHED);
+                    U.sendBroadcast(context, Constants.ACTION_IMPORT_FINISHED);
                 }
             } catch (IOException e) { /* Gracefully fail */ }
         }

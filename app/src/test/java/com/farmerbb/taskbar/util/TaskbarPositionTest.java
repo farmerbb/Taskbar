@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_ANCHOR;
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_POSITION;
+import static com.farmerbb.taskbar.util.Constants.PREF_ANCHOR;
+import static com.farmerbb.taskbar.util.Constants.PREF_POSITION;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
@@ -417,9 +417,9 @@ public class TaskbarPositionTest {
                                                            List<String> changedPositions) {
         assertEquals(4, changedPositions.size());
         String oldPosition =
-                U.getSharedPreferences(context).getString(SP_KEY_POSITION, POSITION_BOTTOM_LEFT);
+                U.getSharedPreferences(context).getString(PREF_POSITION, POSITION_BOTTOM_LEFT);
         boolean oldAnchor =
-                U.getSharedPreferences(context).getBoolean(SP_KEY_ANCHOR, false);
+                U.getSharedPreferences(context).getBoolean(PREF_ANCHOR, false);
         initializeTaskbarPosition(originPosition);
         initializeRotation(Surface.ROTATION_0);
         assertEquals(changedPositions.get(0), TaskbarPosition.getTaskbarPosition(context));
@@ -429,26 +429,26 @@ public class TaskbarPositionTest {
         assertEquals(changedPositions.get(2), TaskbarPosition.getTaskbarPosition(context));
         initializeRotation(Surface.ROTATION_270);
         assertEquals(changedPositions.get(3), TaskbarPosition.getTaskbarPosition(context));
-        U.getSharedPreferences(context).edit().putBoolean(SP_KEY_ANCHOR, oldAnchor).apply();
-        U.getSharedPreferences(context).edit().putString(SP_KEY_POSITION, oldPosition).apply();
+        U.getSharedPreferences(context).edit().putBoolean(PREF_ANCHOR, oldAnchor).apply();
+        U.getSharedPreferences(context).edit().putString(PREF_POSITION, oldPosition).apply();
     }
 
     private void checkTaskbarPositionGroup(String originPosition,
                                            Predicate<Context> predicate,
                                            boolean expectedResult) {
         String oldPosition =
-                U.getSharedPreferences(context).getString(SP_KEY_POSITION, POSITION_BOTTOM_LEFT);
+                U.getSharedPreferences(context).getString(PREF_POSITION, POSITION_BOTTOM_LEFT);
         boolean oldAnchor =
-                U.getSharedPreferences(context).getBoolean(SP_KEY_ANCHOR, false);
+                U.getSharedPreferences(context).getBoolean(PREF_ANCHOR, false);
         initializeTaskbarPosition(originPosition);
         assertEquals(expectedResult, predicate.test(context));
-        U.getSharedPreferences(context).edit().putBoolean(SP_KEY_ANCHOR, oldAnchor).apply();
-        U.getSharedPreferences(context).edit().putString(SP_KEY_POSITION, oldPosition).apply();
+        U.getSharedPreferences(context).edit().putBoolean(PREF_ANCHOR, oldAnchor).apply();
+        U.getSharedPreferences(context).edit().putString(PREF_POSITION, oldPosition).apply();
     }
 
     private void initializeTaskbarPosition(String position) {
-        U.getSharedPreferences(context).edit().putBoolean(SP_KEY_ANCHOR, true).apply();
-        U.getSharedPreferences(context).edit().putString(SP_KEY_POSITION, position).apply();
+        U.getSharedPreferences(context).edit().putBoolean(PREF_ANCHOR, true).apply();
+        U.getSharedPreferences(context).edit().putString(PREF_POSITION, position).apply();
     }
 
     private void initializeRotation(int rotation) {

@@ -43,7 +43,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.fragment.AboutFragment;
 import com.farmerbb.taskbar.fragment.AdvancedFragment;
 import com.farmerbb.taskbar.fragment.AppearanceFragment;
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        U.registerReceiver(this, switchReceiver, TaskbarIntent.ACTION_UPDATE_SWITCH);
+        U.registerReceiver(this, switchReceiver, Constants.ACTION_UPDATE_SWITCH);
 
         final SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(!launcherEnabled) {
-            U.sendBroadcast(this, TaskbarIntent.ACTION_KILL_HOME_ACTIVITY);
+            U.sendBroadcast(this, Constants.ACTION_KILL_HOME_ACTIVITY);
         }
 
         // Update caption state
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
             IconCache.getInstance(this).clearCache();
 
-            U.sendBroadcast(this, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
+            U.sendBroadcast(this, Constants.ACTION_START_MENU_DISAPPEARING);
         }
 
         stopService(new Intent(this, NotificationService.class));

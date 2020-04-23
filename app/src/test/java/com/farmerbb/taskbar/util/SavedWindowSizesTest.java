@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import static com.farmerbb.taskbar.util.SharedPreferenceConstant.SP_KEY_WINDOW_SIZE;
+import static com.farmerbb.taskbar.util.Constants.PREF_WINDOW_SIZE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertNotEquals;
@@ -47,12 +47,12 @@ public class SavedWindowSizesTest {
         );
         SharedPreferences prefs = U.getSharedPreferences(context);
         String newWindowSize = defaultWindowSize + "-new";
-        prefs.edit().putString(SP_KEY_WINDOW_SIZE, newWindowSize).apply();
+        prefs.edit().putString(PREF_WINDOW_SIZE, newWindowSize).apply();
         assertEquals(
                 newWindowSize,
                 savedWindowSizes.getWindowSize(context, context.getPackageName())
         );
-        prefs.edit().remove(SP_KEY_WINDOW_SIZE).apply();
+        prefs.edit().remove(PREF_WINDOW_SIZE).apply();
         savedWindowSizes.setWindowSize(context, context.getPackageName(), CUSTOM_WINDOW_SIZE);
         assertEquals(
                 CUSTOM_WINDOW_SIZE,

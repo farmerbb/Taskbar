@@ -58,7 +58,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
@@ -254,10 +254,10 @@ public class DashboardController extends UIController {
 
         mAppWidgetHost.stopListening();
 
-        U.registerReceiver(context, toggleReceiver, TaskbarIntent.ACTION_TOGGLE_DASHBOARD);
-        U.registerReceiver(context, addWidgetReceiver, TaskbarIntent.ACTION_ADD_WIDGET_COMPLETED);
-        U.registerReceiver(context, removeWidgetReceiver, TaskbarIntent.ACTION_REMOVE_WIDGET_COMPLETED);
-        U.registerReceiver(context, hideReceiver, TaskbarIntent.ACTION_HIDE_DASHBOARD);
+        U.registerReceiver(context, toggleReceiver, Constants.ACTION_TOGGLE_DASHBOARD);
+        U.registerReceiver(context, addWidgetReceiver, Constants.ACTION_ADD_WIDGET_COMPLETED);
+        U.registerReceiver(context, removeWidgetReceiver, Constants.ACTION_REMOVE_WIDGET_COMPLETED);
+        U.registerReceiver(context, hideReceiver, Constants.ACTION_HIDE_DASHBOARD);
 
         host.addView(layout, params);
 
@@ -298,8 +298,8 @@ public class DashboardController extends UIController {
             layout.setOnClickListener(ocl);
             fadeIn();
 
-            U.sendBroadcast(context, TaskbarIntent.ACTION_DASHBOARD_APPEARING);
-            U.sendBroadcast(context, TaskbarIntent.ACTION_HIDE_START_MENU);
+            U.sendBroadcast(context, Constants.ACTION_DASHBOARD_APPEARING);
+            U.sendBroadcast(context, Constants.ACTION_HIDE_START_MENU);
 
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
@@ -396,7 +396,7 @@ public class DashboardController extends UIController {
                     public void onAnimationEnd(Animator animation) {
                         layout.setVisibility(View.GONE);
                         if(sendIntent) {
-                            U.sendBroadcast(context, TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
+                            U.sendBroadcast(context, Constants.ACTION_DASHBOARD_DISAPPEARING);
                         }
                     }
                 });
@@ -433,7 +433,7 @@ public class DashboardController extends UIController {
         U.unregisterReceiver(context, removeWidgetReceiver);
         U.unregisterReceiver(context, hideReceiver);
 
-        U.sendBroadcast(context, TaskbarIntent.ACTION_DASHBOARD_DISAPPEARING);
+        U.sendBroadcast(context, Constants.ACTION_DASHBOARD_DISAPPEARING);
 
         SharedPreferences pref = U.getSharedPreferences(context);
         pref.edit().remove("dont_stop_dashboard").apply();
@@ -454,7 +454,7 @@ public class DashboardController extends UIController {
             FrameLayout frameLayout = cells.get(currentlySelectedCell);
             frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
 
-            Intent intent = new Intent(TaskbarIntent.ACTION_ADD_WIDGET_REQUESTED);
+            Intent intent = new Intent(Constants.ACTION_ADD_WIDGET_REQUESTED);
             intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
             intent.putExtra("cellId", cellId);
             U.sendBroadcast(context, intent);
@@ -491,7 +491,7 @@ public class DashboardController extends UIController {
         Bundle bundle = (Bundle) view.getTag();
         int cellId = bundle.getInt("cellId");
 
-        Intent intent = new Intent(TaskbarIntent.ACTION_REMOVE_WIDGET_REQUESTED);
+        Intent intent = new Intent(Constants.ACTION_REMOVE_WIDGET_REQUESTED);
         intent.putExtra("cellId", cellId);
         U.sendBroadcast(context, intent);
     }

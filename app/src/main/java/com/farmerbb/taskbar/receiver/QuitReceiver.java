@@ -19,7 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import com.farmerbb.taskbar.util.TaskbarIntent;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -47,7 +47,7 @@ public class QuitReceiver extends BroadcastReceiver {
 
                 IconCache.getInstance(context).clearCache();
 
-                U.sendBroadcast(context, TaskbarIntent.ACTION_START_MENU_DISAPPEARING);
+                U.sendBroadcast(context, Constants.ACTION_START_MENU_DISAPPEARING);
             }
 
             context.stopService(notificationIntent);
