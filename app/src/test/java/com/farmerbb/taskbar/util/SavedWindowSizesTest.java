@@ -13,10 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import static com.farmerbb.taskbar.util.Constants.PREF_WINDOW_SIZE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertNotEquals;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 @RunWith(RobolectricTestRunner.class)
 public class SavedWindowSizesTest {

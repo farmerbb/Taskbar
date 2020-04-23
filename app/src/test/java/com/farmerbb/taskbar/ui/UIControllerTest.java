@@ -23,10 +23,11 @@ import org.robolectric.Shadows;
 import org.robolectric.android.controller.ServiceController;
 import org.robolectric.shadows.ShadowService;
 
-import static com.farmerbb.taskbar.util.Constants.PREF_TASKBAR_ACTIVE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.when;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})

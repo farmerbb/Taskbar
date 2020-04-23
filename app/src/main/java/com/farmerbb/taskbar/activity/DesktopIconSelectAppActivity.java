@@ -17,13 +17,14 @@ package com.farmerbb.taskbar.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.U;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class DesktopIconSelectAppActivity extends AbstractSelectAppActivity {
 
@@ -45,7 +46,7 @@ public class DesktopIconSelectAppActivity extends AbstractSelectAppActivity {
             icons.put(desktopIcon.toJson(this));
 
             pref.edit().putString("desktop_icons", icons.toString()).apply();
-            U.sendBroadcast(this, Constants.ACTION_REFRESH_DESKTOP_ICONS);
+            U.sendBroadcast(this, ACTION_REFRESH_DESKTOP_ICONS);
         } catch (JSONException e) { /* Gracefully fail */ }
 
         finish();

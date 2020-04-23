@@ -49,33 +49,6 @@ import org.robolectric.shadows.ShadowToast;
 import org.robolectric.util.ReflectionHelpers;
 
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-import static com.farmerbb.taskbar.util.Constants.PREF_ACCENT_COLOR;
-import static com.farmerbb.taskbar.util.Constants.PREF_ANCHOR;
-import static com.farmerbb.taskbar.util.Constants.PREF_APP_DRAWER_ICON;
-import static com.farmerbb.taskbar.util.Constants.PREF_AUTO_HIDE_NAVBAR;
-import static com.farmerbb.taskbar.util.Constants.PREF_BACKGROUND_TINT;
-import static com.farmerbb.taskbar.util.Constants.PREF_BLISS_OS_PREFS;
-import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK;
-import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME;
-import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS;
-import static com.farmerbb.taskbar.util.Constants.PREF_CHROME_OS_CONTEXT_MENU_FIX;
-import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD;
-import static com.farmerbb.taskbar.util.Constants.PREF_FREEFORM_HACK;
-import static com.farmerbb.taskbar.util.Constants.PREF_FREEFORM_HACK_OVERRIDE;
-import static com.farmerbb.taskbar.util.Constants.PREF_FULL_LENGTH;
-import static com.farmerbb.taskbar.util.Constants.PREF_LAUNCH_GAMES_FULLSCREEN;
-import static com.farmerbb.taskbar.util.Constants.PREF_MAX_NUM_OF_RECENTS;
-import static com.farmerbb.taskbar.util.Constants.PREF_POSITION;
-import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT;
-import static com.farmerbb.taskbar.util.Constants.PREF_REFRESH_FREQUENCY;
-import static com.farmerbb.taskbar.util.Constants.PREF_SAVE_WINDOW_SIZES;
-import static com.farmerbb.taskbar.util.Constants.PREF_SHORTCUT_ICON;
-import static com.farmerbb.taskbar.util.Constants.PREF_SHOW_BACKGROUND;
-import static com.farmerbb.taskbar.util.Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE;
-import static com.farmerbb.taskbar.util.Constants.PREF_SORT_ORDER;
-import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
-import static com.farmerbb.taskbar.util.Constants.PREF_SYS_TRAY;
-import static com.farmerbb.taskbar.util.Constants.PREF_THEME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -84,6 +57,8 @@ import static org.mockito.Matchers.any;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static org.robolectric.util.ReflectionHelpers.ClassParameter.from;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
@@ -912,7 +887,7 @@ public class UTest {
         prefs.edit().putBoolean(PREF_FULL_LENGTH, true).apply();
         assertTrue(U.isSystemTrayEnabled(context));
         prefs.edit()
-                .putString(PREF_POSITION, TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT)
+                .putString(PREF_POSITION, POSITION_BOTTOM_VERTICAL_LEFT)
                 .putBoolean(PREF_ANCHOR, false)
                 .apply();
         assertFalse(U.isSystemTrayEnabled(context));

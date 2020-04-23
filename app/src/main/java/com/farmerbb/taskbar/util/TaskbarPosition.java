@@ -23,14 +23,6 @@ import android.view.WindowManager;
 import static com.farmerbb.taskbar.util.Constants.*;
 
 public class TaskbarPosition {
-    public static final String POSITION_BOTTOM_LEFT = "bottom_left";
-    public static final String POSITION_BOTTOM_RIGHT = "bottom_right";
-    public static final String POSITION_BOTTOM_VERTICAL_LEFT = "bottom_vertical_left";
-    public static final String POSITION_BOTTOM_VERTICAL_RIGHT = "bottom_vertical_right";
-    public static final String POSITION_TOP_LEFT = "top_left";
-    public static final String POSITION_TOP_RIGHT = "top_right";
-    public static final String POSITION_TOP_VERTICAL_LEFT = "top_vertical_left";
-    public static final String POSITION_TOP_VERTICAL_RIGHT = "top_vertical_right";
 
     private TaskbarPosition() {}
 

@@ -94,7 +94,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.farmerbb.taskbar.util.Constants.*;
-import static com.farmerbb.taskbar.util.TaskbarPosition.*;
 
 public class U {
 
@@ -244,7 +243,7 @@ public class U {
             }
 
             new Handler().postDelayed(() -> {
-                Intent intent = new Intent(Constants.ACTION_ACCESSIBILITY_ACTION);
+                Intent intent = new Intent(ACTION_ACCESSIBILITY_ACTION);
                 intent.putExtra("action", action);
                 sendBroadcast(context, intent);
 
@@ -257,7 +256,7 @@ public class U {
                 if(onComplete != null) onComplete.run();
             }, 100);
         } else if(isAccessibilityServiceEnabled) {
-            Intent intent = new Intent(Constants.ACTION_ACCESSIBILITY_ACTION);
+            Intent intent = new Intent(ACTION_ACCESSIBILITY_ACTION);
             intent.putExtra("action", action);
             sendBroadcast(context, intent);
 
@@ -416,7 +415,7 @@ public class U {
     }
 
     public static void stopFreeformHack(Context context) {
-        sendBroadcast(context, Constants.ACTION_FINISH_FREEFORM_ACTIVITY);
+        sendBroadcast(context, ACTION_FINISH_FREEFORM_ACTIVITY);
 
         if(isOverridingFreeformHack(context, false)) {
             FreeformHackHelper helper = FreeformHackHelper.getInstance();
@@ -487,9 +486,9 @@ public class U {
         });
 
         if(shouldCollapse(context, true)) {
-            sendBroadcast(context, Constants.ACTION_HIDE_TASKBAR);
+            sendBroadcast(context, ACTION_HIDE_TASKBAR);
         } else {
-            sendBroadcast(context, Constants.ACTION_HIDE_START_MENU);
+            sendBroadcast(context, ACTION_HIDE_START_MENU);
         }
     }
 
@@ -611,7 +610,7 @@ public class U {
     }
 
     private static void prepareToStartActivity(Context context, boolean openInNewWindow, Runnable runnable) {
-        sendBroadcast(context, Constants.ACTION_HIDE_CONTEXT_MENU);
+        sendBroadcast(context, ACTION_HIDE_CONTEXT_MENU);
 
         if(!FreeformHackHelper.getInstance().isTouchAbsorberActive()
                 && shouldLaunchTouchAbsorber(context)) {
@@ -1224,7 +1223,7 @@ public class U {
             startTaskbarService(context, false);
         }
 
-        sendBroadcast(context, Constants.ACTION_RESTART);
+        sendBroadcast(context, ACTION_RESTART);
     }
 
     public static void restartNotificationService(Context context) {

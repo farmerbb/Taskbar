@@ -41,8 +41,9 @@ import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.LauncherHelper;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class DesktopModeFragment extends SettingsFragment {
 
@@ -180,7 +181,7 @@ public class DesktopModeFragment extends SettingsFragment {
     @TargetApi(29)
     private void startStopDesktopMode(boolean start) {
         if(!start || !U.isDesktopModeActive(getActivity()) || !U.launcherIsDefault(getActivity())) {
-            U.sendBroadcast(getActivity(), Constants.ACTION_KILL_HOME_ACTIVITY);
+            U.sendBroadcast(getActivity(), ACTION_KILL_HOME_ACTIVITY);
             return;
         }
 

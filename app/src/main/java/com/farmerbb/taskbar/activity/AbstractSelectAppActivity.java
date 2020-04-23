@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.adapter.DesktopIconAppListAdapter;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
@@ -42,6 +41,8 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public abstract class AbstractSelectAppActivity extends AppCompatActivity {
 
@@ -74,7 +75,7 @@ public abstract class AbstractSelectAppActivity extends AppCompatActivity {
         isCollapsed = !pref.getBoolean("collapsed", false);
 
         if(!isCollapsed) {
-            U.sendBroadcast(this, Constants.ACTION_HIDE_TASKBAR);
+            U.sendBroadcast(this, ACTION_HIDE_TASKBAR);
         }
 
         progressBar = findViewById(R.id.progress_bar);
@@ -91,7 +92,7 @@ public abstract class AbstractSelectAppActivity extends AppCompatActivity {
         }
 
         if(!isCollapsed) {
-            U.sendBroadcast(this, Constants.ACTION_SHOW_TASKBAR);
+            U.sendBroadcast(this, ACTION_SHOW_TASKBAR);
         }
         super.finish();
     }

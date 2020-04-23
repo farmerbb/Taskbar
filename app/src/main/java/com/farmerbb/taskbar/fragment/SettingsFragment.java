@@ -39,9 +39,10 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.dark.ClearDataActivityDark;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public abstract class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -119,7 +120,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         helper.setFreeformHackActive(false);
                         helper.setInFreeformWorkspace(false);
 
-                        U.sendBroadcast(getActivity(), Constants.ACTION_FINISH_FREEFORM_ACTIVITY);
+                        U.sendBroadcast(getActivity(), ACTION_FINISH_FREEFORM_ACTIVITY);
 
                         SharedPreferences pref = U.getSharedPreferences(getActivity());
                         if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false))

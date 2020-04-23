@@ -106,4 +106,15 @@ public class Constants {
     public static final String PREF_FULL_LENGTH = "full_length";
     public static final String PREF_POSITION = "position";
     public static final String PREF_ANCHOR = "anchor";
+
+    // TaskbarPosition values
+
+    public static final String POSITION_BOTTOM_LEFT = "bottom_left";
+    public static final String POSITION_BOTTOM_RIGHT = "bottom_right";
+    public static final String POSITION_BOTTOM_VERTICAL_LEFT = "bottom_vertical_left";
+    public static final String POSITION_BOTTOM_VERTICAL_RIGHT = "bottom_vertical_right";
+    public static final String POSITION_TOP_LEFT = "top_left";
+    public static final String POSITION_TOP_RIGHT = "top_right";
+    public static final String POSITION_TOP_VERTICAL_LEFT = "top_vertical_left";
+    public static final String POSITION_TOP_VERTICAL_RIGHT = "top_vertical_right";
 }

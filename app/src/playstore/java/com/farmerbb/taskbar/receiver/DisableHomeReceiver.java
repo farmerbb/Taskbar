@@ -20,8 +20,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import com.farmerbb.taskbar.activity.HomeActivity;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class DisableHomeReceiver extends BroadcastReceiver {
     @Override
@@ -33,8 +34,8 @@ public class DisableHomeReceiver extends BroadcastReceiver {
             pref.edit().putBoolean("launcher", false).apply();
 
             U.setComponentEnabled(context, HomeActivity.class, false);
-            U.sendBroadcast(context, Constants.ACTION_KILL_HOME_ACTIVITY);
-            U.sendBroadcast(context, Constants.ACTION_LAUNCHER_PREF_CHANGED);
+            U.sendBroadcast(context, ACTION_KILL_HOME_ACTIVITY);
+            U.sendBroadcast(context, ACTION_LAUNCHER_PREF_CHANGED);
         }
     }
 }

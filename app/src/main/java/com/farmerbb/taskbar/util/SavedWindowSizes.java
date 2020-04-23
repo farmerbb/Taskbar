@@ -28,7 +28,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.farmerbb.taskbar.util.Constants.PREF_WINDOW_SIZE;
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class SavedWindowSizes implements Serializable {
     static final long serialVersionUID = 7111185146180868281L;

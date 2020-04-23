@@ -19,10 +19,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.BundleScrubber;
 import com.farmerbb.taskbar.util.PluginBundleManager;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public final class TaskerActionReceiver extends BroadcastReceiver {
     @Override
@@ -56,17 +57,17 @@ public final class TaskerActionReceiver extends BroadcastReceiver {
     private String getIntentAction(String action) {
         if(action != null) switch(action) {
             case "tasker_on":
-                return Constants.ACTION_START;
+                return ACTION_START;
             case "tasker_off":
-                return Constants.ACTION_QUIT;
+                return ACTION_QUIT;
             case "show_taskbar":
-                return Constants.ACTION_SHOW_TASKBAR;
+                return ACTION_SHOW_TASKBAR;
             case "hide_taskbar":
-                return Constants.ACTION_HIDE_TASKBAR;
+                return ACTION_HIDE_TASKBAR;
             case "toggle_start_menu":
-                return Constants.ACTION_TOGGLE_START_MENU;
+                return ACTION_TOGGLE_START_MENU;
             case "toggle_dashboard":
-                return Constants.ACTION_TOGGLE_DASHBOARD;
+                return ACTION_TOGGLE_DASHBOARD;
         }
 
         return null;

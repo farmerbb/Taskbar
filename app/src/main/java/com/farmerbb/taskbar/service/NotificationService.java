@@ -34,10 +34,11 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class NotificationService extends Service {
 
@@ -92,10 +93,10 @@ public class NotificationService extends Service {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                Intent receiverIntent = new Intent(Constants.ACTION_SHOW_HIDE_TASKBAR);
+                Intent receiverIntent = new Intent(ACTION_SHOW_HIDE_TASKBAR);
                 receiverIntent.setPackage(getPackageName());
 
-                Intent receiverIntent2 = new Intent(Constants.ACTION_QUIT);
+                Intent receiverIntent2 = new Intent(ACTION_QUIT);
                 receiverIntent2.setPackage(getPackageName());
 
                 PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -129,7 +130,7 @@ public class NotificationService extends Service {
                 if(U.canEnableFreeform() && !U.isChromeOs(this)) {
                     String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.tb_freeform_off : R.string.tb_freeform_on);
 
-                    Intent freeformIntent = new Intent(Constants.ACTION_TOGGLE_FREEFORM_MODE);
+                    Intent freeformIntent = new Intent(ACTION_TOGGLE_FREEFORM_MODE);
                     freeformIntent.setPackage(getPackageName());
 
                     PendingIntent freeformPendingIntent = PendingIntent.getBroadcast(this, 0, freeformIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -145,7 +146,7 @@ public class NotificationService extends Service {
 
                 startForeground(8675309, mBuilder.build());
 
-                U.sendBroadcast(this, Constants.ACTION_UPDATE_SWITCH);
+                U.sendBroadcast(this, ACTION_UPDATE_SWITCH);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));
@@ -170,7 +171,7 @@ public class NotificationService extends Service {
         if(pref.getBoolean("is_restarting", false))
             pref.edit().remove("is_restarting").apply();
         else {
-            U.sendBroadcast(this, Constants.ACTION_UPDATE_SWITCH);
+            U.sendBroadcast(this, ACTION_UPDATE_SWITCH);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 TileService.requestListeningState(this, new ComponentName(getPackageName(), QuickSettingsTileService.class.getName()));

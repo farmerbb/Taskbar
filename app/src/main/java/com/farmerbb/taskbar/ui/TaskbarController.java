@@ -94,7 +94,6 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
@@ -105,7 +104,7 @@ import com.farmerbb.taskbar.util.PinnedBlockedApps;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
-import static com.farmerbb.taskbar.util.TaskbarPosition.*;
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class TaskbarController extends UIController {
 
@@ -155,7 +154,7 @@ public class TaskbarController extends UIController {
     private int cellStrength = -1;
 
     private View.OnClickListener ocl = view ->
-            U.sendBroadcast(context, Constants.ACTION_TOGGLE_START_MENU);
+            U.sendBroadcast(context, ACTION_TOGGLE_START_MENU);
 
     private BroadcastReceiver showReceiver = new BroadcastReceiver() {
         @Override
@@ -388,8 +387,8 @@ public class TaskbarController extends UIController {
                 break;
         }
 
-        U.sendBroadcast(context, Constants.ACTION_HIDE_START_MENU);
-        U.sendBroadcast(context, Constants.ACTION_UPDATE_HOME_SCREEN_MARGINS);
+        U.sendBroadcast(context, ACTION_HIDE_START_MENU);
+        U.sendBroadcast(context, ACTION_UPDATE_HOME_SCREEN_MARGINS);
 
         if(altButtonConfig) {
             button = layout.findViewById(R.id.hide_taskbar_button_alt);
@@ -429,7 +428,7 @@ public class TaskbarController extends UIController {
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
             dashboardButton.setOnClickListener(v ->
-                    U.sendBroadcast(context, Constants.ACTION_TOGGLE_DASHBOARD));
+                    U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
         } else
             dashboardButton.setVisibility(View.GONE);
 
@@ -617,17 +616,17 @@ public class TaskbarController extends UIController {
             U.showHideNavigationBar(context, false);
 
         if(FreeformHackHelper.getInstance().isTouchAbsorberActive()) {
-            U.sendBroadcast(context, Constants.ACTION_FINISH_FREEFORM_ACTIVITY);
+            U.sendBroadcast(context, ACTION_FINISH_FREEFORM_ACTIVITY);
 
             new Handler().postDelayed(() -> U.startTouchAbsorberActivity(context), 500);
         }
 
-        U.registerReceiver(context, showReceiver, Constants.ACTION_SHOW_TASKBAR);
-        U.registerReceiver(context, hideReceiver, Constants.ACTION_HIDE_TASKBAR);
-        U.registerReceiver(context, tempShowReceiver, Constants.ACTION_TEMP_SHOW_TASKBAR);
-        U.registerReceiver(context, tempHideReceiver, Constants.ACTION_TEMP_HIDE_TASKBAR);
-        U.registerReceiver(context, startMenuAppearReceiver, Constants.ACTION_START_MENU_APPEARING);
-        U.registerReceiver(context, startMenuDisappearReceiver, Constants.ACTION_START_MENU_DISAPPEARING);
+        U.registerReceiver(context, showReceiver, ACTION_SHOW_TASKBAR);
+        U.registerReceiver(context, hideReceiver, ACTION_HIDE_TASKBAR);
+        U.registerReceiver(context, tempShowReceiver, ACTION_TEMP_SHOW_TASKBAR);
+        U.registerReceiver(context, tempHideReceiver, ACTION_TEMP_HIDE_TASKBAR);
+        U.registerReceiver(context, startMenuAppearReceiver, ACTION_START_MENU_APPEARING);
+        U.registerReceiver(context, startMenuDisappearReceiver, ACTION_START_MENU_DISAPPEARING);
 
         startRefreshingRecents();
 
@@ -1150,7 +1149,7 @@ public class TaskbarController extends UIController {
             updateButton(false);
 
             new Handler().post(() ->
-                    U.sendBroadcast(context, Constants.ACTION_SHOW_START_MENU_SPACE));
+                    U.sendBroadcast(context, ACTION_SHOW_START_MENU_SPACE));
         }
     }
 
@@ -1185,12 +1184,12 @@ public class TaskbarController extends UIController {
             updateButton(true);
 
             if(clearVariables) {
-                U.sendBroadcast(context, Constants.ACTION_HIDE_START_MENU);
-                U.sendBroadcast(context, Constants.ACTION_HIDE_DASHBOARD);
+                U.sendBroadcast(context, ACTION_HIDE_START_MENU);
+                U.sendBroadcast(context, ACTION_HIDE_DASHBOARD);
             }
 
             new Handler().post(() ->
-                    U.sendBroadcast(context, Constants.ACTION_HIDE_START_MENU_SPACE));
+                    U.sendBroadcast(context, ACTION_HIDE_START_MENU_SPACE));
         }
     }
 

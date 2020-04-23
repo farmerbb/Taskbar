@@ -58,7 +58,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -86,6 +85,8 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private TaskbarController taskbarController;
@@ -259,7 +260,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             });
         } else {
             layout.setOnClickListener(
-                    view1 -> U.sendBroadcast(this, Constants.ACTION_HIDE_START_MENU));
+                    view1 -> U.sendBroadcast(this, ACTION_HIDE_START_MENU));
 
             layout.setOnLongClickListener(view2 -> {
                 if(!pref.getBoolean("freeform_hack", false))
@@ -382,23 +383,23 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         updateWindowFlags();
 
-        U.registerReceiver(this, killReceiver, Constants.ACTION_KILL_HOME_ACTIVITY);
-        U.registerReceiver(this, forceTaskbarStartReceiver, Constants.ACTION_FORCE_TASKBAR_RESTART);
+        U.registerReceiver(this, killReceiver, ACTION_KILL_HOME_ACTIVITY);
+        U.registerReceiver(this, forceTaskbarStartReceiver, ACTION_FORCE_TASKBAR_RESTART);
 
         U.registerReceiver(this, freeformToggleReceiver,
-                Constants.ACTION_UPDATE_FREEFORM_CHECKBOX,
-                Constants.ACTION_TOUCH_ABSORBER_STATE_CHANGED,
-                Constants.ACTION_FREEFORM_PREF_CHANGED);
+                ACTION_UPDATE_FREEFORM_CHECKBOX,
+                ACTION_TOUCH_ABSORBER_STATE_CHANGED,
+                ACTION_FREEFORM_PREF_CHANGED);
 
         if(this instanceof SecondaryHomeActivity) {
-            U.registerReceiver(this, restartReceiver, Constants.ACTION_RESTART);
+            U.registerReceiver(this, restartReceiver, ACTION_RESTART);
         }
 
         if(isDesktopIconsEnabled) {
-            U.registerReceiver(this, refreshDesktopIconsReceiver, Constants.ACTION_REFRESH_DESKTOP_ICONS);
-            U.registerReceiver(this, iconArrangeModeReceiver, Constants.ACTION_ENTER_ICON_ARRANGE_MODE);
-            U.registerReceiver(this, sortDesktopIconsReceiver, Constants.ACTION_SORT_DESKTOP_ICONS);
-            U.registerReceiver(this, updateMarginsReceiver, Constants.ACTION_UPDATE_HOME_SCREEN_MARGINS);
+            U.registerReceiver(this, refreshDesktopIconsReceiver, ACTION_REFRESH_DESKTOP_ICONS);
+            U.registerReceiver(this, iconArrangeModeReceiver, ACTION_ENTER_ICON_ARRANGE_MODE);
+            U.registerReceiver(this, sortDesktopIconsReceiver, ACTION_SORT_DESKTOP_ICONS);
+            U.registerReceiver(this, updateMarginsReceiver, ACTION_UPDATE_HOME_SCREEN_MARGINS);
 
             LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
             launcherApps.registerCallback(callback);
@@ -408,7 +409,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void setWallpaper() {
-        U.sendBroadcast(this, Constants.ACTION_TEMP_HIDE_TASKBAR);
+        U.sendBroadcast(this, ACTION_TEMP_HIDE_TASKBAR);
 
         try {
             startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper)));
@@ -436,7 +437,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             }
         } else {
-            U.sendBroadcast(this, Constants.ACTION_TEMP_SHOW_TASKBAR);
+            U.sendBroadcast(this, ACTION_TEMP_SHOW_TASKBAR);
         }
     }
 
@@ -444,7 +445,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     protected void onStart() {
         super.onStart();
 
-        U.sendBroadcast(this, Constants.ACTION_HIDE_START_MENU);
+        U.sendBroadcast(this, ACTION_HIDE_START_MENU);
 
         if(U.canDrawOverlays(this)) {
             if(!U.canBootToFreeform(this)) {
@@ -506,7 +507,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
         new Handler().postDelayed(() ->
-                U.sendBroadcast(this, Constants.ACTION_TEMP_SHOW_TASKBAR), 100);
+                U.sendBroadcast(this, ACTION_TEMP_SHOW_TASKBAR), 100);
     }
 
     private void startFreeformHack() {
@@ -525,7 +526,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             setOnHomeScreen(false);
 
             if(U.shouldCollapse(this, false)) {
-                U.sendBroadcast(this, Constants.ACTION_TEMP_HIDE_TASKBAR);
+                U.sendBroadcast(this, ACTION_TEMP_HIDE_TASKBAR);
             }
 
             if(this instanceof SecondaryHomeActivity) {
@@ -591,7 +592,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     @Override
     public void onBackPressed() {
-        U.sendBroadcast(this, Constants.ACTION_HIDE_START_MENU);
+        U.sendBroadcast(this, ACTION_HIDE_START_MENU);
     }
 
     private void killHomeActivity() {
@@ -735,7 +736,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
             iconContainer.setOnClickListener(view -> {
                 boolean isStartMenuOpen = MenuHelper.getInstance().isStartMenuOpen();
-                U.sendBroadcast(this, Constants.ACTION_HIDE_START_MENU);
+                U.sendBroadcast(this, ACTION_HIDE_START_MENU);
 
                 DesktopIconInfo info = icons.get(index);
                 if(!isStartMenuOpen && info != null && info.entry != null) {

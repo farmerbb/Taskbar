@@ -22,7 +22,7 @@ import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
-import static com.farmerbb.taskbar.util.Constants.PREF_TASKBAR_ACTIVE;
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public abstract class UIController {
     protected Context context;

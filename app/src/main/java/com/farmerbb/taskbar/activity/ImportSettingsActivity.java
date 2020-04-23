@@ -20,8 +20,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.farmerbb.taskbar.BuildConfig;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class ImportSettingsActivity extends AbstractProgressActivity {
 
@@ -38,10 +39,10 @@ public class ImportSettingsActivity extends AbstractProgressActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        U.registerReceiver(this, settingsReceivedReceiver, Constants.ACTION_IMPORT_FINISHED);
+        U.registerReceiver(this, settingsReceivedReceiver, ACTION_IMPORT_FINISHED);
 
         if(!broadcastSent) {
-            Intent intent = new Intent(Constants.ACTION_RECEIVE_SETTINGS);
+            Intent intent = new Intent(ACTION_RECEIVE_SETTINGS);
             intent.setPackage(BuildConfig.BASE_APPLICATION_ID);
             sendBroadcast(intent);
 

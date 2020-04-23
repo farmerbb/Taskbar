@@ -21,8 +21,9 @@ import android.os.Bundle;
 
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.ShortcutUtils;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class StartTaskbarActivity extends Activity {
 
@@ -32,8 +33,8 @@ public class StartTaskbarActivity extends Activity {
 
         if(getIntent().hasExtra("is_launching_shortcut")) {
             Intent intent = new Intent(U.isServiceRunning(this, NotificationService.class)
-                    ? Constants.ACTION_QUIT
-                    : Constants.ACTION_START);
+                    ? ACTION_QUIT
+                    : ACTION_START);
 
             intent.setPackage(getPackageName());
             sendBroadcast(intent);

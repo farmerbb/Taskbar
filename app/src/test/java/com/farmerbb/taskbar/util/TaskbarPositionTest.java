@@ -18,16 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.farmerbb.taskbar.util.Constants.PREF_ANCHOR;
-import static com.farmerbb.taskbar.util.Constants.PREF_POSITION;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_BOTTOM_VERTICAL_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_RIGHT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_LEFT;
-import static com.farmerbb.taskbar.util.TaskbarPosition.POSITION_TOP_VERTICAL_RIGHT;
 import static com.farmerbb.taskbar.util.TaskbarPosition.isBottom;
 import static com.farmerbb.taskbar.util.TaskbarPosition.isLeft;
 import static com.farmerbb.taskbar.util.TaskbarPosition.isRight;
@@ -38,6 +28,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 @RunWith(RobolectricTestRunner.class)
 public class TaskbarPositionTest {

@@ -22,12 +22,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.Set;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class KeyboardShortcutActivity extends Activity {
 
@@ -53,9 +54,9 @@ public class KeyboardShortcutActivity extends Activity {
                     Intent startStopIntent;
 
                     if (pref.getBoolean("taskbar_active", false)) {
-                        startStopIntent = new Intent(Constants.ACTION_QUIT);
+                        startStopIntent = new Intent(ACTION_QUIT);
                     } else {
-                        startStopIntent = new Intent(Constants.ACTION_START);
+                        startStopIntent = new Intent(ACTION_START);
                     }
 
                     startStopIntent.setPackage(getPackageName());
@@ -65,7 +66,7 @@ public class KeyboardShortcutActivity extends Activity {
                 break;
             case Intent.ACTION_ASSIST:
                 if(U.isServiceRunning(this, StartMenuService.class)) {
-                    U.sendBroadcast(this, Constants.ACTION_TOGGLE_START_MENU);
+                    U.sendBroadcast(this, ACTION_TOGGLE_START_MENU);
                 } else {
                     Intent intent = new Intent("com.google.android.googlequicksearchbox.TEXT_ASSIST");
                     if(intent.resolveActivity(getPackageManager()) == null)

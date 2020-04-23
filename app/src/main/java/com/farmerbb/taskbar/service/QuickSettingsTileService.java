@@ -26,8 +26,9 @@ import android.service.quicksettings.TileService;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 @TargetApi(Build.VERSION_CODES.N)
 public class QuickSettingsTileService extends TileService {
@@ -42,8 +43,8 @@ public class QuickSettingsTileService extends TileService {
         super.onClick();
 
         Intent intent = new Intent(U.isServiceRunning(this, NotificationService.class)
-                ? Constants.ACTION_QUIT
-                : Constants.ACTION_START);
+                ? ACTION_QUIT
+                : ACTION_START);
 
         intent.setPackage(getPackageName());
         sendBroadcast(intent);

@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import com.farmerbb.taskbar.activity.DummyActivity;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
@@ -28,6 +27,8 @@ import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
+
+import static com.farmerbb.taskbar.util.Constants.*;
 
 public class ShowHideTaskbarReceiver extends BroadcastReceiver {
     @Override
@@ -69,7 +70,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
 
                 IconCache.getInstance(context).clearCache();
 
-                U.sendBroadcast(context, Constants.ACTION_START_MENU_DISAPPEARING);
+                U.sendBroadcast(context, ACTION_START_MENU_DISAPPEARING);
             }
 
             U.startForegroundService(context, notificationIntent);
