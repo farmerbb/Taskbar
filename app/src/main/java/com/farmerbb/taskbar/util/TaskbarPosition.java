@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.farmerbb.taskbar.util;
 
 import android.content.Context;
@@ -31,9 +32,7 @@ public class TaskbarPosition {
     public static final String POSITION_TOP_VERTICAL_LEFT = "top_vertical_left";
     public static final String POSITION_TOP_VERTICAL_RIGHT = "top_vertical_right";
 
-    private TaskbarPosition() {
-        // Empty constructor
-    }
+    private TaskbarPosition() {}
 
     /**
      * Transfer origin position based on rotation.
@@ -228,14 +227,12 @@ public class TaskbarPosition {
         SharedPreferences pref = U.getSharedPreferences(context);
         String position = pref.getString(PREF_POSITION, POSITION_BOTTOM_LEFT);
 
-        if (pref.getBoolean(PREF_ANCHOR, false)) {
-            WindowManager windowManager =
-                    (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if(pref.getBoolean(PREF_ANCHOR, false)) {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             Integer cachedRotation = U.getCachedRotation();
-            int rotation =
-                    cachedRotation != null
-                            ? cachedRotation
-                            : windowManager.getDefaultDisplay().getRotation();
+            int rotation = cachedRotation != null
+                    ? cachedRotation
+                    : windowManager.getDefaultDisplay().getRotation();
 
             String finalPosition = transferPositionWithRotation(position, rotation);
             return finalPosition == null ? position : finalPosition;
