@@ -600,11 +600,11 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "start_menu_apps":
                 Intent intent = U.getThemedIntent(this, SelectAppActivity.class);
-                SharedPreferences pref3 = U.getSharedPreferences(this);
 
+                SharedPreferences pref3 = U.getSharedPreferences(this);
                 if(U.hasFreeformSupport(this)
                         && pref3.getBoolean("freeform_hack", false)
-                        && intent != null && isInMultiWindowMode()) {
+                        && isInMultiWindowMode()) {
                     intent.putExtra("no_shadow", true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
@@ -689,12 +689,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case "add_icon_to_desktop":
                 Intent intent2 = U.getThemedIntent(this, DesktopIconSelectAppActivity.class);
-                if(intent2 != null)
-                    intent2.putExtra("desktop_icon", desktopIcon);
+                intent2.putExtra("desktop_icon", desktopIcon);
 
+                SharedPreferences pref4 = U.getSharedPreferences(this);
                 if(U.hasFreeformSupport(this)
                         && pref4.getBoolean("freeform_hack", false)
-                        && intent2 != null && isInMultiWindowMode()) {
+                        && isInMultiWindowMode()) {
                     intent2.putExtra("no_shadow", true);
                     intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 

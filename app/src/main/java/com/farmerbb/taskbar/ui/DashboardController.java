@@ -302,15 +302,12 @@ public class DashboardController extends UIController {
 
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
-            final SharedPreferences pref = U.getSharedPreferences(context);
             Intent intent = U.getThemedIntent(context, DashboardActivity.class);
-            if(intent != null) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
             if(inFreeformMode) {
-                if(intent != null && U.hasBrokenSetLaunchBoundsApi())
+                if(U.hasBrokenSetLaunchBoundsApi())
                     intent.putExtra("context_menu_fix", true);
 
                 U.startActivityMaximized(context, intent);
@@ -339,6 +336,7 @@ public class DashboardController extends UIController {
                 }
             }
 
+            final SharedPreferences pref = U.getSharedPreferences(context);
             if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
                 U.showToastLong(context, R.string.tb_dashboard_tutorial);
                 pref.edit().putBoolean("dashboard_tutorial_shown", true).apply();

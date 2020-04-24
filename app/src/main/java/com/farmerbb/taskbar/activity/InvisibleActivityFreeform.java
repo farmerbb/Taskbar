@@ -128,10 +128,8 @@ public class InvisibleActivityFreeform extends Activity {
                 new Handler().postDelayed(() -> {
                     if(helper.isInFreeformWorkspace()) {
                         Intent intent = U.getThemedIntent(this, InvisibleActivityAlt.class);
-                        if(intent != null) {
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("power_button_warning", true);
-                        }
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("power_button_warning", true);
 
                         U.startActivityMaximized(getApplicationContext(), intent);
                     }

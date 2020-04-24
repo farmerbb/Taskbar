@@ -680,15 +680,13 @@ public class U {
 
     public static void startContextMenuActivity(Context context, Bundle args) {
         Intent intent = getThemedIntent(context, ContextMenuActivity.class);
-        if(intent != null) {
-            intent.putExtra("args", args);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
+        intent.putExtra("args", args);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if(hasFreeformSupport(context) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayInfo display = getDisplayInfo(context);
 
-            if(intent != null && hasBrokenSetLaunchBoundsApi())
+            if(hasBrokenSetLaunchBoundsApi())
                 intent.putExtra("context_menu_fix", true);
 
             context.startActivity(intent,
