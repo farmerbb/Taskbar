@@ -71,11 +71,13 @@ import android.widget.Toast;
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ContextMenuActivity;
+import com.farmerbb.taskbar.activity.DesktopIconSelectAppActivity;
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
 import com.farmerbb.taskbar.activity.dark.ContextMenuActivityDark;
+import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
@@ -679,18 +681,7 @@ public class U {
     }
 
     public static void startContextMenuActivity(Context context, Bundle args) {
-        SharedPreferences pref = getSharedPreferences(context);
-        Intent intent = null;
-
-        switch(getCurrentTheme(context)) {
-            case "light":
-                intent = new Intent(context, ContextMenuActivity.class);
-                break;
-            case "dark":
-                intent = new Intent(context, ContextMenuActivityDark.class);
-                break;
-        }
-
+        Intent intent = getThemedIntent(context, ContextMenuActivity.class);
         if(intent != null) {
             intent.putExtra("args", args);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1593,19 +1584,13 @@ public class U {
     }
 
     public static Context wrapContext(Context context) {
-        SharedPreferences pref = getSharedPreferences(context);
+        int theme;
+        if(isDarkTheme(context))
+            theme = R.style.Taskbar_Dark;
+        else
+            theme = R.style.Taskbar;
 
-        int theme = -1;
-        switch(getCurrentTheme(context)) {
-            case "light":
-                theme = R.style.Taskbar;
-                break;
-            case "dark":
-                theme = R.style.Taskbar_Dark;
-                break;
-        }
-
-        return theme > -1 ? new ContextThemeWrapper(context, theme) : context;
+        return new ContextThemeWrapper(context, theme);
     }
 
     public static boolean isPlayStoreRelease(Context context) {
@@ -1940,7 +1925,7 @@ public class U {
         return new BitmapDrawable(context.getResources(), resizedBitmap);
     }
 
-    public static String getCurrentTheme(Context context) {
+    private static String getCurrentTheme(Context context) {
         String defaultTheme = context.getString(R.string.tb_pref_theme_default);
 
         SharedPreferences pref = getSharedPreferences(context);
@@ -1965,5 +1950,24 @@ public class U {
 
     public static boolean isFavoriteAppTilesEnabled(Context context) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isChromeOs(context);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static Intent getThemedIntent(Context context, Class clazz) {
+        Class newClass;
+
+        if(!isDarkTheme(context))
+            newClass = clazz;
+        else try {
+            newClass = Class.forName(clazz.getName() + "Dark");
+        } catch (ClassNotFoundException e) {
+            newClass = clazz;
+        }
+
+        return new Intent(context, newClass);
+    }
+
+    public static boolean isDarkTheme(Context context) {
+        return getCurrentTheme(context).equals("dark");
     }
 }

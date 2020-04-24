@@ -36,7 +36,7 @@ public class IconPackApplyActivity extends Activity {
             finish();
         else if(getIntent().hasExtra(Intent.EXTRA_PACKAGE_NAME)) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(U.getCurrentTheme(this).equals("dark"))
+            if(U.isDarkTheme(this))
                 setTheme(R.style.Taskbar_Dialog_Dark);
 
             @SuppressLint("InlinedApi")

@@ -123,17 +123,7 @@ public class AppearanceFragment extends SettingsFragment {
 
         switch(p.getKey()) {
             case "icon_pack_list":
-                Intent intent = null;
-
-                switch(U.getCurrentTheme(getActivity())) {
-                    case "light":
-                        intent = new Intent(getActivity(), IconPackActivity.class);
-                        break;
-                    case "dark":
-                        intent = new Intent(getActivity(), IconPackActivityDark.class);
-                        break;
-                }
-
+                Intent intent = U.getThemedIntent(getActivity(), IconPackActivity.class);
                 startActivityForResult(intent, 123);
                 break;
             case "reset_colors":

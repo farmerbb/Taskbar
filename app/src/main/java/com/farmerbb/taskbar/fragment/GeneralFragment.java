@@ -106,17 +106,7 @@ public class GeneralFragment extends SettingsFragment {
     public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
             case "blacklist":
-                Intent intent = null;
-
-                switch(U.getCurrentTheme(getActivity())) {
-                    case "light":
-                        intent = new Intent(getActivity(), SelectAppActivity.class);
-                        break;
-                    case "dark":
-                        intent = new Intent(getActivity(), SelectAppActivityDark.class);
-                        break;
-                }
-
+                Intent intent = U.getThemedIntent(getActivity(), SelectAppActivity.class);
                 startActivity(intent);
                 break;
             case "notification_settings":

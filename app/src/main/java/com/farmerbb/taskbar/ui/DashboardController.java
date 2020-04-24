@@ -303,17 +303,7 @@ public class DashboardController extends UIController {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             final SharedPreferences pref = U.getSharedPreferences(context);
-            Intent intent = null;
-
-            switch(U.getCurrentTheme(context)) {
-                case "light":
-                    intent = new Intent(context, DashboardActivity.class);
-                    break;
-                case "dark":
-                    intent = new Intent(context, DashboardActivityDark.class);
-                    break;
-            }
-
+            Intent intent = U.getThemedIntent(context, DashboardActivity.class);
             if(intent != null) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

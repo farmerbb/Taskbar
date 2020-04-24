@@ -29,8 +29,7 @@ public abstract class TaskerActivityBase extends PreferenceActivity implements P
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences pref = U.getSharedPreferences(this);
-        if(U.getCurrentTheme(this).equals("dark"))
+        if(U.isDarkTheme(this))
             setTheme(android.R.style.Theme_Material_Dialog);
 
         super.onCreate(savedInstanceState);

@@ -127,17 +127,7 @@ public class InvisibleActivityFreeform extends Activity {
             if(!pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
                 new Handler().postDelayed(() -> {
                     if(helper.isInFreeformWorkspace()) {
-                        Intent intent = null;
-
-                        switch(U.getCurrentTheme(this)) {
-                            case "light":
-                                intent = new Intent(this, InvisibleActivityAlt.class);
-                                break;
-                            case "dark":
-                                intent = new Intent(this, InvisibleActivityAltDark.class);
-                                break;
-                        }
-
+                        Intent intent = U.getThemedIntent(this, InvisibleActivityAlt.class);
                         if(intent != null) {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra("power_button_warning", true);

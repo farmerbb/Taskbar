@@ -599,17 +599,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "start_menu_apps":
-                Intent intent = null;
-
+                Intent intent = U.getThemedIntent(this, SelectAppActivity.class);
                 SharedPreferences pref3 = U.getSharedPreferences(this);
-                switch(U.getCurrentTheme(this)) {
-                    case "light":
-                        intent = new Intent(this, SelectAppActivity.class);
-                        break;
-                    case "dark":
-                        intent = new Intent(this, SelectAppActivityDark.class);
-                        break;
-                }
 
                 if(U.hasFreeformSupport(this)
                         && pref3.getBoolean("freeform_hack", false)
@@ -697,18 +688,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "add_icon_to_desktop":
-                Intent intent2 = null;
-
-                SharedPreferences pref4 = U.getSharedPreferences(this);
-                switch(U.getCurrentTheme(this)) {
-                    case "light":
-                        intent2 = new Intent(this, DesktopIconSelectAppActivity.class);
-                        break;
-                    case "dark":
-                        intent2 = new Intent(this, DesktopIconSelectAppActivityDark.class);
-                        break;
-                }
-
+                Intent intent2 = U.getThemedIntent(this, DesktopIconSelectAppActivity.class);
                 if(intent2 != null)
                     intent2.putExtra("desktop_icon", desktopIcon);
 

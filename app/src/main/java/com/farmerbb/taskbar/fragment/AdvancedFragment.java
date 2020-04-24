@@ -257,17 +257,7 @@ public class AdvancedFragment extends SettingsFragment {
 
                 break;
             case "navigation_bar_buttons":
-                Intent intent = null;
-
-                switch(U.getCurrentTheme(getActivity())) {
-                    case "light":
-                        intent = new Intent(getActivity(), NavigationBarButtonsActivity.class);
-                        break;
-                    case "dark":
-                        intent = new Intent(getActivity(), NavigationBarButtonsActivityDark.class);
-                        break;
-                }
-
+                Intent intent = U.getThemedIntent(this, NavigationBarButtonsActivity.class);
                 startActivity(intent);
                 break;
             case "secondscreen":

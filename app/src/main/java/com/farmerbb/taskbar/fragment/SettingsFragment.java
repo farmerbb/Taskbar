@@ -188,17 +188,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
     @Override
     public boolean onPreferenceClick(final Preference p) {
         if(p.getKey().equals("clear_pinned_apps")) {
-            Intent clearIntent = null;
-
-            switch(U.getCurrentTheme(getActivity())) {
-                case "light":
-                    clearIntent = new Intent(getActivity(), ClearDataActivity.class);
-                    break;
-                case "dark":
-                    clearIntent = new Intent(getActivity(), ClearDataActivityDark.class);
-                    break;
-            }
-
+            Intent clearIntent = U.getThemedIntent(getActivity(), ClearDataActivity.class);
             startActivity(clearIntent);
         }
 

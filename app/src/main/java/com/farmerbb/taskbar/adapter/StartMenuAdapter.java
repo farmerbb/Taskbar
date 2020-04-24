@@ -96,15 +96,8 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         TextView textView = convertView.findViewById(R.id.name);
         textView.setText(entry.getLabel());
         textView.setTypeface(null, isTopApp(entry) ? Typeface.BOLD : Typeface.NORMAL);
-
-        switch(U.getCurrentTheme(getContext())) {
-            case "light":
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.tb_text_color));
-                break;
-            case "dark":
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.tb_text_color_dark));
-                break;
-        }
+        textView.setTextColor(ContextCompat.getColor(getContext(),
+                U.isDarkTheme(getContext()) ? R.color.tb_text_color_dark : R.color.tb_text_color));
 
         ImageView imageView = convertView.findViewById(R.id.icon);
         imageView.setImageDrawable(entry.getIcon(getContext()));

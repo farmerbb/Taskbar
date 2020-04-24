@@ -88,16 +88,9 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
 
-        if(!U.isLibrary(this)) {
-            switch(U.getCurrentTheme(this)) {
-                case "light":
-                    setTheme(R.style.Taskbar);
-                    break;
-                case "dark":
-                    setTheme(R.style.Taskbar_Dark);
-                    break;
-            }
-        } else {
+        if(!U.isLibrary(this))
+            setTheme(U.isDarkTheme(this) ? R.style.Taskbar_Dark : R.style.Taskbar);
+        else {
             int theme = getIntent().getIntExtra("theme", -1);
             if(theme != -1)
                 setTheme(theme);
