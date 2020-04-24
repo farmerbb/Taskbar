@@ -43,8 +43,6 @@ import android.view.WindowManager;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.dark.DesktopIconSelectAppActivityDark;
-import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;

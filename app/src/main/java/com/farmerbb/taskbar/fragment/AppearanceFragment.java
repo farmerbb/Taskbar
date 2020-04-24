@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.IconPackActivity;
-import com.farmerbb.taskbar.activity.dark.IconPackActivityDark;
 import com.farmerbb.taskbar.util.U;
 
 public class AppearanceFragment extends SettingsFragment {

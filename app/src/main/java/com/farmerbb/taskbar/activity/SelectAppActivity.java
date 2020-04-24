@@ -38,7 +38,6 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.activity.dark.SelectAppActivityDark;
 import com.farmerbb.taskbar.adapter.AppListAdapter;
 import com.farmerbb.taskbar.fragment.SelectAppFragment;
 import com.farmerbb.taskbar.util.Blacklist;

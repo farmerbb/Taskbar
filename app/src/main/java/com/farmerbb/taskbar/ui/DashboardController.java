@@ -56,13 +56,10 @@ import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
-import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
-import com.farmerbb.taskbar.activity.dark.DashboardActivityDark;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
