@@ -229,7 +229,7 @@ public class TaskbarController extends UIController {
 
         // Initialize layout params
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        U.setCachedRotation(windowManager.getDefaultDisplay().getRotation());
+        TaskbarPosition.setCachedRotation(windowManager.getDefaultDisplay().getRotation());
 
         final ViewParams params = new ViewParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,

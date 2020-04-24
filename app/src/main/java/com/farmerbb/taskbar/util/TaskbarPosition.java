@@ -26,6 +26,8 @@ public class TaskbarPosition {
 
     private TaskbarPosition() {}
 
+    private static Integer cachedRotation;
+
     /**
      * Transfer origin position based on rotation.
      *
@@ -221,7 +223,6 @@ public class TaskbarPosition {
 
         if(pref.getBoolean(PREF_ANCHOR, false)) {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            Integer cachedRotation = U.getCachedRotation();
             int rotation = cachedRotation != null
                     ? cachedRotation
                     : windowManager.getDefaultDisplay().getRotation();
@@ -231,5 +232,9 @@ public class TaskbarPosition {
         }
 
         return position;
+    }
+
+    public static void setCachedRotation(int cachedRotation) {
+        TaskbarPosition.cachedRotation = cachedRotation;
     }
 }

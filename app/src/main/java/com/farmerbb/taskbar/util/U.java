@@ -101,8 +101,6 @@ public class U {
 
     private U() {}
 
-    private static Integer cachedRotation;
-
     private static final int MAXIMIZED = 0;
     private static final int LEFT = -1;
     private static final int RIGHT = 1;
@@ -726,14 +724,6 @@ public class U {
         ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
         return defaultLauncher.activityInfo.packageName.equals(context.getPackageName());
-    }
-
-    public static void setCachedRotation(int cachedRotation) {
-        U.cachedRotation = cachedRotation;
-    }
-
-    public static Integer getCachedRotation() {
-        return cachedRotation;
     }
 
     private static int getMaxNumOfColumns(Context context) {
