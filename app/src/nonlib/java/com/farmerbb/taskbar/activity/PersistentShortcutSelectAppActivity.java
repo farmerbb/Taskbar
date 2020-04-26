@@ -120,6 +120,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
                 @Override public void onStopTrackingTouch(SeekBar seekBar) {}
             });
 
+            thresholdInProcess = -1;
             seekBar.setProgress(50);
         }
 
