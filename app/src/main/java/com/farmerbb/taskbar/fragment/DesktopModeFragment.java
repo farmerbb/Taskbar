@@ -247,7 +247,7 @@ public class DesktopModeFragment extends SettingsFragment {
         densityPref.setValue(densityPrefValue);
 
         bindPreferenceSummaryToValue(densityPref);
-        if(densityPref.getSummary().equals(""))
+        if(densityPref.getSummary() == null || densityPref.getSummary().equals(""))
             densityPref.setSummary(getString(R.string.tb_density_custom, info.currentDensity));
 
         finishedLoadingPrefs = true;
