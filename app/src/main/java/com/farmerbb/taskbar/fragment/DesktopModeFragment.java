@@ -222,7 +222,28 @@ public class DesktopModeFragment extends SettingsFragment {
 
         pref.edit().putString("display_density", densityPrefValue).apply();
 
+        String[] noDefaultList = getResources().getStringArray(R.array.tb_pref_display_density_list_alt);
+        String[] noDefaultValues = getResources().getStringArray(R.array.tb_pref_display_density_list_values_alt);
+        boolean useNoDefault = false;
+
+        for(int i = 0; i < noDefaultValues.length; i++) {
+            if(info.defaultDensity == Integer.parseInt(noDefaultValues[i])) {
+                noDefaultList[i] = getString(R.string.tb_density_default, info.defaultDensity);
+                noDefaultValues[i] = "reset";
+                useNoDefault = true;
+                break;
+            }
+        }
+
         ListPreference densityPref = ((ListPreference) findPreference("display_density"));
+        if(useNoDefault) {
+            densityPref.setEntries(noDefaultList);
+            densityPref.setEntryValues(noDefaultValues);
+        } else {
+            densityPref.setEntries(R.array.tb_pref_display_density_list);
+            densityPref.setEntryValues(R.array.tb_pref_display_density_list_values);
+        }
+
         densityPref.setValue(densityPrefValue);
 
         bindPreferenceSummaryToValue(densityPref);

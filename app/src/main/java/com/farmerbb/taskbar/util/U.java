@@ -296,7 +296,10 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        ToastInterface toast = DependencyUtils.createToast(context.getApplicationContext(), message, length);
+        if(!isDesktopModeActive(context))
+            context = context.getApplicationContext();
+
+        ToastInterface toast = DependencyUtils.createToast(context, message, length);
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);
@@ -923,9 +926,12 @@ public class U {
 
     public static ActivityOptions getActivityOptions(Context context, ApplicationType applicationType, View view) {
         ActivityOptions options;
-        if(view != null)
-            options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
-        else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if(view != null) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                options = ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.getWidth(), view.getHeight());
+            else
+                options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
+        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             options = ActivityOptions.makeBasic();
         else {
             try {
@@ -1039,13 +1045,10 @@ public class U {
                                                    int right,
                                                    int bottom) {
         ActivityOptions options = getActivityOptions(context, applicationType, view);
-        if (options == null) {
-            return null;
-        }
+        if(options == null) return null;
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             return options.toBundle();
-        }
 
         return options.setLaunchBounds(new Rect(left, top, right, bottom)).toBundle();
     }
@@ -1325,7 +1328,9 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
-        context = context.getApplicationContext();
+        if(!isDesktopModeActive(context))
+            context = context.getApplicationContext();
+
         int displayID = getTaskbarDisplayID();
 
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);

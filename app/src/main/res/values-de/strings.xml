@@ -430,7 +430,13 @@
         <item>Hohe Auflösung (320dpi)</item>
     </string-array>
 
+    <string-array name="tb_pref_display_density_list_alt">
+        <item>Niedrige Auflösung (160dpi)</item>
+        <item>Hohe Auflösung (320dpi)</item>
+    </string-array>
+
     <string name="tb_density_custom">Benutzerdefiniert (%ddpi)</string>
+    <string name="tb_density_default">Standard (%ddpi)</string>
     <string name="tb_unable_to_apply_density_change">Auflösungsänderung nicht möglich</string>
 
     <string name="tb_icon_preview">Iconvorschau</string>
