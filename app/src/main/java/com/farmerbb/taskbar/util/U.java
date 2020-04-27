@@ -1944,8 +1944,8 @@ public class U {
         if(!isDarkTheme(context))
             newClass = clazz;
         else try {
-            newClass = Class.forName(clazz.getName() + "Dark");
-        } catch (ClassNotFoundException e) {
+            newClass = Class.forName(clazz.getPackage().getName() + ".dark." + clazz.getSimpleName() + "Dark");
+        } catch (ClassNotFoundException | NullPointerException e) {
             newClass = clazz;
         }
 
