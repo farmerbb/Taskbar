@@ -205,18 +205,15 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
     @SuppressWarnings("JavaReflectionMemberAccess")
     @Override
     public void addPreferencesFromResource(@XmlRes int preferencesResId) {
-        try {
-            Context context = U.wrapContext(getActivity().getApplicationContext());
-            PreferenceScreen screen = (PreferenceScreen) Class.forName("android.preference.PreferenceManager")
-                    .getMethod("inflateFromResource", Context.class, int.class, PreferenceScreen.class)
-                    .invoke(getPreferenceManager(), context, preferencesResId, getPreferenceScreen());
-
-            if(!(this instanceof AboutFragment))
-                screen.getDialog().getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-
-            setPreferenceScreen(screen);
-        } catch (Exception e) {
-            super.addPreferencesFromResource(preferencesResId);
+        if(!(this instanceof AboutFragment)) {
+            try {
+                Context context = U.wrapContext(getActivity().getApplicationContext());
+                Class.forName("android.preference.PreferenceManager")
+                        .getMethod("inflateFromResource", Context.class, int.class, PreferenceScreen.class)
+                        .invoke(getPreferenceManager(), context, preferencesResId, getPreferenceScreen());
+            } catch (Exception e) { /* Gracefully fail */ }
         }
+
+        super.addPreferencesFromResource(preferencesResId);
     }
 }
