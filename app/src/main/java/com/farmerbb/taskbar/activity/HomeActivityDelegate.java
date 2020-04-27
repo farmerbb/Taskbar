@@ -437,6 +437,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
             }
         } else {
+            overridePendingTransition(0, R.anim.close_anim);
             U.sendBroadcast(this, ACTION_TEMP_SHOW_TASKBAR);
         }
     }

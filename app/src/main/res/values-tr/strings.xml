@@ -405,9 +405,9 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 
     <string name="tb_pref_header_desktop_mode">Desktop mode</string>
     <string name="tb_primary_launcher">Primary launcher</string>
-    <string name="tb_set_launcher_default_title">Set Taskbar as default Home app</string>
+    <string name="tb_set_launcher_default_title">Set Taskbar as default home app</string>
     <string name="tb_set_launcher_default_summary">Required for desktop mode to work</string>
-    <string name="tb_unable_to_set_default_home">Unable to set default Home app. Please do so manually via system settings.</string>
+    <string name="tb_unable_to_set_default_home">Unable to set default home app. Please do so manually via system settings.</string>
     <string name="tb_display_density">Display density</string>
     <string name="tb_auto_hide_navbar_alt">Hide navbar while on desktop</string>
     <string name="tb_enable_additional_settings">Enable additional settings</string>
@@ -437,5 +437,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_clear_qs_shortcuts">Quick settings tiles</string>
     <string name="tb_pref_description_enable_recents">Required for recent apps to appear</string>
     <string name="tb_chrome_os_wallpaper">Taskbar requests permission to read your storage in order to display the current wallpaper on Chrome OS.</string>
+
+    <string name="tb_disable_home_setting">Please disable the \"Replace home screen\" setting under \"Advanced features\" in order to use desktop mode.</string>
 
 </resources>

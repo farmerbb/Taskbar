@@ -329,6 +329,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.dark.PersistentShortcutSelectAppActivityDark"
+            android:label="@string/tb_new_shortcut"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:theme="@style/Taskbar.Dialog.Blacklist.Dark"/>
+        <activity
             android:name=".activity.PersistentShortcutLaunchActivity"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"

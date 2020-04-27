@@ -134,6 +134,9 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
                         try {
                             U.setDensity(displayID, stringValue);
+
+                            SharedPreferences pref2 = U.getSharedPreferences(getActivity());
+                            U.showHideNavigationBar(getActivity(), pref2.getBoolean("auto_hide_navbar", false));
                         } catch (Exception e) {
                             U.showToast(getActivity(), R.string.tb_unable_to_apply_density_change);
                         }

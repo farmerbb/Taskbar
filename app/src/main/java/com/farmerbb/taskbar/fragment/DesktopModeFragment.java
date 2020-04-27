@@ -81,9 +81,10 @@ public class DesktopModeFragment extends SettingsFragment {
         findPreference("primary_launcher").setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(pref.getBoolean("launcher", false))
+        if(pref.getBoolean("launcher", false)) {
             findPreference("desktop_mode").setEnabled(false);
-        else
+            U.showToastLong(getActivity(), R.string.tb_disable_home_setting);
+        } else
             bindPreferenceSummaryToValue(findPreference("desktop_mode"));
 
         bindPreferenceSummaryToValue(findPreference("display_density"));
@@ -110,6 +111,10 @@ public class DesktopModeFragment extends SettingsFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if(isConfiguringHomeApp)
+            startStopDesktopMode(true);
+
         isConfiguringHomeApp = false;
 
         Preference primaryLauncherPref = findPreference("primary_launcher");

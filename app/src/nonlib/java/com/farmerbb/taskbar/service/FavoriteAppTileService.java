@@ -68,7 +68,7 @@ public abstract class FavoriteAppTileService extends TileService {
     }
 
     private void selectApp() {
-        Intent intent = new Intent(this, PersistentShortcutSelectAppActivity.class);
+        Intent intent = U.getThemedIntent(this, PersistentShortcutSelectAppActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("qs_tile", tileNumber());
         startActivityAndCollapse(intent);
