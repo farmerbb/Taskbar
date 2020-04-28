@@ -79,6 +79,7 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
         updateMaxNumOfRecents(false);
         updateRefreshFrequency(false);
 
+        U.sanitizePrefs(getActivity(), "full_length", "sys_tray");
         finishedLoadingPrefs = true;
     }
 

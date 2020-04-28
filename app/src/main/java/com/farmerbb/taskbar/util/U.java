@@ -87,6 +87,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1959,5 +1960,46 @@ public class U {
 
     public static boolean isDarkTheme(Context context) {
         return getCurrentTheme(context).equals("dark");
+    }
+
+    public static String getStringPrefWithDefault(Context context, String key) {
+        context = context.getApplicationContext();
+        int resId = getDefaultPrefResID(context, key, R.string.class);
+
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getString(key, context.getString(resId));
+    }
+
+    public static boolean getBooleanPrefWithDefault(Context context, String key) {
+        context = context.getApplicationContext();
+        int resId = getDefaultPrefResID(context, key, R.bool.class);
+
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getBoolean(key, context.getResources().getBoolean(resId));
+    }
+
+    public static void sanitizePrefs(Context context, String... keys) {
+        SharedPreferences pref = getSharedPreferences(context);
+
+        for(String key : keys) {
+            if(!pref.getBoolean(key + "_is_modified", false))
+                pref.edit().remove(key).apply();
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static int getDefaultPrefResID(Context context, String key, Class rClass) {
+        int resId;
+
+        try {
+            Field field = rClass.getField("tb_def_" + key);
+            resId = field.getInt(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            // Pref does not have a default
+            return 0;
+        }
+
+        sanitizePrefs(context, key);
+        return resId;
     }
 }

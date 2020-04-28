@@ -117,6 +117,7 @@ public class AdvancedFragment extends SettingsFragment {
 
         bindPreferenceSummaryToValue(findPreference("dashboard"));
 
+        U.sanitizePrefs(getActivity(), "dashboard");
         finishedLoadingPrefs = true;
     }
 

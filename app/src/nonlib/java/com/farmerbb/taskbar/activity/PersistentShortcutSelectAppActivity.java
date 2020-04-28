@@ -73,7 +73,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             checkBox.setChecked(isFreeformEnabled);
             spinner.setEnabled(isFreeformEnabled);
 
-            String defaultWindowSize = pref.getString("window_size", getString(R.string.tb_def_window_size));
+            String defaultWindowSize = U.getStringPrefWithDefault(this, "window_size");
             for(int i = 0; i < windowSizes.length; i++) {
                 if(windowSizes[i].equals(defaultWindowSize)) {
                     spinner.setSelection(i);

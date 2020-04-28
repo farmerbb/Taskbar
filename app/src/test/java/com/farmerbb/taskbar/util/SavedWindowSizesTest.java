@@ -41,7 +41,7 @@ public class SavedWindowSizesTest {
 
     @Test
     public void testGetWindowSize() {
-        String defaultWindowSize = context.getString(R.string.tb_def_window_size);
+        String defaultWindowSize = U.getStringPrefWithDefault(context, "window_size");
         assertEquals(
                 defaultWindowSize,
                 savedWindowSizes.getWindowSize(context, context.getPackageName())
