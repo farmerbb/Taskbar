@@ -33,6 +33,6 @@
         android:text="@null"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:textColor="?tb_text_color"/>
+        android:textColor="?tb_settings_icon_color"/>
 
 </LinearLayout>

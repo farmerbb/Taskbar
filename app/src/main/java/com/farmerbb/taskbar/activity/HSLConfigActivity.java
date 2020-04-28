@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -74,7 +75,9 @@ public class HSLConfigActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(U.isDarkTheme(this) ? R.style.Taskbar_Dark : R.style.Taskbar);
+
+        boolean isDarkTheme = U.isDarkTheme(this);
+        setTheme(isDarkTheme ? R.style.Taskbar_Dark : R.style.Taskbar);
         setContentView(R.layout.tb_activity_hsl_config);
 
         returnToSettings = getIntent().getBooleanExtra("return_to_settings", false);
@@ -91,9 +94,14 @@ public class HSLConfigActivity extends AppCompatActivity {
             // Make action bar invisible
             getSupportActionBar().setElevation(0);
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0));
-            getWindow().setStatusBarColor(ContextCompat.getColor(this, U.isDarkTheme(this)
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, isDarkTheme
                     ? R.color.tb_main_activity_background_dark
                     : R.color.tb_main_activity_background));
+
+            if(!isDarkTheme && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                View view = getWindow().getDecorView();
+                view.setSystemUiVisibility(view.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
 
             setTitle(null);
         }
