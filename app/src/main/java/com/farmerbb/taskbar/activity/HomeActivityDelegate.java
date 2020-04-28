@@ -109,6 +109,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private int startDragIndex;
     private int endDragIndex;
 
+    private boolean isSecondaryHome;
     private boolean dcvRemoved;
 
     private GestureDetector detector;
@@ -206,7 +207,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(this instanceof SecondaryHomeActivity) {
+        isSecondaryHome = this instanceof SecondaryHomeActivity;
+        if(isSecondaryHome) {
             if(!U.isDesktopModeActive(this)) {
                 finish();
                 return;
@@ -316,7 +318,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
                     if(!pref.getBoolean("dont_show_double_tap_dialog", false)
-                            && !(HomeActivityDelegate.this instanceof SecondaryHomeActivity)) {
+                            && !isSecondaryHome) {
                         if(pref.getBoolean("double_tap_to_sleep", false)) {
                             U.lockDevice(HomeActivityDelegate.this);
                         } else {
@@ -354,12 +356,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             });
         }
 
-        if((this instanceof HomeActivity ||
-                this instanceof SecondaryHomeActivity
+        if((this instanceof HomeActivity
+                || isSecondaryHome
                 || U.isLauncherPermanentlyEnabled(this))) {
             setContentView(layout);
 
-            if(this instanceof SecondaryHomeActivity) {
+            if(isSecondaryHome) {
                 dcvRemoved = false;
                 traverseAndRemoveDecorCaption(getWindow().getDecorView());
             } else if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -377,7 +379,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     showWallpaperOnChromeOs();
             }
 
-            pref.edit().putBoolean("launcher", !(this instanceof SecondaryHomeActivity)).apply();
+            pref.edit()
+                    .putBoolean("launcher", !isSecondaryHome)
+                    .putBoolean("desktop_mode", U.isDesktopModeSupported(this) && isSecondaryHome)
+                    .apply();
         } else
             killHomeActivity();
 
@@ -391,7 +396,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 ACTION_TOUCH_ABSORBER_STATE_CHANGED,
                 ACTION_FREEFORM_PREF_CHANGED);
 
-        if(this instanceof SecondaryHomeActivity) {
+        if(isSecondaryHome) {
             U.registerReceiver(this, restartReceiver, ACTION_RESTART);
         }
 
@@ -481,7 +486,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     null);
         }
 
-        if(this instanceof SecondaryHomeActivity) {
+        if(isSecondaryHome) {
             // Stop any currently running services and switch to using HomeActivityDelegate as UI host
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
@@ -530,7 +535,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 U.sendBroadcast(this, ACTION_TEMP_HIDE_TASKBAR);
             }
 
-            if(this instanceof SecondaryHomeActivity) {
+            if(isSecondaryHome) {
                 if(taskbarController != null) taskbarController.onDestroyHost(this);
                 if(startMenuController != null) startMenuController.onDestroyHost(this);
                 if(dashboardController != null) dashboardController.onDestroyHost(this);
@@ -571,7 +576,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         U.unregisterReceiver(this, forceTaskbarStartReceiver);
         U.unregisterReceiver(this, freeformToggleReceiver);
 
-        if(this instanceof SecondaryHomeActivity)
+        if(isSecondaryHome)
             U.unregisterReceiver(this, restartReceiver);
 
         if(isDesktopIconsEnabled) {
@@ -599,7 +604,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void killHomeActivity() {
         setOnHomeScreen(false);
 
-        if(this instanceof SecondaryHomeActivity) {
+        if(isSecondaryHome) {
             if(taskbarController != null) taskbarController.onDestroyHost(this);
             if(startMenuController != null) startMenuController.onDestroyHost(this);
             if(dashboardController != null) dashboardController.onDestroyHost(this);
@@ -1030,7 +1035,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void setOnHomeScreen(boolean value) {
         LauncherHelper helper = LauncherHelper.getInstance();
 
-        if(this instanceof SecondaryHomeActivity) {
+        if(isSecondaryHome) {
             WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
             Display disp = wm.getDefaultDisplay();
 
