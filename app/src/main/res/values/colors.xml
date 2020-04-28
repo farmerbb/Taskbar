@@ -46,8 +46,4 @@
     <color name="tb_desktop_icon_text">#FFFFFF</color>
     <color name="tb_desktop_icon_shadow">#000000</color>
 
-    <color name="tb_hsl_primary">#0277BD</color>
-    <color name="tb_hsl_background">#012C4E</color>
-    <color name="tb_hsl_button">#C1C1C1</color>
-
 </resources>

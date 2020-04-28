@@ -32,6 +32,7 @@
         android:paddingRight="5dp"
         android:text="@null"
         android:textSize="25sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="?tb_text_color"/>
 
 </LinearLayout>

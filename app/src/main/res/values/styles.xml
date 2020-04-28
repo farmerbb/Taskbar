@@ -98,10 +98,4 @@
         <item name="android:colorAccent">@color/tb_colorAccent</item>
     </style>
 
-    <style name="Taskbar.HSLConfigActivity" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/tb_hsl_background</item>
-        <item name="android:windowBackground">@color/tb_hsl_background</item>
-        <item name="tb_settings_icon_color">@color/tb_settings_icon_color_dark</item>
-    </style>
-
 </resources>

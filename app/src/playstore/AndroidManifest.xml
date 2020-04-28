@@ -363,9 +363,8 @@
         </activity>
         <activity
             android:name=".activity.HSLConfigActivity"
-            android:label="${appName}"
-            android:launchMode="singleTask"
-            android:theme="@style/Taskbar.HSLConfigActivity"/>
+            android:label="@string/tb_primary_launcher"
+            android:launchMode="singleTask"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

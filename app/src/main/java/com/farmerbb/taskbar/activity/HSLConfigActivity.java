@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
@@ -72,18 +74,29 @@ public class HSLConfigActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(U.isDarkTheme(this) ? R.style.Taskbar_Dark : R.style.Taskbar);
         setContentView(R.layout.tb_activity_hsl_config);
-
-        // Make action bar invisible
-        if(getSupportActionBar() != null)
-            getSupportActionBar().setElevation(0);
-
-        setTitle(null);
 
         returnToSettings = getIntent().getBooleanExtra("return_to_settings", false);
 
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean("desktop_mode", U.isDesktopModeSupported(this)).apply();
+
+        if(getSupportActionBar() == null) return;
+
+        if(returnToSettings) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(returnToSettings);
+            findViewById(R.id.space).setVisibility(View.GONE);
+        } else {
+            // Make action bar invisible
+            getSupportActionBar().setElevation(0);
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0));
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, U.isDarkTheme(this)
+                    ? R.color.tb_main_activity_background_dark
+                    : R.color.tb_main_activity_background));
+
+            setTitle(null);
+        }
     }
 
     @Override
@@ -165,12 +178,12 @@ public class HSLConfigActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-
         if(item.getItemId() == R.id.action_settings) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }
+        } else if(item.getItemId() == android.R.id.home)
+            onBackPressed();
 
         return true;
     }

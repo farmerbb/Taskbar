@@ -20,7 +20,7 @@
     android:gravity="center" >
 
     <TextView
-        android:layout_width="@dimen/tb_match_parent"
+        android:layout_width="@dimen/tb_max_width"
         android:layout_height="wrap_content"
         android:padding="32dp"
         android:textSize="20sp"
@@ -28,12 +28,13 @@
         android:id="@+id/textView"/>
 
     <ListView
-        android:layout_width="@dimen/tb_match_parent"
+        android:layout_width="@dimen/tb_max_width"
         android:layout_height="wrap_content"
         android:id="@+id/listView" />
 
     <Space
+        android:id="@+id/space"
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="?android:attr/actionBarSize" />
 
 </LinearLayout>
