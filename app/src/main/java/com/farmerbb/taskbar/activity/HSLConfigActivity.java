@@ -81,6 +81,9 @@ public class HSLConfigActivity extends AppCompatActivity {
         setTitle(null);
 
         returnToSettings = getIntent().getBooleanExtra("return_to_settings", false);
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        pref.edit().putBoolean("desktop_mode", U.isDesktopModeSupported(this)).apply();
     }
 
     @Override
