@@ -61,8 +61,7 @@ public class SavedWindowSizes implements Serializable {
                 return entry.getWindowSize();
         }
 
-        return U.getSharedPreferences(context)
-                .getString(PREF_WINDOW_SIZE, context.getString(R.string.tb_def_window_size));
+        return U.getSharedPreferences(context).getString(PREF_WINDOW_SIZE, "standard");
     }
 
     public void clear(Context context) {

@@ -1007,10 +1007,7 @@ public class U {
 
     public static Bundle getActivityOptionsBundle(Context context, ApplicationType type, View view) {
         SharedPreferences pref = getSharedPreferences(context);
-
-        return getActivityOptionsBundle(
-                context, type, pref.getString(PREF_WINDOW_SIZE, context.getString(R.string.tb_def_window_size)), view
-        );
+        return getActivityOptionsBundle(context, type, pref.getString(PREF_WINDOW_SIZE, "standard"), view);
     }
 
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
