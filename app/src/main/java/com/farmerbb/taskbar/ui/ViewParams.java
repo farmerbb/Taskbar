@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.ui;
 
 import android.graphics.PixelFormat;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import com.farmerbb.taskbar.util.U;
 
@@ -47,17 +46,5 @@ public class ViewParams {
             wmParams.gravity = gravity;
 
         return wmParams;
-    }
-
-    public FrameLayout.LayoutParams toFrameLayoutParams() {
-        final FrameLayout.LayoutParams flParams = new FrameLayout.LayoutParams(
-                width,
-                height
-        );
-
-        if(gravity > -1)
-            flParams.gravity = gravity;
-
-        return flParams;
     }
 }
