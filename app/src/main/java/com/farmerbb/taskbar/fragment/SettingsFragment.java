@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,9 +26,12 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+
+import androidx.annotation.XmlRes;
 
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
@@ -199,5 +203,20 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                 .replace(R.id.fragmentContainer, fragment, fragment.getClass().getSimpleName())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
+    }
+
+    @SuppressWarnings("JavaReflectionMemberAccess")
+    @Override
+    public void addPreferencesFromResource(@XmlRes int preferencesResId) {
+        if(!(this instanceof AboutFragment)) {
+            try {
+                Context context = U.wrapContext(getActivity().getApplicationContext());
+                Class.forName("android.preference.PreferenceManager")
+                        .getMethod("inflateFromResource", Context.class, int.class, PreferenceScreen.class)
+                        .invoke(getPreferenceManager(), context, preferencesResId, getPreferenceScreen());
+            } catch (Exception e) { /* Gracefully fail */ }
+        }
+
+        super.addPreferencesFromResource(preferencesResId);
     }
 }

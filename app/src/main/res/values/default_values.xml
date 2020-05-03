@@ -18,5 +18,4 @@
     <bool name="tb_def_full_length">false</bool>
     <bool name="tb_def_sys_tray">false</bool>
     <bool name="tb_def_dashboard">false</bool>
-    <string name="tb_def_window_size" translatable="false">standard</string>
 </resources>

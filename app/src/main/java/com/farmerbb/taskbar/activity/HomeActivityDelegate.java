@@ -110,7 +110,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private int endDragIndex;
 
     private boolean isSecondaryHome;
-    private boolean dcvRemoved;
 
     private GestureDetector detector;
 
@@ -361,10 +360,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 || U.isLauncherPermanentlyEnabled(this))) {
             setContentView(layout);
 
-            if(isSecondaryHome) {
-                dcvRemoved = false;
-                traverseAndRemoveDecorCaption(getWindow().getDecorView());
-            } else if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
                     builder.setTitle(R.string.tb_permission_dialog_title)
@@ -1042,38 +1038,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             helper.setOnSecondaryHomeScreen(value, disp.getDisplayId());
         } else
             helper.setOnPrimaryHomeScreen(value);
-    }
-
-    @SuppressWarnings("rawtypes")
-    @SuppressLint("PrivateApi")
-    private void traverseAndRemoveDecorCaption(View view) {
-        if(dcvRemoved || !(view instanceof ViewGroup))
-            return;
-
-        Class dcvClass;
-        try {
-            dcvClass = Class.forName("com.android.internal.widget.DecorCaptionView");
-        } catch (ClassNotFoundException e) {
-            return;
-        }
-
-        ViewGroup viewGroup = (ViewGroup) view;
-        int position = -1;
-
-        for(int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-
-            if(dcvClass.isInstance(child)) {
-                position = i;
-                break;
-            } else
-                traverseAndRemoveDecorCaption(child);
-        }
-
-        if(position >= 0) {
-            viewGroup.removeViewAt(position);
-            dcvRemoved = true;
-        }
     }
 
     @Override

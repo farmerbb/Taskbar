@@ -21,14 +21,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.provider.Settings;
-import android.view.Display;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +36,6 @@ import com.farmerbb.taskbar.activity.HSLActivity;
 import com.farmerbb.taskbar.activity.HSLConfigActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.service.TaskbarService;
-import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -185,22 +182,10 @@ public class DesktopModeFragment extends SettingsFragment {
 
     @TargetApi(29)
     private void startStopDesktopMode(boolean start) {
-        if(!start || !U.isDesktopModeActive(getActivity()) || !U.launcherIsDefault(getActivity())) {
+        if(!start || !U.isDesktopModeActive(getActivity()) || !U.launcherIsDefault(getActivity()))
             U.sendBroadcast(getActivity(), ACTION_KILL_HOME_ACTIVITY);
-            return;
-        }
-
-        int displayId = U.getExternalDisplayID(getActivity());
-
-        LauncherHelper helper = LauncherHelper.getInstance();
-        if(displayId == Display.DEFAULT_DISPLAY || helper.isOnSecondaryHomeScreen()) return;
-
-        helper.setOnSecondaryHomeScreen(true, displayId);
-
-        Intent intent = new Intent(getActivity(), SecondaryHomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-
-        startActivity(intent, U.getActivityOptions(getActivity(), ApplicationType.APP_FULLSCREEN, null).toBundle());
+        else if(!LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+            U.showToastLong(getActivity(), R.string.tb_reconnect_display);
     }
 
     private void updateAdditionalSettings() {

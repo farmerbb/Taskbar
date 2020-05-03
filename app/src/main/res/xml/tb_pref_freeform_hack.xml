@@ -41,7 +41,7 @@
         android:summary="@string/tb_launch_games_fullscreen_message" />
 
     <ListPreference
-        android:defaultValue="@string/tb_def_window_size"
+        android:defaultValue="standard"
         android:entries="@array/tb_pref_window_size_list"
         android:entryValues="@array/tb_pref_window_size_list_values"
         android:key="window_size"

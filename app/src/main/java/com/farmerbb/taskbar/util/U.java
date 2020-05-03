@@ -1962,14 +1962,6 @@ public class U {
         return getCurrentTheme(context).equals("dark");
     }
 
-    public static String getStringPrefWithDefault(Context context, String key) {
-        context = context.getApplicationContext();
-        int resId = getDefaultPrefResID(context, key, R.string.class);
-
-        SharedPreferences pref = getSharedPreferences(context);
-        return pref.getString(key, context.getString(resId));
-    }
-
     public static boolean getBooleanPrefWithDefault(Context context, String key) {
         context = context.getApplicationContext();
         int resId = getDefaultPrefResID(context, key, R.bool.class);

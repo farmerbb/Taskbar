@@ -18,5 +18,4 @@
     <bool name="tb_def_full_length">true</bool>
     <bool name="tb_def_sys_tray">true</bool>
     <bool name="tb_def_dashboard">true</bool>
-    <string name="tb_def_window_size" translatable="false">phone_size</string>
 </resources>
