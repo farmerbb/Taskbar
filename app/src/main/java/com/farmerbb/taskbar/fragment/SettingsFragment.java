@@ -143,6 +143,9 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
                         shouldRestart = false;
                         break;
+                    case "hide_icon_labels":
+                        U.sendBroadcast(getActivity(), ACTION_REFRESH_DESKTOP_ICONS);
+                        break;
                 }
 
                 if(shouldRestart) U.restartTaskbar(getActivity());

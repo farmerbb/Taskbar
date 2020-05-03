@@ -68,6 +68,11 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:key="hide_icon_labels"
+        android:title="@string/tb_hide_icon_labels"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
         android:key="icon_pack_use_mask"
         android:title="@string/tb_pref_title_use_mask"
         android:summary="@string/tb_pref_description_use_mask" />

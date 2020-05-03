@@ -71,6 +71,7 @@ public class AppearanceFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference("visual_feedback"));
         bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
         bindPreferenceSummaryToValue(findPreference("transparent_start_menu"));
+        bindPreferenceSummaryToValue(findPreference("hide_icon_labels"));
 
         findPreference("background_tint_pref").setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
         findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());

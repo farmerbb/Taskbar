@@ -94,7 +94,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         final SharedPreferences pref = U.getSharedPreferences(getContext());
 
         TextView textView = convertView.findViewById(R.id.name);
-        textView.setText(entry.getLabel());
+        textView.setText(pref.getBoolean("hide_icon_labels", false) ? "" : entry.getLabel());
         textView.setTypeface(null, isTopApp(entry) ? Typeface.BOLD : Typeface.NORMAL);
         textView.setTextColor(ContextCompat.getColor(getContext(),
                 U.isDarkTheme(getContext()) ? R.color.tb_text_color_dark : R.color.tb_text_color));

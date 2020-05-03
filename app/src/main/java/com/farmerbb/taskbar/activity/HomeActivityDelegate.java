@@ -944,10 +944,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private View inflateDesktopIcon(ViewGroup parent, AppEntry entry) {
+        SharedPreferences pref = U.getSharedPreferences(this);
         View icon = LayoutInflater.from(this).inflate(R.layout.tb_row_alt, parent, false);
 
         TextView textView = icon.findViewById(R.id.name);
-        textView.setText(entry.getLabel());
+        textView.setText(pref.getBoolean("hide_icon_labels", false) ? "" : entry.getLabel());
         textView.setTextColor(ContextCompat.getColor(this, R.color.tb_desktop_icon_text));
         textView.setShadowLayer(10, 0, 0, R.color.tb_desktop_icon_shadow);
 

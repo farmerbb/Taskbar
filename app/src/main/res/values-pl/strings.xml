@@ -466,4 +466,6 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
     <string name="tb_disable_home_setting">Please disable the \"Replace home screen\" setting under \"Advanced features\" in order to use desktop mode.</string>
     <string name="tb_reconnect_display">Please disconnect and reconnect your external display in order to use desktop mode.</string>
 
+    <string name="tb_hide_icon_labels">Hide app icon labels</string>
+
 </resources>
