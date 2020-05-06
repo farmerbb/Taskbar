@@ -1053,7 +1053,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         layout.setBackground(wallpaperDrawable);
     }
 
-    @Override
+ // @Override
     public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
         if(isTopResumedActivity)
             overridePendingTransition(0, R.anim.close_anim);
