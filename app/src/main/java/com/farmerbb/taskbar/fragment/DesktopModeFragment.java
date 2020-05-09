@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.fragment;
 
-import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -142,7 +141,6 @@ public class DesktopModeFragment extends SettingsFragment {
         super.onDestroy();
     }
 
-    @TargetApi(29)
     @Override
     public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
@@ -180,7 +178,6 @@ public class DesktopModeFragment extends SettingsFragment {
         return super.onPreferenceClick(p);
     }
 
-    @TargetApi(29)
     private void startStopDesktopMode(boolean start) {
         if(!start || !U.isDesktopModeActive(getActivity()) || !U.launcherIsDefault(getActivity()))
             U.sendBroadcast(getActivity(), ACTION_KILL_HOME_ACTIVITY);
