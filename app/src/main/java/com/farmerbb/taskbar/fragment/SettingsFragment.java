@@ -135,7 +135,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                             U.setDensity(displayID, stringValue);
 
                             SharedPreferences pref2 = U.getSharedPreferences(getActivity());
-                            if(pref2.getBoolean("auto_hide_navbar", false))
+                            if(pref2.getBoolean("auto_hide_navbar_desktop_mode", false))
                                 new Handler().postDelayed(() -> U.showHideNavigationBar(getActivity(), false), 250);
                         } catch (Exception e) {
                             U.showToast(getActivity(), R.string.tb_unable_to_apply_density_change);

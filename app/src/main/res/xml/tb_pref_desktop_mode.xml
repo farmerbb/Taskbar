@@ -51,7 +51,7 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="auto_hide_navbar"
+            android:key="auto_hide_navbar_desktop_mode"
             android:title="@string/tb_auto_hide_navbar_alt"/>
 
     </PreferenceCategory>

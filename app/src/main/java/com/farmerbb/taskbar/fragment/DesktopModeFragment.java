@@ -170,7 +170,7 @@ public class DesktopModeFragment extends SettingsFragment {
                 startActivity(intent);
 
                 break;
-            case "auto_hide_navbar":
+            case "auto_hide_navbar_desktop_mode":
                 if(U.isServiceRunning(getActivity(), TaskbarService.class))
                     U.showHideNavigationBar(getActivity(), !((CheckBoxPreference) p).isChecked());
 
@@ -201,8 +201,8 @@ public class DesktopModeFragment extends SettingsFragment {
                 && U.isDesktopModeActive(getActivity());
 
         findPreference("display_density").setEnabled(enabled);
-        findPreference("auto_hide_navbar").setEnabled(enabled);
-        findPreference("auto_hide_navbar").setOnPreferenceClickListener(this);
+        findPreference("auto_hide_navbar_desktop_mode").setEnabled(enabled);
+        findPreference("auto_hide_navbar_desktop_mode").setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         DisplayInfo info = U.getExternalDisplayInfo(getActivity());

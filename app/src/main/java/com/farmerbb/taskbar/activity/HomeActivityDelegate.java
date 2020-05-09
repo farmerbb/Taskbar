@@ -1035,8 +1035,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(isSecondaryHome) {
             WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
             Display disp = wm.getDefaultDisplay();
+            int displayID = disp.getDisplayId();
 
-            helper.setOnSecondaryHomeScreen(value, disp.getDisplayId());
+            helper.setOnSecondaryHomeScreen(value, displayID);
+
+            SharedPreferences pref = U.getSharedPreferences(this);
+            if(pref.getBoolean("auto_hide_navbar_desktop_mode", false))
+                U.showHideNavigationBar(this, displayID, !value);
         } else
             helper.setOnPrimaryHomeScreen(value);
     }

@@ -1215,13 +1215,16 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, boolean show) {
+        showHideNavigationBar(context, getTaskbarDisplayID(), show);
+    }
+
+    public static void showHideNavigationBar(Context context, int displayID, boolean show) {
         if(!isDesktopModeActive(context)
                 && !isBlissOs(context)
                 && !hasSupportLibrary(context, 7)) {
             return;
         }
 
-        int displayID = getTaskbarDisplayID();
         int value = show ? 0 : getNavbarHeight(context) * -1;
 
         if(hasWriteSecureSettingsPermission(context)) {
