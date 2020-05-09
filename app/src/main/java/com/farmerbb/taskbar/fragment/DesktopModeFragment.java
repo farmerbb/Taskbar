@@ -185,7 +185,7 @@ public class DesktopModeFragment extends SettingsFragment {
         if(!start || !U.isDesktopModeActive(getActivity()) || !U.launcherIsDefault(getActivity()))
             U.sendBroadcast(getActivity(), ACTION_KILL_HOME_ACTIVITY);
         else if(!LauncherHelper.getInstance().isOnSecondaryHomeScreen())
-            U.showToastLong(getActivity(), R.string.tb_reconnect_display);
+            U.showToastLong(getActivity(), R.string.tb_desktop_mode_setup_complete);
     }
 
     private void updateAdditionalSettings() {

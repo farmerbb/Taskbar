@@ -447,7 +447,7 @@
     <string name="tb_chrome_os_wallpaper">Taskbar fordert die Berechtigung an, ihren Speicher zu lesen, um das aktuelle Hintergrundbild in Chrome OS anzuzeigen.</string>
 
     <string name="tb_disable_home_setting">Please disable the \"Replace home screen\" setting under \"Advanced features\" in order to use desktop mode.</string>
-    <string name="tb_reconnect_display">Please disconnect and reconnect your external display in order to use desktop mode.</string>
+    <string name="tb_desktop_mode_setup_complete">Setup complete. Launch Taskbar by clicking the home button on your external display.</string>
 
     <string name="tb_hide_icon_labels">Hide app icon labels</string>
 
