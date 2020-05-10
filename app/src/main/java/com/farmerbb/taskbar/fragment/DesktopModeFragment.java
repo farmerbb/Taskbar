@@ -116,8 +116,8 @@ public class DesktopModeFragment extends SettingsFragment {
         Preference primaryLauncherPref = findPreference(PREF_PRIMARY_LAUNCHER);
         if(primaryLauncherPref != null) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
-            String primaryLauncherName = pref.getString("hsl_name", "null");
-            String primaryLauncherPackage = pref.getString("hsl_id", "null");
+            String primaryLauncherName = pref.getString(PREF_HSL_NAME, "null");
+            String primaryLauncherPackage = pref.getString(PREF_HSL_ID, "null");
 
             boolean primaryLauncherValid = true;
             try {

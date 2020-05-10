@@ -377,7 +377,7 @@ public class TaskbarController extends UIController {
                 searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
                 break;
             case "app_start":
-                long appStartTime = pref.getLong("time_of_service_start", System.currentTimeMillis());
+                long appStartTime = pref.getLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
                 long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
 
                 searchInterval = deviceStartTime > appStartTime ? deviceStartTime : appStartTime;
@@ -609,7 +609,7 @@ public class TaskbarController extends UIController {
 
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar(false);
-        else if(!pref.getBoolean("collapsed", false) && pref.getBoolean(PREF_TASKBAR_ACTIVE, false))
+        else if(!pref.getBoolean(PREF_COLLAPSED, false) && pref.getBoolean(PREF_TASKBAR_ACTIVE, false))
             toggleTaskbar(false);
 
         if(pref.getBoolean(PREF_AUTO_HIDE_NAVBAR, false))
@@ -1106,9 +1106,9 @@ public class TaskbarController extends UIController {
     private void toggleTaskbar(boolean userInitiated) {
         if(userInitiated && Build.BRAND.equalsIgnoreCase("essential")) {
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(!pref.getBoolean("grip_rejection_toast_shown", false)) {
+            if(!pref.getBoolean(PREF_GRIP_REJECTION_TOAST_SHOWN, false)) {
                 U.showToastLong(context, R.string.tb_essential_phone_grip_rejection);
-                pref.edit().putBoolean("grip_rejection_toast_shown", true).apply();
+                pref.edit().putBoolean(PREF_GRIP_REJECTION_TOAST_SHOWN, true).apply();
             }
         }
 
@@ -1144,7 +1144,7 @@ public class TaskbarController extends UIController {
             startRefreshingRecents();
 
             SharedPreferences pref = U.getSharedPreferences(context);
-            pref.edit().putBoolean("collapsed", true).apply();
+            pref.edit().putBoolean(PREF_COLLAPSED, true).apply();
 
             updateButton(false);
 
@@ -1179,7 +1179,7 @@ public class TaskbarController extends UIController {
             if(thread != null) thread.interrupt();
 
             SharedPreferences pref = U.getSharedPreferences(context);
-            pref.edit().putBoolean("collapsed", false).apply();
+            pref.edit().putBoolean(PREF_COLLAPSED, false).apply();
 
             updateButton(true);
 
@@ -1196,7 +1196,7 @@ public class TaskbarController extends UIController {
     private void tempShowTaskbar() {
         if(!taskbarHiddenTemporarily) {
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(!pref.getBoolean("collapsed", false)) taskbarShownTemporarily = true;
+            if(!pref.getBoolean(PREF_COLLAPSED, false)) taskbarShownTemporarily = true;
         }
 
         showTaskbar(false);
@@ -1208,7 +1208,7 @@ public class TaskbarController extends UIController {
     private void tempHideTaskbar(boolean monitorPositionChanges) {
         if(!taskbarShownTemporarily) {
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(pref.getBoolean("collapsed", false)) taskbarHiddenTemporarily = true;
+            if(pref.getBoolean(PREF_COLLAPSED, false)) taskbarHiddenTemporarily = true;
         }
 
         hideTaskbar(false);

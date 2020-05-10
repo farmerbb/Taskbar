@@ -158,8 +158,8 @@ public class HSLConfigActivity extends AppCompatActivity {
             listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
                 SharedPreferences pref = U.getSharedPreferences(HSLConfigActivity.this);
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("hsl_id", packageIds.get(position));
-                editor.putString("hsl_name", packageNames.get(position));
+                editor.putString(PREF_HSL_ID, packageIds.get(position));
+                editor.putString(PREF_HSL_NAME, packageNames.get(position));
                 editor.apply();
 
                 for(ResolveInfo launcher : listOfLaunchers) {

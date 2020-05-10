@@ -31,8 +31,8 @@ public class DisableFreeformReceiver extends BroadcastReceiver {
 
         boolean freeformEnabled = pref.getBoolean(PREF_FREEFORM_HACK, false);
 
-        if(pref.getBoolean("skip_disable_freeform_receiver", false))
-            pref.edit().remove("skip_disable_freeform_receiver").apply();
+        if(pref.getBoolean(PREF_SKIP_DISABLE_FREEFORM_RECEIVER, false))
+            pref.edit().remove(PREF_SKIP_DISABLE_FREEFORM_RECEIVER).apply();
         else if(!U.isChromeOs(context) && freeformEnabled) {
             U.restartNotificationService(context);
 

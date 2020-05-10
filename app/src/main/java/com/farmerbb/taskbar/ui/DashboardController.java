@@ -182,8 +182,8 @@ public class DashboardController extends UIController {
         layout.setAlpha(0);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        int width = pref.getInt("dashboard_width", context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
-        int height = pref.getInt("dashboard_height", context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
+        int width = pref.getInt(PREF_DASHBOARD_WIDTH, context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
+        int height = pref.getInt(PREF_DASHBOARD_HEIGHT, context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
 
         boolean isPortrait = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -334,9 +334,9 @@ public class DashboardController extends UIController {
             }
 
             final SharedPreferences pref = U.getSharedPreferences(context);
-            if(!pref.getBoolean("dashboard_tutorial_shown", false)) {
+            if(!pref.getBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false)) {
                 U.showToastLong(context, R.string.tb_dashboard_tutorial);
-                pref.edit().putBoolean("dashboard_tutorial_shown", true).apply();
+                pref.edit().putBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, true).apply();
             }
         }
     }

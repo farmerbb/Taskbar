@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class IconPackActivity extends AppCompatActivity {
 
     private AppListGenerator appListGenerator;
@@ -116,7 +118,7 @@ public class IconPackActivity extends AppCompatActivity {
             LinearLayout layout = convertView.findViewById(R.id.entry);
             layout.setOnClickListener(view -> {
                 SharedPreferences pref = U.getSharedPreferences(IconPackActivity.this);
-                pref.edit().putString("icon_pack", entry.getPackageName()).apply();
+                pref.edit().putString(PREF_ICON_PACK, entry.getPackageName()).apply();
                 setResult(RESULT_OK);
                 finish();
             });

@@ -111,7 +111,7 @@ public class SelectAppActivity extends AppCompatActivity {
             }
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            isCollapsed = !pref.getBoolean("collapsed", false);
+            isCollapsed = !pref.getBoolean(PREF_COLLAPSED, false);
 
             if(!isCollapsed) {
                 U.sendBroadcast(this, ACTION_HIDE_TASKBAR);

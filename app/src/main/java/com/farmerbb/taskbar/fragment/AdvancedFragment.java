@@ -226,8 +226,8 @@ public class AdvancedFragment extends SettingsFragment {
 
                                 if(width > 0 && height > 0) {
                                     SharedPreferences.Editor editor = pref.edit();
-                                    editor.putInt("dashboard_width", width);
-                                    editor.putInt("dashboard_height", height);
+                                    editor.putInt(PREF_DASHBOARD_WIDTH, width);
+                                    editor.putInt(PREF_DASHBOARD_HEIGHT, height);
                                     editor.apply();
 
                                     updateDashboardGridSize(true);
@@ -240,12 +240,12 @@ public class AdvancedFragment extends SettingsFragment {
                         })
                         .setNegativeButton(R.string.tb_action_cancel, null)
                         .setNeutralButton(R.string.tb_use_default, (dialog, id) -> {
-                            pref.edit().remove("dashboard_width").remove("dashboard_height").apply();
+                            pref.edit().remove(PREF_DASHBOARD_WIDTH).remove(PREF_DASHBOARD_HEIGHT).apply();
                             updateDashboardGridSize(true);
                         });
 
-                editText.setText(Integer.toString(pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width))));
-                editText2.setText(Integer.toString(pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height))));
+                editText.setText(Integer.toString(pref.getInt(PREF_DASHBOARD_WIDTH, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width))));
+                editText2.setText(Integer.toString(pref.getInt(PREF_DASHBOARD_HEIGHT, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height))));
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -290,8 +290,8 @@ public class AdvancedFragment extends SettingsFragment {
 
     private void updateDashboardGridSize(boolean restartTaskbar) {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        int width = pref.getInt("dashboard_width", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
-        int height = pref.getInt("dashboard_height", getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
+        int width = pref.getInt(PREF_DASHBOARD_WIDTH, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
+        int height = pref.getInt(PREF_DASHBOARD_HEIGHT, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
 
         boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;

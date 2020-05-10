@@ -123,7 +123,7 @@ public class InvisibleActivityFreeform extends Activity {
         // Show power button warning on CyanogenMod / LineageOS devices
         if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(!pref.getString("power_button_warning", "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
+            if(!pref.getString(PREF_POWER_BUTTON_WARNING, "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
                 new Handler().postDelayed(() -> {
                     if(helper.isInFreeformWorkspace()) {
                         Intent intent = U.getThemedIntent(this, InvisibleActivityAlt.class);
@@ -181,10 +181,10 @@ public class InvisibleActivityFreeform extends Activity {
             bootToFreeform = true;
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("first_run", true)) {
+            if(pref.getBoolean(PREF_FIRST_RUN, true)) {
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean("first_run", false);
-                editor.putBoolean("collapsed", true);
+                editor.putBoolean(PREF_FIRST_RUN, false);
+                editor.putBoolean(PREF_COLLAPSED, true);
                 editor.apply();
 
                 new Handler().postDelayed(() -> {

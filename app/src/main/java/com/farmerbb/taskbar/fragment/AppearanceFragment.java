@@ -99,7 +99,7 @@ public class AppearanceFragment extends SettingsFragment {
         Preference iconPackListPref = findPreference(PREF_ICON_PACK_LIST);
         if(iconPackListPref != null) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
-            String iconPackPackage = pref.getString("icon_pack", getActivity().getPackageName());
+            String iconPackPackage = pref.getString(PREF_ICON_PACK, getActivity().getPackageName());
             PackageManager pm = getActivity().getPackageManager();
 
             boolean iconPackValid = true;

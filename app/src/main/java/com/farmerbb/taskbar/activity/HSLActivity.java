@@ -33,6 +33,8 @@ import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class HSLActivity extends Activity {
 
     @Override
@@ -51,7 +53,7 @@ public class HSLActivity extends Activity {
         }
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        String activityToLaunch = pref.getString("hsl_id", "null");
+        String activityToLaunch = pref.getString(PREF_HSL_ID, "null");
 
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -103,8 +105,8 @@ public class HSLActivity extends Activity {
 
     private void launcherNotFound() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!pref.getString("hsl_name", "null").equals("null")) {
-            U.showToast(this, getString(R.string.tb_hsl_launcher_uninstalled, pref.getString("hsl_name", "null")), Toast.LENGTH_LONG);
+        if(!pref.getString(PREF_HSL_NAME, "null").equals("null")) {
+            U.showToast(this, getString(R.string.tb_hsl_launcher_uninstalled, pref.getString(PREF_HSL_NAME, "null")), Toast.LENGTH_LONG);
         }
 
         Intent intent = new Intent(this, HSLConfigActivity.class);

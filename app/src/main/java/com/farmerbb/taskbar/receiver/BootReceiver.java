@@ -43,7 +43,7 @@ public class BootReceiver extends BroadcastReceiver {
 
             if(pref.getBoolean(PREF_START_ON_BOOT, false)) {
                 editor.putBoolean(PREF_TASKBAR_ACTIVE, true);
-                editor.putLong("time_of_service_start", System.currentTimeMillis());
+                editor.putLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
                 editor.apply();
 
                 boolean startServices = false;

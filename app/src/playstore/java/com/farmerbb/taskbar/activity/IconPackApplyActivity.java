@@ -26,6 +26,8 @@ import android.os.Bundle;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class IconPackApplyActivity extends Activity {
 
     @Override
@@ -55,7 +57,7 @@ public class IconPackApplyActivity extends Activity {
                 builder.setTitle(R.string.tb_apply_icon_pack)
                         .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> finish())
                         .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
-                            pref.edit().putString("icon_pack", iconPackPackage).apply();
+                            pref.edit().putString(PREF_ICON_PACK, iconPackPackage).apply();
 
                             U.refreshPinnedIcons(this);
                             U.restartTaskbar(this);

@@ -30,6 +30,8 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class InvisibleActivityAlt extends InvisibleActivity {
 
     @SuppressLint("HardwareIds")
@@ -56,7 +58,7 @@ public class InvisibleActivityAlt extends InvisibleActivity {
                             .setMessage(R.string.tb_power_button_warning_message)
                             .setPositiveButton(R.string.tb_action_i_understand, (dialog, which) -> {
                                 SharedPreferences pref = U.getSharedPreferences(this);
-                                pref.edit().putString("power_button_warning",
+                                pref.edit().putString(PREF_POWER_BUTTON_WARNING,
                                         Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)).apply();
 
                                 finish();

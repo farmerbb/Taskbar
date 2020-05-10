@@ -91,11 +91,11 @@ public class FreeformModeFragment extends SettingsFragment {
         findPreference(PREF_FREEFORM_HACK).setEnabled(!lockFreeformToggle);
 
         // Dialog shown on devices which seem to not work correctly with freeform mode
-        if(U.isSamsungDevice() && !pref.getBoolean("samsung_dialog_shown", false)) {
+        if(U.isSamsungDevice() && !pref.getBoolean(PREF_SAMSUNG_DIALOG_SHOWN, false)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.tb_samsung_freeform_title)
                     .setMessage(R.string.tb_samsung_freeform_message)
-                    .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> pref.edit().putBoolean("samsung_dialog_shown", true).apply());
+                    .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> pref.edit().putBoolean(PREF_SAMSUNG_DIALOG_SHOWN, true).apply());
 
             AlertDialog dialog = builder.create();
             dialog.show();

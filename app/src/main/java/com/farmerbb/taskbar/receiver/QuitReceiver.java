@@ -33,7 +33,7 @@ public class QuitReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(!pref.getBoolean("skip_quit_receiver", false)) {
+        if(!pref.getBoolean(PREF_SKIP_QUIT_RECEIVER, false)) {
             Intent taskbarIntent = new Intent(context, TaskbarService.class);
             Intent startMenuIntent = new Intent(context, StartMenuService.class);
             Intent dashboardIntent = new Intent(context, DashboardService.class);
@@ -53,6 +53,6 @@ public class QuitReceiver extends BroadcastReceiver {
 
             context.stopService(notificationIntent);
         } else
-            pref.edit().remove("skip_quit_receiver").apply();
+            pref.edit().remove(PREF_SKIP_QUIT_RECEIVER).apply();
     }
 }

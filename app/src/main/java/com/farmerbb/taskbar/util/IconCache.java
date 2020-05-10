@@ -78,7 +78,7 @@ public class IconCache {
 
     private Drawable loadIcon(Context context, PackageManager pm, LauncherActivityInfo appInfo) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        String iconPackPackage = pref.getString("icon_pack", context.getPackageName());
+        String iconPackPackage = pref.getString(PREF_ICON_PACK, context.getPackageName());
         boolean useMask = pref.getBoolean(PREF_ICON_PACK_USE_MASK, false);
         IconPackManager iconPackManager = IconPackManager.getInstance();
 
@@ -86,7 +86,7 @@ public class IconCache {
             pm.getPackageInfo(iconPackPackage, 0);
         } catch (PackageManager.NameNotFoundException e) {
             iconPackPackage = context.getPackageName();
-            pref.edit().putString("icon_pack", iconPackPackage).apply();
+            pref.edit().putString(PREF_ICON_PACK, iconPackPackage).apply();
             U.refreshPinnedIcons(context);
         }
 

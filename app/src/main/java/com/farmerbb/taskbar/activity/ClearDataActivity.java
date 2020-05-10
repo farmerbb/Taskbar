@@ -109,7 +109,7 @@ public class ClearDataActivity extends AppCompatActivity {
 
             if(desktopIcons.isChecked()) {
                 SharedPreferences pref = U.getSharedPreferences(this);
-                pref.edit().remove("desktop_icons").apply();
+                pref.edit().remove(PREF_DESKTOP_ICONS).apply();
                 U.sendBroadcast(this, ACTION_REFRESH_DESKTOP_ICONS);
             }
 

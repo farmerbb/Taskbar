@@ -50,9 +50,9 @@ public class StartReceiver extends BroadcastReceiver {
             editor.putBoolean(PREF_IS_HIDDEN, false);
 
             if(taskbarNotActive) {
-                if(pref.getBoolean("first_run", true)) {
-                    editor.putBoolean("first_run", false);
-                    editor.putBoolean("collapsed", true);
+                if(pref.getBoolean(PREF_FIRST_RUN, true)) {
+                    editor.putBoolean(PREF_FIRST_RUN, false);
+                    editor.putBoolean(PREF_COLLAPSED, true);
 
                     new Handler().postDelayed(() -> {
                         Intent intent2 = new Intent(context, DummyActivity.class);
@@ -64,7 +64,7 @@ public class StartReceiver extends BroadcastReceiver {
                 }
 
                 editor.putBoolean(PREF_TASKBAR_ACTIVE, true);
-                editor.putLong("time_of_service_start", System.currentTimeMillis());
+                editor.putLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
             }
 
             editor.apply();
@@ -85,6 +85,6 @@ public class StartReceiver extends BroadcastReceiver {
 
             U.startForegroundService(context, notificationIntent);
         } else if(intent.hasExtra("secondscreen"))
-            pref.edit().putBoolean("skip_quit_receiver", true).apply();
+            pref.edit().putBoolean(PREF_SKIP_QUIT_RECEIVER, true).apply();
     }
 }

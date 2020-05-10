@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this)) {
             getWindow().setRestrictedCaptionAreaListener(rect -> hasCaption = true);
 
-            new Handler().postDelayed(() -> pref.edit().putBoolean("has_caption", hasCaption).apply(), 500);
+            new Handler().postDelayed(() -> pref.edit().putBoolean(PREF_HAS_CAPTION, hasCaption).apply(), 500);
         }
 
         if(getPackageName().equals(BuildConfig.PAID_APPLICATION_ID)) {
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             theSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
                 if(b) {
                     if(U.canDrawOverlays(this)) {
-                        boolean firstRun = pref.getBoolean("first_run", true);
+                        boolean firstRun = pref.getBoolean(PREF_FIRST_RUN, true);
                         startTaskbarService();
 
                         if(firstRun)
@@ -231,39 +231,39 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!getPackageName().equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
-            if(!pref.getBoolean("dont_show_uninstall_dialog", false)) {
+            if(!pref.getBoolean(PREF_DONT_SHOW_UNINSTALL_DIALOG, false)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.tb_settings_imported_successfully)
                         .setMessage(R.string.tb_import_dialog_message)
                         .setPositiveButton(R.string.tb_action_uninstall, (dialog, which) -> {
-                            pref.edit().putBoolean("uninstall_dialog_shown", true).apply();
+                            pref.edit().putBoolean(PREF_UNINSTALL_DIALOG_SHOWN, true).apply();
 
                             try {
                                 startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
                             } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
                         });
 
-                if(pref.getBoolean("uninstall_dialog_shown", false))
-                    builder.setNegativeButton(R.string.tb_action_dont_show_again, (dialogInterface, i) -> pref.edit().putBoolean("dont_show_uninstall_dialog", true).apply());
+                if(pref.getBoolean(PREF_UNINSTALL_DIALOG_SHOWN, false))
+                    builder.setNegativeButton(R.string.tb_action_dont_show_again, (dialogInterface, i) -> pref.edit().putBoolean(PREF_DONT_SHOW_UNINSTALL_DIALOG, true).apply());
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 dialog.setCancelable(false);
             }
 
-            if(!pref.getBoolean("uninstall_dialog_shown", false)) {
+            if(!pref.getBoolean(PREF_UNINSTALL_DIALOG_SHOWN, false)) {
                 if(theSwitch != null) theSwitch.setChecked(false);
 
                 SharedPreferences.Editor editor = pref.edit();
 
-                String iconPack = pref.getString("icon_pack", BuildConfig.BASE_APPLICATION_ID);
+                String iconPack = pref.getString(PREF_ICON_PACK, BuildConfig.BASE_APPLICATION_ID);
                 if(iconPack.contains(BuildConfig.BASE_APPLICATION_ID)) {
-                    editor.putString("icon_pack", getPackageName());
+                    editor.putString(PREF_ICON_PACK, getPackageName());
                 } else {
                     U.refreshPinnedIcons(this);
                 }
 
-                editor.putBoolean("first_run", true);
+                editor.putBoolean(PREF_FIRST_RUN, true);
                 editor.apply();
             }
         }
@@ -324,13 +324,13 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putBoolean(PREF_IS_HIDDEN, false);
 
-        if(pref.getBoolean("first_run", true)) {
-            editor.putBoolean("first_run", false);
-            editor.putBoolean("collapsed", true);
+        if(pref.getBoolean(PREF_FIRST_RUN, true)) {
+            editor.putBoolean(PREF_FIRST_RUN, false);
+            editor.putBoolean(PREF_COLLAPSED, true);
         }
 
         editor.putBoolean(PREF_TASKBAR_ACTIVE, true);
-        editor.putLong("time_of_service_start", System.currentTimeMillis());
+        editor.putLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
         editor.apply();
 
         if(U.hasFreeformSupport(this)

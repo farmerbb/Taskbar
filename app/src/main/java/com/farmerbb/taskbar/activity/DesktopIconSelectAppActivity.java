@@ -42,10 +42,10 @@ public class DesktopIconSelectAppActivity extends AbstractSelectAppActivity {
 
         try {
             SharedPreferences pref = U.getSharedPreferences(this);
-            JSONArray icons = new JSONArray(pref.getString("desktop_icons", "[]"));
+            JSONArray icons = new JSONArray(pref.getString(PREF_DESKTOP_ICONS, "[]"));
             icons.put(desktopIcon.toJson(this));
 
-            pref.edit().putString("desktop_icons", icons.toString()).apply();
+            pref.edit().putString(PREF_DESKTOP_ICONS, icons.toString()).apply();
             U.sendBroadcast(this, ACTION_REFRESH_DESKTOP_ICONS);
         } catch (JSONException e) { /* Gracefully fail */ }
 

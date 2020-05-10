@@ -232,7 +232,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             SharedPreferences pref = U.getSharedPreferences(this);
 
             if(pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)
-                    && !pref.getBoolean("has_caption", false))
+                    && !pref.getBoolean(PREF_HAS_CAPTION, false))
                 params.y = params.y - getResources().getDimensionPixelSize(R.dimen.tb_caption_offset);
         }
 
@@ -725,7 +725,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "remove_desktop_icon":
                 try {
                     SharedPreferences pref5 = U.getSharedPreferences(this);
-                    JSONArray jsonIcons = new JSONArray(pref5.getString("desktop_icons", "[]"));
+                    JSONArray jsonIcons = new JSONArray(pref5.getString(PREF_DESKTOP_ICONS, "[]"));
                     int iconToRemove = -1;
 
                     for(int i = 0; i < jsonIcons.length(); i++) {
@@ -739,7 +739,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     if(iconToRemove > -1) {
                         jsonIcons.remove(iconToRemove);
 
-                        pref5.edit().putString("desktop_icons", jsonIcons.toString()).apply();
+                        pref5.edit().putString(PREF_DESKTOP_ICONS, jsonIcons.toString()).apply();
                         U.sendBroadcast(this, ACTION_REFRESH_DESKTOP_ICONS);
                     }
                 } catch (JSONException e) { /* Gracefully fail */ }

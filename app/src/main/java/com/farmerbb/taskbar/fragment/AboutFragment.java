@@ -61,7 +61,7 @@ public class AboutFragment extends SettingsFragment {
                     && U.isPlayStoreInstalled(getActivity())
                     && U.isPlayStoreRelease(getActivity())
                     && !U.isSystemApp(getActivity())
-                    && !pref.getBoolean("hide_donate", false)) {
+                    && !pref.getBoolean(PREF_HIDE_DONATE, false)) {
                 findPreference(PREF_DONATE).setOnPreferenceClickListener(this);
             } else
                 getPreferenceScreen().removePreference(findPreference("donate_category"));
@@ -141,7 +141,7 @@ public class AboutFragment extends SettingsFragment {
                             noThanksCount++;
 
                             if(noThanksCount == 3) {
-                                pref.edit().putBoolean("hide_donate", true).apply();
+                                pref.edit().putBoolean(PREF_HIDE_DONATE, true).apply();
                                 getPreferenceScreen().removePreference(findPreference("donate_category"));
                             }
                         });
