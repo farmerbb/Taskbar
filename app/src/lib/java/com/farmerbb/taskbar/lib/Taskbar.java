@@ -72,7 +72,7 @@ import com.farmerbb.taskbar.util.U;
     @Keep public static void openSettings(@NonNull Context context, @Nullable String title, @StyleRes int theme) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("title", title);
-        intent.putExtra("theme", theme);
+        intent.putExtra(PREF_THEME, theme);
         intent.putExtra("back_arrow", true);
 
         if(!(context instanceof Activity))

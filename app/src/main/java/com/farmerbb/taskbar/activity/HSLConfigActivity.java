@@ -42,6 +42,8 @@ import com.farmerbb.taskbar.util.U;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class HSLConfigActivity extends AppCompatActivity {
 
     private boolean returnToSettings;
@@ -83,7 +85,7 @@ public class HSLConfigActivity extends AppCompatActivity {
         returnToSettings = getIntent().getBooleanExtra("return_to_settings", false);
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("desktop_mode", U.isDesktopModeSupported(this)).apply();
+        pref.edit().putBoolean(PREF_DESKTOP_MODE, U.isDesktopModeSupported(this)).apply();
 
         if(getSupportActionBar() == null) return;
 

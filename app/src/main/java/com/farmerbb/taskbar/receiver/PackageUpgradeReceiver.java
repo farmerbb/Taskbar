@@ -24,6 +24,8 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class PackageUpgradeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,7 +33,7 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
             SharedPreferences pref = U.getSharedPreferences(context);
             boolean startServices = false;
 
-            if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+            if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !pref.getBoolean(PREF_IS_HIDDEN, false)) {
                 if(U.hasFreeformSupport(context) && U.isFreeformModeEnabled(context)) {
                     Intent intent2 = new Intent(context, DummyActivity.class);
                     intent2.putExtra("start_freeform_hack", true);
@@ -43,7 +45,7 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
                 startServices = true;
             }
 
-            if(pref.getBoolean("taskbar_active", false)) {
+            if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false)) {
                 Intent notificationIntent = new Intent(context, NotificationService.class);
                 notificationIntent.putExtra("start_services", startServices);
 

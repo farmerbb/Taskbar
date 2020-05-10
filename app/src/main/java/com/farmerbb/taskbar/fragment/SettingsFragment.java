@@ -103,7 +103,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                 boolean shouldRestart = true;
 
                 switch(preference.getKey()) {
-                    case "theme":
+                    case PREF_THEME:
                         if(U.isLibrary(getActivity())) break;
 
                         // Restart MainActivity
@@ -113,7 +113,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         startActivity(intent);
                         getActivity().overridePendingTransition(0, 0);
                         break;
-                    case "chrome_os_context_menu_fix":
+                    case PREF_CHROME_OS_CONTEXT_MENU_FIX:
                         FreeformHackHelper helper = FreeformHackHelper.getInstance();
                         helper.setFreeformHackActive(false);
                         helper.setInFreeformWorkspace(false);
@@ -121,21 +121,21 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         U.sendBroadcast(getActivity(), ACTION_FINISH_FREEFORM_ACTIVITY);
 
                         SharedPreferences pref = U.getSharedPreferences(getActivity());
-                        if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false))
+                        if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !pref.getBoolean(PREF_IS_HIDDEN, false))
                             new Handler().post(() -> U.startFreeformHack(getActivity()));
                         break;
-                    case "start_button_image":
+                    case PREF_START_BUTTON_IMAGE:
                         if(stringValue.equals("custom"))
                             ((AppearanceFragment) SettingsFragment.this).showFileChooser();
                         break;
-                    case "display_density":
+                    case PREF_DISPLAY_DENSITY:
                         int displayID = U.getExternalDisplayID(getActivity());
 
                         try {
                             U.setDensity(displayID, stringValue);
 
                             SharedPreferences pref2 = U.getSharedPreferences(getActivity());
-                            if(pref2.getBoolean("auto_hide_navbar_desktop_mode", false))
+                            if(pref2.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false))
                                 new Handler().postDelayed(() -> U.showHideNavigationBar(getActivity(), false), 250);
                         } catch (Exception e) {
                             U.showToast(getActivity(), R.string.tb_unable_to_apply_density_change);
@@ -143,7 +143,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
                         shouldRestart = false;
                         break;
-                    case "hide_icon_labels":
+                    case PREF_HIDE_ICON_LABELS:
                         U.sendBroadcast(getActivity(), ACTION_REFRESH_DESKTOP_ICONS);
                         break;
                 }
@@ -192,7 +192,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
     @SuppressLint("SetTextI18n")
     @Override
     public boolean onPreferenceClick(final Preference p) {
-        if(p.getKey().equals("clear_pinned_apps")) {
+        if(p.getKey().equals(PREF_CLEAR_PINNED_APPS)) {
             Intent clearIntent = U.getThemedIntent(getActivity(), ClearDataActivity.class);
             startActivity(clearIntent);
         }

@@ -25,28 +25,30 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             // Initialize preferences on BlissOS
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(U.isBlissOs(context) && !pref.getBoolean("bliss_os_prefs", false))
+            if(U.isBlissOs(context) && !pref.getBoolean(PREF_BLISS_OS_PREFS, false))
                 U.initPrefs(context);
 
             SharedPreferences.Editor editor = pref.edit();
 
             if(!U.hasFreeformSupport(context))
-                editor.putBoolean("freeform_hack", false);
+                editor.putBoolean(PREF_FREEFORM_HACK, false);
 
-            if(pref.getBoolean("start_on_boot", false)) {
-                editor.putBoolean("taskbar_active", true);
+            if(pref.getBoolean(PREF_START_ON_BOOT, false)) {
+                editor.putBoolean(PREF_TASKBAR_ACTIVE, true);
                 editor.putLong("time_of_service_start", System.currentTimeMillis());
                 editor.apply();
 
                 boolean startServices = false;
 
-                if(!pref.getBoolean("is_hidden", false)) {
+                if(!pref.getBoolean(PREF_IS_HIDDEN, false)) {
                     if(U.hasFreeformSupport(context) && U.isFreeformModeEnabled(context)) {
                         Intent intent2 = new Intent(context, DummyActivity.class);
                         intent2.putExtra("start_freeform_hack", true);
@@ -63,7 +65,7 @@ public class BootReceiver extends BroadcastReceiver {
 
                 U.startForegroundService(context, notificationIntent);
             } else {
-                editor.putBoolean("taskbar_active", U.isServiceRunning(context, NotificationService.class));
+                editor.putBoolean(PREF_TASKBAR_ACTIVE, U.isServiceRunning(context, NotificationService.class));
                 editor.apply();
             }
 

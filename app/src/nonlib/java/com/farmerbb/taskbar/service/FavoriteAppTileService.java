@@ -35,6 +35,8 @@ import com.farmerbb.taskbar.activity.PersistentShortcutSelectAppActivity;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 @TargetApi(Build.VERSION_CODES.N)
 public abstract class FavoriteAppTileService extends TileService {
 
@@ -83,7 +85,7 @@ public abstract class FavoriteAppTileService extends TileService {
         shortcutIntent.setAction(Intent.ACTION_MAIN);
         shortcutIntent.putExtra("package_name", pref.getString(prefix + "package_name", null));
         shortcutIntent.putExtra("component_name", pref.getString(prefix + "component_name", null));
-        shortcutIntent.putExtra("window_size", pref.getString(prefix + "window_size", null));
+        shortcutIntent.putExtra(PREF_WINDOW_SIZE, pref.getString(prefix + PREF_WINDOW_SIZE, null));
         shortcutIntent.putExtra("user_id", pref.getLong(prefix + "user_id", userManager.getSerialNumberForUser(Process.myUserHandle())));
 
         startActivityAndCollapse(shortcutIntent);

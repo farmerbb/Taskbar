@@ -34,7 +34,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(!pref.getBoolean("taskbar_active", false))
+        if(!pref.getBoolean(PREF_TASKBAR_ACTIVE, false))
             return;
 
         Intent taskbarIntent = new Intent(context, TaskbarService.class);
@@ -42,8 +42,8 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
         Intent dashboardIntent = new Intent(context, DashboardService.class);
         Intent notificationIntent = new Intent(context, NotificationService.class);
 
-        if(pref.getBoolean("is_hidden", false)) {
-            pref.edit().putBoolean("is_hidden", false).apply();
+        if(pref.getBoolean(PREF_IS_HIDDEN, false)) {
+            pref.edit().putBoolean(PREF_IS_HIDDEN, false).apply();
 
             context.stopService(notificationIntent);
 
@@ -59,7 +59,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
 
             U.startForegroundService(context, notificationIntent);
         } else {
-            pref.edit().putBoolean("is_hidden", true).apply();
+            pref.edit().putBoolean(PREF_IS_HIDDEN, true).apply();
 
             context.stopService(notificationIntent);
 

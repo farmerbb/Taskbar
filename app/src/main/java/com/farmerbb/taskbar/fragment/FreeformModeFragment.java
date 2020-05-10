@@ -42,10 +42,10 @@ public class FreeformModeFragment extends SettingsFragment {
     private BroadcastReceiver checkBoxReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            CheckBoxPreference preference = (CheckBoxPreference) findPreference("freeform_hack");
+            CheckBoxPreference preference = (CheckBoxPreference) findPreference(PREF_FREEFORM_HACK);
             if(preference != null) {
                 SharedPreferences pref = U.getSharedPreferences(getActivity());
-                preference.setChecked(pref.getBoolean("freeform_hack", false));
+                preference.setChecked(pref.getBoolean(PREF_FREEFORM_HACK, false));
             }
         }
     };
@@ -59,36 +59,36 @@ public class FreeformModeFragment extends SettingsFragment {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_freeform_hack);
 
-        findPreference("freeform_hack").setOnPreferenceClickListener(this);
-        findPreference("window_size").setOnPreferenceClickListener(this);
+        findPreference(PREF_FREEFORM_HACK).setOnPreferenceClickListener(this);
+        findPreference(PREF_WINDOW_SIZE).setOnPreferenceClickListener(this);
 
         boolean enableFreeformModeShortcut = U.enableFreeformModeShortcut(getActivity());
         if(enableFreeformModeShortcut)
-            findPreference("add_shortcut").setOnPreferenceClickListener(this);
+            findPreference(PREF_ADD_SHORTCUT).setOnPreferenceClickListener(this);
         else
-            getPreferenceScreen().removePreference(findPreference("add_shortcut"));
+            getPreferenceScreen().removePreference(findPreference(PREF_ADD_SHORTCUT));
 
-        bindPreferenceSummaryToValue(findPreference("window_size"));
+        bindPreferenceSummaryToValue(findPreference(PREF_WINDOW_SIZE));
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        boolean freeformHackEnabled = pref.getBoolean("freeform_hack", false);
-        boolean lockFreeformToggle = pref.getBoolean("desktop_mode", false)
+        boolean freeformHackEnabled = pref.getBoolean(PREF_FREEFORM_HACK, false);
+        boolean lockFreeformToggle = pref.getBoolean(PREF_DESKTOP_MODE, false)
                 || (freeformHackEnabled && U.isChromeOs(getActivity()));
 
         if(!lockFreeformToggle) {
-            findPreference("save_window_sizes").setDependency("freeform_hack");
-            findPreference("force_new_window").setDependency("freeform_hack");
-            findPreference("launch_games_fullscreen").setDependency("freeform_hack");
-            findPreference("window_size").setDependency("freeform_hack");
+            findPreference(PREF_SAVE_WINDOW_SIZES).setDependency(PREF_FREEFORM_HACK);
+            findPreference(PREF_FORCE_NEW_WINDOW).setDependency(PREF_FREEFORM_HACK);
+            findPreference(PREF_LAUNCH_GAMES_FULLSCREEN).setDependency(PREF_FREEFORM_HACK);
+            findPreference(PREF_WINDOW_SIZE).setDependency(PREF_FREEFORM_HACK);
 
             if(enableFreeformModeShortcut)
-                findPreference("add_shortcut").setDependency("freeform_hack");
+                findPreference(PREF_ADD_SHORTCUT).setDependency(PREF_FREEFORM_HACK);
         } else {
-            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(true);
-            pref.edit().putBoolean("freeform_hack", freeformHackEnabled).apply();
+            ((CheckBoxPreference) findPreference(PREF_FREEFORM_HACK)).setChecked(true);
+            pref.edit().putBoolean(PREF_FREEFORM_HACK, freeformHackEnabled).apply();
         }
 
-        findPreference("freeform_hack").setEnabled(!lockFreeformToggle);
+        findPreference(PREF_FREEFORM_HACK).setEnabled(!lockFreeformToggle);
 
         // Dialog shown on devices which seem to not work correctly with freeform mode
         if(U.isSamsungDevice() && !pref.getBoolean("samsung_dialog_shown", false)) {
@@ -104,7 +104,7 @@ public class FreeformModeFragment extends SettingsFragment {
 
         U.registerReceiver(getActivity(), checkBoxReceiver, ACTION_UPDATE_FREEFORM_CHECKBOX);
 
-        U.sanitizePrefs(getActivity(), "window_size");
+        U.sanitizePrefs(getActivity(), PREF_WINDOW_SIZE);
         finishedLoadingPrefs = true;
     }
 
@@ -143,7 +143,7 @@ public class FreeformModeFragment extends SettingsFragment {
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
 
         switch(p.getKey()) {
-            case "freeform_hack":
+            case PREF_FREEFORM_HACK:
                 if(((CheckBoxPreference) p).isChecked()) {
                     if(!U.hasFreeformSupport(getActivity())) {
                         try {
@@ -188,7 +188,7 @@ public class FreeformModeFragment extends SettingsFragment {
                         }
                     }
 
-                    if(pref.getBoolean("taskbar_active", false)
+                    if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false)
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
                         U.startFreeformHack(getActivity(), true);
                     }
@@ -200,10 +200,10 @@ public class FreeformModeFragment extends SettingsFragment {
                 U.restartNotificationService(getActivity());
                 U.sendBroadcast(getActivity(), ACTION_FREEFORM_PREF_CHANGED);
                 break;
-            case "add_shortcut":
+            case PREF_ADD_SHORTCUT:
                 U.pinAppShortcut(getActivity());
                 break;
-            case "window_size":
+            case PREF_WINDOW_SIZE:
                 if(U.hasBrokenSetLaunchBoundsApi())
                     U.showToastLong(getActivity(), R.string.tb_window_sizes_not_available);
                 break;
@@ -213,7 +213,7 @@ public class FreeformModeFragment extends SettingsFragment {
     }
 
     private void freeformSetupComplete() {
-        ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(U.hasFreeformSupport(getActivity()));
+        ((CheckBoxPreference) findPreference(PREF_FREEFORM_HACK)).setChecked(U.hasFreeformSupport(getActivity()));
 
         if(U.hasFreeformSupport(getActivity())) {
             U.showToastLong(getActivity(), R.string.tb_reboot_required);

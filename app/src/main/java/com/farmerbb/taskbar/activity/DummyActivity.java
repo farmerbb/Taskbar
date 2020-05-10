@@ -35,6 +35,8 @@ import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class DummyActivity extends Activity {
 
     boolean shouldFinish = false;
@@ -77,7 +79,7 @@ public class DummyActivity extends Activity {
                             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
                             SharedPreferences pref = U.getSharedPreferences(this);
-                            if(pref.getBoolean("disable_animations", false))
+                            if(pref.getBoolean(PREF_DISABLE_ANIMATIONS, false))
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                             U.launchApp(this, () -> {

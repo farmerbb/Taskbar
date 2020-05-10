@@ -160,7 +160,7 @@ public class DashboardController extends UIController {
     @Override
     public void onCreateHost(UIHost host) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard)))
+        if(pref.getBoolean(PREF_DASHBOARD, context.getResources().getBoolean(R.bool.tb_def_dashboard)))
             init(context, host, () -> drawDashboard(host));
         else
             host.terminate();
@@ -398,7 +398,7 @@ public class DashboardController extends UIController {
             if(U.canDrawOverlays(context))
                 drawDashboard(host);
             else {
-                pref.edit().putBoolean("taskbar_active", false).apply();
+                pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
                 host.terminate();
             }
@@ -420,7 +420,7 @@ public class DashboardController extends UIController {
         U.sendBroadcast(context, ACTION_DASHBOARD_DISAPPEARING);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        pref.edit().remove("dont_stop_dashboard").apply();
+        pref.edit().remove(PREF_DONT_STOP_DASHBOARD).apply();
     }
 
     private void cellClick(View view, boolean isActualClick) {

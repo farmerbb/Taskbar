@@ -37,6 +37,8 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.IconPackActivity;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class AppearanceFragment extends SettingsFragment {
     private int alpha, red, green, blue;
 
@@ -49,32 +51,32 @@ public class AppearanceFragment extends SettingsFragment {
         super.onCreate(savedInstanceState);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(pref.getString("start_button_image", "null").equals("null"))
-            pref.edit().putString("start_button_image", U.getDefaultStartButtonImage(getActivity())).apply();
+        if(pref.getString(PREF_START_BUTTON_IMAGE, "null").equals("null"))
+            pref.edit().putString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(getActivity())).apply();
 
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_appearance);
 
         // Set OnClickListeners for certain preferences
-        findPreference("icon_pack_list").setOnPreferenceClickListener(this);
-        findPreference("reset_colors").setOnPreferenceClickListener(this);
-        findPreference("background_tint_pref").setOnPreferenceClickListener(this);
-        findPreference("accent_color_pref").setOnPreferenceClickListener(this);
+        findPreference(PREF_ICON_PACK_LIST).setOnPreferenceClickListener(this);
+        findPreference(PREF_RESET_COLORS).setOnPreferenceClickListener(this);
+        findPreference(PREF_BACKGROUND_TINT_PREF).setOnPreferenceClickListener(this);
+        findPreference(PREF_ACCENT_COLOR_PREF).setOnPreferenceClickListener(this);
 
         if(U.isBlissOs(getActivity()))
-            ((ListPreference) findPreference("start_button_image")).setEntries(R.array.tb_pref_start_button_image_list_alt);
+            ((ListPreference) findPreference(PREF_START_BUTTON_IMAGE)).setEntries(R.array.tb_pref_start_button_image_list_alt);
 
-        bindPreferenceSummaryToValue(findPreference("theme"));
-        bindPreferenceSummaryToValue(findPreference("invisible_button"));
-        bindPreferenceSummaryToValue(findPreference("start_button_image"));
-        bindPreferenceSummaryToValue(findPreference("icon_pack_use_mask"));
-        bindPreferenceSummaryToValue(findPreference("visual_feedback"));
-        bindPreferenceSummaryToValue(findPreference("shortcut_icon"));
-        bindPreferenceSummaryToValue(findPreference("transparent_start_menu"));
-        bindPreferenceSummaryToValue(findPreference("hide_icon_labels"));
+        bindPreferenceSummaryToValue(findPreference(PREF_THEME));
+        bindPreferenceSummaryToValue(findPreference(PREF_INVISIBLE_BUTTON));
+        bindPreferenceSummaryToValue(findPreference(PREF_START_BUTTON_IMAGE));
+        bindPreferenceSummaryToValue(findPreference(PREF_ICON_PACK_USE_MASK));
+        bindPreferenceSummaryToValue(findPreference(PREF_VISUAL_FEEDBACK));
+        bindPreferenceSummaryToValue(findPreference(PREF_SHORTCUT_ICON));
+        bindPreferenceSummaryToValue(findPreference(PREF_TRANSPARENT_START_MENU));
+        bindPreferenceSummaryToValue(findPreference(PREF_HIDE_ICON_LABELS));
 
-        findPreference("background_tint_pref").setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
-        findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
+        findPreference(PREF_BACKGROUND_TINT_PREF).setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
+        findPreference(PREF_ACCENT_COLOR_PREF).setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
 
         finishedLoadingPrefs = true;
     }
@@ -94,7 +96,7 @@ public class AppearanceFragment extends SettingsFragment {
     public void onResume() {
         super.onResume();
 
-        Preference iconPackListPref = findPreference("icon_pack_list");
+        Preference iconPackListPref = findPreference(PREF_ICON_PACK_LIST);
         if(iconPackListPref != null) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             String iconPackPackage = pref.getString("icon_pack", getActivity().getPackageName());
@@ -122,11 +124,11 @@ public class AppearanceFragment extends SettingsFragment {
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
 
         switch(p.getKey()) {
-            case "icon_pack_list":
+            case PREF_ICON_PACK_LIST:
                 Intent intent = U.getThemedIntent(getActivity(), IconPackActivity.class);
                 startActivityForResult(intent, 123);
                 break;
-            case "reset_colors":
+            case PREF_RESET_COLORS:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.tb_reset_colors)
                         .setMessage(R.string.tb_are_you_sure)
@@ -134,10 +136,10 @@ public class AppearanceFragment extends SettingsFragment {
                         .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                             finishedLoadingPrefs = false;
 
-                            pref.edit().remove("background_tint").remove("accent_color").apply();
+                            pref.edit().remove(PREF_BACKGROUND_TINT).remove(PREF_ACCENT_COLOR).apply();
 
-                            findPreference("background_tint_pref").setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
-                            findPreference("accent_color_pref").setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
+                            findPreference(PREF_BACKGROUND_TINT_PREF).setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
+                            findPreference(PREF_ACCENT_COLOR_PREF).setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
 
                             finishedLoadingPrefs = true;
                             U.restartTaskbar(getActivity());
@@ -146,10 +148,10 @@ public class AppearanceFragment extends SettingsFragment {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 break;
-            case "background_tint_pref":
+            case PREF_BACKGROUND_TINT_PREF:
                 showColorPicker(ColorPickerType.BACKGROUND_TINT);
                 break;
-            case "accent_color_pref":
+            case PREF_ACCENT_COLOR_PREF:
                 showColorPicker(ColorPickerType.ACCENT_COLOR);
                 break;
         }
@@ -317,10 +319,10 @@ public class AppearanceFragment extends SettingsFragment {
                     String preferenceId = null;
                     switch(type) {
                         case BACKGROUND_TINT:
-                            preferenceId = "background_tint";
+                            preferenceId = PREF_BACKGROUND_TINT;
                             break;
                         case ACCENT_COLOR:
-                            preferenceId = "accent_color";
+                            preferenceId = PREF_ACCENT_COLOR;
                             break;
                     }
 

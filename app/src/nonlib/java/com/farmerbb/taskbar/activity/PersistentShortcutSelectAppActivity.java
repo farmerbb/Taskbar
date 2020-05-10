@@ -38,6 +38,8 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivity {
 
     private AppEntry selectedEntry;
@@ -73,7 +75,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             checkBox.setChecked(isFreeformEnabled);
             spinner.setEnabled(isFreeformEnabled);
 
-            String defaultWindowSize = pref.getString("window_size", "standard");
+            String defaultWindowSize = pref.getString(PREF_WINDOW_SIZE, "standard");
             for(int i = 0; i < windowSizes.length; i++) {
                 if(windowSizes[i].equals(defaultWindowSize)) {
                     spinner.setSelection(i);
@@ -160,7 +162,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             shortcutIntent.putExtra("component_name", selectedEntry.getComponentName());
             shortcutIntent.putExtra("user_id", selectedEntry.getUserId(this));
 
-            if(windowSize != null) shortcutIntent.putExtra("window_size", windowSize);
+            if(windowSize != null) shortcutIntent.putExtra(PREF_WINDOW_SIZE, windowSize);
 
             Intent intent = new Intent();
             intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
@@ -181,7 +183,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         editor.putString(prefix + "package_name", selectedEntry.getPackageName());
         editor.putString(prefix + "component_name", selectedEntry.getComponentName());
         editor.putString(prefix + "label", selectedEntry.getLabel());
-        editor.putString(prefix + "window_size", windowSize);
+        editor.putString(prefix + PREF_WINDOW_SIZE, windowSize);
         editor.putLong(prefix + "user_id", selectedEntry.getUserId(this));
         editor.putFloat(prefix + "icon_threshold", threshold);
         editor.putBoolean(prefix + "added", true);

@@ -91,23 +91,23 @@ public class MainActivity extends AppCompatActivity {
         if(!U.isLibrary(this))
             setTheme(U.isDarkTheme(this) ? R.style.Taskbar_Dark : R.style.Taskbar);
         else {
-            int theme = getIntent().getIntExtra("theme", -1);
+            int theme = getIntent().getIntExtra(PREF_THEME, -1);
             if(theme != -1)
                 setTheme(theme);
         }
 
-        if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
-            editor.putBoolean("taskbar_active", false);
+        if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !U.isServiceRunning(this, NotificationService.class))
+            editor.putBoolean(PREF_TASKBAR_ACTIVE, false);
 
         // Ensure that components that should be enabled are enabled properly
-        boolean launcherEnabled = (pref.getBoolean("launcher", false) && U.canDrawOverlays(this))
+        boolean launcherEnabled = (pref.getBoolean(PREF_LAUNCHER, false) && U.canDrawOverlays(this))
                 || U.isLauncherPermanentlyEnabled(this);
 
         boolean desktopModeEnabled = U.isDesktopModeSupported(this)
-                && pref.getBoolean("desktop_mode", false);
+                && pref.getBoolean(PREF_DESKTOP_MODE, false);
 
-        editor.putBoolean("launcher", launcherEnabled);
-        editor.putBoolean("desktop_mode", desktopModeEnabled);
+        editor.putBoolean(PREF_LAUNCHER, launcherEnabled);
+        editor.putBoolean(PREF_DESKTOP_MODE, desktopModeEnabled);
         editor.apply();
 
         if(!U.isLibrary(this)) {
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     launcherEnabled && !U.isDelegatingHomeActivity(this));
 
             U.setComponentEnabled(this, KeyboardShortcutActivity.class,
-                    pref.getBoolean("keyboard_shortcut", false));
+                    pref.getBoolean(PREF_KEYBOARD_SHORTCUT, false));
 
             U.setComponentEnabled(this, ShortcutActivity.class,
                     U.enableFreeformModeShortcut(this));
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 U.setComponentEnabled(this, KeyboardShortcutActivityLockDevice.class,
-                        pref.getBoolean("keyboard_shortcut", false));
+                        pref.getBoolean(PREF_KEYBOARD_SHORTCUT, false));
             }
         }
 
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(theSwitch != null) {
             final SharedPreferences pref = U.getSharedPreferences(this);
-            theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
+            theSwitch.setChecked(pref.getBoolean(PREF_TASKBAR_ACTIVE, false));
 
             theSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
                 if(b) {
@@ -322,14 +322,14 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
 
-        editor.putBoolean("is_hidden", false);
+        editor.putBoolean(PREF_IS_HIDDEN, false);
 
         if(pref.getBoolean("first_run", true)) {
             editor.putBoolean("first_run", false);
             editor.putBoolean("collapsed", true);
         }
 
-        editor.putBoolean("taskbar_active", true);
+        editor.putBoolean(PREF_TASKBAR_ACTIVE, true);
         editor.putLong("time_of_service_start", System.currentTimeMillis());
         editor.apply();
 
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopTaskbarService() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean("taskbar_active", false).apply();
+        pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
         if(!LauncherHelper.getInstance().isOnHomeScreen()) {
             stopService(new Intent(this, TaskbarService.class));
@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateSwitch() {
         if(theSwitch != null) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            theSwitch.setChecked(pref.getBoolean("taskbar_active", false));
+            theSwitch.setChecked(pref.getBoolean(PREF_TASKBAR_ACTIVE, false));
         }
     }
 

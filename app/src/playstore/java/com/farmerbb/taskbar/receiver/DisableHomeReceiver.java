@@ -28,10 +28,10 @@ public class DisableHomeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("skip_disable_home_receiver", false))
-            pref.edit().remove("skip_disable_home_receiver").apply();
+        if(pref.getBoolean(PREF_SKIP_DISABLE_HOME_RECEIVER, false))
+            pref.edit().remove(PREF_SKIP_DISABLE_HOME_RECEIVER).apply();
         else if(!U.isLauncherPermanentlyEnabled(context)) {
-            pref.edit().putBoolean("launcher", false).apply();
+            pref.edit().putBoolean(PREF_LAUNCHER, false).apply();
 
             U.setComponentEnabled(context, HomeActivity.class, false);
             U.sendBroadcast(context, ACTION_KILL_HOME_ACTIVITY);

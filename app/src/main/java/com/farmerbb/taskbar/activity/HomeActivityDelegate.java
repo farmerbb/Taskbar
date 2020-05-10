@@ -376,8 +376,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
 
             pref.edit()
-                    .putBoolean("launcher", !isSecondaryHome)
-                    .putBoolean("desktop_mode", U.isDesktopModeSupported(this) && isSecondaryHome)
+                    .putBoolean(PREF_LAUNCHER, !isSecondaryHome)
+                    .putBoolean(PREF_DESKTOP_MODE, U.isDesktopModeSupported(this) && isSecondaryHome)
                     .apply();
         } else
             killHomeActivity();
@@ -504,8 +504,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             } catch (IllegalStateException e) { /* Gracefully fail */ }
         }
 
-        if(pref.getBoolean("taskbar_active", false) && !U.isServiceRunning(this, NotificationService.class))
-            pref.edit().putBoolean("taskbar_active", false).apply();
+        if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !U.isServiceRunning(this, NotificationService.class))
+            pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
         new Handler().postDelayed(() ->
@@ -539,18 +539,18 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 IconCache.getInstance(this).clearCache();
 
                 // Stop using HomeActivityDelegate as UI host and restart services if needed
-                if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+                if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !pref.getBoolean(PREF_IS_HIDDEN, false)) {
                     startService(new Intent(this, TaskbarService.class));
                     startService(new Intent(this, StartMenuService.class));
                     startService(new Intent(this, DashboardService.class));
                 }
             } else {
                 // Stop the Taskbar and Start Menu services if they should normally not be active
-                if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+                if(!pref.getBoolean(PREF_TASKBAR_ACTIVE, false) || pref.getBoolean(PREF_IS_HIDDEN, false)) {
                     stopService(new Intent(this, TaskbarService.class));
                     stopService(new Intent(this, StartMenuService.class));
 
-                    if(!pref.getBoolean("dont_stop_dashboard", false))
+                    if(!pref.getBoolean(PREF_DONT_STOP_DASHBOARD, false))
                         stopService(new Intent(this, DashboardService.class));
 
                     IconCache.getInstance(this).clearCache();
@@ -611,7 +611,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
             // Stop using HomeActivityDelegate as UI host and restart services if needed
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("taskbar_active", false) && !pref.getBoolean("is_hidden", false)) {
+            if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !pref.getBoolean(PREF_IS_HIDDEN, false)) {
                 startService(new Intent(this, TaskbarService.class));
                 startService(new Intent(this, StartMenuService.class));
                 startService(new Intent(this, DashboardService.class));
@@ -619,7 +619,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         } else {
             // Stop the Taskbar and Start Menu services if they should normally not be active
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(!pref.getBoolean("taskbar_active", false) || pref.getBoolean("is_hidden", false)) {
+            if(!pref.getBoolean(PREF_TASKBAR_ACTIVE, false) || pref.getBoolean(PREF_IS_HIDDEN, false)) {
                 stopService(new Intent(this, TaskbarService.class));
                 stopService(new Intent(this, StartMenuService.class));
                 stopService(new Intent(this, DashboardService.class));
@@ -948,7 +948,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         View icon = LayoutInflater.from(this).inflate(R.layout.tb_row_alt, parent, false);
 
         TextView textView = icon.findViewById(R.id.name);
-        textView.setText(pref.getBoolean("hide_icon_labels", false) ? "" : entry.getLabel());
+        textView.setText(pref.getBoolean(PREF_HIDE_ICON_LABELS, false) ? "" : entry.getLabel());
         textView.setTextColor(ContextCompat.getColor(this, R.color.tb_desktop_icon_text));
         textView.setShadowLayer(10, 0, 0, R.color.tb_desktop_icon_shadow);
 
@@ -1040,7 +1040,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             helper.setOnSecondaryHomeScreen(value, displayID);
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(pref.getBoolean("auto_hide_navbar_desktop_mode", false))
+            if(pref.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false))
                 U.showHideNavigationBar(this, displayID, !value);
         } else
             helper.setOnPrimaryHomeScreen(value);

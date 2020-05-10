@@ -231,9 +231,9 @@ public class DashboardActivity extends Activity {
 
             SharedPreferences pref = U.getSharedPreferences(this);
             if(LauncherHelper.getInstance().isOnHomeScreen() 
-                    && (!pref.getBoolean("taskbar_active", false)
-                    || pref.getBoolean("is_hidden", false)))
-                pref.edit().putBoolean("dont_stop_dashboard", true).apply();
+                    && (!pref.getBoolean(PREF_TASKBAR_ACTIVE, false)
+                    || pref.getBoolean(PREF_IS_HIDDEN, false)))
+                pref.edit().putBoolean(PREF_DONT_STOP_DASHBOARD, true).apply();
 
             shouldFinish = false;
         } else {

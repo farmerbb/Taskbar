@@ -27,16 +27,16 @@ public class EnableFreeformReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("desktop_mode", false)) return;
+        if(pref.getBoolean(PREF_DESKTOP_MODE, false)) return;
 
-        boolean freeformEnabled = pref.getBoolean("freeform_hack", false);
+        boolean freeformEnabled = pref.getBoolean(PREF_FREEFORM_HACK, false);
 
         if(intent.hasExtra("secondscreen") && freeformEnabled)
             pref.edit().putBoolean("skip_disable_freeform_receiver", true).apply();
         else if(U.hasFreeformSupport(context) && !freeformEnabled) {
             U.restartNotificationService(context);
 
-            pref.edit().putBoolean("freeform_hack", true).apply();
+            pref.edit().putBoolean(PREF_FREEFORM_HACK, true).apply();
 
             U.sendBroadcast(context, ACTION_UPDATE_FREEFORM_CHECKBOX);
         }

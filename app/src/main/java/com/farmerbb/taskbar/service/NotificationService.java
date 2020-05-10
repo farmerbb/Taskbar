@@ -86,9 +86,9 @@ public class NotificationService extends Service {
         super.onCreate();
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("taskbar_active", false)) {
+        if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false)) {
             if(U.canDrawOverlays(this)) {
-                isHidden = U.getSharedPreferences(this).getBoolean("is_hidden", false);
+                isHidden = U.getSharedPreferences(this).getBoolean(PREF_IS_HIDDEN, false);
 
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -114,7 +114,7 @@ public class NotificationService extends Service {
                 }
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, id)
-                        .setSmallIcon(pref.getString("start_button_image", U.getDefaultStartButtonImage(this)).equals("app_logo")
+                        .setSmallIcon(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(this)).equals("app_logo")
                                 ? R.drawable.tb_system
                                 : R.drawable.tb_allapps)
                         .setContentIntent(contentIntent)
@@ -127,8 +127,8 @@ public class NotificationService extends Service {
 
                 String showHideLabel;
 
-                if(U.canEnableFreeform() && !U.isChromeOs(this) && !pref.getBoolean("desktop_mode", false)) {
-                    String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.tb_freeform_off : R.string.tb_freeform_on);
+                if(U.canEnableFreeform() && !U.isChromeOs(this) && !pref.getBoolean(PREF_DESKTOP_MODE, false)) {
+                    String freeformLabel = getString(pref.getBoolean(PREF_FREEFORM_HACK, false) ? R.string.tb_freeform_off : R.string.tb_freeform_on);
 
                     Intent freeformIntent = new Intent(ACTION_TOGGLE_FREEFORM_MODE);
                     freeformIntent.setPackage(getPackageName());
@@ -158,7 +158,7 @@ public class NotificationService extends Service {
                     registerReceiver(userBackgroundReceiver, new IntentFilter(Intent.ACTION_USER_BACKGROUND));
                 }
             } else {
-                pref.edit().putBoolean("taskbar_active", false).apply();
+                pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
                 stopSelf();
             }
@@ -168,8 +168,8 @@ public class NotificationService extends Service {
     @Override
     public void onDestroy() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean("is_restarting", false))
-            pref.edit().remove("is_restarting").apply();
+        if(pref.getBoolean(PREF_IS_RESTARTING, false))
+            pref.edit().remove(PREF_IS_RESTARTING).apply();
         else {
             U.sendBroadcast(this, ACTION_UPDATE_SWITCH);
 

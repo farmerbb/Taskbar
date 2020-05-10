@@ -51,7 +51,7 @@ public class KeyboardShortcutActivity extends Activity {
                         U.startFreeformHack(this, true);
                     }
 
-                    Intent startStopIntent = new Intent(pref.getBoolean("taskbar_active", false)
+                    Intent startStopIntent = new Intent(pref.getBoolean(PREF_TASKBAR_ACTIVE, false)
                             ? ACTION_QUIT : ACTION_START);
 
                     startStopIntent.setPackage(getPackageName());

@@ -94,7 +94,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         final SharedPreferences pref = U.getSharedPreferences(getContext());
 
         TextView textView = convertView.findViewById(R.id.name);
-        textView.setText(pref.getBoolean("hide_icon_labels", false) ? "" : entry.getLabel());
+        textView.setText(pref.getBoolean(PREF_HIDE_ICON_LABELS, false) ? "" : entry.getLabel());
         textView.setTypeface(null, isTopApp(entry) ? Typeface.BOLD : Typeface.NORMAL);
         textView.setTextColor(ContextCompat.getColor(getContext(),
                 U.isDarkTheme(getContext()) ? R.color.tb_text_color_dark : R.color.tb_text_color));
@@ -115,7 +115,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
             return true;
         });
 
-        boolean visualFeedbackEnabled = pref.getBoolean("visual_feedback", true);
+        boolean visualFeedbackEnabled = pref.getBoolean(PREF_VISUAL_FEEDBACK, true);
 
         layout.setOnGenericMotionListener((view, motionEvent) -> {
             int action = motionEvent.getAction();
@@ -136,7 +136,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         if(visualFeedbackEnabled) {
             layout.setOnHoverListener((v, event) -> {
                 if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
-                    int backgroundTint = pref.getBoolean("transparent_start_menu", false)
+                    int backgroundTint = pref.getBoolean(PREF_TRANSPARENT_START_MENU, false)
                             ? U.getAccentColor(getContext())
                             : U.getBackgroundTint(getContext());
 
@@ -155,7 +155,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
             });
         }
 
-        if(pref.getBoolean("visual_feedback", true)) {
+        if(pref.getBoolean(PREF_VISUAL_FEEDBACK, true)) {
             layout.setOnTouchListener((v, event) -> {
                 v.setAlpha(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE ? 0.5f : 1);
                 return false;
@@ -222,7 +222,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         }
 
         SharedPreferences pref = U.getSharedPreferences(getContext());
-        if(pref.getBoolean("scrollbar", false)) {
+        if(pref.getBoolean(PREF_SCROLLBAR, false)) {
             for(AppEntry entry : list) {
                 char firstLetter = getSectionForAppEntry(entry);
                 if(!sections.contains(firstLetter))

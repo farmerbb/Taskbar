@@ -42,7 +42,7 @@ public class SavedWindowSizesTest {
     @Test
     public void testGetWindowSize() {
         SharedPreferences prefs = U.getSharedPreferences(context);
-        String defaultWindowSize = prefs.getString("window_size", "standard");
+        String defaultWindowSize = prefs.getString(PREF_WINDOW_SIZE, "standard");
         assertEquals(
                 defaultWindowSize,
                 savedWindowSizes.getWindowSize(context, context.getPackageName())

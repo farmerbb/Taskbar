@@ -28,11 +28,11 @@ public class EnableHomeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(intent.hasExtra("secondscreen") && pref.getBoolean("launcher", false))
-            pref.edit().putBoolean("skip_disable_home_receiver", true).apply();
+        if(intent.hasExtra("secondscreen") && pref.getBoolean(PREF_LAUNCHER, false))
+            pref.edit().putBoolean(PREF_SKIP_DISABLE_HOME_RECEIVER, true).apply();
         else if(U.canDrawOverlays(context)) {
             SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("launcher", true);
+            editor.putBoolean(PREF_LAUNCHER, true);
             editor.apply();
 
             U.setComponentEnabled(context, HomeActivity.class, true);

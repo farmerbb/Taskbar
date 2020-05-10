@@ -284,7 +284,7 @@ public class TaskbarController extends UIController {
 
         // Initialize views
         SharedPreferences pref = U.getSharedPreferences(context);
-        boolean altButtonConfig = pref.getBoolean("alt_button_config", false);
+        boolean altButtonConfig = pref.getBoolean(PREF_ALT_BUTTON_CONFIG, false);
 
         layout = (LinearLayout) LayoutInflater.from(U.wrapContext(context)).inflate(layoutId, null);
         taskbar = layout.findViewById(R.id.taskbar);
@@ -306,7 +306,7 @@ public class TaskbarController extends UIController {
         startButton = layout.findViewById(R.id.start_button);
         int padding = 0;
 
-        switch(pref.getString("start_button_image", U.getDefaultStartButtonImage(context))) {
+        switch(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(context))) {
             case "default":
                 startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
@@ -365,14 +365,14 @@ public class TaskbarController extends UIController {
             return false;
         });
 
-        refreshInterval = (int) (Float.parseFloat(pref.getString("refresh_frequency", "1")) * 1000);
+        refreshInterval = (int) (Float.parseFloat(pref.getString(PREF_REFRESH_FREQUENCY, "1")) * 1000);
         if(refreshInterval == 0)
             refreshInterval = 100;
 
-        sortOrder = pref.getString("sort_order", "false");
-        runningAppsOnly = pref.getString("recents_amount", "past_day").equals("running_apps_only");
+        sortOrder = pref.getString(PREF_SORT_ORDER, "false");
+        runningAppsOnly = pref.getString(PREF_RECENTS_AMOUNT, "past_day").equals("running_apps_only");
 
-        switch(pref.getString("recents_amount", "past_day")) {
+        switch(pref.getString(PREF_RECENTS_AMOUNT, "past_day")) {
             case "past_day":
                 searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
                 break;
@@ -418,7 +418,7 @@ public class TaskbarController extends UIController {
         dashboardButton = layout.findViewById(R.id.dashboard_button);
         navbarButtons = layout.findViewById(R.id.navbar_buttons);
 
-        dashboardEnabled = pref.getBoolean("dashboard", context.getResources().getBoolean(R.bool.tb_def_dashboard));
+        dashboardEnabled = pref.getBoolean(PREF_DASHBOARD, context.getResources().getBoolean(R.bool.tb_def_dashboard));
         if(dashboardEnabled) {
             layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
@@ -432,7 +432,7 @@ public class TaskbarController extends UIController {
         } else
             dashboardButton.setVisibility(View.GONE);
 
-        if(pref.getBoolean("button_back", false)) {
+        if(pref.getBoolean(PREF_BUTTON_BACK, false)) {
             navbarButtonsEnabled = true;
 
             ImageView backButton = layout.findViewById(R.id.button_back);
@@ -467,7 +467,7 @@ public class TaskbarController extends UIController {
             });
         }
 
-        if(pref.getBoolean("button_home", false)) {
+        if(pref.getBoolean(PREF_BUTTON_HOME, false)) {
             navbarButtonsEnabled = true;
 
             ImageView homeButton = layout.findViewById(R.id.button_home);
@@ -510,7 +510,7 @@ public class TaskbarController extends UIController {
             });
         }
 
-        if(pref.getBoolean("button_recents", false)) {
+        if(pref.getBoolean(PREF_BUTTON_RECENTS, false)) {
             navbarButtonsEnabled = true;
 
             ImageView recentsButton = layout.findViewById(R.id.button_recents);
@@ -609,10 +609,10 @@ public class TaskbarController extends UIController {
 
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar(false);
-        else if(!pref.getBoolean("collapsed", false) && pref.getBoolean("taskbar_active", false))
+        else if(!pref.getBoolean("collapsed", false) && pref.getBoolean(PREF_TASKBAR_ACTIVE, false))
             toggleTaskbar(false);
 
-        if(pref.getBoolean("auto_hide_navbar", false))
+        if(pref.getBoolean(PREF_AUTO_HIDE_NAVBAR, false))
             U.showHideNavigationBar(context, false);
 
         if(FreeformHackHelper.getInstance().isTouchAbsorberActive()) {
@@ -640,7 +640,7 @@ public class TaskbarController extends UIController {
         stopThread2 = true;
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        showHideAutomagically = pref.getBoolean("hide_when_keyboard_shown", false);
+        showHideAutomagically = pref.getBoolean(PREF_HIDE_WHEN_KEYBOARD_SHOWN, false);
 
         currentTaskbarIds.clear();
 
@@ -697,7 +697,7 @@ public class TaskbarController extends UIController {
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(context);
         int realNumOfPinnedApps = 0;
-        boolean fullLength = pref.getBoolean("full_length", context.getResources().getBoolean(R.bool.tb_def_full_length));
+        boolean fullLength = pref.getBoolean(PREF_FULL_LENGTH, context.getResources().getBoolean(R.bool.tb_def_full_length));
 
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
         List<AppEntry> pinnedApps = pba.getPinnedApps();
@@ -776,7 +776,7 @@ public class TaskbarController extends UIController {
                 }
 
                 // Filter out the currently running foreground app, if requested by the user
-                if(pref.getBoolean("hide_foreground", false)) {
+                if(pref.getBoolean(PREF_HIDE_FOREGROUND, false)) {
                     UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
                     UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
                     UsageEvents.Event eventCache = new UsageEvents.Event();
@@ -963,7 +963,7 @@ public class TaskbarController extends UIController {
                                     Space whitespaceBottom = layout.findViewById(R.id.whitespace_bottom);
                                     int height = maxScreenSize - recentsSize;
 
-                                    if(pref.getBoolean("centered_icons", false)) {
+                                    if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
                                         ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
                                         topParams.height = height / 2;
                                         whitespaceTop.setLayoutParams(topParams);
@@ -994,7 +994,7 @@ public class TaskbarController extends UIController {
                                     Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
                                     int width = maxScreenSize - recentsSize;
 
-                                    if (pref.getBoolean("centered_icons", false)) {
+                                    if (pref.getBoolean(PREF_CENTERED_ICONS, false)) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width / 2;
                                         whitespaceLeft.setLayoutParams(leftParams);
@@ -1285,9 +1285,9 @@ public class TaskbarController extends UIController {
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("skip_auto_hide_navbar", false)) {
-            pref.edit().remove("skip_auto_hide_navbar").apply();
-        } else if(pref.getBoolean("auto_hide_navbar", false))
+        if(pref.getBoolean(PREF_SKIP_AUTO_HIDE_NAVBAR, false)) {
+            pref.edit().remove(PREF_SKIP_AUTO_HIDE_NAVBAR).apply();
+        } else if(pref.getBoolean(PREF_AUTO_HIDE_NAVBAR, false))
             U.showHideNavigationBar(context, true);
 
         U.unregisterReceiver(context, showReceiver);
@@ -1311,7 +1311,7 @@ public class TaskbarController extends UIController {
         Bundle args = new Bundle();
         args.putBoolean("dont_show_quit",
                 LauncherHelper.getInstance().isOnHomeScreen()
-                        && !pref.getBoolean("taskbar_active", false));
+                        && !pref.getBoolean(PREF_TASKBAR_ACTIVE, false));
         args.putBoolean("is_start_button", true);
 
         U.startContextMenuActivity(context, args);
@@ -1319,7 +1319,7 @@ public class TaskbarController extends UIController {
 
     private void updateButton(boolean isCollapsed) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        boolean hide = pref.getBoolean("invisible_button", false);
+        boolean hide = pref.getBoolean(PREF_INVISIBLE_BUTTON, false);
 
         if(button != null) button.setText(context.getString(isCollapsed ? R.string.tb_right_arrow : R.string.tb_left_arrow));
         if(layout != null) layout.setAlpha(isCollapsed && hide ? 0 : 1);
@@ -1339,7 +1339,7 @@ public class TaskbarController extends UIController {
                 drawTaskbar(host);
             else {
                 SharedPreferences pref = U.getSharedPreferences(context);
-                pref.edit().putBoolean("taskbar_active", false).apply();
+                pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
                 host.terminate();
             }
@@ -1358,7 +1358,7 @@ public class TaskbarController extends UIController {
         imageView2.setBackgroundColor(U.getAccentColor(context));
 
         String taskbarPosition = TaskbarPosition.getTaskbarPosition(context);
-        if(pref.getBoolean("shortcut_icon", true)) {
+        if(pref.getBoolean(PREF_SHORTCUT_ICON, true)) {
             boolean shouldShowShortcutIcon;
             if(taskbarPosition.contains("vertical"))
                 shouldShowShortcutIcon = position >= list.size() - numOfPinnedApps;
@@ -1401,13 +1401,13 @@ public class TaskbarController extends UIController {
                 openContextMenu(entry, location);
             }
 
-            if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean("visual_feedback", true))
+            if(action == MotionEvent.ACTION_SCROLL && pref.getBoolean(PREF_VISUAL_FEEDBACK, true))
                 view.setBackgroundColor(0);
 
             return false;
         });
 
-        if(pref.getBoolean("visual_feedback", true)) {
+        if(pref.getBoolean(PREF_VISUAL_FEEDBACK, true)) {
             layout.setOnHoverListener((v, event) -> {
                 if(event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
                     int accentColor = U.getAccentColor(context);
@@ -1445,7 +1445,7 @@ public class TaskbarController extends UIController {
     private List<AppEntry> getAppEntries() {
         SharedPreferences pref = U.getSharedPreferences(context);
         if(runningAppsOnly)
-            return getAppEntriesUsingActivityManager(Integer.parseInt(pref.getString("max_num_of_recents", "10")));
+            return getAppEntriesUsingActivityManager(Integer.parseInt(pref.getString(PREF_MAX_NUM_OF_RECENTS, "10")));
         else
             return getAppEntriesUsingUsageStats();
     }

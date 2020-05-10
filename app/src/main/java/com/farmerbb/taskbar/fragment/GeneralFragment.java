@@ -31,6 +31,8 @@ import com.farmerbb.taskbar.util.Blacklist;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class GeneralFragment extends SettingsFragment {
 
     @Override
@@ -43,32 +45,32 @@ public class GeneralFragment extends SettingsFragment {
         addPreferencesFromResource(R.xml.tb_pref_general);
 
         // Set OnClickListeners for certain preferences
-        findPreference("blacklist").setOnPreferenceClickListener(this);
+        findPreference(PREF_BLACKLIST).setOnPreferenceClickListener(this);
 
         if(!U.isLibrary(getActivity()))
-            findPreference("notification_settings").setOnPreferenceClickListener(this);
+            findPreference(PREF_NOTIFICATION_SETTINGS).setOnPreferenceClickListener(this);
         else {
-            getPreferenceScreen().removePreference(findPreference("start_on_boot"));
-            getPreferenceScreen().removePreference(findPreference("notification_settings"));
+            getPreferenceScreen().removePreference(findPreference(PREF_START_ON_BOOT));
+            getPreferenceScreen().removePreference(findPreference(PREF_NOTIFICATION_SETTINGS));
         }
 
         if(U.canEnableFreeform()
                 && !U.isChromeOs(getActivity())
                 && !U.isOverridingFreeformHack(getActivity(), false))
-            findPreference("hide_taskbar").setSummary(R.string.tb_hide_taskbar_disclaimer);
+            findPreference(PREF_HIDE_TASKBAR).setSummary(R.string.tb_hide_taskbar_disclaimer);
 
-        bindPreferenceSummaryToValue(findPreference("start_menu_layout"));
-        bindPreferenceSummaryToValue(findPreference("scrollbar"));
-        bindPreferenceSummaryToValue(findPreference("position"));
-        bindPreferenceSummaryToValue(findPreference("anchor"));
-        bindPreferenceSummaryToValue(findPreference("alt_button_config"));
-        bindPreferenceSummaryToValue(findPreference("show_search_bar"));
-        bindPreferenceSummaryToValue(findPreference("hide_when_keyboard_shown"));
+        bindPreferenceSummaryToValue(findPreference(PREF_START_MENU_LAYOUT));
+        bindPreferenceSummaryToValue(findPreference(PREF_SCROLLBAR));
+        bindPreferenceSummaryToValue(findPreference(PREF_POSITION));
+        bindPreferenceSummaryToValue(findPreference(PREF_ANCHOR));
+        bindPreferenceSummaryToValue(findPreference(PREF_ALT_BUTTON_CONFIG));
+        bindPreferenceSummaryToValue(findPreference(PREF_SHOW_SEARCH_BAR));
+        bindPreferenceSummaryToValue(findPreference(PREF_HIDE_WHEN_KEYBOARD_SHOWN));
 
         if(U.isChromeOs(getActivity()))
-            bindPreferenceSummaryToValue(findPreference("chrome_os_context_menu_fix"));
+            bindPreferenceSummaryToValue(findPreference(PREF_CHROME_OS_CONTEXT_MENU_FIX));
         else
-            getPreferenceScreen().removePreference(findPreference("chrome_os_context_menu_fix"));
+            getPreferenceScreen().removePreference(findPreference(PREF_CHROME_OS_CONTEXT_MENU_FIX));
 
         finishedLoadingPrefs = true;
     }
@@ -94,7 +96,7 @@ public class GeneralFragment extends SettingsFragment {
         size = TopApps.getInstance(getActivity()).getTopApps().size();
         summary = summary + "\n" + (size == 1 ? getString(R.string.tb_top_app) : getString(R.string.tb_top_apps, size));
 
-        Preference blacklistPref = findPreference("blacklist");
+        Preference blacklistPref = findPreference(PREF_BLACKLIST);
         if(blacklistPref != null) {
             blacklistPref.setSummary(summary);
         }
@@ -104,11 +106,11 @@ public class GeneralFragment extends SettingsFragment {
     @Override
     public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
-            case "blacklist":
+            case PREF_BLACKLIST:
                 Intent intent = U.getThemedIntent(getActivity(), SelectAppActivity.class);
                 startActivity(intent);
                 break;
-            case "notification_settings":
+            case PREF_NOTIFICATION_SETTINGS:
                 Intent intent2 = new Intent();
                 intent2.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
 

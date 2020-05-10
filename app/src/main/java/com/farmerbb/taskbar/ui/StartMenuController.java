@@ -177,7 +177,7 @@ public class StartMenuController extends UIController {
         IconCache.getInstance(context).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(context);
-        switch(pref.getString("show_search_bar", "always")) {
+        switch(pref.getString(PREF_SHOW_SEARCH_BAR, "always")) {
             case "always":
                 shouldShowSearchBox = true;
                 break;
@@ -245,19 +245,19 @@ public class StartMenuController extends UIController {
         if((shouldShowSearchBox && !hasHardwareKeyboard) || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             layout.viewHandlesBackButton();
 
-        boolean scrollbar = pref.getBoolean("scrollbar", false);
+        boolean scrollbar = pref.getBoolean(PREF_SCROLLBAR, false);
         startMenu.setFastScrollEnabled(scrollbar);
         startMenu.setFastScrollAlwaysVisible(scrollbar);
         startMenu.setScrollBarStyle(scrollbar ? View.SCROLLBARS_OUTSIDE_INSET : View.SCROLLBARS_INSIDE_OVERLAY);
 
-        if(pref.getBoolean("transparent_start_menu", false))
+        if(pref.getBoolean(PREF_TRANSPARENT_START_MENU, false))
             startMenu.setBackgroundColor(0);
 
-        if(pref.getBoolean("visual_feedback", true))
+        if(pref.getBoolean(PREF_VISUAL_FEEDBACK, true))
             startMenu.setRecyclerListener(view -> view.setBackgroundColor(0));
 
         int columns = context.getResources().getInteger(R.integer.tb_start_menu_columns);
-        boolean isGrid = pref.getString("start_menu_layout", "grid").equals("grid");
+        boolean isGrid = pref.getString(PREF_START_MENU_LAYOUT, "grid").equals("grid");
 
         if(isGrid) {
             ViewGroup.LayoutParams startMenuParams = startMenu.getLayoutParams();
@@ -390,7 +390,7 @@ public class StartMenuController extends UIController {
             });
 
             View childLayout = layout.findViewById(R.id.search_view_child_layout);
-            if(pref.getBoolean("transparent_start_menu", false))
+            if(pref.getBoolean(PREF_TRANSPARENT_START_MENU, false))
                 childLayout.setBackgroundColor(0);
 
             if(isGrid) {
@@ -546,7 +546,7 @@ public class StartMenuController extends UIController {
 
                         if(firstDraw) {
                             SharedPreferences pref = U.getSharedPreferences(context);
-                            if(pref.getString("start_menu_layout", "grid").equals("grid")) {
+                            if(pref.getString(PREF_START_MENU_LAYOUT, "grid").equals("grid")) {
                                 startMenu.setNumColumns(context.getResources().getInteger(R.integer.tb_start_menu_columns));
                                 adapter = new StartMenuAdapter(context, R.layout.tb_row_alt, entries);
                             } else
@@ -730,7 +730,7 @@ public class StartMenuController extends UIController {
                 drawStartMenu(host);
             else {
                 SharedPreferences pref = U.getSharedPreferences(context);
-                pref.edit().putBoolean("taskbar_active", false).apply();
+                pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
                 host.terminate();
             }

@@ -72,18 +72,18 @@ public class DesktopModeFragment extends SettingsFragment {
         addPreferencesFromResource(R.xml.tb_pref_desktop_mode);
 
         // Set OnClickListeners for certain preferences
-        findPreference("desktop_mode").setOnPreferenceClickListener(this);
-        findPreference("set_launcher_default").setOnPreferenceClickListener(this);
-        findPreference("primary_launcher").setOnPreferenceClickListener(this);
+        findPreference(PREF_DESKTOP_MODE).setOnPreferenceClickListener(this);
+        findPreference(PREF_SET_LAUNCHER_DEFAULT).setOnPreferenceClickListener(this);
+        findPreference(PREF_PRIMARY_LAUNCHER).setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        if(pref.getBoolean("launcher", false)) {
-            findPreference("desktop_mode").setEnabled(false);
+        if(pref.getBoolean(PREF_LAUNCHER, false)) {
+            findPreference(PREF_DESKTOP_MODE).setEnabled(false);
             U.showToastLong(getActivity(), R.string.tb_disable_home_setting);
         } else
-            bindPreferenceSummaryToValue(findPreference("desktop_mode"));
+            bindPreferenceSummaryToValue(findPreference(PREF_DESKTOP_MODE));
 
-        bindPreferenceSummaryToValue(findPreference("display_density"));
+        bindPreferenceSummaryToValue(findPreference(PREF_DISPLAY_DENSITY));
 
         DisplayManager manager = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
         manager.registerDisplayListener(listener, null);
@@ -113,7 +113,7 @@ public class DesktopModeFragment extends SettingsFragment {
 
         isConfiguringHomeApp = false;
 
-        Preference primaryLauncherPref = findPreference("primary_launcher");
+        Preference primaryLauncherPref = findPreference(PREF_PRIMARY_LAUNCHER);
         if(primaryLauncherPref != null) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
             String primaryLauncherName = pref.getString("hsl_name", "null");
@@ -144,7 +144,7 @@ public class DesktopModeFragment extends SettingsFragment {
     @Override
     public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
-            case "desktop_mode":
+            case PREF_DESKTOP_MODE:
                 boolean isChecked = ((CheckBoxPreference) p).isChecked();
 
                 U.setComponentEnabled(getActivity(), SecondaryHomeActivity.class, isChecked);
@@ -153,7 +153,7 @@ public class DesktopModeFragment extends SettingsFragment {
                 updateAdditionalSettings(isChecked);
 
                 break;
-            case "set_launcher_default":
+            case PREF_SET_LAUNCHER_DEFAULT:
                 try {
                     startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
                     isConfiguringHomeApp = true;
@@ -162,13 +162,13 @@ public class DesktopModeFragment extends SettingsFragment {
                 }
 
                 break;
-            case "primary_launcher":
+            case PREF_PRIMARY_LAUNCHER:
                 Intent intent = new Intent(getActivity(), HSLConfigActivity.class);
                 intent.putExtra("return_to_settings", true);
                 startActivity(intent);
 
                 break;
-            case "auto_hide_navbar_desktop_mode":
+            case PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE:
                 if(U.isServiceRunning(getActivity(), TaskbarService.class))
                     U.showHideNavigationBar(getActivity(), !((CheckBoxPreference) p).isChecked());
 
@@ -187,7 +187,7 @@ public class DesktopModeFragment extends SettingsFragment {
 
     private void updateAdditionalSettings() {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        updateAdditionalSettings(pref.getBoolean("desktop_mode", false));
+        updateAdditionalSettings(pref.getBoolean(PREF_DESKTOP_MODE, false));
     }
 
     private void updateAdditionalSettings(boolean desktopModeEnabled) {
@@ -197,9 +197,9 @@ public class DesktopModeFragment extends SettingsFragment {
                 && U.hasWriteSecureSettingsPermission(getActivity())
                 && U.isDesktopModeActive(getActivity());
 
-        findPreference("display_density").setEnabled(enabled);
-        findPreference("auto_hide_navbar_desktop_mode").setEnabled(enabled);
-        findPreference("auto_hide_navbar_desktop_mode").setOnPreferenceClickListener(this);
+        findPreference(PREF_DISPLAY_DENSITY).setEnabled(enabled);
+        findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE).setEnabled(enabled);
+        findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE).setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         DisplayInfo info = U.getExternalDisplayInfo(getActivity());
@@ -207,7 +207,7 @@ public class DesktopModeFragment extends SettingsFragment {
                 ? "reset"
                 : Integer.toString(info.currentDensity);
 
-        pref.edit().putString("display_density", densityPrefValue).apply();
+        pref.edit().putString(PREF_DISPLAY_DENSITY, densityPrefValue).apply();
 
         String[] noDefaultList = getResources().getStringArray(R.array.tb_pref_display_density_list_alt);
         String[] noDefaultValues = getResources().getStringArray(R.array.tb_pref_display_density_list_values_alt);
@@ -222,7 +222,7 @@ public class DesktopModeFragment extends SettingsFragment {
             }
         }
 
-        ListPreference densityPref = ((ListPreference) findPreference("display_density"));
+        ListPreference densityPref = ((ListPreference) findPreference(PREF_DISPLAY_DENSITY));
         if(useNoDefault) {
             densityPref.setEntries(noDefaultList);
             densityPref.setEntryValues(noDefaultValues);

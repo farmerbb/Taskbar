@@ -24,6 +24,8 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class NavigationBarButtonsActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 
     @SuppressWarnings("deprecation")
@@ -34,12 +36,12 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
 
         addPreferencesFromResource(R.xml.tb_pref_navigation_bar_buttons);
 
-        findPreference("button_back").setOnPreferenceClickListener(this);
-        findPreference("button_home").setOnPreferenceClickListener(this);
-        findPreference("button_recents").setOnPreferenceClickListener(this);
+        findPreference(PREF_BUTTON_BACK).setOnPreferenceClickListener(this);
+        findPreference(PREF_BUTTON_HOME).setOnPreferenceClickListener(this);
+        findPreference(PREF_BUTTON_RECENTS).setOnPreferenceClickListener(this);
 
         if(U.isBlissOs(this) || U.hasSupportLibrary(this, 7))
-            findPreference("auto_hide_navbar").setOnPreferenceClickListener(this);
+            findPreference(PREF_AUTO_HIDE_NAVBAR).setOnPreferenceClickListener(this);
         else
             getPreferenceScreen().removePreference(findPreference("auto_hide_navbar_category"));
     }
@@ -47,7 +49,7 @@ public class NavigationBarButtonsActivity extends PreferenceActivity implements 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         switch(preference.getKey()) {
-            case "auto_hide_navbar":
+            case PREF_AUTO_HIDE_NAVBAR:
                 if(U.isServiceRunning(this, TaskbarService.class))
                     U.showHideNavigationBar(this, !((CheckBoxPreference) preference).isChecked());
 

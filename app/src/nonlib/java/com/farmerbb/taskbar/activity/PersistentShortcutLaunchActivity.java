@@ -28,6 +28,8 @@ import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class PersistentShortcutLaunchActivity extends Activity {
 
     @Override
@@ -37,7 +39,7 @@ public class PersistentShortcutLaunchActivity extends Activity {
 
         String packageName = getIntent().getStringExtra("package_name");
         String componentName = getIntent().getStringExtra("component_name");
-        String windowSize = getIntent().getStringExtra("window_size");
+        String windowSize = getIntent().getStringExtra(PREF_WINDOW_SIZE);
         long userId = getIntent().getLongExtra("user_id", userManager.getSerialNumberForUser(Process.myUserHandle()));
 
         if(!U.canDrawOverlays(this) && windowSize != null) {

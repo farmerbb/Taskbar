@@ -43,6 +43,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class IconPack {
     private String packageName;
     private String name;
@@ -80,7 +82,7 @@ public class IconPack {
             mIsLoading = true;
 
             SharedPreferences pref = U.getSharedPreferences(mContext);
-            boolean loadMasks = pref.getBoolean("icon_pack_use_mask", false);
+            boolean loadMasks = pref.getBoolean(PREF_ICON_PACK_USE_MASK, false);
 
             // Load appfilter.xml from the icon pack package
             try {

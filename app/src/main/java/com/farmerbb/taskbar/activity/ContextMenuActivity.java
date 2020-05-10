@@ -231,7 +231,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 && TaskbarPosition.isBottom(this)) {
             SharedPreferences pref = U.getSharedPreferences(this);
 
-            if(pref.getBoolean("chrome_os_context_menu_fix", true)
+            if(pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)
                     && !pref.getBoolean("has_caption", false))
                 params.y = params.y - getResources().getDimensionPixelSize(R.dimen.tb_caption_offset);
         }
@@ -554,7 +554,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 String windowSize = p.getKey().replace("window_size_", "");
 
                 SharedPreferences pref2 = U.getSharedPreferences(this);
-                if(pref2.getBoolean("save_window_sizes", true)) {
+                if(pref2.getBoolean(PREF_SAVE_WINDOW_SIZES, true)) {
                     SavedWindowSizes.getInstance(this).setWindowSize(this, entry.getPackageName(), windowSize);
                 }
 
@@ -776,7 +776,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         SharedPreferences pref = U.getSharedPreferences(this);
 
         super.finish();
-        if(showStartMenu || pref.getBoolean("disable_animations", false))
+        if(showStartMenu || pref.getBoolean(PREF_DISABLE_ANIMATIONS, false))
             overridePendingTransition(0, 0);
     }
 

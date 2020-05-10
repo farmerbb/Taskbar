@@ -1444,7 +1444,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         return (!checkPref || isFreeformModeEnabled(context))
                 && ((isChromeOs(context) && (pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)
-                || (pref.getBoolean("launcher", false) && launcherIsDefault(context))))
+                || (pref.getBoolean(PREF_LAUNCHER, false) && launcherIsDefault(context))))
                 || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
     }
 
@@ -1996,6 +1996,6 @@ public class U {
 
     public static boolean isFreeformModeEnabled(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getBoolean("desktop_mode", false) || pref.getBoolean("freeform_hack", false);
+        return pref.getBoolean(PREF_DESKTOP_MODE, false) || pref.getBoolean(PREF_FREEFORM_HACK, false);
     }
 }

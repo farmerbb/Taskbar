@@ -25,13 +25,15 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class StartReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
 
         boolean taskbarNotActive = !U.isServiceRunning(context, NotificationService.class);
-        boolean taskbarActiveButHidden = !taskbarNotActive && pref.getBoolean("is_hidden", false);
+        boolean taskbarActiveButHidden = !taskbarNotActive && pref.getBoolean(PREF_IS_HIDDEN, false);
 
         if(!U.canDrawOverlays(context)) {
             new Handler().postDelayed(() -> {
@@ -45,7 +47,7 @@ public class StartReceiver extends BroadcastReceiver {
             U.initPrefs(context);
 
             SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("is_hidden", false);
+            editor.putBoolean(PREF_IS_HIDDEN, false);
 
             if(taskbarNotActive) {
                 if(pref.getBoolean("first_run", true)) {
@@ -61,7 +63,7 @@ public class StartReceiver extends BroadcastReceiver {
                     }, 250);
                 }
 
-                editor.putBoolean("taskbar_active", true);
+                editor.putBoolean(PREF_TASKBAR_ACTIVE, true);
                 editor.putLong("time_of_service_start", System.currentTimeMillis());
             }
 

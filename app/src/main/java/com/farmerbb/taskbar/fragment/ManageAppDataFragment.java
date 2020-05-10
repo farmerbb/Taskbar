@@ -34,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class ManageAppDataFragment extends SettingsFragment {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-kkmmss", Locale.US);
@@ -48,9 +50,9 @@ public class ManageAppDataFragment extends SettingsFragment {
         addPreferencesFromResource(R.xml.tb_pref_manage_app_data);
 
         // Set OnClickListeners for certain preferences
-        findPreference("backup_settings").setOnPreferenceClickListener(this);
-        findPreference("restore_settings").setOnPreferenceClickListener(this);
-        findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
+        findPreference(PREF_BACKUP_SETTINGS).setOnPreferenceClickListener(this);
+        findPreference(PREF_RESTORE_SETTINGS).setOnPreferenceClickListener(this);
+        findPreference(PREF_CLEAR_PINNED_APPS).setOnPreferenceClickListener(this);
 
         finishedLoadingPrefs = true;
     }
@@ -70,7 +72,7 @@ public class ManageAppDataFragment extends SettingsFragment {
     @Override
     public boolean onPreferenceClick(final Preference p) {
         switch(p.getKey()) {
-            case "backup_settings":
+            case PREF_BACKUP_SETTINGS:
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
@@ -82,7 +84,7 @@ public class ManageAppDataFragment extends SettingsFragment {
                     U.showToastLong(getActivity(), R.string.tb_backup_restore_not_available);
                 }
                 break;
-            case "restore_settings":
+            case PREF_RESTORE_SETTINGS:
                 Intent intent2 = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent2.addCategory(Intent.CATEGORY_OPENABLE);
                 intent2.setType("*/*");

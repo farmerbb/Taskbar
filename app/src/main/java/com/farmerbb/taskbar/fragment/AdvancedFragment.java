@@ -59,8 +59,8 @@ public class AdvancedFragment extends SettingsFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());
-            CheckBoxPreference checkBox = (CheckBoxPreference) findPreference("launcher");
-            checkBox.setChecked(pref.getBoolean("launcher", false));
+            CheckBoxPreference checkBox = (CheckBoxPreference) findPreference(PREF_LAUNCHER);
+            checkBox.setChecked(pref.getBoolean(PREF_LAUNCHER, false));
         }
     };
 
@@ -74,50 +74,50 @@ public class AdvancedFragment extends SettingsFragment {
         addPreferencesFromResource(R.xml.tb_pref_advanced);
 
         // Set OnClickListeners for certain preferences
-        findPreference("dashboard_grid_size").setOnPreferenceClickListener(this);
-        findPreference("keyboard_shortcut").setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
+        findPreference(PREF_DASHBOARD_GRID_SIZE).setOnPreferenceClickListener(this);
+        findPreference(PREF_KEYBOARD_SHORTCUT).setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
 
         boolean isLibrary = U.isLibrary(getActivity());
         boolean isAndroidx86 = getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        boolean lockHomeToggle = (pref.getBoolean("launcher", false)
+        boolean lockHomeToggle = (pref.getBoolean(PREF_LAUNCHER, false)
                 && U.isLauncherPermanentlyEnabled(getActivity()))
-                || pref.getBoolean("desktop_mode", false);
+                || pref.getBoolean(PREF_DESKTOP_MODE, false);
 
         if(isLibrary) {
-            getPreferenceScreen().removePreference(findPreference("tasker_enabled"));
-            getPreferenceScreen().removePreference(findPreference("launcher"));
-            getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
-            getPreferenceScreen().removePreference(findPreference("navigation_bar_buttons"));
-            getPreferenceScreen().removePreference(findPreference("manage_app_data"));
+            getPreferenceScreen().removePreference(findPreference(PREF_TASKER_ENABLED));
+            getPreferenceScreen().removePreference(findPreference(PREF_LAUNCHER));
+            getPreferenceScreen().removePreference(findPreference(PREF_KEYBOARD_SHORTCUT));
+            getPreferenceScreen().removePreference(findPreference(PREF_NAVIGATION_BAR_BUTTONS));
+            getPreferenceScreen().removePreference(findPreference(PREF_MANAGE_APP_DATA));
 
-            findPreference("clear_pinned_apps").setOnPreferenceClickListener(this);
+            findPreference(PREF_CLEAR_PINNED_APPS).setOnPreferenceClickListener(this);
         } else {
-            findPreference("launcher").setEnabled(!lockHomeToggle);
-            findPreference("launcher").setOnPreferenceClickListener(this);
-            findPreference("navigation_bar_buttons").setOnPreferenceClickListener(this);
-            findPreference("manage_app_data").setOnPreferenceClickListener(this);
+            findPreference(PREF_LAUNCHER).setEnabled(!lockHomeToggle);
+            findPreference(PREF_LAUNCHER).setOnPreferenceClickListener(this);
+            findPreference(PREF_NAVIGATION_BAR_BUTTONS).setOnPreferenceClickListener(this);
+            findPreference(PREF_MANAGE_APP_DATA).setOnPreferenceClickListener(this);
 
             if(!U.isChromeOs(getActivity()))
-                findPreference("keyboard_shortcut").setOnPreferenceClickListener(this);
+                findPreference(PREF_KEYBOARD_SHORTCUT).setOnPreferenceClickListener(this);
             else
-                getPreferenceScreen().removePreference(findPreference("keyboard_shortcut"));
+                getPreferenceScreen().removePreference(findPreference(PREF_KEYBOARD_SHORTCUT));
 
-            getPreferenceScreen().removePreference(findPreference("clear_pinned_apps"));
+            getPreferenceScreen().removePreference(findPreference(PREF_CLEAR_PINNED_APPS));
         }
 
         if(!isAndroidx86 && !isLibrary
                 && U.isPlayStoreInstalled(getActivity())
                 && U.isPlayStoreRelease(getActivity())) {
-            findPreference("secondscreen").setOnPreferenceClickListener(this);
+            findPreference(PREF_SECONDSCREEN).setOnPreferenceClickListener(this);
             secondScreenPrefEnabled = true;
         } else
-            getPreferenceScreen().removePreference(findPreference("secondscreen"));
+            getPreferenceScreen().removePreference(findPreference(PREF_SECONDSCREEN));
 
-        bindPreferenceSummaryToValue(findPreference("dashboard"));
+        bindPreferenceSummaryToValue(findPreference(PREF_DASHBOARD));
 
-        U.sanitizePrefs(getActivity(), "dashboard");
+        U.sanitizePrefs(getActivity(), PREF_DASHBOARD);
         finishedLoadingPrefs = true;
     }
 
@@ -137,7 +137,7 @@ public class AdvancedFragment extends SettingsFragment {
         super.onResume();
 
         if(secondScreenPrefEnabled) {
-            findPreference("secondscreen").setTitle(
+            findPreference(PREF_SECONDSCREEN).setTitle(
                     U.getSecondScreenPackageName(getActivity()) == null
                             ? R.string.tb_pref_secondscreen_title_install
                             : R.string.tb_pref_secondscreen_title_open);
@@ -167,7 +167,7 @@ public class AdvancedFragment extends SettingsFragment {
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
 
         switch(p.getKey()) {
-            case "launcher":
+            case PREF_LAUNCHER:
                 if(U.canDrawOverlays(getActivity())) {
                     U.setComponentEnabled(getActivity(), HomeActivity.class,
                             ((CheckBoxPreference) p).isChecked());
@@ -180,7 +180,7 @@ public class AdvancedFragment extends SettingsFragment {
                     U.sendBroadcast(getActivity(), ACTION_KILL_HOME_ACTIVITY);
                 }
                 break;
-            case "keyboard_shortcut":
+            case PREF_KEYBOARD_SHORTCUT:
                 U.setComponentEnabled(getActivity(), KeyboardShortcutActivity.class,
                         ((CheckBoxPreference) p).isChecked());
 
@@ -189,7 +189,7 @@ public class AdvancedFragment extends SettingsFragment {
                             ((CheckBoxPreference) p).isChecked());
                 }
                 break;
-            case "dashboard_grid_size":
+            case PREF_DASHBOARD_GRID_SIZE:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.tb_dashboard_size_dialog, null);
 
@@ -256,11 +256,11 @@ public class AdvancedFragment extends SettingsFragment {
                 });
 
                 break;
-            case "navigation_bar_buttons":
+            case PREF_NAVIGATION_BAR_BUTTONS:
                 Intent intent = U.getThemedIntent(getActivity(), NavigationBarButtonsActivity.class);
                 startActivity(intent);
                 break;
-            case "secondscreen":
+            case PREF_SECONDSCREEN:
                 PackageManager packageManager = getActivity().getPackageManager();
                 String packageName = U.getSecondScreenPackageName(getActivity());
                 Intent intent2;
@@ -280,7 +280,7 @@ public class AdvancedFragment extends SettingsFragment {
                 }
 
                 break;
-            case "manage_app_data":
+            case PREF_MANAGE_APP_DATA:
                 navigateTo(new ManageAppDataFragment());
                 break;
         }
@@ -309,7 +309,7 @@ public class AdvancedFragment extends SettingsFragment {
             second = height;
         }
 
-        findPreference("dashboard_grid_size").setSummary(getString(R.string.tb_dashboard_grid_description, first, second));
+        findPreference(PREF_DASHBOARD_GRID_SIZE).setSummary(getString(R.string.tb_dashboard_grid_description, first, second));
 
         if(restartTaskbar) U.restartTaskbar(getActivity());
     }

@@ -26,6 +26,8 @@ import android.graphics.drawable.Drawable;
 import android.os.UserManager;
 import android.util.LruCache;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class IconCache {
 
     private final LruCache<String, BitmapDrawable> drawables;
@@ -77,7 +79,7 @@ public class IconCache {
     private Drawable loadIcon(Context context, PackageManager pm, LauncherActivityInfo appInfo) {
         SharedPreferences pref = U.getSharedPreferences(context);
         String iconPackPackage = pref.getString("icon_pack", context.getPackageName());
-        boolean useMask = pref.getBoolean("icon_pack_use_mask", false);
+        boolean useMask = pref.getBoolean(PREF_ICON_PACK_USE_MASK, false);
         IconPackManager iconPackManager = IconPackManager.getInstance();
 
         try {

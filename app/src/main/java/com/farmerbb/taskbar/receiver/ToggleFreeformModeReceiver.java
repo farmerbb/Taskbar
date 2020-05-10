@@ -30,13 +30,13 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(!pref.getBoolean("taskbar_active", false)
-                || pref.getBoolean("desktop_mode", false)) return;
+        if(!pref.getBoolean(PREF_TASKBAR_ACTIVE, false)
+                || pref.getBoolean(PREF_DESKTOP_MODE, false)) return;
 
         Intent notificationIntent = new Intent(context, NotificationService.class);
 
-        if(pref.getBoolean("freeform_hack", false)) {
-            pref.edit().putBoolean("freeform_hack", false).apply();
+        if(pref.getBoolean(PREF_FREEFORM_HACK, false)) {
+            pref.edit().putBoolean(PREF_FREEFORM_HACK, false).apply();
 
             context.stopService(notificationIntent);
 
@@ -45,7 +45,7 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
             U.stopFreeformHack(context);
             U.sendBroadcast(context, ACTION_UPDATE_FREEFORM_CHECKBOX);
         } else if(U.hasFreeformSupport(context)) {
-            pref.edit().putBoolean("freeform_hack", true).apply();
+            pref.edit().putBoolean(PREF_FREEFORM_HACK, true).apply();
 
             context.stopService(notificationIntent);
 

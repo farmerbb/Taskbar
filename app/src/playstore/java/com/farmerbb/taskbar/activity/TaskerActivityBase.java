@@ -25,6 +25,8 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.PluginBundleManager;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public abstract class TaskerActivityBase extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 
     @Override
@@ -45,7 +47,7 @@ public abstract class TaskerActivityBase extends PreferenceActivity implements P
 
             addPreferencesFromResource(R.xml.tb_pref_tasker_action);
             findPreference("show_taskbar").setOnPreferenceClickListener(this);
-            findPreference("hide_taskbar").setOnPreferenceClickListener(this);
+            findPreference(PREF_HIDE_TASKBAR).setOnPreferenceClickListener(this);
             findPreference("toggle_start_menu").setOnPreferenceClickListener(this);
             findPreference("toggle_dashboard").setOnPreferenceClickListener(this);
         }

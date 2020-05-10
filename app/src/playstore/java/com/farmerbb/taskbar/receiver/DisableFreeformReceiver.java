@@ -27,16 +27,16 @@ public class DisableFreeformReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean("desktop_mode", false)) return;
+        if(pref.getBoolean(PREF_DESKTOP_MODE, false)) return;
 
-        boolean freeformEnabled = pref.getBoolean("freeform_hack", false);
+        boolean freeformEnabled = pref.getBoolean(PREF_FREEFORM_HACK, false);
 
         if(pref.getBoolean("skip_disable_freeform_receiver", false))
             pref.edit().remove("skip_disable_freeform_receiver").apply();
         else if(!U.isChromeOs(context) && freeformEnabled) {
             U.restartNotificationService(context);
 
-            pref.edit().putBoolean("freeform_hack", false).apply();
+            pref.edit().putBoolean(PREF_FREEFORM_HACK, false).apply();
 
             U.sendBroadcast(context, ACTION_UPDATE_FREEFORM_CHECKBOX);
         }

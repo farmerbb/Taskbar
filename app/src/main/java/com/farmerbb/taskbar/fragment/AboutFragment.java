@@ -38,6 +38,8 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class AboutFragment extends SettingsFragment {
 
     private int noThanksCount = 0;
@@ -60,27 +62,27 @@ public class AboutFragment extends SettingsFragment {
                     && U.isPlayStoreRelease(getActivity())
                     && !U.isSystemApp(getActivity())
                     && !pref.getBoolean("hide_donate", false)) {
-                findPreference("donate").setOnPreferenceClickListener(this);
+                findPreference(PREF_DONATE).setOnPreferenceClickListener(this);
             } else
                 getPreferenceScreen().removePreference(findPreference("donate_category"));
         }
 
         // Set OnClickListeners for certain preferences
         if(U.canEnableFreeform())
-            findPreference("pref_screen_freeform").setOnPreferenceClickListener(this);
+            findPreference(PREF_PREF_SCREEN_FREEFORM).setOnPreferenceClickListener(this);
         else
-            getPreferenceScreen().removePreference(findPreference("pref_screen_freeform"));
+            getPreferenceScreen().removePreference(findPreference(PREF_PREF_SCREEN_FREEFORM));
 
         if(U.isDesktopModeSupported(getActivity())) {
-            findPreference("pref_screen_desktop_mode").setOnPreferenceClickListener(this);
-            findPreference("pref_screen_desktop_mode").setIcon(getDesktopModeDrawable());
+            findPreference(PREF_PREF_SCREEN_DESKTOP_MODE).setOnPreferenceClickListener(this);
+            findPreference(PREF_PREF_SCREEN_DESKTOP_MODE).setIcon(getDesktopModeDrawable());
         } else
-            getPreferenceScreen().removePreference(findPreference("pref_screen_desktop_mode"));
+            getPreferenceScreen().removePreference(findPreference(PREF_PREF_SCREEN_DESKTOP_MODE));
 
-        findPreference("pref_screen_general").setOnPreferenceClickListener(this);
-        findPreference("pref_screen_appearance").setOnPreferenceClickListener(this);
-        findPreference("pref_screen_recent_apps").setOnPreferenceClickListener(this);
-        findPreference("pref_screen_advanced").setOnPreferenceClickListener(this);
+        findPreference(PREF_PREF_SCREEN_GENERAL).setOnPreferenceClickListener(this);
+        findPreference(PREF_PREF_SCREEN_APPEARANCE).setOnPreferenceClickListener(this);
+        findPreference(PREF_PREF_SCREEN_RECENT_APPS).setOnPreferenceClickListener(this);
+        findPreference(PREF_PREF_SCREEN_ADVANCED).setOnPreferenceClickListener(this);
 
         if(!isLibrary) {
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Denver"));
@@ -88,12 +90,12 @@ public class AboutFragment extends SettingsFragment {
 
             int year = calendar.get(Calendar.YEAR);
             if(BuildConfig.DEBUG || getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-                findPreference("about").setSummary(getString(R.string.tb_pref_about_description_alt, year));
+                findPreference(PREF_ABOUT).setSummary(getString(R.string.tb_pref_about_description_alt, year));
             else {
                 String emoji = new String(Character.toChars(0x1F601));
 
-                findPreference("about").setSummary(getString(R.string.tb_pref_about_description, year, emoji));
-                findPreference("about").setOnPreferenceClickListener(this);
+                findPreference(PREF_ABOUT).setSummary(getString(R.string.tb_pref_about_description, year, emoji));
+                findPreference(PREF_ABOUT).setOnPreferenceClickListener(this);
             }
         }
 
@@ -116,10 +118,10 @@ public class AboutFragment extends SettingsFragment {
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
 
         switch(p.getKey()) {
-            case "about":
+            case PREF_ABOUT:
                 U.checkForUpdates(getActivity());
                 break;
-            case "donate":
+            case PREF_DONATE:
                 NumberFormat format = NumberFormat.getCurrencyInstance();
                 format.setCurrency(Currency.getInstance(Locale.US));
 
@@ -147,22 +149,22 @@ public class AboutFragment extends SettingsFragment {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 break;
-            case "pref_screen_general":
+            case PREF_PREF_SCREEN_GENERAL:
                 navigateTo(new GeneralFragment());
                 break;
-            case "pref_screen_appearance":
+            case PREF_PREF_SCREEN_APPEARANCE:
                 navigateTo(new AppearanceFragment());
                 break;
-            case "pref_screen_recent_apps":
+            case PREF_PREF_SCREEN_RECENT_APPS:
                 navigateTo(new RecentAppsFragment());
                 break;
-            case "pref_screen_freeform":
+            case PREF_PREF_SCREEN_FREEFORM:
                 navigateTo(new FreeformModeFragment());
                 break;
-            case "pref_screen_desktop_mode":
+            case PREF_PREF_SCREEN_DESKTOP_MODE:
                 navigateTo(new DesktopModeFragment());
                 break;
-            case "pref_screen_advanced":
+            case PREF_PREF_SCREEN_ADVANCED:
                 navigateTo(new AdvancedFragment());
                 break;
         }
