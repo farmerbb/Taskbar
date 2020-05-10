@@ -104,7 +104,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
             output.close();
 
             setResult(R.string.tb_backup_successful);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             setResult(R.string.tb_backup_failed);
         }
     }
@@ -169,7 +169,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
             }
 
             statusFile.renameTo(new File(getFilesDir(), "restore_successful"));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if(!pointOfNoReturn)
                 setResult(R.string.tb_backup_file_invalid);
         } finally {
