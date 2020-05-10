@@ -334,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
         if(U.hasFreeformSupport(this)
-                && pref.getBoolean("freeform_hack", false)
+                && U.isFreeformModeEnabled(this)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
             U.startFreeformHack(this, true);
         }

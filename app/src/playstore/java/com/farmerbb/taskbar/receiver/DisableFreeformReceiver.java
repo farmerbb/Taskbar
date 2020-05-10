@@ -27,6 +27,8 @@ public class DisableFreeformReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
+        if(pref.getBoolean("desktop_mode", false)) return;
+
         boolean freeformEnabled = pref.getBoolean("freeform_hack", false);
 
         if(pref.getBoolean("skip_disable_freeform_receiver", false))

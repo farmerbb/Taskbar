@@ -46,18 +46,13 @@ public class KeyboardShortcutActivity extends Activity {
                 if(categories.contains(Intent.CATEGORY_APP_MAPS)) {
                     SharedPreferences pref = U.getSharedPreferences(this);
                     if(U.hasFreeformSupport(this)
-                            && pref.getBoolean("freeform_hack", false)
+                            && U.isFreeformModeEnabled(this)
                             && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
                         U.startFreeformHack(this, true);
                     }
 
-                    Intent startStopIntent;
-
-                    if (pref.getBoolean("taskbar_active", false)) {
-                        startStopIntent = new Intent(ACTION_QUIT);
-                    } else {
-                        startStopIntent = new Intent(ACTION_START);
-                    }
+                    Intent startStopIntent = new Intent(pref.getBoolean("taskbar_active", false)
+                            ? ACTION_QUIT : ACTION_START);
 
                     startStopIntent.setPackage(getPackageName());
                     sendBroadcast(startStopIntent);
@@ -73,9 +68,8 @@ public class KeyboardShortcutActivity extends Activity {
                         intent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
 
                     if(intent.resolveActivity(getPackageManager()) != null) {
-                        SharedPreferences pref = U.getSharedPreferences(this);
                         if(U.hasFreeformSupport(this)
-                                && pref.getBoolean("freeform_hack", false)
+                                && U.isFreeformModeEnabled(this)
                                 && isInMultiWindowMode()) {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                             U.startActivityMaximized(getApplicationContext(), intent);

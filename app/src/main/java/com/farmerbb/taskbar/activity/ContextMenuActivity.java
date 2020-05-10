@@ -255,14 +255,12 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     @SuppressWarnings("deprecation")
     private void generateMenu() {
-        SharedPreferences pref = U.getSharedPreferences(this);
-
         if(isStartButton) {
             addPreferencesFromResource(R.xml.tb_pref_context_menu_open_settings);
             findPreference("open_taskbar_settings").setOnPreferenceClickListener(this);
             findPreference("start_menu_apps").setOnPreferenceClickListener(this);
 
-            if(pref.getBoolean("freeform_hack", false)
+            if(U.isFreeformModeEnabled(this)
                     && !U.isDesktopIconsEnabled(this)
                     && ((U.launcherIsDefault(this)
                     && !U.isOverridingFreeformHack(this, false)
@@ -320,7 +318,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             }
 
             if(U.hasFreeformSupport(this)
-                    && pref.getBoolean("freeform_hack", false)
+                    && U.isFreeformModeEnabled(this)
                     && !U.isGame(this, entry.getPackageName())) {
                 addPreferencesFromResource(R.xml.tb_pref_context_menu_show_window_sizes);
                 findPreference("show_window_sizes").setOnPreferenceClickListener(this);
@@ -599,9 +597,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "start_menu_apps":
                 Intent intent = U.getThemedIntent(this, SelectAppActivity.class);
 
-                SharedPreferences pref3 = U.getSharedPreferences(this);
                 if(U.hasFreeformSupport(this)
-                        && pref3.getBoolean("freeform_hack", false)
+                        && U.isFreeformModeEnabled(this)
                         && isInMultiWindowMode()) {
                     intent.putExtra("no_shadow", true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -689,9 +686,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 Intent intent2 = U.getThemedIntent(this, DesktopIconSelectAppActivity.class);
                 intent2.putExtra("desktop_icon", desktopIcon);
 
-                SharedPreferences pref4 = U.getSharedPreferences(this);
                 if(U.hasFreeformSupport(this)
-                        && pref4.getBoolean("freeform_hack", false)
+                        && U.isFreeformModeEnabled(this)
                         && isInMultiWindowMode()) {
                     intent2.putExtra("no_shadow", true);
                     intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);

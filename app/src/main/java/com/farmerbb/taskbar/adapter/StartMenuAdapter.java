@@ -200,9 +200,8 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
     }
 
     private boolean shouldDelay() {
-        SharedPreferences pref = U.getSharedPreferences(getContext());
         return U.hasFreeformSupport(getContext())
-                && pref.getBoolean("freeform_hack", false)
+                && U.isFreeformModeEnabled(getContext())
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }
 

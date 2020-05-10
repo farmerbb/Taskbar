@@ -37,7 +37,7 @@ public class ShortcutActivity extends Activity {
                 U.restartNotificationService(this);
 
                 SharedPreferences pref = U.getSharedPreferences(this);
-                if(!pref.getBoolean("freeform_hack", false)) {
+                if(!U.isFreeformModeEnabled(this)) {
                     pref.edit().putBoolean("freeform_hack", true).apply();
 
                     U.sendBroadcast(this, ACTION_UPDATE_FREEFORM_CHECKBOX);

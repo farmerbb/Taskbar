@@ -30,8 +30,8 @@ public class ToggleFreeformModeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(!pref.getBoolean("taskbar_active", false))
-            return;
+        if(!pref.getBoolean("taskbar_active", false)
+                || pref.getBoolean("desktop_mode", false)) return;
 
         Intent notificationIntent = new Intent(context, NotificationService.class);
 

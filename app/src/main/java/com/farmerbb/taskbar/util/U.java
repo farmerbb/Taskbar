@@ -386,7 +386,7 @@ public class U {
                 pref.getBoolean(PREF_DISABLE_ANIMATIONS, false);
 
         if(hasFreeformSupport(context)
-                && (pref.getBoolean(PREF_FREEFORM_HACK, false) || isPersistentShortcut)
+                && (isFreeformModeEnabled(context) || isPersistentShortcut)
                 && (!helper.isInFreeformWorkspace() || specialLaunch)) {
             new Handler().postDelayed(() -> {
                 startFreeformHack(context, true);
@@ -1011,8 +1011,7 @@ public class U {
     }
 
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
-        SharedPreferences pref = getSharedPreferences(context);
-        if(!canEnableFreeform() || !pref.getBoolean(PREF_FREEFORM_HACK, false))
+        if(!canEnableFreeform() || !isFreeformModeEnabled(context))
             return getActivityOptions(view).toBundle();
 
         switch(windowSize) {
@@ -1274,7 +1273,7 @@ public class U {
                 stopFreeformHack(context);
             }
         } else {
-            boolean freeformWasEnabled = pref.getBoolean(PREF_FREEFORM_HACK, false)
+            boolean freeformWasEnabled = isFreeformModeEnabled(context)
                     || pref.getBoolean(PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false);
 
             pref.edit()
@@ -1423,7 +1422,7 @@ public class U {
     public static boolean shouldCollapse(Context context, boolean pendingAppLaunch) {
         SharedPreferences pref = getSharedPreferences(context);
         if(pref.getBoolean(PREF_HIDE_TASKBAR, true)) {
-            if(!pref.getBoolean(PREF_FREEFORM_HACK, false)
+            if(!isFreeformModeEnabled(context)
                     || isOverridingFreeformHack(context, false))
                 return !LauncherHelper.getInstance().isOnHomeScreen();
             else {
@@ -1443,7 +1442,7 @@ public class U {
 
     public static boolean isOverridingFreeformHack(Context context, boolean checkPref) {
         SharedPreferences pref = getSharedPreferences(context);
-        return (!checkPref || pref.getBoolean(PREF_FREEFORM_HACK, false))
+        return (!checkPref || isFreeformModeEnabled(context))
                 && ((isChromeOs(context) && (pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)
                 || (pref.getBoolean("launcher", false) && launcherIsDefault(context))))
                 || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
@@ -1993,5 +1992,10 @@ public class U {
 
         sanitizePrefs(context, key);
         return resId;
+    }
+
+    public static boolean isFreeformModeEnabled(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getBoolean("desktop_mode", false) || pref.getBoolean("freeform_hack", false);
     }
 }

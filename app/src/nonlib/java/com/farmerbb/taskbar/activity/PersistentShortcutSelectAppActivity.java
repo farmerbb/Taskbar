@@ -68,7 +68,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             layout.findViewById(R.id.window_size_options).setVisibility(View.VISIBLE);
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            boolean isFreeformEnabled = pref.getBoolean("freeform_hack", false);
+            boolean isFreeformEnabled = U.isFreeformModeEnabled(this);
 
             checkBox.setChecked(isFreeformEnabled);
             spinner.setEnabled(isFreeformEnabled);

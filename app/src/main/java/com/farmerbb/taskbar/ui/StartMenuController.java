@@ -750,9 +750,8 @@ public class StartMenuController extends UIController {
     }
 
     private boolean shouldDelay() {
-        SharedPreferences pref = U.getSharedPreferences(context);
         return U.hasFreeformSupport(context)
-                && pref.getBoolean("freeform_hack", false)
+                && U.isFreeformModeEnabled(context)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }
 

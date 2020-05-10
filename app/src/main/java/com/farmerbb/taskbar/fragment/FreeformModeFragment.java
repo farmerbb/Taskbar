@@ -71,8 +71,9 @@ public class FreeformModeFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference("window_size"));
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
-        boolean lockFreeformToggle = pref.getBoolean("freeform_hack", false)
-                && U.isChromeOs(getActivity());
+        boolean freeformHackEnabled = pref.getBoolean("freeform_hack", false);
+        boolean lockFreeformToggle = pref.getBoolean("desktop_mode", false)
+                || (freeformHackEnabled && U.isChromeOs(getActivity()));
 
         if(!lockFreeformToggle) {
             findPreference("save_window_sizes").setDependency("freeform_hack");
@@ -82,6 +83,9 @@ public class FreeformModeFragment extends SettingsFragment {
 
             if(enableFreeformModeShortcut)
                 findPreference("add_shortcut").setDependency("freeform_hack");
+        } else {
+            ((CheckBoxPreference) findPreference("freeform_hack")).setChecked(true);
+            pref.edit().putBoolean("freeform_hack", freeformHackEnabled).apply();
         }
 
         findPreference("freeform_hack").setEnabled(!lockFreeformToggle);

@@ -96,9 +96,8 @@ public class DummyActivity extends Activity {
                 dialog.show();
                 dialog.setCancelable(false);
             } else if(getIntent().hasExtra("start_freeform_hack")) {
-                SharedPreferences pref = U.getSharedPreferences(this);
                 if(U.hasFreeformSupport(this)
-                        && pref.getBoolean("freeform_hack", false)
+                        && U.isFreeformModeEnabled(this)
                         && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
                     U.startFreeformHack(this, true);
                 }

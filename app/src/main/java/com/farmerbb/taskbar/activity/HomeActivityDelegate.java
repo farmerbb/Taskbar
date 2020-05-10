@@ -264,7 +264,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     view1 -> U.sendBroadcast(this, ACTION_HIDE_START_MENU));
 
             layout.setOnLongClickListener(view2 -> {
-                if(!pref.getBoolean("freeform_hack", false))
+                if(!U.isFreeformModeEnabled(this))
                     setWallpaper();
 
                 return false;
@@ -273,7 +273,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             layout.setOnGenericMotionListener((view3, motionEvent) -> {
                 if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                         && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY
-                        && !pref.getBoolean("freeform_hack", false))
+                        && !U.isFreeformModeEnabled(this))
                     setWallpaper();
 
                 return false;

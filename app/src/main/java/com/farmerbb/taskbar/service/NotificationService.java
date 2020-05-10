@@ -127,7 +127,7 @@ public class NotificationService extends Service {
 
                 String showHideLabel;
 
-                if(U.canEnableFreeform() && !U.isChromeOs(this)) {
+                if(U.canEnableFreeform() && !U.isChromeOs(this) && !pref.getBoolean("desktop_mode", false)) {
                     String freeformLabel = getString(pref.getBoolean("freeform_hack", false) ? R.string.tb_freeform_off : R.string.tb_freeform_on);
 
                     Intent freeformIntent = new Intent(ACTION_TOGGLE_FREEFORM_MODE);
