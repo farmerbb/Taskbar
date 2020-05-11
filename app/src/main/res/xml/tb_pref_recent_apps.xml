@@ -64,7 +64,7 @@
         android:title="@string/tb_disable_scrolling_list"/>
 
     <CheckBoxPreference
-        android:defaultValue="@bool/tb_def_full_length"
+        android:defaultValue="true"
         android:key="full_length"
         android:title="@string/tb_full_length"/>
 

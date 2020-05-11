@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2019 Braden Farmer
+<!-- Copyright 2020 Braden Farmer
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,5 +16,5 @@
 
 <resources>
     <bool name="tb_def_sys_tray">true</bool>
-    <bool name="tb_def_dashboard">true</bool>
+    <bool name="tb_def_dashboard">false</bool>
 </resources>

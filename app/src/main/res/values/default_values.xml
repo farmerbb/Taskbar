@@ -15,7 +15,6 @@
 -->
 
 <resources>
-    <bool name="tb_def_full_length">false</bool>
     <bool name="tb_def_sys_tray">false</bool>
     <bool name="tb_def_dashboard">false</bool>
 </resources>

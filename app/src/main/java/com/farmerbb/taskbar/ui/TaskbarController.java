@@ -427,8 +427,7 @@ public class TaskbarController extends UIController {
             layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
-            dashboardButton.setOnClickListener(v ->
-                    U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
+            dashboardButton.setOnClickListener(v -> U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
         } else
             dashboardButton.setVisibility(View.GONE);
 
@@ -697,7 +696,7 @@ public class TaskbarController extends UIController {
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = U.getMaxNumOfEntries(context);
         int realNumOfPinnedApps = 0;
-        boolean fullLength = pref.getBoolean(PREF_FULL_LENGTH, context.getResources().getBoolean(R.bool.tb_def_full_length));
+        boolean fullLength = pref.getBoolean(PREF_FULL_LENGTH, true);
 
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
         List<AppEntry> pinnedApps = pba.getPinnedApps();
