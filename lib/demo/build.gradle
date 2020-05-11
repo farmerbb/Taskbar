@@ -11,7 +11,7 @@ android {
     buildToolsVersion BUILD_TOOLS_VERSION
 
     defaultConfig {
-        applicationId "com.farmerbb.taskbar.demo"
+        applicationId "com.farmerbb.taskbar.lib.demo"
 
         minSdkVersion 29
         targetSdkVersion SDK_VERSION
