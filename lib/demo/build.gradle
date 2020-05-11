@@ -1,0 +1,35 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    flatDir {
+        dirs '../build/outputs/aar'
+    }
+}
+
+android {
+    compileSdkVersion SDK_VERSION
+    buildToolsVersion BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        applicationId "com.farmerbb.taskbar.demo"
+
+        minSdkVersion 29
+        targetSdkVersion SDK_VERSION
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+//  implementation(name: 'lib-release', ext: 'aar')
+    implementation 'com.farmerbb:libtaskbar:1.0.1'
+
+    implementation "androidx.legacy:legacy-support-v4:$SUPPORT_V4_VERSION"
+    implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
+    implementation "com.google.android.material:material:$MATERIAL_VERSION"
+}

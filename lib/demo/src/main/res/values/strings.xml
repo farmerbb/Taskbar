@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">libtaskbar</string>
+    <string name="set_default_home">Set default home</string>
+    <string name="open_settings">Open libtaskbar settings</string>
+</resources>
