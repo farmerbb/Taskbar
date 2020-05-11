@@ -891,15 +891,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         int right = 0;
         int bottom = 0;
 
-        if (TaskbarPosition.isVerticalLeft(position)) {
+        if(TaskbarPosition.isVerticalLeft(position))
             left = iconSize;
-        } else if (TaskbarPosition.isVerticalRight(position)) {
+        else if(TaskbarPosition.isVerticalRight(position))
             right = iconSize;
-        } else if (TaskbarPosition.isBottom(position)) {
+        else if(TaskbarPosition.isBottom(position))
             bottom = iconSize;
-        } else {
+        else
             top = iconSize;
-        }
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,

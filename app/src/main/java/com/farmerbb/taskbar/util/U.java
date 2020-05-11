@@ -526,21 +526,17 @@ public class U {
         int right = display.width;
         int bottom = display.height;
 
-        int iconSize =
-                isOverridingFreeformHack(context)
-                        && !LauncherHelper.getInstance().isOnHomeScreen()
-                        ? 0
-                        : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+        int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
+                ? 0 : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-        if (TaskbarPosition.isVerticalLeft(position)) {
+        if(TaskbarPosition.isVerticalLeft(position))
             left = left + iconSize;
-        } else if (TaskbarPosition.isVerticalRight(position)) {
+        else if(TaskbarPosition.isVerticalRight(position))
             right = right - iconSize;
-        } else if (TaskbarPosition.isBottom(position)) {
+        else if(TaskbarPosition.isBottom(position))
             bottom = bottom - iconSize;
-        } else {
+        else
             top = top + iconSize;
-        }
 
         int halfLandscape =
                 (right / 2)
@@ -550,15 +546,14 @@ public class U {
         int halfPortrait =
                 (bottom / 2) + ((iconSize / 2) * ((isTopLeft || isTopRight) ? 1 : 0));
 
-        if (launchType == RIGHT && isLandscape) {
+        if(launchType == RIGHT && isLandscape)
             left = halfLandscape;
-        } else if (launchType == RIGHT && isPortrait) {
+        else if(launchType == RIGHT && isPortrait)
             top = halfPortrait;
-        } else if (launchType == LEFT && isLandscape) {
+        else if(launchType == LEFT && isLandscape)
             right = halfLandscape;
-        } else if (launchType == LEFT && isPortrait) {
+        else if(launchType == LEFT && isPortrait)
             bottom = halfPortrait;
-        }
 
         return getActivityOptionsBundle(context, type, view, left, top, right, bottom);
     }
@@ -657,15 +652,14 @@ public class U {
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-        if (TaskbarPosition.isVerticalLeft(position)) {
+        if(TaskbarPosition.isVerticalLeft(position))
             right = iconSize;
-        } else if (TaskbarPosition.isVerticalRight(position)) {
+        else if(TaskbarPosition.isVerticalRight(position))
             left = right - iconSize;
-        } else if (TaskbarPosition.isBottom(position)) {
+        else if(TaskbarPosition.isBottom(position))
             top = bottom - iconSize;
-        } else {
+        else
             bottom = iconSize;
-        }
 
         Intent intent = new Intent(context, TouchAbsorberActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -737,8 +731,7 @@ public class U {
 
         float iconSize = context.getResources().getDimension(R.dimen.tb_icon_size) / density;
 
-        int userMaxNumOfColumns =
-                Integer.valueOf(pref.getString(PREF_MAX_NUM_OF_RECENTS, "10"));
+        int userMaxNumOfColumns = Integer.valueOf(pref.getString(PREF_MAX_NUM_OF_RECENTS, "10"));
 
         while(baseTaskbarSize + iconSize < maxScreenSize
                 && numOfColumns < userMaxNumOfColumns) {

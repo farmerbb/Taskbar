@@ -36,9 +36,9 @@ public class TaskbarPosition {
      * @return The new position transferred based on rotation.
      */
     private static String transferPositionWithRotation(String position, int rotation) {
-        switch (position) {
+        switch(position) {
             case POSITION_BOTTOM_LEFT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_BOTTOM_LEFT;
                     case Surface.ROTATION_90:
@@ -50,7 +50,7 @@ public class TaskbarPosition {
                 }
                 break;
             case POSITION_BOTTOM_VERTICAL_LEFT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_BOTTOM_VERTICAL_LEFT;
                     case Surface.ROTATION_90:
@@ -62,7 +62,7 @@ public class TaskbarPosition {
                 }
                 break;
             case POSITION_BOTTOM_RIGHT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_BOTTOM_RIGHT;
                     case Surface.ROTATION_90:
@@ -74,7 +74,7 @@ public class TaskbarPosition {
                 }
                 break;
             case POSITION_BOTTOM_VERTICAL_RIGHT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_BOTTOM_VERTICAL_RIGHT;
                     case Surface.ROTATION_90:
@@ -86,7 +86,7 @@ public class TaskbarPosition {
                 }
                 break;
             case POSITION_TOP_LEFT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_TOP_LEFT;
                     case Surface.ROTATION_90:
@@ -98,7 +98,7 @@ public class TaskbarPosition {
                 }
                 break;
             case POSITION_TOP_VERTICAL_LEFT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_TOP_VERTICAL_LEFT;
                     case Surface.ROTATION_90:
@@ -110,7 +110,7 @@ public class TaskbarPosition {
                 }
                 break;
             case POSITION_TOP_RIGHT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_TOP_RIGHT;
                     case Surface.ROTATION_90:
@@ -122,7 +122,7 @@ public class TaskbarPosition {
                 }
                 break;
             case POSITION_TOP_VERTICAL_RIGHT:
-                switch (rotation) {
+                switch(rotation) {
                     case Surface.ROTATION_0:
                         return POSITION_TOP_VERTICAL_RIGHT;
                     case Surface.ROTATION_90:
@@ -138,7 +138,7 @@ public class TaskbarPosition {
     }
 
     public static boolean isVertical(String position) {
-        switch (position) {
+        switch(position) {
             case POSITION_TOP_VERTICAL_LEFT:
             case POSITION_TOP_VERTICAL_RIGHT:
             case POSITION_BOTTOM_VERTICAL_LEFT:
@@ -154,7 +154,7 @@ public class TaskbarPosition {
     }
 
     public static boolean isLeft(String position) {
-        switch (position) {
+        switch(position) {
             case POSITION_TOP_LEFT:
             case POSITION_TOP_VERTICAL_LEFT:
             case POSITION_BOTTOM_LEFT:
@@ -170,7 +170,7 @@ public class TaskbarPosition {
     }
 
     public static boolean isRight(String position) {
-        switch (position) {
+        switch(position) {
             case POSITION_TOP_RIGHT:
             case POSITION_TOP_VERTICAL_RIGHT:
             case POSITION_BOTTOM_RIGHT:
@@ -186,7 +186,7 @@ public class TaskbarPosition {
     }
 
     public static boolean isBottom(String position) {
-        switch (position) {
+        switch(position) {
             case POSITION_BOTTOM_LEFT:
             case POSITION_BOTTOM_RIGHT:
             case POSITION_BOTTOM_VERTICAL_LEFT:

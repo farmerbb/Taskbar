@@ -116,9 +116,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         // Determine where to position the dialog on screen
         WindowManager.LayoutParams params = getWindow().getAttributes();
         
-        if (args.containsKey("x") && args.containsKey("y")) {
+        if(args.containsKey("x") && args.containsKey("y"))
             U.applyDisplayCutoutModeTo(params);
-        }
 
         DisplayInfo display = U.getDisplayInfo(this);
 
@@ -127,16 +126,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         if(resourceId > 0)
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        if (showStartMenu || desktopIcon != null) {
+        if(showStartMenu || desktopIcon != null) {
             int x = args.getInt("x", 0);
             int y = args.getInt("y", 0);
-            int offsetResourceId =
-                    isOverflowMenu
-                            ? R.dimen.tb_context_menu_offset_overflow
-                            : R.dimen.tb_context_menu_offset;
+            int offsetResourceId = isOverflowMenu
+                    ? R.dimen.tb_context_menu_offset_overflow
+                    : R.dimen.tb_context_menu_offset;
             int offset = getResources().getDimensionPixelSize(offsetResourceId);
 
-            switch (TaskbarPosition.getTaskbarPosition(this)) {
+            switch(TaskbarPosition.getTaskbarPosition(this)) {
                 case POSITION_BOTTOM_LEFT:
                 case POSITION_BOTTOM_VERTICAL_LEFT:
                     params.gravity = Gravity.BOTTOM | Gravity.LEFT;
@@ -216,10 +214,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     break;
             }
 
-            if (!TaskbarPosition.isVertical(this)
-                    && (params.x > display.width / 2)) {
-                int contextMenuWidth =
-                        getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
+            if(!TaskbarPosition.isVertical(this) && (params.x > display.width / 2)) {
+                int contextMenuWidth = getResources().getDimensionPixelSize(R.dimen.tb_context_menu_width);
                 params.x = params.x - contextMenuWidth + offset;
             }
         }

@@ -60,6 +60,7 @@ public class ShortcutUtils {
         return intent;
     }
 
+    @SuppressWarnings("rawtypes")
     public static void initFavoriteAppTiles(Context context) {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
 

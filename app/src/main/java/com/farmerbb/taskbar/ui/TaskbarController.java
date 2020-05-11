@@ -586,7 +586,7 @@ public class TaskbarController extends UIController {
                         if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                                 && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                             U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
-                            if (U.shouldCollapse(context, false))
+                            if(U.shouldCollapse(context, false))
                                 hideTaskbar(true);
                         }
                         return true;
@@ -970,7 +970,7 @@ public class TaskbarController extends UIController {
                                         ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
                                         bottomParams.height = height / 2;
                                         whitespaceBottom.setLayoutParams(bottomParams);
-                                    } else if (TaskbarPosition.isBottom(context)) {
+                                    } else if(TaskbarPosition.isBottom(context)) {
                                         ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
                                         topParams.height = height;
                                         whitespaceTop.setLayoutParams(topParams);
@@ -993,7 +993,7 @@ public class TaskbarController extends UIController {
                                     Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
                                     int width = maxScreenSize - recentsSize;
 
-                                    if (pref.getBoolean(PREF_CENTERED_ICONS, false)) {
+                                    if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width / 2;
                                         whitespaceLeft.setLayoutParams(leftParams);
@@ -1001,7 +1001,7 @@ public class TaskbarController extends UIController {
                                         ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
                                         rightParams.width = width / 2;
                                         whitespaceRight.setLayoutParams(rightParams);
-                                    } else if (TaskbarPosition.isRight(context)) {
+                                    } else if(TaskbarPosition.isRight(context)) {
                                         ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
                                         leftParams.width = width;
                                         whitespaceLeft.setLayoutParams(leftParams);
@@ -1367,8 +1367,7 @@ public class TaskbarController extends UIController {
             if(shouldShowShortcutIcon) imageView2.setVisibility(View.VISIBLE);
         }
 
-        if (POSITION_BOTTOM_RIGHT.equals(taskbarPosition)
-                || POSITION_TOP_RIGHT.equals(taskbarPosition)) {
+        if(POSITION_BOTTOM_RIGHT.equals(taskbarPosition) || POSITION_TOP_RIGHT.equals(taskbarPosition)) {
             imageView.setRotationY(180);
             imageView2.setRotationY(180);
         }
