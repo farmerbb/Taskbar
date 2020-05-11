@@ -208,7 +208,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         isSecondaryHome = this instanceof SecondaryHomeActivity;
         if(isSecondaryHome) {
-            if(!U.isDesktopModeActive(this)) {
+            if(!U.isDesktopModeActive(this) && !U.isLibrary(this)) {
                 finish();
                 return;
             }

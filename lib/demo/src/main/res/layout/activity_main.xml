@@ -13,6 +13,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:onClick="openDeveloperOptions"
+            android:text="@string/open_developer_options"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
             android:onClick="setDefaultHome"
             android:text="@string/set_default_home"/>
 
@@ -20,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_margin="8dp"
             android:onClick="openSettings"
             android:text="@string/open_settings"/>
 

@@ -1731,10 +1731,7 @@ public class U {
     }
 
     public static boolean isDesktopModeSupported(Context context) {
-        if(isLauncherPermanentlyEnabled(context)
-                || isLibrary(context)
-                || !BuildConfig.DEBUG // TODO remove this line
-                || isChromeOs(context))
+        if(isLauncherPermanentlyEnabled(context) || isChromeOs(context))
             return false;
 
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.P
@@ -1931,7 +1928,7 @@ public class U {
     }
 
     public static boolean isFavoriteAppTilesEnabled(Context context) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isChromeOs(context);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isChromeOs(context) && !isLibrary(context);
     }
 
     @SuppressWarnings("rawtypes")
@@ -1963,6 +1960,8 @@ public class U {
     }
 
     public static boolean isFreeformModeEnabled(Context context) {
+        if(isLibrary(context)) return true;
+
         SharedPreferences pref = getSharedPreferences(context);
         return pref.getBoolean(PREF_DESKTOP_MODE, false) || pref.getBoolean(PREF_FREEFORM_HACK, false);
     }

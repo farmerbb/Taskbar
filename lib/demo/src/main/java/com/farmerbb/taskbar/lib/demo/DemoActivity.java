@@ -21,13 +21,24 @@ public class DemoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {}
 
+    public void openDeveloperOptions(View v) {
+        startActivitySafely(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+    }
+
     public void setDefaultHome(View v) {
-        try {
-            startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        startActivitySafely(Settings.ACTION_HOME_SETTINGS);
     }
 
     public void openSettings(View v) {
         Taskbar.openSettings(this);
+    }
+
+    private void startActivitySafely(String action) {
+        Intent intent = new Intent(action);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
     }
 }

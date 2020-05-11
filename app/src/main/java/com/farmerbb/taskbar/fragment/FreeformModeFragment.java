@@ -71,9 +71,11 @@ public class FreeformModeFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference(PREF_WINDOW_SIZE));
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
+        boolean isLibrary = U.isLibrary(getActivity());
         boolean freeformHackEnabled = pref.getBoolean(PREF_FREEFORM_HACK, false);
         boolean lockFreeformToggle = pref.getBoolean(PREF_DESKTOP_MODE, false)
-                || (freeformHackEnabled && U.isChromeOs(getActivity()));
+                || (freeformHackEnabled && U.isChromeOs(getActivity())
+                || isLibrary);
 
         if(!lockFreeformToggle) {
             findPreference(PREF_SAVE_WINDOW_SIZES).setDependency(PREF_FREEFORM_HACK);
@@ -88,7 +90,10 @@ public class FreeformModeFragment extends SettingsFragment {
             pref.edit().putBoolean(PREF_FREEFORM_HACK, freeformHackEnabled).apply();
         }
 
-        findPreference(PREF_FREEFORM_HACK).setEnabled(!lockFreeformToggle);
+        if(!isLibrary)
+            findPreference(PREF_FREEFORM_HACK).setEnabled(!lockFreeformToggle);
+        else
+            getPreferenceScreen().removePreference(findPreference(PREF_FREEFORM_HACK));
 
         // Dialog shown on devices which seem to not work correctly with freeform mode
         if(U.isSamsungDevice() && !pref.getBoolean(PREF_SAMSUNG_DIALOG_SHOWN, false)) {

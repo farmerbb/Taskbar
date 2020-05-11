@@ -73,7 +73,7 @@ public class AboutFragment extends SettingsFragment {
         else
             getPreferenceScreen().removePreference(findPreference(PREF_PREF_SCREEN_FREEFORM));
 
-        if(U.isDesktopModeSupported(getActivity())) {
+        if(U.isDesktopModeSupported(getActivity()) && !isLibrary) {
             findPreference(PREF_PREF_SCREEN_DESKTOP_MODE).setOnPreferenceClickListener(this);
             findPreference(PREF_PREF_SCREEN_DESKTOP_MODE).setIcon(getDesktopModeDrawable());
         } else

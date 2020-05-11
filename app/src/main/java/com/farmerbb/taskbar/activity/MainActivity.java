@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean(PREF_DESKTOP_MODE, desktopModeEnabled);
         editor.apply();
 
-        if(!U.isLibrary(this)) {
+        boolean isLibrary = U.isLibrary(this);
+        if(!isLibrary) {
             U.setComponentEnabled(this, HomeActivity.class,
                     launcherEnabled && !U.isDelegatingHomeActivity(this));
 
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if(!launcherEnabled && !desktopModeEnabled) {
+        if(!launcherEnabled && !desktopModeEnabled && !isLibrary) {
             U.sendBroadcast(this, ACTION_KILL_HOME_ACTIVITY);
         }
 
@@ -268,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && !U.isLibrary(this)) {
             ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
 
             if(shortcutManager.getDynamicShortcuts().size() == 0) {
@@ -406,6 +407,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateHelpButton(SettingsFragment fragment) {
+        if(helpButton == null) return;
+
         if(fragment instanceof FreeformModeFragment) {
             helpButton.setVisibility(View.VISIBLE);
             helpButton.setOnClickListener(v -> {

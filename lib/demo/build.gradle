@@ -1,11 +1,5 @@
 apply plugin: 'com.android.application'
 
-repositories {
-    flatDir {
-        dirs '../build/outputs/aar'
-    }
-}
-
 android {
     compileSdkVersion SDK_VERSION
     buildToolsVersion BUILD_TOOLS_VERSION
@@ -26,8 +20,7 @@ android {
 }
 
 dependencies {
-//  implementation(name: 'lib-release', ext: 'aar')
-    implementation 'com.farmerbb:libtaskbar:1.0.1'
+    implementation project(path: ':lib', configuration: 'default')
 
     implementation "androidx.legacy:legacy-support-v4:$SUPPORT_V4_VERSION"
     implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
