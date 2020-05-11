@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if(!launcherEnabled) {
+        if(!launcherEnabled && !desktopModeEnabled) {
             U.sendBroadcast(this, ACTION_KILL_HOME_ACTIVITY);
         }
 

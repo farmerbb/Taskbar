@@ -34,7 +34,6 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HSLActivity;
 import com.farmerbb.taskbar.activity.HSLConfigActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
-import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -169,8 +168,9 @@ public class DesktopModeFragment extends SettingsFragment {
 
                 break;
             case PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE:
-                if(U.isServiceRunning(getActivity(), TaskbarService.class))
-                    U.showHideNavigationBar(getActivity(), !((CheckBoxPreference) p).isChecked());
+                LauncherHelper helper = LauncherHelper.getInstance();
+                if(helper.isOnSecondaryHomeScreen())
+                    U.showHideNavigationBar(getActivity(), helper.getSecondaryDisplayId(), !((CheckBoxPreference) p).isChecked());
 
                 break;
         }
