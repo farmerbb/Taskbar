@@ -162,7 +162,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             shortcutIntent.putExtra("component_name", selectedEntry.getComponentName());
             shortcutIntent.putExtra("user_id", selectedEntry.getUserId(this));
 
-            if(windowSize != null) shortcutIntent.putExtra(PREF_WINDOW_SIZE, windowSize);
+            if(windowSize != null) shortcutIntent.putExtra("window_size", windowSize);
 
             Intent intent = new Intent();
             intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
@@ -173,6 +173,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
     }
 
+    @SuppressWarnings("rawtypes")
     @TargetApi(Build.VERSION_CODES.N)
     private void createQuickSettingTileShortcut(String windowSize, int num) {
         String prefix = "qs_tile_" + num + "_";
@@ -183,7 +184,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         editor.putString(prefix + "package_name", selectedEntry.getPackageName());
         editor.putString(prefix + "component_name", selectedEntry.getComponentName());
         editor.putString(prefix + "label", selectedEntry.getLabel());
-        editor.putString(prefix + PREF_WINDOW_SIZE, windowSize);
+        editor.putString(prefix + "window_size", windowSize);
         editor.putLong(prefix + "user_id", selectedEntry.getUserId(this));
         editor.putFloat(prefix + "icon_threshold", threshold);
         editor.putBoolean(prefix + "added", true);
