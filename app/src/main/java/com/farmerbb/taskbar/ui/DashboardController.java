@@ -182,11 +182,11 @@ public class DashboardController extends UIController {
         layout.setAlpha(0);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        int width = pref.getInt(PREF_DASHBOARD_WIDTH, context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
-        int height = pref.getInt(PREF_DASHBOARD_HEIGHT, context.getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
+        int width = pref.getInt(PREF_DASHBOARD_WIDTH, context.getResources().getInteger(R.integer.tb_dashboard_width));
+        int height = pref.getInt(PREF_DASHBOARD_HEIGHT, context.getResources().getInteger(R.integer.tb_dashboard_height));
 
-        boolean isPortrait = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        boolean isLandscape = context.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         if(isPortrait) {
             columns = height;
