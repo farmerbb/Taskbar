@@ -208,12 +208,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         isSecondaryHome = this instanceof SecondaryHomeActivity;
         if(isSecondaryHome) {
-            if(!U.isDesktopModeActive(this) && !U.isLibrary(this)) {
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            if(windowManager.getDefaultDisplay().getDisplayId() == Display.DEFAULT_DISPLAY
+                    || (!U.isDesktopModeActive(this) && !U.isLibrary(this))) {
                 finish();
                 return;
             }
-
-            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         }
 
         shouldDelayFreeformHack = true;
@@ -1032,9 +1032,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         LauncherHelper helper = LauncherHelper.getInstance();
 
         if(isSecondaryHome) {
-            WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-            Display disp = wm.getDefaultDisplay();
-            int displayID = disp.getDisplayId();
+            int displayID = windowManager.getDefaultDisplay().getDisplayId();
+            if(displayID == Display.DEFAULT_DISPLAY) {
+                finish();
+                return;
+            }
 
             helper.setOnSecondaryHomeScreen(value, displayID);
 
