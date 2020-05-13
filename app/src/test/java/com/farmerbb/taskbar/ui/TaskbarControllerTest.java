@@ -3,6 +3,7 @@ package com.farmerbb.taskbar.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.widget.ImageView;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -10,6 +11,7 @@ import androidx.test.core.app.ApplicationProvider;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
+import org.bouncycastle.jcajce.provider.symmetric.Grain128;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,6 +25,14 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ServiceController;
 
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -89,6 +99,102 @@ public class TaskbarControllerTest {
         prefs.edit().putString(PREF_START_BUTTON_IMAGE, "non-support").apply();
         callDrawStartButton(context, startButton, prefs);
         checkStartButtonPadding(0, startButton);
+    }
+
+    @Test
+    public void testGetTaskbarGravity() {
+        assertEquals(
+                Gravity.BOTTOM | Gravity.LEFT,
+                callGetTaskbarGravity(POSITION_BOTTOM_LEFT)
+        );
+        assertEquals(
+                Gravity.BOTTOM | Gravity.LEFT,
+                callGetTaskbarGravity(POSITION_BOTTOM_VERTICAL_LEFT)
+        );
+        assertEquals(
+                Gravity.BOTTOM | Gravity.RIGHT,
+                callGetTaskbarGravity(POSITION_BOTTOM_RIGHT)
+        );
+        assertEquals(
+                Gravity.BOTTOM | Gravity.RIGHT,
+                callGetTaskbarGravity(POSITION_BOTTOM_VERTICAL_RIGHT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.LEFT,
+                callGetTaskbarGravity(POSITION_TOP_LEFT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.LEFT,
+                callGetTaskbarGravity(POSITION_TOP_VERTICAL_LEFT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.RIGHT,
+                callGetTaskbarGravity(POSITION_TOP_RIGHT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.RIGHT,
+                callGetTaskbarGravity(POSITION_TOP_VERTICAL_RIGHT)
+        );
+        assertEquals(
+                Gravity.BOTTOM | Gravity.LEFT,
+                callGetTaskbarGravity("unsupported")
+        );
+    }
+
+    @Test
+    public void testGetTaskbarLayoutId() {
+        assertEquals(
+                R.layout.tb_taskbar_left,
+                callGetTaskbarLayoutId(POSITION_BOTTOM_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_vertical,
+                callGetTaskbarLayoutId(POSITION_BOTTOM_VERTICAL_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_right,
+                callGetTaskbarLayoutId(POSITION_BOTTOM_RIGHT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_vertical,
+                callGetTaskbarLayoutId(POSITION_BOTTOM_VERTICAL_RIGHT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_left,
+                callGetTaskbarLayoutId(POSITION_TOP_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_top_vertical,
+                callGetTaskbarLayoutId(POSITION_TOP_VERTICAL_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_right,
+                callGetTaskbarLayoutId(POSITION_TOP_RIGHT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_top_vertical,
+                callGetTaskbarLayoutId(POSITION_TOP_VERTICAL_RIGHT)
+        );
+        assertEquals(
+                R.layout.tb_taskbar_left,
+                callGetTaskbarLayoutId("unsupported")
+        );
+    }
+
+    private int callGetTaskbarLayoutId(String taskbarPosition) {
+        return callInstanceMethod(
+                uiController,
+                "getTaskbarLayoutId",
+                from(String.class, taskbarPosition)
+        );
+    }
+
+    private int callGetTaskbarGravity(String taskbarPosition) {
+        return callInstanceMethod(
+                uiController,
+                "getTaskbarGravity",
+                from(String.class, taskbarPosition)
+        );
     }
 
     private void callDrawStartButton(Context context,

@@ -239,48 +239,10 @@ public class TaskbarController extends UIController {
         );
 
         // Determine where to show the taskbar on screen
-        switch(TaskbarPosition.getTaskbarPosition(context)) {
-            case POSITION_BOTTOM_LEFT:
-                layoutId = R.layout.tb_taskbar_left;
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                positionIsVertical = false;
-                break;
-            case POSITION_BOTTOM_VERTICAL_LEFT:
-                layoutId = R.layout.tb_taskbar_vertical;
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                positionIsVertical = true;
-                break;
-            case POSITION_BOTTOM_RIGHT:
-                layoutId = R.layout.tb_taskbar_right;
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                positionIsVertical = false;
-                break;
-            case POSITION_BOTTOM_VERTICAL_RIGHT:
-                layoutId = R.layout.tb_taskbar_vertical;
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                positionIsVertical = true;
-                break;
-            case POSITION_TOP_LEFT:
-                layoutId = R.layout.tb_taskbar_left;
-                params.gravity = Gravity.TOP | Gravity.LEFT;
-                positionIsVertical = false;
-                break;
-            case POSITION_TOP_VERTICAL_LEFT:
-                layoutId = R.layout.tb_taskbar_top_vertical;
-                params.gravity = Gravity.TOP | Gravity.LEFT;
-                positionIsVertical = true;
-                break;
-            case POSITION_TOP_RIGHT:
-                layoutId = R.layout.tb_taskbar_right;
-                params.gravity = Gravity.TOP | Gravity.RIGHT;
-                positionIsVertical = false;
-                break;
-            case POSITION_TOP_VERTICAL_RIGHT:
-                layoutId = R.layout.tb_taskbar_top_vertical;
-                params.gravity = Gravity.TOP | Gravity.RIGHT;
-                positionIsVertical = true;
-                break;
-        }
+        String taskbarPosition = TaskbarPosition.getTaskbarPosition(context);
+        params.gravity = getTaskbarGravity(taskbarPosition);
+        layoutId = getTaskbarLayoutId(taskbarPosition);
+        positionIsVertical = TaskbarPosition.isVertical(taskbarPosition);
 
         // Initialize views
         SharedPreferences pref = U.getSharedPreferences(context);
@@ -573,6 +535,52 @@ public class TaskbarController extends UIController {
         host.addView(layout, params);
 
         isFirstStart = false;
+    }
+
+    public int getTaskbarGravity(String taskbarPosition) {
+        int gravity = Gravity.BOTTOM | Gravity.LEFT;
+        switch(taskbarPosition) {
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+                gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case POSITION_TOP_LEFT:
+            case POSITION_TOP_VERTICAL_LEFT:
+                gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case POSITION_TOP_RIGHT:
+            case POSITION_TOP_VERTICAL_RIGHT:
+                gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+        }
+        return gravity;
+    }
+
+    private int getTaskbarLayoutId(String taskbarPosition) {
+        int layoutId = R.layout.tb_taskbar_left;
+        switch(taskbarPosition) {
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_TOP_LEFT:
+                layoutId = R.layout.tb_taskbar_left;
+                break;
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                layoutId = R.layout.tb_taskbar_vertical;
+                break;
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_TOP_RIGHT:
+                layoutId = R.layout.tb_taskbar_right;
+                break;
+            case POSITION_TOP_VERTICAL_LEFT:
+            case POSITION_TOP_VERTICAL_RIGHT:
+                layoutId = R.layout.tb_taskbar_top_vertical;
+                break;
+        }
+        return layoutId;
     }
 
     private void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
