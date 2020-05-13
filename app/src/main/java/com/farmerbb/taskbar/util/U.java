@@ -122,23 +122,18 @@ public class U {
     }
 
     public static void showPermissionDialog(Context context) {
-        showPermissionDialog(context, null, null);
+        Callbacks callbacks = new Callbacks();
+        callbacks.onError = () -> showErrorDialog(context, "SYSTEM_ALERT_WINDOW", callbacks);
+
+        showPermissionDialog(context, callbacks);
     }
 
-    public static AlertDialog showPermissionDialog(Context context, Runnable onError, Runnable onFinish) {
-        Runnable finalOnFinish = onFinish == null
-                ? () -> {}
-                : onFinish;
-
-        Runnable finalOnError = onError == null
-                ? () -> showErrorDialog(context, "SYSTEM_ALERT_WINDOW", finalOnFinish)
-                : onError;
-
+    public static AlertDialog showPermissionDialog(Context context, Callbacks callbacks) {
         AlertDialog.Builder builder;
         if(hasAndroidTVSettings(context))
-            builder = buildPermissionDialogAndroidTV(context, finalOnError, finalOnFinish);
+            builder = buildPermissionDialogAndroidTV(context, callbacks);
         else
-            builder = buildPermissionDialogStandard(context, finalOnError, finalOnFinish);
+            builder = buildPermissionDialogStandard(context, callbacks);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -148,28 +143,24 @@ public class U {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    private static AlertDialog.Builder buildPermissionDialogStandard(Context context, Runnable onError, Runnable onFinish) {
+    private static AlertDialog.Builder buildPermissionDialogStandard(Context context, Callbacks callbacks) {
         return new AlertDialog.Builder(context)
                 .setTitle(R.string.tb_permission_dialog_title)
                 .setMessage(R.string.tb_permission_dialog_message)
                 .setPositiveButton(R.string.tb_action_grant_permission, (dialog, which) -> {
                     try {
-                        Intent intent =
-                                new Intent(
-                                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                        Uri.parse("package:" + context.getPackageName())
-                                );
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
 
-                        onFinish.run();
+                        callbacks.onFinish.run();
                     } catch (ActivityNotFoundException e) {
-                        onError.run();
+                        callbacks.onError.run();
                     }
                 });
     }
 
-    private static AlertDialog.Builder buildPermissionDialogAndroidTV(Context context, Runnable onError, Runnable onFinish) {
+    private static AlertDialog.Builder buildPermissionDialogAndroidTV(Context context, Callbacks callbacks) {
         return new AlertDialog.Builder(context)
                 .setTitle(R.string.tb_permission_dialog_title)
                 .setMessage(R.string.tb_permission_dialog_message_alt)
@@ -178,26 +169,23 @@ public class U {
                         Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
-                        onFinish.run();
+
+                        callbacks.onFinish.run();
                     } catch (ActivityNotFoundException e) {
-                        onError.run();
+                        callbacks.onError.run();
                     }
                 });
     }
 
     public static AlertDialog showErrorDialog(Context context, String appopCmd) {
-        return showErrorDialog(context, appopCmd, null);
+        return showErrorDialog(context, appopCmd, new Callbacks());
     }
 
-    private static AlertDialog showErrorDialog(Context context, String appopCmd, Runnable onFinish) {
-        Runnable finalOnFinish = onFinish == null
-                ? () -> {}
-                : onFinish;
-
+    private static AlertDialog showErrorDialog(Context context, String appopCmd, Callbacks callbacks) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.tb_error_dialog_title)
                 .setMessage(context.getString(R.string.tb_error_dialog_message, context.getPackageName(), appopCmd))
-                .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> finalOnFinish.run());
+                .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> callbacks.onFinish.run());
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -1491,18 +1479,13 @@ public class U {
     }
 
     public static void showRecentAppsDialog(Context context) {
-        showRecentAppsDialog(context, null, null);
+        Callbacks callbacks = new Callbacks();
+        callbacks.onError = () -> showErrorDialog(context, "GET_USAGE_STATS", callbacks);
+
+        showRecentAppsDialog(context, callbacks);
     }
 
-    public static AlertDialog showRecentAppsDialog(Context context, Runnable onError, Runnable onFinish) {
-        Runnable finalOnFinish = onFinish == null
-                ? () -> {}
-                : onFinish;
-
-        Runnable finalOnError = onError == null
-                ? () -> showErrorDialog(context, "GET_USAGE_STATS", finalOnFinish)
-                : onError;
-
+    public static AlertDialog showRecentAppsDialog(Context context, Callbacks callbacks) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isSystemApp(context)) {
             ApplicationInfo applicationInfo = null;
             try {
@@ -1516,9 +1499,9 @@ public class U {
                 if(mode != AppOpsManager.MODE_ALLOWED) {
                     AlertDialog.Builder builder;
                     if(hasAndroidTVSettings(context))
-                        builder = buildRecentAppsDialogAndroidTV(context, finalOnError, finalOnFinish);
+                        builder = buildRecentAppsDialogAndroidTV(context, callbacks);
                     else
-                        builder = buildRecentAppsDialogStandard(context, finalOnError, finalOnFinish);
+                        builder = buildRecentAppsDialogStandard(context, callbacks);
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
@@ -1529,11 +1512,11 @@ public class U {
             }
         }
 
-        finalOnFinish.run();
+        callbacks.onFinish.run();
         return null;
     }
 
-    private static AlertDialog.Builder buildRecentAppsDialogStandard(Context context, Runnable onError, Runnable onFinish) {
+    private static AlertDialog.Builder buildRecentAppsDialogStandard(Context context, Callbacks callbacks) {
         return new AlertDialog.Builder(context)
                 .setTitle(R.string.tb_pref_header_recent_apps)
                 .setMessage(R.string.tb_enable_recent_apps)
@@ -1542,27 +1525,27 @@ public class U {
                         context.startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                         showToastLong(context, R.string.tb_usage_stats_message);
 
-                        onFinish.run();
+                        callbacks.onFinish.run();
                     } catch (ActivityNotFoundException e) {
-                        onError.run();
+                        callbacks.onError.run();
                     }
                 })
-                .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> onFinish.run());
+                .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> callbacks.onFinish.run());
     }
 
-    private static AlertDialog.Builder buildRecentAppsDialogAndroidTV(Context context, Runnable onError, Runnable onFinish) {
+    private static AlertDialog.Builder buildRecentAppsDialogAndroidTV(Context context, Callbacks callbacks) {
         return new AlertDialog.Builder(context)
                 .setTitle(R.string.tb_pref_header_recent_apps)
                 .setMessage(R.string.tb_enable_recent_apps_alt)
                 .setPositiveButton(R.string.tb_action_open_settings, (dialog, which) -> {
                     try {
                         context.startActivity(new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS));
-                        onFinish.run();
+                        callbacks.onFinish.run();
                     } catch (ActivityNotFoundException e) {
-                        onError.run();
+                        callbacks.onError.run();
                     }
                 })
-                .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> onFinish.run());
+                .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> callbacks.onFinish.run());
     }
 
     public static Context wrapContext(Context context) {

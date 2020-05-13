@@ -58,6 +58,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.Callbacks;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -466,9 +467,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             } else if(U.launcherIsDefault(this))
                 startFreeformHack();
         } else if(!waitingForPermission)
-            dialog = U.showPermissionDialog(U.wrapContext(this),
+            dialog = U.showPermissionDialog(U.wrapContext(this), new Callbacks(
                     () -> dialog = U.showErrorDialog(U.wrapContext(this), "SYSTEM_ALERT_WINDOW"),
-                    () -> waitingForPermission = true);
+                    () -> waitingForPermission = true));
     }
 
     private void startTaskbar() {
@@ -479,9 +480,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             editor.putBoolean(PREF_COLLAPSED, true);
             editor.apply();
 
-            dialog = U.showRecentAppsDialog(U.wrapContext(this),
+            dialog = U.showRecentAppsDialog(U.wrapContext(this), new Callbacks(
                     () -> dialog = U.showErrorDialog(U.wrapContext(this), "GET_USAGE_STATS"),
-                    null);
+                    null));
         }
 
         if(isSecondaryHome) {

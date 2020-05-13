@@ -32,6 +32,7 @@ import android.view.View;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.ApplicationType;
+import com.farmerbb.taskbar.util.Callbacks;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
@@ -106,9 +107,9 @@ public class DummyActivity extends Activity {
 
                 finish();
             } else if(getIntent().hasExtra("show_permission_dialog"))
-                U.showPermissionDialog(U.wrapContext(this), null, this::finish);
+                U.showPermissionDialog(U.wrapContext(this), new Callbacks(null, this::finish));
             else if(getIntent().hasExtra("show_recent_apps_dialog"))
-                U.showRecentAppsDialog(U.wrapContext(this), null, this::finish);
+                U.showRecentAppsDialog(U.wrapContext(this), new Callbacks(null, this::finish));
             else if(!finishOnPause)
                 finish();
         }
