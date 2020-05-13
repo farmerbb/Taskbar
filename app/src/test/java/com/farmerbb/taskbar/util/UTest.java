@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -756,7 +757,7 @@ public class UTest {
         assertEquals(R.style.Taskbar_Dark, (int) themeResource);
         prefs.edit().putString(PREF_THEME, "non-support").apply();
         newContext = U.wrapContext(context);
-        assertEquals(context, newContext);
+        assertTrue(newContext instanceof ContextThemeWrapper);
         prefs.edit().remove(PREF_THEME).apply();
         newContext = U.wrapContext(context);
         themeResource = ReflectionHelpers.getField(newContext, "mThemeResource");
@@ -883,6 +884,8 @@ public class UTest {
         SharedPreferences prefs = U.getSharedPreferences(context);
         assertFalse(U.isSystemTrayEnabled(context));
         prefs.edit().putBoolean(PREF_SYS_TRAY, true).apply();
+        assertTrue(U.isSystemTrayEnabled(context));
+        prefs.edit().putBoolean(PREF_FULL_LENGTH, false).apply();
         assertFalse(U.isSystemTrayEnabled(context));
         prefs.edit().putBoolean(PREF_FULL_LENGTH, true).apply();
         assertTrue(U.isSystemTrayEnabled(context));
