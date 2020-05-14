@@ -239,48 +239,10 @@ public class TaskbarController extends UIController {
         );
 
         // Determine where to show the taskbar on screen
-        switch(TaskbarPosition.getTaskbarPosition(context)) {
-            case POSITION_BOTTOM_LEFT:
-                layoutId = R.layout.tb_taskbar_left;
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                positionIsVertical = false;
-                break;
-            case POSITION_BOTTOM_VERTICAL_LEFT:
-                layoutId = R.layout.tb_taskbar_vertical;
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                positionIsVertical = true;
-                break;
-            case POSITION_BOTTOM_RIGHT:
-                layoutId = R.layout.tb_taskbar_right;
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                positionIsVertical = false;
-                break;
-            case POSITION_BOTTOM_VERTICAL_RIGHT:
-                layoutId = R.layout.tb_taskbar_vertical;
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                positionIsVertical = true;
-                break;
-            case POSITION_TOP_LEFT:
-                layoutId = R.layout.tb_taskbar_left;
-                params.gravity = Gravity.TOP | Gravity.LEFT;
-                positionIsVertical = false;
-                break;
-            case POSITION_TOP_VERTICAL_LEFT:
-                layoutId = R.layout.tb_taskbar_top_vertical;
-                params.gravity = Gravity.TOP | Gravity.LEFT;
-                positionIsVertical = true;
-                break;
-            case POSITION_TOP_RIGHT:
-                layoutId = R.layout.tb_taskbar_right;
-                params.gravity = Gravity.TOP | Gravity.RIGHT;
-                positionIsVertical = false;
-                break;
-            case POSITION_TOP_VERTICAL_RIGHT:
-                layoutId = R.layout.tb_taskbar_top_vertical;
-                params.gravity = Gravity.TOP | Gravity.RIGHT;
-                positionIsVertical = true;
-                break;
-        }
+        String taskbarPosition = TaskbarPosition.getTaskbarPosition(context);
+        params.gravity = getTaskbarGravity(taskbarPosition);
+        layoutId = getTaskbarLayoutId(taskbarPosition);
+        positionIsVertical = TaskbarPosition.isVertical(taskbarPosition);
 
         // Initialize views
         SharedPreferences pref = U.getSharedPreferences(context);
@@ -304,66 +266,7 @@ public class TaskbarController extends UIController {
         space.setOnClickListener(v -> toggleTaskbar(true));
 
         startButton = layout.findViewById(R.id.start_button);
-        int padding = 0;
-
-        switch(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(context))) {
-            case "default":
-                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
-                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
-                break;
-            case "app_logo":
-                Drawable drawable;
-
-                if(U.isBlissOs(context)) {
-                    drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
-                    drawable.setTint(accentColor);
-                } else {
-                    LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
-                    LauncherActivityInfo info = launcherApps.getActivityList(context.getPackageName(), Process.myUserHandle()).get(0);
-                    drawable = IconCache.getInstance(context).getIcon(context, context.getPackageManager(), info);
-                }
-
-                startButton.setImageDrawable(drawable);
-                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
-                break;
-            case "custom":
-                File file = new File(context.getFilesDir() + "/tb_images", "custom_image");
-                if(file.exists()) {
-                    Handler handler = new Handler();
-                    new Thread(() -> {
-                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                        handler.post(() -> {
-                            if(bitmap != null) {
-                                BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
-                                bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
-                                startButton.setImageDrawable(bitmapDrawable);
-                            } else {
-                                U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
-                                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
-                            }
-                        });
-                    }).start();
-                } else
-                    startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
-
-                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
-                break;
-        }
-
-        startButton.setPadding(padding, padding, padding, padding);
-        startButton.setOnClickListener(ocl);
-        startButton.setOnLongClickListener(view -> {
-            openContextMenu();
-            return true;
-        });
-
-        startButton.setOnGenericMotionListener((view, motionEvent) -> {
-            if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
-                openContextMenu();
-
-            return false;
-        });
+        drawStartButton(context, startButton, pref, accentColor);
 
         refreshInterval = (int) (Float.parseFloat(pref.getString(PREF_REFRESH_FREQUENCY, "1")) * 1000);
         if(refreshInterval == 0)
@@ -632,6 +535,115 @@ public class TaskbarController extends UIController {
         host.addView(layout, params);
 
         isFirstStart = false;
+    }
+
+    public int getTaskbarGravity(String taskbarPosition) {
+        int gravity = Gravity.BOTTOM | Gravity.LEFT;
+        switch(taskbarPosition) {
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+                gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case POSITION_TOP_LEFT:
+            case POSITION_TOP_VERTICAL_LEFT:
+                gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case POSITION_TOP_RIGHT:
+            case POSITION_TOP_VERTICAL_RIGHT:
+                gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+        }
+        return gravity;
+    }
+
+    private int getTaskbarLayoutId(String taskbarPosition) {
+        int layoutId = R.layout.tb_taskbar_left;
+        switch(taskbarPosition) {
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_TOP_LEFT:
+                layoutId = R.layout.tb_taskbar_left;
+                break;
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                layoutId = R.layout.tb_taskbar_vertical;
+                break;
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_TOP_RIGHT:
+                layoutId = R.layout.tb_taskbar_right;
+                break;
+            case POSITION_TOP_VERTICAL_LEFT:
+            case POSITION_TOP_VERTICAL_RIGHT:
+                layoutId = R.layout.tb_taskbar_top_vertical;
+                break;
+        }
+        return layoutId;
+    }
+
+    private void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
+        int padding = 0;
+
+        switch(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(context))) {
+            case "default":
+                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
+                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
+                break;
+            case "app_logo":
+                Drawable drawable;
+
+                if(U.isBlissOs(context)) {
+                    drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
+                    drawable.setTint(accentColor);
+                } else {
+                    LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+                    LauncherActivityInfo info = launcherApps.getActivityList(context.getPackageName(), Process.myUserHandle()).get(0);
+                    drawable = IconCache.getInstance(context).getIcon(context, context.getPackageManager(), info);
+                }
+
+                startButton.setImageDrawable(drawable);
+                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
+                break;
+            case "custom":
+                File file = new File(context.getFilesDir() + "/tb_images", "custom_image");
+                if(file.exists()) {
+                    Handler handler = new Handler();
+                    new Thread(() -> {
+                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                        handler.post(() -> {
+                            if(bitmap != null) {
+                                BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
+                                bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
+                                startButton.setImageDrawable(bitmapDrawable);
+                            } else {
+                                U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
+                                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
+                            }
+                        });
+                    }).start();
+                } else
+                    startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
+
+                padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
+                break;
+        }
+
+        startButton.setPadding(padding, padding, padding, padding);
+        startButton.setOnClickListener(ocl);
+        startButton.setOnLongClickListener(view -> {
+            openContextMenu();
+            return true;
+        });
+
+        startButton.setOnGenericMotionListener((view, motionEvent) -> {
+            if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                    && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
+                openContextMenu();
+
+            return false;
+        });
     }
 
     private void startRefreshingRecents() {
