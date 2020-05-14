@@ -46,16 +46,22 @@ public class TaskbarControllerTest {
     private Context context;
     SharedPreferences prefs;
 
+    private UIHost host = new MockUIHost();
+
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
         uiController = new TaskbarController(context);
         prefs = U.getSharedPreferences(context);
+
+        uiController.onCreateHost(host);
     }
 
     @After
     public void tearDown() {
         prefs.edit().remove(PREF_START_BUTTON_IMAGE).apply();
+
+        uiController.onDestroyHost(host);
     }
 
     @Test
