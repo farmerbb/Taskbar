@@ -101,7 +101,7 @@ public class UTest {
         RunnableHooker onFinish = new RunnableHooker();
         PowerMockito.spy(U.class);
         when(U.class, "hasAndroidTVSettings", context).thenReturn(hasAndroidTVSettings);
-        AlertDialog dialog = U.showPermissionDialog(context, onError, onFinish);
+        AlertDialog dialog = U.showPermissionDialog(context, new Callbacks(onError, onFinish));
         ShadowAlertDialog shadowDialog = Shadows.shadowOf(dialog);
         Resources resources = context.getResources();
         assertEquals(
@@ -127,7 +127,7 @@ public class UTest {
                         "showErrorDialog",
                         from(Context.class, context),
                         from(String.class, appOpCommand),
-                        from(Runnable.class, onFinish)
+                        from(Callbacks.class, new Callbacks(null, onFinish))
                 );
         ShadowAlertDialog shadowDialog = Shadows.shadowOf(dialog);
         Resources resources = context.getResources();
