@@ -173,11 +173,11 @@ public class TaskbarControllerTest {
     }
 
     private int callGetTaskbarLayoutId(String taskbarPosition) {
-        uiController.getTaskbarLayoutId(taskbarPosition);
+        return uiController.getTaskbarLayoutId(taskbarPosition);
     }
 
     private int callGetTaskbarGravity(String taskbarPosition) {
-        uiController.getTaskbarGravity(taskbarPosition);
+        return uiController.getTaskbarGravity(taskbarPosition);
     }
 
     private void callDrawStartButton(Context context,
