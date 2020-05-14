@@ -57,6 +57,8 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+
+import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import android.telephony.PhoneStateListener;
@@ -537,6 +539,7 @@ public class TaskbarController extends UIController {
         isFirstStart = false;
     }
 
+    @VisibleForTesting
     public int getTaskbarGravity(String taskbarPosition) {
         int gravity = Gravity.BOTTOM | Gravity.LEFT;
         switch(taskbarPosition) {
@@ -560,7 +563,8 @@ public class TaskbarController extends UIController {
         return gravity;
     }
 
-    private int getTaskbarLayoutId(String taskbarPosition) {
+    @VisibleForTesting
+    public int getTaskbarLayoutId(String taskbarPosition) {
         int layoutId = R.layout.tb_taskbar_left;
         switch(taskbarPosition) {
             case POSITION_BOTTOM_LEFT:
@@ -583,7 +587,8 @@ public class TaskbarController extends UIController {
         return layoutId;
     }
 
-    private void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
+    @VisibleForTesting
+    public void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
         int padding = 0;
 
         switch(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(context))) {

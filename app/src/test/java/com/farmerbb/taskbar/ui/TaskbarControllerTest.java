@@ -11,7 +11,6 @@ import androidx.test.core.app.ApplicationProvider;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
 
-import org.bouncycastle.jcajce.provider.symmetric.Grain128;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,9 +20,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.android.controller.ServiceController;
 
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
@@ -37,8 +34,6 @@ import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static org.robolectric.util.ReflectionHelpers.ClassParameter.from;
-import static org.robolectric.util.ReflectionHelpers.callInstanceMethod;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
@@ -47,18 +42,14 @@ public class TaskbarControllerTest {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
 
-    private ServiceController<TaskbarUIHostService> controller;
-    private TaskbarUIHostService hostService;
     private TaskbarController uiController;
     private Context context;
     SharedPreferences prefs;
 
     @Before
     public void setUp() {
-        controller = Robolectric.buildService(TaskbarUIHostService.class);
-        hostService = controller.create().get();
-        uiController = hostService.controller;
         context = ApplicationProvider.getApplicationContext();
+        uiController = new TaskbarController(context);
         prefs = U.getSharedPreferences(context);
     }
 
@@ -182,32 +173,17 @@ public class TaskbarControllerTest {
     }
 
     private int callGetTaskbarLayoutId(String taskbarPosition) {
-        return callInstanceMethod(
-                uiController,
-                "getTaskbarLayoutId",
-                from(String.class, taskbarPosition)
-        );
+        uiController.getTaskbarLayoutId(taskbarPosition);
     }
 
     private int callGetTaskbarGravity(String taskbarPosition) {
-        return callInstanceMethod(
-                uiController,
-                "getTaskbarGravity",
-                from(String.class, taskbarPosition)
-        );
+        uiController.getTaskbarGravity(taskbarPosition);
     }
 
     private void callDrawStartButton(Context context,
                                      ImageView startButton,
                                      SharedPreferences prefs) {
-        callInstanceMethod(
-                uiController,
-                "drawStartButton",
-                from(Context.class, context),
-                from(ImageView.class, startButton),
-                from(SharedPreferences.class, prefs),
-                from(int.class, Color.RED)
-        );
+        uiController.drawStartButton(context, startButton, prefs, Color.RED);
     }
 
 
