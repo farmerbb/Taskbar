@@ -15,6 +15,13 @@ repositories {
     jcenter()
 }
 
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
 dependencies {
     implementation 'com.farmerbb:libtaskbar:1.0.0' // see badge above for latest version
 }
