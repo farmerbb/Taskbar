@@ -672,7 +672,8 @@ public class TaskbarController extends UIController {
                 sysTrayLayout.setOnGenericMotionListener((view, motionEvent) -> {
                     if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                             && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,
+                                () -> U.showToast(context, R.string.tb_opening_quick_settings));
                         if(U.shouldCollapse(context, false))
                             hideTaskbar(true);
                     }

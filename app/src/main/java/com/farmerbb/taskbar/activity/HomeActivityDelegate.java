@@ -791,6 +791,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 return false;
             });
 
+            iconContainer.setFocusable(false);
+
             DesktopIconInfo info = icons.get(index);
             if(info != null && info.entry != null && info.column < columns && info.row < rows)
                 iconContainer.addView(inflateDesktopIcon(iconContainer, info.entry));

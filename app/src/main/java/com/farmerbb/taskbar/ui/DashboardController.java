@@ -218,6 +218,7 @@ public class DashboardController extends UIController {
                 cellLayout.setBackgroundColor(backgroundTint);
                 cellLayout.setOnClickListener(cellOcl);
                 cellLayout.setOnHoverListener(cellOhl);
+                cellLayout.setFocusable(false);
 
                 TextView empty = cellLayout.findViewById(R.id.empty);
                 empty.setBackgroundColor(accentColorAlt);
