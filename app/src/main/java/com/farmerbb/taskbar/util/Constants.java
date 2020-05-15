@@ -174,7 +174,7 @@ public class Constants {
     public static final String PREF_VISUAL_FEEDBACK = "visual_feedback";
     public static final String PREF_WINDOW_SIZE = "window_size";
 
-    // SharedPreference keys
+    // SharedPreference values
 
     public static final String PREF_RECENTS_AMOUNT_PAST_DAY = "past_day";
     public static final String PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY = "running_apps_only";
