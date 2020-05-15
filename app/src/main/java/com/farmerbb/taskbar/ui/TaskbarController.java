@@ -310,22 +310,8 @@ public class TaskbarController extends UIController {
 
         dashboardButton = layout.findViewById(R.id.dashboard_button);
         navbarButtons = layout.findViewById(R.id.navbar_buttons);
-
-        dashboardEnabled = pref.getBoolean(PREF_DASHBOARD, context.getResources().getBoolean(R.bool.tb_def_dashboard));
-        if(dashboardEnabled) {
-            layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square3).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square4).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
-
-            dashboardButton.setOnClickListener(v -> U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
-        } else
-            dashboardButton.setVisibility(View.GONE);
-
+        dashboardEnabled = drawDashboard(context, pref, layout, dashboardButton, accentColor);
         navbarButtonsEnabled = drawNavbarButtons(context, layout, pref, accentColor);
-
         if(!navbarButtonsEnabled)
             navbarButtons.setVisibility(View.GONE);
 
@@ -477,6 +463,34 @@ public class TaskbarController extends UIController {
 
             return false;
         });
+    }
+
+    @VisibleForTesting
+    public boolean drawDashboard(Context context,
+                                 SharedPreferences pref,
+                                 LinearLayout layout,
+                                 FrameLayout dashboardButton,
+                                 int accentColor) {
+        boolean dashboardEnabled =
+                pref.getBoolean(
+                        PREF_DASHBOARD,
+                        context.getResources().getBoolean(R.bool.tb_def_dashboard)
+                );
+        if(dashboardEnabled) {
+            layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square3).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square4).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
+
+            dashboardButton
+                    .setOnClickListener(v -> U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
+            dashboardButton.setVisibility(View.VISIBLE);
+        } else {
+            dashboardButton.setVisibility(View.GONE);
+        }
+        return dashboardEnabled;
     }
 
     @VisibleForTesting
