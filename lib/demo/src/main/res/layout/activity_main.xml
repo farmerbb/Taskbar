@@ -14,16 +14,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
-            android:onClick="openDeveloperOptions"
-            android:text="@string/open_developer_options"/>
-
+            android:onClick="setDefaultHome"
+            android:text="@string/set_default_home"/>
+        
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
-            android:onClick="setDefaultHome"
-            android:text="@string/set_default_home"/>
+            android:onClick="openDeveloperOptions"
+            android:text="@string/open_developer_options"/>
 
         <Button
             android:layout_width="wrap_content"
