@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -30,9 +33,14 @@ import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK;
+import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME;
+import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS;
 import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -74,7 +82,7 @@ public class TaskbarControllerTest {
         ImageView startButton = new ImageView(context);
         prefs = U.getSharedPreferences(context);
         prefs.edit().putString(PREF_START_BUTTON_IMAGE, "default").apply();
-        callDrawStartButton(context, startButton, prefs);
+        uiController.drawStartButton(context, startButton, prefs, Color.RED);
         int padding =
                 context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
         checkStartButtonPadding(padding, startButton);
@@ -83,18 +91,18 @@ public class TaskbarControllerTest {
         // Use bliss os logic to avoid using LauncherApps, that robolectric doesn't support
         when(U.isBlissOs(context)).thenReturn(true);
         prefs.edit().putString(PREF_START_BUTTON_IMAGE, "app_logo").apply();
-        callDrawStartButton(context, startButton, prefs);
+        uiController.drawStartButton(context, startButton, prefs, Color.RED);
         padding =
                 context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
         checkStartButtonPadding(padding, startButton);
 
         prefs.edit().putString(PREF_START_BUTTON_IMAGE, "custom").apply();
-        callDrawStartButton(context, startButton, prefs);
+        uiController.drawStartButton(context, startButton, prefs, Color.RED);
         padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
         checkStartButtonPadding(padding, startButton);
 
         prefs.edit().putString(PREF_START_BUTTON_IMAGE, "non-support").apply();
-        callDrawStartButton(context, startButton, prefs);
+        uiController.drawStartButton(context, startButton, prefs, Color.RED);
         checkStartButtonPadding(0, startButton);
     }
 
@@ -102,39 +110,39 @@ public class TaskbarControllerTest {
     public void testGetTaskbarGravity() {
         assertEquals(
                 Gravity.BOTTOM | Gravity.LEFT,
-                callGetTaskbarGravity(POSITION_BOTTOM_LEFT)
+                uiController.getTaskbarGravity(POSITION_BOTTOM_LEFT)
         );
         assertEquals(
                 Gravity.BOTTOM | Gravity.LEFT,
-                callGetTaskbarGravity(POSITION_BOTTOM_VERTICAL_LEFT)
+                uiController.getTaskbarGravity(POSITION_BOTTOM_VERTICAL_LEFT)
         );
         assertEquals(
                 Gravity.BOTTOM | Gravity.RIGHT,
-                callGetTaskbarGravity(POSITION_BOTTOM_RIGHT)
+                uiController.getTaskbarGravity(POSITION_BOTTOM_RIGHT)
         );
         assertEquals(
                 Gravity.BOTTOM | Gravity.RIGHT,
-                callGetTaskbarGravity(POSITION_BOTTOM_VERTICAL_RIGHT)
+                uiController.getTaskbarGravity(POSITION_BOTTOM_VERTICAL_RIGHT)
         );
         assertEquals(
                 Gravity.TOP | Gravity.LEFT,
-                callGetTaskbarGravity(POSITION_TOP_LEFT)
+                uiController.getTaskbarGravity(POSITION_TOP_LEFT)
         );
         assertEquals(
                 Gravity.TOP | Gravity.LEFT,
-                callGetTaskbarGravity(POSITION_TOP_VERTICAL_LEFT)
+                uiController.getTaskbarGravity(POSITION_TOP_VERTICAL_LEFT)
         );
         assertEquals(
                 Gravity.TOP | Gravity.RIGHT,
-                callGetTaskbarGravity(POSITION_TOP_RIGHT)
+                uiController.getTaskbarGravity(POSITION_TOP_RIGHT)
         );
         assertEquals(
                 Gravity.TOP | Gravity.RIGHT,
-                callGetTaskbarGravity(POSITION_TOP_VERTICAL_RIGHT)
+                uiController.getTaskbarGravity(POSITION_TOP_VERTICAL_RIGHT)
         );
         assertEquals(
                 Gravity.BOTTOM | Gravity.LEFT,
-                callGetTaskbarGravity("unsupported")
+                uiController.getTaskbarGravity("unsupported")
         );
     }
 
@@ -142,56 +150,68 @@ public class TaskbarControllerTest {
     public void testGetTaskbarLayoutId() {
         assertEquals(
                 R.layout.tb_taskbar_left,
-                callGetTaskbarLayoutId(POSITION_BOTTOM_LEFT)
+                uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT)
         );
         assertEquals(
                 R.layout.tb_taskbar_vertical,
-                callGetTaskbarLayoutId(POSITION_BOTTOM_VERTICAL_LEFT)
+                uiController.getTaskbarLayoutId(POSITION_BOTTOM_VERTICAL_LEFT)
         );
         assertEquals(
                 R.layout.tb_taskbar_right,
-                callGetTaskbarLayoutId(POSITION_BOTTOM_RIGHT)
+                uiController.getTaskbarLayoutId(POSITION_BOTTOM_RIGHT)
         );
         assertEquals(
                 R.layout.tb_taskbar_vertical,
-                callGetTaskbarLayoutId(POSITION_BOTTOM_VERTICAL_RIGHT)
+                uiController.getTaskbarLayoutId(POSITION_BOTTOM_VERTICAL_RIGHT)
         );
         assertEquals(
                 R.layout.tb_taskbar_left,
-                callGetTaskbarLayoutId(POSITION_TOP_LEFT)
+                uiController.getTaskbarLayoutId(POSITION_TOP_LEFT)
         );
         assertEquals(
                 R.layout.tb_taskbar_top_vertical,
-                callGetTaskbarLayoutId(POSITION_TOP_VERTICAL_LEFT)
+                uiController.getTaskbarLayoutId(POSITION_TOP_VERTICAL_LEFT)
         );
         assertEquals(
                 R.layout.tb_taskbar_right,
-                callGetTaskbarLayoutId(POSITION_TOP_RIGHT)
+                uiController.getTaskbarLayoutId(POSITION_TOP_RIGHT)
         );
         assertEquals(
                 R.layout.tb_taskbar_top_vertical,
-                callGetTaskbarLayoutId(POSITION_TOP_VERTICAL_RIGHT)
+                uiController.getTaskbarLayoutId(POSITION_TOP_VERTICAL_RIGHT)
         );
         assertEquals(
                 R.layout.tb_taskbar_left,
-                callGetTaskbarLayoutId("unsupported")
+                uiController.getTaskbarLayoutId("unsupported")
         );
     }
 
-    private int callGetTaskbarLayoutId(String taskbarPosition) {
-        return uiController.getTaskbarLayoutId(taskbarPosition);
-    }
+    @Test
+    public void testDrawNavbarButtons() {
+        int layoutId = uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT);
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
+        prefs.edit()
+                .remove(PREF_BUTTON_BACK)
+                .remove(PREF_BUTTON_HOME)
+                .remove(PREF_BUTTON_RECENTS)
+                .apply();
+        assertFalse(uiController.drawNavbarButtons(context, layout, prefs, Color.RED));
 
-    private int callGetTaskbarGravity(String taskbarPosition) {
-        return uiController.getTaskbarGravity(taskbarPosition);
-    }
+        prefs.edit().putBoolean(PREF_BUTTON_BACK, true).apply();
+        assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED));
+        assertEquals(View.VISIBLE, layout.findViewById(R.id.button_back).getVisibility());
+        prefs.edit().remove(PREF_BUTTON_BACK).apply();
 
-    private void callDrawStartButton(Context context,
-                                     ImageView startButton,
-                                     SharedPreferences prefs) {
-        uiController.drawStartButton(context, startButton, prefs, Color.RED);
-    }
+        prefs.edit().putBoolean(PREF_BUTTON_HOME, true).apply();
+        assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED));
+        assertEquals(View.VISIBLE, layout.findViewById(R.id.button_home).getVisibility());
+        prefs.edit().remove(PREF_BUTTON_HOME).apply();
 
+        prefs.edit().putBoolean(PREF_BUTTON_RECENTS, true).apply();
+        assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED));
+        assertEquals(View.VISIBLE, layout.findViewById(R.id.button_recents).getVisibility());
+        prefs.edit().remove(PREF_BUTTON_RECENTS).apply();
+    }
 
     private void checkStartButtonPadding(int padding, ImageView startButton) {
         assertEquals(padding, startButton.getPaddingLeft());
