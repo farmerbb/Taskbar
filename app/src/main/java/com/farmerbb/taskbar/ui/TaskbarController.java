@@ -276,21 +276,7 @@ public class TaskbarController extends UIController {
 
         sortOrder = pref.getString(PREF_SORT_ORDER, "false");
         runningAppsOnly = pref.getString(PREF_RECENTS_AMOUNT, "past_day").equals("running_apps_only");
-
-        switch(pref.getString(PREF_RECENTS_AMOUNT, "past_day")) {
-            case "past_day":
-                searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
-                break;
-            case "app_start":
-                long appStartTime = pref.getLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
-                long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
-
-                searchInterval = deviceStartTime > appStartTime ? deviceStartTime : appStartTime;
-                break;
-            case "show_all":
-                searchInterval = 0;
-                break;
-        }
+        searchInterval = getSearchInterval(pref);
 
         U.sendBroadcast(context, ACTION_HIDE_START_MENU);
         U.sendBroadcast(context, ACTION_UPDATE_HOME_SCREEN_MARGINS);
@@ -608,6 +594,25 @@ public class TaskbarController extends UIController {
             }
         }
         return navbarButtonsEnabled;
+    }
+
+    @VisibleForTesting
+    public long getSearchInterval(SharedPreferences pref) {
+        long searchInterval = -1;
+        switch(pref.getString(PREF_RECENTS_AMOUNT, "past_day")) {
+            case "past_day":
+                searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
+                break;
+            case "app_start":
+                long appStartTime = pref.getLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
+                long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+                searchInterval = Math.max(deviceStartTime, appStartTime);
+                break;
+            case "show_all":
+                searchInterval = 0;
+                break;
+        }
+        return searchInterval;
     }
 
     @VisibleForTesting

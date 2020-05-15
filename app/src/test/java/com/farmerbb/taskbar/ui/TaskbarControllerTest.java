@@ -1,8 +1,10 @@
 package com.farmerbb.taskbar.ui;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +43,9 @@ import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT;
 import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
+import static com.farmerbb.taskbar.util.Constants.PREF_TIME_OF_SERVICE_START;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -216,6 +220,40 @@ public class TaskbarControllerTest {
         assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED));
         assertEquals(View.VISIBLE, layout.findViewById(R.id.button_recents).getVisibility());
         prefs.edit().remove(PREF_BUTTON_RECENTS).apply();
+    }
+
+    @Test
+    public void testGetSearchInterval() {
+        long permitTimeDeltaMillis = 100;
+        prefs.edit().remove(PREF_RECENTS_AMOUNT).apply();
+        long searchInterval = uiController.getSearchInterval(prefs);
+        long lastDayTime = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
+        assertEquals(lastDayTime, searchInterval, permitTimeDeltaMillis);
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, "app_start").apply();
+        long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        // The service start time is larger than device start time
+        long appStartTime = deviceStartTime * 2;
+        prefs.edit().putLong(PREF_TIME_OF_SERVICE_START, appStartTime).apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(appStartTime, searchInterval);
+
+        // The service start time is smaller than device start time
+        prefs.edit().putLong(PREF_TIME_OF_SERVICE_START, deviceStartTime - 100).apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        assertEquals(deviceStartTime, searchInterval, permitTimeDeltaMillis);
+        prefs.edit().remove(PREF_TIME_OF_SERVICE_START).apply();
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, "show_all").apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(0, searchInterval);
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, "unsupported").apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(-1, searchInterval);
+
+        prefs.edit().remove(PREF_RECENTS_AMOUNT).apply();
     }
 
     @Test
