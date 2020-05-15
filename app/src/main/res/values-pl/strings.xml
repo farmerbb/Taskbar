@@ -469,4 +469,7 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string name="tb_hide_icon_labels">Hide app icon labels</string>
 
+    <string name="tb_opening_notification_tray">Opening notification tray on primary display</string>
+    <string name="tb_opening_quick_settings">Opening quick settings on primary display</string>
+
 </resources>

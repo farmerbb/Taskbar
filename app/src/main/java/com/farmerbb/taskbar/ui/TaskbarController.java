@@ -653,14 +653,16 @@ public class TaskbarController extends UIController {
 
         if(!U.isLibrary(context)) {
             sysTrayLayout.setOnClickListener(v -> {
-                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
+                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,
+                        () -> U.showToast(context, R.string.tb_opening_notification_tray));
                 if(U.shouldCollapse(context, false))
                     hideTaskbar(true);
             });
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 sysTrayLayout.setOnLongClickListener(v -> {
-                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,
+                            () -> U.showToast(context, R.string.tb_opening_quick_settings));
                     if(U.shouldCollapse(context, false))
                         hideTaskbar(true);
 
@@ -801,7 +803,9 @@ public class TaskbarController extends UIController {
                 for(AppEntry packageInfo : usageStatsList) {
                     if(hasLauncherIntent(packageInfo.getPackageName())
                             && !packageInfo.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
-                            && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName))
+                            && !packageInfo.getPackageName().equals(defaultLauncher.activityInfo.packageName)
+                            && (!(U.launcherIsDefault(context) && pref.getBoolean(PREF_DESKTOP_MODE, false))
+                            || !packageInfo.getPackageName().equals(pref.getString(PREF_HSL_ID, "null"))))
                         usageStatsList2.add(packageInfo);
                 }
 
@@ -1158,7 +1162,10 @@ public class TaskbarController extends UIController {
     private void toggleTaskbar(boolean userInitiated) {
         if(userInitiated && Build.BRAND.equalsIgnoreCase("essential")) {
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(!pref.getBoolean(PREF_GRIP_REJECTION_TOAST_SHOWN, false)) {
+            LauncherHelper helper = LauncherHelper.getInstance();
+
+            if(!pref.getBoolean(PREF_GRIP_REJECTION_TOAST_SHOWN, false)
+                    && !helper.isOnSecondaryHomeScreen()) {
                 U.showToastLong(context, R.string.tb_essential_phone_grip_rejection);
                 pref.edit().putBoolean(PREF_GRIP_REJECTION_TOAST_SHOWN, true).apply();
             }
