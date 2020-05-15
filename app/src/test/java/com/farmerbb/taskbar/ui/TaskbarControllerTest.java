@@ -1,8 +1,12 @@
 package com.farmerbb.taskbar.ui;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +32,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
@@ -41,7 +46,13 @@ import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS;
+import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_APP_START;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_SHOW_ALL;
 import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
+import static com.farmerbb.taskbar.util.Constants.PREF_TIME_OF_SERVICE_START;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -192,6 +203,59 @@ public class TaskbarControllerTest {
     }
 
     @Test
+    public void testDrawDashboardWithDefaultConfig() {
+        prefs.edit().remove(PREF_DASHBOARD).apply();
+        checkDashboardEnabled(false);
+    }
+
+    @Test
+    @Config(qualifiers = "sw540dp")
+    public void testDrawDashboardWithDefaultConfigForSw540dp() {
+        prefs.edit().remove(PREF_DASHBOARD).apply();
+        checkDashboardEnabled(false);
+    }
+
+    @Test
+    @Config(qualifiers = "sw720dp")
+    public void testDrawDashboardWithDefaultConfigForSw720dp() {
+        prefs.edit().remove(PREF_DASHBOARD).apply();
+        checkDashboardEnabled(true);
+    }
+
+    @Test
+    public void testDrawDashboardForDashboardButton() {
+        int accentColor = Color.RED;
+        int layoutId = uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT);
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
+        FrameLayout dashboardButton = layout.findViewById(R.id.dashboard_button);
+
+        prefs.edit().putBoolean(PREF_DASHBOARD, false).apply();
+        boolean dashboardEnabled =
+                uiController.drawDashboard(context, prefs, layout, dashboardButton, accentColor);
+        assertFalse(dashboardEnabled);
+        assertEquals(View.GONE, dashboardButton.getVisibility());
+
+        prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
+        dashboardEnabled =
+                uiController.drawDashboard(context, prefs, layout, dashboardButton, accentColor);
+        assertTrue(dashboardEnabled);
+        assertTrue(dashboardButton.hasOnClickListeners());
+        assertEquals(View.VISIBLE, dashboardButton.getVisibility());
+        Drawable drawable = layout.findViewById(R.id.square1).getBackground();
+        checkDrawableBackgroundColor(drawable, accentColor);
+        drawable = layout.findViewById(R.id.square2).getBackground();
+        checkDrawableBackgroundColor(drawable, accentColor);
+        drawable = layout.findViewById(R.id.square3).getBackground();
+        checkDrawableBackgroundColor(drawable, accentColor);
+        drawable = layout.findViewById(R.id.square4).getBackground();
+        checkDrawableBackgroundColor(drawable, accentColor);
+        drawable = layout.findViewById(R.id.square5).getBackground();
+        checkDrawableBackgroundColor(drawable, accentColor);
+        drawable = layout.findViewById(R.id.square6).getBackground();
+        checkDrawableBackgroundColor(drawable, accentColor);
+    }
+
+    @Test
     public void testDrawNavbarButtons() {
         int layoutId = uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT);
         LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
@@ -216,6 +280,44 @@ public class TaskbarControllerTest {
         assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED));
         assertEquals(View.VISIBLE, layout.findViewById(R.id.button_recents).getVisibility());
         prefs.edit().remove(PREF_BUTTON_RECENTS).apply();
+    }
+
+    @Test
+    public void testGetSearchInterval() {
+        long permitTimeDeltaMillis = 100;
+        prefs.edit().remove(PREF_RECENTS_AMOUNT).apply();
+        long searchInterval = uiController.getSearchInterval(prefs);
+        long lastDayTime = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
+        assertEquals(lastDayTime, searchInterval, permitTimeDeltaMillis);
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_APP_START).apply();
+        long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        // The service start time is larger than device start time
+        long appStartTime = deviceStartTime * 2;
+        prefs.edit().putLong(PREF_TIME_OF_SERVICE_START, appStartTime).apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(appStartTime, searchInterval);
+
+        // The service start time is smaller than device start time
+        prefs.edit().putLong(PREF_TIME_OF_SERVICE_START, deviceStartTime - 100).apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        assertEquals(deviceStartTime, searchInterval, permitTimeDeltaMillis);
+        prefs.edit().remove(PREF_TIME_OF_SERVICE_START).apply();
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_SHOW_ALL).apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(0, searchInterval);
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY).apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(-1, searchInterval);
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, "unsupported").apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(-1, searchInterval);
+
+        prefs.edit().remove(PREF_RECENTS_AMOUNT).apply();
     }
 
     @Test
@@ -250,6 +352,21 @@ public class TaskbarControllerTest {
     public void testDrawSysTrayTime() {
         checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_LEFT, R.id.time_right);
         checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_RIGHT, R.id.time_left);
+    }
+
+    private void checkDrawableBackgroundColor(Drawable drawable, int color) {
+        assertTrue(drawable instanceof ColorDrawable);
+        ColorDrawable colorDrawable = (ColorDrawable) drawable;
+        assertEquals(color, colorDrawable.getColor());
+    }
+
+    private void checkDashboardEnabled(boolean expectedDashboardEnabled) {
+        int layoutId = uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT);
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
+        FrameLayout dashboardButton = layout.findViewById(R.id.dashboard_button);
+        boolean dashboardEnabled =
+                uiController.drawDashboard(context, prefs, layout, dashboardButton, Color.RED);
+        assertEquals(expectedDashboardEnabled, dashboardEnabled);
     }
 
     private void checkDrawSysTrayTimeVisibility(String position, int timeId) {

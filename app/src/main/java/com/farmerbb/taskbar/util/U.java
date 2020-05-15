@@ -1274,7 +1274,7 @@ public class U {
                 editor.putBoolean(PREF_FREEFORM_HACK, true);
             }
 
-            editor.putString(PREF_RECENTS_AMOUNT, "running_apps_only");
+            editor.putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY);
             editor.putString(PREF_REFRESH_FREQUENCY, "0");
             editor.putString(PREF_MAX_NUM_OF_RECENTS, "2147483647");
             editor.putString(PREF_SORT_ORDER, "true");
@@ -1293,7 +1293,7 @@ public class U {
                 && isSystemApp(context)
                 && !pref.getBoolean(PREF_ANDROID_X86_PREFS, false)) {
             pref.edit()
-                    .putString(PREF_RECENTS_AMOUNT, "running_apps_only")
+                    .putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY)
                     .putString(PREF_REFRESH_FREQUENCY, "0")
                     .putString(PREF_MAX_NUM_OF_RECENTS, "2147483647")
                     .putString(PREF_SORT_ORDER, "true")

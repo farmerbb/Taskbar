@@ -275,22 +275,10 @@ public class TaskbarController extends UIController {
             refreshInterval = 100;
 
         sortOrder = pref.getString(PREF_SORT_ORDER, "false");
-        runningAppsOnly = pref.getString(PREF_RECENTS_AMOUNT, "past_day").equals("running_apps_only");
-
-        switch(pref.getString(PREF_RECENTS_AMOUNT, "past_day")) {
-            case "past_day":
-                searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
-                break;
-            case "app_start":
-                long appStartTime = pref.getLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
-                long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
-
-                searchInterval = deviceStartTime > appStartTime ? deviceStartTime : appStartTime;
-                break;
-            case "show_all":
-                searchInterval = 0;
-                break;
-        }
+        runningAppsOnly =
+                PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY
+                        .equals(pref.getString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_PAST_DAY));
+        searchInterval = getSearchInterval(pref);
 
         U.sendBroadcast(context, ACTION_HIDE_START_MENU);
         U.sendBroadcast(context, ACTION_UPDATE_HOME_SCREEN_MARGINS);
@@ -322,22 +310,8 @@ public class TaskbarController extends UIController {
 
         dashboardButton = layout.findViewById(R.id.dashboard_button);
         navbarButtons = layout.findViewById(R.id.navbar_buttons);
-
-        dashboardEnabled = pref.getBoolean(PREF_DASHBOARD, context.getResources().getBoolean(R.bool.tb_def_dashboard));
-        if(dashboardEnabled) {
-            layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square3).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square4).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
-            layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
-
-            dashboardButton.setOnClickListener(v -> U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
-        } else
-            dashboardButton.setVisibility(View.GONE);
-
+        dashboardEnabled = drawDashboard(context, pref, layout, dashboardButton, accentColor);
         navbarButtonsEnabled = drawNavbarButtons(context, layout, pref, accentColor);
-
         if(!navbarButtonsEnabled)
             navbarButtons.setVisibility(View.GONE);
 
@@ -492,6 +466,34 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
+    public boolean drawDashboard(Context context,
+                                 SharedPreferences pref,
+                                 LinearLayout layout,
+                                 FrameLayout dashboardButton,
+                                 int accentColor) {
+        boolean dashboardEnabled =
+                pref.getBoolean(
+                        PREF_DASHBOARD,
+                        context.getResources().getBoolean(R.bool.tb_def_dashboard)
+                );
+        if(dashboardEnabled) {
+            layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square3).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square4).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
+            layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
+
+            dashboardButton
+                    .setOnClickListener(v -> U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
+            dashboardButton.setVisibility(View.VISIBLE);
+        } else {
+            dashboardButton.setVisibility(View.GONE);
+        }
+        return dashboardEnabled;
+    }
+
+    @VisibleForTesting
     public boolean drawNavbarButtons(Context context,
                                      LinearLayout layout,
                                      SharedPreferences pref,
@@ -608,6 +610,25 @@ public class TaskbarController extends UIController {
             }
         }
         return navbarButtonsEnabled;
+    }
+
+    @VisibleForTesting
+    public long getSearchInterval(SharedPreferences pref) {
+        long searchInterval = -1;
+        switch(pref.getString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_PAST_DAY)) {
+            case PREF_RECENTS_AMOUNT_PAST_DAY:
+                searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
+                break;
+            case PREF_RECENTS_AMOUNT_APP_START:
+                long appStartTime = pref.getLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
+                long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+                searchInterval = Math.max(deviceStartTime, appStartTime);
+                break;
+            case PREF_RECENTS_AMOUNT_SHOW_ALL:
+                searchInterval = 0;
+                break;
+        }
+        return searchInterval;
     }
 
     @VisibleForTesting

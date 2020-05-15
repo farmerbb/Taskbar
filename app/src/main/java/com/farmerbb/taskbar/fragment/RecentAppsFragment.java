@@ -60,7 +60,8 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
             recentsAmountPref.setEntryValues(getResources().getStringArray(R.array.tb_pref_recents_amount_values_alt));
 
             SharedPreferences pref = U.getSharedPreferences(getActivity());
-            if(pref.getString(PREF_RECENTS_AMOUNT, "past_day").equals("running_apps_only")) {
+            if(PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY.equals(
+                    pref.getString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_PAST_DAY))) {
                 ListPreference sortOrderPref = ((ListPreference) findPreference(PREF_SORT_ORDER));
                 sortOrderPref.setEntries(getResources().getStringArray(R.array.tb_pref_sort_order_alt));
                 sortOrderPref.setEntryValues(getResources().getStringArray(R.array.tb_pref_sort_order_values_alt));

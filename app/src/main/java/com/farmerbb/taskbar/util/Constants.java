@@ -174,6 +174,13 @@ public class Constants {
     public static final String PREF_VISUAL_FEEDBACK = "visual_feedback";
     public static final String PREF_WINDOW_SIZE = "window_size";
 
+    // SharedPreference keys
+
+    public static final String PREF_RECENTS_AMOUNT_PAST_DAY = "past_day";
+    public static final String PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY = "running_apps_only";
+    public static final String PREF_RECENTS_AMOUNT_APP_START = "app_start";
+    public static final String PREF_RECENTS_AMOUNT_SHOW_ALL = "show_all";
+
     // TaskbarPosition values
 
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";
