@@ -336,116 +336,7 @@ public class TaskbarController extends UIController {
         } else
             dashboardButton.setVisibility(View.GONE);
 
-        if(pref.getBoolean(PREF_BUTTON_BACK, false)) {
-            navbarButtonsEnabled = true;
-
-            ImageView backButton = layout.findViewById(R.id.button_back);
-            backButton.setColorFilter(accentColor);
-            backButton.setVisibility(View.VISIBLE);
-            backButton.setOnClickListener(v -> {
-                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_BACK);
-                if(U.shouldCollapse(context, false))
-                    hideTaskbar(true);
-            });
-
-            backButton.setOnLongClickListener(v -> {
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showInputMethodPicker();
-
-                if(U.shouldCollapse(context, false))
-                    hideTaskbar(true);
-
-                return true;
-            });
-
-            backButton.setOnGenericMotionListener((view13, motionEvent) -> {
-                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showInputMethodPicker();
-
-                    if(U.shouldCollapse(context, false))
-                        hideTaskbar(true);
-                }
-                return true;
-            });
-        }
-
-        if(pref.getBoolean(PREF_BUTTON_HOME, false)) {
-            navbarButtonsEnabled = true;
-
-            ImageView homeButton = layout.findViewById(R.id.button_home);
-            homeButton.setColorFilter(accentColor);
-            homeButton.setVisibility(View.VISIBLE);
-            homeButton.setOnClickListener(v -> {
-                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_HOME);
-                if(U.shouldCollapse(context, false))
-                    hideTaskbar(true);
-            });
-
-            homeButton.setOnLongClickListener(v -> {
-                Intent voiceSearchIntent = new Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE);
-                voiceSearchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                try {
-                    context.startActivity(voiceSearchIntent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-
-                if(U.shouldCollapse(context, false))
-                    hideTaskbar(true);
-
-                return true;
-            });
-
-            homeButton.setOnGenericMotionListener((view13, motionEvent) -> {
-                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                    Intent voiceSearchIntent = new Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE);
-                    voiceSearchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    try {
-                        context.startActivity(voiceSearchIntent);
-                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
-
-                    if(U.shouldCollapse(context, false))
-                        hideTaskbar(true);
-                }
-                return true;
-            });
-        }
-
-        if(pref.getBoolean(PREF_BUTTON_RECENTS, false)) {
-            navbarButtonsEnabled = true;
-
-            ImageView recentsButton = layout.findViewById(R.id.button_recents);
-            recentsButton.setColorFilter(accentColor);
-            recentsButton.setVisibility(View.VISIBLE);
-            recentsButton.setOnClickListener(v -> {
-                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_RECENTS);
-                if(U.shouldCollapse(context, false))
-                    hideTaskbar(true);
-            });
-
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                recentsButton.setOnLongClickListener(v -> {
-                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
-                    if(U.shouldCollapse(context, false))
-                        hideTaskbar(true);
-
-                    return true;
-                });
-
-                recentsButton.setOnGenericMotionListener((view13, motionEvent) -> {
-                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
-                        if(U.shouldCollapse(context, false))
-                            hideTaskbar(true);
-                    }
-                    return true;
-                });
-            }
-        }
+        navbarButtonsEnabled = drawNavbarButtons(context, layout, pref, accentColor);
 
         if(!navbarButtonsEnabled)
             navbarButtons.setVisibility(View.GONE);
@@ -453,58 +344,7 @@ public class TaskbarController extends UIController {
         sysTrayEnabled = U.isSystemTrayEnabled(context);
 
         if(sysTrayEnabled) {
-            sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.tb_system_tray, null);
-
-            FrameLayout.LayoutParams sysTrayParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                    context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size)
-            );
-
-            if(layoutId == R.layout.tb_taskbar_right) {
-                time = sysTrayLayout.findViewById(R.id.time_left);
-                sysTrayParams.gravity = Gravity.START;
-            } else {
-                time = sysTrayLayout.findViewById(R.id.time_right);
-                sysTrayParams.gravity = Gravity.END;
-            }
-
-            time.setVisibility(View.VISIBLE);
-            sysTrayLayout.setLayoutParams(sysTrayParams);
-
-            if(!U.isLibrary(context)) {
-                sysTrayLayout.setOnClickListener(v -> {
-                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
-                    if(U.shouldCollapse(context, false))
-                        hideTaskbar(true);
-                });
-
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    sysTrayLayout.setOnLongClickListener(v -> {
-                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
-                        if(U.shouldCollapse(context, false))
-                            hideTaskbar(true);
-
-                        return true;
-                    });
-
-                    sysTrayLayout.setOnGenericMotionListener((view, motionEvent) -> {
-                        if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
-                                && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                            U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
-                            if(U.shouldCollapse(context, false))
-                                hideTaskbar(true);
-                        }
-                        return true;
-                    });
-                }
-            }
-
-            sysTrayParentLayout = layout.findViewById(R.id.add_systray_here);
-            sysTrayParentLayout.setVisibility(View.VISIBLE);
-            sysTrayParentLayout.addView(sysTrayLayout);
-
-            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            manager.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+            drawSysTray(context, layoutId, layout);
         }
 
         layout.setBackgroundColor(backgroundTint);
@@ -649,6 +489,181 @@ public class TaskbarController extends UIController {
 
             return false;
         });
+    }
+
+    @VisibleForTesting
+    public boolean drawNavbarButtons(Context context,
+                                     LinearLayout layout,
+                                     SharedPreferences pref,
+                                     int accentColor) {
+        boolean navbarButtonsEnabled = false;
+        if(pref.getBoolean(PREF_BUTTON_BACK, false)) {
+            navbarButtonsEnabled = true;
+
+            ImageView backButton = layout.findViewById(R.id.button_back);
+            backButton.setColorFilter(accentColor);
+            backButton.setVisibility(View.VISIBLE);
+            backButton.setOnClickListener(v -> {
+                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_BACK);
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+            });
+
+            backButton.setOnLongClickListener(v -> {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showInputMethodPicker();
+
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+
+                return true;
+            });
+
+            backButton.setOnGenericMotionListener((view13, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showInputMethodPicker();
+
+                    if(U.shouldCollapse(context, false))
+                        hideTaskbar(true);
+                }
+                return true;
+            });
+        }
+
+        if(pref.getBoolean(PREF_BUTTON_HOME, false)) {
+            navbarButtonsEnabled = true;
+
+            ImageView homeButton = layout.findViewById(R.id.button_home);
+            homeButton.setColorFilter(accentColor);
+            homeButton.setVisibility(View.VISIBLE);
+            homeButton.setOnClickListener(v -> {
+                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_HOME);
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+            });
+
+            homeButton.setOnLongClickListener(v -> {
+                Intent voiceSearchIntent = new Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE);
+                voiceSearchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                try {
+                    context.startActivity(voiceSearchIntent);
+                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+
+                return true;
+            });
+
+            homeButton.setOnGenericMotionListener((view13, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                        && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                    Intent voiceSearchIntent = new Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE);
+                    voiceSearchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        context.startActivity(voiceSearchIntent);
+                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+
+                    if(U.shouldCollapse(context, false))
+                        hideTaskbar(true);
+                }
+                return true;
+            });
+        }
+
+        if(pref.getBoolean(PREF_BUTTON_RECENTS, false)) {
+            navbarButtonsEnabled = true;
+
+            ImageView recentsButton = layout.findViewById(R.id.button_recents);
+            recentsButton.setColorFilter(accentColor);
+            recentsButton.setVisibility(View.VISIBLE);
+            recentsButton.setOnClickListener(v -> {
+                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_RECENTS);
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+            });
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                recentsButton.setOnLongClickListener(v -> {
+                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                    if(U.shouldCollapse(context, false))
+                        hideTaskbar(true);
+
+                    return true;
+                });
+
+                recentsButton.setOnGenericMotionListener((view13, motionEvent) -> {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                        if(U.shouldCollapse(context, false))
+                            hideTaskbar(true);
+                    }
+                    return true;
+                });
+            }
+        }
+        return navbarButtonsEnabled;
+    }
+
+    @VisibleForTesting
+    public void drawSysTray(Context context, int layoutId, LinearLayout layout) {
+        sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.tb_system_tray, null);
+
+        FrameLayout.LayoutParams sysTrayParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size)
+        );
+
+        if(layoutId == R.layout.tb_taskbar_right) {
+            time = sysTrayLayout.findViewById(R.id.time_left);
+            sysTrayParams.gravity = Gravity.START;
+        } else {
+            time = sysTrayLayout.findViewById(R.id.time_right);
+            sysTrayParams.gravity = Gravity.END;
+        }
+
+        time.setVisibility(View.VISIBLE);
+        sysTrayLayout.setLayoutParams(sysTrayParams);
+
+        if(!U.isLibrary(context)) {
+            sysTrayLayout.setOnClickListener(v -> {
+                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+            });
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sysTrayLayout.setOnLongClickListener(v -> {
+                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+                    if(U.shouldCollapse(context, false))
+                        hideTaskbar(true);
+
+                    return true;
+                });
+
+                sysTrayLayout.setOnGenericMotionListener((view, motionEvent) -> {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
+                            && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
+                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+                        if(U.shouldCollapse(context, false))
+                            hideTaskbar(true);
+                    }
+                    return true;
+                });
+            }
+        }
+
+        sysTrayParentLayout = layout.findViewById(R.id.add_systray_here);
+        sysTrayParentLayout.setVisibility(View.VISIBLE);
+        sysTrayParentLayout.addView(sysTrayLayout);
+
+        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        manager.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     }
 
     private void startRefreshingRecents() {
