@@ -565,7 +565,7 @@ public class UTest {
         assertFalse(prefs.getBoolean(PREF_BLISS_OS_PREFS, false));
         U.initPrefs(context);
         assertEquals(
-                "running_apps_only",
+                PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY,
                 prefs.getString(PREF_RECENTS_AMOUNT, "")
         );
         assertEquals("0", prefs.getString(PREF_REFRESH_FREQUENCY, ""));

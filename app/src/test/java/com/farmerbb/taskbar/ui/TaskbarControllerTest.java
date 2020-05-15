@@ -44,6 +44,9 @@ import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS;
 import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_APP_START;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY;
+import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_SHOW_ALL;
 import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
 import static com.farmerbb.taskbar.util.Constants.PREF_TIME_OF_SERVICE_START;
 import static org.junit.Assert.assertEquals;
@@ -230,7 +233,7 @@ public class TaskbarControllerTest {
         long lastDayTime = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
         assertEquals(lastDayTime, searchInterval, permitTimeDeltaMillis);
 
-        prefs.edit().putString(PREF_RECENTS_AMOUNT, "app_start").apply();
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_APP_START).apply();
         long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
         // The service start time is larger than device start time
         long appStartTime = deviceStartTime * 2;
@@ -245,9 +248,13 @@ public class TaskbarControllerTest {
         assertEquals(deviceStartTime, searchInterval, permitTimeDeltaMillis);
         prefs.edit().remove(PREF_TIME_OF_SERVICE_START).apply();
 
-        prefs.edit().putString(PREF_RECENTS_AMOUNT, "show_all").apply();
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_SHOW_ALL).apply();
         searchInterval = uiController.getSearchInterval(prefs);
         assertEquals(0, searchInterval);
+
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY).apply();
+        searchInterval = uiController.getSearchInterval(prefs);
+        assertEquals(-1, searchInterval);
 
         prefs.edit().putString(PREF_RECENTS_AMOUNT, "unsupported").apply();
         searchInterval = uiController.getSearchInterval(prefs);

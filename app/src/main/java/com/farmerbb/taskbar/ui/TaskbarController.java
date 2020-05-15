@@ -275,7 +275,9 @@ public class TaskbarController extends UIController {
             refreshInterval = 100;
 
         sortOrder = pref.getString(PREF_SORT_ORDER, "false");
-        runningAppsOnly = pref.getString(PREF_RECENTS_AMOUNT, "past_day").equals("running_apps_only");
+        runningAppsOnly =
+                PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY
+                        .equals(pref.getString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_PAST_DAY));
         searchInterval = getSearchInterval(pref);
 
         U.sendBroadcast(context, ACTION_HIDE_START_MENU);
@@ -599,16 +601,16 @@ public class TaskbarController extends UIController {
     @VisibleForTesting
     public long getSearchInterval(SharedPreferences pref) {
         long searchInterval = -1;
-        switch(pref.getString(PREF_RECENTS_AMOUNT, "past_day")) {
-            case "past_day":
+        switch(pref.getString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_PAST_DAY)) {
+            case PREF_RECENTS_AMOUNT_PAST_DAY:
                 searchInterval = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
                 break;
-            case "app_start":
+            case PREF_RECENTS_AMOUNT_APP_START:
                 long appStartTime = pref.getLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis());
                 long deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
                 searchInterval = Math.max(deviceStartTime, appStartTime);
                 break;
-            case "show_all":
+            case PREF_RECENTS_AMOUNT_SHOW_ALL:
                 searchInterval = 0;
                 break;
         }
