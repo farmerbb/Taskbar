@@ -6,12 +6,16 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.mockito.BooleanAnswer;
 import com.farmerbb.taskbar.util.U;
 
 import org.junit.After;
@@ -24,6 +28,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.util.ReflectionHelpers;
 
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
@@ -211,6 +216,62 @@ public class TaskbarControllerTest {
         assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED));
         assertEquals(View.VISIBLE, layout.findViewById(R.id.button_recents).getVisibility());
         prefs.edit().remove(PREF_BUTTON_RECENTS).apply();
+    }
+
+    @Test
+    public void testDrawSysTrayOnClickListener() {
+        PowerMockito.spy(U.class);
+        BooleanAnswer isLibraryAnswer = new BooleanAnswer();
+        when(U.isLibrary(context)).thenAnswer(isLibraryAnswer);
+
+        isLibraryAnswer.answer = true;
+        LinearLayout sysTrayLayout = initializeSysTrayLayout(POSITION_BOTTOM_RIGHT);
+        assertFalse(sysTrayLayout.hasOnClickListeners());
+
+        isLibraryAnswer.answer = false;
+        sysTrayLayout = initializeSysTrayLayout(POSITION_BOTTOM_RIGHT);
+        assertTrue(sysTrayLayout.hasOnClickListeners());
+    }
+
+    @Test
+    public void testDrawSysTrayParentLayoutVisibility() {
+        LinearLayout sysTrayLayout = initializeSysTrayLayout(POSITION_BOTTOM_RIGHT);
+        ViewGroup parent = (ViewGroup) sysTrayLayout.getParent();
+        assertEquals(View.VISIBLE, parent.getVisibility());
+    }
+
+    @Test
+    public void testDrawSysTrayGravity() {
+        checkDrawSysTrayGravity(POSITION_BOTTOM_LEFT, Gravity.END);
+        checkDrawSysTrayGravity(POSITION_BOTTOM_RIGHT, Gravity.START);
+    }
+
+    @Test
+    public void testDrawSysTrayTime() {
+        checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_LEFT, R.id.time_right);
+        checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_RIGHT, R.id.time_left);
+    }
+
+    private void checkDrawSysTrayTimeVisibility(String position, int timeId) {
+        LinearLayout sysTrayLayout = initializeSysTrayLayout(position);
+        assertEquals(View.VISIBLE, sysTrayLayout.findViewById(timeId).getVisibility());
+    }
+
+    private void checkDrawSysTrayGravity(String position, int gravity) {
+        LinearLayout sysTrayLayout = initializeSysTrayLayout(position);
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) sysTrayLayout.getLayoutParams();
+        assertEquals(gravity, params.gravity);
+    }
+
+    private LinearLayout initializeSysTrayLayout(String position) {
+        int layoutId = uiController.getTaskbarLayoutId(position);
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
+        uiController.drawSysTray(context, layoutId, layout);
+        return getFieldSysTrayLayout(uiController);
+    }
+
+    private LinearLayout getFieldSysTrayLayout(TaskbarController uiController) {
+        return ReflectionHelpers.getField(uiController, "sysTrayLayout");
     }
 
     private void checkStartButtonPadding(int padding, ImageView startButton) {
