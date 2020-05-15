@@ -344,6 +344,7 @@
     <string name="tb_pref_secondscreen_title_open">打开第二屏</string>
     <string name="tb_pref_secondscreen_title_install">安装第二屏</string>
     <string name="tb_pref_secondscreen_description">连接外部显示器的时候修改设备的分辨率以及密度以此达到Continuum或者类似Dex的体验</string>
+    <string name="tb_pref_secondscreen_description_alt">@string/tb_pref_secondscreen_description</string>
 
     <string name="tb_use_default">使用默认</string>
 

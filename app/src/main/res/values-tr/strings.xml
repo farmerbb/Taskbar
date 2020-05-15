@@ -247,6 +247,7 @@ Başlat menüsü gösterme
 <string name="tb_pref_header_recent_apps">Son kullanılan uygulamalar</string>
 <string name="tb_pref_max_num_of_recents">Son kullanılan / sabitlenmiş uygulamaların maksimum sayısı</string>
 <string name="tb_pref_secondscreen_description">Continuum veya DeX benzeri bir deneyim için harici bir ekrana bağlandığında cihazınızın çözünürlüğünü ve yoğunluğunu değiştirin</string>
+<string name="tb_pref_secondscreen_description_alt">@string/tb_pref_secondscreen_description</string>
 <string name="tb_pref_secondscreen_title_install">İkincil ekran yükle</string>
 <string name="tb_pref_secondscreen_title_open">İkincil ekranı aç</string>
 <string name="tb_pref_summary_donate">Taskbar gelişimini, bağış sürümüne yükselterek küçük bir bağışla destekleyin</string>

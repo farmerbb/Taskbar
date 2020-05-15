@@ -344,6 +344,7 @@
     <string name="tb_pref_secondscreen_title_open">Open SecondScreen</string>
     <string name="tb_pref_secondscreen_title_install">Install SecondScreen</string>
     <string name="tb_pref_secondscreen_description">Change your device\'s resolution and density when connected to an external display, for a Continuum or DeX-like experience</string>
+    <string name="tb_pref_secondscreen_description_alt">Additional options for changing your device\'s resolution and density when connected to an external display</string>
 
     <string name="tb_use_default">Use default</string>
 

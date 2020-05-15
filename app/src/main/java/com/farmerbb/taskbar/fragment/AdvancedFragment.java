@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -112,6 +111,9 @@ public class AdvancedFragment extends SettingsFragment {
                 && U.isPlayStoreRelease(getActivity())) {
             findPreference(PREF_SECONDSCREEN).setOnPreferenceClickListener(this);
             secondScreenPrefEnabled = true;
+
+            if(U.isDesktopModeSupported(getActivity()))
+                findPreference(PREF_SECONDSCREEN).setSummary(R.string.tb_pref_secondscreen_description_alt);
         } else
             getPreferenceScreen().removePreference(findPreference(PREF_SECONDSCREEN));
 
