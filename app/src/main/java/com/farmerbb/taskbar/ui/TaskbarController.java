@@ -705,14 +705,12 @@ public class TaskbarController extends UIController {
 
         handler = new Handler();
         thread = new Thread(() -> {
-            updateSystemTray();
             updateRecentApps(true);
 
             if(!isRefreshingRecents) {
                 isRefreshingRecents = true;
 
                 while(shouldRefreshRecents) {
-                    SystemClock.sleep(refreshInterval);
                     updateSystemTray();
                     updateRecentApps(false);
 
@@ -736,6 +734,8 @@ public class TaskbarController extends UIController {
                                 }
                             }
                         });
+
+                    SystemClock.sleep(refreshInterval);
                 }
 
                 isRefreshingRecents = false;
@@ -754,7 +754,7 @@ public class TaskbarController extends UIController {
         final PackageManager pm = context.getPackageManager();
         final List<AppEntry> entries = new ArrayList<>();
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
-        int maxNumOfEntries = U.getMaxNumOfEntries(context);
+        int maxNumOfEntries = firstRefresh ? 0 : U.getMaxNumOfEntries(context);
         int realNumOfPinnedApps = 0;
         boolean fullLength = pref.getBoolean(PREF_FULL_LENGTH, true);
 
