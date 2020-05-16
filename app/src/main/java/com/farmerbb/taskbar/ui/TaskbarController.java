@@ -997,76 +997,7 @@ public class TaskbarController extends UIController {
                 handler.post(() -> {
                     if(numOfEntries > 0 || fullLength) {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-                        DisplayInfo display = U.getDisplayInfo(context, true);
-                        int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
-                        float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
-
-                        if(TaskbarPosition.isVertical(context)) {
-                            int maxScreenSize = Math.max(0, display.height
-                                    - U.getStatusBarHeight(context)
-                                    - U.getBaseTaskbarSize(context));
-
-                            params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
-                                    + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
-
-                            if(fullLength) {
-                                try {
-                                    Space whitespaceTop = layout.findViewById(R.id.whitespace_top);
-                                    Space whitespaceBottom = layout.findViewById(R.id.whitespace_bottom);
-                                    int height = maxScreenSize - recentsSize;
-
-                                    if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
-                                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
-                                        topParams.height = height / 2;
-                                        whitespaceTop.setLayoutParams(topParams);
-
-                                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
-                                        bottomParams.height = height / 2;
-                                        whitespaceBottom.setLayoutParams(bottomParams);
-                                    } else if(TaskbarPosition.isBottom(context)) {
-                                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
-                                        topParams.height = height;
-                                        whitespaceTop.setLayoutParams(topParams);
-                                    } else {
-                                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
-                                        bottomParams.height = height;
-                                        whitespaceBottom.setLayoutParams(bottomParams);
-                                    }
-                                } catch (NullPointerException e) { /* Gracefully fail */ }
-                            }
-                        } else {
-                            int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
-
-                            params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
-                                    + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
-
-                            if(fullLength) {
-                                try {
-                                    Space whitespaceLeft = layout.findViewById(R.id.whitespace_left);
-                                    Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
-                                    int width = maxScreenSize - recentsSize;
-
-                                    if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
-                                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
-                                        leftParams.width = width / 2;
-                                        whitespaceLeft.setLayoutParams(leftParams);
-
-                                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
-                                        rightParams.width = width / 2;
-                                        whitespaceRight.setLayoutParams(rightParams);
-                                    } else if(TaskbarPosition.isRight(context)) {
-                                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
-                                        leftParams.width = width;
-                                        whitespaceLeft.setLayoutParams(leftParams);
-                                    } else {
-                                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
-                                        rightParams.width = width;
-                                        whitespaceRight.setLayoutParams(rightParams);
-                                    }
-                                } catch (NullPointerException e) { /* Gracefully fail */ }
-                            }
-                        }
-
+                        calculateScrollViewParams(context, pref, params, fullLength, numOfEntries);
                         scrollView.setLayoutParams(params);
 
                         taskbar.removeAllViews();
@@ -1108,6 +1039,84 @@ public class TaskbarController extends UIController {
                 isShowingRecents = false;
                 scrollView.setVisibility(View.GONE);
             });
+        }
+    }
+
+    @VisibleForTesting
+    public void calculateScrollViewParams(Context context,
+                                          SharedPreferences pref,
+                                          ViewGroup.LayoutParams params,
+                                          boolean fullLength,
+                                          int numOfEntries) {
+        DisplayInfo display = U.getDisplayInfo(context, true);
+        int recentsSize =
+                context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
+        float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
+
+        if (TaskbarPosition.isVertical(context)) {
+            int maxScreenSize = Math.max(0, display.height
+                    - U.getStatusBarHeight(context)
+                    - U.getBaseTaskbarSize(context));
+
+            params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
+                    + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
+
+            if (fullLength) {
+                try {
+                    Space whitespaceTop = layout.findViewById(R.id.whitespace_top);
+                    Space whitespaceBottom = layout.findViewById(R.id.whitespace_bottom);
+                    int height = maxScreenSize - recentsSize;
+
+                    if (pref.getBoolean(PREF_CENTERED_ICONS, false)) {
+                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
+                        topParams.height = height / 2;
+                        whitespaceTop.setLayoutParams(topParams);
+
+                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
+                        bottomParams.height = height / 2;
+                        whitespaceBottom.setLayoutParams(bottomParams);
+                    } else if (TaskbarPosition.isBottom(context)) {
+                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
+                        topParams.height = height;
+                        whitespaceTop.setLayoutParams(topParams);
+                    } else {
+                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
+                        bottomParams.height = height;
+                        whitespaceBottom.setLayoutParams(bottomParams);
+                    }
+                } catch (NullPointerException e) { /* Gracefully fail */ }
+            }
+        } else {
+            int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
+
+            params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
+                    + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
+
+            if (fullLength) {
+                try {
+                    Space whitespaceLeft = layout.findViewById(R.id.whitespace_left);
+                    Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
+                    int width = maxScreenSize - recentsSize;
+
+                    if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
+                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
+                        leftParams.width = width / 2;
+                        whitespaceLeft.setLayoutParams(leftParams);
+
+                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
+                        rightParams.width = width / 2;
+                        whitespaceRight.setLayoutParams(rightParams);
+                    } else if(TaskbarPosition.isRight(context)) {
+                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
+                        leftParams.width = width;
+                        whitespaceLeft.setLayoutParams(leftParams);
+                    } else {
+                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
+                        rightParams.width = width;
+                        whitespaceRight.setLayoutParams(rightParams);
+                    }
+                } catch (NullPointerException e) { /* Gracefully fail */ }
+            }
         }
     }
 

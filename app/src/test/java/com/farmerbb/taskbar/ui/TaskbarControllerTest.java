@@ -19,6 +19,7 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
+import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
@@ -352,6 +353,61 @@ public class TaskbarControllerTest {
     public void testDrawSysTrayTime() {
         checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_LEFT, R.id.time_right);
         checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_RIGHT, R.id.time_left);
+    }
+
+    @Test
+    public void testCalculateScrollViewParams() {
+        BooleanAnswer isVerticalAnswer = new BooleanAnswer();
+        PowerMockito.spy(TaskbarPosition.class);
+        when(TaskbarPosition.isVertical(context)).thenAnswer(isVerticalAnswer);
+
+        DisplayInfo display = U.getDisplayInfo(context, true);
+        int dividerSize = context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
+
+        int defaultSize = -1;
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(defaultSize, defaultSize);
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+
+        isVerticalAnswer.answer = true;
+        int maxScreenSize =
+                Math.max(
+                        0,
+                        display.height
+                                - U.getStatusBarHeight(context)
+                                - U.getBaseTaskbarSize(context)
+                );
+
+        uiController.calculateScrollViewParams(context, prefs, params, true, 1);
+        assertEquals(defaultSize, params.width);
+        assertEquals(maxScreenSize + dividerSize, params.height);
+        params.height = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 1);
+        assertEquals(defaultSize, params.width);
+        assertEquals(iconSize + dividerSize, params.height);
+        params.height = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 10000);
+        assertEquals(defaultSize, params.width);
+        assertEquals(maxScreenSize + dividerSize, params.height);
+        params.height = defaultSize;
+
+        isVerticalAnswer.answer = false;
+        maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
+
+        uiController.calculateScrollViewParams(context, prefs, params, true, 1);
+        assertEquals(maxScreenSize + dividerSize, params.width);
+        assertEquals(defaultSize, params.height);
+        params.width = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 1);
+        assertEquals(iconSize + dividerSize, params.width);
+        assertEquals(defaultSize, params.height);
+        params.width = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 10000);
+        assertEquals(maxScreenSize + dividerSize, params.width);
+        assertEquals(defaultSize, params.height);
     }
 
     @Test
