@@ -471,11 +471,7 @@ public class TaskbarController extends UIController {
                                  LinearLayout layout,
                                  FrameLayout dashboardButton,
                                  int accentColor) {
-        boolean dashboardEnabled =
-                pref.getBoolean(
-                        PREF_DASHBOARD,
-                        context.getResources().getBoolean(R.bool.tb_def_dashboard)
-                );
+        boolean dashboardEnabled = U.getBooleanPrefWithDefault(context, PREF_DASHBOARD);
         if(dashboardEnabled) {
             layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square2).setBackgroundColor(accentColor);
@@ -484,12 +480,11 @@ public class TaskbarController extends UIController {
             layout.findViewById(R.id.square5).setBackgroundColor(accentColor);
             layout.findViewById(R.id.square6).setBackgroundColor(accentColor);
 
-            dashboardButton
-                    .setOnClickListener(v -> U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
+            dashboardButton.setOnClickListener(v -> U.sendBroadcast(context, ACTION_TOGGLE_DASHBOARD));
             dashboardButton.setVisibility(View.VISIBLE);
-        } else {
+        } else
             dashboardButton.setVisibility(View.GONE);
-        }
+
         return dashboardEnabled;
     }
 

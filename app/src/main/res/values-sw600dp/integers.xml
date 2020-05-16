@@ -15,6 +15,5 @@
 -->
 
 <resources>
-    <integer name="tb_dashboard_width">3</integer>
     <integer name="tb_start_menu_columns">4</integer>
 </resources>

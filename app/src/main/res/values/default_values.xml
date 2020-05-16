@@ -17,4 +17,6 @@
 <resources>
     <bool name="tb_def_sys_tray">false</bool>
     <bool name="tb_def_dashboard">false</bool>
+    <integer name="tb_def_dashboard_width">2</integer>
+    <integer name="tb_def_dashboard_height">2</integer>
 </resources>

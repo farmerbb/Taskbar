@@ -17,7 +17,5 @@
 <resources>
     <integer name="tb_translucent_gray">0x66000000</integer>
     <integer name="tb_translucent_white">0xFFF0F0F0</integer>
-    <integer name="tb_dashboard_width">2</integer>
-    <integer name="tb_dashboard_height">2</integer>
     <integer name="tb_start_menu_columns">3</integer>
 </resources>

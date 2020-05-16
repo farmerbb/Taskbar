@@ -38,6 +38,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
@@ -135,8 +136,9 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                             U.setDensity(displayID, stringValue);
 
                             SharedPreferences pref2 = U.getSharedPreferences(getActivity());
-                            if(pref2.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false))
-                                new Handler().postDelayed(() -> U.showHideNavigationBar(getActivity(), false), 250);
+                            if(pref2.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false)
+                                    && LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                                U.showHideNavigationBar(getActivity(), displayID, false, 250);
                         } catch (Exception e) {
                             U.showToast(getActivity(), R.string.tb_unable_to_apply_density_change);
                         }

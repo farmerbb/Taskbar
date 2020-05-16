@@ -195,8 +195,9 @@ public class AdvancedFragment extends SettingsFragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LinearLayout dialogLayout = (LinearLayout) View.inflate(getActivity(), R.layout.tb_dashboard_size_dialog, null);
 
-                boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-                boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+                int orientation = U.getDisplayOrientation(getActivity());
+                boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
+                boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
                 int editTextId = -1;
                 int editText2Id = -1;
@@ -246,8 +247,8 @@ public class AdvancedFragment extends SettingsFragment {
                             updateDashboardGridSize(true);
                         });
 
-                editText.setText(Integer.toString(pref.getInt(PREF_DASHBOARD_WIDTH, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width))));
-                editText2.setText(Integer.toString(pref.getInt(PREF_DASHBOARD_HEIGHT, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height))));
+                editText.setText(Integer.toString(U.getIntPrefWithDefault(getActivity(), PREF_DASHBOARD_WIDTH)));
+                editText2.setText(Integer.toString(U.getIntPrefWithDefault(getActivity(), PREF_DASHBOARD_HEIGHT)));
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -291,12 +292,12 @@ public class AdvancedFragment extends SettingsFragment {
     }
 
     private void updateDashboardGridSize(boolean restartTaskbar) {
-        SharedPreferences pref = U.getSharedPreferences(getActivity());
-        int width = pref.getInt(PREF_DASHBOARD_WIDTH, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_width));
-        int height = pref.getInt(PREF_DASHBOARD_HEIGHT, getActivity().getApplicationContext().getResources().getInteger(R.integer.tb_dashboard_height));
+        int width = U.getIntPrefWithDefault(getActivity(), PREF_DASHBOARD_WIDTH);
+        int height = U.getIntPrefWithDefault(getActivity(), PREF_DASHBOARD_HEIGHT);
 
-        boolean isPortrait = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        boolean isLandscape = getActivity().getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        int orientation = U.getDisplayOrientation(getActivity());
+        boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         int first = -1;
         int second = -1;

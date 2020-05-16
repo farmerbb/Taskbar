@@ -170,7 +170,7 @@ public class DesktopModeFragment extends SettingsFragment {
             case PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE:
                 LauncherHelper helper = LauncherHelper.getInstance();
                 if(helper.isOnSecondaryHomeScreen())
-                    U.showHideNavigationBar(getActivity(), helper.getSecondaryDisplayId(), !((CheckBoxPreference) p).isChecked());
+                    U.showHideNavigationBar(getActivity(), helper.getSecondaryDisplayId(), !((CheckBoxPreference) p).isChecked(), 0);
 
                 break;
         }

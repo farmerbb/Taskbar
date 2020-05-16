@@ -1047,7 +1047,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
             SharedPreferences pref = U.getSharedPreferences(this);
             if(pref.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false))
-                U.showHideNavigationBar(this, displayID, !value);
+                U.showHideNavigationBar(this, displayID, !value, 0);
         } else
             helper.setOnPrimaryHomeScreen(value);
     }

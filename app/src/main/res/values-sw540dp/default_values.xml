@@ -16,5 +16,4 @@
 
 <resources>
     <bool name="tb_def_sys_tray">true</bool>
-    <bool name="tb_def_dashboard">false</bool>
 </resources>

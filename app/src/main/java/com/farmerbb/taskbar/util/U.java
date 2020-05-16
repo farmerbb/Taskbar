@@ -54,6 +54,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -87,6 +88,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -284,10 +286,7 @@ public class U {
     public static void showToast(Context context, String message, int length) {
         cancelToast();
 
-        if(!isDesktopModeActive(context))
-            context = context.getApplicationContext();
-
-        ToastInterface toast = DependencyUtils.createToast(context, message, length);
+        ToastInterface toast = DependencyUtils.createToast(getDisplayContext(context), message, length);
         toast.show();
 
         ToastHelper.getInstance().setLastToast(toast);
@@ -505,7 +504,7 @@ public class U {
         int statusBarHeight = getStatusBarHeight(context);
         String position = TaskbarPosition.getTaskbarPosition(context);
 
-        int orientation = context.getResources().getConfiguration().orientation;
+        int orientation = getDisplayOrientation(context);
         boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
@@ -1120,7 +1119,7 @@ public class U {
         float baseTaskbarSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         boolean navbarButtonsEnabled = false;
 
-        if(pref.getBoolean(PREF_DASHBOARD, context.getResources().getBoolean(R.bool.tb_def_dashboard)))
+        if(getBooleanPrefWithDefault(context, PREF_DASHBOARD))
             baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
 
         if(pref.getBoolean(PREF_BUTTON_BACK, false)) {
@@ -1194,10 +1193,10 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, boolean show) {
-        showHideNavigationBar(context, getTaskbarDisplayID(), show);
+        showHideNavigationBar(context, getTaskbarDisplayID(), show, 0);
     }
 
-    public static void showHideNavigationBar(Context context, int displayID, boolean show) {
+    public static void showHideNavigationBar(Context context, int displayID, boolean show, int delay) {
         if(!isDesktopModeActive(context)
                 && !isBlissOs(context)
                 && !hasSupportLibrary(context, 7)) {
@@ -1207,12 +1206,18 @@ public class U {
         int value = show ? 0 : getNavbarHeight(context) * -1;
 
         if(hasWriteSecureSettingsPermission(context)) {
-            try {
-                setOverscan(displayID, value);
-                return;
-            } catch (Exception e) {
-                // Fallback to next method
-            }
+            Runnable runnable = () -> {
+                try {
+                    setOverscan(displayID, value);
+                } catch (Exception e) { /* Gracefully fail */ }
+            };
+
+            if(delay == 0)
+                runnable.run();
+            else
+                new Handler().postDelayed(runnable, delay);
+
+            return;
         }
 
         if(hasSupportLibrary(context, 7)) {
@@ -1308,9 +1313,7 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
-        if(!isDesktopModeActive(context))
-            context = context.getApplicationContext();
-
+        context = getDisplayContext(context);
         int displayID = getTaskbarDisplayID();
 
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
@@ -1345,7 +1348,7 @@ public class U {
         }
 
         // Workaround for incorrect display size on devices with notches in landscape mode
-        if(fromTaskbar && context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+        if(fromTaskbar && getDisplayOrientation(context) == Configuration.ORIENTATION_LANDSCAPE)
             return info;
 
         boolean sameWidth = metrics.widthPixels == realMetrics.widthPixels;
@@ -1676,7 +1679,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
 
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && pref.getBoolean(PREF_SYS_TRAY, context.getResources().getBoolean(R.bool.tb_def_sys_tray))
+                && getBooleanPrefWithDefault(context, PREF_SYS_TRAY)
                 && pref.getBoolean(PREF_FULL_LENGTH, true)
                 && !TaskbarPosition.isVertical(context);
     }
@@ -1722,7 +1725,8 @@ public class U {
     }
 
     public static boolean isDesktopModeActive(Context context) {
-        if(!isDesktopModeSupported(context)) return false;
+        if(!isDesktopModeSupported(context) || !hasFreeformSupport(context))
+            return false;
 
         boolean desktopModePrefEnabled;
 
@@ -1933,6 +1937,22 @@ public class U {
         return getCurrentTheme(context).equals("dark");
     }
 
+    public static boolean getBooleanPrefWithDefault(Context context, String key) {
+        context = getDisplayContext(context);
+        int resId = getDefaultPrefResID(context, key, R.bool.class);
+
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getBoolean(key, context.getResources().getBoolean(resId));
+    }
+
+    public static int getIntPrefWithDefault(Context context, String key) {
+        context = getDisplayContext(context);
+        int resId = getDefaultPrefResID(context, key, R.integer.class);
+
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getInt(key, context.getResources().getInteger(resId));
+    }
+
     public static void sanitizePrefs(Context context, String... keys) {
         SharedPreferences pref = getSharedPreferences(context);
 
@@ -1942,10 +1962,37 @@ public class U {
         }
     }
 
+    @SuppressWarnings("rawtypes")
+    private static int getDefaultPrefResID(Context context, String key, Class rClass) {
+        int resId;
+
+        try {
+            Field field = rClass.getField("tb_def_" + key);
+            resId = field.getInt(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            // Pref does not have a default
+            return 0;
+        }
+
+        sanitizePrefs(context, key);
+        return resId;
+    }
+
     public static boolean isFreeformModeEnabled(Context context) {
         if(isLibrary(context)) return true;
 
         SharedPreferences pref = getSharedPreferences(context);
         return pref.getBoolean(PREF_DESKTOP_MODE, false) || pref.getBoolean(PREF_FREEFORM_HACK, false);
+    }
+
+    public static Context getDisplayContext(Context context) {
+        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+            return context.createDisplayContext(getExternalDisplay(context));
+        else
+            return context.getApplicationContext();
+    }
+
+    public static int getDisplayOrientation(Context context) {
+        return getDisplayContext(context).getResources().getConfiguration().orientation;
     }
 }

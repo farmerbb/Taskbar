@@ -159,8 +159,7 @@ public class DashboardController extends UIController {
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCreateHost(UIHost host) {
-        SharedPreferences pref = U.getSharedPreferences(context);
-        if(pref.getBoolean(PREF_DASHBOARD, context.getResources().getBoolean(R.bool.tb_def_dashboard)))
+        if(U.getBooleanPrefWithDefault(context, PREF_DASHBOARD))
             init(context, host, () -> drawDashboard(host));
         else
             host.terminate();
@@ -182,11 +181,12 @@ public class DashboardController extends UIController {
         layout.setAlpha(0);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        int width = pref.getInt(PREF_DASHBOARD_WIDTH, context.getResources().getInteger(R.integer.tb_dashboard_width));
-        int height = pref.getInt(PREF_DASHBOARD_HEIGHT, context.getResources().getInteger(R.integer.tb_dashboard_height));
+        int width = U.getIntPrefWithDefault(context, PREF_DASHBOARD_WIDTH);
+        int height = U.getIntPrefWithDefault(context, PREF_DASHBOARD_HEIGHT);
 
-        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        int orientation = U.getDisplayOrientation(context);
+        boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         if(isPortrait) {
             columns = height;
