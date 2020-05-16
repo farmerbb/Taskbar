@@ -231,6 +231,8 @@ public class AdvancedFragment extends SettingsFragment {
                                     SharedPreferences.Editor editor = pref.edit();
                                     editor.putInt(PREF_DASHBOARD_WIDTH, width);
                                     editor.putInt(PREF_DASHBOARD_HEIGHT, height);
+                                    editor.putBoolean(PREF_DASHBOARD_WIDTH + isModified, true);
+                                    editor.putBoolean(PREF_DASHBOARD_HEIGHT + isModified, true);
                                     editor.apply();
 
                                     updateDashboardGridSize(true);
@@ -243,7 +245,11 @@ public class AdvancedFragment extends SettingsFragment {
                         })
                         .setNegativeButton(R.string.tb_action_cancel, null)
                         .setNeutralButton(R.string.tb_use_default, (dialog, id) -> {
-                            pref.edit().remove(PREF_DASHBOARD_WIDTH).remove(PREF_DASHBOARD_HEIGHT).apply();
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.remove(PREF_DASHBOARD_WIDTH + isModified);
+                            editor.remove(PREF_DASHBOARD_HEIGHT + isModified);
+                            editor.apply();
+
                             updateDashboardGridSize(true);
                         });
 

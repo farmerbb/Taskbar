@@ -109,7 +109,6 @@ public class FreeformModeFragment extends SettingsFragment {
 
         U.registerReceiver(getActivity(), checkBoxReceiver, ACTION_UPDATE_FREEFORM_CHECKBOX);
 
-        U.sanitizePrefs(getActivity(), PREF_WINDOW_SIZE);
         finishedLoadingPrefs = true;
     }
 

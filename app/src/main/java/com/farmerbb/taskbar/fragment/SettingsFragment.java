@@ -49,6 +49,8 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
     boolean showReminderToast = false;
     boolean restartNotificationService = false;
 
+    String isModified = "_is_modified";
+
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,6 +149,11 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         break;
                     case PREF_HIDE_ICON_LABELS:
                         U.sendBroadcast(getActivity(), ACTION_REFRESH_DESKTOP_ICONS);
+                        break;
+                    case PREF_DASHBOARD:
+                    case PREF_SYS_TRAY:
+                        SharedPreferences pref2 = U.getSharedPreferences(getActivity());
+                        pref2.edit().putBoolean(preference.getKey() + isModified, true).apply();
                         break;
                 }
 
