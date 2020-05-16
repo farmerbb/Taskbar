@@ -648,16 +648,22 @@ public class TaskbarController extends UIController {
 
         if(!U.isLibrary(context)) {
             sysTrayLayout.setOnClickListener(v -> {
-                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,
-                        () -> U.showToast(context, R.string.tb_opening_notification_tray));
+                U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS, () -> {
+                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                        U.showToast(context, R.string.tb_opening_notification_tray);
+                });
+
                 if(U.shouldCollapse(context, false))
                     hideTaskbar(true);
             });
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 sysTrayLayout.setOnLongClickListener(v -> {
-                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,
-                            () -> U.showToast(context, R.string.tb_opening_quick_settings));
+                    U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS, () -> {
+                        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                            U.showToast(context, R.string.tb_opening_quick_settings);
+                    });
+
                     if(U.shouldCollapse(context, false))
                         hideTaskbar(true);
 
@@ -667,8 +673,11 @@ public class TaskbarController extends UIController {
                 sysTrayLayout.setOnGenericMotionListener((view, motionEvent) -> {
                     if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                             && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
-                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,
-                                () -> U.showToast(context, R.string.tb_opening_quick_settings));
+                        U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS, () -> {
+                            if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                                U.showToast(context, R.string.tb_opening_quick_settings);
+                        });
+
                         if(U.shouldCollapse(context, false))
                             hideTaskbar(true);
                     }

@@ -444,7 +444,9 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 
     <string name="tb_hide_icon_labels">Hide app icon labels</string>
 
-    <string name="tb_opening_notification_tray">Opening notification tray on primary display</string>
-    <string name="tb_opening_quick_settings">Opening quick settings on primary display</string>
+    <string name="tb_opening_notification_tray">Opened notification tray on primary display</string>
+    <string name="tb_opening_quick_settings">Opened quick settings on primary display</string>
+    <string name="tb_opening_volume_control">Opened volume control on primary display</string>
+    <string name="tb_opening_power_menu">Opened power menu on primary display</string>
 
 </resources>

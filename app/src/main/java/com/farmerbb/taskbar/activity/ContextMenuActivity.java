@@ -614,6 +614,9 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
                 audio.adjustSuggestedStreamVolume(AudioManager.ADJUST_SAME, AudioManager.USE_DEFAULT_STREAM_TYPE, AudioManager.FLAG_SHOW_UI);
 
+                if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                    U.showToast(this, R.string.tb_opening_volume_control);
+
                 showStartMenu = false;
                 shouldHideTaskbar = true;
                 contextMenuFix = false;
@@ -672,7 +675,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 contextMenuFix = false;
                 break;
             case "power_menu":
-                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
+                U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG, () -> {
+                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                        U.showToast(this, R.string.tb_opening_power_menu);
+                });
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;
