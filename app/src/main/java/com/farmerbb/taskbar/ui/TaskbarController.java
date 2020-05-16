@@ -1086,32 +1086,15 @@ public class TaskbarController extends UIController {
                         }
 
                         if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
-                            new Handler().post(() -> {
-                                switch(TaskbarPosition.getTaskbarPosition(context)) {
-                                    case POSITION_BOTTOM_LEFT:
-                                    case POSITION_BOTTOM_RIGHT:
-                                    case POSITION_TOP_LEFT:
-                                    case POSITION_TOP_RIGHT:
-                                        if(sortOrder.contains("false"))
-                                            scrollView.scrollTo(0, 0);
-                                        else if(sortOrder.contains("true"))
-                                            scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
-                                        break;
-                                    case POSITION_BOTTOM_VERTICAL_LEFT:
-                                    case POSITION_BOTTOM_VERTICAL_RIGHT:
-                                    case POSITION_TOP_VERTICAL_LEFT:
-                                    case POSITION_TOP_VERTICAL_RIGHT:
-                                        if(sortOrder.contains("false"))
-                                            scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
-                                        else if(sortOrder.contains("true"))
-                                            scrollView.scrollTo(0, 0);
-                                        break;
-                                }
-
-                                if(shouldRefreshRecents) {
-                                    scrollView.setVisibility(View.VISIBLE);
-                                }
-                            });
+                            new Handler().post(
+                                    () -> scrollTaskbar(
+                                            scrollView,
+                                            taskbar,
+                                            TaskbarPosition.getTaskbarPosition(context),
+                                            sortOrder,
+                                            shouldRefreshRecents
+                                    )
+                            );
                     } else {
                         isShowingRecents = false;
                         scrollView.setVisibility(View.GONE);
@@ -1125,6 +1108,31 @@ public class TaskbarController extends UIController {
                 isShowingRecents = false;
                 scrollView.setVisibility(View.GONE);
             });
+        }
+    }
+
+    @VisibleForTesting
+    public void scrollTaskbar(FrameLayout scrollView,
+                              LinearLayout taskbar,
+                              String taskbarPosition,
+                              String sortOrder,
+                              boolean shouldRefreshRecents) {
+        if (TaskbarPosition.isVertical(taskbarPosition)) {
+            if (sortOrder.contains("false")) {
+                scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
+            } else if (sortOrder.contains("true")) {
+                scrollView.scrollTo(0, 0);
+            }
+        } else {
+            if (sortOrder.contains("false")) {
+                scrollView.scrollTo(0, 0);
+            } else if (sortOrder.contains("true")) {
+                scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
+            }
+        }
+
+        if (shouldRefreshRecents) {
+            scrollView.setVisibility(View.VISIBLE);
         }
     }
 
