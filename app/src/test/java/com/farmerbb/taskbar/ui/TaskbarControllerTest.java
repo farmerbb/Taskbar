@@ -14,12 +14,13 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
+import com.farmerbb.taskbar.util.DisplayInfo;
+import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
 import org.junit.After;
@@ -61,7 +62,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
-@PrepareForTest(U.class)
+@PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class TaskbarControllerTest {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
@@ -353,6 +354,114 @@ public class TaskbarControllerTest {
     public void testDrawSysTrayTime() {
         checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_LEFT, R.id.time_right);
         checkDrawSysTrayTimeVisibility(POSITION_BOTTOM_RIGHT, R.id.time_left);
+    }
+
+    @Test
+    public void testCalculateScrollViewParams() {
+        BooleanAnswer isVerticalAnswer = new BooleanAnswer();
+        PowerMockito.spy(TaskbarPosition.class);
+        when(TaskbarPosition.isVertical(context)).thenAnswer(isVerticalAnswer);
+
+        DisplayInfo display = U.getDisplayInfo(context, true);
+        int dividerSize = context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
+
+        int defaultSize = -1;
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(defaultSize, defaultSize);
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+
+        isVerticalAnswer.answer = true;
+        int maxScreenSize =
+                Math.max(
+                        0,
+                        display.height
+                                - U.getStatusBarHeight(context)
+                                - U.getBaseTaskbarSize(context)
+                );
+
+        uiController.calculateScrollViewParams(context, prefs, params, true, 1);
+        assertEquals(defaultSize, params.width);
+        assertEquals(maxScreenSize + dividerSize, params.height);
+        params.height = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 1);
+        assertEquals(defaultSize, params.width);
+        assertEquals(iconSize + dividerSize, params.height);
+        params.height = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 10000);
+        assertEquals(defaultSize, params.width);
+        assertEquals(maxScreenSize + dividerSize, params.height);
+        params.height = defaultSize;
+
+        isVerticalAnswer.answer = false;
+        maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
+
+        uiController.calculateScrollViewParams(context, prefs, params, true, 1);
+        assertEquals(maxScreenSize + dividerSize, params.width);
+        assertEquals(defaultSize, params.height);
+        params.width = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 1);
+        assertEquals(iconSize + dividerSize, params.width);
+        assertEquals(defaultSize, params.height);
+        params.width = defaultSize;
+
+        uiController.calculateScrollViewParams(context, prefs, params, false, 10000);
+        assertEquals(maxScreenSize + dividerSize, params.width);
+        assertEquals(defaultSize, params.height);
+    }
+
+    @Test
+    public void testScrollTaskbarForScrollViewVisibility() {
+        int layoutId = uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT);
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
+        FrameLayout scrollView = layout.findViewById(R.id.taskbar_scrollview);
+        LinearLayout taskbar = layout.findViewById(R.id.taskbar);
+        uiController.scrollTaskbar(scrollView, taskbar, POSITION_BOTTOM_LEFT, "false", false);
+        assertEquals(View.GONE, scrollView.getVisibility());
+
+        uiController.scrollTaskbar(scrollView, taskbar, POSITION_BOTTOM_LEFT, "false", true);
+        assertEquals(View.VISIBLE, scrollView.getVisibility());
+    }
+
+    @Test
+    @Config(shadows = {TaskbarShadowScrollView.class})
+    public void testScrollTaskbarForScrollViewLocation() {
+        // We only provide enhanced ShadowScrollView with scrollTo supported, so we should
+        // choose the layout uses the ScrollView instead of HorizontalScrollView.
+        String taskbarPosition = POSITION_BOTTOM_VERTICAL_LEFT;
+        int layoutId = uiController.getTaskbarLayoutId(taskbarPosition);
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
+        FrameLayout scrollView = layout.findViewById(R.id.taskbar_scrollview);
+        LinearLayout taskbar = layout.findViewById(R.id.taskbar);
+        int taskbarWidth = 200;
+        int taskbarHeight = 50;
+        // Change LayoutParams doesn't work with robolectric, so we should use reflection
+        // to change the location directly.
+        ReflectionHelpers.setField(taskbar, "mLeft", 0);
+        ReflectionHelpers.setField(taskbar, "mTop", 0);
+        ReflectionHelpers.setField(taskbar, "mRight", taskbarWidth);
+        ReflectionHelpers.setField(taskbar, "mBottom", taskbarHeight);
+
+        BooleanAnswer isVerticalAnswer = new BooleanAnswer();
+        PowerMockito.spy(TaskbarPosition.class);
+        when(TaskbarPosition.isVertical(taskbarPosition)).thenAnswer(isVerticalAnswer);
+
+        isVerticalAnswer.answer = false;
+        uiController.scrollTaskbar(scrollView, taskbar, taskbarPosition, "false", true);
+        assertEquals(0, scrollView.getScrollX());
+        assertEquals(0, scrollView.getScrollY());
+        uiController.scrollTaskbar(scrollView, taskbar, taskbarPosition, "true", true);
+        assertEquals(taskbarWidth, scrollView.getScrollX());
+        assertEquals(taskbarHeight, scrollView.getScrollY());
+
+        isVerticalAnswer.answer = true;
+        uiController.scrollTaskbar(scrollView, taskbar, taskbarPosition, "true", true);
+        assertEquals(0, scrollView.getScrollX());
+        assertEquals(0, scrollView.getScrollY());
+        uiController.scrollTaskbar(scrollView, taskbar, taskbarPosition, "false", true);
+        assertEquals(taskbarWidth, scrollView.getScrollX());
+        assertEquals(taskbarHeight, scrollView.getScrollY());
     }
 
     private void checkDrawableBackgroundColor(Drawable drawable, int color) {
