@@ -221,7 +221,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
     public void addPreferencesFromResource(@XmlRes int preferencesResId) {
         if(!(this instanceof AboutFragment)) {
             try {
-                Context context = U.wrapContext(getActivity().getApplicationContext());
+                Context context = U.wrapContext(U.getDisplayContext(getActivity()));
                 Class.forName("android.preference.PreferenceManager")
                         .getMethod("inflateFromResource", Context.class, int.class, PreferenceScreen.class)
                         .invoke(getPreferenceManager(), context, preferencesResId, getPreferenceScreen());

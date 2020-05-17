@@ -559,7 +559,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 }
 
                 U.launchApp(
-                        getApplicationContext(),
+                        U.getDisplayContext(this),
                         entry,
                         windowSize,
                         false,
@@ -585,7 +585,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             case "shortcut_4":
             case "shortcut_5":
                 U.startShortcut(
-                        getApplicationContext(),
+                        U.getDisplayContext(this),
                         entry,
                         shortcuts.get(Integer.parseInt(p.getKey().replace("shortcut_", "")) - 1),
                         getListView().getChildAt(p.getOrder()));
@@ -603,7 +603,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent.putExtra("no_shadow", true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
-                    U.startActivityMaximized(getApplicationContext(), intent);
+                    U.startActivityMaximized(U.getDisplayContext(this), intent);
                 } else {
                     try {
                         startActivity(intent);
@@ -698,7 +698,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.putExtra("no_shadow", true);
                     intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
 
-                    U.startActivityMaximized(getApplicationContext(), intent2);
+                    U.startActivityMaximized(U.getDisplayContext(this), intent2);
                 } else {
                     try {
                         startActivity(intent2);
@@ -722,7 +722,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                 Intent intent3 = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper));
                 intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                U.startActivityMaximized(getApplicationContext(), intent3);
+                U.startActivityMaximized(U.getDisplayContext(this), intent3);
 
                 showStartMenu = false;
                 shouldHideTaskbar = true;

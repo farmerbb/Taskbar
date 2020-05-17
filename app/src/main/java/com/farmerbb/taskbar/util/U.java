@@ -1872,7 +1872,7 @@ public class U {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
 
-        int iconSize = context.getApplicationContext().getResources().getDimensionPixelSize(iconSizeRes);
+        int iconSize = getDisplayContext(context).getResources().getDimensionPixelSize(iconSizeRes);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
 
         return new BitmapDrawable(context.getResources(), resizedBitmap);
