@@ -1973,8 +1973,9 @@ public class U {
     }
 
     public static Context getDisplayContext(Context context) {
-        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
-            return context.createDisplayContext(getExternalDisplay(context));
+        Display display = getExternalDisplay(context);
+        if(display.getDisplayId() != Display.DEFAULT_DISPLAY)
+            return context.createDisplayContext(display);
         else
             return context.getApplicationContext();
     }
