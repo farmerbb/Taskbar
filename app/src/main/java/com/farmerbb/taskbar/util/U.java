@@ -434,21 +434,8 @@ public class U {
         if(pref.getBoolean(PREF_DISABLE_ANIMATIONS, false))
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        boolean realOpenInNewWindow =
-                openInNewWindow || pref.getBoolean(PREF_FORCE_NEW_WINDOW, false);
-        if(realOpenInNewWindow) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
-            ActivityInfo activityInfo = intent.resolveActivityInfo(context.getPackageManager(), 0);
-            if(activityInfo != null) {
-                switch(activityInfo.launchMode) {
-                    case ActivityInfo.LAUNCH_SINGLE_TASK:
-                    case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
-                        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                        break;
-                }
-            }
-        }
+        boolean realOpenInNewWindow = openInNewWindow || pref.getBoolean(PREF_FORCE_NEW_WINDOW, false);
+        if(realOpenInNewWindow) applyOpenInNewWindow(context, intent);
 
         ApplicationType type = getApplicationType(context, entry);
 
@@ -1994,5 +1981,22 @@ public class U {
 
     public static int getDisplayOrientation(Context context) {
         return getDisplayContext(context).getResources().getConfiguration().orientation;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public static void applyOpenInNewWindow(Context context, Intent intent) {
+        if(!isFreeformModeEnabled(context)) return;
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+
+        ActivityInfo activityInfo = intent.resolveActivityInfo(context.getPackageManager(), 0);
+        if(activityInfo != null) {
+            switch(activityInfo.launchMode) {
+                case ActivityInfo.LAUNCH_SINGLE_TASK:
+                case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
+                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    break;
+            }
+        }
     }
 }

@@ -475,6 +475,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.launchApp(this, () -> {
                     Intent intent2 = new Intent(this, MainActivity.class);
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    
+                    LauncherHelper helper = LauncherHelper.getInstance();
+                    if(helper.isOnHomeScreen() || helper.isOnSecondaryHomeScreen())
+                        U.applyOpenInNewWindow(this, intent2);
 
                     try {
                         startActivity(intent2,
