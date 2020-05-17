@@ -724,14 +724,21 @@ public class U {
     }
 
     public static int getStatusBarHeight(Context context) {
-        return getSystemDimen(context, "status_bar_height");
+        return isDesktopModeActive(context) ? 0 : getSystemDimen(context, "status_bar_height");
     }
 
     private static int getNavbarHeight(Context context) {
-        return getSystemDimen(context, "navigation_bar_height");
+        SharedPreferences pref = getSharedPreferences(context);
+        boolean isNavbarHidden = isDesktopModeActive(context)
+                && LauncherHelper.getInstance().isOnSecondaryHomeScreen()
+                && pref.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false);
+
+        return isNavbarHidden ? 0 : getSystemDimen(context, "navigation_bar_height");
     }
 
     private static int getSystemDimen(Context context, String id) {
+        context = getDisplayContext(context);
+
         int value = 0;
         int resourceId = context.getResources().getIdentifier(id, "dimen", "android");
         if(resourceId > 0)
@@ -1190,7 +1197,7 @@ public class U {
             return;
         }
 
-        int value = show ? 0 : getNavbarHeight(context) * -1;
+        int value = show ? 0 : getSystemDimen(context, "navigation_bar_height") * -1;
 
         if(hasWriteSecureSettingsPermission(context)) {
             Runnable runnable = () -> {
@@ -1872,7 +1879,7 @@ public class U {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
 
-        int iconSize = getDisplayContext(context).getResources().getDimensionPixelSize(iconSizeRes);
+        int iconSize = context.getApplicationContext().getResources().getDimensionPixelSize(iconSizeRes);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
 
         return new BitmapDrawable(context.getResources(), resizedBitmap);
@@ -1973,9 +1980,8 @@ public class U {
     }
 
     public static Context getDisplayContext(Context context) {
-        Display display = getExternalDisplay(context);
-        if(display.getDisplayId() != Display.DEFAULT_DISPLAY)
-            return context.createDisplayContext(display);
+        if(isDesktopModeActive(context))
+            return context.createDisplayContext(getExternalDisplay(context));
         else
             return context.getApplicationContext();
     }
