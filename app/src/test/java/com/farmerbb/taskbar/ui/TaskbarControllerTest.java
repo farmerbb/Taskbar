@@ -204,27 +204,27 @@ public class TaskbarControllerTest {
     }
 
     @Test
-    public void testDrawDashboardWithDefaultConfig() {
+    public void testDrawDashboardButtonWithDefaultConfig() {
         prefs.edit().remove(PREF_DASHBOARD).apply();
         checkDashboardEnabled(false);
     }
 
     @Test
     @Config(qualifiers = "sw540dp")
-    public void testDrawDashboardWithDefaultConfigForSw540dp() {
+    public void testDrawDashboardButtonWithDefaultConfigForSw540dp() {
         prefs.edit().remove(PREF_DASHBOARD).apply();
         checkDashboardEnabled(false);
     }
 
     @Test
     @Config(qualifiers = "sw720dp")
-    public void testDrawDashboardWithDefaultConfigForSw720dp() {
+    public void testDrawDashboardButtonWithDefaultConfigForSw720dp() {
         prefs.edit().remove(PREF_DASHBOARD).apply();
         checkDashboardEnabled(true);
     }
 
     @Test
-    public void testDrawDashboardForDashboardButton() {
+    public void testDrawDashboardButtonForDashboardButton() {
         int accentColor = Color.RED;
         int layoutId = uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT);
         LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
@@ -233,13 +233,13 @@ public class TaskbarControllerTest {
         prefs.edit().putBoolean(PREF_DASHBOARD + "_is_modified", true).apply();
         prefs.edit().putBoolean(PREF_DASHBOARD, false).apply();
         boolean dashboardEnabled =
-                uiController.drawDashboard(context, prefs, layout, dashboardButton, accentColor);
+                uiController.drawDashboardButton(context, layout, dashboardButton, accentColor);
         assertFalse(dashboardEnabled);
         assertEquals(View.GONE, dashboardButton.getVisibility());
 
         prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
         dashboardEnabled =
-                uiController.drawDashboard(context, prefs, layout, dashboardButton, accentColor);
+                uiController.drawDashboardButton(context, layout, dashboardButton, accentColor);
         assertTrue(dashboardEnabled);
         assertTrue(dashboardButton.hasOnClickListeners());
         assertEquals(View.VISIBLE, dashboardButton.getVisibility());
@@ -475,7 +475,7 @@ public class TaskbarControllerTest {
         LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
         FrameLayout dashboardButton = layout.findViewById(R.id.dashboard_button);
         boolean dashboardEnabled =
-                uiController.drawDashboard(context, prefs, layout, dashboardButton, Color.RED);
+                uiController.drawDashboardButton(context, layout, dashboardButton, Color.RED);
         assertEquals(expectedDashboardEnabled, dashboardEnabled);
     }
 

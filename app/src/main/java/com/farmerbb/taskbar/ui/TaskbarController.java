@@ -310,7 +310,7 @@ public class TaskbarController extends UIController {
 
         dashboardButton = layout.findViewById(R.id.dashboard_button);
         navbarButtons = layout.findViewById(R.id.navbar_buttons);
-        dashboardEnabled = drawDashboard(context, pref, layout, dashboardButton, accentColor);
+        dashboardEnabled = drawDashboardButton(context, layout, dashboardButton, accentColor);
         navbarButtonsEnabled = drawNavbarButtons(context, layout, pref, accentColor);
         if(!navbarButtonsEnabled)
             navbarButtons.setVisibility(View.GONE);
@@ -466,11 +466,10 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public boolean drawDashboard(Context context,
-                                 SharedPreferences pref,
-                                 LinearLayout layout,
-                                 FrameLayout dashboardButton,
-                                 int accentColor) {
+    public boolean drawDashboardButton(Context context,
+                                       LinearLayout layout,
+                                       FrameLayout dashboardButton,
+                                       int accentColor) {
         boolean dashboardEnabled = U.getBooleanPrefWithDefault(context, PREF_DASHBOARD);
         if(dashboardEnabled) {
             layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
