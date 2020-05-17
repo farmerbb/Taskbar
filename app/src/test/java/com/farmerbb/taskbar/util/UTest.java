@@ -524,6 +524,7 @@ public class UTest {
         float initialSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context));
         SharedPreferences prefs = U.getSharedPreferences(context);
+        prefs.edit().putBoolean(PREF_DASHBOARD + "_is_modified", true).apply();
         prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
         float dashboardButtonSize =
                 context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
@@ -883,6 +884,7 @@ public class UTest {
     public void testIsSystemTrayEnabledForMAndAboveVersion() {
         SharedPreferences prefs = U.getSharedPreferences(context);
         assertFalse(U.isSystemTrayEnabled(context));
+        prefs.edit().putBoolean(PREF_SYS_TRAY + "_is_modified", true).apply();
         prefs.edit().putBoolean(PREF_SYS_TRAY, true).apply();
         assertTrue(U.isSystemTrayEnabled(context));
         prefs.edit().putBoolean(PREF_FULL_LENGTH, false).apply();
@@ -919,8 +921,10 @@ public class UTest {
         PowerMockito.spy(U.class);
         BooleanAnswer isDesktopModeSupportedAnswer = new BooleanAnswer();
         IntAnswer getExternalDisplayIdAnswer = new IntAnswer();
+        BooleanAnswer hasFreeformSupportAnswer = new BooleanAnswer();
         when(U.isDesktopModeSupported(context)).thenAnswer(isDesktopModeSupportedAnswer);
         when(U.getExternalDisplayID(context)).thenAnswer(getExternalDisplayIdAnswer);
+        when(U.hasFreeformSupport(context)).thenAnswer(hasFreeformSupportAnswer);
 
         isDesktopModeSupportedAnswer.answer = false;
         assertFalse(U.isDesktopModeActive(context));
@@ -939,6 +943,8 @@ public class UTest {
         );
         assertFalse(U.isDesktopModeActive(context));
         getExternalDisplayIdAnswer.answer = 1;
+        assertFalse(U.isDesktopModeActive(context));
+        hasFreeformSupportAnswer.answer = true;
         assertTrue(U.isDesktopModeActive(context));
         Settings.Global.putInt(
                 context.getContentResolver(),
