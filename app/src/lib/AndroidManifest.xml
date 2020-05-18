@@ -76,6 +76,7 @@
             android:label="@string/tb_app_name"
             android:enabled="true"
             android:excludeFromRecents="true"
+            android:configChanges="screenSize|keyboard|keyboardHidden"
             android:theme="@style/Taskbar.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

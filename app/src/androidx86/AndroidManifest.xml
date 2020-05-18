@@ -123,19 +123,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SecondaryHomeActivity"
-            android:label="@string/tb_app_name"
-            android:enabled="false"
-            android:excludeFromRecents="true"
-            android:theme="@style/Taskbar.HomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.SECONDARY_HOME"/>
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activity.HomeActivityDelegate"
             android:label="@string/tb_app_name"
             android:launchMode="singleTask"
