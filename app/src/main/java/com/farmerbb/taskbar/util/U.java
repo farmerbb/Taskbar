@@ -724,13 +724,13 @@ public class U {
     }
 
     public static int getStatusBarHeight(Context context) {
-        return isDesktopModeActive(context) ? 0 : getSystemDimen(context, "status_bar_height");
+        return LauncherHelper.getInstance().isOnSecondaryHomeScreen()
+                ? 0 : getSystemDimen(context, "status_bar_height");
     }
 
     private static int getNavbarHeight(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        boolean isNavbarHidden = isDesktopModeActive(context)
-                && LauncherHelper.getInstance().isOnSecondaryHomeScreen()
+        boolean isNavbarHidden = LauncherHelper.getInstance().isOnSecondaryHomeScreen()
                 && pref.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false);
 
         return isNavbarHidden ? 0 : getSystemDimen(context, "navigation_bar_height");
