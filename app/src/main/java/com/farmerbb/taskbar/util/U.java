@@ -1519,7 +1519,13 @@ public class U {
                 .setMessage(R.string.tb_enable_recent_apps)
                 .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                     try {
-                        context.startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+
+                        LauncherHelper helper = LauncherHelper.getInstance();
+                        if(helper.isOnHomeScreen() || helper.isOnSecondaryHomeScreen())
+                            applyOpenInNewWindow(context, intent);
+
+                        context.startActivity(intent);
                         showToastLong(context, R.string.tb_usage_stats_message);
 
                         callbacks.onFinish.run();
