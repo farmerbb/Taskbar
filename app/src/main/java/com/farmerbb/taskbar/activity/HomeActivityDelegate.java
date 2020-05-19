@@ -1073,6 +1073,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void performOnResumeLogic() {
         if(waitingForPermission) {
             waitingForPermission = false;
+
+            startFreeformHack();
             init();
         }
 
