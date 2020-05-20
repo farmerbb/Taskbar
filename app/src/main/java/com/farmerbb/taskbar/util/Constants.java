@@ -193,4 +193,7 @@ public class Constants {
     public static final String POSITION_TOP_RIGHT = "top_right";
     public static final String POSITION_TOP_VERTICAL_LEFT = "top_vertical_left";
     public static final String POSITION_TOP_VERTICAL_RIGHT = "top_vertical_right";
+
+    // Intent extra keys
+    public static final String EXTRA_IS_LAUNCHING_SHORT_CUT = "is_launching_shortcut";
 }

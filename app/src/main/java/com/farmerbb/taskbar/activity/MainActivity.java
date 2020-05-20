@@ -53,6 +53,7 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
             if(shortcutManager.getDynamicShortcuts().size() == 0) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.setClass(this, StartTaskbarActivity.class);
-                intent.putExtra("is_launching_shortcut", true);
+                intent.putExtra(EXTRA_IS_LAUNCHING_SHORT_CUT, true);
 
                 ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
                         .setShortLabel(getString(R.string.tb_start_taskbar))
@@ -285,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 if(U.enableFreeformModeShortcut(this)) {
                     Intent intent2 = new Intent(Intent.ACTION_MAIN);
                     intent2.setClass(this, ShortcutActivity.class);
-                    intent2.putExtra("is_launching_shortcut", true);
+                    intent2.putExtra(EXTRA_IS_LAUNCHING_SHORT_CUT, true);
 
                     ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
                             .setShortLabel(getString(R.string.tb_pref_header_freeform))

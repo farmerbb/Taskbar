@@ -37,7 +37,7 @@ public class ShortcutUtils {
     public static Intent getShortcutIntent(Context context) {
         Intent shortcutIntent = new Intent(context, ShortcutActivity.class);
         shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra("is_launching_shortcut", true);
+        shortcutIntent.putExtra(Constants.EXTRA_IS_LAUNCHING_SHORT_CUT, true);
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
@@ -50,7 +50,7 @@ public class ShortcutUtils {
     public static Intent getStartStopIntent(Context context) {
         Intent shortcutIntent = new Intent(context, StartTaskbarActivity.class);
         shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra("is_launching_shortcut", true);
+        shortcutIntent.putExtra(Constants.EXTRA_IS_LAUNCHING_SHORT_CUT, true);
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
