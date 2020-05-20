@@ -207,6 +207,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences pref = U.getSharedPreferences(this);
 
         isSecondaryHome = this instanceof SecondaryHomeActivity;
         if(isSecondaryHome) {
@@ -216,6 +217,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 finish();
                 return;
             }
+
+            if(pref.getBoolean(PREF_DIM_SCREEN, false) && U.launcherIsDefault(this)) {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory(Intent.CATEGORY_HOME);
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                getApplicationContext().startActivity(homeIntent);
+            }
         }
 
         shouldDelayFreeformHack = true;
@@ -224,8 +233,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         if(U.applyDisplayCutoutModeTo(params))
             getWindow().setAttributes(params);
-
-        SharedPreferences pref = U.getSharedPreferences(this);
 
         layout = new FrameLayout(this) {
             @Override

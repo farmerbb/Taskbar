@@ -40,6 +40,7 @@ public class HSLActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences pref = U.getSharedPreferences(this);
 
         if(DesktopModeFragment.isConfiguringHomeApp) {
             int enter = getResources().getIdentifier("activity_close_enter", "anim", "android");
@@ -47,11 +48,15 @@ public class HSLActivity extends Activity {
 
             startActivity(new Intent(this, MainActivity.class));
             overridePendingTransition(enter, exit);
+        } else if(pref.getBoolean(PREF_DIM_SCREEN, false) && U.isDesktopModeActive(this))
+            startActivity(new Intent(this, DimScreenActivity.class));
+        else
+            startPrimaryLauncher();
 
-            finish();
-            return;
-        }
+        finish();
+    }
 
+    private void startPrimaryLauncher() {
         SharedPreferences pref = U.getSharedPreferences(this);
         String activityToLaunch = pref.getString(PREF_HSL_ID, "null");
 
@@ -99,8 +104,6 @@ public class HSLActivity extends Activity {
                 launcherNotFound();
             }
         }
-
-        finish();
     }
 
     private void launcherNotFound() {

@@ -32,6 +32,13 @@
         android:title="@string/tb_primary_launcher"
         android:dependency="desktop_mode"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="dim_screen"
+        android:title="@string/tb_pref_dim_screen_title"
+        android:summary="@string/tb_pref_dim_screen_description"
+        android:dependency="desktop_mode"/>
+
     <PreferenceCategory
         android:key="additional_settings">
 

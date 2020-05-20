@@ -449,4 +449,8 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_opening_volume_control">Opened volume control on primary display</string>
     <string name="tb_opening_power_menu">Opened power menu on primary display</string>
 
+    <string name="tb_pref_dim_screen_title">Lock and dim phone screen while active</string>
+    <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
+    <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
+
 </resources>

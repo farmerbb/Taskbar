@@ -74,6 +74,7 @@ public class DesktopModeFragment extends SettingsFragment {
         findPreference(PREF_DESKTOP_MODE).setOnPreferenceClickListener(this);
         findPreference(PREF_SET_LAUNCHER_DEFAULT).setOnPreferenceClickListener(this);
         findPreference(PREF_PRIMARY_LAUNCHER).setOnPreferenceClickListener(this);
+        findPreference(PREF_DIM_SCREEN).setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean(PREF_LAUNCHER, false)) {
@@ -171,6 +172,11 @@ public class DesktopModeFragment extends SettingsFragment {
                 LauncherHelper helper = LauncherHelper.getInstance();
                 if(helper.isOnSecondaryHomeScreen())
                     U.showHideNavigationBar(getActivity(), helper.getSecondaryDisplayId(), !((CheckBoxPreference) p).isChecked(), 0);
+
+                break;
+            case PREF_DIM_SCREEN:
+                if(!((CheckBoxPreference) p).isChecked())
+                    U.sendBroadcast(getActivity(), ACTION_FINISH_DIM_SCREEN_ACTIVITY);
 
                 break;
         }

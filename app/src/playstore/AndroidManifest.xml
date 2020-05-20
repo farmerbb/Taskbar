@@ -366,6 +366,11 @@
             android:name=".activity.HSLConfigActivity"
             android:label="@string/tb_primary_launcher"
             android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.DimScreenActivity"
+            android:theme="@style/Taskbar.DimScreenActivity"
+            android:screenOrientation="locked"
+            android:launchMode="singleTask"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

@@ -30,6 +30,7 @@ public class Constants {
     public static final String ACTION_DASHBOARD_DISAPPEARING = "com.farmerbb.taskbar.DASHBOARD_DISAPPEARING";
     public static final String ACTION_ENTER_ICON_ARRANGE_MODE = "com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE";
     public static final String ACTION_FINISH_FREEFORM_ACTIVITY = "com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY";
+    public static final String ACTION_FINISH_DIM_SCREEN_ACTIVITY = "com.farmerbb.taskbar.FINISH_DIM_SCREEN_ACTIVITY";
     public static final String ACTION_FORCE_TASKBAR_RESTART = "com.farmerbb.taskbar.FORCE_TASKBAR_RESTART";
     public static final String ACTION_FREEFORM_PREF_CHANGED = "com.farmerbb.taskbar.FREEFORM_PREF_CHANGED";
     public static final String ACTION_HIDE_CONTEXT_MENU = "com.farmerbb.taskbar.HIDE_CONTEXT_MENU";
@@ -97,6 +98,7 @@ public class Constants {
     public static final String PREF_DASHBOARD_WIDTH = "dashboard_width";
     public static final String PREF_DESKTOP_ICONS = "desktop_icons";
     public static final String PREF_DESKTOP_MODE = "desktop_mode";
+    public static final String PREF_DIM_SCREEN = "dim_screen";
     public static final String PREF_DISABLE_ANIMATIONS = "disable_animations";
     public static final String PREF_DISABLE_SCROLLING_LIST = "disable_scrolling_list";
     public static final String PREF_DISPLAY_DENSITY = "display_density";

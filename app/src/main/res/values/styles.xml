@@ -98,4 +98,11 @@
         <item name="android:colorAccent">@color/tb_colorAccent</item>
     </style>
 
+    <style name="Taskbar.DimScreenActivity" parent="Theme.AppCompat">
+        <item name="colorPrimary">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="tb_settings_icon_color">@color/tb_settings_icon_color_dark</item>
+    </style>
+
 </resources>
