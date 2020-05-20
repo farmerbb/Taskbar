@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
 
@@ -32,7 +33,7 @@ public class ShortcutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getIntent().hasExtra("is_launching_shortcut")) {
+        if(getIntent().hasExtra(EXTRA_IS_LAUNCHING_SHORT_CUT)) {
             if(U.hasFreeformSupport(this)) {
                 U.restartNotificationService(this);
 
