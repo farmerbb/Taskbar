@@ -32,7 +32,7 @@ public class StartTaskbarActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getIntent().hasExtra(EXTRA_IS_LAUNCHING_SHORT_CUT)) {
+        if(getIntent().hasExtra(EXTRA_IS_LAUNCHING_SHORTCUT)) {
             Intent intent = new Intent(U.isServiceRunning(this, NotificationService.class)
                     ? ACTION_QUIT
                     : ACTION_START);

@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
             if(shortcutManager.getDynamicShortcuts().size() == 0) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.setClass(this, StartTaskbarActivity.class);
-                intent.putExtra(EXTRA_IS_LAUNCHING_SHORT_CUT, true);
+                intent.putExtra(EXTRA_IS_LAUNCHING_SHORTCUT, true);
 
                 ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "start_taskbar")
                         .setShortLabel(getString(R.string.tb_start_taskbar))
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 if(U.enableFreeformModeShortcut(this)) {
                     Intent intent2 = new Intent(Intent.ACTION_MAIN);
                     intent2.setClass(this, ShortcutActivity.class);
-                    intent2.putExtra(EXTRA_IS_LAUNCHING_SHORT_CUT, true);
+                    intent2.putExtra(EXTRA_IS_LAUNCHING_SHORTCUT, true);
 
                     ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "freeform_mode")
                             .setShortLabel(getString(R.string.tb_pref_header_freeform))

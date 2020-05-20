@@ -30,6 +30,8 @@ import com.farmerbb.taskbar.service.FavoriteApp3;
 import com.farmerbb.taskbar.service.FavoriteApp4;
 import com.farmerbb.taskbar.service.FavoriteApp5;
 
+import static com.farmerbb.taskbar.util.Constants.*;
+
 public class ShortcutUtils {
 
     private ShortcutUtils() {}
@@ -37,7 +39,7 @@ public class ShortcutUtils {
     public static Intent getShortcutIntent(Context context) {
         Intent shortcutIntent = new Intent(context, ShortcutActivity.class);
         shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra(Constants.EXTRA_IS_LAUNCHING_SHORT_CUT, true);
+        shortcutIntent.putExtra(EXTRA_IS_LAUNCHING_SHORTCUT, true);
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
@@ -50,7 +52,7 @@ public class ShortcutUtils {
     public static Intent getStartStopIntent(Context context) {
         Intent shortcutIntent = new Intent(context, StartTaskbarActivity.class);
         shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra(Constants.EXTRA_IS_LAUNCHING_SHORT_CUT, true);
+        shortcutIntent.putExtra(EXTRA_IS_LAUNCHING_SHORTCUT, true);
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);

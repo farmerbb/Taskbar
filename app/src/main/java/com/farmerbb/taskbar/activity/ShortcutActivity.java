@@ -33,7 +33,7 @@ public class ShortcutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getIntent().hasExtra(EXTRA_IS_LAUNCHING_SHORT_CUT)) {
+        if(getIntent().hasExtra(EXTRA_IS_LAUNCHING_SHORTCUT)) {
             if(U.hasFreeformSupport(this)) {
                 U.restartNotificationService(this);
 

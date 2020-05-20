@@ -195,5 +195,6 @@ public class Constants {
     public static final String POSITION_TOP_VERTICAL_RIGHT = "top_vertical_right";
 
     // Intent extra keys
-    public static final String EXTRA_IS_LAUNCHING_SHORT_CUT = "is_launching_shortcut";
+
+    public static final String EXTRA_IS_LAUNCHING_SHORTCUT = "is_launching_shortcut";
 }
