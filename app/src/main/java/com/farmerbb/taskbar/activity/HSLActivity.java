@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.activity;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -24,11 +25,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.fragment.DesktopModeFragment;
+import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.List;
@@ -94,12 +95,14 @@ public class HSLActivity extends Activity {
             Intent intent = getIntent();
             intent.setComponent(ComponentName.unflattenFromString(activityToLaunch));
 
+            ActivityOptions options = U.getActivityOptions(this, ApplicationType.APP_FULLSCREEN, null);
+
             try {
-                startActivity(intent);
+                startActivity(intent, options.toBundle());
 
                 // Fire the intent twice to fix launchers that specifically listen
                 // for home button presses (i.e. to jump to the default panel)
-                new Handler().post(() -> startActivity(intent));
+                new Handler().post(() -> startActivity(intent, options.toBundle()));
             } catch (ActivityNotFoundException e) {
                 launcherNotFound();
             }
