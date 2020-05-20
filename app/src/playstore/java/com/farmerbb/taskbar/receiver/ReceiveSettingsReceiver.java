@@ -36,10 +36,12 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
         if(context.getPackageName().equals(BuildConfig.PAID_APPLICATION_ID)) {
             BackupUtils.restore(context, new IntentBackupAgent(intent));
 
-            // Get custom start button image
-            if(intent.hasExtra("custom_image")) {
-                Uri uri = intent.getParcelableExtra("custom_image");
-                U.importCustomStartButtonImage(context, uri);
+            // Get images
+            for(String filename : U.getImageFilenames()) {
+                if(intent.hasExtra(filename)) {
+                    Uri uri = intent.getParcelableExtra(filename);
+                    U.importImage(context, uri, filename);
+                }
             }
 
             // Finish import

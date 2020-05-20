@@ -118,6 +118,8 @@ public class U {
     public static final int EXPORT = 123;
     public static final int IMPORT = 456;
 
+    public static final int IMAGE_REQUEST_CODE = 1001;
+
     @SuppressWarnings("deprecation")
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
@@ -1630,13 +1632,27 @@ public class U {
         }
     }
 
+    public static void showImageChooser(Activity activity) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        String message = activity.getResources().getString(R.string.tb_filepicker_select_an_image_file);
+
+        try {
+            activity.startActivityForResult(Intent.createChooser(intent, message), IMAGE_REQUEST_CODE);
+        } catch (ActivityNotFoundException ex) {
+            showToast(activity, activity.getResources().getString(R.string.tb_filepicker_install_file_manager), 50);
+        }
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static boolean importCustomStartButtonImage(Context context, Uri uri) {
+    public static boolean importImage(Context context, Uri uri, String filename) {
         try {
             File imagesDir = new File(context.getFilesDir(), "tb_images");
             imagesDir.mkdirs();
 
-            File importedFile = new File(imagesDir, "custom_image_new");
+            File importedFile = new File(imagesDir, filename + "_new");
             if(importedFile.exists()) importedFile.delete();
 
             BufferedInputStream is = new BufferedInputStream(context.getContentResolver().openInputStream(uri));
@@ -1650,7 +1666,7 @@ public class U {
                 os.close();
             }
 
-            File prevFile = new File(imagesDir, "custom_image");
+            File prevFile = new File(imagesDir, filename);
             if(prevFile.exists()) prevFile.delete();
 
             importedFile.renameTo(prevFile);
@@ -1658,6 +1674,10 @@ public class U {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public static String[] getImageFilenames() {
+        return new String[] {"custom_image"};
     }
 
     public static String getDefaultStartButtonImage(Context context) {

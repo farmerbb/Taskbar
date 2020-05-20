@@ -129,7 +129,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         break;
                     case PREF_START_BUTTON_IMAGE:
                         if(stringValue.equals("custom"))
-                            ((AppearanceFragment) SettingsFragment.this).showFileChooser();
+                            U.showImageChooser(getActivity());
                         break;
                     case PREF_DISPLAY_DENSITY:
                         int displayID = U.getExternalDisplayID(getActivity());

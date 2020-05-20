@@ -85,20 +85,22 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
             File imagesDir = new File(getFilesDir(), "tb_images");
             imagesDir.mkdirs();
 
-            File customImage = new File(imagesDir, "custom_image");
-            if(customImage.exists()) {
-                output.putNextEntry(new ZipEntry("tb_images/custom_image"));
+            for(String filename : U.getImageFilenames()) {
+                File customImage = new File(imagesDir, filename);
+                if(customImage.exists()) {
+                    output.putNextEntry(new ZipEntry("tb_images/" + filename));
 
-                BufferedInputStream input = new BufferedInputStream(new FileInputStream(customImage));
-                byte[] data = new byte[input.available()];
+                    BufferedInputStream input = new BufferedInputStream(new FileInputStream(customImage));
+                    byte[] data = new byte[input.available()];
 
-                if(data.length > 0) {
-                    input.read(data);
-                    input.close();
+                    if(data.length > 0) {
+                        input.read(data);
+                        input.close();
+                    }
+
+                    output.write(data);
+                    output.closeEntry();
                 }
-
-                output.write(data);
-                output.closeEntry();
             }
 
             output.close();
@@ -129,7 +131,6 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
 
             ZipFile zipFile = new ZipFile(importedFile);
             ZipEntry backupJsonEntry = zipFile.getEntry("backup.json");
-            ZipEntry customImageEntry = zipFile.getEntry("tb_images/custom_image");
 
             if(backupJsonEntry == null) {
                 // Backup file is invalid; fail immediately
@@ -152,19 +153,22 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
             File imagesDir = new File(getFilesDir(), "tb_images");
             imagesDir.mkdirs();
 
-            File customImage = new File(imagesDir, "custom_image");
-            if(customImage.exists()) customImage.delete();
+            for(String filename : U.getImageFilenames()) {
+                File customImage = new File(imagesDir, filename);
+                if(customImage.exists()) customImage.delete();
 
-            if(customImageEntry != null) {
-                data = new byte[(int) customImageEntry.getSize()];
-                input = new BufferedInputStream(zipFile.getInputStream(customImageEntry));
-                input.read(data);
-                input.close();
+                ZipEntry customImageEntry = zipFile.getEntry("tb_images/" + filename);
+                if(customImageEntry != null) {
+                    data = new byte[(int) customImageEntry.getSize()];
+                    input = new BufferedInputStream(zipFile.getInputStream(customImageEntry));
+                    input.read(data);
+                    input.close();
 
-                BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(customImage));
-                if(data.length > 0) {
-                    output.write(data);
-                    output.close();
+                    BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(customImage));
+                    if(data.length > 0) {
+                        output.write(data);
+                        output.close();
+                    }
                 }
             }
 

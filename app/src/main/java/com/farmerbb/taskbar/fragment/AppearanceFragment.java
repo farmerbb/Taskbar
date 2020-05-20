@@ -17,7 +17,6 @@ package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -159,19 +158,6 @@ public class AppearanceFragment extends SettingsFragment {
         return super.onPreferenceClick(p);
     }
 
-    protected void showFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        try {
-            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.tb_filepicker_select_an_image_file)), 1001);
-        } catch (ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
-            U.showToast(getActivity(), getResources().getString(R.string.tb_filepicker_install_file_manager), 50);
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode != Activity.RESULT_OK)
@@ -182,11 +168,11 @@ public class AppearanceFragment extends SettingsFragment {
             U.restartTaskbar(getActivity());
         }
 
-        if(requestCode == 1001) {
+        if(requestCode == U.IMAGE_REQUEST_CODE) {
             if(data.getData() == null)
                 return;
 
-            if(U.importCustomStartButtonImage(getActivity(), data.getData()))
+            if(U.importImage(getActivity(), data.getData(), "custom_image"))
                 U.restartTaskbar(getActivity());
         }
     }

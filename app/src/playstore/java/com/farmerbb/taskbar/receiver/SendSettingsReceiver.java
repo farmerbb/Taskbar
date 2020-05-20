@@ -40,12 +40,14 @@ public class SendSettingsReceiver extends BroadcastReceiver {
 
             BackupUtils.backup(context, new IntentBackupAgent(sendSettingsIntent));
 
-            // Get custom start button image
-            File file = new File(context.getFilesDir() + "/tb_images", "custom_image");
-            if(file.exists() && U.isPlayStoreRelease(context, BuildConfig.PAID_APPLICATION_ID)) {
-                Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
-                context.grantUriPermission(BuildConfig.PAID_APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                sendSettingsIntent.putExtra("custom_image", uri);
+            // Get images
+            for(String filename : U.getImageFilenames()) {
+                File file = new File(context.getFilesDir() + "/tb_images", filename);
+                if(file.exists() && U.isPlayStoreRelease(context, BuildConfig.PAID_APPLICATION_ID)) {
+                    Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+                    context.grantUriPermission(BuildConfig.PAID_APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    sendSettingsIntent.putExtra(filename, uri);
+                }
             }
 
             // Finally, send the broadcast
