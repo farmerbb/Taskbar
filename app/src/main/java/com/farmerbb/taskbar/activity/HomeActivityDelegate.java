@@ -176,6 +176,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         }
     };
 
+    private BroadcastReceiver wallpaperChangeRequestReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            U.showImageChooser(HomeActivityDelegate.this);
+        }
+    };
+
     private LauncherApps.Callback callback = new LauncherApps.Callback() {
         @Override
         public void onPackageRemoved(String packageName, UserHandle user) {
@@ -403,6 +410,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         if(isSecondaryHome) {
             U.registerReceiver(this, restartReceiver, ACTION_RESTART);
+            U.registerReceiver(this, wallpaperChangeRequestReceiver, ACTION_WALLPAPER_CHANGE_REQUESTED);
         }
 
         if(isDesktopIconsEnabled) {
@@ -582,8 +590,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         U.unregisterReceiver(this, forceTaskbarStartReceiver);
         U.unregisterReceiver(this, freeformToggleReceiver);
 
-        if(isSecondaryHome)
+        if(isSecondaryHome) {
             U.unregisterReceiver(this, restartReceiver);
+            U.unregisterReceiver(this, wallpaperChangeRequestReceiver);
+        }
 
         if(isDesktopIconsEnabled) {
             U.unregisterReceiver(this, refreshDesktopIconsReceiver);
@@ -1087,5 +1097,21 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         overridePendingTransition(0, R.anim.close_anim);
         U.sendBroadcast(this, ACTION_TEMP_SHOW_TASKBAR);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode != RESULT_OK)
+            return;
+
+        if(requestCode == U.IMAGE_REQUEST_CODE) {
+            if(data.getData() == null)
+                return;
+
+            if(U.importImage(this, data.getData(), "wallpaper_desktop"))
+                U.applyCustomImage(this, "wallpaper_desktop", layout, null);
+        }
     }
 }

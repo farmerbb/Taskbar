@@ -58,6 +58,7 @@ Bu izin sadece düğme basma eylemlerini gerçekleştirmek için kullanılır ve
 <string name="tb_button_home">Ana ekran</string>
 <string name="tb_button_recents">Son kullanılan</string>
 <string name="tb_change_wallpaper">Arkaplanı değiştir</string>
+<string name="tb_change_wallpaper_alt">@string/tb_change_wallpaper</string>
 <string name="tb_clear_hidden_apps">Başlat menüsü – Gizli uygulamalar</string>
 <string name="tb_clear_pba">Son kullanılan sabit / engelli uygulamalar</string>
 <string name="tb_clear_pinned_apps">Uygulama tercihlerini sıfırla</string>
@@ -362,7 +363,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 
     <string name="tb_filepicker_select_an_image_file">Select an image file</string>
     <string name="tb_filepicker_install_file_manager">Please install a file manager.</string>
-    <string name="tb_error_reading_custom_start_image">Error reading the custom image for the start menu. Try another file.</string>
+    <string name="tb_error_reading_custom_start_image">Error reading the image. Try another file.</string>
 
     <string name="tb_add_icon_to_desktop">Add icon to desktop</string>
     <string name="tb_arrange_icons">Move icons</string>
@@ -452,5 +453,9 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_pref_dim_screen_title">Lock and dim phone screen while active</string>
     <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
     <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
+
+    <string name="tb_apply_wallpaper_to">Apply wallpaper to&#8230;</string>
+    <string name="tb_pref_wallpaper_global">Phone and desktop</string>
+    <string name="tb_pref_wallpaper_desktop">Desktop only</string>
 
 </resources>

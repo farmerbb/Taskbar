@@ -262,6 +262,7 @@
     <string name="tb_pref_title_force_new_window">始终在新窗口打开应用</string>
     <string name="tb_pref_description_force_new_window">每次从开始菜单或者最近应用中选择时强制应用打开新窗口 (如果应用允许多窗口)</string>
     <string name="tb_change_wallpaper">更换壁纸</string>
+    <string name="tb_change_wallpaper_alt">@string/tb_change_wallpaper</string>
 
     <string name="tb_notification_settings">系统通知设置</string>
 
@@ -460,5 +461,9 @@
     <string name="tb_pref_dim_screen_title">Lock and dim phone screen while active</string>
     <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
     <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
+
+    <string name="tb_apply_wallpaper_to">Apply wallpaper to&#8230;</string>
+    <string name="tb_pref_wallpaper_global">Phone and desktop</string>
+    <string name="tb_pref_wallpaper_desktop">Desktop only</string>
 
 </resources>

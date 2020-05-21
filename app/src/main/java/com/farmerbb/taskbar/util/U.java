@@ -44,6 +44,7 @@ import android.content.pm.ShortcutManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -61,12 +62,14 @@ import android.os.UserManager;
 import android.provider.Settings;
 
 import androidx.annotation.DimenRes;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.BuildConfig;
@@ -1677,7 +1680,35 @@ public class U {
     }
 
     public static String[] getImageFilenames() {
-        return new String[] {"custom_image"};
+        return new String[] {"custom_image", "wallpaper_desktop"};
+    }
+
+    public static void applyCustomImage(Context context, String filename, View view, Drawable errorDrawable) {
+        File file = new File(context.getFilesDir() + "/tb_images", filename);
+        if(file.exists()) {
+            Handler handler = new Handler();
+            new Thread(() -> {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                handler.post(() -> {
+                    if(bitmap != null) {
+                        BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
+                        bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
+                        applyCustomImage(view, bitmapDrawable);
+                    } else {
+                        U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
+                        applyCustomImage(view, errorDrawable);
+                    }
+                });
+            }).start();
+        } else
+            applyCustomImage(view, errorDrawable);
+    }
+
+    private static void applyCustomImage(View view, Drawable drawable) {
+        if(view instanceof ImageView)
+            ((ImageView) view).setImageDrawable(drawable);
+        else
+            view.setBackground(drawable);
     }
 
     public static String getDefaultStartButtonImage(Context context) {

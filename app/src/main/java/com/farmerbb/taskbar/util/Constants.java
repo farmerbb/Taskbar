@@ -66,17 +66,22 @@ public class Constants {
     public static final String ACTION_UPDATE_FREEFORM_CHECKBOX = "com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX";
     public static final String ACTION_UPDATE_HOME_SCREEN_MARGINS = "com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS";
     public static final String ACTION_UPDATE_SWITCH = "com.farmerbb.taskbar.UPDATE_SWITCH";
+    public static final String ACTION_WALLPAPER_CHANGE_REQUESTED = "com.farmerbb.taskbar.ACTION_WALLPAPER_CHANGE_REQUESTED";
 
     // SharedPreference keys
 
     public static final String PREF_ABOUT = "about";
     public static final String PREF_ACCENT_COLOR = "accent_color";
     public static final String PREF_ACCENT_COLOR_PREF = "accent_color_pref";
+    public static final String PREF_ADD_ICON_TO_DESKTOP = "add_icon_to_desktop";
     public static final String PREF_ADD_SHORTCUT = "add_shortcut";
     public static final String PREF_ALT_BUTTON_CONFIG = "alt_button_config";
     public static final String PREF_ANCHOR = "anchor";
     public static final String PREF_ANDROID_X86_PREFS = "android_x86_prefs";
     public static final String PREF_APP_DRAWER_ICON = "app_drawer_icon";
+    public static final String PREF_APP_INFO = "app_info";
+    public static final String PREF_APP_SHORTCUTS = "app_shortcuts";
+    public static final String PREF_ARRANGE_ICONS = "arrange_icons";
     public static final String PREF_AUTO_HIDE_NAVBAR = "auto_hide_navbar";
     public static final String PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE = "auto_hide_navbar_desktop_mode";
     public static final String PREF_BACKGROUND_TINT = "background_tint";
@@ -84,10 +89,12 @@ public class Constants {
     public static final String PREF_BACKUP_SETTINGS = "backup_settings";
     public static final String PREF_BLACKLIST = "blacklist";
     public static final String PREF_BLISS_OS_PREFS = "bliss_os_prefs";
+    public static final String PREF_BLOCK_APP = "block_app";
     public static final String PREF_BUTTON_BACK = "button_back";
     public static final String PREF_BUTTON_HOME = "button_home";
     public static final String PREF_BUTTON_RECENTS = "button_recents";
     public static final String PREF_CENTERED_ICONS = "centered_icons";
+    public static final String PREF_CHANGE_WALLPAPER = "change_wallpaper";
     public static final String PREF_CHROME_OS_CONTEXT_MENU_FIX = "chrome_os_context_menu_fix";
     public static final String PREF_CLEAR_PINNED_APPS = "clear_pinned_apps";
     public static final String PREF_COLLAPSED = "collapsed";
@@ -109,6 +116,7 @@ public class Constants {
     public static final String PREF_DOUBLE_TAP_DIALOG_SHOWN = "double_tap_dialog_shown";
     public static final String PREF_DOUBLE_TAP_TO_SLEEP = "double_tap_to_sleep";
     public static final String PREF_ENABLE_RECENTS = "enable_recents";
+    public static final String PREF_FILE_MANAGER = "file_manager";
     public static final String PREF_FIRST_RUN = "first_run";
     public static final String PREF_FORCE_NEW_WINDOW = "force_new_window";
     public static final String PREF_FREEFORM_HACK = "freeform_hack";
@@ -116,6 +124,7 @@ public class Constants {
     public static final String PREF_FULL_LENGTH = "full_length";
     public static final String PREF_GRIP_REJECTION_TOAST_SHOWN = "grip_rejection_toast_shown";
     public static final String PREF_HAS_CAPTION = "has_caption";
+    public static final String PREF_HEADER = "header";
     public static final String PREF_HIDE_DONATE = "hide_donate";
     public static final String PREF_HIDE_FOREGROUND = "hide_foreground";
     public static final String PREF_HIDE_ICON_LABELS = "hide_icon_labels";
@@ -132,12 +141,16 @@ public class Constants {
     public static final String PREF_KEYBOARD_SHORTCUT = "keyboard_shortcut";
     public static final String PREF_LAUNCH_GAMES_FULLSCREEN = "launch_games_fullscreen";
     public static final String PREF_LAUNCHER = "launcher";
+    public static final String PREF_LOCK_DEVICE = "lock_device";
     public static final String PREF_MANAGE_APP_DATA = "manage_app_data";
     public static final String PREF_MAX_NUM_OF_RECENTS = "max_num_of_recents";
     public static final String PREF_NAVIGATION_BAR_BUTTONS = "navigation_bar_buttons";
     public static final String PREF_NOTIFICATION_SETTINGS = "notification_settings";
+    public static final String PREF_OPEN_TASKBAR_SETTINGS = "open_taskbar_settings";
+    public static final String PREF_PIN_APP = "pin_app";
     public static final String PREF_POSITION = "position";
     public static final String PREF_POWER_BUTTON_WARNING = "power_button_warning";
+    public static final String PREF_POWER_MENU = "power_menu";
     public static final String PREF_PREF_SCREEN_ADVANCED = "pref_screen_advanced";
     public static final String PREF_PREF_SCREEN_APPEARANCE = "pref_screen_appearance";
     public static final String PREF_PREF_SCREEN_DESKTOP_MODE = "pref_screen_desktop_mode";
@@ -145,8 +158,10 @@ public class Constants {
     public static final String PREF_PREF_SCREEN_GENERAL = "pref_screen_general";
     public static final String PREF_PREF_SCREEN_RECENT_APPS = "pref_screen_recent_apps";
     public static final String PREF_PRIMARY_LAUNCHER = "primary_launcher";
+    public static final String PREF_QUIT_TASKBAR = "quit_taskbar";
     public static final String PREF_RECENTS_AMOUNT = "recents_amount";
     public static final String PREF_REFRESH_FREQUENCY = "refresh_frequency";
+    public static final String PREF_REMOVE_DESKTOP_ICON = "remove_desktop_icon";
     public static final String PREF_RESET_COLORS = "reset_colors";
     public static final String PREF_RESTORE_SETTINGS = "restore_settings";
     public static final String PREF_SAMSUNG_DIALOG_SHOWN = "samsung_dialog_shown";
@@ -154,27 +169,46 @@ public class Constants {
     public static final String PREF_SCROLLBAR = "scrollbar";
     public static final String PREF_SECONDSCREEN = "secondscreen";
     public static final String PREF_SET_LAUNCHER_DEFAULT = "set_launcher_default";
+    public static final String PREF_SHORTCUT_1 = "shortcut_1";
+    public static final String PREF_SHORTCUT_2 = "shortcut_2";
+    public static final String PREF_SHORTCUT_3 = "shortcut_3";
+    public static final String PREF_SHORTCUT_4 = "shortcut_4";
+    public static final String PREF_SHORTCUT_5 = "shortcut_5";
     public static final String PREF_SHORTCUT_ICON = "shortcut_icon";
     public static final String PREF_SHOW_BACKGROUND = "show_background";
     public static final String PREF_SHOW_FREEFORM_DISABLED_MESSAGE = "show_freeform_disabled_message";
     public static final String PREF_SHOW_SEARCH_BAR = "show_search_bar";
+    public static final String PREF_SHOW_WINDOW_SIZES = "show_window_sizes";
     public static final String PREF_SKIP_AUTO_HIDE_NAVBAR = "skip_auto_hide_navbar";
     public static final String PREF_SKIP_DISABLE_FREEFORM_RECEIVER = "skip_disable_freeform_receiver";
     public static final String PREF_SKIP_DISABLE_HOME_RECEIVER = "skip_disable_home_receiver";
     public static final String PREF_SKIP_QUIT_RECEIVER = "skip_quit_receiver";
+    public static final String PREF_SORT_BY_NAME = "sort_by_name";
     public static final String PREF_SORT_ORDER = "sort_order";
     public static final String PREF_START_BUTTON_IMAGE = "start_button_image";
+    public static final String PREF_START_MENU_APPS = "start_menu_apps";
     public static final String PREF_START_MENU_LAYOUT = "start_menu_layout";
     public static final String PREF_START_ON_BOOT = "start_on_boot";
     public static final String PREF_SYS_TRAY = "sys_tray";
+    public static final String PREF_SYSTEM_SETTINGS = "system_settings";
     public static final String PREF_TASKBAR_ACTIVE = "taskbar_active";
     public static final String PREF_TASKER_ENABLED = "tasker_enabled";
     public static final String PREF_THEME = "theme";
     public static final String PREF_TIME_OF_SERVICE_START = "time_of_service_start";
     public static final String PREF_TRANSPARENT_START_MENU = "transparent_start_menu";
+    public static final String PREF_UNINSTALL = "uninstall";
     public static final String PREF_UNINSTALL_DIALOG_SHOWN = "uninstall_dialog_shown";
     public static final String PREF_VISUAL_FEEDBACK = "visual_feedback";
+    public static final String PREF_VOLUME = "volume";
+    public static final String PREF_WALLPAPER_DESKTOP = "wallpaper_desktop";
+    public static final String PREF_WALLPAPER_GLOBAL = "wallpaper_global";
     public static final String PREF_WINDOW_SIZE = "window_size";
+    public static final String PREF_WINDOW_SIZE_FULLSCREEN = "window_size_fullscreen";
+    public static final String PREF_WINDOW_SIZE_HALF_LEFT = "window_size_half_left";
+    public static final String PREF_WINDOW_SIZE_HALF_RIGHT = "window_size_half_right";
+    public static final String PREF_WINDOW_SIZE_LARGE = "window_size_large";
+    public static final String PREF_WINDOW_SIZE_PHONE_SIZE = "window_size_phone_size";
+    public static final String PREF_WINDOW_SIZE_STANDARD = "window_size_standard";
 
     // SharedPreference values
 

@@ -403,11 +403,12 @@ public class TaskbarController extends UIController {
 
     @VisibleForTesting
     public void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
+        Drawable allAppsIcon = ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon);
         int padding = 0;
 
         switch(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(context))) {
             case "default":
-                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
+                startButton.setImageDrawable(allAppsIcon);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;
             case "app_logo":
@@ -426,25 +427,7 @@ public class TaskbarController extends UIController {
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
                 break;
             case "custom":
-                File file = new File(context.getFilesDir() + "/tb_images", "custom_image");
-                if(file.exists()) {
-                    Handler handler = new Handler();
-                    new Thread(() -> {
-                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                        handler.post(() -> {
-                            if(bitmap != null) {
-                                BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
-                                bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
-                                startButton.setImageDrawable(bitmapDrawable);
-                            } else {
-                                U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
-                                startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
-                            }
-                        });
-                    }).start();
-                } else
-                    startButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon));
-
+                U.applyCustomImage(context, "custom_image", startButton, allAppsIcon);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;
         }
