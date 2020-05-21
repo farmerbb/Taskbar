@@ -50,7 +50,6 @@
     <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH" />
 
     <uses-permission-sdk-23 android:name="com.farmerbb.taskbar.support.USE_SUPPORT_LIBRARY" />
-    <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"

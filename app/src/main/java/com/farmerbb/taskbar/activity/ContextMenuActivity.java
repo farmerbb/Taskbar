@@ -697,6 +697,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
                     generateWallpaperOptions();
                     secondaryMenu = true;
+                } else if(U.isChromeOs(this)) {
+                    U.sendBroadcast(this, ACTION_WALLPAPER_CHANGE_REQUESTED);
                 } else {
                     changeWallpaper();
                     prepareToClose();

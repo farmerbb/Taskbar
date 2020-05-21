@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -28,16 +27,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherApps;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.appcompat.app.AppCompatActivity;
@@ -376,20 +372,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 || U.isLauncherPermanentlyEnabled(this))) {
             setContentView(layout);
 
-            if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
-                    builder.setTitle(R.string.tb_permission_dialog_title)
-                            .setMessage(R.string.tb_chrome_os_wallpaper)
-                            .setNegativeButton(R.string.tb_action_cancel, null)
-                            .setPositiveButton(R.string.tb_action_grant_permission, (dialog, which) ->
-                                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 42));
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } else
-                    showWallpaperOnChromeOs();
-            }
+            if(isSecondaryHome || U.isChromeOs(this))
+                U.applyCustomImage(this, "wallpaper_desktop", layout, null);
 
             pref.edit()
                     .putBoolean(PREF_LAUNCHER, !isSecondaryHome)
@@ -408,10 +392,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 ACTION_TOUCH_ABSORBER_STATE_CHANGED,
                 ACTION_FREEFORM_PREF_CHANGED);
 
-        if(isSecondaryHome) {
+        if(isSecondaryHome)
             U.registerReceiver(this, restartReceiver, ACTION_RESTART);
+
+        if(isSecondaryHome || U.isChromeOs(this))
             U.registerReceiver(this, wallpaperChangeRequestReceiver, ACTION_WALLPAPER_CHANGE_REQUESTED);
-        }
 
         if(isDesktopIconsEnabled) {
             U.registerReceiver(this, refreshDesktopIconsReceiver, ACTION_REFRESH_DESKTOP_ICONS);
@@ -590,10 +575,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         U.unregisterReceiver(this, forceTaskbarStartReceiver);
         U.unregisterReceiver(this, freeformToggleReceiver);
 
-        if(isSecondaryHome) {
+        if(isSecondaryHome)
             U.unregisterReceiver(this, restartReceiver);
+
+        if(isSecondaryHome || U.isChromeOs(this))
             U.unregisterReceiver(this, wallpaperChangeRequestReceiver);
-        }
 
         if(isDesktopIconsEnabled) {
             U.unregisterReceiver(this, refreshDesktopIconsReceiver);
@@ -1067,18 +1053,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 U.showHideNavigationBar(this, displayID, !value, 0);
         } else
             helper.setOnPrimaryHomeScreen(value);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            showWallpaperOnChromeOs();
-    }
-
-    private void showWallpaperOnChromeOs() {
-        final WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
-        final Drawable wallpaperDrawable = wallpaperManager.getDrawable();
-        layout.setBackground(wallpaperDrawable);
     }
 
  // @Override
