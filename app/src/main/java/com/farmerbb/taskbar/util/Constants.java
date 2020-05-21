@@ -29,8 +29,8 @@ public class Constants {
     public static final String ACTION_DASHBOARD_APPEARING = "com.farmerbb.taskbar.DASHBOARD_APPEARING";
     public static final String ACTION_DASHBOARD_DISAPPEARING = "com.farmerbb.taskbar.DASHBOARD_DISAPPEARING";
     public static final String ACTION_ENTER_ICON_ARRANGE_MODE = "com.farmerbb.taskbar.ENTER_ICON_ARRANGE_MODE";
-    public static final String ACTION_FINISH_FREEFORM_ACTIVITY = "com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY";
     public static final String ACTION_FINISH_DIM_SCREEN_ACTIVITY = "com.farmerbb.taskbar.FINISH_DIM_SCREEN_ACTIVITY";
+    public static final String ACTION_FINISH_FREEFORM_ACTIVITY = "com.farmerbb.taskbar.FINISH_FREEFORM_ACTIVITY";
     public static final String ACTION_FORCE_TASKBAR_RESTART = "com.farmerbb.taskbar.FORCE_TASKBAR_RESTART";
     public static final String ACTION_FREEFORM_PREF_CHANGED = "com.farmerbb.taskbar.FREEFORM_PREF_CHANGED";
     public static final String ACTION_HIDE_CONTEXT_MENU = "com.farmerbb.taskbar.HIDE_CONTEXT_MENU";
@@ -45,6 +45,7 @@ public class Constants {
     public static final String ACTION_QUIT = "com.farmerbb.taskbar.QUIT";
     public static final String ACTION_RECEIVE_SETTINGS = "com.farmerbb.taskbar.RECEIVE_SETTINGS";
     public static final String ACTION_REFRESH_DESKTOP_ICONS = "com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS";
+    public static final String ACTION_REMOVE_DESKTOP_WALLPAPER = "com.farmerbb.taskbar.REMOVE_DESKTOP_WALLPAPER";
     public static final String ACTION_REMOVE_WIDGET_COMPLETED = "com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED";
     public static final String ACTION_REMOVE_WIDGET_REQUESTED = "com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED";
     public static final String ACTION_RESET_START_MENU = "com.farmerbb.taskbar.RESET_START_MENU";
@@ -66,7 +67,7 @@ public class Constants {
     public static final String ACTION_UPDATE_FREEFORM_CHECKBOX = "com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX";
     public static final String ACTION_UPDATE_HOME_SCREEN_MARGINS = "com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS";
     public static final String ACTION_UPDATE_SWITCH = "com.farmerbb.taskbar.UPDATE_SWITCH";
-    public static final String ACTION_WALLPAPER_CHANGE_REQUESTED = "com.farmerbb.taskbar.ACTION_WALLPAPER_CHANGE_REQUESTED";
+    public static final String ACTION_WALLPAPER_CHANGE_REQUESTED = "com.farmerbb.taskbar.WALLPAPER_CHANGE_REQUESTED";
 
     // SharedPreference keys
 
@@ -95,6 +96,8 @@ public class Constants {
     public static final String PREF_BUTTON_RECENTS = "button_recents";
     public static final String PREF_CENTERED_ICONS = "centered_icons";
     public static final String PREF_CHANGE_WALLPAPER = "change_wallpaper";
+    public static final String PREF_CHANGE_WALLPAPER_DESKTOP = "change_wallpaper_desktop";
+    public static final String PREF_CHANGE_WALLPAPER_GLOBAL = "change_wallpaper_global";
     public static final String PREF_CHROME_OS_CONTEXT_MENU_FIX = "chrome_os_context_menu_fix";
     public static final String PREF_CLEAR_PINNED_APPS = "clear_pinned_apps";
     public static final String PREF_COLLAPSED = "collapsed";
@@ -162,6 +165,7 @@ public class Constants {
     public static final String PREF_RECENTS_AMOUNT = "recents_amount";
     public static final String PREF_REFRESH_FREQUENCY = "refresh_frequency";
     public static final String PREF_REMOVE_DESKTOP_ICON = "remove_desktop_icon";
+    public static final String PREF_REMOVE_DESKTOP_WALLPAPER = "remove_desktop_wallpaper";
     public static final String PREF_RESET_COLORS = "reset_colors";
     public static final String PREF_RESTORE_SETTINGS = "restore_settings";
     public static final String PREF_SAMSUNG_DIALOG_SHOWN = "samsung_dialog_shown";
@@ -200,8 +204,6 @@ public class Constants {
     public static final String PREF_UNINSTALL_DIALOG_SHOWN = "uninstall_dialog_shown";
     public static final String PREF_VISUAL_FEEDBACK = "visual_feedback";
     public static final String PREF_VOLUME = "volume";
-    public static final String PREF_WALLPAPER_DESKTOP = "wallpaper_desktop";
-    public static final String PREF_WALLPAPER_GLOBAL = "wallpaper_global";
     public static final String PREF_WINDOW_SIZE = "window_size";
     public static final String PREF_WINDOW_SIZE_FULLSCREEN = "window_size_fullscreen";
     public static final String PREF_WINDOW_SIZE_HALF_LEFT = "window_size_half_left";
@@ -212,9 +214,9 @@ public class Constants {
 
     // SharedPreference values
 
+    public static final String PREF_RECENTS_AMOUNT_APP_START = "app_start";
     public static final String PREF_RECENTS_AMOUNT_PAST_DAY = "past_day";
     public static final String PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY = "running_apps_only";
-    public static final String PREF_RECENTS_AMOUNT_APP_START = "app_start";
     public static final String PREF_RECENTS_AMOUNT_SHOW_ALL = "show_all";
 
     // TaskbarPosition values

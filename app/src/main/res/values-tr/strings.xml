@@ -453,8 +453,8 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
     <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
 
-    <string name="tb_apply_wallpaper_to">Apply wallpaper to&#8230;</string>
-    <string name="tb_pref_wallpaper_global">Phone and desktop</string>
-    <string name="tb_pref_wallpaper_desktop">Desktop only</string>
+    <string name="tb_pref_change_wallpaper_global">Apply to phone and desktop</string>
+    <string name="tb_pref_change_wallpaper_desktop">Apply to desktop only</string>
+    <string name="tb_pref_remove_desktop_wallpaper">Remove desktop wallpaper</string>
 
 </resources>

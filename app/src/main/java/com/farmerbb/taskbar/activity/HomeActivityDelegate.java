@@ -25,6 +25,7 @@ import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherApps;
 import android.content.res.ColorStateList;
@@ -78,6 +79,7 @@ import com.farmerbb.taskbar.util.U;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -171,6 +173,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateMargins();
+        }
+    };
+
+    private BroadcastReceiver removeDesktopWallpaperReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            removeCustomWallpaper();
         }
     };
 
@@ -382,7 +391,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             setContentView(layout);
 
             if(isWallpaperEnabled)
-                U.applyCustomImage(this, "wallpaper_desktop", wallpaper, null);
+                U.applyCustomImage(this, "desktop_wallpaper", wallpaper, null);
 
             pref.edit()
                     .putBoolean(PREF_LAUNCHER, !isSecondaryHome)
@@ -404,8 +413,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(isSecondaryHome)
             U.registerReceiver(this, restartReceiver, ACTION_RESTART);
 
-        if(isWallpaperEnabled)
+        if(isWallpaperEnabled) {
+            //noinspection deprecation
+            registerReceiver(removeDesktopWallpaperReceiver, new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
+            U.registerReceiver(this, removeDesktopWallpaperReceiver, ACTION_REMOVE_DESKTOP_WALLPAPER);
             U.registerReceiver(this, wallpaperChangeRequestReceiver, ACTION_WALLPAPER_CHANGE_REQUESTED);
+        }
 
         if(isDesktopIconsEnabled) {
             U.registerReceiver(this, refreshDesktopIconsReceiver, ACTION_REFRESH_DESKTOP_ICONS);
@@ -587,8 +600,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(isSecondaryHome)
             U.unregisterReceiver(this, restartReceiver);
 
-        if(isWallpaperEnabled)
+        if(isWallpaperEnabled) {
+            unregisterReceiver(removeDesktopWallpaperReceiver);
             U.unregisterReceiver(this, wallpaperChangeRequestReceiver);
+        }
 
         if(isDesktopIconsEnabled) {
             U.unregisterReceiver(this, refreshDesktopIconsReceiver);
@@ -1094,8 +1109,15 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             if(data.getData() == null)
                 return;
 
-            if(U.importImage(this, data.getData(), "wallpaper_desktop"))
-                U.applyCustomImage(this, "wallpaper_desktop", wallpaper, null);
+            if(U.importImage(this, data.getData(), "desktop_wallpaper"))
+                U.applyCustomImage(this, "desktop_wallpaper", wallpaper, null);
         }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void removeCustomWallpaper() {
+        File file = new File(getFilesDir() + "/tb_images", "desktop_wallpaper");
+        if(file.exists()) file.delete();
+        if(wallpaper != null) wallpaper.setImageDrawable(null);
     }
 }

@@ -17,11 +17,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:key="change_wallpaper_global"
-        android:title="@string/tb_pref_change_wallpaper_global" />
-
-    <Preference
-        android:key="change_wallpaper_desktop"
-        android:title="@string/tb_pref_change_wallpaper_desktop" />
+        android:key="remove_desktop_wallpaper"
+        android:title="@string/tb_pref_remove_desktop_wallpaper" />
 
 </PreferenceScreen>

@@ -1639,6 +1639,7 @@ public class U {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
+        applyOpenInNewWindow(activity, intent);
 
         String message = activity.getResources().getString(R.string.tb_filepicker_select_an_image_file);
 
@@ -1680,7 +1681,7 @@ public class U {
     }
 
     public static String[] getImageFilenames() {
-        return new String[] {"custom_image", "wallpaper_desktop"};
+        return new String[] {"custom_image", "desktop_wallpaper"};
     }
 
     public static void applyCustomImage(Context context, String filename, ImageView view, Drawable errorDrawable) {

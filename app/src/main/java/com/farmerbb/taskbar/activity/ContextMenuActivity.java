@@ -59,6 +59,7 @@ import com.farmerbb.taskbar.util.U;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.util.List;
 
 import static com.farmerbb.taskbar.util.Constants.*;
@@ -423,12 +424,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     private void generateWallpaperOptions() {
         getPreferenceScreen().removeAll();
 
-        addPreferencesFromResource(R.xml.tb_pref_context_menu_header);
         addPreferencesFromResource(R.xml.tb_pref_context_menu_change_wallpaper_secondary);
+        findPreference(PREF_CHANGE_WALLPAPER_GLOBAL).setOnPreferenceClickListener(this);
+        findPreference(PREF_CHANGE_WALLPAPER_DESKTOP).setOnPreferenceClickListener(this);
 
-        findPreference(PREF_HEADER).setTitle(R.string.tb_apply_wallpaper_to);
-        findPreference(PREF_WALLPAPER_GLOBAL).setOnPreferenceClickListener(this);
-        findPreference(PREF_WALLPAPER_DESKTOP).setOnPreferenceClickListener(this);
+        File file = new File(getFilesDir() + "/tb_images", "desktop_wallpaper");
+        if(!file.exists()) return;
+
+        addPreferencesFromResource(R.xml.tb_pref_remove_desktop_wallpaper);
+        findPreference(PREF_REMOVE_DESKTOP_WALLPAPER).setOnPreferenceClickListener(this);
     }
 
     @SuppressWarnings("deprecation")
@@ -726,12 +730,15 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     }
                 } catch (JSONException e) { /* Gracefully fail */ }
                 break;
-            case PREF_WALLPAPER_GLOBAL:
+            case PREF_CHANGE_WALLPAPER_GLOBAL:
                 changeWallpaper();
                 prepareToClose();
                 break;
-            case PREF_WALLPAPER_DESKTOP:
+            case PREF_CHANGE_WALLPAPER_DESKTOP:
                 U.sendBroadcast(this, ACTION_WALLPAPER_CHANGE_REQUESTED);
+                break;
+            case PREF_REMOVE_DESKTOP_WALLPAPER:
+                U.sendBroadcast(this, ACTION_REMOVE_DESKTOP_WALLPAPER);
                 break;
         }
 
