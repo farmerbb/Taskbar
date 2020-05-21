@@ -93,6 +93,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private FrameLayout layout;
     private GridLayout desktopIcons;
     private FABWrapper fab;
+    private ImageView wallpaper;
 
     private boolean forceTaskbarStart = false;
     private AlertDialog dialog;
@@ -108,6 +109,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     private boolean isSecondaryHome;
     private boolean waitingForPermission;
+    private boolean isWallpaperEnabled;
 
     private GestureDetector detector;
 
@@ -258,6 +260,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         };
 
+        isWallpaperEnabled = isSecondaryHome || U.isChromeOs(this);
+        if(isWallpaperEnabled) {
+            wallpaper = new ImageView(this);
+            wallpaper.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            layout.addView(wallpaper);
+        }
+
         isDesktopIconsEnabled = U.isDesktopIconsEnabled(this);
         if(isDesktopIconsEnabled) {
             layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -372,8 +381,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 || U.isLauncherPermanentlyEnabled(this))) {
             setContentView(layout);
 
-            if(isSecondaryHome || U.isChromeOs(this))
-                U.applyCustomImage(this, "wallpaper_desktop", layout, null);
+            if(isWallpaperEnabled)
+                U.applyCustomImage(this, "wallpaper_desktop", wallpaper, null);
 
             pref.edit()
                     .putBoolean(PREF_LAUNCHER, !isSecondaryHome)
@@ -395,7 +404,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(isSecondaryHome)
             U.registerReceiver(this, restartReceiver, ACTION_RESTART);
 
-        if(isSecondaryHome || U.isChromeOs(this))
+        if(isWallpaperEnabled)
             U.registerReceiver(this, wallpaperChangeRequestReceiver, ACTION_WALLPAPER_CHANGE_REQUESTED);
 
         if(isDesktopIconsEnabled) {
@@ -578,7 +587,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(isSecondaryHome)
             U.unregisterReceiver(this, restartReceiver);
 
-        if(isSecondaryHome || U.isChromeOs(this))
+        if(isWallpaperEnabled)
             U.unregisterReceiver(this, wallpaperChangeRequestReceiver);
 
         if(isDesktopIconsEnabled) {
@@ -678,8 +687,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         if(!iconArrangeMode) fab.hide();
 
-        layout.addView(desktopIcons, 0);
-        layout.addView(fab.view, 1);
+        int index = isDesktopIconsEnabled ? 1 : 0;
+        layout.addView(desktopIcons, index++);
+        layout.addView(fab.view, index);
     }
 
     private void refreshDesktopIcons() {
@@ -1085,7 +1095,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 return;
 
             if(U.importImage(this, data.getData(), "wallpaper_desktop"))
-                U.applyCustomImage(this, "wallpaper_desktop", layout, null);
+                U.applyCustomImage(this, "wallpaper_desktop", wallpaper, null);
         }
     }
 }

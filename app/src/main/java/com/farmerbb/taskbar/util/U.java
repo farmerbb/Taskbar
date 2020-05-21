@@ -1683,7 +1683,7 @@ public class U {
         return new String[] {"custom_image", "wallpaper_desktop"};
     }
 
-    public static void applyCustomImage(Context context, String filename, View view, Drawable errorDrawable) {
+    public static void applyCustomImage(Context context, String filename, ImageView view, Drawable errorDrawable) {
         File file = new File(context.getFilesDir() + "/tb_images", filename);
         if(file.exists()) {
             Handler handler = new Handler();
@@ -1693,22 +1693,15 @@ public class U {
                     if(bitmap != null) {
                         BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
                         bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
-                        applyCustomImage(view, bitmapDrawable);
+                        view.setImageDrawable(bitmapDrawable);
                     } else {
                         U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
-                        applyCustomImage(view, errorDrawable);
+                        view.setImageDrawable(errorDrawable);
                     }
                 });
             }).start();
         } else
-            applyCustomImage(view, errorDrawable);
-    }
-
-    private static void applyCustomImage(View view, Drawable drawable) {
-        if(view instanceof ImageView)
-            ((ImageView) view).setImageDrawable(drawable);
-        else
-            view.setBackground(drawable);
+            view.setImageDrawable(errorDrawable);
     }
 
     public static String getDefaultStartButtonImage(Context context) {
