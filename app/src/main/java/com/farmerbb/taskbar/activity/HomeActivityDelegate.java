@@ -547,8 +547,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!U.canBootToFreeform(this)) {
-            setOnHomeScreen(false);
-
             if(U.shouldCollapse(this, false)) {
                 U.sendBroadcast(this, ACTION_TEMP_HIDE_TASKBAR);
             }
@@ -578,6 +576,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     IconCache.getInstance(this).clearCache();
                 }
             }
+
+            new Handler().post(() -> setOnHomeScreen(false));
         }
 
         if(dialog != null) {
@@ -625,8 +625,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void killHomeActivity() {
-        setOnHomeScreen(false);
-
         if(isSecondaryHome) {
             if(taskbarController != null) taskbarController.onDestroyHost(this);
             if(startMenuController != null) startMenuController.onDestroyHost(this);
@@ -657,7 +655,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         }
 
-        finish();
+        new Handler().post(() -> {
+            setOnHomeScreen(false);
+            finish();
+        });
     }
 
     private void updateWindowFlags() {
