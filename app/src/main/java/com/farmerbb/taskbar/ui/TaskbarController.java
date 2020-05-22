@@ -221,7 +221,6 @@ public class TaskbarController extends UIController {
         init(context, host, () -> drawTaskbar(host));
     }
 
-    @SuppressLint("RtlHardcoded")
     private void drawTaskbar(UIHost host) {
         IconCache.getInstance(context).clearCache();
 
@@ -351,23 +350,23 @@ public class TaskbarController extends UIController {
 
     @VisibleForTesting
     public int getTaskbarGravity(String taskbarPosition) {
-        int gravity = Gravity.BOTTOM | Gravity.LEFT;
+        int gravity = Gravity.BOTTOM | Gravity.START;
         switch(taskbarPosition) {
             case POSITION_BOTTOM_LEFT:
             case POSITION_BOTTOM_VERTICAL_LEFT:
-                gravity = Gravity.BOTTOM | Gravity.LEFT;
+                gravity = Gravity.BOTTOM | Gravity.START;
                 break;
             case POSITION_BOTTOM_RIGHT:
             case POSITION_BOTTOM_VERTICAL_RIGHT:
-                gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                gravity = Gravity.BOTTOM | Gravity.END;
                 break;
             case POSITION_TOP_LEFT:
             case POSITION_TOP_VERTICAL_LEFT:
-                gravity = Gravity.TOP | Gravity.LEFT;
+                gravity = Gravity.TOP | Gravity.START;
                 break;
             case POSITION_TOP_RIGHT:
             case POSITION_TOP_VERTICAL_RIGHT:
-                gravity = Gravity.TOP | Gravity.RIGHT;
+                gravity = Gravity.TOP | Gravity.END;
                 break;
         }
         return gravity;

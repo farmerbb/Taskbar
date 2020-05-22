@@ -126,39 +126,39 @@ public class TaskbarControllerTest {
     @Test
     public void testGetTaskbarGravity() {
         assertEquals(
-                Gravity.BOTTOM | Gravity.LEFT,
+                Gravity.BOTTOM | Gravity.START,
                 uiController.getTaskbarGravity(POSITION_BOTTOM_LEFT)
         );
         assertEquals(
-                Gravity.BOTTOM | Gravity.LEFT,
+                Gravity.BOTTOM | Gravity.START,
                 uiController.getTaskbarGravity(POSITION_BOTTOM_VERTICAL_LEFT)
         );
         assertEquals(
-                Gravity.BOTTOM | Gravity.RIGHT,
+                Gravity.BOTTOM | Gravity.END,
                 uiController.getTaskbarGravity(POSITION_BOTTOM_RIGHT)
         );
         assertEquals(
-                Gravity.BOTTOM | Gravity.RIGHT,
+                Gravity.BOTTOM | Gravity.END,
                 uiController.getTaskbarGravity(POSITION_BOTTOM_VERTICAL_RIGHT)
         );
         assertEquals(
-                Gravity.TOP | Gravity.LEFT,
+                Gravity.TOP | Gravity.START,
                 uiController.getTaskbarGravity(POSITION_TOP_LEFT)
         );
         assertEquals(
-                Gravity.TOP | Gravity.LEFT,
+                Gravity.TOP | Gravity.START,
                 uiController.getTaskbarGravity(POSITION_TOP_VERTICAL_LEFT)
         );
         assertEquals(
-                Gravity.TOP | Gravity.RIGHT,
+                Gravity.TOP | Gravity.END,
                 uiController.getTaskbarGravity(POSITION_TOP_RIGHT)
         );
         assertEquals(
-                Gravity.TOP | Gravity.RIGHT,
+                Gravity.TOP | Gravity.END,
                 uiController.getTaskbarGravity(POSITION_TOP_VERTICAL_RIGHT)
         );
         assertEquals(
-                Gravity.BOTTOM | Gravity.LEFT,
+                Gravity.BOTTOM | Gravity.START,
                 uiController.getTaskbarGravity("unsupported")
         );
     }
