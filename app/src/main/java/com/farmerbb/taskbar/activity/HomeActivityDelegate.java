@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherApps;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -389,8 +390,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 || U.isLauncherPermanentlyEnabled(this))) {
             setContentView(layout);
 
-            if(isWallpaperEnabled)
-                U.applyCustomImage(this, "desktop_wallpaper", wallpaper, null);
+            if(isWallpaperEnabled) {
+                File file = new File(getFilesDir() + "/tb_images", "desktop_wallpaper");
+                if(file.exists()) {
+                    U.applyCustomImage(this, "desktop_wallpaper", wallpaper, null);
+                    getWindow().setNavigationBarColor(Color.BLACK);
+                }
+            }
 
             pref.edit()
                     .putBoolean(PREF_LAUNCHER, !isSecondaryHome)
@@ -1107,8 +1113,10 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             if(data.getData() == null)
                 return;
 
-            if(U.importImage(this, data.getData(), "desktop_wallpaper"))
+            if(U.importImage(this, data.getData(), "desktop_wallpaper")) {
                 U.applyCustomImage(this, "desktop_wallpaper", wallpaper, null);
+                getWindow().setNavigationBarColor(Color.BLACK);
+            }
         }
     }
 
@@ -1117,5 +1125,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         File file = new File(getFilesDir() + "/tb_images", "desktop_wallpaper");
         if(file.exists()) file.delete();
         if(wallpaper != null) wallpaper.setImageDrawable(null);
+
+        getWindow().setNavigationBarColor(0);
     }
 }
