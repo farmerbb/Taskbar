@@ -445,12 +445,12 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string-array name="tb_pref_display_density_list">
         <item>Default</item>
-        <item>Low-density (160dpi)</item>
+        <item>Recommended (160dpi)</item>
         <item>High-density (320dpi)</item>
     </string-array>
 
     <string-array name="tb_pref_display_density_list_alt">
-        <item>Low-density (160dpi)</item>
+        <item>Recommended (160dpi)</item>
         <item>High-density (320dpi)</item>
     </string-array>
 
