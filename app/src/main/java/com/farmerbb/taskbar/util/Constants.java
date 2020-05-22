@@ -64,6 +64,7 @@ public class Constants {
     public static final String ACTION_TOGGLE_FREEFORM_MODE = "com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE";
     public static final String ACTION_TOGGLE_START_MENU = "com.farmerbb.taskbar.TOGGLE_START_MENU";
     public static final String ACTION_TOUCH_ABSORBER_STATE_CHANGED = "com.farmerbb.taskbar.TOUCH_ABSORBER_STATE_CHANGED";
+    public static final String ACTION_UNDIM_SCREEN = "com.farmerbb.taskbar.ACTION_UNDIM_SCREEN";
     public static final String ACTION_UPDATE_FREEFORM_CHECKBOX = "com.farmerbb.taskbar.UPDATE_FREEFORM_CHECKBOX";
     public static final String ACTION_UPDATE_HOME_SCREEN_MARGINS = "com.farmerbb.taskbar.UPDATE_HOME_SCREEN_MARGINS";
     public static final String ACTION_UPDATE_SWITCH = "com.farmerbb.taskbar.UPDATE_SWITCH";

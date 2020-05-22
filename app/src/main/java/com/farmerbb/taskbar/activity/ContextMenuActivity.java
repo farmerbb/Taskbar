@@ -613,8 +613,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
                 audio.adjustSuggestedStreamVolume(AudioManager.ADJUST_SAME, AudioManager.USE_DEFAULT_STREAM_TYPE, AudioManager.FLAG_SHOW_UI);
 
-                if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
                     U.showToast(this, R.string.tb_opening_volume_control);
+                    U.sendBroadcast(this, ACTION_UNDIM_SCREEN);
+                }
 
                 prepareToClose();
                 break;
@@ -666,8 +668,10 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case PREF_POWER_MENU:
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG, () -> {
-                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
                         U.showToast(this, R.string.tb_opening_power_menu);
+                        U.sendBroadcast(this, ACTION_UNDIM_SCREEN);
+                    }
                 });
 
                 prepareToClose();

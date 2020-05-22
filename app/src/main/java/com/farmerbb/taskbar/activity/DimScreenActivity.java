@@ -60,6 +60,13 @@ public class DimScreenActivity extends AppCompatActivity {
         if(!U.isDesktopModeActive(this)) finish();
     }
 
+    private BroadcastReceiver unDimScreenReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            dimScreen(false);
+        }
+    };
+
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -78,6 +85,7 @@ public class DimScreenActivity extends AppCompatActivity {
         DisplayManager manager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
         manager.registerDisplayListener(listener, null);
 
+        U.registerReceiver(this, unDimScreenReceiver, ACTION_UNDIM_SCREEN);
         U.registerReceiver(this, finishReceiver,
                 ACTION_FINISH_DIM_SCREEN_ACTIVITY, ACTION_KILL_HOME_ACTIVITY);
 
@@ -101,6 +109,7 @@ public class DimScreenActivity extends AppCompatActivity {
         DisplayManager manager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
         manager.unregisterDisplayListener(listener);
         
+        U.unregisterReceiver(this, unDimScreenReceiver);
         U.unregisterReceiver(this, finishReceiver);
 
         super.onDestroy();

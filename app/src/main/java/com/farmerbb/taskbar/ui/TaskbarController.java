@@ -35,12 +35,9 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -78,7 +75,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -631,8 +627,10 @@ public class TaskbarController extends UIController {
         if(!U.isLibrary(context)) {
             sysTrayLayout.setOnClickListener(v -> {
                 U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS, () -> {
-                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
                         U.showToast(context, R.string.tb_opening_notification_tray);
+                        U.sendBroadcast(context, ACTION_UNDIM_SCREEN);
+                    }
                 });
 
                 if(U.shouldCollapse(context, false))
@@ -642,8 +640,10 @@ public class TaskbarController extends UIController {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 sysTrayLayout.setOnLongClickListener(v -> {
                     U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS, () -> {
-                        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
                             U.showToast(context, R.string.tb_opening_quick_settings);
+                            U.sendBroadcast(context, ACTION_UNDIM_SCREEN);
+                        }
                     });
 
                     if(U.shouldCollapse(context, false))
@@ -656,8 +656,10 @@ public class TaskbarController extends UIController {
                     if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                             && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                         U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS, () -> {
-                            if(LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+                            if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
                                 U.showToast(context, R.string.tb_opening_quick_settings);
+                                U.sendBroadcast(context, ACTION_UNDIM_SCREEN);
+                            }
                         });
 
                         if(U.shouldCollapse(context, false))
