@@ -36,6 +36,9 @@ import static com.farmerbb.taskbar.util.Constants.*;
 
 public class DimScreenActivity extends AppCompatActivity {
 
+    private boolean isResumed = false;
+    private boolean isTopResumed = false;
+
     private DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
         @Override
         public void onDisplayAdded(int displayId) {
@@ -89,16 +92,8 @@ public class DimScreenActivity extends AppCompatActivity {
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        WindowManager.LayoutParams wmParams = getWindow().getAttributes();
-        wmParams.screenBrightness = hasFocus ? 1 / 255f : -1f;
-        getWindow().setAttributes(wmParams);
-
-        if(hasFocus) {
-            View view = getWindow().getDecorView();
-            view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
+        if(isResumed && isTopResumed)
+            dimScreen(hasFocus);
     }
 
     @Override
@@ -132,4 +127,39 @@ public class DimScreenActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {}
+
+    // @Override
+    public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
+        isTopResumed = isTopResumedActivity;
+        dimScreen(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        isResumed = false;
+        dimScreen(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        isResumed = true;
+        dimScreen(true);
+    }
+
+    private void dimScreen(boolean shouldDim) {
+        WindowManager.LayoutParams wmParams = getWindow().getAttributes();
+        wmParams.screenBrightness = shouldDim ? 1 / 255f : -1f;
+        getWindow().setAttributes(wmParams);
+
+        if(shouldDim) {
+            View view = getWindow().getDecorView();
+            view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        }
+    }
 }

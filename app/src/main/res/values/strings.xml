@@ -370,8 +370,8 @@
     <string name="tb_enable_freeform_windows">Enable freeform windows</string>
 
     <string name="tb_filepicker_select_an_image_file">Select an image file</string>
-    <string name="tb_filepicker_install_file_manager">Please install a file manager.</string>
-    <string name="tb_error_reading_custom_start_image">Error reading the image. Try another file.</string>
+    <string name="tb_filepicker_install_file_manager">Error selecting image</string>
+    <string name="tb_error_reading_custom_start_image">Error reading image</string>
 
     <string name="tb_add_icon_to_desktop">Add icon to desktop</string>
     <string name="tb_arrange_icons">Move icons</string>
@@ -461,8 +461,8 @@
     <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
     <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
 
-    <string name="tb_pref_change_wallpaper_global">Apply to phone and desktop</string>
+    <string name="tb_pref_change_wallpaper_global">Apply to entire device</string>
     <string name="tb_pref_change_wallpaper_desktop">Apply to desktop only</string>
-    <string name="tb_pref_remove_desktop_wallpaper">Remove desktop wallpaper</string>
+    <string name="tb_pref_remove_desktop_wallpaper">Use device wallpaper</string>
 
 </resources>

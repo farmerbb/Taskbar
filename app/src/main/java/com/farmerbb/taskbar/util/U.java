@@ -1639,7 +1639,6 @@ public class U {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        applyOpenInNewWindow(activity, intent);
 
         String message = activity.getResources().getString(R.string.tb_filepicker_select_an_image_file);
 
@@ -1696,7 +1695,7 @@ public class U {
                         bitmapDrawable.setFilterBitmap(bitmap.getWidth() * bitmap.getHeight() > 2000);
                         view.setImageDrawable(bitmapDrawable);
                     } else {
-                        U.showToastLong(context, R.string.tb_error_reading_custom_start_image);
+                        showToastLong(context, R.string.tb_error_reading_custom_start_image);
                         view.setImageDrawable(errorDrawable);
                     }
                 });

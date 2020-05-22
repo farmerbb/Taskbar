@@ -25,7 +25,6 @@ import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherApps;
 import android.content.res.ColorStateList;
@@ -414,8 +413,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             U.registerReceiver(this, restartReceiver, ACTION_RESTART);
 
         if(isWallpaperEnabled) {
-            //noinspection deprecation
-            registerReceiver(removeDesktopWallpaperReceiver, new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
             U.registerReceiver(this, removeDesktopWallpaperReceiver, ACTION_REMOVE_DESKTOP_WALLPAPER);
             U.registerReceiver(this, wallpaperChangeRequestReceiver, ACTION_WALLPAPER_CHANGE_REQUESTED);
         }
@@ -601,7 +598,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             U.unregisterReceiver(this, restartReceiver);
 
         if(isWallpaperEnabled) {
-            unregisterReceiver(removeDesktopWallpaperReceiver);
+            U.unregisterReceiver(this, removeDesktopWallpaperReceiver);
             U.unregisterReceiver(this, wallpaperChangeRequestReceiver);
         }
 
