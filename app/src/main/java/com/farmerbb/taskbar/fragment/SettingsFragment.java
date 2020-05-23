@@ -27,7 +27,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
