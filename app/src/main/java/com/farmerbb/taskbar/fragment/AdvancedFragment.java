@@ -248,6 +248,8 @@ public class AdvancedFragment extends SettingsFragment {
                         .setNegativeButton(R.string.tb_action_cancel, null)
                         .setNeutralButton(R.string.tb_use_default, (dialog, id) -> {
                             SharedPreferences.Editor editor = pref.edit();
+                            editor.remove(PREF_DASHBOARD_WIDTH);
+                            editor.remove(PREF_DASHBOARD_HEIGHT);
                             editor.remove(PREF_DASHBOARD_WIDTH + isModified);
                             editor.remove(PREF_DASHBOARD_HEIGHT + isModified);
                             editor.apply();

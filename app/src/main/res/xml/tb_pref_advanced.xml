@@ -35,6 +35,7 @@
 
     <Preference
         android:key="dashboard_grid_size"
+        android:dependency="dashboard"
         android:title="@string/tb_dashboard_grid_size" />
 
     <Preference
