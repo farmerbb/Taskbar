@@ -81,6 +81,12 @@
         android:title="@string/tb_pref_title_sys_tray"
         android:summary="@string/tb_pref_description_sys_tray"/>
 
+    <Preference
+        android:key="notification_count"
+        android:dependency="sys_tray"
+        android:title="@string/tb_pref_notification_count_title"
+        android:summary="@string/tb_pref_notification_count_description"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

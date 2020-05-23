@@ -202,6 +202,7 @@ public class TaskbarController extends UIController {
     };
 
     private BroadcastReceiver notificationCountReceiver = new BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
         @Override
         public void onReceive(Context context, Intent intent) {
             int count = intent.getIntExtra("count", 0);

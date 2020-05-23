@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,10 +75,13 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PREF_FULL_LENGTH));
         bindPreferenceSummaryToValue(findPreference(PREF_CENTERED_ICONS));
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            findPreference(PREF_NOTIFICATION_COUNT).setOnPreferenceClickListener(this);
             bindPreferenceSummaryToValue(findPreference(PREF_SYS_TRAY));
-        else
+        } else {
+            getPreferenceScreen().removePreference(findPreference(PREF_NOTIFICATION_COUNT));
             getPreferenceScreen().removePreference(findPreference(PREF_SYS_TRAY));
+        }
 
         updateMaxNumOfRecents(false);
         updateRefreshFrequency(false);
@@ -98,6 +102,7 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
     }
 
     @SuppressLint("SetTextI18n")
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     public boolean onPreferenceClick(final Preference p) {
         final SharedPreferences pref = U.getSharedPreferences(getActivity());
@@ -205,6 +210,13 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
 
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();
+                break;
+            case PREF_NOTIFICATION_COUNT:
+                try {
+                    startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                } catch (ActivityNotFoundException e) {
+                    U.showToast(getActivity(), R.string.tb_lock_device_not_supported);
+                }
                 break;
         }
 

@@ -461,8 +461,11 @@
     <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
     <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
 
-    <string name="tb_pref_change_wallpaper_global">Apply to phone and desktop</string>
+    <string name="tb_pref_change_wallpaper_global">Apply to entire device</string>
     <string name="tb_pref_change_wallpaper_desktop">Apply to desktop only</string>
-    <string name="tb_pref_remove_desktop_wallpaper">Remove desktop wallpaper</string>
+    <string name="tb_pref_remove_desktop_wallpaper">Use device wallpaper</string>
+
+    <string name="tb_pref_notification_count_title">Show notification count in status area</string>
+    <string name="tb_pref_notification_count_description">Requires notification access</string>
 
 </resources>

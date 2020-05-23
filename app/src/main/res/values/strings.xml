@@ -465,4 +465,7 @@
     <string name="tb_pref_change_wallpaper_desktop">Apply to desktop only</string>
     <string name="tb_pref_remove_desktop_wallpaper">Use device wallpaper</string>
 
+    <string name="tb_pref_notification_count_title">Show notification count in status area</string>
+    <string name="tb_pref_notification_count_description">Requires notification access</string>
+
 </resources>

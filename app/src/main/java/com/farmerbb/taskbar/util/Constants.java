@@ -151,6 +151,7 @@ public class Constants {
     public static final String PREF_MANAGE_APP_DATA = "manage_app_data";
     public static final String PREF_MAX_NUM_OF_RECENTS = "max_num_of_recents";
     public static final String PREF_NAVIGATION_BAR_BUTTONS = "navigation_bar_buttons";
+    public static final String PREF_NOTIFICATION_COUNT = "notification_count";
     public static final String PREF_NOTIFICATION_SETTINGS = "notification_settings";
     public static final String PREF_OPEN_TASKBAR_SETTINGS = "open_taskbar_settings";
     public static final String PREF_PIN_APP = "pin_app";
