@@ -92,8 +92,9 @@ Taskbar jest i zawsze będzie w 100%% darmowy, open source, bez reklam. Jednak w
 <string name="tb_enable_freeform_windows">Włącz okienka freeform</string>
 <string name="tb_enable_recent_apps">"Na pasku zadań można opcjonalnie wyświetlać ikony ostatnio używanych aplikacji wzdłuż krawędzi ekranu. W tym celu Taskbar wymaga uprawnień dostępu do użytkowania.
 
-Włączyć obsługę ostatnio używanych aplikacji?"</string>
-<string name="tb_enable_recent_apps_alt">@string/tb_enable_recent_apps</string>
+"</string>
+<string name="tb_enable_recent_apps_instructions_phone">Włączyć obsługę ostatnio używanych aplikacji?</string>
+<string name="tb_enable_recent_apps_instructions_tv">To enable support for recent apps, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Usage access\" and ensure that Taskbar is enabled.</string>
 <string name="tb_error_dialog_message">"Niestety, z powodu ograniczeń OEM, funkcja ta nie może być włączona w urządzeniu.
 
 Nadal możesz być w stanie ją włączyć za pomocą tego polecenia powłoki adb:
@@ -206,9 +207,11 @@ Wyższe wartości mogą zmniejszyć wydajność."</string>
 <string name="tb_off">Wył</string>
 <string name="tb_on">WŁ</string>
 <string name="tb_open_taskbar_settings">Otwórz ustawienia</string>
+<string name="tb_permission_dialog_instructions_phone">Proszę nacisnąć \"Udziel uprawnień\" i upewnij się, że \"Zezwalaj na rysowanie nad innymi aplikacjami\" jest włączone.</string>
+<string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
 <string name="tb_permission_dialog_message">"Taskbar wymaga uprawnienia do rysowania nad innymi aplikacjami.
 
-Proszę nacisnąć \"Udziel uprawnień\" i upewnij się, że \"Zezwalaj na rysowanie nad innymi aplikacjami\" jest włączone."</string>
+"</string>
 <string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 <string name="tb_permission_dialog_title">Potrzebne jest pozwolenie</string>
 <string name="tb_pin_app">Przypnij do ostatnich</string>

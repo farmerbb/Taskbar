@@ -87,8 +87,9 @@ Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak
 <string name="tb_enable_force_activities_resizable">Aşağı kaydırın ve \"%s\" yı açın.</string>
 <string name="tb_enable_recent_apps">"Taskbar, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için Taskbar, kullanım erişim izinleri gerektirir.
 
-Son kullanılan uygulamalar için desteği etkinleştirilsin mi?"</string>
-<string name="tb_enable_recent_apps_alt">@string/tb_enable_recent_apps</string>
+"</string>
+<string name="tb_enable_recent_apps_instructions_phone">Son kullanılan uygulamalar için desteği etkinleştirilsin mi?</string>
+<string name="tb_enable_recent_apps_instructions_tv">To enable support for recent apps, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Usage access\" and ensure that Taskbar is enabled.</string>
 <string name="tb_error_dialog_message">"Ne yazık ki, OEM kısıtlamaları nedeniyle, bu özellik cihazınızda etkinleştirilemiyor.
 
 Bu adb shell komutunu kullanarak bunu yine de etkinleştirebilirsiniz:
@@ -192,9 +193,11 @@ Daha yüksek değerler performansı düşürebilir."</string>
 <string name="tb_off">Kapalı</string>
 <string name="tb_on">Açık</string>
 <string name="tb_open_taskbar_settings">Ayarları aç</string>
+<string name="tb_permission_dialog_instructions_phone">Lütfen \"İzin Ver\" e basın ve \"Diğer uygulamaların üzerine çizim izni verme\" özelliğinin etkinleştirildiğinden emin olun.</string>
+<string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
 <string name="tb_permission_dialog_message">"Taskbar, başlamadan önce diğer uygulamaların üzerine çizim izni gerektirir.
 
-Lütfen \"İzin Ver\" e basın ve \"Diğer uygulamaların üzerine çizim izni verme\" özelliğinin etkinleştirildiğinden emin olun."</string>
+"</string>
 <string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 <string name="tb_permission_dialog_title">İzin gereklidir</string>
 <string name="tb_pin_app">Son kullanılanlara al</string>
