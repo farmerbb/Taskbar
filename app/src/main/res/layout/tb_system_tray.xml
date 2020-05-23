@@ -25,9 +25,35 @@
         android:layout_width="84dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="16dp"
+        android:textSize="15.499dp"
         android:visibility="gone"
         tools:ignore="SpUsage" />
+
+    <FrameLayout
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/notification_count_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            tools:tint="#000000"
+            tools:src="@drawable/tb_circle"/>
+
+        <TextView
+            android:id="@+id/notification_count_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="13.5dp"
+            android:textStyle="bold"
+            tools:textColor="#0000FF"
+            tools:text="1"
+            tools:ignore="SpUsage"/>
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/bluetooth"

@@ -117,6 +117,8 @@ public class TaskbarController extends UIController {
     private LinearLayout sysTrayLayout;
     private FrameLayout sysTrayParentLayout;
     private TextView time;
+    private ImageView notificationCountCircle;
+    private TextView notificationCountText;
 
     private Handler handler;
     private Handler handler2;
@@ -196,6 +198,26 @@ public class TaskbarController extends UIController {
         public void onReceive(Context context, Intent intent) {
             if(startButton.getVisibility() == View.GONE)
                 layout.setVisibility(View.VISIBLE);
+        }
+    };
+
+    private BroadcastReceiver notificationCountReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int count = intent.getIntExtra("count", 0);
+            if(count > 0) {
+                int color = ColorUtils.setAlphaComponent(U.getBackgroundTint(context), 255);
+                notificationCountText.setTextColor(color);
+
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.tb_circle);
+                drawable.setTint(U.getAccentColor(context));
+
+                notificationCountCircle.setImageDrawable(drawable);
+                notificationCountText.setText(Integer.toString(count));
+            } else {
+                notificationCountCircle.setImageDrawable(null);
+                notificationCountText.setText(null);
+            }
         }
     };
 
@@ -342,6 +364,14 @@ public class TaskbarController extends UIController {
         U.registerReceiver(context, startMenuAppearReceiver, ACTION_START_MENU_APPEARING);
         U.registerReceiver(context, startMenuDisappearReceiver, ACTION_START_MENU_DISAPPEARING);
 
+        if(sysTrayEnabled) {
+            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            manager.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+            U.registerReceiver(context, notificationCountReceiver, ACTION_NOTIFICATION_COUNT_CHANGED);
+            U.sendBroadcast(context, ACTION_REQUEST_NOTIFICATION_COUNT);
+        }
+
         startRefreshingRecents();
 
         host.addView(layout, params);
@@ -349,6 +379,7 @@ public class TaskbarController extends UIController {
         isFirstStart = false;
     }
 
+    @SuppressLint("RtlHardcoded")
     @VisibleForTesting
     public int getTaskbarGravity(String taskbarPosition) {
         int gravity = Gravity.BOTTOM | Gravity.LEFT;
@@ -670,12 +701,12 @@ public class TaskbarController extends UIController {
             }
         }
 
+        notificationCountCircle = sysTrayLayout.findViewById(R.id.notification_count_circle);
+        notificationCountText = sysTrayLayout.findViewById(R.id.notification_count_text);
+
         sysTrayParentLayout = layout.findViewById(R.id.add_systray_here);
         sysTrayParentLayout.setVisibility(View.VISIBLE);
         sysTrayParentLayout.addView(sysTrayLayout);
-
-        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        manager.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     }
 
     private void startRefreshingRecents() {
@@ -1365,6 +1396,8 @@ public class TaskbarController extends UIController {
         if(sysTrayEnabled) {
             TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             manager.listen(listener, PhoneStateListener.LISTEN_NONE);
+
+            U.unregisterReceiver(context, notificationCountReceiver);
         }
 
         isFirstStart = true;

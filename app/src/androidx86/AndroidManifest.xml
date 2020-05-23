@@ -369,6 +369,13 @@
             <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
                        android:value="true" />
         </service>
+        <service
+            android:name=".service.NotificationCountService"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".receiver.ShowHideTaskbarReceiver"

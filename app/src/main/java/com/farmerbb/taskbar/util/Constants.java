@@ -42,12 +42,14 @@ public class Constants {
     public static final String ACTION_IMPORT_FINISHED = "com.farmerbb.taskbar.IMPORT_FINISHED";
     public static final String ACTION_KILL_HOME_ACTIVITY = "com.farmerbb.taskbar.KILL_HOME_ACTIVITY";
     public static final String ACTION_LAUNCHER_PREF_CHANGED = "com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED";
+    public static final String ACTION_NOTIFICATION_COUNT_CHANGED = "com.farmerbb.taskbar.NOTIFICATION_COUNT_CHANGED";
     public static final String ACTION_QUIT = "com.farmerbb.taskbar.QUIT";
     public static final String ACTION_RECEIVE_SETTINGS = "com.farmerbb.taskbar.RECEIVE_SETTINGS";
     public static final String ACTION_REFRESH_DESKTOP_ICONS = "com.farmerbb.taskbar.REFRESH_DESKTOP_ICONS";
     public static final String ACTION_REMOVE_DESKTOP_WALLPAPER = "com.farmerbb.taskbar.REMOVE_DESKTOP_WALLPAPER";
     public static final String ACTION_REMOVE_WIDGET_COMPLETED = "com.farmerbb.taskbar.REMOVE_WIDGET_COMPLETED";
     public static final String ACTION_REMOVE_WIDGET_REQUESTED = "com.farmerbb.taskbar.REMOVE_WIDGET_REQUESTED";
+    public static final String ACTION_REQUEST_NOTIFICATION_COUNT = "com.farmerbb.taskbar.REQUEST_NOTIFICATION_COUNT";
     public static final String ACTION_RESET_START_MENU = "com.farmerbb.taskbar.RESET_START_MENU";
     public static final String ACTION_RESTART = "com.farmerbb.taskbar.RESTART";
     public static final String ACTION_SEND_SETTINGS = "com.farmerbb.taskbar.SEND_SETTINGS";
