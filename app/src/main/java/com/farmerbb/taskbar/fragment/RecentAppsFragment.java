@@ -76,7 +76,11 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PREF_CENTERED_ICONS));
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            findPreference(PREF_NOTIFICATION_COUNT).setOnPreferenceClickListener(this);
+            if(!U.isAndroidTV(getActivity()))
+                findPreference(PREF_NOTIFICATION_COUNT).setOnPreferenceClickListener(this);
+            else
+                getPreferenceScreen().removePreference(findPreference(PREF_NOTIFICATION_COUNT));
+
             bindPreferenceSummaryToValue(findPreference(PREF_SYS_TRAY));
         } else {
             getPreferenceScreen().removePreference(findPreference(PREF_NOTIFICATION_COUNT));
@@ -216,8 +220,7 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
                 try {
                     startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
                 } catch (ActivityNotFoundException e) {
-                    showAndroidTVPermissionDialog(R.string.tb_notification_listener_instructions_tv,
-                            () -> U.showToast(getActivity(), R.string.tb_lock_device_not_supported));
+                    U.showToast(getActivity(), R.string.tb_lock_device_not_supported);
                 }
                 break;
         }

@@ -1077,6 +1077,11 @@ public class U {
         return context.getPackageManager().hasSystemFeature("org.chromium.arc");
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
+    public static boolean isAndroidTV(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK_ONLY);
+    }
+
     public static boolean isBlissOs(Context context) {
         boolean validBlissOsBuildProp = false;
 

@@ -487,6 +487,5 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string name="tb_pref_notification_count_title">Show notification count in status area</string>
     <string name="tb_pref_notification_count_description">Requires notification access</string>
-    <string name="tb_notification_listener_instructions_tv">To enable support for showing the notification count, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Notification access\" and ensure that Taskbar is enabled.</string>
 
 </resources>
