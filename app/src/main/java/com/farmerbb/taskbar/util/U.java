@@ -1716,7 +1716,9 @@ public class U {
     }
 
     public static boolean isDesktopIconsEnabled(Context context) {
-        return !canBootToFreeform(context, false) && !shouldLaunchTouchAbsorber(context);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
+                && !canBootToFreeform(context, false)
+                && !shouldLaunchTouchAbsorber(context);
     }
 
     public static boolean isSystemTrayEnabled(Context context) {

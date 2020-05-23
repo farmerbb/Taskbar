@@ -706,9 +706,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         if(!iconArrangeMode) fab.hide();
 
-        int index = isDesktopIconsEnabled ? 1 : 0;
-        layout.addView(desktopIcons, index++);
-        layout.addView(fab.view, index);
+        layout.addView(desktopIcons);
+        layout.addView(fab.view);
     }
 
     private void refreshDesktopIcons() {
