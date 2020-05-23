@@ -198,7 +198,6 @@ Daha yüksek değerler performansı düşürebilir."</string>
 <string name="tb_permission_dialog_message">"Taskbar, başlamadan önce diğer uygulamaların üzerine çizim izni gerektirir.
 
 "</string>
-<string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 <string name="tb_permission_dialog_title">İzin gereklidir</string>
 <string name="tb_pin_app">Son kullanılanlara al</string>
 <string name="tb_pin_shortcut_not_supported">"Ana ekran uygulaması, diğer uygulamalardan kısayol eklemeyi desteklemiyor.

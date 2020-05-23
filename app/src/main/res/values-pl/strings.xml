@@ -212,7 +212,6 @@ Wyższe wartości mogą zmniejszyć wydajność."</string>
 <string name="tb_permission_dialog_message">"Taskbar wymaga uprawnienia do rysowania nad innymi aplikacjami.
 
 "</string>
-<string name="tb_permission_dialog_message_alt">@string/tb_permission_dialog_message</string>
 <string name="tb_permission_dialog_title">Potrzebne jest pozwolenie</string>
 <string name="tb_pin_app">Przypnij do ostatnich</string>
 <string name="tb_pin_shortcut_not_supported">"Twój launcher nie obsługuje dodawania skrótów z innych aplikacji.
