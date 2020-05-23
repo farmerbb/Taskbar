@@ -62,11 +62,7 @@ public class DesktopModeFragment extends SettingsFragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
-
-        super.onCreate(savedInstanceState);
-
+    protected void loadPrefs() {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_desktop_mode);
 
@@ -89,8 +85,6 @@ public class DesktopModeFragment extends SettingsFragment {
         manager.registerDisplayListener(listener, null);
 
         updateAdditionalSettings();
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

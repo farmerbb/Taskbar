@@ -36,11 +36,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 public class GeneralFragment extends SettingsFragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
-
-        super.onCreate(savedInstanceState);
-
+    protected void loadPrefs() {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_general);
 
@@ -73,8 +69,6 @@ public class GeneralFragment extends SettingsFragment {
             bindPreferenceSummaryToValue(findPreference(PREF_CHROME_OS_CONTEXT_MENU_FIX));
         else
             getPreferenceScreen().removePreference(findPreference(PREF_CHROME_OS_CONTEXT_MENU_FIX));
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

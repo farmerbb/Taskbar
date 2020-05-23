@@ -42,11 +42,12 @@ import static com.farmerbb.taskbar.util.Constants.*;
 public class RecentAppsFragment extends SettingsFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
+    protected void addPrefsToSanitize() {
+        prefsToSanitize.put(PREF_SYS_TRAY, R.bool.class);
+    }
 
-        super.onCreate(savedInstanceState);
-
+    @Override
+    protected void loadPrefs() {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_recent_apps);
 
@@ -89,9 +90,6 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
 
         updateMaxNumOfRecents(false);
         updateRefreshFrequency(false);
-
-        U.sanitizePrefs(getActivity(), PREF_SYS_TRAY);
-        finishedLoadingPrefs = true;
     }
 
     @Override

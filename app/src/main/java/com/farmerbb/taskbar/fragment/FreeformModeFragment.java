@@ -51,11 +51,7 @@ public class FreeformModeFragment extends SettingsFragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
-
-        super.onCreate(savedInstanceState);
-
+    protected void loadPrefs() {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_freeform_hack);
 
@@ -108,8 +104,6 @@ public class FreeformModeFragment extends SettingsFragment {
         }
 
         U.registerReceiver(getActivity(), checkBoxReceiver, ACTION_UPDATE_FREEFORM_CHECKBOX);
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

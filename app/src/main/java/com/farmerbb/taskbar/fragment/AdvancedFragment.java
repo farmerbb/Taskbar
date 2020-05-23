@@ -34,6 +34,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Pair;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -47,6 +48,9 @@ import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.KeyboardShortcutActivity;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.U;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.farmerbb.taskbar.util.Constants.*;
 
@@ -64,11 +68,12 @@ public class AdvancedFragment extends SettingsFragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
+    protected void addPrefsToSanitize() {
+        prefsToSanitize.put(PREF_DASHBOARD, R.bool.class);
+    }
 
-        super.onCreate(savedInstanceState);
-
+    @Override
+    protected void loadPrefs() {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_advanced);
 
@@ -118,9 +123,6 @@ public class AdvancedFragment extends SettingsFragment {
             getPreferenceScreen().removePreference(findPreference(PREF_SECONDSCREEN));
 
         bindPreferenceSummaryToValue(findPreference(PREF_DASHBOARD));
-
-        U.sanitizePrefs(getActivity(), PREF_DASHBOARD);
-        finishedLoadingPrefs = true;
     }
 
     @Override

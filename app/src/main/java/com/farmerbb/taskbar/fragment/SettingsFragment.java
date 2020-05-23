@@ -27,6 +27,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -41,6 +42,9 @@ import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.farmerbb.taskbar.util.Constants.*;
 
 public abstract class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
@@ -51,9 +55,18 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
     String isModified = "_is_modified";
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("rawtypes")
+    protected Map<String, Class> prefsToSanitize = new HashMap<>();
+
+    protected void addPrefsToSanitize() {}
+
+    protected abstract void loadPrefs();
+
+    @SuppressWarnings({"deprecation", "rawtypes"})
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        finishedLoadingPrefs = false;
+
         super.onCreate(savedInstanceState);
 
         if(U.isLibrary(getActivity()))
@@ -62,6 +75,28 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
         // Set values
         setRetainInstance(true);
         setHasOptionsMenu(true);
+
+        addPrefsToSanitize();
+
+        SharedPreferences pref = U.getSharedPreferences(getActivity());
+        for(String key : prefsToSanitize.keySet()) {
+            if(pref.contains(key + "_default")) continue;
+
+            Class rClass = prefsToSanitize.get(key);
+            if(rClass == R.bool.class)
+                pref.edit().putBoolean(key + "_default", U.getBooleanPrefWithDefault(getActivity(), key)).apply();
+            else if(rClass == R.integer.class)
+                pref.edit().putInt(key + "_default", U.getIntPrefWithDefault(getActivity(), key)).apply();
+        }
+
+        loadPrefs();
+
+        for(String key : prefsToSanitize.keySet()) {
+            if(!pref.getBoolean(key + "_is_modified", false))
+                pref.edit().remove(key).apply();
+        }
+
+        finishedLoadingPrefs = true;
     }
 
     @Override

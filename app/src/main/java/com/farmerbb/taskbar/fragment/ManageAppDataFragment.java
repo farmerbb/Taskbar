@@ -41,11 +41,7 @@ public class ManageAppDataFragment extends SettingsFragment {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-kkmmss", Locale.US);
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
-
-        super.onCreate(savedInstanceState);
-
+    protected void loadPrefs() {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_manage_app_data);
 
@@ -53,8 +49,6 @@ public class ManageAppDataFragment extends SettingsFragment {
         findPreference(PREF_BACKUP_SETTINGS).setOnPreferenceClickListener(this);
         findPreference(PREF_RESTORE_SETTINGS).setOnPreferenceClickListener(this);
         findPreference(PREF_CLEAR_PINNED_APPS).setOnPreferenceClickListener(this);
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

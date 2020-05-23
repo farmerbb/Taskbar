@@ -45,11 +45,7 @@ public class AboutFragment extends SettingsFragment {
     private int noThanksCount = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
-
-        super.onCreate(savedInstanceState);
-
+    protected void loadPrefs() {
         // Add preferences
         addPreferencesFromResource(R.xml.tb_pref_base);
         addPreferencesFromResource(R.xml.tb_pref_about);
@@ -98,8 +94,6 @@ public class AboutFragment extends SettingsFragment {
                 findPreference(PREF_ABOUT).setOnPreferenceClickListener(this);
             }
         }
-
-        finishedLoadingPrefs = true;
     }
 
     @Override

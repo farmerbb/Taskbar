@@ -230,7 +230,6 @@ public class TaskbarControllerTest {
         LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(layoutId, null);
         FrameLayout dashboardButton = layout.findViewById(R.id.dashboard_button);
 
-        prefs.edit().putBoolean(PREF_DASHBOARD + "_is_modified", true).apply();
         prefs.edit().putBoolean(PREF_DASHBOARD, false).apply();
         boolean dashboardEnabled =
                 uiController.drawDashboardButton(context, layout, dashboardButton, accentColor);

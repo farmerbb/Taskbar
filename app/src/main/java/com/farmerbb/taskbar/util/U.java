@@ -2000,31 +2000,24 @@ public class U {
 
     public static boolean getBooleanPrefWithDefault(Context context, String key) {
         context = getDisplayContext(context);
-        int resId = getDefaultPrefResID(context, key, R.bool.class);
+        int resId = getDefaultPrefResID(key, R.bool.class);
 
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getBoolean(key, context.getResources().getBoolean(resId));
+        boolean def = pref.getBoolean(key + "_default", context.getResources().getBoolean(resId));
+        return pref.getBoolean(key, def);
     }
 
     public static int getIntPrefWithDefault(Context context, String key) {
         context = getDisplayContext(context);
-        int resId = getDefaultPrefResID(context, key, R.integer.class);
+        int resId = getDefaultPrefResID(key, R.integer.class);
 
         SharedPreferences pref = getSharedPreferences(context);
-        return pref.getInt(key, context.getResources().getInteger(resId));
-    }
-
-    public static void sanitizePrefs(Context context, String... keys) {
-        SharedPreferences pref = getSharedPreferences(context);
-
-        for(String key : keys) {
-            if(!pref.getBoolean(key + "_is_modified", false))
-                pref.edit().remove(key).apply();
-        }
+        int def = pref.getInt(key + "_default", context.getResources().getInteger(resId));
+        return pref.getInt(key, def);
     }
 
     @SuppressWarnings("rawtypes")
-    private static int getDefaultPrefResID(Context context, String key, Class rClass) {
+    private static int getDefaultPrefResID(String key, Class rClass) {
         int resId;
 
         try {
@@ -2035,7 +2028,6 @@ public class U {
             return 0;
         }
 
-        sanitizePrefs(context, key);
         return resId;
     }
 

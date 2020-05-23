@@ -15,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.provider.Settings;
-import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
@@ -56,7 +55,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static org.robolectric.util.ReflectionHelpers.ClassParameter.from;
 
 import static com.farmerbb.taskbar.util.Constants.*;
@@ -80,7 +78,8 @@ public class UTest {
     public void testShowPermissionDialogWithAndroidTVSettings() throws Exception {
         testShowPermissionDialog(
                 true,
-                R.string.tb_permission_dialog_message_alt,
+                context.getResources().getString(R.string.tb_permission_dialog_message)
+                        + context.getResources().getString(R.string.tb_permission_dialog_instructions_tv),
                 R.string.tb_action_open_settings
         );
     }
@@ -89,13 +88,14 @@ public class UTest {
     public void testShowPermissionDialogNormal() throws Exception {
         testShowPermissionDialog(
                 false,
-                R.string.tb_permission_dialog_message,
+                context.getResources().getString(R.string.tb_permission_dialog_message)
+                        + context.getResources().getString(R.string.tb_permission_dialog_instructions_phone),
                 R.string.tb_action_grant_permission
         );
     }
 
     private void testShowPermissionDialog(boolean hasAndroidTVSettings,
-                                          int messageResId,
+                                          String message,
                                           int buttonTextResId) throws Exception {
         RunnableHooker onError = new RunnableHooker();
         RunnableHooker onFinish = new RunnableHooker();
@@ -108,7 +108,7 @@ public class UTest {
                 resources.getString(R.string.tb_permission_dialog_title),
                 shadowDialog.getTitle()
         );
-        assertEquals(resources.getString(messageResId), shadowDialog.getMessage());
+        assertEquals(message, shadowDialog.getMessage());
         Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         assertEquals(resources.getString(buttonTextResId), positiveButton.getText());
         assertFalse(shadowDialog.isCancelable());
@@ -524,7 +524,6 @@ public class UTest {
         float initialSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context));
         SharedPreferences prefs = U.getSharedPreferences(context);
-        prefs.edit().putBoolean(PREF_DASHBOARD + "_is_modified", true).apply();
         prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
         float dashboardButtonSize =
                 context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
@@ -884,7 +883,6 @@ public class UTest {
     public void testIsSystemTrayEnabledForMAndAboveVersion() {
         SharedPreferences prefs = U.getSharedPreferences(context);
         assertFalse(U.isSystemTrayEnabled(context));
-        prefs.edit().putBoolean(PREF_SYS_TRAY + "_is_modified", true).apply();
         prefs.edit().putBoolean(PREF_SYS_TRAY, true).apply();
         assertTrue(U.isSystemTrayEnabled(context));
         prefs.edit().putBoolean(PREF_FULL_LENGTH, false).apply();

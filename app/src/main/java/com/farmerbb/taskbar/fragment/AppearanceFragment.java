@@ -44,11 +44,7 @@ public class AppearanceFragment extends SettingsFragment {
     private enum ColorPickerType { BACKGROUND_TINT, ACCENT_COLOR }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        finishedLoadingPrefs = false;
-
-        super.onCreate(savedInstanceState);
-
+    protected void loadPrefs() {
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getString(PREF_START_BUTTON_IMAGE, "null").equals("null"))
             pref.edit().putString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(getActivity())).apply();
@@ -76,8 +72,6 @@ public class AppearanceFragment extends SettingsFragment {
 
         findPreference(PREF_BACKGROUND_TINT_PREF).setSummary("#" + String.format("%08x", U.getBackgroundTint(getActivity())).toUpperCase());
         findPreference(PREF_ACCENT_COLOR_PREF).setSummary("#" + String.format("%08x", U.getAccentColor(getActivity())).toUpperCase());
-
-        finishedLoadingPrefs = true;
     }
 
     @Override
