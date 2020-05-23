@@ -15,7 +15,6 @@
 
 package com.farmerbb.taskbar.service;
 
-import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +26,6 @@ import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
 
-@TargetApi(Build.VERSION_CODES.N)
 public class NotificationCountService extends NotificationListenerService {
 
     private BroadcastReceiver requestCountReceiver = new BroadcastReceiver() {
