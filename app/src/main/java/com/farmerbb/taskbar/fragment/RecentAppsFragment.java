@@ -112,7 +112,8 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
                 try {
                     startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                 } catch (ActivityNotFoundException e) {
-                    U.showErrorDialog(getActivity(), "GET_USAGE_STATS");
+                    showAndroidTVPermissionDialog(R.string.tb_enable_recent_apps_instructions_tv,
+                            () -> U.showErrorDialog(getActivity(), "GET_USAGE_STATS"));
                 }
                 break;
             case PREF_MAX_NUM_OF_RECENTS:
@@ -215,7 +216,8 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
                 try {
                     startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
                 } catch (ActivityNotFoundException e) {
-                    U.showToast(getActivity(), R.string.tb_lock_device_not_supported);
+                    showAndroidTVPermissionDialog(R.string.tb_notification_listener_instructions_tv,
+                            () -> U.showToast(getActivity(), R.string.tb_lock_device_not_supported));
                 }
                 break;
         }
@@ -295,5 +297,27 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
 
     private boolean showRunningAppsOnly() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && U.isSystemApp(getActivity());
+    }
+
+    private void showAndroidTVPermissionDialog(int message, Runnable onError) {
+        if(!U.hasAndroidTVSettings(getActivity())) {
+            onError.run();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.tb_permission_dialog_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.tb_action_open_settings, (dialog, which) -> {
+                    try {
+                        startActivity(new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS));
+                    } catch (ActivityNotFoundException e) {
+                        onError.run();
+                    }
+                })
+                .setNegativeButton(R.string.tb_action_cancel, null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -55,14 +55,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 
 import androidx.annotation.DimenRes;
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
@@ -1756,7 +1754,7 @@ public class U {
         return false;
     }
 
-    private static boolean hasAndroidTVSettings(Context context) {
+    public static boolean hasAndroidTVSettings(Context context) {
         return getInstalledPackage(context, "com.android.tv.settings") != null
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
     }
