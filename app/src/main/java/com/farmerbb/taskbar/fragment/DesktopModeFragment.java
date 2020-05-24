@@ -45,6 +45,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 public class DesktopModeFragment extends SettingsFragment {
 
     public static boolean isConfiguringHomeApp;
+    private boolean isConfiguringDeveloperOptions;
 
     private boolean updateAdditionalSettings;
 
@@ -107,11 +108,6 @@ public class DesktopModeFragment extends SettingsFragment {
     public void onResume() {
         super.onResume();
 
-        if(showReminderToast) {
-            showReminderToast = false;
-            desktopModeSetupComplete();
-        }
-
         if(updateAdditionalSettings) {
             updateAdditionalSettings = false;
             updateAdditionalSettings();
@@ -119,7 +115,26 @@ public class DesktopModeFragment extends SettingsFragment {
 
         if(isConfiguringHomeApp) {
             isConfiguringHomeApp = false;
-            startStopDesktopMode(true);
+
+            if(showReminderToast) {
+                showReminderToast = false;
+                desktopModeSetupComplete();
+            } else
+                startStopDesktopMode(true);
+        }
+
+        if(isConfiguringDeveloperOptions && !isConfiguringHomeApp) {
+            isConfiguringDeveloperOptions = false;
+
+            boolean desktopModeEnabled = U.isDesktopModePrefEnabled(getActivity());
+            ((CheckBoxPreference) findPreference(PREF_DESKTOP_MODE)).setChecked(desktopModeEnabled);
+
+            handleDesktopModePrefChange(desktopModeEnabled);
+
+            if(desktopModeEnabled) {
+                showReminderToast = true;
+                configureHomeApp();
+            }
         }
 
         Preference primaryLauncherPref = findPreference(PREF_PRIMARY_LAUNCHER);
@@ -167,14 +182,12 @@ public class DesktopModeFragment extends SettingsFragment {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle(R.string.tb_desktop_mode_dialog_title)
-                                .setMessage(R.string.tb_freeform_dialog_message)
+                                .setMessage(R.string.tb_desktop_mode_dialog_message)
                                 .setPositiveButton(R.string.tb_action_developer_options, (dialogInterface, i) -> {
-                                    showReminderToast = true;
-
                                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
                                     try {
                                         startActivity(intent);
-                                        U.showToastLong(getActivity(), R.string.tb_enable_desktop_mode);
+                                        isConfiguringDeveloperOptions = true;
                                     } catch (ActivityNotFoundException e1) {
                                         intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
                                         try {
@@ -190,20 +203,10 @@ public class DesktopModeFragment extends SettingsFragment {
                     }
                 }
 
-                U.setComponentEnabled(getActivity(), SecondaryHomeActivity.class, isChecked);
-                U.setComponentEnabled(getActivity(), HSLActivity.class, isChecked);
-                startStopDesktopMode(isChecked);
-                updateAdditionalSettings(isChecked);
-
+                handleDesktopModePrefChange(isChecked);
                 break;
             case PREF_SET_LAUNCHER_DEFAULT:
-                try {
-                    startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
-                    isConfiguringHomeApp = true;
-                } catch (ActivityNotFoundException e) {
-                    U.showToastLong(getActivity(), R.string.tb_unable_to_set_default_home);
-                }
-
+                configureHomeApp();
                 break;
             case PREF_PRIMARY_LAUNCHER:
                 Intent intent = new Intent(getActivity(), HSLConfigActivity.class);
@@ -291,6 +294,23 @@ public class DesktopModeFragment extends SettingsFragment {
             densityPref.setSummary(getString(R.string.tb_density_custom, info.currentDensity));
 
         finishedLoadingPrefs = true;
+    }
+
+    private void handleDesktopModePrefChange(boolean isChecked) {
+        U.setComponentEnabled(getActivity(), SecondaryHomeActivity.class, isChecked);
+        U.setComponentEnabled(getActivity(), HSLActivity.class, isChecked);
+        startStopDesktopMode(isChecked);
+        updateAdditionalSettings(isChecked);
+    }
+
+    private void configureHomeApp() {
+        try {
+            startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+            isConfiguringHomeApp = true;
+        } catch (ActivityNotFoundException e) {
+            U.showToastLong(getActivity(), R.string.tb_unable_to_set_default_home);
+            showReminderToast = false;
+        }
     }
 
     private void desktopModeSetupComplete() {

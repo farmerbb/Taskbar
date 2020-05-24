@@ -157,9 +157,7 @@ public class FreeformModeFragment extends SettingsFragment {
                                         .setMessage(R.string.tb_freeform_dialog_message_alt)
                                         .setPositiveButton(R.string.tb_action_continue, (dialogInterface, i) -> freeformSetupComplete());
                             } else {
-                                String settingName = Build.VERSION.SDK_INT > Build.VERSION_CODES.P
-                                        ? getString(R.string.tb_enable_freeform_windows)
-                                        : getString(R.string.tb_force_activities_resizable);
+                                String settingName = getString(R.string.tb_force_activities_resizable);
 
                                 builder.setTitle(R.string.tb_freeform_dialog_title)
                                         .setMessage(getString(R.string.tb_freeform_dialog_message, settingName))

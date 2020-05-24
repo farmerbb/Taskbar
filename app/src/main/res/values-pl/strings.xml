@@ -89,7 +89,6 @@ Taskbar jest i zawsze będzie w 100%% darmowy, open source, bez reklam. Jednak w
 <string name="tb_enable_developer_options">Włącz opcje programisty, stukając wersję 7 razy</string>
 <string name="tb_enable_double_tap_to_sleep">Włączyć dwukrotne stuknięcie w  tryb uśpienia?</string>
 <string name="tb_enable_force_activities_resizable">Przewiń do dołu i włącz \"%s\"</string>
-<string name="tb_enable_freeform_windows">Włącz okienka freeform</string>
 <string name="tb_enable_recent_apps">"Na pasku zadań można opcjonalnie wyświetlać ikony ostatnio używanych aplikacji wzdłuż krawędzi ekranu. W tym celu Taskbar wymaga uprawnień dostępu do użytkowania.
 
 "</string>
@@ -486,5 +485,12 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string name="tb_pref_notification_count_title">Show notification count in status area</string>
     <string name="tb_pref_notification_count_description">Requires notification access</string>
+
+    <string name="tb_desktop_mode_dialog_title">Enable desktop mode support</string>
+    <string name="tb_desktop_mode_dialog_message">To configure your device for desktop mode, please follow these steps:\n\n&#8226; Go to Developer Options\n\n&#8226; Scroll to the bottom and turn on \"Enable freeform windows\" and \"Force desktop mode\"\n\n&#8226; Set Taskbar as your default home app\n\n&#8226; Reboot your device</string>
+    <string name="tb_reboot_required_alt">Reboot your device to complete desktop mode setup</string>
+    <string name="tb_enable_additional_settings_message">Taskbar can optionally use elevated permissions to improve your desktop mode experience. These permissions are granted by running an adb shell command.\n\nIf you wish to continue, connect your device to a computer with the Android SDK installed, and run the following command (one line):</string>
+    <string name="tb_desktop_mode_pref_description">Use Taskbar to launch windowed apps on an external display, similar to Samsung DeX and other solutions.\n\nRequires either a USB-to-HDMI adapter, or a lapdock, and a device that supports video output.</string>
+    <string name="tb_enable_additional_settings_pref_description">Requires adb shell access &#8211; tap for more info</string>
 
 </resources>

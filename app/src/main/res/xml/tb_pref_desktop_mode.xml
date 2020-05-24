@@ -19,7 +19,8 @@
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="desktop_mode"
-        android:title="@string/tb_pref_header_desktop_mode"/>
+        android:title="@string/tb_pref_header_desktop_mode"
+        android:summary="@string/tb_desktop_mode_pref_description"/>
 
     <Preference
         android:key="set_launcher_default"
@@ -45,6 +46,7 @@
         <Preference
             android:key="enable_additional_settings"
             android:title="@string/tb_enable_additional_settings"
+            android:summary="@string/tb_enable_additional_settings_pref_description"
             android:dependency="desktop_mode"/>
 
         <ListPreference
