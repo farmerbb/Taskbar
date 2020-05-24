@@ -109,6 +109,7 @@
         <item name="colorPrimary">@color/tb_colorPrimary</item>
         <item name="colorPrimaryDark">@color/tb_colorPrimaryDark</item>
         <item name="colorAccent">@color/tb_colorAccent</item>
+        <item name="android:textColor">@color/tb_text_color</item>
         <item name="android:windowMinWidthMajor">95%</item>
         <item name="android:windowMinWidthMinor">95%</item>
     </style>
@@ -117,6 +118,7 @@
         <item name="colorPrimary">@color/tb_colorPrimary</item>
         <item name="colorPrimaryDark">@color/tb_colorPrimaryDark</item>
         <item name="colorAccent">@color/tb_colorAccent</item>
+        <item name="android:textColor">@color/tb_text_color_dark</item>
         <item name="android:windowMinWidthMajor">95%</item>
         <item name="android:windowMinWidthMinor">95%</item>
     </style>
