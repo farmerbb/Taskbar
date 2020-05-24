@@ -33,9 +33,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textSize="16sp"
-                android:text="@string/tb_enable_additional_settings_message"/>
+                android:text="@string/tb_enable_additional_settings_message_1"/>
 
             <TextView
                 android:id="@+id/adb_shell_command"
@@ -46,6 +48,15 @@
                 android:textSize="12sp"
                 android:fontFamily="monospace"
                 android:textIsSelectable="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textSize="16sp"
+                android:text="@string/tb_enable_additional_settings_message_2"/>
 
         </LinearLayout>
 
