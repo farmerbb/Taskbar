@@ -1785,7 +1785,7 @@ public class U {
                 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_ACTIVITIES_ON_SECONDARY_DISPLAYS);
     }
 
-    public static boolean isDesktopModeActive(Context context) {
+    public static boolean isDesktopModePrefEnabled(Context context) {
         if(!isDesktopModeSupported(context) || !hasFreeformSupport(context))
             return false;
 
@@ -1797,7 +1797,11 @@ public class U {
             desktopModePrefEnabled = false;
         }
 
-        return desktopModePrefEnabled && getExternalDisplayID(context) != Display.DEFAULT_DISPLAY;
+        return desktopModePrefEnabled;
+    }
+
+    public static boolean isDesktopModeActive(Context context) {
+        return isDesktopModePrefEnabled(context) && getExternalDisplayID(context) != Display.DEFAULT_DISPLAY;
     }
 
     private static Display getExternalDisplay(Context context) {

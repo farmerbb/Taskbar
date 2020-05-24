@@ -470,4 +470,10 @@
     <string name="tb_pref_notification_count_title">Show notification count in status area</string>
     <string name="tb_pref_notification_count_description">Requires notification access</string>
 
+    <string name="tb_desktop_mode_dialog_title">Enable desktop mode support</string>
+    <string name="tb_desktop_mode_dialog_message">In order for Taskbar to support desktop mode, please follow these steps:\n\n&#8226; Go to Developer Options\n\n&#8226; Scroll to the bottom and turn on \"Enable freeform windows\" and \"Force desktop mode\"\n\n&#8226; Reboot your device</string>
+    <string name="tb_enable_desktop_mode">Scroll to the bottom and turn on \"Enable freeform support\" and \"Force desktop mode\"</string>
+    <string name="tb_reboot_required_alt">Reboot your device to complete desktop mode setup</string>
+    <string name="tb_enable_additional_settings_message">Taskbar can optionally use elevated permissions to improve your desktop mode experience. These permissions are granted by running an adb shell command.\n\nIf you wish to continue, connect your device to a computer with the Android SDK installed, and run the following command (one line):</string>
+
 </resources>

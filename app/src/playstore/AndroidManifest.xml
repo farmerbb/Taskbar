@@ -370,6 +370,12 @@
             android:theme="@style/Taskbar.DimScreenActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.EnableAdditionalSettingsActivity"
+            android:theme="@style/Taskbar.Dialog.FullWidth"/>
+        <activity
+            android:name=".activity.dark.EnableAdditionalSettingsActivityDark"
+            android:theme="@style/Taskbar.Dialog.FullWidth.Dark"/>
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>

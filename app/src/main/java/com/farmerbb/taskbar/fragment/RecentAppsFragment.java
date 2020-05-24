@@ -77,10 +77,10 @@ public class RecentAppsFragment extends SettingsFragment implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PREF_CENTERED_ICONS));
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(!U.isAndroidTV(getActivity()))
-                findPreference(PREF_NOTIFICATION_COUNT).setOnPreferenceClickListener(this);
-            else
+            if(U.isAndroidTV(getActivity()))
                 getPreferenceScreen().removePreference(findPreference(PREF_NOTIFICATION_COUNT));
+            else
+                findPreference(PREF_NOTIFICATION_COUNT).setOnPreferenceClickListener(this);
 
             bindPreferenceSummaryToValue(findPreference(PREF_SYS_TRAY));
         } else {

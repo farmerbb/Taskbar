@@ -28,9 +28,11 @@ import android.preference.Preference;
 import android.provider.Settings;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.EnableAdditionalSettingsActivity;
 import com.farmerbb.taskbar.activity.HSLActivity;
 import com.farmerbb.taskbar.activity.HSLConfigActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
@@ -43,6 +45,8 @@ import static com.farmerbb.taskbar.util.Constants.*;
 public class DesktopModeFragment extends SettingsFragment {
 
     public static boolean isConfiguringHomeApp;
+
+    private boolean updateAdditionalSettings;
 
     private DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
         @Override
@@ -71,6 +75,7 @@ public class DesktopModeFragment extends SettingsFragment {
         findPreference(PREF_SET_LAUNCHER_DEFAULT).setOnPreferenceClickListener(this);
         findPreference(PREF_PRIMARY_LAUNCHER).setOnPreferenceClickListener(this);
         findPreference(PREF_DIM_SCREEN).setOnPreferenceClickListener(this);
+        findPreference(PREF_ENABLE_ADDITIONAL_SETTINGS).setOnPreferenceClickListener(this);
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean(PREF_LAUNCHER, false)) {
@@ -102,10 +107,20 @@ public class DesktopModeFragment extends SettingsFragment {
     public void onResume() {
         super.onResume();
 
-        if(isConfiguringHomeApp)
-            startStopDesktopMode(true);
+        if(showReminderToast) {
+            showReminderToast = false;
+            desktopModeSetupComplete();
+        }
 
-        isConfiguringHomeApp = false;
+        if(updateAdditionalSettings) {
+            updateAdditionalSettings = false;
+            updateAdditionalSettings();
+        }
+
+        if(isConfiguringHomeApp) {
+            isConfiguringHomeApp = false;
+            startStopDesktopMode(true);
+        }
 
         Preference primaryLauncherPref = findPreference(PREF_PRIMARY_LAUNCHER);
         if(primaryLauncherPref != null) {
@@ -141,6 +156,40 @@ public class DesktopModeFragment extends SettingsFragment {
             case PREF_DESKTOP_MODE:
                 boolean isChecked = ((CheckBoxPreference) p).isChecked();
 
+                if(isChecked && !U.isDesktopModePrefEnabled(getActivity())) {
+                    try {
+                        Settings.Global.putInt(getActivity().getContentResolver(), "enable_freeform_support", 1);
+                        Settings.Global.putInt(getActivity().getContentResolver(), "force_desktop_mode_on_external_displays", 1);
+                        U.showToastLong(getActivity(), R.string.tb_reboot_required);
+                    } catch (Exception e) {
+                        ((CheckBoxPreference) p).setChecked(false);
+                        isChecked = false;
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.tb_desktop_mode_dialog_title)
+                                .setMessage(R.string.tb_freeform_dialog_message)
+                                .setPositiveButton(R.string.tb_action_developer_options, (dialogInterface, i) -> {
+                                    showReminderToast = true;
+
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+                                    try {
+                                        startActivity(intent);
+                                        U.showToastLong(getActivity(), R.string.tb_enable_desktop_mode);
+                                    } catch (ActivityNotFoundException e1) {
+                                        intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                                        try {
+                                            startActivity(intent);
+                                            U.showToastLong(getActivity(), R.string.tb_enable_developer_options);
+                                        } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
+                                    }
+                                });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.setCancelable(false);
+                    }
+                }
+
                 U.setComponentEnabled(getActivity(), SecondaryHomeActivity.class, isChecked);
                 U.setComponentEnabled(getActivity(), HSLActivity.class, isChecked);
                 startStopDesktopMode(isChecked);
@@ -172,6 +221,10 @@ public class DesktopModeFragment extends SettingsFragment {
                 if(!((CheckBoxPreference) p).isChecked())
                     U.sendBroadcast(getActivity(), ACTION_FINISH_DIM_SCREEN_ACTIVITY);
 
+                break;
+            case PREF_ENABLE_ADDITIONAL_SETTINGS:
+                updateAdditionalSettings = true;
+                startActivity(U.getThemedIntent(getActivity(), EnableAdditionalSettingsActivity.class));
                 break;
         }
 
@@ -238,5 +291,15 @@ public class DesktopModeFragment extends SettingsFragment {
             densityPref.setSummary(getString(R.string.tb_density_custom, info.currentDensity));
 
         finishedLoadingPrefs = true;
+    }
+
+    private void desktopModeSetupComplete() {
+        boolean desktopModeEnabled = U.isDesktopModePrefEnabled(getActivity());
+        ((CheckBoxPreference) findPreference(PREF_DESKTOP_MODE)).setChecked(desktopModeEnabled);
+
+        if(desktopModeEnabled)
+            U.showToastLong(getActivity(), R.string.tb_reboot_required_alt);
+
+        updateAdditionalSettings();
     }
 }

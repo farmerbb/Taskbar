@@ -121,6 +121,7 @@ public class Constants {
     public static final String PREF_DONT_STOP_DASHBOARD = "dont_stop_dashboard";
     public static final String PREF_DOUBLE_TAP_DIALOG_SHOWN = "double_tap_dialog_shown";
     public static final String PREF_DOUBLE_TAP_TO_SLEEP = "double_tap_to_sleep";
+    public static final String PREF_ENABLE_ADDITIONAL_SETTINGS = "enable_additional_settings";
     public static final String PREF_ENABLE_RECENTS = "enable_recents";
     public static final String PREF_FILE_MANAGER = "file_manager";
     public static final String PREF_FIRST_RUN = "first_run";
