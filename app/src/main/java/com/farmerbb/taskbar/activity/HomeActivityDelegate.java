@@ -258,7 +258,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     DisplayInfo display = U.getDisplayInfo(HomeActivityDelegate.this);
-                    wallpaperManager.suggestDesiredDimensions(display.width, display.height);
+                    if(display.width > 0 && display.height > 0)
+                        wallpaperManager.suggestDesiredDimensions(display.width, display.height);
                 }
 
                 boolean shouldStartFreeformHack = shouldDelayFreeformHack && hits > 0;
