@@ -26,7 +26,9 @@ On Android 9+ devices, Taskbar now respects the system theme setting, automatica
 
 ### Improved Android TV and Chrome OS support
 
-On Android TV 9+ devices like the Nvidia Shield, Taskbar will now guide you to the Android TV settings app for enabling crucial settings like displaying over other apps and usage access.  Certain app settings that weren't supported on Android TV or Chrome OS were removed on those devices.  The "Replace home screen" feature has also been improved for Chrome OS (though it still can't actually replace your home screen on those devices)
+On Android TV 9+ devices like the Nvidia Shield, Taskbar will now guide you to the Android TV settings app for enabling crucial settings like displaying over other apps and usage access.  (Note that Taskbar still needs to be sideloaded on Android TV devices)
+
+Certain app settings that weren't supported on Android TV or Chrome OS were removed on those devices.  The "Replace home screen" feature has also been improved for Chrome OS (though it still can't actually replace your home screen on those devices)
 
 ### New and updated translations
 
@@ -36,4 +38,4 @@ A Polish translation has been added, along with updated Chinese and German trans
 
 A new setting has been added to display a notification count in the status icon area (system tray).  There is also a new option to hide app labels on the start menu and desktop.  Apps that launch in a phone-sized freeform window will now launch in landscape if requested by the app.
 
-Additionally, many bug fixes and under-the-hood improvements have been done, keeping Taskbar maintained for the future!
+Finally, many bug fixes and under-the-hood improvements have been made, keeping Taskbar well maintained for the future!
