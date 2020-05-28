@@ -22,18 +22,18 @@ Taskbar now allows you to backup and restore your app settings, allowing you to 
 
 ### System theme support
 
-On Android 9+ devices, Taskbar now respects the system theme setting, automatically switching between light and dark mode along with the rest of the system.  For Android 10 and higher, the "Dark theme" setting is followed; on Android 9, the "Night mode" developer option is used instead.
+On Android 9+ devices, Taskbar now respects the system theme setting, automatically switching between light and dark mode along with the rest of the system.  For Android 10 and higher, the "Dark theme" system setting is followed; on Android 9, the "Night mode" developer option is used instead.
 
 ### Improved Android TV and Chrome OS support
 
-On Android TV 9+ devices like the Nvidia Shield, Taskbar will now guide you to the Android TV settings app for enabling crucial settings like displaying over other apps and usage access.  Additionally, certain app settings that weren't supported on Android TV or Chrome OS were removed on those devices.
+On Android TV 9+ devices like the Nvidia Shield, Taskbar will now guide you to the Android TV settings app for enabling crucial settings like displaying over other apps and usage access.  Certain app settings that weren't supported on Android TV or Chrome OS were removed on those devices.  The "Replace home screen" feature has also been improved for Chrome OS (though it still can't actually replace your home screen on those devices)
 
 ### New and updated translations
 
-A Polish translation has been added, along with updated Chinese and German translations.  Huge thank you to everyone that has contributed to translating the app!
+A Polish translation has been added, along with updated Chinese and German translations.  Huge thanks to everyone that has contributed to translating the app!
 
 ### Miscellaneous features and improvements
 
-New settings have been added to display a notification count in the status icon area (system tray).  There is also a new option to hide app labels on the start menu and desktop.  Apps that launch in a phone-sized freeform window will now launch in landscape if requested by the app.
+A new setting has been added to display a notification count in the status icon area (system tray).  There is also a new option to hide app labels on the start menu and desktop.  Apps that launch in a phone-sized freeform window will now launch in landscape if requested by the app.
 
-Additionally, many bug fixes and under-the-hood improvements have been done to help keep Taskbar well maintained for the future!
+Additionally, many bug fixes and under-the-hood improvements have been done, keeping Taskbar maintained for the future!
