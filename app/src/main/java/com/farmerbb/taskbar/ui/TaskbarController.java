@@ -890,18 +890,7 @@ public class TaskbarController extends UIController {
                     usageStatsList6 = usageStatsList5;
 
                 // Determine if we need to reverse the order
-                boolean needToReverseOrder;
-                switch(TaskbarPosition.getTaskbarPosition(context)) {
-                    case POSITION_BOTTOM_RIGHT:
-                    case POSITION_TOP_RIGHT:
-                        needToReverseOrder = sortOrder.contains("false");
-                        break;
-                    default:
-                        needToReverseOrder = sortOrder.contains("true");
-                        break;
-                }
-
-                if(needToReverseOrder) {
+                if(needToReverseOrder(context, sortOrder)) {
                     Collections.reverse(usageStatsList6);
                 }
 
@@ -1167,6 +1156,17 @@ public class TaskbarController extends UIController {
 
         if (shouldRefreshRecents) {
             scrollView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @VisibleForTesting
+    public boolean needToReverseOrder(Context context, String sortOrder) {
+        switch(TaskbarPosition.getTaskbarPosition(context)) {
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_TOP_RIGHT:
+                return sortOrder.contains("false");
+            default:
+                return sortOrder.contains("true");
         }
     }
 

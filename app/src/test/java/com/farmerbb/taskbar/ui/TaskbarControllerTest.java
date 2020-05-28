@@ -19,6 +19,7 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
+import com.farmerbb.taskbar.mockito.StringAnswer;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
@@ -35,6 +36,9 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
@@ -461,6 +465,50 @@ public class TaskbarControllerTest {
         uiController.scrollTaskbar(scrollView, taskbar, taskbarPosition, "false", true);
         assertEquals(taskbarWidth, scrollView.getScrollX());
         assertEquals(taskbarHeight, scrollView.getScrollY());
+    }
+
+    @Test
+    public void testNeedToReverseOrder() {
+        PowerMockito.spy(TaskbarPosition.class);
+        StringAnswer positionAnswer = new StringAnswer();
+        when(TaskbarPosition.getTaskbarPosition(context)).thenAnswer(positionAnswer);
+
+        List<String> positions = new ArrayList<>();
+        positions.add(POSITION_BOTTOM_LEFT);
+        positions.add(POSITION_BOTTOM_RIGHT);
+        positions.add(POSITION_BOTTOM_VERTICAL_LEFT);
+        positions.add(POSITION_BOTTOM_VERTICAL_RIGHT);
+        positions.add(POSITION_TOP_LEFT);
+        positions.add(POSITION_TOP_RIGHT);
+        positions.add(POSITION_TOP_VERTICAL_LEFT);
+        positions.add(POSITION_TOP_VERTICAL_RIGHT);
+        positions.add("unsupported");
+
+        String sortOrder = "false";
+        for (String position : positions) {
+            positionAnswer.answer = position;
+            if (POSITION_BOTTOM_RIGHT.equals(position) || POSITION_TOP_RIGHT.equals(position)) {
+                assertTrue(uiController.needToReverseOrder(context, sortOrder));
+            } else {
+                assertFalse(uiController.needToReverseOrder(context, sortOrder));
+            }
+        }
+
+        sortOrder = "true";
+        for (String position : positions) {
+            positionAnswer.answer = position;
+            if (POSITION_BOTTOM_RIGHT.equals(position) || POSITION_TOP_RIGHT.equals(position)) {
+                assertFalse(uiController.needToReverseOrder(context, sortOrder));
+            } else {
+                assertTrue(uiController.needToReverseOrder(context, sortOrder));
+            }
+        }
+
+        sortOrder = "unsupported";
+        for (String position : positions) {
+            positionAnswer.answer = position;
+            assertFalse(uiController.needToReverseOrder(context, sortOrder));
+        }
     }
 
     private void checkDrawableBackgroundColor(Drawable drawable, int color) {
