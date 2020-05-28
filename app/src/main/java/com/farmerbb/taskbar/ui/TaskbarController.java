@@ -853,29 +853,7 @@ public class TaskbarController extends UIController {
                 }
 
                 // Filter out the currently running foreground app, if requested by the user
-                if(pref.getBoolean(PREF_HIDE_FOREGROUND, false)) {
-                    UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-                    UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
-                    UsageEvents.Event eventCache = new UsageEvents.Event();
-                    String currentForegroundApp = null;
-
-                    while(events.hasNextEvent()) {
-                        events.getNextEvent(eventCache);
-
-                        if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-                            if(!(eventCache.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
-                                    && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())
-                                    && !eventCache.getClassName().equals(HomeActivity.class.getCanonicalName())
-                                    && !eventCache.getClassName().equals(HomeActivityDelegate.class.getCanonicalName())
-                                    && !eventCache.getClassName().equals(SecondaryHomeActivity.class.getCanonicalName())
-                                    && !eventCache.getClassName().equals(InvisibleActivityFreeform.class.getCanonicalName())))
-                                currentForegroundApp = eventCache.getPackageName();
-                        }
-                    }
-
-                    if(!applicationIdsToRemove.contains(currentForegroundApp))
-                        applicationIdsToRemove.add(currentForegroundApp);
-                }
+                filterForegroundApp(context, pref, searchInterval, applicationIdsToRemove);
 
                 for(AppEntry stats : usageStatsList4) {
                     if(!applicationIdsToRemove.contains(stats.getPackageName())) {
@@ -890,18 +868,7 @@ public class TaskbarController extends UIController {
                     usageStatsList6 = usageStatsList5;
 
                 // Determine if we need to reverse the order
-                boolean needToReverseOrder;
-                switch(TaskbarPosition.getTaskbarPosition(context)) {
-                    case POSITION_BOTTOM_RIGHT:
-                    case POSITION_TOP_RIGHT:
-                        needToReverseOrder = sortOrder.contains("false");
-                        break;
-                    default:
-                        needToReverseOrder = sortOrder.contains("true");
-                        break;
-                }
-
-                if(needToReverseOrder) {
+                if(needToReverseOrder(context, sortOrder)) {
                     Collections.reverse(usageStatsList6);
                 }
 
@@ -1167,6 +1134,51 @@ public class TaskbarController extends UIController {
 
         if (shouldRefreshRecents) {
             scrollView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @VisibleForTesting
+    public void filterForegroundApp(Context context,
+                                    SharedPreferences pref,
+                                    long searchInterval,
+                                    List<String> applicationIdsToRemove) {
+        if (pref.getBoolean(PREF_HIDE_FOREGROUND, false)) {
+            UsageStatsManager mUsageStatsManager =
+                    (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+            UsageEvents events =
+                    mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
+            UsageEvents.Event eventCache = new UsageEvents.Event();
+            String currentForegroundApp = null;
+
+            while (events.hasNextEvent()) {
+                events.getNextEvent(eventCache);
+
+                if (eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                    if (!(eventCache.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
+                            && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())
+                            && !eventCache.getClassName().equals(HomeActivity.class.getCanonicalName())
+                            && !eventCache.getClassName().equals(HomeActivityDelegate.class.getCanonicalName())
+                            && !eventCache.getClassName().equals(SecondaryHomeActivity.class.getCanonicalName())
+                            && !eventCache.getClassName().equals(InvisibleActivityFreeform.class.getCanonicalName()))) {
+                        currentForegroundApp = eventCache.getPackageName();
+                    }
+                }
+            }
+
+            if (!applicationIdsToRemove.contains(currentForegroundApp)) {
+                applicationIdsToRemove.add(currentForegroundApp);
+            }
+        }
+    }
+
+    @VisibleForTesting
+    public boolean needToReverseOrder(Context context, String sortOrder) {
+        switch(TaskbarPosition.getTaskbarPosition(context)) {
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_TOP_RIGHT:
+                return sortOrder.contains("false");
+            default:
+                return sortOrder.contains("true");
         }
     }
 

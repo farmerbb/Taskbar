@@ -1,6 +1,8 @@
 package com.farmerbb.taskbar.ui;
 
 import android.app.AlarmManager;
+import android.app.usage.UsageEvents;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,7 +20,13 @@ import android.widget.LinearLayout;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.activity.HomeActivity;
+import com.farmerbb.taskbar.activity.HomeActivityDelegate;
+import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
+import com.farmerbb.taskbar.activity.MainActivity;
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
+import com.farmerbb.taskbar.mockito.StringAnswer;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
@@ -34,8 +42,14 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowUsageStatsManager.EventBuilder;
 import org.robolectric.util.ReflectionHelpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.app.usage.UsageEvents.Event.MOVE_TO_BACKGROUND;
+import static android.app.usage.UsageEvents.Event.MOVE_TO_FOREGROUND;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT;
@@ -48,6 +62,7 @@ import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME;
 import static com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS;
 import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD;
+import static com.farmerbb.taskbar.util.Constants.PREF_HIDE_FOREGROUND;
 import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT;
 import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_APP_START;
 import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY;
@@ -59,6 +74,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
@@ -461,6 +477,125 @@ public class TaskbarControllerTest {
         uiController.scrollTaskbar(scrollView, taskbar, taskbarPosition, "false", true);
         assertEquals(taskbarWidth, scrollView.getScrollX());
         assertEquals(taskbarHeight, scrollView.getScrollY());
+    }
+
+    @Test
+    public void testFilterForegroundApp() {
+        prefs.edit().putBoolean(PREF_HIDE_FOREGROUND, true).apply();
+
+        long searchInterval = 0L;
+        List<String> applicationIdsToRemove = new ArrayList<>();
+        UsageStatsManager usageStatsManager =
+                (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        UsageEvents.Event event =
+                EventBuilder
+                        .buildEvent()
+                        .setEventType(MOVE_TO_FOREGROUND)
+                        .setTimeStamp(100L)
+                        .setPackage("test-package-1")
+                        .build();
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals("test-package-1", applicationIdsToRemove.remove(0));
+
+        event =
+                EventBuilder
+                        .buildEvent()
+                        .setEventType(MOVE_TO_BACKGROUND)
+                        .setTimeStamp(200L)
+                        .setPackage("test-package-2")
+                        .build();
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals("test-package-1", applicationIdsToRemove.remove(0));
+
+        event = buildTaskbarForegroundAppEvent(MainActivity.class.getCanonicalName(), 300L);
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals(MainActivity.class.getCanonicalName(), applicationIdsToRemove.remove(0));
+
+        event = buildTaskbarForegroundAppEvent(HomeActivity.class.getCanonicalName(), 400L);
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals(HomeActivity.class.getCanonicalName(), applicationIdsToRemove.remove(0));
+
+        event = buildTaskbarForegroundAppEvent(HomeActivityDelegate.class.getCanonicalName(), 500L);
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals(HomeActivityDelegate.class.getCanonicalName(), applicationIdsToRemove.remove(0));
+
+        event = buildTaskbarForegroundAppEvent(SecondaryHomeActivity.class.getCanonicalName(), 600L);
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals(SecondaryHomeActivity.class.getCanonicalName(), applicationIdsToRemove.remove(0));
+
+        event = buildTaskbarForegroundAppEvent(InvisibleActivityFreeform.class.getCanonicalName(), 700L);
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals(InvisibleActivityFreeform.class.getCanonicalName(), applicationIdsToRemove.remove(0));
+
+        event = buildTaskbarForegroundAppEvent("unsupported", 800L);
+        shadowOf(usageStatsManager).addEvent(event);
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals("unsupported", applicationIdsToRemove.remove(0));
+
+        prefs.edit().remove(PREF_HIDE_FOREGROUND).apply();
+        uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
+        assertEquals(0, applicationIdsToRemove.size());
+    }
+
+    @Test
+    public void testNeedToReverseOrder() {
+        PowerMockito.spy(TaskbarPosition.class);
+        StringAnswer positionAnswer = new StringAnswer();
+        when(TaskbarPosition.getTaskbarPosition(context)).thenAnswer(positionAnswer);
+
+        List<String> positions = new ArrayList<>();
+        positions.add(POSITION_BOTTOM_LEFT);
+        positions.add(POSITION_BOTTOM_RIGHT);
+        positions.add(POSITION_BOTTOM_VERTICAL_LEFT);
+        positions.add(POSITION_BOTTOM_VERTICAL_RIGHT);
+        positions.add(POSITION_TOP_LEFT);
+        positions.add(POSITION_TOP_RIGHT);
+        positions.add(POSITION_TOP_VERTICAL_LEFT);
+        positions.add(POSITION_TOP_VERTICAL_RIGHT);
+        positions.add("unsupported");
+
+        String sortOrder = "false";
+        for (String position : positions) {
+            positionAnswer.answer = position;
+            if (POSITION_BOTTOM_RIGHT.equals(position) || POSITION_TOP_RIGHT.equals(position)) {
+                assertTrue(uiController.needToReverseOrder(context, sortOrder));
+            } else {
+                assertFalse(uiController.needToReverseOrder(context, sortOrder));
+            }
+        }
+
+        sortOrder = "true";
+        for (String position : positions) {
+            positionAnswer.answer = position;
+            if (POSITION_BOTTOM_RIGHT.equals(position) || POSITION_TOP_RIGHT.equals(position)) {
+                assertFalse(uiController.needToReverseOrder(context, sortOrder));
+            } else {
+                assertTrue(uiController.needToReverseOrder(context, sortOrder));
+            }
+        }
+
+        sortOrder = "unsupported";
+        for (String position : positions) {
+            positionAnswer.answer = position;
+            assertFalse(uiController.needToReverseOrder(context, sortOrder));
+        }
+    }
+
+    private UsageEvents.Event buildTaskbarForegroundAppEvent(String className, long timestamp) {
+        return EventBuilder
+                .buildEvent()
+                .setPackage(className)
+                .setTimeStamp(timestamp)
+                .setClass(className)
+                .setEventType(MOVE_TO_FOREGROUND)
+                .build();
     }
 
     private void checkDrawableBackgroundColor(Drawable drawable, int color) {
