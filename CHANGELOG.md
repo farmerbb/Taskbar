@@ -1,39 +1,39 @@
-## New features in Taskbar 5.0
+## New features in Taskbar 6.0
 
-### Desktop icons
+### Android 10 Desktop Mode support
 
-Taskbar now allows you to place icons on your desktop when set as your home screen!
+Taskbar now has support for Android 10's built-in desktop mode functionality.  You can connect your compatible Android 10+ device to an external display and run apps in resizable windows, with Taskbar's interface running on your external display and your existing launcher still running on your phone.
 
-Simply long-press the wallpaper on your home screen to get started.  Select "Add icon to desktop" from the context menu, then select an app from the list to add it to your desktop.
+Desktop mode requires a USB-to-HDMI adapter (or a lapdock), and a compatible device that supports video output.  Additionally, certain settings require granting a special permission via adb.
 
-Long-pressing the desktop and selecting "Move icons" will allow you to rearrange your icons.  Press the checkmark button in the lower-right hand corner to lock the desktop back into place.  You can also select "Sort icons by name" to auto-arrange your icons for you.
+To get started, open up the Taskbar app and click "Desktop mode".  Then, just tick the checkbox and the app will guide you through the setup process.  For more information, click the (?) icon in the upper-right hand corner of the screen.
 
-* PLEASE NOTE: If freeform mode is enabled, desktop icons will only be available if your device is running Android 10 or later.  This is due to technical limitations in how Google has implemented freeform mode on earlier Android versions.
+### Favorite app shortcuts
 
-### Status icons & clock on the recent apps tray
+You can now launch your favorite apps in a floating window directly from your quick settings drawer (or a home screen shortcut), without needing to keep Taskbar running in the background.  This feature is available on Android 9+ devices.  To get started, simply add one of the new "Launch app" tiles to your quick settings drawer.
 
-Taskbar now includes a status area and clock on the recent apps tray!  Now you can quickly check your battery, network status, and the time and date, all on the corner of your screen.
+The first time you tap the "Launch app" tile, you'll be asked to select an app, choose if you want to launch the app in freeform window mode, and fine-tune the generated icon.  You'll then have a tile in your quick settings drawer with the app's icon and name, ready for you to launch at any time.
 
-You can enable this option by going to the "Recent apps" section of Taskbar's settings, and enabling the "Expand area with whitespace" and "Show status icons and clock" options.
+You can also choose to put these shortcuts directly on your home screen via the "Launch app" item under Taskbar in your launcher's widgets drawer.
 
-Note that this area will not display while Taskbar is in the vertical orientation.
+### Backup and restore
 
-### Custom start button image
+Taskbar now allows you to backup and restore your app settings, allowing you to transfer settings more easily between devices, or to keep a copy of your Taskbar settings for archival purposes.  Look for the new "Manage app data" section under "Advanced features" to use the backup and restore functionality.
 
-You can now customize the start button image beyond the previous "App drawer" and "Taskbar logo" options.  Want to display the Windows logo on your start button instead?  No problem!
+### System theme support
 
-Change your start button image by going to the "Appearance" section of Taskbar's settings, and setting the "Start button image" option to "Custom".  The system file picker will appear; just select the image you want to use and you're set!
+On Android 9+ devices, Taskbar now respects the system theme setting, automatically switching between light and dark mode along with the rest of the system.  For Android 10 and higher, the "Dark theme" setting is followed; on Android 9, the "Night mode" developer option is used instead.
 
-### Larger start menu on tablets
+### Improved Android TV and Chrome OS support
 
-When the start menu layout is set to "Grid", Taskbar's start menu will now expand to fill either three, four, or five columns, depending on the size of your device's screen, taking better advantage of screen real-estate and helping you locate the apps you want to launch faster.
+On Android TV 9+ devices like the Nvidia Shield, Taskbar will now guide you to the Android TV settings app for enabling crucial settings like displaying over other apps and usage access.  Additionally, certain app settings that weren't supported on Android TV or Chrome OS were removed on those devices.
 
-### New transitions when launching apps
+### New and updated translations
 
-Taskbar will now scale apps onto the screen from their icons as it launches them, for some visual pizazz!
+A Polish translation has been added, along with updated Chinese and German translations.  Huge thank you to everyone that has contributed to translating the app!
 
-### Better default options
+### Miscellaneous features and improvements
 
-On a fresh Taskbar install, a few of the default settings have now changed.  For example, Taskbar now ships out-of-the-box with a more contrasty color scheme, as well as a faster refresh rate for the recent apps tray.
+New settings have been added to display a notification count in the status icon area (system tray).  There is also a new option to hide app labels on the start menu and desktop.  Apps that launch in a phone-sized freeform window will now launch in landscape if requested by the app.
 
-#### Plus, lots of bug fixes and miscellaneous improvements!
+Additionally, many bug fixes and under-the-hood improvements have been done to help keep Taskbar well maintained for the future!
