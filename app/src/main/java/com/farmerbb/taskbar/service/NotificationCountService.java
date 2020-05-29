@@ -18,7 +18,6 @@ package com.farmerbb.taskbar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
@@ -60,7 +59,14 @@ public class NotificationCountService extends NotificationListenerService {
     private void broadcastNotificationCount() {
         int count = 0;
 
-        for(StatusBarNotification notification : getActiveNotifications()) {
+        StatusBarNotification[] notifications;
+        try {
+            notifications = getActiveNotifications();
+        } catch (SecurityException e) {
+            notifications = new StatusBarNotification[0];
+        }
+
+        for(StatusBarNotification notification : notifications) {
             if(notification.isClearable()) count++;
         }
 
