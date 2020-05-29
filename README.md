@@ -57,12 +57,14 @@ Prerequisites:
 
 Once all the prerequisites are met, make sure that the `ANDROID_HOME` environment variable is set to your Android SDK directory, then run `./gradlew assembleFreeDebug` at the base directory of the project to start the build. After the build completes, navigate to `app/build/outputs/apk/free/debug` where you will end up with an APK file ready to install on your Android device.
 
-## Android 10 Desktop Mode support via libtaskbar
+## For Third-Party App Developers
+
+#### Android 10 Desktop Mode support via libtaskbar
 Taskbar can now be included as a library inside any third-party launcher, to quickly and easily add Android 10 Desktop Mode support into your existing launcher with no additional setup.
 
 For more information on including Taskbar inside your application, see the [libtaskbar documentation](https://github.com/farmerbb/Taskbar/blob/master/lib/README.md).
 
-## Icon Pack Support
+#### Icon Pack Support
 Taskbar includes support for ADW-style icon packs.  If you are an icon pack developer and would like to include support for applying the icon pack from within your app, simply use the following code:
 
     Intent intent = new Intent("com.farmerbb.taskbar.APPLY_ICON_PACK");
