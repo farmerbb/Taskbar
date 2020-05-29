@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -411,20 +412,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(fragment instanceof FreeformModeFragment) {
             helpButton.setVisibility(View.VISIBLE);
-            helpButton.setOnClickListener(v -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setView(View.inflate(MainActivity.this, R.layout.tb_freeform_help_dialog, null))
-                        .setTitle(R.string.tb_freeform_help_dialog_title)
-                        .setPositiveButton(R.string.tb_action_close, null);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            });
+            helpButton.setOnClickListener(v -> showHelpDialog(R.string.tb_freeform_help_dialog_message));
         } else if(fragment instanceof DesktopModeFragment) {
             helpButton.setVisibility(View.VISIBLE);
-            helpButton.setOnClickListener(v -> {
-                // TODO
-            });
+            helpButton.setOnClickListener(v -> showHelpDialog(R.string.tb_desktop_mode_help));
         } else {
             helpButton.setVisibility(View.INVISIBLE);
             helpButton.setOnClickListener(null);
@@ -436,5 +427,19 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, fragment.getClass().getSimpleName())
                 .commit();
+    }
+
+    private void showHelpDialog(int helpText) {
+        View view = View.inflate(MainActivity.this, R.layout.tb_freeform_help_dialog, null);
+        TextView dialogMessage = view.findViewById(R.id.dialogMessage);
+        dialogMessage.setText(helpText);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setView(view)
+                .setTitle(R.string.tb_freeform_help_dialog_title)
+                .setPositiveButton(R.string.tb_action_close, null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

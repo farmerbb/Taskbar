@@ -18,7 +18,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:paddingTop="8dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -29,12 +31,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:text="@string/tb_freeform_help_dialog_message"
             android:layout_width="match_parent"
             android:id="@+id/dialogMessage"
             android:textSize="15sp"
             android:padding="16dp"
-            android:textIsSelectable="true" />
+            android:textIsSelectable="true"
+            android:autoLink="web"/>
 
     </ScrollView>
 
