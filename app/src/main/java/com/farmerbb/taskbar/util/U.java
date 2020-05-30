@@ -1313,6 +1313,22 @@ public class U {
                     .putBoolean(PREF_ANDROID_X86_PREFS, true)
                     .apply();
         }
+
+        // Allow reflection on Android 11 and up
+        if(U.getCurrentApiVersion() <= 29.0f && !U.isDesktopModeSupported(context))
+            return;
+
+        try {
+            Method forName = Class.class.getDeclaredMethod("forName", String.class);
+            Method getDeclaredMethod = Class.class.getDeclaredMethod("getDeclaredMethod", String.class, Class[].class);
+
+            Class<?> vmRuntimeClass = (Class<?>) forName.invoke(null, "dalvik.system.VMRuntime");
+            Method getRuntime = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "getRuntime", null);
+            Method setHiddenApiExemptions = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", new Class[]{String[].class});
+
+            Object vmRuntime = getRuntime.invoke(null);
+            setHiddenApiExemptions.invoke(vmRuntime, new Object[]{new String[]{"L"}});
+        } catch (Throwable e) { /* Gracefully fail */ }
     }
 
     public static DisplayInfo getDisplayInfo(Context context) {
