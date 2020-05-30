@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean hasCaption = false;
 
-    private final int latestChangelogVersion = 199;
+    private final int latestChangelogVersion = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 pref.edit().putInt("show_changelog", latestChangelogVersion).apply();
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://github.com/farmerbb/Taskbar/blob/" + latestChangelogVersion + "/CHANGELOG.md"));
+                intent.setData(Uri.parse("https://github.com/farmerbb/Taskbar/blob/" + BuildConfig.VERSION_CODE + "/CHANGELOG.md"));
 
                 try {
                     startActivity(intent);
