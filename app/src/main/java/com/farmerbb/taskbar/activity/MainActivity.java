@@ -54,11 +54,11 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.Arrays;
@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private boolean hasCaption = false;
+
+    private final int latestChangelogVersion = 199;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,6 +302,28 @@ public class MainActivity extends AppCompatActivity {
                     shortcutManager.setDynamicShortcuts(Collections.singletonList(shortcut));
             }
         }
+
+        if(pref.getInt("show_changelog", 0) < latestChangelogVersion
+                && U.isConsumerBuild(this)) {
+            Snackbar snackbar = Snackbar.make(
+                    findViewById(R.id.main_activity_layout),
+                    R.string.tb_see_whats_new,
+                    Snackbar.LENGTH_INDEFINITE
+            );
+
+            snackbar.setAction(R.string.tb_action_view, v -> {
+                pref.edit().putInt("show_changelog", latestChangelogVersion).apply();
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://github.com/farmerbb/Taskbar/blob/" + latestChangelogVersion + "/CHANGELOG.md"));
+
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException | IllegalArgumentException e1) { /* Gracefully fail */ }
+            });
+
+            snackbar.show();
+        }
     }
 
     @Override
@@ -315,6 +339,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this))
             getWindow().setRestrictedCaptionAreaListener(null);
+
+        if(isFinishing() && U.isConsumerBuild(this)) {
+            SharedPreferences pref = U.getSharedPreferences(this);
+            pref.edit().putInt("show_changelog", latestChangelogVersion).apply();
+        }
 
         super.onDestroy();
     }

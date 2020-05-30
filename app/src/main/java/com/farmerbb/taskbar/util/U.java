@@ -2069,4 +2069,10 @@ public class U {
             }
         }
     }
+
+    public static boolean isConsumerBuild(Context context) {
+        return !BuildConfig.DEBUG
+                && !context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
+                && !isLibrary(context);
+    }
 }

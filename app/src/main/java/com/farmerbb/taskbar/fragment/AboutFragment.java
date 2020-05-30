@@ -85,14 +85,13 @@ public class AboutFragment extends SettingsFragment {
             calendar.setTimeInMillis(BuildConfig.TIMESTAMP);
 
             int year = calendar.get(Calendar.YEAR);
-            if(BuildConfig.DEBUG || getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID))
-                findPreference(PREF_ABOUT).setSummary(getString(R.string.tb_pref_about_description_alt, year));
-            else {
+            if(U.isConsumerBuild(getActivity())) {
                 String emoji = new String(Character.toChars(0x1F601));
 
                 findPreference(PREF_ABOUT).setSummary(getString(R.string.tb_pref_about_description, year, emoji));
                 findPreference(PREF_ABOUT).setOnPreferenceClickListener(this);
-            }
+            } else
+                findPreference(PREF_ABOUT).setSummary(getString(R.string.tb_pref_about_description_alt, year));
         }
     }
 
