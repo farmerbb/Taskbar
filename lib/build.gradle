@@ -25,6 +25,7 @@ android {
         versionCode VERSION_CODE
         versionName VERSION_NAME
 
+        buildConfigField "String", "APPLICATION_ID", "\"com.farmerbb.taskbar\""
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
         buildConfigField "String", "PAID_APPLICATION_ID", "\"com.farmerbb.taskbar.paid\""
         buildConfigField "String", "SUPPORT_APPLICATION_ID", "\"com.farmerbb.taskbar.support\""

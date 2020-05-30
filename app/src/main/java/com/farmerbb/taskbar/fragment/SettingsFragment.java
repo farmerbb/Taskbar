@@ -61,7 +61,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
     protected abstract void loadPrefs();
 
-    @SuppressWarnings({"deprecation", "rawtypes"})
+    @SuppressWarnings("rawtypes")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;

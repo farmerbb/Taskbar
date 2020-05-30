@@ -121,7 +121,6 @@ public class U {
 
     public static final int IMAGE_REQUEST_CODE = 1001;
 
-    @SuppressWarnings("deprecation")
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
     }
@@ -1745,7 +1744,6 @@ public class U {
                 && !TaskbarPosition.isVertical(context);
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean isLibrary(Context context) {
         return !context.getPackageName().equals(BuildConfig.APPLICATION_ID);
     }
