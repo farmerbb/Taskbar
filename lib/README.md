@@ -4,7 +4,7 @@
 
 **libtaskbar allows you to quickly and easily add support for Android 10’s Desktop Mode to any third-party launcher, powered by the Taskbar app.**
 
-It's a plug-and-play solution that is lightweight (less than 0.5 MB) and doesn't require Taskbar to already be installed.  libtaskbar gives your users on Android 10 a fully-featured desktop-style experience with a taskbar, start menu, desktop icons, and more, while being unobtrusive to your launcher's existing phone or tablet experience.
+It's a plug-and-play solution that is lightweight (less than 0.5 MB) and doesn't require Taskbar to already be installed.  libtaskbar gives your users on Android 10+ a fully-featured desktop-style experience with a taskbar, start menu, desktop icons, and more, while being unobtrusive to your launcher's existing phone or tablet experience.
 
 ### Setup
 
@@ -27,7 +27,7 @@ dependencies {
 }
 ```
 
-That's it!  As long as your launcher is set as the system default, and the user has enabled the "Force desktop mode" developer option, then Taskbar will appear whenever the user plugs in their HDMI-enabled phone into an external display.
+That's it!  As long as your launcher is set as the system default, and the user has enabled the "Enable freeform windows" and "Force desktop mode" developer options, then Taskbar will appear whenever the user plugs in their HDMI-enabled phone into an external display.
 
 ### Additional configuration
 
@@ -45,7 +45,7 @@ Finally, while Taskbar's desktop mode functionality is enabled out-of-the-box, i
 
 ### Things to consider
 
-* libtaskbar doesn't include any UI for informing the user to enable the "Force desktop mode" developer option.  You may wish to include a setup flow inside your launcher to guide the user with enabling the option.  Note that a reboot is required for the option to take effect.  Enabling the "Enable freeform windows" option is also strongly recommended when enabling desktop mode.
+* libtaskbar doesn't include any UI for informing the user to enable the "Enable freeform windows" and "Force desktop mode" developer options.  You may wish to include a setup flow inside your launcher to guide the user with enabling the option.  Note that a reboot is required for the option to take effect.
 
 * libtaskbar will add the `SYSTEM_ALERT_WINDOW` and `PACKAGE_USAGE_STATS` permissions to your app's manifest, as well as a small number of non-runtime permissions for additional functionality such as displaying a status area on the taskbar.  As a result, your app will appear inside the "Display over other apps" and "Usage access" sections of the "Special app access" page in Android's settings.
 
@@ -53,8 +53,26 @@ Finally, while Taskbar's desktop mode functionality is enabled out-of-the-box, i
 
 * If aapt complains about any resource conflicts, you may need to exclude the `com.google.android.material:material` transitive dependency from libtaskbar inside your build.gradle file.
 
+* libtaskbar currently does not support launchers with a targetSdkVersion of 30 or higher.  For now, please set your targetSdkVersion back to 29 in order to use libtaskbar.
+
 ### Example implementation
 
 An example implementation of libtaskbar using Lawnchair is available at https://github.com/farmerbb/libtaskbar-Lawnchair-Example.  
 
 You can also download a prebuilt APK here: https://github.com/farmerbb/libtaskbar-Lawnchair-Example/releases
+
+### Changelog
+
+**v2.0.0**
+* Includes all changes from Taskbar 6.0
+* The "Enable freeform windows" developer option is now required, in addition to "Force desktop mode"
+
+_Known issues:_
+* libtaskbar currently does not support launchers with a targetSdkVersion of 30 or higher
+
+**v1.0.1**
+* Includes all changes from Taskbar 5.0.1
+* Migrated to AndroidX
+
+**v1.0.0**
+* Initial release, based off of Taskbar 5.0
