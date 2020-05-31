@@ -594,7 +594,12 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 }
             }
 
-            new Handler().post(() -> setOnHomeScreen(false));
+            AppHelper helper = AppHelper.getInstance();
+            if(helper.isChangingResolution()) {
+                helper.setChangingResolution(false);
+                setOnHomeScreen(false);
+            } else
+                new Handler().post(() -> setOnHomeScreen(false));
         }
 
         if(dialog != null) {

@@ -21,6 +21,7 @@ public class AppHelper {
 
     private boolean onMainActivity = false;
     private boolean reflectionAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.P;
+    private boolean changingResolution = false;
 
     private static AppHelper theInstance;
 
@@ -46,5 +47,13 @@ public class AppHelper {
 
     public void setReflectionAllowed(boolean value) {
         reflectionAllowed = value;
+    }
+
+    public boolean isChangingResolution() {
+        return changingResolution;
+    }
+
+    public void setChangingResolution(boolean value) {
+        changingResolution = value;
     }
 }
