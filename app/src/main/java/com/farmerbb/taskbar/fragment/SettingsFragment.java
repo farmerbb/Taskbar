@@ -172,7 +172,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
                             SharedPreferences pref2 = U.getSharedPreferences(getActivity());
                             if(pref2.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false) && isOnHomeScreen)
-                                U.showHideNavigationBar(getActivity(), displayID, false, 250);
+                                U.showHideNavigationBar(U.getDisplayContext(getActivity()), displayID, false, 250);
                         } catch (Exception e) {
                             U.showToast(getActivity(), R.string.tb_unable_to_apply_density_change);
                         }

@@ -1217,12 +1217,12 @@ public class U {
             return;
         }
 
-        int value = show ? 0 : getSystemDimen(context, "navigation_bar_height") * -1;
+        Lazy<Integer> value = () -> show ? 0 : getSystemDimen(context, "navigation_bar_height") * -1;
 
         if(hasWriteSecureSettingsPermission(context)) {
             Runnable runnable = () -> {
                 try {
-                    setOverscan(displayID, value);
+                    setOverscan(displayID, value.get());
                 } catch (Exception e) { /* Gracefully fail */ }
             };
 
@@ -1239,7 +1239,7 @@ public class U {
             intent.setPackage(BuildConfig.SUPPORT_APPLICATION_ID);
 
             intent.putExtra("display_id", displayID);
-            intent.putExtra("value", value);
+            intent.putExtra("value", value.get());
 
             context.sendBroadcast(intent);
             return;
