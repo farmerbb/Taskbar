@@ -252,6 +252,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
     @Override
     public void addPreferencesFromResource(@XmlRes int preferencesResId) {
         if(!(this instanceof AboutFragment)) {
+            U.allowReflection();
             try {
                 Context context = U.wrapContext(U.getDisplayContext(getActivity()));
                 Class.forName("android.preference.PreferenceManager")

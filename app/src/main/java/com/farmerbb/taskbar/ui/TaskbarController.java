@@ -1560,7 +1560,7 @@ public class TaskbarController extends UIController {
             return getAppEntriesUsingUsageStats();
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "JavaReflectionMemberAccess"})
     @TargetApi(Build.VERSION_CODES.M)
     private List<AppEntry> getAppEntriesUsingActivityManager(int maxNum) {
         ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -1579,6 +1579,7 @@ public class TaskbarController extends UIController {
                         false
                 );
 
+                U.allowReflection();
                 try {
                     Field field = ActivityManager.RecentTaskInfo.class.getField("firstActiveTime");
                     newEntry.setLastTimeUsed(field.getLong(recentTaskInfo));

@@ -121,6 +121,8 @@ public class U {
 
     public static final int IMAGE_REQUEST_CODE = 1001;
 
+    private static boolean reflectionAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.P;
+
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
     }
@@ -951,6 +953,7 @@ public class U {
                 break;
         }
 
+        allowReflection();
         try {
             Method method = ActivityOptions.class.getMethod(getWindowingModeMethodName(), int.class);
             method.invoke(options, stackId);
@@ -1313,22 +1316,6 @@ public class U {
                     .putBoolean(PREF_ANDROID_X86_PREFS, true)
                     .apply();
         }
-
-        // Allow reflection on Android 11 and up
-        if(U.getCurrentApiVersion() <= 29.0f && !U.isDesktopModeSupported(context))
-            return;
-
-        try {
-            Method forName = Class.class.getDeclaredMethod("forName", String.class);
-            Method getDeclaredMethod = Class.class.getDeclaredMethod("getDeclaredMethod", String.class, Class[].class);
-
-            Class<?> vmRuntimeClass = (Class<?>) forName.invoke(null, "dalvik.system.VMRuntime");
-            Method getRuntime = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "getRuntime", null);
-            Method setHiddenApiExemptions = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", new Class[]{String[].class});
-
-            Object vmRuntime = getRuntime.invoke(null);
-            setHiddenApiExemptions.invoke(vmRuntime, new Object[]{new String[]{"L"}});
-        } catch (Throwable e) { /* Gracefully fail */ }
     }
 
     public static DisplayInfo getDisplayInfo(Context context) {
@@ -1657,6 +1644,7 @@ public class U {
 
     @SuppressLint("PrivateApi")
     private static String getSystemProperty(String key) {
+        allowReflection();
         try {
             Class<?> cls = Class.forName("android.os.SystemProperties");
             return cls.getMethod("get", String.class).invoke(null, key).toString();
@@ -1849,6 +1837,7 @@ public class U {
 
     @SuppressLint("PrivateApi")
     private static Object getWindowManagerService() throws Exception {
+        allowReflection();
         return Class.forName("android.view.WindowManagerGlobal")
                 .getMethod("getWindowManagerService")
                 .invoke(null);
@@ -1859,6 +1848,7 @@ public class U {
         // From android.os.UserHandle
         final int USER_CURRENT_OR_SELF = -3;
 
+        allowReflection();
         if(value.equals("reset")) {
             Class.forName("android.view.IWindowManager")
                     .getMethod("clearForcedDisplayDensityForUser", int.class, int.class)
@@ -1874,6 +1864,7 @@ public class U {
 
     @SuppressLint("PrivateApi")
     private static void setOverscan(int displayID, int value) throws Exception {
+        allowReflection();
         Class.forName("android.view.IWindowManager")
                 .getMethod("setOverscan", int.class, int.class, int.class, int.class, int.class)
                 .invoke(getWindowManagerService(), displayID, 0, 0, 0, value);
@@ -1881,6 +1872,7 @@ public class U {
 
     @SuppressLint("PrivateApi")
     private static Integer getDefaultDensity(int displayID) throws Exception {
+        allowReflection();
         return (Integer) Class.forName("android.view.IWindowManager")
                 .getMethod("getInitialDisplayDensity", int.class)
                 .invoke(getWindowManagerService(), displayID);
@@ -2085,5 +2077,23 @@ public class U {
         return !BuildConfig.DEBUG
                 && !context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
                 && !isLibrary(context);
+    }
+
+    public static void allowReflection() {
+        if(reflectionAllowed) return;
+
+        try {
+            Method forName = Class.class.getDeclaredMethod("forName", String.class);
+            Method getDeclaredMethod = Class.class.getDeclaredMethod("getDeclaredMethod", String.class, Class[].class);
+
+            Class<?> vmRuntimeClass = (Class<?>) forName.invoke(null, "dalvik.system.VMRuntime");
+            Method getRuntime = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "getRuntime", null);
+            Method setHiddenApiExemptions = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", new Class[]{String[].class});
+
+            Object vmRuntime = getRuntime.invoke(null);
+            setHiddenApiExemptions.invoke(vmRuntime, new Object[]{new String[]{"L"}});
+        } catch (Throwable e) { /* Gracefully fail */ }
+
+        reflectionAllowed = true;
     }
 }
