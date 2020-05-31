@@ -121,8 +121,6 @@ public class U {
 
     public static final int IMAGE_REQUEST_CODE = 1001;
 
-    private static boolean reflectionAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.P;
-
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
     }
@@ -2080,7 +2078,8 @@ public class U {
     }
 
     public static void allowReflection() {
-        if(reflectionAllowed) return;
+        AppHelper helper = AppHelper.getInstance();
+        if(helper.isReflectionAllowed()) return;
 
         try {
             Method forName = Class.class.getDeclaredMethod("forName", String.class);
@@ -2094,6 +2093,6 @@ public class U {
             setHiddenApiExemptions.invoke(vmRuntime, new Object[]{new String[]{"L"}});
         } catch (Throwable e) { /* Gracefully fail */ }
 
-        reflectionAllowed = true;
+        helper.setReflectionAllowed(true);
     }
 }

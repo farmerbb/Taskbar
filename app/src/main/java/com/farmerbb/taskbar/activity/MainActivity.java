@@ -54,6 +54,7 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.AppHelper;
 import com.farmerbb.taskbar.util.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.LauncherHelper;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppHelper.getInstance().setOnMainActivity(true);
 
         U.registerReceiver(this, switchReceiver, ACTION_UPDATE_SWITCH);
 
@@ -345,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
             pref.edit().putInt("show_changelog", latestChangelogVersion).apply();
         }
 
+        AppHelper.getInstance().setOnMainActivity(false);
         super.onDestroy();
     }
 

@@ -55,6 +55,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.AppHelper;
 import com.farmerbb.taskbar.util.Callbacks;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
@@ -232,7 +233,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 return;
             }
 
-            if(pref.getBoolean(PREF_DIM_SCREEN, false) && U.launcherIsDefault(this)) {
+            if(pref.getBoolean(PREF_DIM_SCREEN, false)
+                    && U.launcherIsDefault(this)
+                    && !AppHelper.getInstance().isOnMainActivity()) {
                 Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                 homeIntent.addCategory(Intent.CATEGORY_HOME);
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
