@@ -378,8 +378,8 @@ public class U {
                 && helper.isInFreeformWorkspace()
                 && MenuHelper.getInstance().isContextMenuOpen();
 
-        boolean noAnimation =
-                pref.getBoolean(PREF_DISABLE_ANIMATIONS, false);
+        boolean noAnimation = pref.getBoolean(PREF_DISABLE_ANIMATIONS, false);
+        boolean isAndroidR = getCurrentApiVersion() > 29.0;
 
         if(hasFreeformSupport(context)
                 && (isFreeformModeEnabled(context) || isPersistentShortcut)
@@ -387,10 +387,10 @@ public class U {
             new Handler().postDelayed(() -> {
                 startFreeformHack(context, true);
 
-                new Handler().postDelayed(runnable, helper.isFreeformHackActive() ? 0 : 100);
+                new Handler().postDelayed(runnable, helper.isFreeformHackActive() ? 0 : isAndroidR ? 300 : 100);
             }, launchedFromTaskbar ? 0 : 100);
         } else
-            new Handler().postDelayed(runnable, !launchedFromTaskbar && noAnimation ? 100 : 0);
+            new Handler().postDelayed(runnable, !launchedFromTaskbar && noAnimation ? 100 : isAndroidR ? 100 : 0);
     }
 
     public static void startFreeformHack(Context context) {
@@ -1450,7 +1450,7 @@ public class U {
         }
     }
 
-    public static float getCurrentApiVersion() {
+    private static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
         else

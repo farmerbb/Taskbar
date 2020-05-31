@@ -499,6 +499,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     private void startTaskbar() {
+        // Ensure that the freeform hack is started whenever Taskbar starts
+        if(U.hasFreeformSupport(this)
+                && U.isFreeformModeEnabled(this)
+                && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+            U.startFreeformHack(this, true);
+        }
+
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean(PREF_FIRST_RUN, true)) {
             SharedPreferences.Editor editor = pref.edit();
@@ -1093,8 +1100,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private void performOnResumeLogic() {
         if(waitingForPermission) {
             waitingForPermission = false;
-
-            startFreeformHack();
             init();
         }
 
