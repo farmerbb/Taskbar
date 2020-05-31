@@ -54,7 +54,7 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
-import com.farmerbb.taskbar.helper.AppHelper;
+import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.helper.LauncherHelper;
@@ -338,14 +338,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        AppHelper.getInstance().setOnMainActivity(true);
+        GlobalHelper.getInstance().setOnMainActivity(true);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        AppHelper.getInstance().setOnMainActivity(false);
+        GlobalHelper.getInstance().setOnMainActivity(false);
     }
 
     @Override

@@ -78,7 +78,7 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
-import com.farmerbb.taskbar.helper.AppHelper;
+import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.helper.MenuHelper;
@@ -2085,7 +2085,7 @@ public class U {
     }
 
     public static void allowReflection() {
-        AppHelper helper = AppHelper.getInstance();
+        GlobalHelper helper = GlobalHelper.getInstance();
         if(helper.isReflectionAllowed()) return;
 
         try {

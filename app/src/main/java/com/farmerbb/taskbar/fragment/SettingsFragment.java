@@ -37,7 +37,6 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.MainActivity;
-import com.farmerbb.taskbar.helper.AppHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -166,8 +165,6 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                         break;
                     case PREF_DISPLAY_DENSITY:
                         boolean isOnHomeScreen = LauncherHelper.getInstance().isOnSecondaryHomeScreen();
-                        AppHelper.getInstance().setChangingResolution(isOnHomeScreen);
-
                         int displayID = U.getExternalDisplayID(getActivity());
 
                         try {
