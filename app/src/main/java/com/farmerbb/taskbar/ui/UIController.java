@@ -19,7 +19,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
-import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;

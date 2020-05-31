@@ -24,7 +24,7 @@ import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.util.IconCache;
-import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;

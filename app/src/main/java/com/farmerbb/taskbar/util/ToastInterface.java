@@ -15,7 +15,7 @@
 
 package com.farmerbb.taskbar.util;
 
-interface ToastInterface {
+public interface ToastInterface {
     void show();
     void cancel();
 }

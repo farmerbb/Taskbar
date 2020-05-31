@@ -95,11 +95,11 @@ import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
-import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
-import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.PinnedBlockedApps;
-import com.farmerbb.taskbar.util.MenuHelper;
+import com.farmerbb.taskbar.helper.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;

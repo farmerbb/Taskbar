@@ -42,7 +42,7 @@ import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.util.TopApps;
 import com.farmerbb.taskbar.util.U;
 

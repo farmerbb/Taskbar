@@ -24,6 +24,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
 import com.farmerbb.taskbar.mockito.IntAnswer;
 import com.farmerbb.taskbar.service.PowerMenuService;

@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
-import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import org.junit.After;

@@ -36,9 +36,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.DashboardHelper;
+import com.farmerbb.taskbar.helper.DashboardHelper;
 import com.farmerbb.taskbar.util.DisplayInfo;
-import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;

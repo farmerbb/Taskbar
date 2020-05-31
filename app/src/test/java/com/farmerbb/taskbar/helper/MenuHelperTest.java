@@ -1,4 +1,4 @@
-package com.farmerbb.taskbar.util;
+package com.farmerbb.taskbar.helper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

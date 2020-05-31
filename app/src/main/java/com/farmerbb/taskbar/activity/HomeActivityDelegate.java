@@ -55,7 +55,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.util.AppHelper;
+import com.farmerbb.taskbar.helper.AppHelper;
 import com.farmerbb.taskbar.util.Callbacks;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
@@ -71,10 +71,10 @@ import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FABWrapper;
-import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.util.IconCache;
-import com.farmerbb.taskbar.util.LauncherHelper;
-import com.farmerbb.taskbar.util.MenuHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
+import com.farmerbb.taskbar.helper.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 import org.json.JSONArray;

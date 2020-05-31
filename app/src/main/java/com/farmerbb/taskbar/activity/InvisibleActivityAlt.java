@@ -26,8 +26,8 @@ import android.widget.LinearLayout;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.DisplayInfo;
-import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.MenuHelper;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
+import com.farmerbb.taskbar.helper.MenuHelper;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;

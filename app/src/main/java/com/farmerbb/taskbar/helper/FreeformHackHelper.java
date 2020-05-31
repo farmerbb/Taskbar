@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.util;
+package com.farmerbb.taskbar.helper;
 
 public class FreeformHackHelper {
 

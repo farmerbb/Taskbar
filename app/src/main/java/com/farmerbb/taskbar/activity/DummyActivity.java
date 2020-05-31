@@ -33,7 +33,7 @@ import android.view.View;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.ApplicationType;
 import com.farmerbb.taskbar.util.Callbacks;
-import com.farmerbb.taskbar.util.FreeformHackHelper;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;

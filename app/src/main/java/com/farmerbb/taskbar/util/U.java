@@ -61,6 +61,7 @@ import android.os.UserManager;
 import android.provider.Settings;
 
 import androidx.annotation.DimenRes;
+import androidx.annotation.VisibleForTesting;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
@@ -77,6 +78,11 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
+import com.farmerbb.taskbar.helper.AppHelper;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
+import com.farmerbb.taskbar.helper.MenuHelper;
+import com.farmerbb.taskbar.helper.ToastHelper;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.PowerMenuService;
@@ -1448,7 +1454,8 @@ public class U {
         }
     }
 
-    private static float getCurrentApiVersion() {
+    @VisibleForTesting
+    public static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
         else

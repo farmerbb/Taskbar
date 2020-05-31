@@ -37,8 +37,8 @@ import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.ClearDataActivity;
 import com.farmerbb.taskbar.activity.MainActivity;
-import com.farmerbb.taskbar.util.FreeformHackHelper;
-import com.farmerbb.taskbar.util.LauncherHelper;
+import com.farmerbb.taskbar.helper.FreeformHackHelper;
+import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 
 import java.util.HashMap;

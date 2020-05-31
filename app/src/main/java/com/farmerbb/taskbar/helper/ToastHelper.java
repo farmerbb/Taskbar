@@ -13,9 +13,11 @@
  * limitations under the License.
  */
 
-package com.farmerbb.taskbar.util;
+package com.farmerbb.taskbar.helper;
 
-class ToastHelper {
+import com.farmerbb.taskbar.util.ToastInterface;
+
+public class ToastHelper {
 
     private ToastInterface lastToast;
 
@@ -29,11 +31,11 @@ class ToastHelper {
         return theInstance;
     }
 
-    ToastInterface getLastToast() {
+    public ToastInterface getLastToast() {
         return lastToast;
     }
 
-    void setLastToast(ToastInterface lastToast) {
+    public void setLastToast(ToastInterface lastToast) {
         this.lastToast = lastToast;
     }
 }
