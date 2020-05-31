@@ -31,10 +31,10 @@ public class DependencyUtils {
 
     private DependencyUtils() {}
 
-    public static CharSequence getIconicsString(Context context, int stringRes) {
+    public static CharSequence getKeyboardShortcutSummary(Context context) {
         return new Iconics.IconicsBuilder()
                 .ctx(context)
-                .on(context.getString(stringRes))
+                .on(context.getString(R.string.tb_pref_description_keyboard_shortcut))
                 .build();
     }
 

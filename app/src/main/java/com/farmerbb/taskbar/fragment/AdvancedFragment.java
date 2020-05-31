@@ -79,12 +79,10 @@ public class AdvancedFragment extends SettingsFragment {
 
         // Set OnClickListeners for certain preferences
         findPreference(PREF_DASHBOARD_GRID_SIZE).setOnPreferenceClickListener(this);
+        findPreference(PREF_KEYBOARD_SHORTCUT).setSummary(DependencyUtils.getKeyboardShortcutSummary(getActivity()));
 
         boolean isLibrary = U.isLibrary(getActivity());
         boolean isAndroidx86 = getActivity().getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID);
-
-        int stringRes = isAndroidx86 ? R.string.tb_pref_description_keyboard_shortcut_alt : R.string.tb_pref_description_keyboard_shortcut;
-        findPreference(PREF_KEYBOARD_SHORTCUT).setSummary(DependencyUtils.getIconicsString(getActivity(), stringRes));
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         boolean lockHomeToggle = (pref.getBoolean(PREF_LAUNCHER, false)
