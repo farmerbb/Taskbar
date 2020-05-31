@@ -121,9 +121,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
     implementation "com.google.android.material:material:$MATERIAL_VERSION"
     //noinspection GradleDependency
-    implementation 'com.mikepenz:iconics-core:3.0.4'
-    //noinspection GradleDependency
-    implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.4'
+    implementation 'com.mikepenz:iconics-core:3.2.5'
+    implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.5'
     implementation 'moe.banana:toast-compat:1.0.5'
     implementation group:'com.twofortyfouram', name:'android-plugin-api-for-locale', version:'[1.0.2,2.0['
 
