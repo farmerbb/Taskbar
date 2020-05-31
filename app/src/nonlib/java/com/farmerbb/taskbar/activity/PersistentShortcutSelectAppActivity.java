@@ -173,7 +173,6 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
     }
 
-    @SuppressWarnings("rawtypes")
     @TargetApi(Build.VERSION_CODES.N)
     private void createQuickSettingTileShortcut(String windowSize, int num) {
         String prefix = "qs_tile_" + num + "_";
@@ -191,7 +190,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         editor.apply();
 
         try {
-            Class clazz = Class.forName("com.farmerbb.taskbar.service.FavoriteApp" + num);
+            Class<?> clazz = Class.forName("com.farmerbb.taskbar.service.FavoriteApp" + num);
             TileService.requestListeningState(this, new ComponentName(this, clazz));
         } catch (ClassNotFoundException e) { /* Gracefully fail */ }
     }

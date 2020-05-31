@@ -54,14 +54,12 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
     String isModified = "_is_modified";
 
-    @SuppressWarnings("rawtypes")
-    protected Map<String, Class> prefsToSanitize = new HashMap<>();
+    protected Map<String, Class<?>> prefsToSanitize = new HashMap<>();
 
     protected void addPrefsToSanitize() {}
 
     protected abstract void loadPrefs();
 
-    @SuppressWarnings("rawtypes")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         finishedLoadingPrefs = false;
@@ -81,7 +79,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
         for(String key : prefsToSanitize.keySet()) {
             if(pref.contains(key + "_default")) continue;
 
-            Class rClass = prefsToSanitize.get(key);
+            Class<?> rClass = prefsToSanitize.get(key);
             if(rClass == R.bool.class)
                 pref.edit().putBoolean(key + "_default", U.getBooleanPrefWithDefault(getActivity(), key)).apply();
             else if(rClass == R.integer.class)

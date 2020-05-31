@@ -1909,8 +1909,7 @@ public class U {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static void setComponentEnabled(Context context, Class clazz, boolean enabled) {
+    public static void setComponentEnabled(Context context, Class<?> clazz, boolean enabled) {
         ComponentName component = new ComponentName(context, clazz);
         context.getPackageManager().setComponentEnabledSetting(component,
                 enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
@@ -1997,9 +1996,8 @@ public class U {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isChromeOs(context) && !isLibrary(context);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static Intent getThemedIntent(Context context, Class clazz) {
-        Class newClass;
+    public static Intent getThemedIntent(Context context, Class<?> clazz) {
+        Class<?> newClass;
 
         if(!isDarkTheme(context))
             newClass = clazz;
@@ -2034,8 +2032,7 @@ public class U {
         return pref.getInt(key, def);
     }
 
-    @SuppressWarnings("rawtypes")
-    private static int getDefaultPrefResID(String key, Class rClass) {
+    private static int getDefaultPrefResID(String key, Class<?> rClass) {
         int resId;
 
         try {

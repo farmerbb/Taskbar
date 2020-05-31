@@ -62,11 +62,10 @@ public class ShortcutUtils {
         return intent;
     }
 
-    @SuppressWarnings("rawtypes")
     public static void initFavoriteAppTiles(Context context) {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
 
-        Class[] tiles = new Class[] {
+        Class<?>[] tiles = new Class<?>[] {
                 FavoriteApp1.class,
                 FavoriteApp2.class,
                 FavoriteApp3.class,
@@ -74,7 +73,7 @@ public class ShortcutUtils {
                 FavoriteApp5.class
         };
 
-        for(Class tile : tiles) {
+        for(Class<?> tile : tiles) {
             TileService.requestListeningState(context, new ComponentName(context, tile));
         }
     }
