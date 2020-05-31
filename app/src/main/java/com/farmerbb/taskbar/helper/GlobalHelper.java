@@ -19,7 +19,7 @@ import android.os.Build;
 
 public class GlobalHelper {
 
-    private boolean onMainActivity = false;
+    private int onMainActivity = 0;
     private boolean reflectionAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.P;
 
     private static GlobalHelper theInstance;
@@ -33,11 +33,12 @@ public class GlobalHelper {
     }
 
     public boolean isOnMainActivity() {
-        return onMainActivity;
+        return onMainActivity > 0;
     }
 
     public void setOnMainActivity(boolean value) {
-        onMainActivity = value;
+        int factor = value ? 1 : -1;
+        onMainActivity = Math.max(0, onMainActivity + factor);
     }
 
     public boolean isReflectionAllowed() {
