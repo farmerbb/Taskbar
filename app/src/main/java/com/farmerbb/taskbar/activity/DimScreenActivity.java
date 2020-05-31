@@ -56,8 +56,11 @@ public class DimScreenActivity extends AppCompatActivity {
         }
     };
 
-    private void checkIfShouldFinish() {
-        if(!U.isDesktopModeActive(this)) finish();
+    private boolean checkIfShouldFinish() {
+        boolean shouldFinish = !U.isDesktopModeActive(this);
+        if(shouldFinish) finish();
+
+        return shouldFinish;
     }
 
     private BroadcastReceiver unDimScreenReceiver = new BroadcastReceiver() {
@@ -160,6 +163,8 @@ public class DimScreenActivity extends AppCompatActivity {
     }
 
     private void dimScreen(boolean shouldDim) {
+        if(checkIfShouldFinish()) return;
+
         WindowManager.LayoutParams wmParams = getWindow().getAttributes();
         wmParams.screenBrightness = shouldDim ? 1 / 255f : -1f;
         getWindow().setAttributes(wmParams);
