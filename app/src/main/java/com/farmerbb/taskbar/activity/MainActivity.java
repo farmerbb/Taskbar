@@ -56,6 +56,7 @@ import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
+import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -476,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
     private void showHelpDialog(int helpText) {
         View view = View.inflate(MainActivity.this, R.layout.tb_freeform_help_dialog, null);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        dialogMessage.setText(helpText);
+        dialogMessage.setText(DependencyUtils.getIconicsString(this, helpText));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setView(view)

@@ -23,8 +23,8 @@ public class DependencyUtils {
 
     private DependencyUtils() {}
 
-    public static CharSequence getKeyboardShortcutSummary(Context context) {
-        return context.getString(R.string.tb_pref_description_keyboard_shortcut_alt);
+    public static CharSequence getIconicsString(Context context, int stringRes) {
+        return context.getString(stringRes);
     }
 
     static ToastInterface createToast(Context context, String message, int length) {
