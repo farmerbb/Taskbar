@@ -24,7 +24,9 @@ Taskbar now allows you to backup and restore your app settings, allowing you to 
 
 On Android 9+ devices, Taskbar now respects the system theme setting, automatically switching between light and dark mode along with the rest of the system.  For Android 10 and higher, the "Dark theme" system setting is followed; on Android 9, the "Night mode" developer option is used instead.
 
-### Improved Android TV and Chrome OS support
+### Improved support for Android 11, Android TV, and Chrome OS
+
+Taskbar is now able to launch apps in freeform mode on the Android 11 Developer Preview.
 
 On Android TV 9+ devices like the Nvidia Shield, Taskbar will now guide you to the Android TV settings app for enabling crucial settings like displaying over other apps and usage access.  (Note that Taskbar still needs to be sideloaded on Android TV devices)
 
@@ -36,6 +38,6 @@ A Polish translation has been added, along with updated Chinese and German trans
 
 ### Miscellaneous features and improvements
 
-A new setting has been added to display a notification count in the status icon area (system tray).  There is also a new option to hide app labels on the start menu and desktop.  Apps that launch in a phone-sized freeform window will now launch in landscape if requested by the app.
+A new setting has been added to display a notification count in the status icon area (system tray).  There is also a new option to hide app labels on the start menu and desktop.  Apps that launch in a phone-sized freeform window will now launch in landscape if requested by the app's manifest.
 
 Finally, many bug fixes and under-the-hood improvements have been made, keeping Taskbar well maintained for the future!
