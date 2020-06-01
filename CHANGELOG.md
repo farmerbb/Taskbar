@@ -2,6 +2,8 @@
 
 ### Android 10 Desktop Mode support
 
+###### _XDA-Developers article: [Taskbar 6.0 enables a Samsung DeX-like desktop mode experience on some Android 10+ devices](https://www.xda-developers.com/taskbar-samsung-dex-desktop-mode-android-10/)_
+
 Taskbar now has support for Android 10's built-in desktop mode functionality.  You can connect your compatible Android 10+ device to an external display and run apps in resizable windows, with Taskbar's interface running on your external display and your existing launcher still running on your phone.
 
 Desktop mode requires a USB-to-HDMI adapter (or a lapdock), and a compatible device that supports video output.  Additionally, certain settings require granting a special permission via adb.
