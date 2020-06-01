@@ -65,6 +65,7 @@ You can also download a prebuilt APK here: https://github.com/farmerbb/libtaskba
 
 **v2.0.0**
 * Includes all changes from Taskbar 6.0
+* libtaskbar components now run in a separate process from the rest of the app
 * The "Enable freeform windows" developer option is now required, in addition to "Force desktop mode"
 
 _Known issues:_
