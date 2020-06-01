@@ -56,6 +56,7 @@ import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
+import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.helper.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
@@ -418,9 +419,11 @@ public class DashboardController extends UIController {
         U.unregisterReceiver(context, removeWidgetReceiver);
         U.unregisterReceiver(context, hideReceiver);
 
-        U.sendBroadcast(context, ACTION_DASHBOARD_DISAPPEARING);
-
         SharedPreferences pref = U.getSharedPreferences(context);
+        if(!LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
+                || !pref.getBoolean(PREF_DONT_STOP_DASHBOARD, false))
+            U.sendBroadcast(context, ACTION_DASHBOARD_DISAPPEARING);
+
         pref.edit().remove(PREF_DONT_STOP_DASHBOARD).apply();
     }
 

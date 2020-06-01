@@ -164,7 +164,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                             U.showImageChooser(getActivity());
                         break;
                     case PREF_DISPLAY_DENSITY:
-                        boolean isOnHomeScreen = LauncherHelper.getInstance().isOnSecondaryHomeScreen();
+                        boolean isOnHomeScreen = LauncherHelper.getInstance().isOnSecondaryHomeScreen(getActivity());
                         int displayID = U.getExternalDisplayID(getActivity());
 
                         try {

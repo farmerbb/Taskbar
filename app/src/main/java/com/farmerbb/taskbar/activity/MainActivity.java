@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = U.getSharedPreferences(this);
         pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
-        if(!LauncherHelper.getInstance().isOnHomeScreen()) {
+        if(!LauncherHelper.getInstance().isOnHomeScreen(this)) {
             stopService(new Intent(this, TaskbarService.class));
             stopService(new Intent(this, StartMenuService.class));
             stopService(new Intent(this, DashboardService.class));

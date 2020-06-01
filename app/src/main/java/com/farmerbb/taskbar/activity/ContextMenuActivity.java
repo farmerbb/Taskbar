@@ -257,7 +257,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     && !U.isOverridingFreeformHack(this, false)
                     && FreeformHackHelper.getInstance().isInFreeformWorkspace())
                     || (U.isOverridingFreeformHack(this, false)
-                    && LauncherHelper.getInstance().isOnHomeScreen()))) {
+                    && LauncherHelper.getInstance().isOnHomeScreen(this)))) {
                 addPreferencesFromResource(R.xml.tb_pref_context_menu_change_wallpaper);
                 findPreference(PREF_CHANGE_WALLPAPER).setOnPreferenceClickListener(this);
             }
@@ -483,7 +483,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     
                     LauncherHelper helper = LauncherHelper.getInstance();
-                    if(helper.isOnHomeScreen() || helper.isOnSecondaryHomeScreen())
+                    if(helper.isOnHomeScreen(this) || helper.isOnSecondaryHomeScreen(this))
                         U.applyOpenInNewWindow(this, intent2);
 
                     try {
@@ -613,7 +613,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
                 audio.adjustSuggestedStreamVolume(AudioManager.ADJUST_SAME, AudioManager.USE_DEFAULT_STREAM_TYPE, AudioManager.FLAG_SHOW_UI);
 
-                if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
+                if(LauncherHelper.getInstance().isOnSecondaryHomeScreen(this)) {
                     U.showToast(this, R.string.tb_opening_volume_control);
                     U.sendBroadcast(this, ACTION_UNDIM_SCREEN);
                 }
@@ -668,7 +668,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 break;
             case PREF_POWER_MENU:
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG, () -> {
-                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
+                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen(this)) {
                         U.showToast(this, R.string.tb_opening_power_menu);
                         U.sendBroadcast(this, ACTION_UNDIM_SCREEN);
                     }
@@ -702,7 +702,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 U.sendBroadcast(this, ACTION_SORT_DESKTOP_ICONS);
                 break;
             case PREF_CHANGE_WALLPAPER:
-                if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
+                if(LauncherHelper.getInstance().isOnSecondaryHomeScreen(this)) {
                     generateWallpaperOptions();
                     secondaryMenu = true;
                 } else if(U.isChromeOs(this)) {
@@ -841,7 +841,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
     }
 
     private void changeWallpaper() {
-        if(LauncherHelper.getInstance().isOnHomeScreen())
+        if(LauncherHelper.getInstance().isOnHomeScreen(this))
             U.sendBroadcast(this, ACTION_TEMP_HIDE_TASKBAR);
 
         Intent intent = Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper));

@@ -256,7 +256,8 @@ public class InvisibleActivityFreeform extends Activity {
     private void possiblyHideTaskbar() {
         if(!doNotHide) {
             new Handler().postDelayed(() -> {
-                if(U.shouldCollapse(this, false) && !LauncherHelper.getInstance().isOnHomeScreen()) {
+                if(U.shouldCollapse(this, false)
+                        && !LauncherHelper.getInstance().isOnHomeScreen(this)) {
                     U.sendBroadcast(this, ACTION_HIDE_TASKBAR);
                 } else {
                     U.sendBroadcast(this, ACTION_HIDE_START_MENU);

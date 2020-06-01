@@ -188,7 +188,7 @@ public class TaskbarController extends UIController {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(startButton.getVisibility() == View.GONE
-                    && (!LauncherHelper.getInstance().isOnHomeScreen() || FreeformHackHelper.getInstance().isInFreeformWorkspace()))
+                    && (!LauncherHelper.getInstance().isOnHomeScreen(context) || FreeformHackHelper.getInstance().isInFreeformWorkspace()))
                 layout.setVisibility(View.GONE);
         }
     };
@@ -659,7 +659,7 @@ public class TaskbarController extends UIController {
         if(!U.isLibrary(context)) {
             sysTrayLayout.setOnClickListener(v -> {
                 U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS, () -> {
-                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
+                    if(LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)) {
                         U.showToast(context, R.string.tb_opening_notification_tray);
                         U.sendBroadcast(context, ACTION_UNDIM_SCREEN);
                     }
@@ -672,7 +672,7 @@ public class TaskbarController extends UIController {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 sysTrayLayout.setOnLongClickListener(v -> {
                     U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS, () -> {
-                        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
+                        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)) {
                             U.showToast(context, R.string.tb_opening_quick_settings);
                             U.sendBroadcast(context, ACTION_UNDIM_SCREEN);
                         }
@@ -688,7 +688,7 @@ public class TaskbarController extends UIController {
                     if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                             && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY) {
                         U.sendAccessibilityAction(context, AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS, () -> {
-                            if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()) {
+                            if(LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)) {
                                 U.showToast(context, R.string.tb_opening_quick_settings);
                                 U.sendBroadcast(context, ACTION_UNDIM_SCREEN);
                             }
@@ -1215,7 +1215,7 @@ public class TaskbarController extends UIController {
             LauncherHelper helper = LauncherHelper.getInstance();
 
             if(!pref.getBoolean(PREF_GRIP_REJECTION_TOAST_SHOWN, false)
-                    && !helper.isOnSecondaryHomeScreen()) {
+                    && !helper.isOnSecondaryHomeScreen(context)) {
                 U.showToastLong(context, R.string.tb_essential_phone_grip_rejection);
                 pref.edit().putBoolean(PREF_GRIP_REJECTION_TOAST_SHOWN, true).apply();
             }
@@ -1421,7 +1421,7 @@ public class TaskbarController extends UIController {
 
         Bundle args = new Bundle();
         args.putBoolean("dont_show_quit",
-                LauncherHelper.getInstance().isOnHomeScreen()
+                LauncherHelper.getInstance().isOnHomeScreen(context)
                         && !pref.getBoolean(PREF_TASKBAR_ACTIVE, false));
         args.putBoolean("is_start_button", true);
 

@@ -40,13 +40,13 @@ public abstract class UIController {
         LauncherHelper helper = LauncherHelper.getInstance();
 
         boolean shouldProceed;
-        if(helper.isOnSecondaryHomeScreen())
+        if(helper.isOnSecondaryHomeScreen(context))
             shouldProceed = host instanceof SecondaryHomeActivity;
         else
             shouldProceed = true;
 
         if(shouldProceed && (pref.getBoolean(PREF_TASKBAR_ACTIVE, false)
-                || helper.isOnHomeScreen())) {
+                || helper.isOnHomeScreen(context))) {
             if(U.canDrawOverlays(context))
                 runnable.run();
             else {

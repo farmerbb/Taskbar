@@ -41,7 +41,7 @@ public class QuitReceiver extends BroadcastReceiver {
 
             pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
-            if(!LauncherHelper.getInstance().isOnHomeScreen()) {
+            if(!LauncherHelper.getInstance().isOnHomeScreen(context)) {
                 context.stopService(taskbarIntent);
                 context.stopService(startMenuIntent);
                 context.stopService(dashboardIntent);

@@ -28,6 +28,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -169,10 +170,21 @@ public class DashboardActivity extends Activity {
         return super.dispatchKeyShortcutEvent(event);
     }
 
+ // @Override
+    public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
+        if(!isTopResumedActivity)
+            performOnPauseLogic();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
 
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P)
+            performOnPauseLogic();
+    }
+
+    private void performOnPauseLogic() {
         if(shouldFinish) {
             if(shouldCollapse) {
                 if(U.shouldCollapse(this, true)) {
@@ -230,7 +242,7 @@ public class DashboardActivity extends Activity {
             startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
 
             SharedPreferences pref = U.getSharedPreferences(this);
-            if(LauncherHelper.getInstance().isOnHomeScreen() 
+            if(LauncherHelper.getInstance().isOnHomeScreen(this)
                     && (!pref.getBoolean(PREF_TASKBAR_ACTIVE, false)
                     || pref.getBoolean(PREF_IS_HIDDEN, false)))
                 pref.edit().putBoolean(PREF_DONT_STOP_DASHBOARD, true).apply();

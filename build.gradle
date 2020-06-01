@@ -19,7 +19,7 @@ plugins {
 
 ext {
     // TODO keep version name and version code in sync with Android-x86 manifest
-    VERSION_CODE = 199
+    VERSION_CODE = 200
     VERSION_NAME = "6.0"
 
     MIN_SDK_VERSION = 21

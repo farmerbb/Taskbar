@@ -216,7 +216,7 @@ public class DesktopModeFragment extends SettingsFragment {
                 break;
             case PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE:
                 LauncherHelper helper = LauncherHelper.getInstance();
-                if(helper.isOnSecondaryHomeScreen())
+                if(helper.isOnSecondaryHomeScreen(getActivity()))
                     U.showHideNavigationBar(getActivity(), helper.getSecondaryDisplayId(), !((CheckBoxPreference) p).isChecked(), 0);
 
                 break;
@@ -237,7 +237,7 @@ public class DesktopModeFragment extends SettingsFragment {
     private void startStopDesktopMode(boolean start) {
         if(!start || !U.isDesktopModeActive(getActivity()) || !U.launcherIsDefault(getActivity()))
             U.sendBroadcast(getActivity(), ACTION_KILL_HOME_ACTIVITY);
-        else if(!LauncherHelper.getInstance().isOnSecondaryHomeScreen())
+        else if(!LauncherHelper.getInstance().isOnSecondaryHomeScreen(getActivity()))
             U.showToastLong(getActivity(), R.string.tb_desktop_mode_setup_complete);
     }
 

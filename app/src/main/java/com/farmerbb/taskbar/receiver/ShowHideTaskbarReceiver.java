@@ -63,7 +63,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
 
             context.stopService(notificationIntent);
 
-            if(!LauncherHelper.getInstance().isOnHomeScreen()) {
+            if(!LauncherHelper.getInstance().isOnHomeScreen(context)) {
                 context.stopService(taskbarIntent);
                 context.stopService(startMenuIntent);
                 context.stopService(dashboardIntent);

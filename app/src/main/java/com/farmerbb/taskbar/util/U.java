@@ -514,7 +514,7 @@ public class U {
         int right = display.width;
         int bottom = display.height;
 
-        int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen()
+        int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen(context)
                 ? 0 : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
         if(TaskbarPosition.isVerticalLeft(position))
@@ -738,13 +738,13 @@ public class U {
     }
 
     public static int getStatusBarHeight(Context context) {
-        return LauncherHelper.getInstance().isOnSecondaryHomeScreen()
+        return LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
                 ? 0 : getSystemDimen(context, "status_bar_height");
     }
 
     private static int getNavbarHeight(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        boolean isNavbarHidden = LauncherHelper.getInstance().isOnSecondaryHomeScreen()
+        boolean isNavbarHidden = LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
                 && pref.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false);
 
         return isNavbarHidden ? 0 : getSystemDimen(context, "navigation_bar_height");
@@ -848,7 +848,7 @@ public class U {
     }
 
     public static boolean isServiceRunning(Context context, Class<? extends Service> cls) {
-        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen()
+        if(LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
                 && (cls.equals(TaskbarService.class)
                 || cls.equals(StartMenuService.class)
                 || cls.equals(DashboardService.class)))
@@ -1207,7 +1207,7 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, boolean show) {
-        showHideNavigationBar(context, getTaskbarDisplayID(), show, 0);
+        showHideNavigationBar(context, getTaskbarDisplayID(context), show, 0);
     }
 
     public static void showHideNavigationBar(Context context, int displayID, boolean show, int delay) {
@@ -1328,7 +1328,7 @@ public class U {
 
     public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
         context = getDisplayContext(context);
-        int displayID = getTaskbarDisplayID();
+        int displayID = getTaskbarDisplayID(context);
 
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         Display currentDisplay = null;
@@ -1381,10 +1381,10 @@ public class U {
         return info;
     }
 
-    private static int getTaskbarDisplayID() {
+    private static int getTaskbarDisplayID(Context context) {
         LauncherHelper helper = LauncherHelper.getInstance();
 
-        if(helper.isOnSecondaryHomeScreen())
+        if(helper.isOnSecondaryHomeScreen(context))
             return helper.getSecondaryDisplayId();
         else
             return Display.DEFAULT_DISPLAY;
@@ -1421,7 +1421,7 @@ public class U {
         if(pref.getBoolean(PREF_HIDE_TASKBAR, true)) {
             if(!isFreeformModeEnabled(context)
                     || isOverridingFreeformHack(context, false))
-                return !LauncherHelper.getInstance().isOnHomeScreen();
+                return !LauncherHelper.getInstance().isOnHomeScreen(context);
             else {
                 FreeformHackHelper helper = FreeformHackHelper.getInstance();
                 if(pendingAppLaunch)
@@ -1546,7 +1546,7 @@ public class U {
                         Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
 
                         LauncherHelper helper = LauncherHelper.getInstance();
-                        if(helper.isOnHomeScreen() || helper.isOnSecondaryHomeScreen())
+                        if(helper.isOnHomeScreen(context))
                             applyOpenInNewWindow(context, intent);
 
                         context.startActivity(intent);

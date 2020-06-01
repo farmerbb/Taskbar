@@ -595,7 +595,7 @@ public class StartMenuController extends UIController {
 
             U.sendBroadcast(context, ACTION_START_MENU_APPEARING);
 
-            boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen();
+            boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen(context);
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!U.isChromeOs(context) && (!onHomeScreen || inFreeformMode)) {
