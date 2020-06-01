@@ -367,7 +367,6 @@
         <activity
             android:name=".activity.DimScreenActivity"
             android:theme="@style/Taskbar.DimScreenActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
         <activity
             android:name=".activity.EnableAdditionalSettingsActivity"

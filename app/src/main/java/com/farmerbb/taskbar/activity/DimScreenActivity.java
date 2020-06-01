@@ -18,6 +18,7 @@ package com.farmerbb.taskbar.activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
@@ -81,6 +82,7 @@ public class DimScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tb_activity_hsl_config);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         TextView textView = findViewById(R.id.textView);
         textView.setText(R.string.tb_desktop_mode_is_active);
