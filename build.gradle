@@ -19,11 +19,11 @@ plugins {
 
 ext {
     // TODO keep version name and version code in sync with Android-x86 manifest
-    VERSION_CODE = 200
+    VERSION_CODE = 201
     VERSION_NAME = "6.0"
 
     MIN_SDK_VERSION = 21
-    BUILD_TOOLS_VERSION = "29.0.2"
+    BUILD_TOOLS_VERSION = "29.0.3"
 
     // Keep at 29 for now, since bumping to 30 will break freeform mode on Android 11
     SDK_VERSION = 29

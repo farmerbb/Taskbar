@@ -19,7 +19,7 @@
      * HomeActivity is enabled by default
      * Certain activities and receivers are not exposed
 -->
-<manifest android:versionCode="200"
+<manifest android:versionCode="201"
           android:versionName="6.0"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
