@@ -382,7 +382,7 @@ public class TaskbarController extends UIController {
 
     @SuppressLint("RtlHardcoded")
     @VisibleForTesting
-    public int getTaskbarGravity(String taskbarPosition) {
+    int getTaskbarGravity(String taskbarPosition) {
         int gravity = Gravity.BOTTOM | Gravity.LEFT;
         switch(taskbarPosition) {
             case POSITION_BOTTOM_LEFT:
@@ -406,7 +406,7 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public int getTaskbarLayoutId(String taskbarPosition) {
+    int getTaskbarLayoutId(String taskbarPosition) {
         int layoutId = R.layout.tb_taskbar_left;
         switch(taskbarPosition) {
             case POSITION_BOTTOM_LEFT:
@@ -430,7 +430,7 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
+    void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
         Drawable allAppsIcon = ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon);
         int padding = 0;
 
@@ -477,10 +477,10 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public boolean drawDashboardButton(Context context,
-                                       LinearLayout layout,
-                                       FrameLayout dashboardButton,
-                                       int accentColor) {
+    boolean drawDashboardButton(Context context,
+                                LinearLayout layout,
+                                FrameLayout dashboardButton,
+                                int accentColor) {
         boolean dashboardEnabled = U.getBooleanPrefWithDefault(context, PREF_DASHBOARD);
         if(dashboardEnabled) {
             layout.findViewById(R.id.square1).setBackgroundColor(accentColor);
@@ -499,10 +499,10 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public boolean drawNavbarButtons(Context context,
-                                     LinearLayout layout,
-                                     SharedPreferences pref,
-                                     int accentColor) {
+    boolean drawNavbarButtons(Context context,
+                              LinearLayout layout,
+                              SharedPreferences pref,
+                              int accentColor) {
         boolean navbarButtonsEnabled = false;
         if(pref.getBoolean(PREF_BUTTON_BACK, false)) {
             navbarButtonsEnabled = true;
@@ -618,7 +618,7 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public long getSearchInterval(SharedPreferences pref) {
+    long getSearchInterval(SharedPreferences pref) {
         long searchInterval = -1;
         switch(pref.getString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_PAST_DAY)) {
             case PREF_RECENTS_AMOUNT_PAST_DAY:
@@ -637,7 +637,7 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public void drawSysTray(Context context, int layoutId, LinearLayout layout) {
+    void drawSysTray(Context context, int layoutId, LinearLayout layout) {
         sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.tb_system_tray, null);
 
         FrameLayout.LayoutParams sysTrayParams = new FrameLayout.LayoutParams(
@@ -995,11 +995,11 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public void calculateScrollViewParams(Context context,
-                                          SharedPreferences pref,
-                                          ViewGroup.LayoutParams params,
-                                          boolean fullLength,
-                                          int numOfEntries) {
+    void calculateScrollViewParams(Context context,
+                                   SharedPreferences pref,
+                                   ViewGroup.LayoutParams params,
+                                   boolean fullLength,
+                                   int numOfEntries) {
         DisplayInfo display = U.getDisplayInfo(context, true);
         int recentsSize =
                 context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
@@ -1073,11 +1073,11 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public void scrollTaskbar(FrameLayout scrollView,
-                              LinearLayout taskbar,
-                              String taskbarPosition,
-                              String sortOrder,
-                              boolean shouldRefreshRecents) {
+    void scrollTaskbar(FrameLayout scrollView,
+                       LinearLayout taskbar,
+                       String taskbarPosition,
+                       String sortOrder,
+                       boolean shouldRefreshRecents) {
         if (TaskbarPosition.isVertical(taskbarPosition)) {
             if (sortOrder.contains("false")) {
                 scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
@@ -1098,10 +1098,10 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public void filterForegroundApp(Context context,
-                                    SharedPreferences pref,
-                                    long searchInterval,
-                                    List<String> applicationIdsToRemove) {
+    void filterForegroundApp(Context context,
+                             SharedPreferences pref,
+                             long searchInterval,
+                             List<String> applicationIdsToRemove) {
         if (pref.getBoolean(PREF_HIDE_FOREGROUND, false)) {
             UsageStatsManager mUsageStatsManager =
                     (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
@@ -1132,7 +1132,7 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public boolean needToReverseOrder(Context context, String sortOrder) {
+    boolean needToReverseOrder(Context context, String sortOrder) {
         switch(TaskbarPosition.getTaskbarPosition(context)) {
             case POSITION_BOTTOM_RIGHT:
             case POSITION_TOP_RIGHT:
@@ -1143,10 +1143,10 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public int filterRealPinnedApps(Context context,
-                                    List<AppEntry> pinnedApps,
-                                    List<AppEntry> entries,
-                                    List<String> applicationIdsToRemove) {
+    int filterRealPinnedApps(Context context,
+                             List<AppEntry> pinnedApps,
+                             List<AppEntry> entries,
+                             List<String> applicationIdsToRemove) {
         int realNumOfPinnedApps = 0;
         if(pinnedApps.size() > 0) {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
@@ -1170,10 +1170,10 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    public void populateAppEntry(Context context,
-                                 PackageManager pm,
-                                 List<AppEntry> entries,
-                                 List<LauncherActivityInfo> launcherAppCache) {
+    void populateAppEntry(Context context,
+                          PackageManager pm,
+                          List<AppEntry> entries,
+                          List<LauncherActivityInfo> launcherAppCache) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
 
         int launcherAppCachePos = -1;
