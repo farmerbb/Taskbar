@@ -27,6 +27,9 @@ import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
 import com.farmerbb.taskbar.mockito.StringAnswer;
+import com.farmerbb.taskbar.shadow.TaskbarShadowLauncherApps;
+import com.farmerbb.taskbar.shadow.TaskbarShadowScrollView;
+import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
@@ -77,7 +80,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
+@PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
+        "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"})
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class TaskbarControllerTest {
     @Rule
@@ -101,6 +105,7 @@ public class TaskbarControllerTest {
     @After
     public void tearDown() {
         prefs.edit().remove(PREF_START_BUTTON_IMAGE).apply();
+        TaskbarShadowLauncherApps.reset();
 
         uiController.onDestroyHost(host);
     }
@@ -586,6 +591,53 @@ public class TaskbarControllerTest {
             positionAnswer.answer = position;
             assertFalse(uiController.needToReverseOrder(context, sortOrder));
         }
+    }
+
+    @Test
+    @Config(shadows = TaskbarShadowLauncherApps.class)
+    public void testFilterRealPinnedApps() {
+        List<AppEntry> pinnedApps = new ArrayList<>();
+        List<AppEntry> entries = new ArrayList<>();
+        List<String> applicationIdsToRemove = new ArrayList<>();
+
+        int realNumOfPinnedApps = uiController.filterRealPinnedApps(
+                context, pinnedApps, entries, applicationIdsToRemove
+        );
+        assertEquals(0, realNumOfPinnedApps);
+
+        AppEntry appEntry = generateTestAppEntry(1);
+        pinnedApps.add(appEntry);
+        TaskbarShadowLauncherApps.addEnabledPackages(appEntry.getPackageName());
+        realNumOfPinnedApps = uiController.filterRealPinnedApps(
+                context, pinnedApps, entries, applicationIdsToRemove
+        );
+        assertEquals(1, realNumOfPinnedApps);
+        assertEquals(appEntry.getPackageName(), applicationIdsToRemove.get(0));
+        assertEquals(appEntry, entries.get(0));
+        applicationIdsToRemove.clear();
+        entries.clear();
+
+        appEntry = generateTestAppEntry(2);
+        pinnedApps.add(appEntry);
+        realNumOfPinnedApps = uiController.filterRealPinnedApps(
+                context, pinnedApps, entries, applicationIdsToRemove
+        );
+        assertEquals(1, realNumOfPinnedApps);
+        assertEquals(2, applicationIdsToRemove.size());
+        assertEquals(1, entries.size());
+    }
+
+    private AppEntry generateTestAppEntry(int index) {
+        AppEntry appEntry =
+                new AppEntry(
+                        "test-package-" + index,
+                        "test-component" + index,
+                        "test-label-" + index,
+                        null,
+                        false
+                );
+        appEntry.setUserId(0);
+        return appEntry;
     }
 
     private UsageEvents.Event buildTaskbarForegroundAppEvent(String className, long timestamp) {

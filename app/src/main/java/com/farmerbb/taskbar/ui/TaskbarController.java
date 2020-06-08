@@ -771,7 +771,6 @@ public class TaskbarController extends UIController {
         final List<AppEntry> entries = new ArrayList<>();
         List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
         int maxNumOfEntries = firstRefresh ? 0 : U.getMaxNumOfEntries(context);
-        int realNumOfPinnedApps = 0;
         boolean fullLength = pref.getBoolean(PREF_FULL_LENGTH, true);
 
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
@@ -780,24 +779,8 @@ public class TaskbarController extends UIController {
         List<String> applicationIdsToRemove = new ArrayList<>();
 
         // Filter out anything on the pinned/blocked apps lists
-        if(pinnedApps.size() > 0) {
-            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-            LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
-
-            for(AppEntry entry : pinnedApps) {
-                boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
-                        userManager.getUserForSerialNumber(entry.getUserId(context)));
-
-                if(packageEnabled)
-                    entries.add(entry);
-                else
-                    realNumOfPinnedApps--;
-
-                applicationIdsToRemove.add(entry.getPackageName());
-            }
-
-            realNumOfPinnedApps = realNumOfPinnedApps + pinnedApps.size();
-        }
+        int realNumOfPinnedApps =
+                filterRealPinnedApps(context, pinnedApps, entries, applicationIdsToRemove);
 
         if(blockedApps.size() > 0) {
             for(AppEntry entry : blockedApps) {
@@ -1180,6 +1163,33 @@ public class TaskbarController extends UIController {
             default:
                 return sortOrder.contains("true");
         }
+    }
+
+    @VisibleForTesting
+    public int filterRealPinnedApps(Context context,
+                                    List<AppEntry> pinnedApps,
+                                    List<AppEntry> entries,
+                                    List<String> applicationIdsToRemove) {
+        int realNumOfPinnedApps = 0;
+        if(pinnedApps.size() > 0) {
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+
+            for(AppEntry entry : pinnedApps) {
+                boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
+                        userManager.getUserForSerialNumber(entry.getUserId(context)));
+
+                if(packageEnabled)
+                    entries.add(entry);
+                else
+                    realNumOfPinnedApps--;
+
+                applicationIdsToRemove.add(entry.getPackageName());
+            }
+
+            realNumOfPinnedApps = realNumOfPinnedApps + pinnedApps.size();
+        }
+        return realNumOfPinnedApps;
     }
 
     private void updateRunningAppIndicators(List<AppEntry> pinnedApps, List<AppEntry> usageStatsList, List<AppEntry> entries) {
