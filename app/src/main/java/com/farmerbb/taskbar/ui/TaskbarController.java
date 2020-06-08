@@ -942,30 +942,7 @@ public class TaskbarController extends UIController {
                 currentTaskbarIds = finalApplicationIds;
                 numOfPinnedApps = realNumOfPinnedApps;
 
-                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-
-                int launcherAppCachePos = -1;
-                for(int i = 0; i < entries.size(); i++) {
-                    if(entries.get(i).getComponentName() == null) {
-                        launcherAppCachePos++;
-                        LauncherActivityInfo appInfo = launcherAppCache.get(launcherAppCachePos);
-                        String packageName = entries.get(i).getPackageName();
-                        long lastTimeUsed = entries.get(i).getLastTimeUsed();
-
-                        entries.remove(i);
-
-                        AppEntry newEntry = new AppEntry(
-                                packageName,
-                                appInfo.getComponentName().flattenToString(),
-                                appInfo.getLabel().toString(),
-                                IconCache.getInstance(context).getIcon(context, pm, appInfo),
-                                false);
-
-                        newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
-                        newEntry.setLastTimeUsed(lastTimeUsed);
-                        entries.add(i, newEntry);
-                    }
-                }
+                populateAppEntry(context, pm, entries, launcherAppCache);
 
                 final int numOfEntries = Math.min(entries.size(), maxNumOfEntries);
 
@@ -1190,6 +1167,37 @@ public class TaskbarController extends UIController {
             realNumOfPinnedApps = realNumOfPinnedApps + pinnedApps.size();
         }
         return realNumOfPinnedApps;
+    }
+
+    @VisibleForTesting
+    public void populateAppEntry(Context context,
+                                 PackageManager pm,
+                                 List<AppEntry> entries,
+                                 List<LauncherActivityInfo> launcherAppCache) {
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+
+        int launcherAppCachePos = -1;
+        for(int i = 0; i < entries.size(); i++) {
+            if(entries.get(i).getComponentName() == null) {
+                launcherAppCachePos++;
+                LauncherActivityInfo appInfo = launcherAppCache.get(launcherAppCachePos);
+                String packageName = entries.get(i).getPackageName();
+                long lastTimeUsed = entries.get(i).getLastTimeUsed();
+
+                entries.remove(i);
+
+                AppEntry newEntry = new AppEntry(
+                        packageName,
+                        appInfo.getComponentName().flattenToString(),
+                        appInfo.getLabel().toString(),
+                        IconCache.getInstance(context).getIcon(context, pm, appInfo),
+                        false);
+
+                newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
+                newEntry.setLastTimeUsed(lastTimeUsed);
+                entries.add(i, newEntry);
+            }
+        }
     }
 
     private void updateRunningAppIndicators(List<AppEntry> pinnedApps, List<AppEntry> usageStatsList, List<AppEntry> entries) {

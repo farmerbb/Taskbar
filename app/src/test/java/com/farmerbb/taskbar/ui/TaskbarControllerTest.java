@@ -5,10 +5,14 @@ import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,15 +79,18 @@ import static com.farmerbb.taskbar.util.Constants.PREF_TIME_OF_SERVICE_START;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.util.ReflectionHelpers.ClassParameter.from;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
         "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"})
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class TaskbarControllerTest {
+    private static final int DEFAULT_TEST_USER_ID = 0;
     @Rule
     public PowerMockRule rule = new PowerMockRule();
 
@@ -627,6 +634,51 @@ public class TaskbarControllerTest {
         assertEquals(1, entries.size());
     }
 
+    @Test
+    public void testPopulateAppEntry() {
+        List<AppEntry> entries = new ArrayList<>();
+        PackageManager pm = context.getPackageManager();
+        List<LauncherActivityInfo> launcherAppCache = new ArrayList<>();
+
+        uiController.populateAppEntry(context, pm, entries, launcherAppCache);
+        assertEquals(0, entries.size());
+
+        AppEntry appEntry = generateTestAppEntry(1);
+        entries.add(appEntry);
+        uiController.populateAppEntry(context, pm, entries, launcherAppCache);
+        assertEquals(1, entries.size());
+        assertSame(appEntry, entries.get(0));
+
+        AppEntry firstEntry = appEntry;
+        appEntry = new AppEntry("test-package", null, null, null, false);
+        appEntry.setLastTimeUsed(System.currentTimeMillis());
+        entries.add(appEntry);
+        ActivityInfo info = new ActivityInfo();
+        info.packageName = appEntry.getPackageName();
+        info.name = "test-name";
+        info.nonLocalizedLabel = "test-label";
+        LauncherActivityInfo launcherActivityInfo =
+                ReflectionHelpers.callConstructor(
+                        LauncherActivityInfo.class,
+                        from(Context.class, context),
+                        from(ActivityInfo.class, info),
+                        from(UserHandle.class, UserHandle.getUserHandleForUid(DEFAULT_TEST_USER_ID))
+                );
+        launcherAppCache.add(launcherActivityInfo);
+        uiController.populateAppEntry(context, pm, entries, launcherAppCache);
+        assertEquals(2, entries.size());
+        assertSame(firstEntry, entries.get(0));
+        AppEntry populatedEntry = entries.get(1);
+        assertEquals(info.packageName, populatedEntry.getPackageName());
+        assertEquals(
+                launcherActivityInfo.getComponentName().flattenToString(),
+                populatedEntry.getComponentName()
+        );
+        assertEquals(info.nonLocalizedLabel.toString(), populatedEntry.getLabel());
+        assertEquals(DEFAULT_TEST_USER_ID, populatedEntry.getUserId(context));
+        assertEquals(appEntry.getLastTimeUsed(), populatedEntry.getLastTimeUsed());
+    }
+
     private AppEntry generateTestAppEntry(int index) {
         AppEntry appEntry =
                 new AppEntry(
@@ -636,7 +688,7 @@ public class TaskbarControllerTest {
                         null,
                         false
                 );
-        appEntry.setUserId(0);
+        appEntry.setUserId(DEFAULT_TEST_USER_ID);
         return appEntry;
     }
 
