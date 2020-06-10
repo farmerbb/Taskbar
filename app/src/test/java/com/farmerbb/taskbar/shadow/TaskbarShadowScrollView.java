@@ -1,4 +1,4 @@
-package com.farmerbb.taskbar.ui;
+package com.farmerbb.taskbar.shadow;
 
 import android.widget.ScrollView;
 
