@@ -93,6 +93,12 @@ import static org.robolectric.util.ReflectionHelpers.ClassParameter.from;
         "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"})
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class TaskbarControllerTest {
+    private static final String UNSUPPORTED = "unsupported";
+    private static final String ENTRY_TEST_PACKAGE = "test-package";
+    private static final String ENTRY_TEST_COMPONENT = "test-component";
+    private static final String ENTRY_TEST_LABEL = "test-label";
+    private static final String ENTRY_TEST_NAME = "test-name";
+
     private static final int DEFAULT_TEST_USER_ID = 0;
     private static final int DEFAULT_TEST_USER_PROFILE_ID = 200000;
     @Rule
@@ -190,7 +196,7 @@ public class TaskbarControllerTest {
         );
         assertEquals(
                 Gravity.BOTTOM | Gravity.LEFT,
-                uiController.getTaskbarGravity("unsupported")
+                uiController.getTaskbarGravity(UNSUPPORTED)
         );
     }
 
@@ -230,7 +236,7 @@ public class TaskbarControllerTest {
         );
         assertEquals(
                 R.layout.tb_taskbar_left,
-                uiController.getTaskbarLayoutId("unsupported")
+                uiController.getTaskbarLayoutId(UNSUPPORTED)
         );
     }
 
@@ -345,7 +351,7 @@ public class TaskbarControllerTest {
         searchInterval = uiController.getSearchInterval(prefs);
         assertEquals(-1, searchInterval);
 
-        prefs.edit().putString(PREF_RECENTS_AMOUNT, "unsupported").apply();
+        prefs.edit().putString(PREF_RECENTS_AMOUNT, UNSUPPORTED).apply();
         searchInterval = uiController.getSearchInterval(prefs);
         assertEquals(-1, searchInterval);
 
@@ -502,27 +508,28 @@ public class TaskbarControllerTest {
         List<String> applicationIdsToRemove = new ArrayList<>();
         UsageStatsManager usageStatsManager =
                 (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        final String entryTestPackage1 = ENTRY_TEST_PACKAGE + "-1";
         UsageEvents.Event event =
                 EventBuilder
                         .buildEvent()
                         .setEventType(MOVE_TO_FOREGROUND)
                         .setTimeStamp(100L)
-                        .setPackage("test-package-1")
+                        .setPackage(entryTestPackage1)
                         .build();
         shadowOf(usageStatsManager).addEvent(event);
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
-        assertEquals("test-package-1", applicationIdsToRemove.remove(0));
+        assertEquals(entryTestPackage1, applicationIdsToRemove.remove(0));
 
         event =
                 EventBuilder
                         .buildEvent()
                         .setEventType(MOVE_TO_BACKGROUND)
                         .setTimeStamp(200L)
-                        .setPackage("test-package-2")
+                        .setPackage(ENTRY_TEST_PACKAGE + "-2")
                         .build();
         shadowOf(usageStatsManager).addEvent(event);
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
-        assertEquals("test-package-1", applicationIdsToRemove.remove(0));
+        assertEquals(entryTestPackage1, applicationIdsToRemove.remove(0));
 
         event = buildTaskbarForegroundAppEvent(MainActivity.class.getCanonicalName(), 300L);
         shadowOf(usageStatsManager).addEvent(event);
@@ -549,10 +556,10 @@ public class TaskbarControllerTest {
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
         assertEquals(InvisibleActivityFreeform.class.getCanonicalName(), applicationIdsToRemove.remove(0));
 
-        event = buildTaskbarForegroundAppEvent("unsupported", 800L);
+        event = buildTaskbarForegroundAppEvent(UNSUPPORTED, 800L);
         shadowOf(usageStatsManager).addEvent(event);
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
-        assertEquals("unsupported", applicationIdsToRemove.remove(0));
+        assertEquals(UNSUPPORTED, applicationIdsToRemove.remove(0));
 
         prefs.edit().remove(PREF_HIDE_FOREGROUND).apply();
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
@@ -574,7 +581,7 @@ public class TaskbarControllerTest {
         positions.add(POSITION_TOP_RIGHT);
         positions.add(POSITION_TOP_VERTICAL_LEFT);
         positions.add(POSITION_TOP_VERTICAL_RIGHT);
-        positions.add("unsupported");
+        positions.add(UNSUPPORTED);
 
         String sortOrder = "false";
         for (String position : positions) {
@@ -596,7 +603,7 @@ public class TaskbarControllerTest {
             }
         }
 
-        sortOrder = "unsupported";
+        sortOrder = UNSUPPORTED;
         for (String position : positions) {
             positionAnswer.answer = position;
             assertFalse(uiController.needToReverseOrder(context, sortOrder));
@@ -725,8 +732,8 @@ public class TaskbarControllerTest {
         appEntry =
                 new AppEntry(
                         "com.google.android.googlequicksearchbox",
-                        "test-component",
-                        "test-label",
+                        ENTRY_TEST_COMPONENT,
+                        ENTRY_TEST_LABEL,
                         null,
                         false
                 );
@@ -770,13 +777,13 @@ public class TaskbarControllerTest {
         assertSame(appEntry, entries.get(0));
 
         AppEntry firstEntry = appEntry;
-        appEntry = new AppEntry("test-package", null, null, null, false);
+        appEntry = new AppEntry(ENTRY_TEST_PACKAGE, null, null, null, false);
         appEntry.setLastTimeUsed(System.currentTimeMillis());
         entries.add(appEntry);
         ActivityInfo info = new ActivityInfo();
         info.packageName = appEntry.getPackageName();
-        info.name = "test-name";
-        info.nonLocalizedLabel = "test-label";
+        info.name = ENTRY_TEST_NAME;
+        info.nonLocalizedLabel = ENTRY_TEST_LABEL;
         LauncherActivityInfo launcherActivityInfo =
                 generateTestLauncherActivityInfo(context, info, DEFAULT_TEST_USER_ID);
         launcherAppCache.add(launcherActivityInfo);
@@ -809,9 +816,9 @@ public class TaskbarControllerTest {
     private AppEntry generateTestAppEntry(int index) {
         AppEntry appEntry =
                 new AppEntry(
-                        "test-package-" + index,
-                        "test-component" + index,
-                        "test-label-" + index,
+                        ENTRY_TEST_PACKAGE + "-" + index,
+                        ENTRY_TEST_COMPONENT + "-" + index,
+                        ENTRY_TEST_LABEL + "-" + index,
                         null,
                         false
                 );
