@@ -18,16 +18,21 @@ public class ViewParamsTest {
         int height = 101;
         int gravity = Gravity.BOTTOM;
         int flags = 1001;
-        ViewParams params = new ViewParams(width, height, gravity, flags);
+        int bottomMargin = 102;
+        ViewParams params = new ViewParams(width, height, gravity, flags, bottomMargin);
         WindowManager.LayoutParams generatedParams = params.toWindowManagerParams();
         assertEquals(width, generatedParams.width);
         assertEquals(height, generatedParams.height);
         assertEquals(gravity, generatedParams.gravity);
         assertEquals(flags, generatedParams.flags);
+        assertEquals(bottomMargin, generatedParams.y);
         assertEquals(PixelFormat.TRANSLUCENT, generatedParams.format);
         assertEquals(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, generatedParams.type);
         params.gravity = -1;
         generatedParams = params.toWindowManagerParams();
         assertEquals(0, generatedParams.gravity);
+        params.bottomMargin = -1;
+        generatedParams = params.toWindowManagerParams();
+        assertEquals(0, generatedParams.y);
     }
 }
