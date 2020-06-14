@@ -744,7 +744,8 @@ public class U {
 
     private static int getNavbarHeight(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        boolean isNavbarHidden = LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
+        boolean isNavbarHidden = isShowHideNavbarSupported()
+                && LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
                 && pref.getBoolean(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE, false);
 
         return isNavbarHidden ? 0 : getSystemDimen(context, "navigation_bar_height");
@@ -1211,9 +1212,10 @@ public class U {
     }
 
     public static void showHideNavigationBar(Context context, int displayID, boolean show, int delay) {
-        if(!isDesktopModeActive(context)
+        if(!isShowHideNavbarSupported()
+                || (!isDesktopModeActive(context)
                 && !isBlissOs(context)
-                && !hasSupportLibrary(context, 7)) {
+                && !hasSupportLibrary(context, 7))) {
             return;
         }
 
@@ -1254,6 +1256,10 @@ public class U {
             else
                 Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", show ? 1 : 0);
         } catch (Exception e) { /* Gracefully fail */ }
+    }
+
+    public static boolean isShowHideNavbarSupported() {
+        return getCurrentApiVersion() <= 29.0f;
     }
 
     public static void initPrefs(Context context) {

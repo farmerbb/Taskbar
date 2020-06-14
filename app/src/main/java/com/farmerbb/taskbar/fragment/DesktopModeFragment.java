@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.provider.Settings;
 
 import androidx.appcompat.app.ActionBar;
@@ -77,6 +78,11 @@ public class DesktopModeFragment extends SettingsFragment {
         findPreference(PREF_PRIMARY_LAUNCHER).setOnPreferenceClickListener(this);
         findPreference(PREF_DIM_SCREEN).setOnPreferenceClickListener(this);
         findPreference(PREF_ENABLE_ADDITIONAL_SETTINGS).setOnPreferenceClickListener(this);
+
+        if(!U.isShowHideNavbarSupported()) {
+            PreferenceCategory category = (PreferenceCategory) findPreference(PREF_ADDITIONAL_SETTINGS);
+            category.removePreference(findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE));
+        }
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean(PREF_LAUNCHER, false)) {
@@ -254,8 +260,11 @@ public class DesktopModeFragment extends SettingsFragment {
                 && U.isDesktopModeActive(getActivity());
 
         findPreference(PREF_DISPLAY_DENSITY).setEnabled(enabled);
-        findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE).setEnabled(enabled);
-        findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE).setOnPreferenceClickListener(this);
+
+        if(U.isShowHideNavbarSupported()) {
+            findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE).setEnabled(enabled);
+            findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE).setOnPreferenceClickListener(this);
+        }
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         DisplayInfo info = U.getExternalDisplayInfo(getActivity());

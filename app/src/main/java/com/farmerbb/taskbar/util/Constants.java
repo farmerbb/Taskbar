@@ -79,6 +79,7 @@ public class Constants {
     public static final String PREF_ACCENT_COLOR_PREF = "accent_color_pref";
     public static final String PREF_ADD_ICON_TO_DESKTOP = "add_icon_to_desktop";
     public static final String PREF_ADD_SHORTCUT = "add_shortcut";
+    public static final String PREF_ADDITIONAL_SETTINGS = "additional_settings";
     public static final String PREF_ALT_BUTTON_CONFIG = "alt_button_config";
     public static final String PREF_ANCHOR = "anchor";
     public static final String PREF_ANDROID_X86_PREFS = "android_x86_prefs";
@@ -87,6 +88,7 @@ public class Constants {
     public static final String PREF_APP_SHORTCUTS = "app_shortcuts";
     public static final String PREF_ARRANGE_ICONS = "arrange_icons";
     public static final String PREF_AUTO_HIDE_NAVBAR = "auto_hide_navbar";
+    public static final String PREF_AUTO_HIDE_NAVBAR_CATEGORY = "auto_hide_navbar_category";
     public static final String PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE = "auto_hide_navbar_desktop_mode";
     public static final String PREF_BACKGROUND_TINT = "background_tint";
     public static final String PREF_BACKGROUND_TINT_PREF = "background_tint_pref";
