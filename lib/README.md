@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.farmerbb:libtaskbar:1.0.0' // see badge above for latest version
+    implementation 'com.farmerbb:libtaskbar:2.0.0' // see badge above for latest version
 }
 ```
 
@@ -45,7 +45,7 @@ Finally, while Taskbar's desktop mode functionality is enabled out-of-the-box, i
 
 ### Things to consider
 
-* libtaskbar doesn't include any UI for informing the user to enable the "Enable freeform windows" and "Force desktop mode" developer options.  You may wish to include a setup flow inside your launcher to guide the user with enabling the option.  Note that a reboot is required for the option to take effect.
+* libtaskbar doesn't include any UI for informing the user to enable the "Enable freeform windows" and "Force desktop mode" developer options.  You may wish to include a setup flow inside your launcher to guide the user with enabling these options.  Note that a reboot is required for the option to take effect.
 
 * libtaskbar will add the `SYSTEM_ALERT_WINDOW` and `PACKAGE_USAGE_STATS` permissions to your app's manifest, as well as a small number of non-runtime permissions for additional functionality such as displaying a status area on the taskbar.  As a result, your app will appear inside the "Display over other apps" and "Usage access" sections of the "Special app access" page in Android's settings.
 
