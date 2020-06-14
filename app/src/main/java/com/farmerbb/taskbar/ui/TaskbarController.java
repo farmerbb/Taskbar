@@ -860,48 +860,7 @@ public class TaskbarController extends UIController {
                         ? usageStatsList6.size() - realNumOfPinnedApps
                         : usageStatsList6.size();
 
-                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-                LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
-
-                final List<UserHandle> userHandles = userManager.getUserProfiles();
-
-                for(int i = 0; i < number; i++) {
-                    for(UserHandle handle : userHandles) {
-                        String packageName = usageStatsList6.get(i).getPackageName();
-                        long lastTimeUsed = usageStatsList6.get(i).getLastTimeUsed();
-                        List<LauncherActivityInfo> list = launcherApps.getActivityList(packageName, handle);
-                        if(!list.isEmpty()) {
-                            // Google App workaround
-                            if(!packageName.equals("com.google.android.googlequicksearchbox"))
-                                launcherAppCache.add(list.get(0));
-                            else {
-                                boolean added = false;
-                                for(LauncherActivityInfo info : list) {
-                                    if(info.getName().equals("com.google.android.googlequicksearchbox.SearchActivity")) {
-                                        launcherAppCache.add(info);
-                                        added = true;
-                                    }
-                                }
-
-                                if(!added) launcherAppCache.add(list.get(0));
-                            }
-
-                            AppEntry newEntry = new AppEntry(
-                                    packageName,
-                                    null,
-                                    null,
-                                    null,
-                                    false
-                            );
-
-                            newEntry.setUserId(userManager.getSerialNumberForUser(handle));
-                            newEntry.setLastTimeUsed(lastTimeUsed);
-                            entries.add(newEntry);
-
-                            break;
-                        }
-                    }
-                }
+                generateAppEntries(context, number, usageStatsList6, entries, launcherAppCache);
             }
 
             while(entries.size() > maxNumOfEntries) {
@@ -942,7 +901,7 @@ public class TaskbarController extends UIController {
                 currentTaskbarIds = finalApplicationIds;
                 numOfPinnedApps = realNumOfPinnedApps;
 
-                populateAppEntry(context, pm, entries, launcherAppCache);
+                populateAppEntries(context, pm, entries, launcherAppCache);
 
                 final int numOfEntries = Math.min(entries.size(), maxNumOfEntries);
 
@@ -1170,10 +1129,60 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    void populateAppEntry(Context context,
-                          PackageManager pm,
-                          List<AppEntry> entries,
-                          List<LauncherActivityInfo> launcherAppCache) {
+    void generateAppEntries(Context context,
+                            int number,
+                            List<AppEntry> usageStatsList6,
+                            List<AppEntry> entries,
+                            List<LauncherActivityInfo> launcherAppCache) {
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        LauncherApps launcherApps =
+                (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+
+        final List<UserHandle> userHandles = userManager.getUserProfiles();
+
+        final String googleSearchBoxPackage = "com.google.android.googlequicksearchbox";
+        final String googleSearchBoxActivity =
+                "com.google.android.googlequicksearchbox.SearchActivity";
+        for(int i = 0; i < number; i++) {
+            for(UserHandle handle : userHandles) {
+                String packageName = usageStatsList6.get(i).getPackageName();
+                long lastTimeUsed = usageStatsList6.get(i).getLastTimeUsed();
+                List<LauncherActivityInfo> list = launcherApps.getActivityList(packageName, handle);
+                if(!list.isEmpty()) {
+                    // Google App workaround
+                    if (!packageName.equals(googleSearchBoxPackage)) {
+                        launcherAppCache.add(list.get(0));
+                    } else {
+                        boolean added = false;
+                        for(LauncherActivityInfo info : list) {
+                            if(info.getName().equals(googleSearchBoxActivity)) {
+                                launcherAppCache.add(info);
+                                added = true;
+                            }
+                        }
+
+                        if (!added) {
+                            launcherAppCache.add(list.get(0));
+                        }
+                    }
+
+                    AppEntry newEntry = new AppEntry(packageName, null, null, null, false);
+
+                    newEntry.setUserId(userManager.getSerialNumberForUser(handle));
+                    newEntry.setLastTimeUsed(lastTimeUsed);
+                    entries.add(newEntry);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    @VisibleForTesting
+    void populateAppEntries(Context context,
+                            PackageManager pm,
+                            List<AppEntry> entries,
+                            List<LauncherActivityInfo> launcherAppCache) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
 
         int launcherAppCachePos = -1;
