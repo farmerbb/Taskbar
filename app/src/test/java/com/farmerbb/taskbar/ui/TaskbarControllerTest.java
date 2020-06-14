@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -48,6 +49,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowUsageStatsManager.EventBuilder;
 import org.robolectric.util.ReflectionHelpers;
@@ -112,7 +114,6 @@ public class TaskbarControllerTest {
     @After
     public void tearDown() {
         prefs.edit().remove(PREF_START_BUTTON_IMAGE).apply();
-        TaskbarShadowLauncherApps.reset();
 
         uiController.onDestroyHost(host);
     }
@@ -612,9 +613,17 @@ public class TaskbarControllerTest {
         );
         assertEquals(0, realNumOfPinnedApps);
 
+        LauncherApps launcherApps =
+                (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+        TaskbarShadowLauncherApps taskbarShadowLauncherApps =
+                (TaskbarShadowLauncherApps) shadowOf(launcherApps);
         AppEntry appEntry = generateTestAppEntry(1);
         pinnedApps.add(appEntry);
-        TaskbarShadowLauncherApps.addEnabledPackages(appEntry.getPackageName());
+        taskbarShadowLauncherApps
+                .addEnabledPackage(
+                        UserHandle.getUserHandleForUid(DEFAULT_TEST_USER_ID),
+                        appEntry.getPackageName()
+                );
         realNumOfPinnedApps = uiController.filterRealPinnedApps(
                 context, pinnedApps, entries, applicationIdsToRemove
         );
@@ -632,6 +641,8 @@ public class TaskbarControllerTest {
         assertEquals(1, realNumOfPinnedApps);
         assertEquals(2, applicationIdsToRemove.size());
         assertEquals(1, entries.size());
+
+        taskbarShadowLauncherApps.reset();
     }
 
     @Test
