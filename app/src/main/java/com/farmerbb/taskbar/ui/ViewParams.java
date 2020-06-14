@@ -25,12 +25,14 @@ public class ViewParams {
     public int height;
     public int gravity;
     public int flags;
+    public int bottomMargin;
 
-    public ViewParams(int width, int height, int gravity, int flags) {
+    public ViewParams(int width, int height, int gravity, int flags, int bottomMargin) {
         this.width = width;
         this.height = height;
         this.gravity = gravity;
         this.flags = flags;
+        this.bottomMargin = bottomMargin;
     }
 
     public WindowManager.LayoutParams toWindowManagerParams() {
@@ -44,6 +46,9 @@ public class ViewParams {
 
         if(gravity > -1)
             wmParams.gravity = gravity;
+
+        if(bottomMargin > -1)
+            wmParams.y = bottomMargin;
 
         return wmParams;
     }

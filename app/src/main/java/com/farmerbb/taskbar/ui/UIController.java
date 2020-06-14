@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.helper.LauncherHelper;
+import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
@@ -55,5 +56,11 @@ public abstract class UIController {
             }
         } else
             host.terminate();
+    }
+
+    protected int getBottomMargin(Context context, UIHost host) {
+        return host instanceof SecondaryHomeActivity
+                && !U.isShowHideNavbarSupported()
+                && TaskbarPosition.isBottom(context) ? U.getNavbarHeight(context) : -1;
     }
 }

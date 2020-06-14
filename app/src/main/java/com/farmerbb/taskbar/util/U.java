@@ -742,7 +742,7 @@ public class U {
                 ? 0 : getSystemDimen(context, "status_bar_height");
     }
 
-    private static int getNavbarHeight(Context context) {
+    public static int getNavbarHeight(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         boolean isNavbarHidden = isShowHideNavbarSupported()
                 && LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
