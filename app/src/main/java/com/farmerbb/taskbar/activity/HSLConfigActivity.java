@@ -128,6 +128,7 @@ public class HSLConfigActivity extends AppCompatActivity {
             // Don't include the Settings dummy launcher, or Taskbar itself, on the list
             if(!string.equals("com.android.settings")
                     && !string.equals("com.android.tv.settings")
+                    && !string.equals("com.android.shell")
                     && !string.startsWith("com.farmerbb.taskbar")) {
                 if(string.equals("com.google.android.googlequicksearchbox")) {
                     // Only add the Google App onto the list if Google Now Launcher is installed
