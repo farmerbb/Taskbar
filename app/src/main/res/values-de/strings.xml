@@ -31,8 +31,8 @@
 
     <string name="tb_permission_dialog_title">Zugriff nötig</string>
     <string name="tb_permission_dialog_message">Taskbar braucht die Berechtigung, über anderen Apps einblenden, um zu starten.\n\n</string>
-    <string name="tb_permission_dialog_instructions_phone">Bitte drücken Sie \"Zugriff erlauben\" und stellen Sie sicher, dass \"Über anderen Apps einblenden\" freigeschaltet ist.</string>
-    <string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
+    <string name="tb_permission_dialog_instructions_phone">Bitte drücken Sie \"Zugriff erlauben\" und stellen Sie sicher, dass \"Über anderen Apps einblenden\" aktiviert ist.</string>
+    <string name="tb_permission_dialog_instructions_tv">Bitte wählen sie \"Einstellungen öffnen\", um das Android TV-Einstellungsmenü zu öffnen. Wählen Sie \"Spezieller App-Zugriff\", dann \"Über anderen Apps einblenden\" und stellen Sie sicher, dass Taskbar aktiviert ist.</string>
 
     <string name="tb_pref_header_general">Allgemeine Einstellungen</string>
     <string name="tb_pref_title_start_menu_layout">Startmenüansicht</string>
@@ -75,13 +75,13 @@
         <item>Zuletzt genutzt (aufsteigend)</item>
     </string-array>
 
-    <string name="tb_pref_header_advanced">Fortgeschrittene Optionen</string>
+    <string name="tb_pref_header_advanced">Erweiterte Optionen</string>
 
     <string name="tb_pref_title_freeform_hack">Unterstützung des Freiform-Modus</string>
     <string name="tb_pref_description_freeform_hack">Erlaubt Taskbar, Apps im Freifenstermodus zu starten, für ein Desktop-ähnlicheres Erlebnis.\n\nDiese Funktion ist experemintell und kann u.U. Probleme mit standart Split-Screen Multitasking veraursachen.</string>
 
     <string name="tb_pref_header_about">Über Taskbar</string>
-    <string name="tb_pref_about_description">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; %1$d Braden Farmer\nApps Logo von Mark Morilla\n\nKlicken Sie hier um auf Updates zu überprüfen oder eine Bewertung geben! %2$s</string>
+    <string name="tb_pref_about_description">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; %1$d Braden Farmer\nApps Logo von Mark Morilla\n\nTippen Sie hier, um auf Updates zu überprüfen oder eine Bewertung geben! %2$s</string>
     <string name="tb_pref_about_description_alt">Taskbar: Multitasking mit wenigen Fingertips\n\n&#169; %1$d Braden Farmer\nApps Logo von Mark Morilla</string>
 
     <string name="tb_pref_title_hide_taskbar">Taskbar nach dem Auswählen der App verbergen</string>
@@ -117,7 +117,7 @@
     <string name="tb_nothing_to_see_here">Nichts zu sehen hier, gehen Sie weiter&#8230;</string>
 
     <string name="tb_error_dialog_title">Fehler</string>
-    <string name="tb_error_dialog_message">Leider kann diese Option auf Ihrem Gerät wegen OEM Restriktionen nicht freigeschaltet werden.\n\nVielleicht können Sie aber sie durch folgenden den folgenden Befehl freigeben:\n\nappops set %1$s %2$s allow</string>
+    <string name="tb_error_dialog_message">Leider kann diese Option auf Ihrem Gerät augrund Herstellerrestriktionen nicht freigeschaltet werden.\n\nVielleicht können Sie aber sie durch folgenden den folgenden Befehl freigeben:\n\nappops set %1$s %2$s allow</string>
     <string name="tb_action_ok">OK</string>
     <string name="tb_action_cancel">Abbrechen</string>
 
@@ -130,7 +130,7 @@
     <string name="tb_pref_title_hide_foreground">Symbol für Fordergrundapp verstecken</string>
     <string name="tb_pref_summary_hide_foreground">Könnte die Leistung reduzieren</string>
 
-    <string name="tb_pref_title_theme">Thema</string>
+    <string name="tb_pref_title_theme">Design</string>
     <string-array name="tb_pref_theme_list">
         <item>Hell</item>
         <item>Dunkel</item>
@@ -146,7 +146,7 @@
     <string name="tb_pref_title_invisible_button">Knopf ausblenden, wenn Taskbar versteckt ist</string>
     <string name="tb_pref_title_freeform_mode_help">Hilfe und Anleitung zum Frriform Modus</string>
     <string name="tb_freeform_help_dialog_title">Hilfe und Anleitungen</string>
-    <string name="tb_freeform_help_dialog_message"><b>Über den Freiform Modus</b>\n\nMit Taskbar kannst du in Android 7.0 Apps in schwebenden Fenstern aufrufen, ganz ohne Root-Zugriff. Folgen Sie einfach den folgenden Anweisungen, um diesen freizuschalten:\n\n<b>1.</b> Überprüfen Sie, ob /\"Freiformfrnster/\" in Taskbar aktiviert ist.\n\n<b>2.</b> Folgen Sie den Anweisungen, die in dem Popup Fenster erscheinen, um die Option auf Ihrem Gerät zu aktivieren.\n\n<b>3.</b> Gehen Sie mit offenem Taskbar zu der Liste der letzten Apps.\n\n<b>4.</b> Leeren Sie alles und gehen Sie zurück zu der (leeren) Liste.\n\n<b>5.</b> Gehen Sie auf Taskbars Startknopf und wählen Sie eine App, um diese im Freiform Modus laufen zu lassen.\n\n<i>Bei Problemen gehen Sie auf die Hilfsseite.</i></string>
+    <string name="tb_freeform_help_dialog_message"><b>Über den Freiformmodus</b>\n\nMit Taskbar können Sie ab Android 7.0 Apps in schwebenden Fenstern aufrufen, ganz ohne Root-Zugriff. Folgen Sie einfach den folgenden Anweisungen, um diesen freizuschalten:\n\n<b>1.</b> Überprüfen Sie, ob /\"Freiformfrnster/\" in Taskbar aktiviert ist.\n\n<b>2.</b> Folgen Sie den Anweisungen, die in dem Popup Fenster erscheinen, um die Option auf Ihrem Gerät zu aktivieren.\n\n<b>3.</b> Gehen Sie mit offenem Taskbar zu der Liste der letzten Apps.\n\n<b>4.</b> Leeren Sie alles und gehen Sie zurück zu der (leeren) Liste.\n\n<b>5.</b> Tippen Sie auf Taskbars Startknopf und wählen Sie eine App, um diese im Freiformmodus laufen zu lassen.\n\n<i>Bei Problemen gehen Sie auf die Hilfsseite.</i></string>
 
     <string name="tb_action_developer_options">Entwickleroptionen anzeigen</string>
     <string name="tb_action_close">Schließen</string>
@@ -167,12 +167,12 @@
     <string name="tb_app_hidden">1 App versteckt</string>
     <string name="tb_apps_hidden">%1$d Apps versteckt</string>
     <string name="tb_blacklist_dialog_title">Versteckt</string>
-    <string name="tb_top_app">Eine Top App</string>
-    <string name="tb_top_apps">%1$d Top Apps</string>
-    <string name="tb_top_apps_dialog_title">Top Apps</string>
+    <string name="tb_top_app">Eine Top-App</string>
+    <string name="tb_top_apps">%1$d Top-Apps</string>
+    <string name="tb_top_apps_dialog_title">Top-Apps</string>
     <string name="tb_start_menu_apps">Apps im Startmenü</string>
 
-    <string name="tb_reboot_required">Starten Sie Ihr Gerät neu, um die Einrichtung des Freiform Modus abzuschließen</string>
+    <string name="tb_reboot_required">Starten Sie Ihr Gerät neu, um die Einrichtung des Freiformmodus abzuschließen</string>
     <string name="tb_enable_force_activities_resizable">Scrollen Sie auf zum Ende und aktivieren Sie \"%s\""</string>
     <string name="tb_set_as_default_home">Drücken Sie \"Immer\", um Taskbar als Ihren Standartlauncher festzulegen</string>
     <string name="tb_enable_developer_options">Aktivieren Sie die Entwickleroptionen, indem Sie sieben mal auf die Buildnummer tippen</string>
@@ -180,7 +180,7 @@
     <string name="tb_pref_title_anchor">Taskbar bei Bildschirmrotationen anheften</string>
     <string name="tb_pref_title_donate">Spenden</string>
     <string name="tb_pref_summary_donate">Unterstützen Sie Taskbar, indem Sie auf die Spezialversion upgraten</string>
-    <string name="tb_dialog_donate_message">Unterstützen Sie Taskbar, indem Sie zur Spezialversion für %1$s wechseln!\n\nDie Spezialversion ist identisch zu der, die Sie gerade benutzen und Ihre Einstellungen werden automatisch übernommen.\n\nTaskbar ist und wird auch immer 100%%ig frei, quelloffen und ohne Werbung sein. Deshalb ist Ihre Unterstützung sehr willkommen.</string>
+    <string name="tb_dialog_donate_message">Unterstützen Sie Taskbar, indem Sie zur Spezialversion für %1$s wechseln!\n\nDie Spezialversion ist identisch zu der, die Sie gerade benutzen, und Ihre Einstellungen werden automatisch übernommen.\n\nTaskbar ist und wird auch immer 100%%ig frei, quelloffen und ohne Werbung sein. Deshalb ist Ihre Unterstützung sehr willkommen.</string>
     <string name="tb_action_no_thanks">Nein, danke</string>
 
     <string name="tb_importing_settings">Einstellungen werden importiert, bitte warten.</string>
@@ -204,7 +204,7 @@
     <string name="tb_must_specify_extra">Intent.EXTRA_PACKAGE_NAME muss spezifiziert werden</string>
     <string name="tb_invalid_package_name">Ungültiger Paketname</string>
 
-    <string name="tb_pref_title_use_mask">Masken für Themenlose icons anzeigen</string>
+    <string name="tb_pref_title_use_mask">Masken für themenlose Icons anzeigen</string>
     <string name="tb_pref_description_use_mask">Kann die Leistung reduzieren, falls ein Icon Paket gesetzt ist.</string>
 
     <string name="tb_pref_title_app_drawer_icon">Das Logo von Taskbar als Menüknopf verwenden</string>
@@ -218,7 +218,7 @@
     <string name="tb_pref_description_save_window_sizes">Wenn neue Fenster aus dem Kontextmenü geöffnet werden</string>
 
     <string name="tb_add_shortcut">Kürzel zum Hauptbildschirm hinzufügen</string>
-    <string name="tb_shortcut_created">Freiform Modus Kürzel erstellt</string>
+    <string name="tb_shortcut_created">Freiformmodus-Verknüpfung erstellt</string>
 
     <string name="tb_start_taskbar">Taskbar starten</string>
     <string name="tb_no_freeform_support">Freiform ist auf diesem Gerät nicht aktiviert - öffnen Sie Taskbar und aktivieren Sie es zuerst.</string>
@@ -294,14 +294,14 @@
     <string name="tb_refresh_frequency_continuous">Kontinuierlich</string>
 
     <string name="tb_power_button_warning_title">Vorsicht</string>
-    <string name="tb_power_button_warning_message">Custom ROMs basierend auf CyanogenMod / LineageOS haben ein Problem, bei dem der Power Button nicht funktioniert, während das Gerät im Freiform Modus ist.\n\nBitte teste deinen Power Button nun. Sollte dieser nicht funktionieren dann sei Vorsichtig im Freiform Modus, da du vielleicht die Möglichkeit das Gerät wieder aufzuwecken verlierst, nachdem es automatisch in den Ruhezustand fällt.</string>
+    <string name="tb_power_button_warning_message">auf CyanogenMod / LineageOS basierende Custom ROMs haben ein Problem, bei dem der Power Button nicht funktioniert, während das Gerät im Freiformmodus ist.\n\nBitte testen Sie Ihren Power Button nun. Sollte dieser nicht funktionieren, seien Sie im Freiformmodus vorsichtig, da Sie vielleicht die Möglichkeit das Gerät wieder aufzuwecken verlierem, nachdem es automatisch in den Ruhezustand fällt.</string>
     <string name="tb_action_i_understand">Ich verstehe</string>
 
-    <string name="tb_hide_taskbar_disclaimer">Trifft nicht auf Apps im Freiform Modus zu</string>
+    <string name="tb_hide_taskbar_disclaimer">Trifft nicht auf Apps im Freiformmodus zu</string>
     <string name="tb_transparent_start_menu">Transparentes Startmenü</string>
 
     <string name="tb_launch_games_fullscreen_title">Spiele im Vollbildmodus öffnen</string>
-    <string name="tb_launch_games_fullscreen_message">Wenn eine Anwendung sich als Spiel deklariert, dann diesem verbieten im Freiform Modus zu starten.</string>
+    <string name="tb_launch_games_fullscreen_message">Wenn eine Anwendung sich als Spiel deklariert, dann diesem verbieten, im Freiformmodus zu starten.</string>
 
     <string name="tb_invalid_grid_size">Ugültige Gittergröße</string>
 
@@ -318,7 +318,7 @@
     <string name="tb_restore_widget">Widget wiederherstellen</string>
 
     <string name="tb_samsung_freeform_title">Hinweis</string>
-    <string name="tb_samsung_freeform_message">Taskbar kann auf einigen Samsung-Geräten Probleme beim Öffnen von Anwendungen im Freiform Modus haben, da Systemänderungen im Multi-Window-Modus vorgenommen wurden. In diesem Fall müssen Sie möglicherweise ein benutzerdefiniertes ROM flashen, um den Freiform Modus auf diesem Gerät zu verwenden.</string>
+    <string name="tb_samsung_freeform_message">Taskbar kann auf einigen Samsung-Geräten Probleme beim Öffnen von Anwendungen im Freiformmodus haben, da Systemänderungen im Multi-Window-Modus vorgenommen wurden. In diesem Fall müssen Sie möglicherweise ein benutzerdefiniertes ROM flashen, um den Freiformmodus auf diesem Gerät zu verwenden.</string>
 
     <string name="tb_widget_restore_toast">Wählen Sie \"%1$s\", um dieses Widget wiederherzustellen.</string>
 
@@ -337,8 +337,8 @@
     <string name="tb_color_picker_green">Grün</string>
     <string name="tb_color_picker_blue">Blau</string>
 
-    <string name="tb_pref_title_chrome_os_context_menu_fix">Chrome OS Dock Kompatibilitätsmodus</string>
-    <string name="tb_pref_description_chrome_os_context_menu_fix">Aktivieren Sie dies, wenn Sie die Taskleiste neben dem Chrome OS Dock verwenden.</string>
+    <string name="tb_pref_title_chrome_os_context_menu_fix">Chrome OS-Dock-Kompatibilitätsmodus</string>
+    <string name="tb_pref_description_chrome_os_context_menu_fix">Aktivieren Sie dies, wenn Sie die Taskleiste neben dem Chrome OS-Dock verwenden.</string>
 
     <string name="tb_pin_shortcut_not_supported">Ihr Launcher unterstützt das Hinzufügen von Verknüpfungen aus anderen Anwendungen nicht.\n\n\Bitte fügen Sie die Verknüpfung manuell aus dem Menü \"Widgets\" Ihres Launchers hinzu.</string>
 
@@ -388,9 +388,9 @@
     <string name="tb_start_button_image_default">Standard</string>
     <string name="tb_start_button_image_custom">Benutzerdefiniert</string>
 
-    <string name="tb_pref_centered_icons">Center icons within whitespace</string>
-    <string name="tb_pref_title_sys_tray">Show status icons and clock</string>
-    <string name="tb_pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
+    <string name="tb_pref_centered_icons">Icons in Leerraum zentrieren</string>
+    <string name="tb_pref_title_sys_tray">Status-Icons und Uhr anzeigen</string>
+    <string name="tb_pref_description_sys_tray">Nur sichtbar, wenn Taskbar im horizontalen Modus ist.</string>
 
     <string name="tb_settings">Einstellungen</string>
     <string name="tb_powered_by_taskbar">Ermöglicht durch Taskbar</string>
@@ -404,7 +404,7 @@
     <string name="tb_backup_failed">Beim Erstellen des Backups ist ein Fehler aufgetreten</string>
     <string name="tb_restore_failed">Beim Wiederherstellen des Backups ist ein Fehler aufgetreten</string>
     <string name="tb_backup_restore_not_available">Sichern und Wiederherstellen ist auf diesem Gerät nicht verfügbar</string>
-    <string name="tb_backup_file_invalid">Die ausgewählte Backupdatei ist ungültig Bitte versuchen Sie es erneut.</string>
+    <string name="tb_backup_file_invalid">Die ausgewählte Backupdatei ist ungültig. Bitte versuchen Sie es erneut.</string>
 
     <string name="tb_new_shortcut">App öffnen</string>
     <string name="tb_allow_freeform_mode">App im Freiform-Modus öffnen</string>
@@ -423,9 +423,9 @@
     <string name="tb_auto_hide_navbar_alt">Navigationsleiste auf dem Desktop ausblenden</string>
     <string name="tb_enable_additional_settings">Erweiterte Einstellungen aktivieren</string>
 
-    <string name="tb_hsl_no_launchers_found">Kein Hauptlauncher gefunden. Bitte laden Sie einen herunter und installieren Sie uhn.</string>
+    <string name="tb_hsl_no_launchers_found">Kein Hauptlauncher gefunden. Bitte installieren Sie einen Launcher.</string>
     <string name="tb_hsl_launcher_uninstalled">%1$s wurde deinstalliert. Bitte wählen Sie einen anderen Launcher aus der Liste.</string>
-    <string name="tb_hsl_main_activity_text">Bitte wählen Sie ihren primären Launcher aus. Diese Auswhl kann jederzeit aus Taskbars Desktopmodus-Einstellungen geändert werden.</string>
+    <string name="tb_hsl_main_activity_text">Bitte wählen Sie ihren primären Launcher aus. Diese Auswahl kann jederzeit aus Taskbars Desktopmodus-Einstellungen geändert werden.</string>
 
     <string-array name="tb_pref_display_density_list">
         <item>Standard</item>
@@ -448,37 +448,37 @@
     <string name="tb_clear_qs_shortcuts">Schnelleinstellungskacheln</string>
     <string name="tb_pref_description_enable_recents">Benötigt, um zuletzt verwendete Apps anzuzeigen</string>
 
-    <string name="tb_disable_home_setting">Please disable the \"Replace home screen\" setting under \"Advanced features\" in order to use desktop mode.</string>
-    <string name="tb_desktop_mode_setup_complete">Launch Taskbar by clicking the home button on your external display.</string>
+    <string name="tb_disable_home_setting">Bitte deeaktivieren Sie die \"Launcher ersetzen\"-Option unter \"Erweiterte Optionen\", um den Desktopmodus zu nutzen.</string>
+    <string name="tb_desktop_mode_setup_complete">Taskbar öffnen, wenn der Home-Button auf dem externen Display gedrückt wird.</string>
 
-    <string name="tb_hide_icon_labels">Hide app icon labels</string>
+    <string name="tb_hide_icon_labels">App-Iconlabels ausblenden</string>
 
-    <string name="tb_opening_notification_tray">Opened notification tray on primary display</string>
-    <string name="tb_opening_quick_settings">Opened quick settings on primary display</string>
-    <string name="tb_opening_volume_control">Opened volume control on primary display</string>
-    <string name="tb_opening_power_menu">Opened power menu on primary display</string>
+    <string name="tb_opening_notification_tray">Benachrichtigunsleiste auf dem Hauptbildschirm geöffnet</string>
+    <string name="tb_opening_quick_settings">Schnelleinstellungen auf dem Hauptbildschirm geöffnet</string>
+    <string name="tb_opening_volume_control">Lautstärkeregler auf dem Hauptbildschirm geöffnet</string>
+    <string name="tb_opening_power_menu">Power-Menü auf dem Hauptbildschirm geöffnet</string>
 
-    <string name="tb_pref_dim_screen_title">Lock and dim phone screen while active</string>
-    <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
-    <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
+    <string name="tb_pref_dim_screen_title">Bildschirm während aktiv abdunkeln und sperren</string>
+    <string name="tb_pref_dim_screen_description">Drücken Sie den Home-Button zum manuellen Aktivieren</string>
+    <string name="tb_desktop_mode_is_active">Desktopmodus ist aktiv</string>
 
-    <string name="tb_pref_change_wallpaper_global">Apply to entire device</string>
-    <string name="tb_pref_change_wallpaper_desktop">Apply to desktop only</string>
-    <string name="tb_pref_remove_desktop_wallpaper">Use device wallpaper</string>
+    <string name="tb_pref_change_wallpaper_global">Für das ganze Gerät festlegen</string>
+    <string name="tb_pref_change_wallpaper_desktop">Nur für den Desktop festlegen</string>
+    <string name="tb_pref_remove_desktop_wallpaper">Gerätshintergrundbild verwenden</string>
 
-    <string name="tb_pref_notification_count_title">Show notification count in status area</string>
-    <string name="tb_pref_notification_count_description">Requires notification access</string>
+    <string name="tb_pref_notification_count_title">Benachrichtigungen im Statusbereich anzeigen</string>
+    <string name="tb_pref_notification_count_description">Benötigt Benachrichtigungszugriff</string>
 
-    <string name="tb_desktop_mode_dialog_title">Enable desktop mode support</string>
-    <string name="tb_desktop_mode_dialog_message">To configure your device for desktop mode, please follow these steps:\n\n&#8226; Go to Developer Options\n\n&#8226; Scroll to the bottom and turn on \"Enable freeform windows\" and \"Force desktop mode\"\n\n&#8226; Set Taskbar as your default home app\n\n&#8226; Reboot your device\n\nFor more information and troubleshooting steps, click the (?) icon in the upper-right hand corner of the screen.</string>
-    <string name="tb_reboot_required_alt">Reboot your device to complete desktop mode setup</string>
-    <string name="tb_enable_additional_settings_message_1">Taskbar can optionally use elevated permissions to improve your desktop mode experience. These permissions are granted by running an adb shell command.\n\nIf you wish to continue, connect your device to a computer with the Android SDK installed, and run the following command (one line):</string>
-    <string name="tb_enable_additional_settings_message_2">Once granted, the additional settings will be enabled when a display is connected.</string>
-    <string name="tb_desktop_mode_pref_description">Use Taskbar to launch windowed apps on an external display, similar to Samsung DeX and other solutions.\n\nRequires either a USB-to-HDMI adapter, or a lapdock, and a device that supports video output.</string>
-    <string name="tb_enable_additional_settings_pref_description">Click here for info on how to enable</string>
+    <string name="tb_desktop_mode_dialog_title">Unterstützung für den Desktopmodus aktivieren.</string>
+    <string name="tb_desktop_mode_dialog_message">Um Ihr Gerät für den Desktopmodus zu konfigurieren, folgen Sie bitte diesen Schritten:\n\n&#8226; Öffnen Sie die Entwickleroptionen\n\n&#8226; Scrollen Sie nach unten und aktivieren Sie \"Freiform-Fenster zulassen\" und \"Desktop-Modus erzwingen\"\n\n&#8226; Wählen sie Taskabr als Standard-Launcher aus\n\n&#8226; Starten Sie Ihr Gerät neu\n\nUm weitere Informationen und Fehlerbehebungsschritte zu erhalten, tippen Sie auf das (?)-Icon oben rechts auf dem Bildschirm.</string>
+    <string name="tb_reboot_required_alt">Starten Sie ihr Gerät neu, um die Einrichtung des Desktopmodus abzuschließen.</string>
+    <string name="tb_enable_additional_settings_message_1">Taskbar kann optional auch erweiterte Berechtigungen verwenden, um ihre Desktoperfahrung zu verbessern. Diese Berechtigungen werden durch einen ADB-Shellbefehl gewährt.\n\nWenn Sie fortfahren möchten, verbinden Sie ihr Gerät mit einem Computer, auf dem das Android-SDK installiert ist, und führen Sie diesen Befehl aus (eine Zeile):</string>
+    <string name="tb_enable_additional_settings_message_2">Nach Gewährung werden die Berechtigungen genutzt.</string>
+    <string name="tb_desktop_mode_pref_description">Taskabr verwenden, um Apps auf einem externen Bildschirm in Fenstern zu öffnen, ähnlich wie Samsung DeX und andere Lösungen.\n\nBenötigt entweder einen USB-zu-HDMI-Adapter, ein Lapdock, und ein Gerät, das Video-Output unterstützt.</string>
+    <string name="tb_enable_additional_settings_pref_description">Tippen Sie hier für Informationen zum Aktivieren</string>
 
-    <string name="tb_desktop_mode_help"><b>About desktop mode</b>\n\nTaskbar supports Android 10\'s built-in desktop mode functionality. You can connect your compatible Android 10+ device to an external display and run apps in resizable windows, with Taskbar\'s interface running on your external display and your existing launcher still running on your phone.\n\nDesktop mode requires a USB-to-HDMI adapter (or a lapdock), and a compatible device that supports video output. Additionally, certain settings require granting a special permission via adb.\n\nTo get started, tick the checkbox for \"Desktop mode.\" The app will guide you through the one-time setup process, which involves:\n\n&#8226; Enabling the \"Enable freeform windows\" and \"Force desktop mode\" developer options\n\n&#8226; Setting Taskbar as your default home app\n\n&#8226; Rebooting your device\n\n<b>Why does Taskbar need to be set as my default home app for desktop mode to work?</b>\n\nBy design, Android will only allow the default home app to act as the launcher for desktop mode on external displays.  If the currently set home app does not specifically declare support for desktop mode, then Android will fall back to using a predefined desktop mode interface.\n\nTaskbar is able to work around this limitation by acting as a shim between the system and your preferred launcher.  When Taskbar is set as your home app, when the home button is pressed it will immediately start the launcher you prefer to use on your phone, then quit.  This launcher is set within Taskbar\'s desktop mode preferences by clicking on the \"Primary launcher\" setting.\n\nThere are a couple of caveats to keep in mind when Taskbar is set as your home app:\n\n&#8226; Most app shortcuts (seen when long-pressing an app icon) will no longer be available to your primary launcher.  This is due to an Android system limitation where only the default home app has access to app shortcuts that are dynamically created.\n\n&#8226; Certain animations that occur when pressing the home button may look incorrect.  This is due to the aforementioned behavior where Taskbar acts as a shim when the home button is pressed.\n\n<b>How do I know if my device supports video output to external displays?</b>\n\nThe folks over at NexDock maintain a list of Android 10+ smartphones that are compatible with USB-to-HDMI video output (this list excludes Samsung and Huawei devices).  You can view this list here: http://nexdock.com/lapdock-for-smartphones\n\nGoogle Pixel devices, notably, do not include support for video output.  However, you can still use Taskbar with standard screen mirroring on these devices, either via Chromecast or by using a DisplayLink dock coupled with the DisplayLink Presenter app.\n\n<b>Should I use Taskbar\'s desktop mode over my device\'s built-in desktop mode solution, such as Samsung DeX?</b>\n\nSome OEMs, such as Samsung and Huawei, have implemented their own version of desktop mode, building on top of Google\'s implementation in Android 10.  These solutions have better integration with the rest of the system and are generally more polished overall.  There is no need to switch over to Taskbar if you\'re happy with your device\'s existing desktop mode solution.\n\nTaskbar\'s desktop mode support is geared towards devices that don\'t offer a built-in desktop mode solution beyond what Google ships as stock with Android 10.\n\n<b>I can\'t find the \"Force desktop mode\" toggle in developer options &#8211; can I still use desktop mode?</b>\n\nSome devices (such as the ASUS ROG Phone 2) do not have the \"Force desktop mode\" toggle in developer options. You will need to enable that option manually via adb. To do so, connect your device to a computer with the Android SDK installed, and run the following command (one-line):\n\nadb shell settings put global force_desktop_mode_on_external_displays 1\n\n<b>What should I do if something goes wrong or my launcher / apps behave funky when desktop mode is enabled?</b>\n\nPlease follow these steps to disable desktop mode in case anything goes wrong:\n\n&#8226; Pull down the quick settings drawer, then enter system settings via the gear icon\n\n&#8226; Navigate to developer options and disable \"Enable freeform support\" and \"Force desktop mode\"\n\n&#8226; Reboot your device</string>
+    <string name="tb_desktop_mode_help"><b>Über den Desktopmodus</b>\n\nTaskbar unterstützt die eingebaute Desktopmodus-Funktionalität von Android 10 und neuer.Sie können ein kompatibles Android 10+-Gerät mit einem externen Bildschirm verbinden und Apps in Fenstern öffnen, während Taskbars Benutzeroberfläche auf dem externen Bildschirm läuft, und ihr Launcher weiterhin auf ihrem Smartphone.\n\nDer Desktopmodus benötigt entweder einen USB-zu-HDMI-Adapter, ein Lapdock, und ein Gerät, das Video-Output unterstützt. Zusätzlich benötigen einige Einstellungen über ADB gewährte Berechtigungen.\n\nUm loszulegen, aktivieren sie die Checkbox für \"Desktopmodus\". Die App wird sie durch den einmaligen Einrichtungsvorgang führen, der folgendes enthält:\n\n&#8226; Die \"Freiform-Fenster zulassen\" und \"Desktop-Modus erzwingen\"-Entwickleroption zu aktivieren\n\n&#8226; Taskbar als Standardlauncher festzulegen\n\n&#8226; Ihr Gerät neu zu starten\n\n<b>Wieso muss Taskbar mein Standardlauncher sein, um den Desktopmodus zu verwenden?</b>\n\nAndroid erlaubt es nur dem Standardlauncher, auch als Launcher auf dem externen Display verwendet zu werden. Wenn die aktuell festgelegte Home-App nicht explizit den Desktopmodus unterstützt, verwendet Android einen eigenen Desktopnmodus.\n\nTaskbar kann dies umgehen, indem die App als Verbindung zwischen dem System und Ihrem Lieblingslauncher arbeitet.  Wenn Taskbar als Standardlauncher festgelegt ist, wird es direkt Ihren Lieblingslauncher starten, und sich dann selbst beenden.  Dieser Launcher wird in Taskbars Desktopmodus-Einstellungen festgelegt durch Einstellen der \"Standardlauncher\"-Optiom.\n\nEs gibt einige Dinge zu beachten, wenn Sie Taskbar als Standardlauncher verwenden:\n\n&#8226; Die meisten App-Shortcuts werden nicht mehr angezeigt, wenn sie lange af das App-Icon drücken.  Dies liegt daran, dass Android nur dem Standardlauncher erlaubt, auf dynamisch erzeugte App-Shortcuts zuzugreifen. \n\n&#8226; Einige Animationen, die erfolgen, wenn der Homebutton gedrückt wird, werden eventuell fehlerhaft dargestellt.  Dies liegt daran, dass Taskbar als Verbindung zwischen Launche rund System den Prozess unterbricht.\n\n<b>Woher weiß ich, ob mein Gerät Video-Output auf externen Displays unterstützt?</b>\n\nNexDock betreibt eine Liste von Android 10+-Smartphones, die USB-zu-HDMI-Videooutput unterstützen (dies schließt Samsung- und Huawai-Geräte aus).  Diese Liste ist hier verfügbar: http://nexdock.com/lapdock-for-smartphones\n\nBeispielweise Google Pixel-Geräte unterstützen diesen Output nicht.  Trotzdem kann Taskbar weiterhin auf diesen Geräten über Screen-Mirroring verwendet werden, entweder über ChromeCast oder einem DisplayLink-Dock mit der zugehörigen App.\n\n<b>Sollte ich Taskbars Desktopmodus statt dem eingebauten meines Gerätes verwenden, zum Beispiel Samsung DeX?</b>\n\Einige Hersteller, wie Samsung und Huawei, haben ihren eigenen Desktopmodus entwickelt, auf Basis des von Google in Android 10+ eingebauten Desktopmodus.  Diese Lösungen haben eine bessere Systemintegration und sind generell ausgefeilter.  Es ist nicht nötig, zu Taskbar zu wechseln, wenn Sie mit dem Desktopmodus ihres Geräts zufreiden sind.\n\nTaskbars Desktopmodus ist für Geräte gedacht, die außer dem von Google in Android 10+ eingebauten keinen eigenen Desktopmodus haben.\n\n<b>Ich finde die \"Desktop-Modus erzwingen\"-Option in den Entwickleroptionen nicht &#8211; kann ich den Desktopmodus trotzdem verwenden?</b>\n\nEinige Geräte (wie das ASUS ROG Phone 2)haben die \"Desktop-Modus erzwingen\"-Option nicht. In diesem Fall müssen Sie die Option manuell über ADB aktivieren. Um dies zu tun, verbinden Sie ihr Gerät mit einem Computer, auf dem das Android-SDK installiert ist, und führen sie folgenden Befehl aus (eine Zeile):\n\nadb shell settings put global force_desktop_mode_on_external_displays 1\n\n<b>Was soll ich tun, wenn etwas schiefgeht oder mein Launcher/meine Apps sich komisch veralten, wenn der Desktopmouds aktiv ist?</b>\n\nBitte folgen Sie disen Schritten, um den Desktopmodus zu deaktivieren, wenn etwas schiefgeht:\n\n&#8226; Ziehen Sie das Schnelleinstellungsmenü herunter, dann öffnen Sie die Einstellungen mit einem Tipp auf das Zahnradsybold\n\n&#8226; Öffen Sie die Entwickleroptionen und deaktivieren sie dort \"Freiform-Fenster zulassen\" und \"Desktop-Modus erzwingen\"\n\n&#8226; Starten Sie ihr Gerät neu.</string>
 
-    <string name="tb_see_whats_new">See what\'s new in this release</string>
-    <string name="tb_action_view">View</string>
+    <string name="tb_see_whats_new">Änderungen dieser Version anzeigen</string>
+    <string name="tb_action_view">Anzeigen</string>
 </resources>
