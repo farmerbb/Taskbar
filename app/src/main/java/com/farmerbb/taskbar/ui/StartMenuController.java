@@ -36,6 +36,8 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.SearchView;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -176,17 +178,7 @@ public class StartMenuController extends UIController {
         IconCache.getInstance(context).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(context);
-        switch(pref.getString(PREF_SHOW_SEARCH_BAR, "always")) {
-            case "always":
-                shouldShowSearchBox = true;
-                break;
-            case "keyboard":
-                shouldShowSearchBox = hasHardwareKeyboard;
-                break;
-            case "never":
-                shouldShowSearchBox = false;
-                break;
-        }
+        shouldShowSearchBox = shouldShowSearchBox(pref, hasHardwareKeyboard);
 
         // Initialize layout params
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -414,6 +406,23 @@ public class StartMenuController extends UIController {
         refreshApps(true);
 
         host.addView(layout, params);
+    }
+
+    @VisibleForTesting
+    boolean shouldShowSearchBox(SharedPreferences pref, boolean hasHardwareKeyboard) {
+        boolean shouldShowSearchBox;
+        switch(pref.getString(PREF_SHOW_SEARCH_BAR, "always")) {
+            case "always":
+                shouldShowSearchBox = true;
+                break;
+            case "keyboard":
+                shouldShowSearchBox = hasHardwareKeyboard;
+                break;
+            default:
+                shouldShowSearchBox = false;
+                break;
+        }
+        return shouldShowSearchBox;
     }
 
     private void refreshApps(boolean firstDraw) {
