@@ -2,9 +2,11 @@ package com.farmerbb.taskbar.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.Gravity;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
@@ -18,7 +20,16 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT;
+import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -35,7 +46,7 @@ public class StartMenuControllerTest {
     private StartMenuController uiController;
     private Context context;
     private SharedPreferences prefs;
-    private UIHost host = new MockUIHost();
+    private final UIHost host = new MockUIHost();
 
     @Before
     public void setUp() {
@@ -69,5 +80,77 @@ public class StartMenuControllerTest {
 
         prefs.edit().putString(PREF_SHOW_SEARCH_BAR, UNSUPPORTED).apply();
         assertFalse(uiController.shouldShowSearchBox(prefs, true));
+    }
+
+    @Test
+    public void testGetStartMenuLayoutId() {
+        assertEquals(
+                R.layout.tb_start_menu_left,
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_start_menu_right,
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_RIGHT)
+        );
+        assertEquals(
+                R.layout.tb_start_menu_top_left,
+                uiController.getStartMenuLayoutId(POSITION_TOP_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_start_menu_vertical_left,
+                uiController.getStartMenuLayoutId(POSITION_TOP_VERTICAL_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_start_menu_vertical_left,
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_VERTICAL_LEFT)
+        );
+        assertEquals(
+                R.layout.tb_start_menu_top_right,
+                uiController.getStartMenuLayoutId(POSITION_TOP_RIGHT)
+        );
+        assertEquals(
+                R.layout.tb_start_menu_vertical_right,
+                uiController.getStartMenuLayoutId(POSITION_TOP_VERTICAL_RIGHT)
+        );
+        assertEquals(
+                R.layout.tb_start_menu_vertical_right,
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_VERTICAL_RIGHT)
+        );
+    }
+
+    @Test
+    public void testGetStartMenuGravity() {
+        assertEquals(
+                Gravity.BOTTOM | Gravity.LEFT,
+                uiController.getStartMenuGravity(POSITION_BOTTOM_LEFT)
+        );
+        assertEquals(
+                Gravity.BOTTOM | Gravity.LEFT,
+                uiController.getStartMenuGravity(POSITION_BOTTOM_VERTICAL_LEFT)
+        );
+        assertEquals(
+                Gravity.BOTTOM | Gravity.RIGHT,
+                uiController.getStartMenuGravity(POSITION_BOTTOM_RIGHT)
+        );
+        assertEquals(
+                Gravity.BOTTOM | Gravity.RIGHT,
+                uiController.getStartMenuGravity(POSITION_BOTTOM_VERTICAL_RIGHT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.LEFT,
+                uiController.getStartMenuGravity(POSITION_TOP_LEFT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.LEFT,
+                uiController.getStartMenuGravity(POSITION_TOP_VERTICAL_LEFT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.RIGHT,
+                uiController.getStartMenuGravity(POSITION_TOP_RIGHT)
+        );
+        assertEquals(
+                Gravity.TOP | Gravity.RIGHT,
+                uiController.getStartMenuGravity(POSITION_TOP_VERTICAL_RIGHT)
+        );
     }
 }
