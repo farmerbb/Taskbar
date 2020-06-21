@@ -36,6 +36,8 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.SearchView;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -171,22 +173,11 @@ public class StartMenuController extends UIController {
         init(context, host, () -> drawStartMenu(host));
     }
 
-    @SuppressLint("RtlHardcoded")
     private void drawStartMenu(UIHost host) {
         IconCache.getInstance(context).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(context);
-        switch(pref.getString(PREF_SHOW_SEARCH_BAR, "always")) {
-            case "always":
-                shouldShowSearchBox = true;
-                break;
-            case "keyboard":
-                shouldShowSearchBox = hasHardwareKeyboard;
-                break;
-            case "never":
-                shouldShowSearchBox = false;
-                break;
-        }
+        shouldShowSearchBox = shouldShowSearchBox(pref, hasHardwareKeyboard);
 
         // Initialize layout params
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -201,40 +192,9 @@ public class StartMenuController extends UIController {
         );
 
         // Determine where to show the start menu on screen
-        switch(TaskbarPosition.getTaskbarPosition(context)) {
-            case POSITION_BOTTOM_LEFT:
-                layoutId = R.layout.tb_start_menu_left;
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
-            case POSITION_BOTTOM_VERTICAL_LEFT:
-                layoutId = R.layout.tb_start_menu_vertical_left;
-                params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
-            case POSITION_BOTTOM_RIGHT:
-                layoutId = R.layout.tb_start_menu_right;
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                break;
-            case POSITION_BOTTOM_VERTICAL_RIGHT:
-                layoutId = R.layout.tb_start_menu_vertical_right;
-                params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                break;
-            case POSITION_TOP_LEFT:
-                layoutId = R.layout.tb_start_menu_top_left;
-                params.gravity = Gravity.TOP | Gravity.LEFT;
-                break;
-            case POSITION_TOP_VERTICAL_LEFT:
-                layoutId = R.layout.tb_start_menu_vertical_left;
-                params.gravity = Gravity.TOP | Gravity.LEFT;
-                break;
-            case POSITION_TOP_RIGHT:
-                layoutId = R.layout.tb_start_menu_top_right;
-                params.gravity = Gravity.TOP | Gravity.RIGHT;
-                break;
-            case POSITION_TOP_VERTICAL_RIGHT:
-                layoutId = R.layout.tb_start_menu_vertical_right;
-                params.gravity = Gravity.TOP | Gravity.RIGHT;
-                break;
-        }
+        String taskbarPosition = TaskbarPosition.getTaskbarPosition(context);
+        layoutId = getStartMenuLayoutId(taskbarPosition);
+        params.gravity = getStartMenuGravity(taskbarPosition);
 
         // Initialize views
         layout = (StartMenuLayout) LayoutInflater.from(U.wrapContext(context)).inflate(layoutId, null);
@@ -414,6 +374,76 @@ public class StartMenuController extends UIController {
         refreshApps(true);
 
         host.addView(layout, params);
+    }
+
+    @VisibleForTesting
+    boolean shouldShowSearchBox(SharedPreferences pref, boolean hasHardwareKeyboard) {
+        boolean shouldShowSearchBox;
+        switch(pref.getString(PREF_SHOW_SEARCH_BAR, "always")) {
+            case "always":
+                shouldShowSearchBox = true;
+                break;
+            case "keyboard":
+                shouldShowSearchBox = hasHardwareKeyboard;
+                break;
+            default:
+                shouldShowSearchBox = false;
+                break;
+        }
+        return shouldShowSearchBox;
+    }
+
+    @VisibleForTesting
+    int getStartMenuLayoutId(String taskbarPosition) {
+        int layoutId = R.layout.tb_start_menu_left;
+        switch(taskbarPosition) {
+            case POSITION_BOTTOM_LEFT:
+                layoutId = R.layout.tb_start_menu_left;
+                break;
+            case POSITION_BOTTOM_RIGHT:
+                layoutId = R.layout.tb_start_menu_right;
+                break;
+            case POSITION_TOP_LEFT:
+                layoutId = R.layout.tb_start_menu_top_left;
+                break;
+            case POSITION_TOP_VERTICAL_LEFT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+                layoutId = R.layout.tb_start_menu_vertical_left;
+                break;
+            case POSITION_TOP_RIGHT:
+                layoutId = R.layout.tb_start_menu_top_right;
+                break;
+            case POSITION_TOP_VERTICAL_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                layoutId = R.layout.tb_start_menu_vertical_right;
+                break;
+        }
+        return layoutId;
+    }
+
+    @VisibleForTesting
+    @SuppressLint("RtlHardcoded")
+    int getStartMenuGravity(String taskbarPosition) {
+        int gravity = Gravity.BOTTOM | Gravity.LEFT;;
+        switch(taskbarPosition) {
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+                gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case POSITION_BOTTOM_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case POSITION_TOP_LEFT:
+            case POSITION_TOP_VERTICAL_LEFT:
+                gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case POSITION_TOP_RIGHT:
+            case POSITION_TOP_VERTICAL_RIGHT:
+                gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+        }
+        return gravity;
     }
 
     private void refreshApps(boolean firstDraw) {
