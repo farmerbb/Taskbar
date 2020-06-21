@@ -395,55 +395,43 @@ public class StartMenuController extends UIController {
 
     @VisibleForTesting
     int getStartMenuLayoutId(String taskbarPosition) {
-        int layoutId = R.layout.tb_start_menu_left;
         switch(taskbarPosition) {
             case POSITION_BOTTOM_LEFT:
-                layoutId = R.layout.tb_start_menu_left;
-                break;
+            default:
+                return R.layout.tb_start_menu_left;
             case POSITION_BOTTOM_RIGHT:
-                layoutId = R.layout.tb_start_menu_right;
-                break;
+                return R.layout.tb_start_menu_right;
             case POSITION_TOP_LEFT:
-                layoutId = R.layout.tb_start_menu_top_left;
-                break;
+                return R.layout.tb_start_menu_top_left;
             case POSITION_TOP_VERTICAL_LEFT:
             case POSITION_BOTTOM_VERTICAL_LEFT:
-                layoutId = R.layout.tb_start_menu_vertical_left;
-                break;
+                return R.layout.tb_start_menu_vertical_left;
             case POSITION_TOP_RIGHT:
-                layoutId = R.layout.tb_start_menu_top_right;
-                break;
+                return R.layout.tb_start_menu_top_right;
             case POSITION_TOP_VERTICAL_RIGHT:
             case POSITION_BOTTOM_VERTICAL_RIGHT:
-                layoutId = R.layout.tb_start_menu_vertical_right;
-                break;
+                return R.layout.tb_start_menu_vertical_right;
         }
-        return layoutId;
     }
 
     @VisibleForTesting
     @SuppressLint("RtlHardcoded")
     int getStartMenuGravity(String taskbarPosition) {
-        int gravity = Gravity.BOTTOM | Gravity.LEFT;;
         switch(taskbarPosition) {
             case POSITION_BOTTOM_LEFT:
             case POSITION_BOTTOM_VERTICAL_LEFT:
-                gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
+            default:
+                return Gravity.BOTTOM | Gravity.LEFT;
             case POSITION_BOTTOM_RIGHT:
             case POSITION_BOTTOM_VERTICAL_RIGHT:
-                gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                break;
+                return Gravity.BOTTOM | Gravity.RIGHT;
             case POSITION_TOP_LEFT:
             case POSITION_TOP_VERTICAL_LEFT:
-                gravity = Gravity.TOP | Gravity.LEFT;
-                break;
+                return Gravity.TOP | Gravity.LEFT;
             case POSITION_TOP_RIGHT:
             case POSITION_TOP_VERTICAL_RIGHT:
-                gravity = Gravity.TOP | Gravity.RIGHT;
-                break;
+                return Gravity.TOP | Gravity.RIGHT;
         }
-        return gravity;
     }
 
     private void refreshApps(boolean firstDraw) {
