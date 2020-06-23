@@ -18,7 +18,7 @@ android {
         versionCode VERSION_CODE
         versionName VERSION_NAME
 
-        resConfigs "en", "ja", "ru", "de", "zh-rCN", "tr", "nl", "pl"
+        resConfigs "en", "es", "ja", "ru", "de", "zh-rCN", "tr", "nl", "pl"
         vectorDrawables.generatedDensities = []
 
         buildConfigField "String", "BASE_APPLICATION_ID", "\"com.farmerbb.taskbar\""
