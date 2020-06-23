@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="tb_app_name">Taskbar</string>
+    <string name="tb_app_name_debug">Taskbar (Debug)</string>
+
+    <string name="tb_taskbar_is_active">Taskbar está activa</string>
+    <string name="tb_click_to_open_settings">Click para abrir los ajustes</string>
+    <string name="tb_action_show">Mostrar barra de tareas</string>
+    <string name="tb_action_hide">Ocultar la barra de tareas</string>
+    <string name="tb_action_show_alt">@string/tb_action_show</string>
+    <string name="tb_action_hide_alt">@string/tb_action_hide</string>
+    <string name="tb_action_quit">Salir</string>
+    <string name="tb_action_grant_permission">Dar acceso</string>
+    <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
+
+    <string name="tb_permission_dialog_title">Acceso necesario</string>
+    <string name="tb_permission_dialog_message">La barra de tareas necesita el permiso para mostrar encima de otras aplicaciones para empezar.\n\n</string>
+    <string name="tb_permission_dialog_instructions_phone">Por favor, pulsa \"Permitir acceso\" y asegúrase de que "Mostar sobre otras apps\"  está activado.</string>
+    <string name="tb_permission_dialog_instructions_tv">Por favor, seleccione \ "Abrir ajustes\" para abrir el menú de ajustes de Android TV. Escoga "Acceso especial a la aplicación", luego "Mostrar encima de otras aplicaciones" y asegúrase de que la barra de tareas esté activada.</string>
+
+    <string name="tb_pref_header_general" >Ajustes generales</string>
+    <string name="tb_pref_title_start_menu_layout">Vista del menú de inicio</string>
+    <string name="tb_pref_title_background_tint">Color de fondo</string>
+    <string name="tb_pref_title_scrollbar">Mostrar la barra de desplazamiento en el menú</string>
+    <string name="tb_pref_title_start_on_boot">Iniciar en el 
+arranque</string>
+
+    <string-array name="tb_pref_start_menu_list">
+        <item>Cuadrícula</item>
+        <item>Lista</item>
+    </string-array>
+
+    <string name="tb_pref_header_recent_apps">Últimas aplicaciones</string>
+
+    <string name="tb_pref_title_enable_recents">(Des)activar el acceso a los datos de uso</string>
+    <string name="tb_pref_title_recents_refresh_interval">Frecuencia de actualización</string>
+
+    <string name="tb_pref_title_amount_of_recents">Número de aplicaciones en ejecución que se mostrarán</string>
+    <string-array name="tb_pref_recents_amount">
+        <item>Desde el último día</item>
+        <item>Desde el comienzo de la Barra de Tareas</item>
+        <item>Todas las aplicaciones (pueden afectar el rendimiento)</item>
+    </string-array>
+    <string-array name="tb_pref_recents_amount_alt">
+        <item>Desde el último día</item>
+        <item>Desde el comienzo de la Barra de Tareas</item>
+        <item>Todas las aplicaciones (pueden afectar el rendimiento)</item>
+        <item>Sólo aplicaciones abiertas</item>
+    </string-array>
+
+    <string name="tb_pref_title_sort_order">Secuencia de clasificación</string>
+    <string-array name="tb_pref_sort_order">
+        <item>Último usado (descendente)</item>
+        <item>Último usado (ascendente)</item>
+        <item>Más usado</item>
+        <item>Menos usado</item>
+    </string-array>
+    <string-array name="tb_pref_sort_order_alt">
+        <item>Último usado (descendente)</item>
+        <item>Último usado (ascendente)</item>
+    </string-array>
+
+    <string name="tb_pref_header_advanced">Opciones avanzadas</string>
+
+    <string name="tb_pref_title_freeform_hack">Soporte de ventana libre</string>
+    <string name="tb_pref_description_freeform_hack">Permite que la barra de tareas inicie aplicaciones en modo de ventana libre para una experiencia más parecida a la del escritorio.\n\nEsta característica es experemintal y puede causar problemas con la multitarea estándar de pantalla dividida.</string>
+
+    <string name="tb_pref_header_about">Sobre la Barra de tareas</string>
+    <string name="tb_pref_about_description">Barra de tareas: Multitarea con sólo unos pocos toques\n\n&#169; %1$d Braden Farmer\Logo de aplicaciones por Mark Morilla\n\n¡Pulse aquí para comprobar las actualizaciones o dar una calificación! %2$s</string>
+    <string name="tb_pref_about_description_alt">Barra de tareas: Multitarea con sólo unos pocos toques\n\n&#169; %1$d Braden Farmer\nLogo de aplicaciones por Mark Morilla</string>
+
+    <string name="tb_pref_title_hide_taskbar">Ocultar la barra de tareas después de seleccionar la aplicación</string>
+
+    <string name="tb_pref_title_launcher">Reemplazar el lanzador</string>
+    <string name="tb_pref_description_launcher">Usar la barra de tareas como pantalla de inicio</string>
+
+    <string name="tb_set_wallpaper">Establecer imagen de fondo con&#8230;</string>
+    <string name="tb_pref_disable_animations">Accelerar cambio de aplicación</string>
+
+    <string name="tb_pref_title_position">Posición en pantalla</string>
+    <string-array name="tb_pref_position_list">
+        <item>Izquierda inferior (horizontal)</item>
+        <item>Izquierda inferior (vertical)</item>
+        <item>Derecha inferior (horizontal)</item>
+        <item>Derecha inferior (vertical)</item>
+        <item>Izquierda superior (horizontal)</item>
+        <item>Izquierda superior (vertical)</item>
+        <item>Derecha superior (horizontal)</item>
+        <item>Derecha superior (vertical)</item>
+    </string-array>
+
+    <string name="tb_app_info">Información de la aplicación</string>
+    <string name="tb_uninstall">Desinstalar</string>
+    <string name="tb_open_taskbar_settings">Abrir ajustes</string>
+    <string name="tb_quit_taskbar">Salir</string>
+
+    <string name="tb_pref_title_keyboard_shortcut">Activar atajos de teclado</string>
+    <string name="tb_pref_description_keyboard_shortcut">Iniciar/detener Barra de tareas: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nMostrar menú inicio: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(requiere establecer la aplicación asistente de la Barra de tareass en los Ajustes)</string>
+    <string name="tb_pref_description_keyboard_shortcut_alt">Iniciar/detener Barra de tareas\n&#8226; WinKey+M / Search+M\n\nMostrar menú inicio\n&#8226; WinKey / Search\n(requiere establecer la aplicación asistente de la Barra de tareass en los Ajustes)</string>
+    <string name="tb_loading_apps">Cargando apps&#8230;</string>
+    <string name="tb_press_enter">Sin apps encontradas\n\nPresione Enter para buscar con Google</string>
+    <string name="tb_nothing_to_see_here">Nada que ver aquí, muévase&#8230;</string>
+
+    <string name="tb_error_dialog_title">Error</string>
+    <string name="tb_error_dialog_message">Desafortunadamente, esta opción no puede ser activada en su dispositivo debido a las restricciones del fabricante.\n\nPuede ser capaz de activarla con el siguiente comando: "Nappops set %1$s %2$s allow".</string>
+    <string name="tb_action_ok">Aceptar</string>
+    <string name="tb_action_cancel">Cancelar</string>
+
+    <string name="tb_pin_app">Anclar a aplicaciones recientes</string>
+    <string name="tb_unpin_app">Desanclar de aplicaciones recientes</string>
+    <string name="tb_block_app">Bloquear de recientes</string>
+    <string name="tb_unblock_app">Desbloquear de recientes</string>
+    <string name="tb_clear_pinned_apps">Reinicer preferencias por aplicación</string>
+
+    <string name="tb_pref_title_hide_foreground">Ocultar el icono para la aplicación en segundo plano</string>
+    <string name="tb_pref_summary_hide_foreground">Podría reducir el rendimiento</string>
+
+    <string name="tb_pref_title_theme">Tema</string>
+    <string-array name="tb_pref_theme_list">
+        <item>Claro</item>
+        <item>Oscuro</item>
+    </string-array>
+
+    <string name="tb_lock_device_not_supported">No soportado en este dispositivo</string>
+
+    <string name="tb_pref_title_shortcut_icon">Show shortcut icon for pinned apps</string>
+
+    <string name="tb_freeform_dialog_title">Activar soporte de ventanas libre</string>
+    <string name="tb_freeform_dialog_message">Para que la Barra de tareas pueda lanzar aplicaciones en modo de ventana libre, por favor sigue estos pasos:\n\n&#8226; Ir a las Opciones de desarrollador\n\n&#8226; Tire hacia abajo y activa \"%s\"\n\n&#8226; Reinicie su dispositivo</string>
+
+    <string name="tb_pref_title_invisible_button">Ocultar botón cuando la Barra de tareas se colapsa</string>
+    <string name="tb_pref_title_freeform_mode_help">Ayuda e instrucciones para modo de ventana libre</string>
+    <string name="tb_freeform_help_dialog_title">Ayuda e instrucciones</string>
+    <string name="tb_freeform_help_dialog_message"><b>Acerca del modo de ventanas libres</b>\n\nLa Barra de tareas te permite lanzar aplicaciones en ventanas flotantes de forma libre en dispositivos Android 7.0+.  No se requiere acceso de root, aunque los dispositivos Android 8.0, 8.1 y 9 requieren que se ejecute un comando adb shell durante la configuración inicial.\n\nSimplemente siga estos pasos para configurar su dispositivo para lanzar aplicaciones en modo libre:\n\n<b>1.</b> Marque la casilla \"Soporte de ventana libre\" dentro de la aplicación de la barra de tareas.\n\n<b>2.</b> Siga las instrucciones que aparecen en la ventana emergente para activar la opción adecuada en su dispositivo (configuración única)\n\n<b>3.</b> Ve a la página de aplicaciones recientes de su dispositivo y borra todas las aplicaciones recientes\n\n<b>4.</b> Inicie la Barra de tareas, luego seleccione una aplicación para lanzarla en una ventana libre\n\n<i>Para obtener los mejores resultados, especialmente en Android 8.0 y 8.1, reinicie su dispositivo antes de usar el modo de ventana libre</i>\n\n<b>Preajustes del tamaño de la ventana</b>\n\nLa barra de tareas puede lanzar ventanas de aplicaciones en varios tamaños preestablecidos.  Puede elegir el tamaño de la ventana presionando largamente o haciendo clic con el botón derecho del ratón en el icono de la aplicación y seleccionando \"Nueva ventana\".\n\nPara guardar un preajuste del tamaño de la ventana para una aplicación específica, sólo tiene que pulsar durante mucho tiempo el preajuste, y aparecerá una marca de verificación que indica que está configurado como predeterminado.  La barra de tareas lanzará la aplicación usando este tamaño seleccionado en lanzamientos posteriores.\n\nTenga en cuenta que los tamaños de las ventanas no funcionan correctamente en Android 8.0 y 8.1.  Sin embargo, puede solucionarlo iniciando la aplicación, cerrándola inmediatamente y volviéndola a iniciar desde el menú general de Android.\n\n<b>Problemas conocidos</b>\n\n<i>&#8226; Las aplicaciones aún se lanzan a pantalla completa</i>\n\nSi se lanza una aplicación que ya está cargada en la memoria, la barra de tareas la pondrá en primer plano. Para lanzar la aplicación en modo libre, tiene que lanzarse en un nuevo estado.\n\nBorra la aplicación de los recientes, y luego vuelve a lanzarla desde la página de aplicaciones recientes usando la barra de tareas. Si esto no funciona, entonces presiona el icono de la aplicación, selecciona "Información de la aplicación" y luego fuerce la detención de la aplicación.  Alternativamente, puede reiniciar su dispositivo.\n\n<i>&#8226; Las aplicaciones que se maximizan no pueden ser restauradas en una ventana</i>\n\nSi pulsas el botón Maximizar en la barra de título de una aplicación, Android sacará la aplicación del modo libre y la pondrá en modo de pantalla completa. Como se mencionó anteriormente, la barra de tareas sólo puede lanzar aplicaciones en ventanas de forma libre si se lanzan desde un nuevo estado.\n\nPara solucionarlo, puedes maximizar las ventanas tocando o haciendo clic en el marco exterior de la ventana de la aplicación.  Esto expandirá la ventana para llenar todo el espacio disponible mientras la mantiene en el espacio de trabajo de la ventana de forma libre.\n\n<i>&#8226; Maximizar las ventanas no funciona en Android 9</i>\n\nEsta funcionalidad no es controlada por la Barra de tareas y es algo que Google necesita arreglar a profundidad. Si necesitas maximizar una ventana en Android 9, por favor usa el tamaño de ventana "Maximizado" en su lugar.\n\n<i>&#8226; Las transiciones de las aplicaciones no parecen funcionar correctamente, especialmente en Android 9</i>\n\nEsto también es un problema que Google necesita arreglar a profundidad, sin embargo, puede solucionarlo deshabilitando las transiciones de las aplicaciones\n\nPuede deshabilitar las transiciones al lanzar una aplicación yendo a los ajustes de aplicaciones recientes de la Barra de tareas y habilitando la opción \"Cambio rápido de aplicaciones\". Alternativamente, puede deshabilitar las transiciones en todo el sistema yendo a las opciones del desarrollador y configurando "Escala de animación de transición" a \"Animación desactivada\"..</string>
+
+    <string name="tb_action_developer_options">Abrir opciones para desarrolladores</string>
+    <string name="tb_action_close">Cerrar</string>
+
+    <string name="tb_pref_header_freeform">Modo de ventana libre</string>
+    <string name="tb_pref_title_window_size">Tamaño predeterminado de ventana</string>
+
+    <string name="tb_window_size_standard">Estándar</string>
+    <string name="tb_window_size_fullscreen">Maximizada</string>
+    <string name="tb_window_size_phone_size">Tamaño de teléfono</string>
+    <string name="tb_window_size_large">Largo</string>
+    <string name="tb_window_size_half_left">@string/tb_window_size_half_left_alt</string>
+    <string name="tb_window_size_half_left_alt">Pantalla dividida (izquierda/arriba)</string>
+    <string name="tb_window_size_half_right">@string/tb_window_size_half_right_alt</string>
+    <string name="tb_window_size_half_right_alt">Pantalla dividida (derecha/abajo)</string>
+
+    <string name="tb_pref_title_blacklist">Configurar aplicaciones en el menú de inicio</string>
+    <string name="tb_app_hidden">%1$d aplicación oculta</string>
+    <string name="tb_apps_hidden">%1$d aplicaciones ocultas</string>
+    <string name="tb_blacklist_dialog_title">Oculta</cuerda>
+    <string name="tb_top_app">%1$d aplicación popular</string>
+    <string name="tb_top_apps">%1$d aplicaciones populares</string>
+    <string name="tb_top_apps_dialog_title">Aplicaciones populares</string>
+    <string name="tb_start_menu_apps">Iniciar menú de aplicaciones</string>
+
+    <string name="tb_reboot_required">Reinicie su dispositivo para completar el modo libre setup</string>
+    <string name="tb_enable_force_activities_resizable">Desplace hacia abajo y acitive \"%s\"</string>
+    <string name="tb_set_as_default_home">Pulse \"Siempre\" para establecer la Barra de tareas como su lanzador por defecto</string>
+    <string name="tb_enable_developer_options">Habilitar las opciones de desarrollo pulsando el número de compilación 7 veces</string>
+
+    <string name="tb_pref_title_anchor">Anclar Barra de tareas cuando la pantalla gira</string>
+    <string name="tb_pref_title_donate">Donar</string>
+    <string name="tb_pref_summary_donate">Apoya el desarrollo de Taskbar con una pequeña donación actualizando a la Versión Donar</string>
+    <string name="tb_dialog_donate_message">Apoya el desarrollo de Taskbar actualizando a la Versión de Donación por %1$s!\n\nLa Versión de Donación es idéntica a la versión gratuita y tus preferencias se transferirán automáticamente sobre.\n\nTaskbar es y siempre será 100% gratuita, de código abierto, sin ningún tipo de anuncios.  Sin embargo, su apoyo es muy apreciado!
+    <string name="tb_action_no_thanks">No gracias</string>
+
+    <string name="tb_importing_settings">Importando ajustes&#8230; por favor, espere.</string>
+    <string name="tb_settings_imported_successfully">Ajustes importados con éxito</string>
+    <string name="tb_import_dialog_message">Gracias por comprar la Versión de Donación de Taskbar!\n\nSus ajustes han sido importados con éxito y ahora puede desinstalar la versión gratuita de la aplicación.</string>
+    <string name="tb_action_uninstall">Desinstalar</string>
+
+    <string name="tb_pref_title_hide_when_keyboard_shown">Colapsar automáticamente la Barra de tareas</string>
+    <string name="tb_pref_description_hide_when_keyboard_shown">Cuando mostrar el teclado en pantalla</string>
+
+    <string name="tb_pref_max_num_of_recents">Número máximo de aplicaciones recientes/ancladas</string>
+
+    <string name="tb_show_window_sizes">Nueva ventana&#8230;</string>
+
+    <string name="tb_icon_pack">Paquete de íconos</string>
+    <string name="tb_icon_pack_none">Ninguna</string>
+    <string name="tb_no_icon_packs_instalados">No hay paquetes de iconos instalados</string>
+
+    <string name="tb_apply_icon_pack">Aplicar paquete de íconos</string>
+    <string name="tb_apply_icon_pack_description">¿Aplicar \"%1$s\" a la Barra de tareas?</string>
+    <string name="tb_must_specify_extra">Debe especificar Intent.EXTRA_PACKAGE_NAME</string>
+    <string name="tb_invalid_package_name">Nombre del paquete inválido</string>
+
+    <string name="tb_pref_title_use_mask">Utilizar máscaras para los iconos no tematizados</string>
+    <string name="tb_pref_description_use_mask">Puede reducir el rendimiento cuando un paquete de iconos está configurado</string>
+
+    <string name="tb_pref_title_app_drawer_icon">Logo de Taskbar</string>
+    <string name="tb_pref_title_app_drawer_icon_bliss">Logo de Bliss</string>
+
+    <string name="tb_already_blacklisted">No es posible seleccionar %1$s porque está en la lista de aplicaciones ocultas</string>
+    <string name="tb_already_top_app">No es posible seleccionar %1$s porque está en la lista de aplicaciones más populares</string>
+
+    <string name="tb_alt_button_config">Posición alternativa para el botón colapsado</string>
+    <string name="tb_pref_title_save_window_sizes">Siempre guarda los tamaños de las ventanas para aplicaciones</string>
+    <string name="tb_pref_description_save_window_sizes">Cuando se abre las nuevas ventanas desde el menú contextual</string>
+
+    <string name="tb_add_shortcut">Añadir atajo a la pantalla de inicio</string>
+    <string name="tb_shortcut_created">Atajo de modo de ventana libre creado</string>
+
+    <string name="tb_start_taskbar">Iniciar/detener Taskbar</string>
+    <string name="tb_no_freeform_support">El modo libre no está activado en su dispositivo &#8211; abra la Barra de tareas y habilítela primero</string>
+    <string name="tb_enable_recent_apps">Taskbar puede mostrar opcionalmente iconos de las aplicaciones más recientes en el borde de la pantalla.  Para ello, Taskbar requiere permisos de acceso de uso.</string>
+    <string name="tb_enable_recent_apps_instructions_phone">¿Activar el soporte para aplicaciones recientes?</string>
+    <string name="tb_enable_recent_apps_instructions_tv">Para habilitar el soporte para aplicaciones recientes, presione \"Abrir ajustes\" para abrir el menú de configuración de aplicaciones de Android TV. Selecciona \"Acceso especial a aplicaciones\", luego selecciona \"Acceso de uso\" y asegúrate de que la barra de tareas esté habilitada.</string>
+
+    <string name="tb_disable_scrolling_list">Deshabilitar lista de desplazamiento</string>
+
+    <string name="tb_double_tap_to_sleep">Tocar dos veces para dormir</string>
+    <string name="tb_enable_double_tap_to_sleep">¿Activar el doble toque para dormir?</string>
+    <string name="tb_action_dont_show_again">No volver a mostrar</string>
+
+    <string name="tb_app_shortcuts">Más acciones&#8230;</string>
+
+    <string name="tb_usage_stats_message">Por favor, asegúrate de que Taskbar está establecida como \"Activado\".</string>
+
+    <string name="tb_volume">Control de volumen</string>
+    <string name="tb_file_manager">Gestor de archivos</string>
+    <string name="tb_system_settings">Configuración del sistema</string>
+    <string name="tb_lock_device">Bloqueo del dispositivo</string>
+    <string name="tb_power_menu">Menú de energía</string>
+    
+    <string name="tb_show_search_bar">Visibilidad de la barra de búsqueda</string>
+    <string-array name="tb_pref_show_search_bar_list">
+        <item>Mostrar siempre la barra de búsqueda</item>
+        <item>Solo el teclado físico</tem>
+        <item>Nunca mostrar barra de búsqueda</item>
+    </string-array>
+
+    <string name="tb_clear_pba">Aplicacicaciones recientes bloqueadas o ancladas</string>
+    <string name="tb_clear_hidden_apps">Menú de inicio &#8211; Aplicaciones ocultas</string>
+    <string name="tb_clear_top_apps">Menú de inicio &#8211; Aplicaciones populares</string>
+    <string name="tb_clear_window_sizes">Tamaño de las ventanas guardadas</string>
+    <string name="tb_action_reset">Reiniciar</string>
+
+    <string name="tb_tools">Herramientas</string>
+
+    <string name="tb_enable_accessibility">@string/tb_accessibility_service_description</string>
+    <string name="tb_accessibility_service_summary">Permite a la Barra de Tareas realizar acciones de pulsación de botón</string>
+    <string name="tb_accessibility_service_description">Taskbar necesita ser activada como un servicio de accesibilidad para realizar acciones de pulsación de botón como atrás, inicio, recientes y energía, así como para mostrar la bandeja de notificación.</string>
+    
+    <string name="tb_pref_title_force_new_window">Siempre abrir aplicaciones en nuevas ventanas</string>
+    <string name="tb_pref_description_force_new_window">Obliga a una aplicación a abrir una nueva ventana cada vez que es seleccionada en el menú de inicio o en aplicaciones recientes (si una aplicación permite múltiples ventanas)</string>
+    <string name="tb_change_wallpaper">Cambiar el fondo de pantalla</string>
+    <string name="tb_change_wallpaper_alt">Cambiar el fondo de pantalla&#8230;</string>
+
+    <string name="tb_notification_settings">Ajustes de notificación del sistema</string>
+
+    <string name="tb_pref_header_appearance">Apariencia</string>
+    <string name="tb_dashboard">Activar soporte para widgets</string>
+    <string name="tb_dashboard_description">Añade un botón a la Barra de tareas que muestra los widgets cuando se pulsa</string>
+    <string name="tb_dashboard_grid_size">Tamaño de la cuadrícula del dashboard</string>
+
+    <string name="tb_click_to_add_widget">Clic para añadir widget</string>
+    <string name="tb_remove_widget">Quitar widget</string>
+    <string name="tb_are_you_sure">¿Estás seguro?</string>
+    <string name="tb_dashboard_tutorial">Clic en algún lugar de la pantalla para añadir un widget al dashboard</string>
+
+    <string name="tb_pref_title_accent_color">Color de acento</string>
+    <string name="tb_reset_colors">Restablecer colores a los iniciales</string>
+
+    <string name="tb_visual_feedback">Retroalimentación visual al seleccionar los iconos</string>
+
+    <string name="tb_num_of_recents_blurb">Asegúrese de que el acceso de uso esté habilitado antes de cambiar este ajuste.\n\nValores más altos pueden reducir el rendimiento.</string>
+    <string name="tb_max_num_of_recents">%1$d aplicaciones</string>
+    <string name="tb_max_num_of_recents_singular">1 aplicación</string>
+    <string name="tb_max_num_of_recents_unlimited">Ilimitado</string>
+
+    <string name="tb_refresh_frequency_blurb">Asegúrese de que el acceso de uso esté habilitado antes de cambiar este ajuste.\n\nValores más bajos aumentarán el uso de la CPU y pueden disminuir la duración de la batería.</string>
+    <string name="tb_refresh_frequency">%1$s segundos</string>
+    <string name="tb_refresh_frequency_singular">1 segundo</string>
+    <string name="tb_refresh_frequency_continuous">Continuo</string>
+
+    <string name="tb_power_button_warning_title">Precaución</string>
+    <string name="tb_power_button_warning_message">Las ROMs personalizadas basadas en CyanogenMod / LineageOS tienen un problema en el que el botón de encendido no funciona mientras el dispositivo está en modo ventana libre.\n\nPor favor, compruebe el botón de encendido ahora.  Si no funciona, tenga cuidado al utilizar el modo de ventana libre, ya que puede perder la capacidad de despertar el dispositivo del sueño si la pantalla se apaga.</string>
+    <string name="tb_action_i_understand">Entiendo</string>
+
+    <string name="tb_hide_taskbar_disclaimer">No aplica a las aplicaciones en ventana libre</string>
+    <string name="tb_transparent_start_menu">Transparencia del menú de inicio</string>
+
+    <string name="tb_launch_games_fullscreen_title">Lanzar juegos en pantalla completa</string>
+    <string name="tb_launch_games_fullscreen_message">Si una aplicación se declara como un juego, no se le permite ejecutarse como ventana libre.</string>
+
+    <string name="tb_invalid_grid_size">Tamaño de la cuadrícula inválido</string>
+
+    <string name="tb_window_sizes_not_available">El tamaño de las ventanas no funciona correctamente en esta versión para Android- véase \"Ayuda e instrucciones\" for a workaround</string>
+
+    <string name="tb_navigation_bar_buttons">Botones de la barra de navegación</string>
+    <string name="tb_navigation_bar_buttons_description">Añade botones adicionales a la Barra de tareas que realizan acciones de la barra de navegación</string>
+    <string name="tb_button_back">Atrás</string>
+    <string name="tb_button_home">Inicio</string>
+    <string name="tb_button_recents">Recientes</string>
+
+    <string name="tb_full_length">Ampliar el área con espacio vacío</string>
+
+    <string name="tb_restore_widget">Restore widget</string>
+
+    <string name="tb_samsung_freeform_title">Nota</string>
+    <string name="tb_samsung_freeform_message">La barra de tareas puede tener problemas para abrir aplicaciones en modo ventana libre en algunos dispositivos Samsung, debido a los cambios del sistema en el modo multi-ventana.\n\nSi este es el caso, es posible que necesite flashear una ROM personalizada para utilizar el modo de ventana libre en este dispositivo.</string>
+
+    <string name="tb_widget_restore_toast">Seleccione \"%1$s\" para restaurar este widget</string>
+
+    <string name="tb_freeform_on">Modo ventana libre activada</string>
+    <string name="tb_freeform_off">Modo ventana libre desactivada</string>
+
+    <string name="tb_auto_hide_navbar">Controlar automáticamente la barra de navegación del sistema</string>
+    <string name="tb_auto_hide_navbar_description">Oculta la barra de navegación cuando la Taskbar se activa, y vuelve a mostrar cuando esta deja de activarse</string>
+
+    <string name="tb_press_enter_alt">Sin aplicaciones encontradas No apps found\n\nPress Enter to open in browser</string>
+
+    <string name="tb_freeform_dialog_message_alt">Para que la Taskbar pueda lanzar aplicaciones en modo de ventana libre, por favor sigue estos pasos:\n\n&#8226; Ve a Opciones del desarrollador y habilita la depuración de USB\n\n&#8226; Conecte su dispositivo a una computadora con el SDK de Android instalado, y ejecute el siguiente comando (una línea):\n\nadb shell settings put global enable_freeform_support 1\n\n&#8226; Reinicie su equipo</string>
+
+    <string name="tb_color_picker_alpha">Alfa</string>
+    <string name="tb_color_picker_red">Rojo</string>
+    <string name="tb_color_picker_green">Verde</string>
+    <string name="tb_color_picker_blue">Azul</string>
+
+    <string name="tb_pref_title_chrome_os_context_menu_fix">Solucionar compatibilidad del dock de Chrome OS</string>
+    <string name="tb_pref_description_chrome_os_context_menu_fix">Active esta opción si utiliza la Taskbar junto con el dock de Chrome OS</string>
+
+    <string name="tb_pin_shortcut_not_supported">Su lanzador no soporta la adición de atajos desde otras aplicaciones.\n\nPor favor, añade manualmente el atajo desde el menú \"Widgets\" de su lanzador.</string>
+
+    <string name="tb_action_activate">Activación</string>
+
+    <string name="tb_pref_secondscreen_title_open">Abra SecondScreen</string>
+    <string name="tb_pref_secondscreen_title_install">Instale SecondScreen</string>
+    <string name="tb_pref_secondscreen_description">Cambie la resolución y la densidad de su dispositivo cuando lo conecte a una pantalla externa, para una experiencia similar al Continuum o DeX</string>
+    <string name="tb_pref_secondscreen_description_alt">Opciones adicionales para cambiar la resolución y la densidad de su dispositivo cuando se conecta a una pantalla externa</string>
+
+    <string name="tb_use_default">Usar predeterminado</string>
+
+    <string name="tb_action_continue">Continuar</string>
+
+    <string name="tb_tasker_action_title">Seleccionar acción</string>
+    <string name="tb_tasker_condition_title">Seleccionar condición</string>
+    <string name="tb_tasker_on">Taskbar Activado</string>
+    <string name="tb_tasker_off">Taskbar Desactivado</string>
+    <string name="tb_on">Activado</string>
+    <string name="tb_off">Desactivado</string>
+
+    <string name="tb_pref_title_tasker_enabled">Permitir la integración de aplicaciones de terceros</string>
+    <string name="tb_pref_summary_tasker_enabled">Desactivar para mejorar la seguridad</string>
+
+    <string name="tb_essential_phone_grip_rejection">En el Teléfono Essential, desactiva el rechazo de agarre (en las opciones de desarrollo) para ayudar a abrir/cerrar Taskbar</string>
+
+    <string name="tb_toggle_start_menu">Cambiar el Menú de inicio</string>
+    <string name="tb_toggle_dashboard">Cambiar Dashboard</string>
+
+    <string name="tb_force_activities_resizable">Forzar actividades para ser redimensionadas</string>
+
+    <string name="tb_filepicker_select_an_image_file">Seleccione un archivo de imagen</string>
+    <string name="tb_filepicker_install_file_manager">Error al seleccionar la imagen</string>
+    <string name="tb_error_reading_custom_start_image">Error de lectura de imagen</string>
+
+    <string name="tb_add_icon_to_desktop">Añadir icono al escritorio</string>
+    <string name="tb_arrange_icons" >Mover iconos</string>
+    <string name="tb_arrange_icons_alt">Mover icono</string>
+    <string name="tb_select_an_app">Seleccioneuna aplicación</string>
+    <string name="tb_remove_desktop_icon">Quitar del escritorio</string>
+    <string name="tb_sort_by_name">Ordenar los iconos por nombre</string>
+    <string name="tb_no_icons_to_arrange">No hay iconos que mover</string>
+    <string name="tb_no_icons_to_sort">No hay iconos para clasificar</string>
+    <string name="tb_clear_desktop_icons">Iconos de escritorio</string>
+
+    <string name="tb_pref_title_start_button_image" >Imagen del botón de inicio</string>
+    <string name="tb_start_button_image_default">Predeterminado</string>
+    <string name="tb_start_button_image_custom">Personalizado</string>
+
+    <string name="tb_pref_centered_icons">Centrar iconos dentro de los espacios vacío</string>
+    <string name="tb_pref_title_sys_tray">Mostar los iconos de estado y el reloj</string>
+    <string name="tb_pref_description_sys_tray">Sólo visible cuando la Barra de tareas es horizontal</string>
+
+    <string name="tb_settings">Ajustes</string>
+    <string name="tb_powered_by_taskbar">Impulsado por Taskbar</string>
+
+    <string name="tb_manage_app_data">Administrar datos de la aplicación</string>
+    <string name="tb_manage_app_data_description">Ajustes de respaldo y restauración, o restablecer las preferencias por aplicación</string>
+    <string name="tb_backup_settings">Ajustes del respaldo al archivo&#8230;</string>
+    <string name="tb_restore_settings">Restore settings from file&#8230;</string>
+    <string name="tb_backup_successful">Respaldo completado</string>
+    <string name="tb_restore_successful">Restauración completada</string>
+    <string name="tb_backup_failed">Se produjo un error al crear el respaldo</string>
+    <string name="tb_restore_failed">Se produjo un error al restaurar del respaldo</string>
+    <string name="tb_backup_restore_not_available">El respaldo de seguridad y la restauración no están disponibles en este dispositivo</string>
+    <string name="tb_backup_file_invalid">El archivo de respaldo que seleccionó es inválido. Por favor, inténtelo de nuevo.</string>
+
+    <string name="tb_new_shortcut">Lanzar app</string>
+    <string name="tb_allow_freeform_mode">Lanzar app como ventana libre</string>
+    <string name="tb_window_size">Tamaño de ventana</string>
+    <string name="tb_invalid_shortcut">Atajo inválido</string>
+
+    <string name="tb_backing_up_settings">Ajustes de respaldado&#8230;</string>
+    <string name="tb_restoring_settings">Ajustes de restaurado&#8230;</string>
+
+    <string name="tb_pref_header_desktop_mode">Modo escritorio</string>
+    <string name="tb_primary_launcher">Lanzador primario</string>
+    <string name="tb_set_launcher_default_title">Establecer a Taskbar como aplicación de inicio</string>
+    <string name="tb_set_launcher_default_summary">Requerido para que funcione el modo de escritorio</string>
+    <string name="tb_unable_to_set_default_home">No se puede establecer como aplicación de inicio. Por favor, hazlo manualmente a través de la configuración del sistema.</string>
+    <string name="tb_display_density">Densidad de pantalla</string>
+    <string name="tb_auto_hide_navbar_alt">Ocultar barra de navegación mientras está en el escritorio</string>
+    <string name="tb_enable_additional_settings">Activar ajustes adicionales</string>
+
+    <string name="tb_hsl_no_launchers_found">No se encontraron lanzadores primarios. Por favor, descargue e instale uno, e intente de nuevo.</string>
+    <string name="tb_hsl_launcher_uninstalled">%1$s fue desinstalado. Por favor, seleccione un lanzador diferente de la lista.</string>
+    <string name="tb_hsl_main_activity_text">Seleccione su lanzador principal de la lista que aparece a continuación. Puede cambiarlo en cualquier momento desde los ajustes del modo escritorio de Taskbar.</string>
+
+    <string-array name="tb_pref_display_density_list">
+        <item>Predeterminado</item>
+        <item>Recomendado (160dpi)</item>
+        <item>Alta densidad (320dpi)</item>
+    </string-array>
+
+    <string-array name="tb_pref_display_density_list_alt">
+        <item>Recomendado (160dpi)</item>
+        <item>Alta densidad (320dpi)</item>
+    </string-array>
+
+    <string name="tb_density_custom">Personalizado (%ddpi)</string>
+    <string name="tb_density_default">Predeterminado (%ddpi)</string>
+    <string name="tb_unable_to_apply_density_change">No se puede aplicar el cambio de densidad</string>
+
+    <string name="tb_icon_preview">Previsualizar icono</string>
+    <string name="tb_icon_preview_description">Usa el deslizador para ajustar el icono generado a su gusto.</string>
+
+    <string name="tb_clear_qs_shortcuts">Baldosas de ajustes rápidos</string>
+    <string name="tb_pref_description_enable_recents">Requerido para aparecer las aplicaciones recientes</string>
+
+    <string name="tb_disable_home_setting">Por favor, desactiva la opción \"Reemplazar pantalla de inicio\" en \"Características avanzadas\" para poder usar el modo de escritorio.</string>
+    <string name="tb_desktop_mode_setup_complete">Inicie Taskbar haciendo clic en el botón de inicio de su pantalla externa.</string>
+
+    <string name="tb_hide_icon_labels">Ocultar etiquetas de iconos de aplicaciones</string>
+
+    <string name="tb_opening_notification_tray">Se abrió la bandeja de notificación en la pantalla principal</string>
+    <string name="tb_opening_quick_settings">Se abrió la configuración rápida en la pantalla principal</string>
+    <string name="tb_opening_volume_control">Se abrió el control de volumen en la pantalla principal</string>
+    <string name="tb_opening_power_menu">Se abrió el menú de energía en la pantalla principal</string>
+
+    <string name="tb_pref_dim_screen_title">Bloquear y atenuar la pantalla del teléfono mientras está activo</string>
+    <string name="tb_pref_dim_screen_description">Pulsa el botón de inicio para activar manualmente</string>
+    <string name="tb_desktop_mode_is_active">El modo de escritorio está activo</string>
+
+    <string name="tb_pref_change_wallpaper_global">Aplicar a todo el dispositivo</string>
+    <string name="tb_pref_change_wallpaper_desktop">Sólo para el escritorio</string>
+    <string name="tb_pref_remove_desktop_wallpaper">Utilizar el fondo de pantalla del dispositivo</string>
+
+    <string name="tb_pref_notification_count_title">Mostrar recuento de notificaciones en el área de estado</string>
+    <string name="tb_pref_notification_count_description">Requiere acceso a la notificación</string>
+
+    <string name="tb_desktop_mode_dialog_title">Habilitar el soporte del modo de escritorio</string>
+    <string name="tb_desktop_mode_dialog_message">Para configurar su dispositivo para el modo de escritorio, por favor siga estos pasos:\n\n&#8226; Ve a Opciones del desarrollador\n\n&#8226; Desplácese hacia la parte inferior y activa \"Habilitar ventanas de forma libre\" y \"Forzar el modo de escritorio\"; establezca Taskbar como su aplicación de inicio predeterminada\n\n&#8226; Reinicie su dispositivo\n\nPara obtener más información y pasos para solucionar problemas, haz clic en el icono (?) de la esquina superior derecha de la pantalla.</string>
+    <string name="tb_reboot_required_alt">Reinicie su dispositivo para completar el modo de escritorio setup</string>
+    <string name="tb_enable_additional_settings_message_1">Taskbar puede usar opcionalmente permisos elevados para mejorar la experiencia del modo de escritorio. Estos permisos se conceden ejecutando un comando de adb shell.\n\nSi desea continuar, conecte su dispositivo a un ordenador con el SDK de Android instalado, y ejecute el siguiente comando (una línea):</string>
+    <string name="tb_enable_additional_settings_message_2">Una vez concedido, los ajustes adicionales se activarán cuando se conecte una pantalla.</string>
+    <string name="tb_desktop_mode_pref_description">Utilizar la barra de tareas para lanzar aplicaciones en ventana en una pantalla externa, similar a Samsung DeX y otras soluciones.\n\nRequiere un adaptador de USB a HDMI, o un lapdock, y un dispositivo que soporte la salida de video.</string>
+    <string name="tb_enable_additional_settings_pref_description">Clic aquí para la información sobre cómo activar</string>
+
+    <string name="tb_desktop_mode_help"><b>Acerca del modo de escritorio</b>\n\nTaskbar es compatible con el modo de escritorio incorporado de Android 10. Puede conectar su dispositivocompatible con Android 10+ a una pantalla externa y ejecutar aplicaciones en ventanas redimensionables, con la interfaz de Taskbar ejecutándose en su pantalla externa y su lanzador existente todavía ejecutándose en su teléfono. El modo de escritorio requiere un adaptador de USB a HDMI (o un lapdock), y un dispositivo compatible que soporte la salida de video. Además, ciertos ajustes requieren la concesión de un permiso especial a través de adb.\n\nPara empezar, marque la casilla de \"Modo escritorio\". La aplicación le guiará a través del proceso de configuración de una sola vez, que implica:\n\n&#8226; Habilitar las opciones de desarrollo \"Habilitar modo de ventana libre\" y \"Forzar el modo de escritorio\"\n\n&#8226; Establecer Taskbar como aplicación de inicio predeterminada\n\n&#8226; Reiniciar el dispositivo\n\n<b>¿Por qué es necesario establecer Taskbar como mi aplicación de inicio predeterminada para que funcione el modo de escritorio?</b>\n\nPor diseño, Android sólo permitirá que la aplicación de inicio predeterminada actúe como lanzador del modo de escritorio en las pantallas externas.  Si la aplicación predeterminada no declara específicamente el soporte para el modo de escritorio, Android volverá a usar una interfaz de modo de escritorio predefinida.\n\nTaskbar es capaz de trabajar alrededor de esta limitación actuando como un calce entre el sistema y su lanzador preferido.  Cuando la Barra de tareas se configura como su aplicación de inicio, al presionar el botón de inicio se iniciará inmediatamente el lanzador que prefieras usar en su teléfono, y luego saldrá de ella.  Este lanzador se configura en las preferencias del modo de escritorio de la Taskbar haciendo clic en la opción \"Lanzador principal\".\n\nHay un par de advertencias a tener en cuenta cuando Taskbar se establece como su aplicación de inicio:\n\n&#8226; La mayoría de accesos directos a las aplicaciones (que se ven al pulsar el icono de una aplicación) ya no estarán disponibles para su lanzador principal.  Esto se debe a una limitación del sistema Android, en el que sólo la aplicación de inicio predeterminada tiene acceso a los accesos directos de la aplicación que se crean dinámicamente.\n\n&#8226; Ciertas animaciones que ocurren al presionar el botón de inicio podrían lucirse inexactas.  Esto se debe al comportamiento mencionado anteriormente, en el que la Barra de tareas actúa como un calce cuando se presiona el botón de inicio.\n\n<b>¿Cómo sé si mi dispositivo admite la salida de vídeo a pantallas externas?</b>\n\nLos desarrolladores de NexDock mantienen una lista de teléfonos inteligentes compatibles con Android 10+ junto a la salida de video USB a HDMI (esta lista excluye los dispositivos Samsung y Huawei).  Puedes ver esta lista aquí: http://nexdock.com/lapdock-for-smartphones\n\nLos dispositivos de Google Pixel, en particular, no incluyen soporte para salida de video.  Sin embargo, puedes utilizar Taskbar con la duplicación de pantalla estándar en estos dispositivos, ya sea a través de Chromecast o mediante el uso de un acoplamiento DisplayLink junto con la aplicación DisplayLink Presenter.\n\n<b>¿Debo usar el modo escritorio de Taskbar sobre la solución de modo de escritorio incorporada en mi dispositivo, como el Samsung DeX?</b>\n\nAlgunos OEMs, como Samsung y Huawei, han implementado su propia versión del modo de escritorio, además de la implementación de Google en Android 10.  Estas soluciones tienen una mejor integración con el resto del sistema y son generalmente más pulidas en general.  No es necesario cambiar a Taskbar si está contento con la solución de modo de escritorio existente en su dispositivo.\n\nLa compatibilidad con el modo de escritorio de Taskbar está pensada hacia los dispositivos que no ofrecen una solución de modo de escritorio incorporada más allá de lo que Google ofrece en Android 10.\n\n<b>No encuentro la opción \"Forzar el modo de escritorio\" en las opciones de desarrollo &#8211; ¿puedo seguir usando el modo de escritorio?</b>\n\nAlgunos dispositivos (como el teléfono ASUS ROG 2) no tienen la opción de \"Forzar el modo de escritorio\" en las opciones de desarrollo. Necesitará habilitar esa opción manualmente a través de adb. Para ello, conecte su dispositivo a un ordenador con el SDK de Android instalado y ejecuta el siguiente comando (una línea):\n\nadb shell settings put global force_desktop_mode_on_external_displays 1\n\n<b>¿Qué debo hacer si algo sale mal o si mi lanzador o las aplicaciones se comportan de manera extraña cuando el modo de escritorio está activado?</b>\n\nPor favor, siga estos pasos para desactivar el modo de escritorio en caso de que algo vaya mal:\n\n&#8226; Tire hacia abajo del cajón de ajustes rápidos, y luego introduzca los ajustes del sistema a través del icono del engranaje\n\n&#8226; Navega a las opciones del desarrollador y desactive "Activar soporte de ventana libre" y "Forzar el modo de escritorio"\n\n&#8226; Reinicie su dispositivo</string>
+
+    <string name="tb_see_whats_new">Ver que hay de nuevo en este lanzamiento</string>
+    <string name="tb_action_view">Ver</string>
+</resources>
