@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Braden Farmer
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+  <string name="tb_pref_description_keyboard_shortcut">Iniciar/detener Taskbar: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nBloquear dispositivo: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\nMostrar menú de inicio: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(requiere que Taskbar se establezca como la aplicación de asistencia en los Ajustes)</string>
+  <string name="tb_pref_description_keyboard_shortcut_alt">Iniciar/detener Taskbar\n&#8226; WinKey+M / Search+M\n\nBloquear dispositivo\n&#8226; WinKey+L / Search+L\n\nMostrar menú de inicio\n&#8226; WinKey / Search\n(requiere que Taskbar se establezca como la aplicación de asistencia en los Ajustes)</string>
+
+  <string-array name="tb_pref_theme_list">
+      <item>Sistema</item>
+      <item>Claro</item>
+      <item>Oscuro</item>
+  </string-array>
+
+</resources>
