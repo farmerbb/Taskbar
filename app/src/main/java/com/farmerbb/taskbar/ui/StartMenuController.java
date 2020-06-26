@@ -262,32 +262,11 @@ public class StartMenuController extends UIController {
                                     U.sendBroadcast(context, ACTION_HIDE_START_MENU);
                                 }
 
-                                Intent intent;
-
-                                if(Patterns.WEB_URL.matcher(query).matches()) {
-                                    intent = new Intent(Intent.ACTION_VIEW);
-                                    intent.setData(Uri.parse(URLUtil.guessUrl(query)));
-                                } else {
-                                    intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                                    intent.putExtra(SearchManager.QUERY, query);
-                                }
-
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                                if(intent.resolveActivity(context.getPackageManager()) != null)
+                                Intent intent = generateQueryWebSearchIntent(query);
+                                if (intent.resolveActivity(context.getPackageManager()) != null) {
                                     context.startActivity(intent);
-                                else {
-                                    Uri uri = new Uri.Builder()
-                                            .scheme("https")
-                                            .authority("www.google.com")
-                                            .path("search")
-                                            .appendQueryParameter("q", query)
-                                            .build();
-
-                                    intent = new Intent(Intent.ACTION_VIEW);
-                                    intent.setData(uri);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+                                } else {
+                                    intent = generateQueryGoogleIntent(query);
                                     try {
                                         context.startActivity(intent);
                                     } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
@@ -432,6 +411,37 @@ public class StartMenuController extends UIController {
             case POSITION_TOP_VERTICAL_RIGHT:
                 return Gravity.TOP | Gravity.RIGHT;
         }
+    }
+
+    @VisibleForTesting
+    Intent generateQueryWebSearchIntent(String query) {
+        Intent intent;
+        if(Patterns.WEB_URL.matcher(query).matches()) {
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(URLUtil.guessUrl(query)));
+        } else {
+            intent = new Intent(Intent.ACTION_WEB_SEARCH);
+            intent.putExtra(SearchManager.QUERY, query);
+        }
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
+
+    @VisibleForTesting
+    Intent generateQueryGoogleIntent(String query) {
+        Intent intent;
+        Uri uri = new Uri.Builder()
+                .scheme("https")
+                .authority("www.google.com")
+                .path("search")
+                .appendQueryParameter("q", query)
+                .build();
+
+        intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
     }
 
     private void refreshApps(boolean firstDraw) {

@@ -1,7 +1,10 @@
 package com.farmerbb.taskbar.ui;
 
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.Gravity;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -39,6 +42,7 @@ import static org.junit.Assert.assertTrue;
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class StartMenuControllerTest {
     private static final String UNSUPPORTED = "unsupported";
+    private static final String NON_URL_QUERY = "test-query";
 
     @Rule
     public PowerMockRule rule = new PowerMockRule();
@@ -152,5 +156,31 @@ public class StartMenuControllerTest {
                 Gravity.TOP | Gravity.RIGHT,
                 uiController.getStartMenuGravity(POSITION_TOP_VERTICAL_RIGHT)
         );
+    }
+
+    @Test
+    public void testGenerateQueryWebSearchIntent() {
+        Intent intent = uiController.generateQueryWebSearchIntent(NON_URL_QUERY);
+        assertEquals(Intent.ACTION_WEB_SEARCH, intent.getAction());
+        assertEquals(NON_URL_QUERY, intent.getStringExtra(SearchManager.QUERY));
+        assertEquals(Intent.FLAG_ACTIVITY_NEW_TASK, intent.getFlags());
+
+        String urlQuery = "https://github.com/farmerbb/Taskbar";
+        intent = uiController.generateQueryWebSearchIntent(urlQuery);
+        assertEquals(Intent.ACTION_VIEW, intent.getAction());
+        assertEquals(Uri.parse(urlQuery), intent.getData());
+        assertEquals(Intent.FLAG_ACTIVITY_NEW_TASK, intent.getFlags());
+    }
+
+    @Test
+    public void testGenerateQueryGoogleIntent() {
+        Intent intent = uiController.generateQueryGoogleIntent(NON_URL_QUERY);
+        assertEquals(Intent.ACTION_VIEW, intent.getAction());
+        assertEquals(Intent.FLAG_ACTIVITY_NEW_TASK, intent.getFlags());
+        Uri uri = intent.getData();
+        assertEquals("https", uri.getScheme());
+        assertEquals("www.google.com", uri.getAuthority());
+        assertEquals("/search", uri.getPath());
+        assertEquals(NON_URL_QUERY, uri.getQueryParameter("q"));
     }
 }
