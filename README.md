@@ -90,6 +90,7 @@ Pull requests are welcome!  See the [contributor guidelines](https://github.com/
 * Zbigniew Zienko (Polish translation)
 * utzcoz (Additional Chinese translation, code cleanup + unit testing)
 * RaspberryPiFan (Additional German translation)
+* Diego Sangunietti (Spanish translation)
 
 #### Special Thanks
 * Mishaal Rahman (xda-developers)
