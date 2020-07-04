@@ -1,15 +1,25 @@
 package com.farmerbb.taskbar.ui;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.UserManager;
 import android.view.Gravity;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.farmerbb.taskbar.Constants;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.shadow.TaskbarShadowLauncherApps;
+import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
@@ -22,6 +32,9 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
@@ -41,7 +54,6 @@ import static org.junit.Assert.assertTrue;
         "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"})
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class StartMenuControllerTest {
-    private static final String UNSUPPORTED = "unsupported";
     private static final String NON_URL_QUERY = "test-query";
 
     @Rule
@@ -82,7 +94,7 @@ public class StartMenuControllerTest {
         prefs.edit().putString(PREF_SHOW_SEARCH_BAR, "never").apply();
         assertFalse(uiController.shouldShowSearchBox(prefs, true));
 
-        prefs.edit().putString(PREF_SHOW_SEARCH_BAR, UNSUPPORTED).apply();
+        prefs.edit().putString(PREF_SHOW_SEARCH_BAR, Constants.UNSUPPORTED).apply();
         assertFalse(uiController.shouldShowSearchBox(prefs, true));
     }
 
@@ -182,5 +194,50 @@ public class StartMenuControllerTest {
         assertEquals("www.google.com", uri.getAuthority());
         assertEquals("/search", uri.getPath());
         assertEquals(NON_URL_QUERY, uri.getQueryParameter("q"));
+    }
+
+    @Test
+    public void testGenerateAppEntries() {
+        List<LauncherActivityInfo> queryList = new ArrayList<>();
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        PackageManager packageManager = context.getPackageManager();
+
+        List<AppEntry> appEntries =
+                uiController.generateAppEntries(context, userManager, packageManager, queryList);
+        assertEquals(0, appEntries.size());
+
+        ActivityInfo activityInfo = new ActivityInfo();
+        activityInfo.packageName = Constants.ENTRY_TEST_PACKAGE;
+        activityInfo.name = Constants.ENTRY_TEST_LABEL;
+        activityInfo.nonLocalizedLabel = activityInfo.name;
+        activityInfo.applicationInfo = new ApplicationInfo();
+        activityInfo.applicationInfo.packageName = activityInfo.packageName;
+        LauncherActivityInfo launcherActivityInfo =
+                TaskbarShadowLauncherApps
+                        .generateTestLauncherActivityInfo(
+                                context, activityInfo, Constants.DEFAULT_TEST_USER_ID
+                        );
+        queryList.add(launcherActivityInfo);
+        appEntries =
+                uiController.generateAppEntries(context, userManager, packageManager, queryList);
+        assertEquals(1, appEntries.size());
+        verifyAppEntryContent(activityInfo, appEntries.get(0));
+
+        queryList.add(launcherActivityInfo);
+        appEntries =
+                uiController.generateAppEntries(context, userManager, packageManager, queryList);
+        assertEquals(2, appEntries.size());
+
+        verifyAppEntryContent(activityInfo, appEntries.get(0));
+        verifyAppEntryContent(activityInfo, appEntries.get(1));
+    }
+
+    private void verifyAppEntryContent(ActivityInfo activityInfo, AppEntry appEntry) {
+        assertEquals(activityInfo.nonLocalizedLabel, appEntry.getLabel());
+        assertEquals(activityInfo.packageName, appEntry.getPackageName());
+        ComponentName componentNameOne =
+                new ComponentName(activityInfo.packageName, activityInfo.name);
+        assertEquals(componentNameOne.flattenToString(), appEntry.getComponentName());
+        assertEquals(Constants.DEFAULT_TEST_USER_ID, appEntry.getUserId(context));
     }
 }
