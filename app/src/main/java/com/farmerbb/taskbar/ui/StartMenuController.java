@@ -535,37 +535,8 @@ public class StartMenuController extends UIController {
             if(shouldRedrawStartMenu) {
                 if(query == null) currentStartMenuIds = finalApplicationIds;
 
-                Drawable defaultIcon = pm.getDefaultActivityIcon();
-
-                final List<AppEntry> entries = new ArrayList<>();
-                for(LauncherActivityInfo appInfo : queryList) {
-
-                    // Attempt to work around frequently reported OutOfMemoryErrors
-                    String label;
-                    Drawable icon;
-
-                    try {
-                        label = appInfo.getLabel().toString();
-                        icon = IconCache.getInstance(context).getIcon(context, pm, appInfo);
-                    } catch (OutOfMemoryError e) {
-                        System.gc();
-
-                        label = appInfo.getApplicationInfo().packageName;
-                        icon = defaultIcon;
-                    }
-
-                    AppEntry newEntry = new AppEntry(
-                            appInfo.getApplicationInfo().packageName,
-                            new ComponentName(
-                                    appInfo.getApplicationInfo().packageName,
-                                    appInfo.getName()).flattenToString(),
-                            label,
-                            icon,
-                            false);
-
-                    newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
-                    entries.add(newEntry);
-                }
+                final List<AppEntry> entries =
+                        generateAppEntries(context, userManager, pm, queryList);
 
                 handler.post(() -> {
                     String queryText = searchView.getQuery().toString();
@@ -602,6 +573,39 @@ public class StartMenuController extends UIController {
         });
 
         thread.start();
+    }
+
+    @VisibleForTesting
+    List<AppEntry> generateAppEntries(Context context,
+                                      UserManager userManager,
+                                      PackageManager pm,
+                                      List<LauncherActivityInfo> queryList) {
+        final List<AppEntry> entries = new ArrayList<>();
+        Drawable defaultIcon = pm.getDefaultActivityIcon();
+        for(LauncherActivityInfo appInfo : queryList) {
+            // Attempt to work around frequently reported OutOfMemoryErrors
+            String label;
+            Drawable icon;
+
+            try {
+                label = appInfo.getLabel().toString();
+                icon = IconCache.getInstance(context).getIcon(context, pm, appInfo);
+            } catch (OutOfMemoryError e) {
+                System.gc();
+
+                label = appInfo.getApplicationInfo().packageName;
+                icon = defaultIcon;
+            }
+
+            String packageName = appInfo.getApplicationInfo().packageName;
+            ComponentName componentName = new ComponentName(packageName, appInfo.getName());
+            AppEntry newEntry =
+                    new AppEntry(packageName, componentName.flattenToString(), label, icon, false);
+
+            newEntry.setUserId(userManager.getSerialNumberForUser(appInfo.getUser()));
+            entries.add(newEntry);
+        }
+        return entries;
     }
 
     private void toggleStartMenu() {
