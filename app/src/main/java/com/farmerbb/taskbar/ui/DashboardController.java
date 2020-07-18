@@ -41,6 +41,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
+
+import androidx.annotation.VisibleForTesting;
 import androidx.core.graphics.ColorUtils;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -260,28 +262,38 @@ public class DashboardController extends UIController {
 
         host.addView(layout, params);
 
-        new Handler().postDelayed(() -> {
-            int paddingSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+        new Handler().postDelayed(() ->
+                updatePaddingSize(
+                        context,
+                        layout,
+                        TaskbarPosition.getTaskbarPosition(context)
+                ),
+                100
+        );
+    }
 
-            switch(TaskbarPosition.getTaskbarPosition(context)) {
-                case POSITION_TOP_VERTICAL_LEFT:
-                case POSITION_BOTTOM_VERTICAL_LEFT:
-                    layout.setPadding(paddingSize, 0, 0, 0);
-                    break;
-                case POSITION_TOP_LEFT:
-                case POSITION_TOP_RIGHT:
-                    layout.setPadding(0, paddingSize, 0, 0);
-                    break;
-                case POSITION_TOP_VERTICAL_RIGHT:
-                case POSITION_BOTTOM_VERTICAL_RIGHT:
-                    layout.setPadding(0, 0, paddingSize, 0);
-                    break;
-                case POSITION_BOTTOM_LEFT:
-                case POSITION_BOTTOM_RIGHT:
-                    layout.setPadding(0, 0, 0, paddingSize);
-                    break;
-            }
-        }, 100);
+    @VisibleForTesting
+    void updatePaddingSize(Context context, LinearLayout layout, String position) {
+        int paddingSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
+
+        switch(position) {
+            case POSITION_TOP_VERTICAL_LEFT:
+            case POSITION_BOTTOM_VERTICAL_LEFT:
+                layout.setPadding(paddingSize, 0, 0, 0);
+                break;
+            case POSITION_TOP_LEFT:
+            case POSITION_TOP_RIGHT:
+                layout.setPadding(0, paddingSize, 0, 0);
+                break;
+            case POSITION_TOP_VERTICAL_RIGHT:
+            case POSITION_BOTTOM_VERTICAL_RIGHT:
+                layout.setPadding(0, 0, paddingSize, 0);
+                break;
+            case POSITION_BOTTOM_LEFT:
+            case POSITION_BOTTOM_RIGHT:
+                layout.setPadding(0, 0, 0, paddingSize);
+                break;
+        }
     }
 
     private void toggleDashboard() {
