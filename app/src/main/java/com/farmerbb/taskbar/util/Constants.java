@@ -240,4 +240,6 @@ public class Constants {
     // Intent extra keys
 
     public static final String EXTRA_IS_LAUNCHING_SHORTCUT = "is_launching_shortcut";
+    public static final String EXTRA_APPWIDGET_ID = "appWidgetId";
+    public static final String EXTRA_CELL_ID = "cellId";
 }

@@ -42,6 +42,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.graphics.ColorUtils;
 import android.util.SparseArray;
@@ -126,9 +127,9 @@ public class DashboardController extends UIController {
         public void onReceive(Context context, Intent intent) {
             fadeIn();
 
-            if(intent.hasExtra("appWidgetId") && intent.hasExtra("cellId")) {
-                int appWidgetId = intent.getExtras().getInt("appWidgetId", -1);
-                int cellId = intent.getExtras().getInt("cellId", -1);
+            if(intent.hasExtra(EXTRA_APPWIDGET_ID) && intent.hasExtra(EXTRA_CELL_ID)) {
+                int appWidgetId = intent.getExtras().getInt(EXTRA_APPWIDGET_ID, -1);
+                int cellId = intent.getExtras().getInt(EXTRA_CELL_ID, -1);
 
                 addWidget(appWidgetId, cellId, true);
             }
@@ -140,8 +141,8 @@ public class DashboardController extends UIController {
         public void onReceive(Context context, Intent intent) {
             fadeIn();
 
-            if(intent.hasExtra("cellId")) {
-                int cellId = intent.getExtras().getInt("cellId", -1);
+            if(intent.hasExtra(EXTRA_CELL_ID)) {
+                int cellId = intent.getExtras().getInt(EXTRA_CELL_ID, -1);
 
                 removeWidget(cellId, false);
             }
@@ -229,7 +230,7 @@ public class DashboardController extends UIController {
                 empty.setTextColor(accentColor);
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("cellId", cellCount);
+                bundle.putInt(EXTRA_CELL_ID, cellCount);
 
                 cellLayout.setTag(bundle);
                 cells.put(cellCount, cellLayout);
@@ -442,8 +443,8 @@ public class DashboardController extends UIController {
 
     private void cellClick(View view, boolean isActualClick) {
         Bundle bundle = (Bundle) view.getTag();
-        int cellId = bundle.getInt("cellId");
-        int appWidgetId = bundle.getInt("appWidgetId", -1);
+        int cellId = bundle.getInt(EXTRA_CELL_ID);
+        int appWidgetId = bundle.getInt(EXTRA_APPWIDGET_ID, -1);
 
         int currentlySelectedCell = appWidgetId == -1 ? cellId : -1;
 
@@ -456,8 +457,8 @@ public class DashboardController extends UIController {
             frameLayout.findViewById(R.id.empty).setVisibility(View.GONE);
 
             Intent intent = new Intent(ACTION_ADD_WIDGET_REQUESTED);
-            intent.putExtra("appWidgetId", APPWIDGET_HOST_ID);
-            intent.putExtra("cellId", cellId);
+            intent.putExtra(EXTRA_APPWIDGET_ID, APPWIDGET_HOST_ID);
+            intent.putExtra(EXTRA_CELL_ID, cellId);
             U.sendBroadcast(context, intent);
 
             if(shouldShowPlaceholder) {
@@ -490,10 +491,10 @@ public class DashboardController extends UIController {
         fadeOut(false);
 
         Bundle bundle = (Bundle) view.getTag();
-        int cellId = bundle.getInt("cellId");
+        int cellId = bundle.getInt(EXTRA_CELL_ID);
 
         Intent intent = new Intent(ACTION_REMOVE_WIDGET_REQUESTED);
-        intent.putExtra("cellId", cellId);
+        intent.putExtra(EXTRA_CELL_ID, cellId);
         U.sendBroadcast(context, intent);
     }
 
@@ -505,7 +506,7 @@ public class DashboardController extends UIController {
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("cellId", cellId);
+        bundle.putInt(EXTRA_CELL_ID, cellId);
         hostView.setTag(bundle);
 
         cellLayout.findViewById(R.id.empty).setVisibility(View.GONE);
@@ -518,7 +519,7 @@ public class DashboardController extends UIController {
         linearLayout.addView(hostView);
 
         Bundle bundle2 = (Bundle) cellLayout.getTag();
-        bundle2.putInt("appWidgetId", appWidgetId);
+        bundle2.putInt(EXTRA_APPWIDGET_ID, appWidgetId);
         cellLayout.setTag(bundle2);
 
         widgets.put(cellId, hostView);
@@ -547,8 +548,8 @@ public class DashboardController extends UIController {
         DashboardCell cellLayout = cells.get(cellId);
         Bundle bundle = (Bundle) cellLayout.getTag();
 
-        mAppWidgetHost.deleteAppWidgetId(bundle.getInt("appWidgetId"));
-        bundle.remove("appWidgetId");
+        mAppWidgetHost.deleteAppWidgetId(bundle.getInt(EXTRA_APPWIDGET_ID));
+        bundle.remove(EXTRA_APPWIDGET_ID);
 
         LinearLayout linearLayout = cellLayout.findViewById(R.id.dashboard);
         linearLayout.removeAllViews();
