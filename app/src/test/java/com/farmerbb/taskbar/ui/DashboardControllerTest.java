@@ -1,5 +1,7 @@
 package com.farmerbb.taskbar.ui;
 
+import android.appwidget.AppWidgetProviderInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
@@ -22,6 +24,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.farmerbb.taskbar.Constants.TEST_NAME;
+import static com.farmerbb.taskbar.Constants.TEST_PACKAGE;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT;
@@ -30,7 +34,11 @@ import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PREFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
@@ -94,7 +102,37 @@ public class DashboardControllerTest {
         uiController.updatePaddingSize(context, layout, POSITION_BOTTOM_RIGHT);
         verifyViewPadding(layout, 0, 0, 0, paddingSize);
     }
-    
+
+    @Test
+    public void testSaveWidgetInfo() {
+        AppWidgetProviderInfo info = new AppWidgetProviderInfo();
+        info.provider = new ComponentName(TEST_PACKAGE, TEST_NAME);
+        int cellId = 1000;
+        int appWidgetId = 100;
+        prefs.edit().putString(PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX, "");
+        uiController.saveWidgetInfo(context, info, cellId, appWidgetId);
+        assertEquals(
+                appWidgetId,
+                prefs.getInt(PREF_DASHBOARD_WIDGET_PREFIX + cellId, -1)
+        );
+        assertEquals(
+                info.provider.flattenToString(),
+                prefs.getString(
+                        PREF_DASHBOARD_WIDGET_PREFIX
+                                + cellId
+                                + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                        ""
+                )
+        );
+        assertFalse(
+                prefs.contains(
+                        PREF_DASHBOARD_WIDGET_PREFIX
+                                + cellId
+                                + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
+                )
+        );
+    }
+
     private void verifyViewPadding(View view, int left, int top, int right, int bottom) {
         assertEquals(left, view.getPaddingLeft());
         assertEquals(top, view.getPaddingTop());

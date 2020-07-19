@@ -547,19 +547,7 @@ public class DashboardController extends UIController {
         widgets.put(cellId, hostView);
 
         if (shouldSave) {
-            SharedPreferences pref = U.getSharedPreferences(context);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putInt(PREF_DASHBOARD_WIDGET_PREFIX + cellId, appWidgetId);
-            editor.putString(
-                    PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
-                    appWidgetInfo.provider.flattenToString()
-            );
-            editor.remove(
-                    PREF_DASHBOARD_WIDGET_PREFIX
-                            + cellId
-                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
-            );
-            editor.apply();
+            saveWidgetInfo(context, appWidgetInfo, cellId, appWidgetId);
         }
 
         new Handler().post(() -> {
@@ -569,6 +557,26 @@ public class DashboardController extends UIController {
             hostView.setLayoutParams(params);
             hostView.updateAppWidgetSize(null, cellLayout.getWidth(), cellLayout.getHeight(), cellLayout.getWidth(), cellLayout.getHeight());
         });
+    }
+
+    @VisibleForTesting
+    void saveWidgetInfo(Context context,
+                        AppWidgetProviderInfo appWidgetInfo,
+                        int cellId,
+                        int appWidgetId) {
+        SharedPreferences pref = U.getSharedPreferences(context);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(PREF_DASHBOARD_WIDGET_PREFIX + cellId, appWidgetId);
+        editor.putString(
+                PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                appWidgetInfo.provider.flattenToString()
+        );
+        editor.remove(
+                PREF_DASHBOARD_WIDGET_PREFIX
+                        + cellId
+                        + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
+        );
+        editor.apply();
     }
 
     private void removeWidget(int cellId, boolean tempRemove) {
