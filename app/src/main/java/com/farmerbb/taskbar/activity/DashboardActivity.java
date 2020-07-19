@@ -125,7 +125,7 @@ public class DashboardActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        contextMenuFix = getIntent().hasExtra("context_menu_fix");
+        contextMenuFix = getIntent().hasExtra(EXTRA_CONTEXT_MENU_FIX);
 
         // Detect outside touches, and finish the activity when one is detected
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);

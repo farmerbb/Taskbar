@@ -668,8 +668,9 @@ public class U {
         if(hasFreeformSupport(context) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayInfo display = getDisplayInfo(context);
 
-            if(hasBrokenSetLaunchBoundsApi())
-                intent.putExtra("context_menu_fix", true);
+            if (hasBrokenSetLaunchBoundsApi()) {
+                intent.putExtra(EXTRA_CONTEXT_MENU_FIX, true);
+            }
 
             context.startActivity(intent,
                     getActivityOptionsBundle(context, ApplicationType.CONTEXT_MENU, null,

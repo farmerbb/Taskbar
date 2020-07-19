@@ -319,13 +319,15 @@ public class DashboardController extends UIController {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-            if(inFreeformMode) {
-                if(U.hasBrokenSetLaunchBoundsApi())
-                    intent.putExtra("context_menu_fix", true);
+            if (inFreeformMode) {
+                if (U.hasBrokenSetLaunchBoundsApi()) {
+                    intent.putExtra(EXTRA_CONTEXT_MENU_FIX, true);
+                }
 
                 U.startActivityMaximized(context, intent);
-            } else
+            } else {
                 context.startActivity(intent);
+            }
 
             for(int i = 0; i < maxSize; i++) {
                 final DashboardCell cellLayout = cells.get(i);
