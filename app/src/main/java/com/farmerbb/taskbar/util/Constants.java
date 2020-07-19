@@ -218,6 +218,9 @@ public class Constants {
     public static final String PREF_WINDOW_SIZE_LARGE = "window_size_large";
     public static final String PREF_WINDOW_SIZE_PHONE_SIZE = "window_size_phone_size";
     public static final String PREF_WINDOW_SIZE_STANDARD = "window_size_standard";
+    public static final String PREF_DASHBOARD_WIDGET_PREFIX = "dashboard_widget_";
+    public static final String PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX = "_provider";
+    public static final String PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX = "_placeholder";
 
     // SharedPreference values
 
@@ -240,4 +243,7 @@ public class Constants {
     // Intent extra keys
 
     public static final String EXTRA_IS_LAUNCHING_SHORTCUT = "is_launching_shortcut";
+    public static final String EXTRA_APPWIDGET_ID = "appWidgetId";
+    public static final String EXTRA_CELL_ID = "cellId";
+    public static final String EXTRA_CONTEXT_MENU_FIX = "context_menu_fix";
 }

@@ -61,8 +61,8 @@ public class DashboardActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             mAppWidgetManager = AppWidgetManager.getInstance(context);
-            mAppWidgetHost = new AppWidgetHost(context, intent.getIntExtra("appWidgetId", -1));
-            cellId = intent.getIntExtra("cellId", -1);
+            mAppWidgetHost = new AppWidgetHost(context, intent.getIntExtra(EXTRA_APPWIDGET_ID, -1));
+            cellId = intent.getIntExtra(EXTRA_CELL_ID, -1);
 
             int appWidgetId = mAppWidgetHost.allocateAppWidgetId();
             Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
@@ -83,7 +83,7 @@ public class DashboardActivity extends Activity {
     private BroadcastReceiver removeWidgetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
-            cellId = intent.getIntExtra("cellId", -1);
+            cellId = intent.getIntExtra(EXTRA_CELL_ID, -1);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
             builder.setTitle(R.string.tb_remove_widget)
@@ -95,7 +95,7 @@ public class DashboardActivity extends Activity {
                     })
                     .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
                         Intent intent1 = new Intent(ACTION_REMOVE_WIDGET_COMPLETED);
-                        intent1.putExtra("cellId", cellId);
+                        intent1.putExtra(EXTRA_CELL_ID, cellId);
                         U.sendBroadcast(DashboardActivity.this, intent1);
 
                         shouldFinish = true;
@@ -125,7 +125,7 @@ public class DashboardActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        contextMenuFix = getIntent().hasExtra("context_menu_fix");
+        contextMenuFix = getIntent().hasExtra(EXTRA_CONTEXT_MENU_FIX);
 
         // Detect outside touches, and finish the activity when one is detected
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
@@ -255,8 +255,11 @@ public class DashboardActivity extends Activity {
 
     private void createWidget(Intent data) {
         Intent intent = new Intent(ACTION_ADD_WIDGET_COMPLETED);
-        intent.putExtra("appWidgetId", data.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1));
-        intent.putExtra("cellId", cellId);
+        intent.putExtra(
+                EXTRA_APPWIDGET_ID,
+                data.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1)
+        );
+        intent.putExtra(EXTRA_CELL_ID, cellId);
 
         U.sendBroadcast(this, intent);
         U.sendBroadcast(this, ACTION_TEMP_SHOW_TASKBAR);

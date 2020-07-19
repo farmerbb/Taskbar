@@ -500,7 +500,7 @@ public class TaskbarControllerTest {
         List<String> applicationIdsToRemove = new ArrayList<>();
         UsageStatsManager usageStatsManager =
                 (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        final String entryTestPackage1 = Constants.ENTRY_TEST_PACKAGE + "-1";
+        final String entryTestPackage1 = Constants.TEST_PACKAGE + "-1";
         UsageEvents.Event event =
                 EventBuilder
                         .buildEvent()
@@ -517,7 +517,7 @@ public class TaskbarControllerTest {
                         .buildEvent()
                         .setEventType(MOVE_TO_BACKGROUND)
                         .setTimeStamp(200L)
-                        .setPackage(Constants.ENTRY_TEST_PACKAGE + "-2")
+                        .setPackage(Constants.TEST_PACKAGE + "-2")
                         .build();
         shadowOf(usageStatsManager).addEvent(event);
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove);
@@ -735,8 +735,8 @@ public class TaskbarControllerTest {
         appEntry =
                 new AppEntry(
                         "com.google.android.googlequicksearchbox",
-                        Constants.ENTRY_TEST_COMPONENT,
-                        Constants.ENTRY_TEST_LABEL,
+                        Constants.TEST_COMPONENT,
+                        Constants.TEST_LABEL,
                         null,
                         false
                 );
@@ -786,13 +786,13 @@ public class TaskbarControllerTest {
         assertSame(appEntry, entries.get(0));
 
         AppEntry firstEntry = appEntry;
-        appEntry = new AppEntry(Constants.ENTRY_TEST_PACKAGE, null, null, null, false);
+        appEntry = new AppEntry(Constants.TEST_PACKAGE, null, null, null, false);
         appEntry.setLastTimeUsed(System.currentTimeMillis());
         entries.add(appEntry);
         ActivityInfo info = new ActivityInfo();
         info.packageName = appEntry.getPackageName();
-        info.name = Constants.ENTRY_TEST_NAME;
-        info.nonLocalizedLabel = Constants.ENTRY_TEST_LABEL;
+        info.name = Constants.TEST_NAME;
+        info.nonLocalizedLabel = Constants.TEST_LABEL;
         LauncherActivityInfo launcherActivityInfo =
                 TaskbarShadowLauncherApps
                         .generateTestLauncherActivityInfo(
@@ -816,9 +816,9 @@ public class TaskbarControllerTest {
     private AppEntry generateTestAppEntry(int index) {
         AppEntry appEntry =
                 new AppEntry(
-                        Constants.ENTRY_TEST_PACKAGE + "-" + index,
-                        Constants.ENTRY_TEST_COMPONENT + "-" + index,
-                        Constants.ENTRY_TEST_LABEL + "-" + index,
+                        Constants.TEST_PACKAGE + "-" + index,
+                        Constants.TEST_COMPONENT + "-" + index,
+                        Constants.TEST_LABEL + "-" + index,
                         null,
                         false
                 );

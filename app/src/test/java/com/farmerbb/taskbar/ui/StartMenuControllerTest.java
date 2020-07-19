@@ -19,7 +19,6 @@ import com.farmerbb.taskbar.Constants;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.shadow.TaskbarShadowLauncherApps;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
@@ -207,8 +206,8 @@ public class StartMenuControllerTest {
         assertEquals(0, appEntries.size());
 
         ActivityInfo activityInfo = new ActivityInfo();
-        activityInfo.packageName = Constants.ENTRY_TEST_PACKAGE;
-        activityInfo.name = Constants.ENTRY_TEST_LABEL;
+        activityInfo.packageName = Constants.TEST_PACKAGE;
+        activityInfo.name = Constants.TEST_LABEL;
         activityInfo.nonLocalizedLabel = activityInfo.name;
         activityInfo.applicationInfo = new ApplicationInfo();
         activityInfo.applicationInfo.packageName = activityInfo.packageName;

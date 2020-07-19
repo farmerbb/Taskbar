@@ -111,7 +111,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         showStartMenu = args.getBoolean("launched_from_start_menu", false);
         isStartButton = entry == null && args.getBoolean("is_start_button", false);
         isOverflowMenu = entry == null && args.getBoolean("is_overflow_menu", false);
-        contextMenuFix = args.containsKey("context_menu_fix");
+        contextMenuFix = args.containsKey(EXTRA_CONTEXT_MENU_FIX);
         showQuitOption = !args.getBoolean("dont_show_quit", false);
 
         // Determine where to position the dialog on screen
