@@ -126,13 +126,7 @@ public class DashboardController extends UIController {
         @Override
         public void onReceive(Context context, Intent intent) {
             fadeIn();
-
-            if(intent.hasExtra(EXTRA_APPWIDGET_ID) && intent.hasExtra(EXTRA_CELL_ID)) {
-                int appWidgetId = intent.getExtras().getInt(EXTRA_APPWIDGET_ID, -1);
-                int cellId = intent.getExtras().getInt(EXTRA_CELL_ID, -1);
-
-                addWidget(appWidgetId, cellId, true);
-            }
+            addWidget(intent);
         }
     };
 
@@ -496,6 +490,16 @@ public class DashboardController extends UIController {
         Intent intent = new Intent(ACTION_REMOVE_WIDGET_REQUESTED);
         intent.putExtra(EXTRA_CELL_ID, cellId);
         U.sendBroadcast(context, intent);
+    }
+
+    @VisibleForTesting
+    void addWidget(Intent intent) {
+        if (intent.hasExtra(EXTRA_APPWIDGET_ID) && intent.hasExtra(EXTRA_CELL_ID)) {
+            int appWidgetId = intent.getExtras().getInt(EXTRA_APPWIDGET_ID, -1);
+            int cellId = intent.getExtras().getInt(EXTRA_CELL_ID, -1);
+
+            addWidget(appWidgetId, cellId, true);
+        }
     }
 
     private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {
