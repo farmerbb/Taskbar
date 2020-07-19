@@ -1,7 +1,6 @@
 package com.farmerbb.taskbar.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,11 +31,11 @@ import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
-        "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"})
+        "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"
+})
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class DashboardControllerTest {
     @Rule
@@ -95,7 +94,7 @@ public class DashboardControllerTest {
         uiController.updatePaddingSize(context, layout, POSITION_BOTTOM_RIGHT);
         verifyViewPadding(layout, 0, 0, 0, paddingSize);
     }
-
+    
     private void verifyViewPadding(View view, int left, int top, int right, int bottom) {
         assertEquals(left, view.getPaddingLeft());
         assertEquals(top, view.getPaddingTop());

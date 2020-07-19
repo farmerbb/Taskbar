@@ -60,6 +60,7 @@ import android.widget.Toast;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.helper.LauncherHelper;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.helper.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
@@ -241,11 +242,16 @@ public class DashboardController extends UIController {
         mAppWidgetHost.startListening();
 
         for(int i = 0; i < maxSize; i++) {
-            int appWidgetId = pref.getInt("dashboard_widget_" + i, -1);
+            int appWidgetId = pref.getInt(PREF_DASHBOARD_WIDGET_PREFIX + i, -1);
             if(appWidgetId != -1)
                 addWidget(appWidgetId, i, false);
-            else if(pref.getBoolean("dashboard_widget_" + i + "_placeholder", false))
+            else if (pref.getBoolean(
+                    PREF_DASHBOARD_WIDGET_PREFIX
+                            + i
+                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
+                    false)) {
                 addPlaceholder(i);
+            }
         }
 
         mAppWidgetHost.stopListening();
@@ -443,7 +449,13 @@ public class DashboardController extends UIController {
         int currentlySelectedCell = appWidgetId == -1 ? cellId : -1;
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        boolean shouldShowPlaceholder = pref.getBoolean("dashboard_widget_" + cellId + "_placeholder", false);
+        boolean shouldShowPlaceholder =
+                pref.getBoolean(
+                        PREF_DASHBOARD_WIDGET_PREFIX
+                                + cellId
+                                + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
+                        false
+                );
         if(isActualClick && ((appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) || shouldShowPlaceholder)) {
             fadeOut(false);
 
@@ -456,7 +468,13 @@ public class DashboardController extends UIController {
             U.sendBroadcast(context, intent);
 
             if(shouldShowPlaceholder) {
-                String providerName = pref.getString("dashboard_widget_" + cellId + "_provider", "null");
+                String providerName =
+                        pref.getString(
+                                PREF_DASHBOARD_WIDGET_PREFIX
+                                        + cellId
+                                        + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                                "null"
+                        );
                 if(!providerName.equals("null")) {
                     ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
@@ -528,12 +546,19 @@ public class DashboardController extends UIController {
 
         widgets.put(cellId, hostView);
 
-        if(shouldSave) {
+        if (shouldSave) {
             SharedPreferences pref = U.getSharedPreferences(context);
             SharedPreferences.Editor editor = pref.edit();
-            editor.putInt("dashboard_widget_" + cellId, appWidgetId);
-            editor.putString("dashboard_widget_" + cellId + "_provider", appWidgetInfo.provider.flattenToString());
-            editor.remove("dashboard_widget_" + cellId + "_placeholder");
+            editor.putInt(PREF_DASHBOARD_WIDGET_PREFIX + cellId, appWidgetId);
+            editor.putString(
+                    PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                    appWidgetInfo.provider.flattenToString()
+            );
+            editor.remove(
+                    PREF_DASHBOARD_WIDGET_PREFIX
+                            + cellId
+                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
+            );
             editor.apply();
         }
 
@@ -567,21 +592,36 @@ public class DashboardController extends UIController {
 
         SharedPreferences pref = U.getSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
-        editor.remove("dashboard_widget_" + cellId);
+        editor.remove(PREF_DASHBOARD_WIDGET_PREFIX + cellId);
 
-        if(tempRemove) {
-            editor.putBoolean("dashboard_widget_" + cellId + "_placeholder", true);
+        if (tempRemove) {
+            editor.putBoolean(
+                    PREF_DASHBOARD_WIDGET_PREFIX
+                            + cellId
+                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
+                    true
+            );
             addPlaceholder(cellId);
-        } else
-            editor.remove("dashboard_widget_" + cellId + "_provider");
-
+        } else {
+            editor.remove(
+                    PREF_DASHBOARD_WIDGET_PREFIX
+                            + cellId
+                            + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX
+            );
+        }
         editor.apply();
     }
 
     private void addPlaceholder(int cellId) {
         FrameLayout placeholder = cells.get(cellId).findViewById(R.id.placeholder);
         SharedPreferences pref = U.getSharedPreferences(context);
-        String providerName = pref.getString("dashboard_widget_" + cellId + "_provider", "null");
+        String providerName =
+                pref.getString(
+                        PREF_DASHBOARD_WIDGET_PREFIX
+                                + cellId
+                                + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                        "null"
+                );
 
         if(!providerName.equals("null")) {
             ImageView imageView = placeholder.findViewById(R.id.placeholder_image);
