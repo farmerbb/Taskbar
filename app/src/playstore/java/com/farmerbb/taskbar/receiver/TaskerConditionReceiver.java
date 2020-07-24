@@ -33,6 +33,7 @@ public final class TaskerConditionReceiver extends BroadcastReceiver {
         if(U.isExternalAccessDisabled(context)) return;
 
         if (lastbundle.equals(intent.getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE))) {
+            // bundle hasn't changed: we can safely return
             return;
         }
         updateValues(intent);
