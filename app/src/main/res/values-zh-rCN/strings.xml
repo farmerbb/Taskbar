@@ -19,10 +19,10 @@
     <string name="tb_app_name">任务栏</string>
     <string name="tb_app_name_debug">任务栏 (Debug)</string>
 
-    <string name="tb_taskbar_is_active">任务栏正在运行</string>
+    <string name="tb_taskbar_is_active">任务栏 正在运行</string>
     <string name="tb_click_to_open_settings">点击打开设置</string>
-    <string name="tb_action_show">显示任务栏</string>
-    <string name="tb_action_hide">隐藏任务栏</string>
+    <string name="tb_action_show">显示 任务栏</string>
+    <string name="tb_action_hide">隐藏 任务栏</string>
     <string name="tb_action_show_alt">显示</string>
     <string name="tb_action_hide_alt">隐藏</string>
     <string name="tb_action_quit">退出</string>
@@ -30,9 +30,9 @@
     <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">需要权限</string>
-    <string name="tb_permission_dialog_message">任务栏需要在其他应用之上显示的权限才能开始。\n\n</string>
+    <string name="tb_permission_dialog_message">任务栏 需要在其他应用之上显示的权限才能开始。\n\n</string>
     <string name="tb_permission_dialog_instructions_phone">请点击 \"授予权限\" 并确保 \"允许在其他应用之上显示\" 已启用。</string>
-    <string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
+    <string name="tb_permission_dialog_instructions_tv">请点击 \"打开设置\" 来打开 Android TV 应用设置菜单。选择 \"特殊应用访问\"，然后选择 \"允许在其他应用之上显示\" 并确保 任务栏 已被启用。</string>
 
     <string name="tb_pref_header_general">常规设置</string>
     <string name="tb_pref_title_start_menu_layout">开始菜单布局</string>
@@ -53,13 +53,13 @@
     <string name="tb_pref_title_amount_of_recents">显示已启动的应用</string>
     <string-array name="tb_pref_recents_amount">
         <item>过去一天内</item>
-        <item>启动任务栏后</item>
-        <item>所有应用（可能降低性能）</item>
+        <item>启动 任务栏 后</item>
+        <item>所有应用 (可能降低性能)</item>
     </string-array>
     <string-array name="tb_pref_recents_amount_alt">
         <item>过去一天内</item>
         <item>启动任务栏后</item>
-        <item>所有应用（可能降低性能）</item>
+        <item>所有应用 (可能降低性能)</item>
         <item>仅限运行中的应用</item>
     </string-array>
 
@@ -80,14 +80,14 @@
     <string name="tb_pref_title_freeform_hack">自由式窗口支持</string>
     <string name="tb_pref_description_freeform_hack">允许任务栏在自由式窗口模式启动应用，带来更逼真的电脑桌面体验。\n\n这个功能还在试验阶段，可能会与标准分屏多任务发生冲突。</string>
 
-    <string name="tb_pref_header_about">关于任务栏</string>
-    <string name="tb_pref_about_description">任务栏: Android 上 PC 风格的高效率工具\n\n&#169; %1$d Braden Farmer\nApp logo by Mark Morilla\n\n点击此处检查更新或者留下评价! %2$s</string>
-    <string name="tb_pref_about_description_alt">任务栏: Android 上 PC 风格的高效率工具\n\n&#169; %1$d Braden Farmer\nApp logo by Mark Morilla</string>
+    <string name="tb_pref_header_about">关于 任务栏</string>
+    <string name="tb_pref_about_description">任务栏: Android 上 PC 风格的高效率工具\n\n&#169; %1$d Braden Farmer\n应用图标设计 Mark Morilla\n\n点击此处检查更新或者留下评价! %2$s</string>
+    <string name="tb_pref_about_description_alt">任务栏: Android 上 PC 风格的高效率工具\n\n&#169; %1$d Braden Farmer\n应用图标设计 Mark Morilla</string>
 
-    <string name="tb_pref_title_hide_taskbar">选择项目时收起任务栏</string>
+    <string name="tb_pref_title_hide_taskbar">选择项目时收起 任务栏</string>
 
     <string name="tb_pref_title_launcher">替换主屏幕</string>
-    <string name="tb_pref_description_launcher">使用任务栏作为主屏幕替换</string>
+    <string name="tb_pref_description_launcher">使用 任务栏 作为主屏幕替换</string>
 
     <string name="tb_set_wallpaper">使用&#8230;设置壁纸</string>
     <string name="tb_pref_disable_animations">更快速地切换应用</string>
@@ -110,14 +110,14 @@
     <string name="tb_quit_taskbar">退出</string>
 
     <string name="tb_pref_title_keyboard_shortcut">启用键盘快捷方式</string>
-    <string name="tb_pref_description_keyboard_shortcut">开始/停止任务栏: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\n显示开始菜单: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(需要在设置中将任务栏设为辅助应用)</string>
-    <string name="tb_pref_description_keyboard_shortcut_alt">开始/停止任务栏\n&#8226; WinKey+M / Search+M\n\n显示开始菜单\n&#8226; WinKey / Search\n(requires Taskbar to be set as the assist app in Settings)</string>
+    <string name="tb_pref_description_keyboard_shortcut">开始/停止 任务栏: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\n显示开始菜单: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(需要在设置中将任务栏设为辅助应用)</string>
+    <string name="tb_pref_description_keyboard_shortcut_alt">开始/停止 任务栏\n&#8226; WinKey+M / Search+M\n\n显示开始菜单\n&#8226; WinKey / Search\n(requires Taskbar to be set as the assist app in Settings)</string>
     <string name="tb_loading_apps">正在载入应用&#8230;</string>
     <string name="tb_press_enter">未找到应用\n\n点按 Enter 使用 Google 搜索</string>
     <string name="tb_nothing_to_see_here">空空如也, 向前移动&#8230;</string>
 
     <string name="tb_error_dialog_title">出错</string>
-    <string name="tb_error_dialog_message">不幸的是，由于OEM 的限制，该功能不能在你的设备上启用。\n\n你仍然可以使用这个 adb shell 命令启用它:\n\nappops set %1$s %2$s allow</string>
+    <string name="tb_error_dialog_message">不幸的是，由于OEM 的限制，该功能不能在您的设备上启用。\n\n您仍然可以使用这个 adb shell 命令启用它:\n\nappops set %1$s %2$s allow</string>
     <string name="tb_action_ok">确定</string>
     <string name="tb_action_cancel">取消</string>
 
@@ -143,10 +143,10 @@
     <string name="tb_freeform_dialog_title">启用自由式支持</string>
     <string name="tb_freeform_dialog_message">为了 任务栏 能够在自由式窗口模式中启动应用，请遵循以下步骤:\n\n&#8226; 前往开发者选项\n\n&#8226; 滑动到底部并打开 \"%s\"\n\n&#8226; 重新开机</string>
 
-    <string name="tb_pref_title_invisible_button">任务栏收起时隐藏按钮</string>
+    <string name="tb_pref_title_invisible_button">任务栏 收起时隐藏按钮</string>
     <string name="tb_pref_title_freeform_mode_help">自由式模式的帮助 &amp; 使用方法</string>
     <string name="tb_freeform_help_dialog_title">帮助 &amp; 使用方法</string>
-    <string name="tb_freeform_help_dialog_message"><b>关于自由式模式</b>\n\n任务栏 能让你在 Android 7.0 (Nougat) 上在自由式窗口中启动应用。无需 Root 权限。 Android 8.0 (Oreo) 也可以通过 adb shell 命令实现\n\n遵循以下步骤让你的设备可以在自由式模式中启动应用:\n\n<b>1.</b> 在任务栏应用中的勾选方框 \"自由式窗口支持\" \n\n<b>2.</b> 遵循弹窗中出现的指示来启用设备上适当的设置\n\n<b>3.</b> 前往你的设备的最近应用页面并清除所有最近应用\n\n<b>4.</b> 选择要使用任务栏在自由式窗口启动的应用\n\n<b>窗口大小预设</b>\n\n任务栏可在多个预设大小中启动应用窗口。你可以通过长按或者右击应用图标选择窗口大小，然后选择\"新窗口\"\n\n要保存特定应用的窗口大小预设，只需长按预设，出现勾号就表明已设为默认。任务栏 将会在下次启动时使用所选的大小启动应用。\n\n谨记: 窗口大小不能在 Android 8.0 上正常使用。然而，你可以通过启动应用，立即关闭然后从 Android 的概览菜单中再次启动暂时解决这个问题。\n\n<b>问题排查</b>\n\n<i>&#8226; 应用仍然以全屏模式启动</i>\n\n如果应用已经在内存中载入，任务栏 会将其置于前台运行。为了在自由式模式中启动应用，必须将其在全新状态下启动。\n\n从最近中清除应用，然后使用 任务栏 从最近应用页面将其重新启动。如果不可行，然后长按应用图标，选择 \"应用信息，\" 然后强制停止这个应用。\n\n<i>&#8226; 最大化的应用无法还原为窗口</i>\n\n如果你点按应用的标题栏上的最大化按钮，Android 会将应用移出自由式模式，而后进入全屏模式。如以上提到的，如果这些应用以全新的状态启动，任务栏 仅能在自由式窗口中启动应用。\n\n要修复这个问题，你可以通过在应用窗口画面外轻按或者点击即可最大化窗口。在保持自由式窗口工作空间的同时扩大窗口至所有可用空间。\n\n<b>启用完整的系统级自由式窗口支持</b>\n\n如果你有已安装 Android SDK 的电脑的访问权，你可以通过运行如下 adb shell 命令在系统层面下启用对自由式模式的支持:\n\nsettings put global enable_freeform_support 1\n\n运行以上命令后，重启你的设备，将会在设备的最近应用页面中出现一个新按钮可用于进入/退出所选应用的自由式模式。 (谨记: 这个按钮目前在 Android 7.1.2 上不可用)</string>
+    <string name="tb_freeform_help_dialog_message"><b>关于自由式模式</b>\n\n任务栏 能让您在 Android 7.0 (Nougat) 上在自由式窗口中启动应用。无需 Root 权限。 Android 8.0 (Oreo) 也可以通过 adb shell 命令实现\n\n遵循以下步骤让您的设备可以在自由式模式中启动应用:\n\n<b>1.</b> 在任务栏应用中的勾选方框 \"自由式窗口支持\" \n\n<b>2.</b> 遵循弹窗中出现的指示来启用设备上适当的设置\n\n<b>3.</b> 前往您的设备的最近应用页面并清除所有最近应用\n\n<b>4.</b> 选择要使用任务栏在自由式窗口启动的应用\n\n<b>窗口大小预设</b>\n\n任务栏可在多个预设大小中启动应用窗口。您可以通过长按或者右击应用图标选择窗口大小，然后选择\"新窗口\"\n\n要保存特定应用的窗口大小预设，只需长按预设，出现勾号就表明已设为默认。任务栏 将会在下次启动时使用所选的大小启动应用。\n\n谨记: 窗口大小不能在 Android 8.0 上正常使用。然而，您可以通过启动应用，立即关闭然后从 Android 的概览菜单中再次启动暂时解决这个问题。\n\n<b>问题排查</b>\n\n<i>&#8226; 应用仍然以全屏模式启动</i>\n\n如果应用已经在内存中载入，任务栏 会将其置于前台运行。为了在自由式模式中启动应用，必须将其在全新状态下启动。\n\n从最近中清除应用，然后使用 任务栏 从最近应用页面将其重新启动。如果不可行，然后长按应用图标，选择 \"应用信息，\" 然后强制停止这个应用。\n\n<i>&#8226; 最大化的应用无法还原为窗口</i>\n\n如果您点按应用的标题栏上的最大化按钮，Android 会将应用移出自由式模式，而后进入全屏模式。如以上提到的，如果这些应用以全新的状态启动，任务栏 仅能在自由式窗口中启动应用。\n\n要修复这个问题，您可以通过在应用窗口画面外轻按或者点击即可最大化窗口。在保持自由式窗口工作空间的同时扩大窗口至所有可用空间。\n\n<b>启用完整的系统级自由式窗口支持</b>\n\n如果您有已安装 Android SDK 的电脑的访问权，您可以通过运行如下 adb shell 命令在系统层面下启用对自由式模式的支持:\n\nsettings put global enable_freeform_support 1\n\n运行以上命令后，重启您的设备，将会在设备的最近应用页面中出现一个新按钮可用于进入/退出所选应用的自由式模式。 (谨记: 这个按钮目前在 Android 7.1.2 上不可用)</string>
 
     <string name="tb_action_developer_options">打开开发者选项</string>
     <string name="tb_action_close">关闭</string>
@@ -172,23 +172,23 @@
     <string name="tb_top_apps_dialog_title">置顶应用</string>
     <string name="tb_start_menu_apps">开始菜单应用</string>
 
-    <string name="tb_reboot_required">重启你的设备以完成自由式模式设定</string>
+    <string name="tb_reboot_required">重启您的设备以完成自由式模式设定</string>
     <string name="tb_enable_force_activities_resizable">滚动到底部并打开 \"%s\"</string>
-    <string name="tb_set_as_default_home">点击 \"始终\" 将 任务栏 设为你的默认启动器</string>
+    <string name="tb_set_as_default_home">点击 \"始终\" 将 任务栏 设为您的默认启动器</string>
     <string name="tb_enable_developer_options">点击版本号7次即可开启开发者选项</string>
 
     <string name="tb_pref_title_anchor">屏幕旋转时固定任务栏</string>
     <string name="tb_pref_title_donate">捐赠</string>
     <string name="tb_pref_summary_donate">升级到捐赠版以支持 任务栏 的开发</string>
-    <string name="tb_dialog_donate_message">升级到 %1$s 的捐赠版以支持 任务栏 的开发！\n\n捐赠版与免费版其实别无两样，你的首选项会自动转移过去。\n\n 任务栏 永久并完全免费 、开源、绝无广告。然而，你的支持会非常感激！</string>
+    <string name="tb_dialog_donate_message">升级到 %1$s 的捐赠版以支持 任务栏 的开发！\n\n捐赠版与免费版其实别无两样，您的首选项会自动转移过去。\n\n 任务栏 永久并完全免费 、开源、绝无广告。然而，您的支持会非常感激！</string>
     <string name="tb_action_no_thanks">不，谢谢</string>
 
     <string name="tb_importing_settings">正在导入设置&#8230; 请稍等</string>
     <string name="tb_settings_imported_successfully">设置导入成功</string>
-    <string name="tb_import_dialog_message">谢谢你购买了 任务栏 的捐赠版！\n\n你的设置已成功导入，你现在需要卸载应用的免费版。</string>
+    <string name="tb_import_dialog_message">谢谢您购买了 任务栏 的捐赠版！\n\n您的设置已成功导入，您现在需要卸载应用的免费版。</string>
     <string name="tb_action_uninstall">卸载</string>
 
-    <string name="tb_pref_title_hide_when_keyboard_shown">自动收起任务栏</string>
+    <string name="tb_pref_title_hide_when_keyboard_shown">自动收起 任务栏</string>
     <string name="tb_pref_description_hide_when_keyboard_shown">当显示屏幕键盘时</string>
 
     <string name="tb_pref_max_num_of_recents">最近/置顶应用的最大数</string>
@@ -200,7 +200,7 @@
     <string name="tb_no_icon_packs_installed">未安装图标包</string>
 
     <string name="tb_apply_icon_pack">应用图标包</string>
-    <string name="tb_apply_icon_pack_description">应用 \"%1$s\" 到任务栏?</string>
+    <string name="tb_apply_icon_pack_description">应用 \"%1$s\" 到 任务栏?</string>
     <string name="tb_must_specify_extra">必须指定 Intent.EXTRA_PACKAGE_NAME</string>
     <string name="tb_invalid_package_name">无效包名</string>
 
@@ -221,10 +221,10 @@
     <string name="tb_shortcut_created">自由式模式快捷方式已创建</string>
 
     <string name="tb_start_taskbar">开始/停止 任务栏 </string>
-    <string name="tb_no_freeform_support">自由式模式未在你的设备上启用 &#8211; 请先打开 任务栏 并启用</string>
+    <string name="tb_no_freeform_support">自由式模式未在您的设备上启用 &#8211; 请先打开 任务栏 并启用</string>
     <string name="tb_enable_recent_apps">任务栏 可以选择在屏幕边缘显示最常用应用的图标。要做到这个，任务栏 需要使用情况访问权限。\n\n</string>
     <string name="tb_enable_recent_apps_instructions_phone">启用对最近应用的支持?</string>
-    <string name="tb_enable_recent_apps_instructions_tv">To enable support for recent apps, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Usage access\" and ensure that Taskbar is enabled.</string>
+    <string name="tb_enable_recent_apps_instructions_tv">启用对最近应用的支持，点击 \"打开设置\" 来开启 Android TV 应用设置菜单。选择 \"特殊应用访问\"，然后选择 \"使用量数据访问\" 并确保任务栏已经被启用。</string>
 
     <string name="tb_disable_scrolling_list">停用滚动列表</string>
 
@@ -270,12 +270,12 @@
 
     <string name="tb_pref_header_appearance">外观</string>
     <string name="tb_dashboard">启用小部件支持</string>
-    <string name="tb_dashboard_description">添加小部件按钮以便点按时显示任务栏</string>
+    <string name="tb_dashboard_description">添加小部件按钮以便点按时显示 任务栏</string>
     <string name="tb_dashboard_grid_size">小部件面板网格大小</string>
 
     <string name="tb_click_to_add_widget">点击添加小部件</string>
     <string name="tb_remove_widget">移除小部件</string>
-    <string name="tb_are_you_sure">你确定吗?</string>
+    <string name="tb_are_you_sure">您确定吗?</string>
     <string name="tb_dashboard_tutorial">点击屏幕任意处添加小部件到面板</string>
 
     <string name="tb_pref_title_accent_color">强调色</string>
@@ -294,7 +294,7 @@
     <string name="tb_refresh_frequency_continuous">持续性</string>
 
     <string name="tb_power_button_warning_title">注意</string>
-    <string name="tb_power_button_warning_message">基于 CyanogenMod / LineageOS 的自定义ROM在设备处于自由式模式时电源键会出现问题。\n\n请现在测试一下你的电源键。如果不可用，那么请慎用自由式模式，即表示如果屏幕超时，你将无法从休眠中唤醒设备。</string>
+    <string name="tb_power_button_warning_message">基于 CyanogenMod / LineageOS 的自定义ROM在设备处于自由式模式时电源键会出现问题。\n\n请现在测试一下您的电源键。如果不可用，那么请慎用自由式模式，即表示如果屏幕超时，您将无法从休眠中唤醒设备。</string>
     <string name="tb_action_i_understand">我明白</string>
 
     <string name="tb_hide_taskbar_disclaimer">不应用到自由式模式中的应用</string>
@@ -318,7 +318,7 @@
     <string name="tb_restore_widget">还原小部件</string>
 
     <string name="tb_samsung_freeform_title">注</string>
-    <string name="tb_samsung_freeform_message">由于系统对多窗口模式作出了变更，自由式模式不能在 三星设备 上使用。\n\n你可能需要刷入自定义 ROM 才能在这台设备上使用自由式模式。</string>
+    <string name="tb_samsung_freeform_message">由于系统对多窗口模式作出了变更，自由式模式不能在 三星设备 上使用。\n\n您可能需要刷入自定义 ROM 才能在这台设备上使用自由式模式。</string>
 
     <string name="tb_widget_restore_toast">选择 \"%1$s\" 以还原这个小部件</string>
 
@@ -330,7 +330,7 @@
 
     <string name="tb_press_enter_alt">未找到应用\n\n点按 Enter 在浏览器中打开</string>
 
-    <string name="tb_freeform_dialog_message_alt">为了让 任务栏 能在自由式窗口模式中启动应用，请遵循以下步骤:\n\n&#8226; 前往开发者选项并启用 USB 调试\n\n&#8226; 将你的设备连接安装了 Android SDK 的电脑, 然后运行如下 adb shell 命令:\n\nsettings put global enable_freeform_support 1\n\n&#8226; 重启你的设备</string>
+    <string name="tb_freeform_dialog_message_alt">为了让 任务栏 能在自由式窗口模式中启动应用，请遵循以下步骤:\n\n&#8226; 前往开发者选项并启用 USB 调试\n\n&#8226; 将您的设备连接安装了 Android SDK 的电脑, 然后运行如下 adb shell 命令:\n\nsettings put global enable_freeform_support 1\n\n&#8226; 重启您的设备</string>
 
     <string name="tb_color_picker_alpha">透明度</string>
     <string name="tb_color_picker_red">红</string>
@@ -340,13 +340,13 @@
     <string name="tb_pref_title_chrome_os_context_menu_fix">Chrome OS 底栏兼容性修复</string>
     <string name="tb_pref_description_chrome_os_context_menu_fix">当任务栏在 Chrome OS 底栏旁边显示时启用</string>
 
-    <string name="tb_pin_shortcut_not_supported">你的启动器不支持从其他应用中添加快捷方式。\n\n请手动从你的启动器的\"Widgets\" 菜单中添加快捷方式</string>
+    <string name="tb_pin_shortcut_not_supported">您的启动器不支持从其他应用中添加快捷方式。\n\n请手动从您的启动器的\"Widgets\" 菜单中添加快捷方式</string>
 
     <string name="tb_action_activate">激活</string>
 
     <string name="tb_pref_secondscreen_title_open">打开第二屏</string>
     <string name="tb_pref_secondscreen_title_install">安装第二屏</string>
-    <string name="tb_pref_secondscreen_description">连接外部显示器的时候修改设备的分辨率以及密度以此达到Continuum或者类似Dex的体验</string>
+    <string name="tb_pref_secondscreen_description">连接外部显示器的时候修改设备的分辨率以及密度以此达到 Continuum 或者类似 DeX 的体验</string>
     <string name="tb_pref_secondscreen_description_alt">@string/tb_pref_secondscreen_description</string>
 
     <string name="tb_use_default">使用默认</string>
@@ -355,15 +355,15 @@
 
     <string name="tb_tasker_action_title">选择操作</string>
     <string name="tb_tasker_condition_title">选择条件</string>
-    <string name="tb_tasker_on">Taskbar开启</string>
-    <string name="tb_tasker_off">Taskbar关闭</string>
+    <string name="tb_tasker_on">任务栏 开启</string>
+    <string name="tb_tasker_off">任务栏 关闭</string>
     <string name="tb_on">开启</string>
     <string name="tb_off">关闭</string>
 
     <string name="tb_pref_title_tasker_enabled">允许第三方应用集成</string>
     <string name="tb_pref_summary_tasker_enabled">禁止以提高安全性</string>
 
-    <string name="tb_essential_phone_grip_rejection">Essential手机请关闭拒绝控制（开发者选项中）以此来协助打开/关闭Taskbar</string>
+    <string name="tb_essential_phone_grip_rejection">Essential 手机请关闭拒绝控制（开发者选项中）以此来协助打开/关闭 任务栏</string>
 
     <string name="tb_toggle_start_menu">切换开始菜单</string>
     <string name="tb_toggle_dashboard">切换面板</string>
@@ -390,10 +390,10 @@
 
     <string name="tb_pref_centered_icons">空白区域内图标居中</string>
     <string name="tb_pref_title_sys_tray">显示状态图标和时钟</string>
-    <string name="tb_pref_description_sys_tray">只有Taskbar横向显示的时候才可见</string>
+    <string name="tb_pref_description_sys_tray">只有 任务栏 横向显示的时候才可见</string>
 
     <string name="tb_settings">设置</string>
-    <string name="tb_powered_by_taskbar">Powered by Taskbar</string>
+    <string name="tb_powered_by_taskbar">由 任务栏 大力支持</string>
 
     <string name="tb_manage_app_data">管理应用数据</string>
     <string name="tb_manage_app_data_description">@string/tb_clear_pinned_apps</string>
@@ -411,74 +411,74 @@
     <string name="tb_window_size">窗口大小</string>
     <string name="tb_invalid_shortcut">无效快捷方式</string>
 
-    <string name="tb_backing_up_settings">Backing up settings&#8230;</string>
-    <string name="tb_restoring_settings">Restoring settings&#8230;</string>
+    <string name="tb_backing_up_settings">备份设置&#8230;</string>
+    <string name="tb_restoring_settings">还原设置&#8230;</string>
 
-    <string name="tb_pref_header_desktop_mode">Desktop mode</string>
-    <string name="tb_primary_launcher">Primary launcher</string>
-    <string name="tb_set_launcher_default_title">Set Taskbar as default home app</string>
-    <string name="tb_set_launcher_default_summary">Required for desktop mode to work</string>
-    <string name="tb_unable_to_set_default_home">Unable to set default home app. Please do so manually via system settings.</string>
-    <string name="tb_display_density">Display density</string>
-    <string name="tb_auto_hide_navbar_alt">Hide navbar while on desktop</string>
-    <string name="tb_enable_additional_settings">Enable additional settings</string>
+    <string name="tb_pref_header_desktop_mode">桌面模式</string>
+    <string name="tb_primary_launcher">首要启动器</string>
+    <string name="tb_set_launcher_default_title">设置 任务栏 为默认主屏幕应用</string>
+    <string name="tb_set_launcher_default_summary">为桌面模式正常工作所必需</string>
+    <string name="tb_unable_to_set_default_home">无法设置为默认主屏幕应用。请通过系统设置手动设置。</string>
+    <string name="tb_display_density">显示密度</string>
+    <string name="tb_auto_hide_navbar_alt">在桌面模式隐藏导航栏</string>
+    <string name="tb_enable_additional_settings">启用额外设置</string>
 
-    <string name="tb_hsl_no_launchers_found">No primary launchers were found. Please download and install one, then try again.</string>
-    <string name="tb_hsl_launcher_uninstalled">%1$s was uninstalled. Please select a different launcher from the list.</string>
-    <string name="tb_hsl_main_activity_text">Select your primary launcher from the list below. You can change this selection at any time from within Taskbar\'s desktop mode settings.</string>
+    <string name="tb_hsl_no_launchers_found">未找到首要启动器。请下载并安装一个，然后再尝试。</string>
+    <string name="tb_hsl_launcher_uninstalled">%1$s 已被卸载。请从列表中选择其他的启动器。</string>
+    <string name="tb_hsl_main_activity_text">请从下述列表选择您的首要启动器。您可以在任意时候从 任务栏 桌面模式设置中变更该设置。</string>
 
     <string-array name="tb_pref_display_density_list">
-        <item>Default</item>
-        <item>Recommended (160dpi)</item>
-        <item>High-density (320dpi)</item>
+        <item>默认</item>
+        <item>推荐 (160dpi)</item>
+        <item>高精细度 (320dpi)</item>
     </string-array>
 
     <string-array name="tb_pref_display_density_list_alt">
-        <item>Recommended (160dpi)</item>
-        <item>High-density (320dpi)</item>
+        <item>推荐 (160dpi)</item>
+        <item>高精细度 (320dpi)</item>
     </string-array>
 
-    <string name="tb_density_custom">Custom (%ddpi)</string>
-    <string name="tb_density_default">Default (%ddpi)</string>
-    <string name="tb_unable_to_apply_density_change">Unable to apply density change</string>
+    <string name="tb_density_custom">自定义 (%ddpi)</string>
+    <string name="tb_density_default">默认 (%ddpi)</string>
+    <string name="tb_unable_to_apply_density_change">无法应用精细度变化</string>
 
-    <string name="tb_icon_preview">Icon preview</string>
-    <string name="tb_icon_preview_description">Use the slider to adjust the generated icon to your liking.</string>
+    <string name="tb_icon_preview">图标预览</string>
+    <string name="tb_icon_preview_description">使用滑动条来调整生成的图标直到您喜欢。</string>
 
-    <string name="tb_clear_qs_shortcuts">Quick settings tiles</string>
-    <string name="tb_pref_description_enable_recents">Required for recent apps to appear</string>
+    <string name="tb_clear_qs_shortcuts">快捷设置栏</string>
+    <string name="tb_pref_description_enable_recents">为最近应用显示所必需</string>
 
-    <string name="tb_disable_home_setting">Please disable the \"Replace home screen\" setting under \"Advanced features\" in order to use desktop mode.</string>
-    <string name="tb_desktop_mode_setup_complete">Launch Taskbar by clicking the home button on your external display.</string>
+    <string name="tb_disable_home_setting">请禁用 \"替换主屏幕\" 设置于 \"高级功能\" 来使用桌面模式。</string>
+    <string name="tb_desktop_mode_setup_complete">在您的外部显示屏上点击主屏幕按钮来启动 任务栏。</string>
 
-    <string name="tb_hide_icon_labels">Hide app icon labels</string>
+    <string name="tb_hide_icon_labels">隐藏应用图标标签</string>
 
-    <string name="tb_opening_notification_tray">Opened notification tray on primary display</string>
-    <string name="tb_opening_quick_settings">Opened quick settings on primary display</string>
-    <string name="tb_opening_volume_control">Opened volume control on primary display</string>
-    <string name="tb_opening_power_menu">Opened power menu on primary display</string>
+    <string name="tb_opening_notification_tray">在主显示屏上打开通知托盘</string>
+    <string name="tb_opening_quick_settings">在主显示屏上打开快捷设置</string>
+    <string name="tb_opening_volume_control">在主显示屏上打开音量控制</string>
+    <string name="tb_opening_power_menu">在主显示屏上打开电源控制菜单</string>
 
-    <string name="tb_pref_dim_screen_title">Lock and dim phone screen while active</string>
-    <string name="tb_pref_dim_screen_description">Press the home button to manually activate</string>
-    <string name="tb_desktop_mode_is_active">Desktop mode is active</string>
+    <string name="tb_pref_dim_screen_title">当活跃时锁定并调暗手机屏幕</string>
+    <string name="tb_pref_dim_screen_description">点击主屏幕按钮来手动启用</string>
+    <string name="tb_desktop_mode_is_active">桌面模式已启用</string>
 
-    <string name="tb_pref_change_wallpaper_global">Apply to entire device</string>
-    <string name="tb_pref_change_wallpaper_desktop">Apply to desktop only</string>
-    <string name="tb_pref_remove_desktop_wallpaper">Use device wallpaper</string>
+    <string name="tb_pref_change_wallpaper_global">应用于整个设备</string>
+    <string name="tb_pref_change_wallpaper_desktop">仅应用于桌面</string>
+    <string name="tb_pref_remove_desktop_wallpaper">使用设备的壁纸</string>
 
-    <string name="tb_pref_notification_count_title">Show notification count in status area</string>
-    <string name="tb_pref_notification_count_description">Requires notification access</string>
+    <string name="tb_pref_notification_count_title">在状态区域显示通知计数</string>
+    <string name="tb_pref_notification_count_description">需要通知访问权限</string>
 
-    <string name="tb_desktop_mode_dialog_title">Enable desktop mode support</string>
-    <string name="tb_desktop_mode_dialog_message">To configure your device for desktop mode, please follow these steps:\n\n&#8226; Go to Developer Options\n\n&#8226; Scroll to the bottom and turn on \"Enable freeform windows\" and \"Force desktop mode\"\n\n&#8226; Set Taskbar as your default home app\n\n&#8226; Reboot your device\n\nFor more information and troubleshooting steps, click the (?) icon in the upper-right hand corner of the screen.</string>
-    <string name="tb_reboot_required_alt">Reboot your device to complete desktop mode setup</string>
-    <string name="tb_enable_additional_settings_message_1">Taskbar can optionally use elevated permissions to improve your desktop mode experience. These permissions are granted by running an adb shell command.\n\nIf you wish to continue, connect your device to a computer with the Android SDK installed, and run the following command (one line):</string>
-    <string name="tb_enable_additional_settings_message_2">Once granted, the additional settings will be enabled when a display is connected.</string>
-    <string name="tb_desktop_mode_pref_description">Use Taskbar to launch windowed apps on an external display, similar to Samsung DeX and other solutions.\n\nRequires either a USB-to-HDMI adapter, or a lapdock, and a device that supports video output.</string>
-    <string name="tb_enable_additional_settings_pref_description">Click here for info on how to enable</string>
+    <string name="tb_desktop_mode_dialog_title">启用桌面模式支持</string>
+    <string name="tb_desktop_mode_dialog_message">要为您的设备配置桌面模式，请遵循以下步骤：\n\n&#8226; 前往 开发者选项\n\n&#8226; 滚动到底部并开启 \"允许可自由调整的窗口\" 和 \"强制使用桌面模式\"\n\n&#8226; 设定 任务栏 为您的默认主屏幕应用\n\n&#8226; 重启您的设备\n\n更多的信息和除错步骤，点击屏幕右上角的 (?) 图标。</string>
+    <string name="tb_reboot_required_alt">重启您的设备来完成桌面模式设定</string>
+    <string name="tb_enable_additional_settings_message_1">任务栏可以可选的使用赋予的权限来提升您的桌面模式体验。这些权限可以通过运行 adb shell 命令来赋予。\n\n如果您想要继续，请将您的设备与已安装 Android SDK 的电脑相连，并运行下述命令 (仅一行)：</string>
+    <string name="tb_enable_additional_settings_message_2">一旦赋予权限，额外的设置将会在连接至外部显示屏时启用。</string>
+    <string name="tb_desktop_mode_pref_description">使用 任务栏 来在外接显示屏时启动窗口化应用，类似 Samsung DeX 或其他方案。\n\n需要 USB-to-HDMI 转接器或者笔记本坞站，以及支持视频输出的手机设备。</string>
+    <string name="tb_enable_additional_settings_pref_description">点击这里来了解如何启用的信息</string>
 
-    <string name="tb_desktop_mode_help"><b>About desktop mode</b>\n\nTaskbar supports Android 10\'s built-in desktop mode functionality. You can connect your compatible Android 10+ device to an external display and run apps in resizable windows, with Taskbar\'s interface running on your external display and your existing launcher still running on your phone.\n\nDesktop mode requires a USB-to-HDMI adapter (or a lapdock), and a compatible device that supports video output. Additionally, certain settings require granting a special permission via adb.\n\nTo get started, tick the checkbox for \"Desktop mode.\" The app will guide you through the one-time setup process, which involves:\n\n&#8226; Enabling the \"Enable freeform windows\" and \"Force desktop mode\" developer options\n\n&#8226; Setting Taskbar as your default home app\n\n&#8226; Rebooting your device\n\n<b>Why does Taskbar need to be set as my default home app for desktop mode to work?</b>\n\nBy design, Android will only allow the default home app to act as the launcher for desktop mode on external displays.  If the currently set home app does not specifically declare support for desktop mode, then Android will fall back to using a predefined desktop mode interface.\n\nTaskbar is able to work around this limitation by acting as a shim between the system and your preferred launcher.  When Taskbar is set as your home app, when the home button is pressed it will immediately start the launcher you prefer to use on your phone, then quit.  This launcher is set within Taskbar\'s desktop mode preferences by clicking on the \"Primary launcher\" setting.\n\nThere are a couple of caveats to keep in mind when Taskbar is set as your home app:\n\n&#8226; Most app shortcuts (seen when long-pressing an app icon) will no longer be available to your primary launcher.  This is due to an Android system limitation where only the default home app has access to app shortcuts that are dynamically created.\n\n&#8226; Certain animations that occur when pressing the home button may look incorrect.  This is due to the aforementioned behavior where Taskbar acts as a shim when the home button is pressed.\n\n<b>How do I know if my device supports video output to external displays?</b>\n\nThe folks over at NexDock maintain a list of Android 10+ smartphones that are compatible with USB-to-HDMI video output (this list excludes Samsung and Huawei devices).  You can view this list here: http://nexdock.com/lapdock-for-smartphones\n\nGoogle Pixel devices, notably, do not include support for video output.  However, you can still use Taskbar with standard screen mirroring on these devices, either via Chromecast or by using a DisplayLink dock coupled with the DisplayLink Presenter app.\n\n<b>Should I use Taskbar\'s desktop mode over my device\'s built-in desktop mode solution, such as Samsung DeX?</b>\n\nSome OEMs, such as Samsung and Huawei, have implemented their own version of desktop mode, building on top of Google\'s implementation in Android 10.  These solutions have better integration with the rest of the system and are generally more polished overall.  There is no need to switch over to Taskbar if you\'re happy with your device\'s existing desktop mode solution.\n\nTaskbar\'s desktop mode support is geared towards devices that don\'t offer a built-in desktop mode solution beyond what Google ships as stock with Android 10.\n\n<b>I can\'t find the \"Force desktop mode\" toggle in developer options &#8211; can I still use desktop mode?</b>\n\nSome devices (such as the ASUS ROG Phone 2) do not have the \"Force desktop mode\" toggle in developer options. You will need to enable that option manually via adb. To do so, connect your device to a computer with the Android SDK installed, and run the following command (one-line):\n\nadb shell settings put global force_desktop_mode_on_external_displays 1\n\n<b>What should I do if something goes wrong or my launcher / apps behave funky when desktop mode is enabled?</b>\n\nPlease follow these steps to disable desktop mode in case anything goes wrong:\n\n&#8226; Pull down the quick settings drawer, then enter system settings via the gear icon\n\n&#8226; Navigate to developer options and disable \"Enable freeform support\" and \"Force desktop mode\"\n\n&#8226; Reboot your device</string>
+    <string name="tb_desktop_mode_help"><b>关于桌面模式</b>\n\n任务栏 支持 Android 10\'s 内置的桌面模式功能。您可以将您兼容的 Android 10+ 设备连接至外部显示屏来将应用以可改变大小的窗口形式运行，任务栏 的界面运行在您的外部显示屏上而您的现有启动器仍保持在您的手机上运行。\n\n桌面模式需要 USB-to-HDMI 转换器 (或者笔记本坞站)，和支持视频输出的兼容设备。除此之外，部分设置需要通过 adb 赋予特殊的权限。\n\n要开始，点开\"桌面模式\" 的勾选框，应用会指导您完成这仅需一次的设置流程，涉及包括：\n\n&#8226; 启用 \"允许可自由调整的窗口\" 和 \"强制使用桌面模式\" 开发者选项\n\n&#8226; 设定 任务栏 为您的默认主屏幕应用\n\n&#8226; 重启您的设备\n\n<b>为什么 任务栏 需要被设置为我的默认主屏幕应用才可使用桌面模式呢？</b>\n\n默认情况下，Android 仅允许默认主屏幕应用用于外接显示屏上的启动器。如果当前设定的主屏幕应用并为特别声明支持桌面模式，那么 Android 将回退至使用预定义的桌面模式界面。\n\n任务栏 可以扮演系统和您的偏好启动器之间的夹层来绕过这个限制。当 任务栏 被设置为您的主屏幕应用时，按下主屏幕按钮时它将立即启动您偏好在手机上使用的启动器，然后退出。这个启动器在 任务栏 的桌面模式首选项中点击 \"首要启动器\" 设置。\n\n有一些当设置 任务栏 为您主屏幕应用时的事宜需要说明：\n\n&#8226; 大多数应用快捷方式(长按应用图标时看到的)将无法在您的首要启动器下工作。这是由于 Android 系统的限制只有默认主屏幕应用才可以访问动态生成的应用快捷方式。\n\n&#8226; 部分按下主屏幕按钮时的动画效果可以看起来不正确。这是由于之前提及的 任务栏 扮演了按下主屏幕按钮夹层的缘故。\n\n<b>我如何知道我的设备是否支持视频输出至外部显示屏呢？</b>\n\nNexDock 的人们维护了一个兼容 USB-to-HDMI 视频输出的 Android 10+ 智能手机的列表(该列表排除了 Samsung 和 Huawei 设备)。您可以在此查看该列表：http://nexdock.com/lapdock-for-smartphones\n\n值得一提的是，Google Pixel 设备并不支持视频输出。但是，您仍可以以标准的视频镜像方式在这些设备使用 任务栏，无论是使用 Chromecast 或者 DisplayLink 坞站配合 DisplayLink Presenter 应用。\n\n<b>我是否应该使用 任务栏 的桌面模式而不是我设备内建的桌面模式方案，比如 Samsung DeX 呢？</b>\n\n部分厂商，比如 Samsung 和 Huawei，实现了自己的桌面模式，在 Google Android 10 的基础之上。这些方案跟系统的其他部分整合度更好且通常整体上打磨的更完备。如果您对您设备上已有的桌面模式方案感到满意那么没有必要切换到 任务栏 的方案。\n\n任务栏 的桌面模式面向那些并未在 Google 在 Android 10 下已有方案之上内建桌面模式方案的设备。\n\n<b>我在 开发者选项 中找不到 \"强制使用桌面模式\" 开关&#8211; 我是否仍然可以使用桌面模式？</b>\n\n某些设备 (比如 ASUS ROG Phone 2) 在 开发者选项 中没有 \"强制使用桌面模式\" 开关。您需要使用 adb 手动开启该选项。如果要这样做的话，将您的设备与已安装 Android SDK 的电脑相连，并运行下述命令 (仅一行)：\n\nadb shell settings put global force_desktop_mode_on_external_displays 1\n\n<b>如果在桌面模式启动后我的启动器出错了/应用变得奇怪了该怎么办？</b>\n\n一旦感觉任何不对，请遵循如下步骤来禁用桌面模式：\n\n&#8226; 下滑快捷设置抽屉，通过齿轮图标进入系统设置\n\n&#8226; 前往 开发者选项 并禁用 \"允许可自由调整的窗口\" 和 \"强制使用桌面模式\"\n\n&#8226; 重启您的设备。</string>
 
-    <string name="tb_see_whats_new">See what\'s new in this release</string>
-    <string name="tb_action_view">View</string>
+    <string name="tb_see_whats_new">查看本次发布有什么新内容</string>
+    <string name="tb_action_view">查看</string>
 </resources>
