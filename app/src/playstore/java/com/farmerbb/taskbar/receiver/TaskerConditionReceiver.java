@@ -26,17 +26,24 @@ import com.farmerbb.taskbar.util.PluginBundleManager;
 import com.farmerbb.taskbar.util.U;
 
 public final class TaskerConditionReceiver extends BroadcastReceiver {
+    private Bundle lastbundle = null;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(U.isExternalAccessDisabled(context)) return;
 
+        if (lastbundle.equals(intent.getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE))) {
+            // bundle hasn't changed: we can safely return
+            return;
+        }
+        updateValues(intent);
+
         BundleScrubber.scrub(intent);
 
-        final Bundle bundle = intent.getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE);
-        BundleScrubber.scrub(bundle);
+        BundleScrubber.scrub(lastbundle);
 
-        if(PluginBundleManager.isBundleValid(bundle)) {
-            String action = bundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE);
+        if(PluginBundleManager.isBundleValid(lastbundle)) {
+            String action = lastbundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE);
 
             if(action != null) switch(action) {
                 case "tasker_on":
@@ -53,5 +60,9 @@ public final class TaskerConditionReceiver extends BroadcastReceiver {
                     break;
             }
         }
+    }
+
+    private void updateValues(Intent intent) {
+        lastbundle = intent.getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE);
     }
 }
