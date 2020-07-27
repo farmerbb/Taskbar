@@ -91,6 +91,7 @@ Pull requests are welcome!  See the [contributor guidelines](https://github.com/
 * utzcoz (Additional Chinese translation, code cleanup + unit testing)
 * RaspberryPiFan (Additional German translation)
 * Diego Sangunietti (Spanish translation)
+* Tommy He (Chinese translation for Desktop Mode)
 
 #### Special Thanks
 * Mishaal Rahman (xda-developers)
