@@ -243,13 +243,9 @@ public class DashboardController extends UIController {
 
         for(int i = 0; i < maxSize; i++) {
             int appWidgetId = pref.getInt(PREF_DASHBOARD_WIDGET_PREFIX + i, -1);
-            if(appWidgetId != -1)
+            if (appWidgetId != -1) {
                 addWidget(appWidgetId, i, false);
-            else if (pref.getBoolean(
-                    PREF_DASHBOARD_WIDGET_PREFIX
-                            + i
-                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
-                    false)) {
+            } else if (pref.getBoolean(generateProviderPlaceholderPrefKey(i), false)) {
                 addPlaceholder(i);
             }
         }
@@ -457,12 +453,7 @@ public class DashboardController extends UIController {
 
         SharedPreferences pref = U.getSharedPreferences(context);
         boolean shouldShowPlaceholder =
-                pref.getBoolean(
-                        PREF_DASHBOARD_WIDGET_PREFIX
-                                + cellId
-                                + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
-                        false
-                );
+                pref.getBoolean(generateProviderPlaceholderPrefKey(cellId), false);
         if(isActualClick && ((appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) || shouldShowPlaceholder)) {
             fadeOut(false);
 
@@ -476,13 +467,8 @@ public class DashboardController extends UIController {
 
             if(shouldShowPlaceholder) {
                 String providerName =
-                        pref.getString(
-                                PREF_DASHBOARD_WIDGET_PREFIX
-                                        + cellId
-                                        + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
-                                "null"
-                        );
-                if(!providerName.equals("null")) {
+                        pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
+                if(!providerName.equals(PREF_DEFAULT_NULL)) {
                     ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
                     List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
@@ -504,6 +490,16 @@ public class DashboardController extends UIController {
 
             previouslySelectedCell = currentlySelectedCell;
         }
+    }
+
+    @VisibleForTesting
+    String generateProviderPrefKey(int cellId) {
+        return PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX;
+    }
+
+    @VisibleForTesting
+    String generateProviderPlaceholderPrefKey(int cellId) {
+        return PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX;
     }
 
     private void cellLongClick(View view) {
@@ -575,14 +571,10 @@ public class DashboardController extends UIController {
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt(PREF_DASHBOARD_WIDGET_PREFIX + cellId, appWidgetId);
         editor.putString(
-                PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                generateProviderPrefKey(cellId),
                 appWidgetInfo.provider.flattenToString()
         );
-        editor.remove(
-                PREF_DASHBOARD_WIDGET_PREFIX
-                        + cellId
-                        + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
-        );
+        editor.remove(generateProviderPlaceholderPrefKey(cellId));
         editor.apply();
     }
 
@@ -610,19 +602,10 @@ public class DashboardController extends UIController {
         editor.remove(PREF_DASHBOARD_WIDGET_PREFIX + cellId);
 
         if (tempRemove) {
-            editor.putBoolean(
-                    PREF_DASHBOARD_WIDGET_PREFIX
-                            + cellId
-                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
-                    true
-            );
+            editor.putBoolean(generateProviderPlaceholderPrefKey(cellId), true);
             addPlaceholder(cellId);
         } else {
-            editor.remove(
-                    PREF_DASHBOARD_WIDGET_PREFIX
-                            + cellId
-                            + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX
-            );
+            editor.remove(generateProviderPrefKey(cellId));
         }
         editor.apply();
     }
@@ -630,15 +613,9 @@ public class DashboardController extends UIController {
     private void addPlaceholder(int cellId) {
         FrameLayout placeholder = cells.get(cellId).findViewById(R.id.placeholder);
         SharedPreferences pref = U.getSharedPreferences(context);
-        String providerName =
-                pref.getString(
-                        PREF_DASHBOARD_WIDGET_PREFIX
-                                + cellId
-                                + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
-                        "null"
-                );
+        String providerName = pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
 
-        if(!providerName.equals("null")) {
+        if(!providerName.equals(PREF_DEFAULT_NULL)) {
             ImageView imageView = placeholder.findViewById(R.id.placeholder_image);
             ComponentName componentName = ComponentName.unflattenFromString(providerName);
 

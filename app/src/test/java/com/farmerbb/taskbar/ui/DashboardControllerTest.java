@@ -25,6 +25,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
 
+import static com.farmerbb.taskbar.Constants.DEFAULT_TEST_CELL_ID;
 import static com.farmerbb.taskbar.Constants.TEST_NAME;
 import static com.farmerbb.taskbar.Constants.TEST_PACKAGE;
 import static com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT;
@@ -112,7 +113,7 @@ public class DashboardControllerTest {
     public void testSaveWidgetInfo() {
         AppWidgetProviderInfo info = new AppWidgetProviderInfo();
         info.provider = new ComponentName(TEST_PACKAGE, TEST_NAME);
-        int cellId = 1000;
+        int cellId = DEFAULT_TEST_CELL_ID;
         int appWidgetId = 100;
         prefs.edit().putString(PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX, "");
         uiController.saveWidgetInfo(context, info, cellId, appWidgetId);
@@ -122,20 +123,9 @@ public class DashboardControllerTest {
         );
         assertEquals(
                 info.provider.flattenToString(),
-                prefs.getString(
-                        PREF_DASHBOARD_WIDGET_PREFIX
-                                + cellId
-                                + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
-                        ""
-                )
+                prefs.getString(uiController.generateProviderPrefKey(cellId), "")
         );
-        assertFalse(
-                prefs.contains(
-                        PREF_DASHBOARD_WIDGET_PREFIX
-                                + cellId
-                                + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
-                )
-        );
+        assertFalse(prefs.contains(uiController.generateProviderPlaceholderPrefKey(cellId)));
     }
 
     @Test
@@ -149,6 +139,26 @@ public class DashboardControllerTest {
         assertTrue(prefs.getBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false));
         String toastText = ShadowToast.getTextOfLatestToast();
         assertEquals(context.getString(R.string.tb_dashboard_tutorial, toastText), toastText);
+    }
+
+    @Test
+    public void testGenerateProviderPrefKey() {
+        assertEquals(
+                PREF_DASHBOARD_WIDGET_PREFIX
+                        + DEFAULT_TEST_CELL_ID
+                        + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                uiController.generateProviderPrefKey(DEFAULT_TEST_CELL_ID)
+        );
+    }
+
+    @Test
+    public void testGenerateProviderPlaceholderPrefKey() {
+        assertEquals(
+                PREF_DASHBOARD_WIDGET_PREFIX
+                + DEFAULT_TEST_CELL_ID
+                + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
+                uiController.generateProviderPlaceholderPrefKey(DEFAULT_TEST_CELL_ID)
+        );
     }
 
     private void verifyViewPadding(View view, int left, int top, int right, int bottom) {
