@@ -351,11 +351,16 @@ public class DashboardController extends UIController {
                 }
             }
 
-            final SharedPreferences pref = U.getSharedPreferences(context);
-            if(!pref.getBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false)) {
-                U.showToastLong(context, R.string.tb_dashboard_tutorial);
-                pref.edit().putBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, true).apply();
-            }
+            showDashboardTutorialToast(context);
+        }
+    }
+
+    @VisibleForTesting
+    void showDashboardTutorialToast(Context context) {
+        final SharedPreferences pref = U.getSharedPreferences(context);
+        if(!pref.getBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false)) {
+            U.showToastLong(context, R.string.tb_dashboard_tutorial);
+            pref.edit().putBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, true).apply();
         }
     }
 

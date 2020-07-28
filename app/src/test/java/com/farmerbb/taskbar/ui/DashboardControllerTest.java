@@ -23,6 +23,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowToast;
 
 import static com.farmerbb.taskbar.Constants.TEST_NAME;
 import static com.farmerbb.taskbar.Constants.TEST_PACKAGE;
@@ -34,11 +35,14 @@ import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT;
 import static com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT;
+import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_TUTORIAL_SHOWN;
 import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX;
 import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PREFIX;
 import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
@@ -66,6 +70,7 @@ public class DashboardControllerTest {
     @After
     public void tearDown() {
         uiController.onDestroyHost(host);
+        prefs.edit().remove(PREF_DASHBOARD_TUTORIAL_SHOWN).apply();
     }
 
     @Test
@@ -131,6 +136,19 @@ public class DashboardControllerTest {
                                 + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
                 )
         );
+    }
+
+    @Test
+    public void testShowDashboardTutorialToast() {
+        prefs.edit().putBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, true).apply();
+        uiController.showDashboardTutorialToast(context);
+        assertNull(ShadowToast.getTextOfLatestToast());
+
+        prefs.edit().putBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false).apply();
+        uiController.showDashboardTutorialToast(context);
+        assertTrue(prefs.getBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false));
+        String toastText = ShadowToast.getTextOfLatestToast();
+        assertEquals(context.getString(R.string.tb_dashboard_tutorial, toastText), toastText);
     }
 
     private void verifyViewPadding(View view, int left, int top, int right, int bottom) {
