@@ -42,7 +42,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.graphics.ColorUtils;
 import android.util.SparseArray;
@@ -60,7 +59,6 @@ import android.widget.Toast;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.helper.LauncherHelper;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.helper.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
@@ -72,9 +70,8 @@ import java.util.List;
 import static com.farmerbb.taskbar.util.Constants.*;
 
 public class DashboardController extends UIController {
-
-    private AppWidgetManager mAppWidgetManager;
-    private AppWidgetHost mAppWidgetHost;
+    private AppWidgetManager appWidgetManager;
+    private AppWidgetHost appWidgetHost;
 
     private LinearLayout layout;
 
@@ -237,24 +234,20 @@ public class DashboardController extends UIController {
             layout.addView(layout2);
         }
 
-        mAppWidgetManager = AppWidgetManager.getInstance(context);
-        mAppWidgetHost = new AppWidgetHost(context, APPWIDGET_HOST_ID);
-        mAppWidgetHost.startListening();
+        appWidgetManager = AppWidgetManager.getInstance(context);
+        appWidgetHost = new AppWidgetHost(context, APPWIDGET_HOST_ID);
+        appWidgetHost.startListening();
 
         for(int i = 0; i < maxSize; i++) {
             int appWidgetId = pref.getInt(PREF_DASHBOARD_WIDGET_PREFIX + i, -1);
-            if(appWidgetId != -1)
+            if (appWidgetId != -1) {
                 addWidget(appWidgetId, i, false);
-            else if (pref.getBoolean(
-                    PREF_DASHBOARD_WIDGET_PREFIX
-                            + i
-                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
-                    false)) {
+            } else if (pref.getBoolean(generateProviderPlaceholderPrefKey(i), false)) {
                 addPlaceholder(i);
             }
         }
 
-        mAppWidgetHost.stopListening();
+        appWidgetHost.stopListening();
 
         U.registerReceiver(context, toggleReceiver, ACTION_TOGGLE_DASHBOARD);
         U.registerReceiver(context, addWidgetReceiver, ACTION_ADD_WIDGET_COMPLETED);
@@ -351,11 +344,16 @@ public class DashboardController extends UIController {
                 }
             }
 
-            final SharedPreferences pref = U.getSharedPreferences(context);
-            if(!pref.getBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false)) {
-                U.showToastLong(context, R.string.tb_dashboard_tutorial);
-                pref.edit().putBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, true).apply();
-            }
+            showDashboardTutorialToast(context);
+        }
+    }
+
+    @VisibleForTesting
+    void showDashboardTutorialToast(Context context) {
+        final SharedPreferences pref = U.getSharedPreferences(context);
+        if(!pref.getBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, false)) {
+            U.showToastLong(context, R.string.tb_dashboard_tutorial);
+            pref.edit().putBoolean(PREF_DASHBOARD_TUTORIAL_SHOWN, true).apply();
         }
     }
 
@@ -374,7 +372,7 @@ public class DashboardController extends UIController {
     }
 
     private void fadeIn() {
-        mAppWidgetHost.startListening();
+        appWidgetHost.startListening();
 
         DashboardHelper.getInstance().setDashboardOpen(true);
 
@@ -386,7 +384,7 @@ public class DashboardController extends UIController {
     }
 
     private void fadeOut(final boolean sendIntent) {
-        mAppWidgetHost.stopListening();
+        appWidgetHost.stopListening();
 
         DashboardHelper.getInstance().setDashboardOpen(false);
 
@@ -452,12 +450,7 @@ public class DashboardController extends UIController {
 
         SharedPreferences pref = U.getSharedPreferences(context);
         boolean shouldShowPlaceholder =
-                pref.getBoolean(
-                        PREF_DASHBOARD_WIDGET_PREFIX
-                                + cellId
-                                + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
-                        false
-                );
+                pref.getBoolean(generateProviderPlaceholderPrefKey(cellId), false);
         if(isActualClick && ((appWidgetId == -1 && currentlySelectedCell == previouslySelectedCell) || shouldShowPlaceholder)) {
             fadeOut(false);
 
@@ -471,16 +464,11 @@ public class DashboardController extends UIController {
 
             if(shouldShowPlaceholder) {
                 String providerName =
-                        pref.getString(
-                                PREF_DASHBOARD_WIDGET_PREFIX
-                                        + cellId
-                                        + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
-                                "null"
-                        );
-                if(!providerName.equals("null")) {
+                        pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
+                if(!providerName.equals(PREF_DEFAULT_NULL)) {
                     ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
-                    List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
+                    List<AppWidgetProviderInfo> providerInfoList = appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
                     for(AppWidgetProviderInfo info : providerInfoList) {
                         if(info.provider.equals(componentName)) {
                             U.showToast(context, context.getString(R.string.tb_widget_restore_toast, info.loadLabel(context.getPackageManager())), Toast.LENGTH_SHORT);
@@ -499,6 +487,16 @@ public class DashboardController extends UIController {
 
             previouslySelectedCell = currentlySelectedCell;
         }
+    }
+
+    @VisibleForTesting
+    String generateProviderPrefKey(int cellId) {
+        return PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX;
+    }
+
+    @VisibleForTesting
+    String generateProviderPlaceholderPrefKey(int cellId) {
+        return PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX;
     }
 
     private void cellLongClick(View view) {
@@ -523,10 +521,10 @@ public class DashboardController extends UIController {
     }
 
     private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {
-        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+        AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
 
         final DashboardCell cellLayout = cells.get(cellId);
-        final AppWidgetHostView hostView = mAppWidgetHost.createView(context, appWidgetId, appWidgetInfo);
+        final AppWidgetHostView hostView = appWidgetHost.createView(context, appWidgetId, appWidgetInfo);
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
 
         Bundle bundle = new Bundle();
@@ -570,14 +568,10 @@ public class DashboardController extends UIController {
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt(PREF_DASHBOARD_WIDGET_PREFIX + cellId, appWidgetId);
         editor.putString(
-                PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                generateProviderPrefKey(cellId),
                 appWidgetInfo.provider.flattenToString()
         );
-        editor.remove(
-                PREF_DASHBOARD_WIDGET_PREFIX
-                        + cellId
-                        + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
-        );
+        editor.remove(generateProviderPlaceholderPrefKey(cellId));
         editor.apply();
     }
 
@@ -587,7 +581,7 @@ public class DashboardController extends UIController {
         DashboardCell cellLayout = cells.get(cellId);
         Bundle bundle = (Bundle) cellLayout.getTag();
 
-        mAppWidgetHost.deleteAppWidgetId(bundle.getInt(EXTRA_APPWIDGET_ID));
+        appWidgetHost.deleteAppWidgetId(bundle.getInt(EXTRA_APPWIDGET_ID));
         bundle.remove(EXTRA_APPWIDGET_ID);
 
         LinearLayout linearLayout = cellLayout.findViewById(R.id.dashboard);
@@ -605,19 +599,10 @@ public class DashboardController extends UIController {
         editor.remove(PREF_DASHBOARD_WIDGET_PREFIX + cellId);
 
         if (tempRemove) {
-            editor.putBoolean(
-                    PREF_DASHBOARD_WIDGET_PREFIX
-                            + cellId
-                            + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
-                    true
-            );
+            editor.putBoolean(generateProviderPlaceholderPrefKey(cellId), true);
             addPlaceholder(cellId);
         } else {
-            editor.remove(
-                    PREF_DASHBOARD_WIDGET_PREFIX
-                            + cellId
-                            + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX
-            );
+            editor.remove(generateProviderPrefKey(cellId));
         }
         editor.apply();
     }
@@ -625,19 +610,13 @@ public class DashboardController extends UIController {
     private void addPlaceholder(int cellId) {
         FrameLayout placeholder = cells.get(cellId).findViewById(R.id.placeholder);
         SharedPreferences pref = U.getSharedPreferences(context);
-        String providerName =
-                pref.getString(
-                        PREF_DASHBOARD_WIDGET_PREFIX
-                                + cellId
-                                + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
-                        "null"
-                );
+        String providerName = pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
 
-        if(!providerName.equals("null")) {
+        if(!providerName.equals(PREF_DEFAULT_NULL)) {
             ImageView imageView = placeholder.findViewById(R.id.placeholder_image);
             ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
-            List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
+            List<AppWidgetProviderInfo> providerInfoList = appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
             for(AppWidgetProviderInfo info : providerInfoList) {
                 if(info.provider.equals(componentName)) {
                     Drawable drawable = info.loadPreviewImage(context, -1);
