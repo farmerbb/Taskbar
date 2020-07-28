@@ -42,7 +42,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.graphics.ColorUtils;
 import android.util.SparseArray;
@@ -60,7 +59,6 @@ import android.widget.Toast;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.DashboardActivity;
 import com.farmerbb.taskbar.helper.LauncherHelper;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.helper.DashboardHelper;
 import com.farmerbb.taskbar.widget.DashboardCell;
@@ -72,8 +70,7 @@ import java.util.List;
 import static com.farmerbb.taskbar.util.Constants.*;
 
 public class DashboardController extends UIController {
-
-    private AppWidgetManager mAppWidgetManager;
+    private AppWidgetManager appWidgetManager;
     private AppWidgetHost mAppWidgetHost;
 
     private LinearLayout layout;
@@ -237,7 +234,7 @@ public class DashboardController extends UIController {
             layout.addView(layout2);
         }
 
-        mAppWidgetManager = AppWidgetManager.getInstance(context);
+        appWidgetManager = AppWidgetManager.getInstance(context);
         mAppWidgetHost = new AppWidgetHost(context, APPWIDGET_HOST_ID);
         mAppWidgetHost.startListening();
 
@@ -471,7 +468,7 @@ public class DashboardController extends UIController {
                 if(!providerName.equals(PREF_DEFAULT_NULL)) {
                     ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
-                    List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
+                    List<AppWidgetProviderInfo> providerInfoList = appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
                     for(AppWidgetProviderInfo info : providerInfoList) {
                         if(info.provider.equals(componentName)) {
                             U.showToast(context, context.getString(R.string.tb_widget_restore_toast, info.loadLabel(context.getPackageManager())), Toast.LENGTH_SHORT);
@@ -524,7 +521,7 @@ public class DashboardController extends UIController {
     }
 
     private void addWidget(int appWidgetId, int cellId, boolean shouldSave) {
-        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+        AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
 
         final DashboardCell cellLayout = cells.get(cellId);
         final AppWidgetHostView hostView = mAppWidgetHost.createView(context, appWidgetId, appWidgetInfo);
@@ -619,7 +616,7 @@ public class DashboardController extends UIController {
             ImageView imageView = placeholder.findViewById(R.id.placeholder_image);
             ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
-            List<AppWidgetProviderInfo> providerInfoList = mAppWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
+            List<AppWidgetProviderInfo> providerInfoList = appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
             for(AppWidgetProviderInfo info : providerInfoList) {
                 if(info.provider.equals(componentName)) {
                     Drawable drawable = info.loadPreviewImage(context, -1);
