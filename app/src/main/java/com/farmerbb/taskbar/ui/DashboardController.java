@@ -71,7 +71,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 
 public class DashboardController extends UIController {
     private AppWidgetManager appWidgetManager;
-    private AppWidgetHost mAppWidgetHost;
+    private AppWidgetHost appWidgetHost;
 
     private LinearLayout layout;
 
@@ -235,8 +235,8 @@ public class DashboardController extends UIController {
         }
 
         appWidgetManager = AppWidgetManager.getInstance(context);
-        mAppWidgetHost = new AppWidgetHost(context, APPWIDGET_HOST_ID);
-        mAppWidgetHost.startListening();
+        appWidgetHost = new AppWidgetHost(context, APPWIDGET_HOST_ID);
+        appWidgetHost.startListening();
 
         for(int i = 0; i < maxSize; i++) {
             int appWidgetId = pref.getInt(PREF_DASHBOARD_WIDGET_PREFIX + i, -1);
@@ -247,7 +247,7 @@ public class DashboardController extends UIController {
             }
         }
 
-        mAppWidgetHost.stopListening();
+        appWidgetHost.stopListening();
 
         U.registerReceiver(context, toggleReceiver, ACTION_TOGGLE_DASHBOARD);
         U.registerReceiver(context, addWidgetReceiver, ACTION_ADD_WIDGET_COMPLETED);
@@ -372,7 +372,7 @@ public class DashboardController extends UIController {
     }
 
     private void fadeIn() {
-        mAppWidgetHost.startListening();
+        appWidgetHost.startListening();
 
         DashboardHelper.getInstance().setDashboardOpen(true);
 
@@ -384,7 +384,7 @@ public class DashboardController extends UIController {
     }
 
     private void fadeOut(final boolean sendIntent) {
-        mAppWidgetHost.stopListening();
+        appWidgetHost.stopListening();
 
         DashboardHelper.getInstance().setDashboardOpen(false);
 
@@ -524,7 +524,7 @@ public class DashboardController extends UIController {
         AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
 
         final DashboardCell cellLayout = cells.get(cellId);
-        final AppWidgetHostView hostView = mAppWidgetHost.createView(context, appWidgetId, appWidgetInfo);
+        final AppWidgetHostView hostView = appWidgetHost.createView(context, appWidgetId, appWidgetInfo);
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
 
         Bundle bundle = new Bundle();
@@ -581,7 +581,7 @@ public class DashboardController extends UIController {
         DashboardCell cellLayout = cells.get(cellId);
         Bundle bundle = (Bundle) cellLayout.getTag();
 
-        mAppWidgetHost.deleteAppWidgetId(bundle.getInt(EXTRA_APPWIDGET_ID));
+        appWidgetHost.deleteAppWidgetId(bundle.getInt(EXTRA_APPWIDGET_ID));
         bundle.remove(EXTRA_APPWIDGET_ID);
 
         LinearLayout linearLayout = cellLayout.findViewById(R.id.dashboard);
