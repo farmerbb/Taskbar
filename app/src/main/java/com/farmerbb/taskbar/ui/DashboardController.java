@@ -469,20 +469,8 @@ public class DashboardController extends UIController {
             intent.putExtra(EXTRA_CELL_ID, cellId);
             U.sendBroadcast(context, intent);
 
-            if(shouldShowPlaceholder) {
-                String providerName =
-                        pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
-                if(!providerName.equals(PREF_DEFAULT_NULL)) {
-                    ComponentName componentName = ComponentName.unflattenFromString(providerName);
-
-                    List<AppWidgetProviderInfo> providerInfoList = appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
-                    for(AppWidgetProviderInfo info : providerInfoList) {
-                        if(info.provider.equals(componentName)) {
-                            U.showToast(context, context.getString(R.string.tb_widget_restore_toast, info.loadLabel(context.getPackageManager())), Toast.LENGTH_SHORT);
-                            break;
-                        }
-                    }
-                }
+            if (shouldShowPlaceholder) {
+                showPlaceholderToast(context, appWidgetManager, cellId, pref);
             }
 
             previouslySelectedCell = -1;
@@ -504,6 +492,31 @@ public class DashboardController extends UIController {
     @VisibleForTesting
     String generateProviderPlaceholderPrefKey(int cellId) {
         return PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX;
+    }
+
+    @VisibleForTesting
+    void showPlaceholderToast(Context context,
+                              AppWidgetManager appWidgetManager,
+                              int cellId,
+                              SharedPreferences pref) {
+        String providerName = pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
+        if (providerName != null && !PREF_DEFAULT_NULL.equals(providerName)) {
+            ComponentName componentName = ComponentName.unflattenFromString(providerName);
+
+            List<AppWidgetProviderInfo> providerInfoList =
+                    appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
+            for (AppWidgetProviderInfo info : providerInfoList) {
+                if (info.provider.equals(componentName)) {
+                    String text =
+                            context.getString(
+                                    R.string.tb_widget_restore_toast,
+                                    info.loadLabel(context.getPackageManager())
+                            );
+                    U.showToast(context, text, Toast.LENGTH_SHORT);
+                    break;
+                }
+            }
+        }
     }
 
     private void cellLongClick(View view) {
