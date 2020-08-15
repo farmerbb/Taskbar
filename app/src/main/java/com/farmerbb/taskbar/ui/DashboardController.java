@@ -423,10 +423,11 @@ public class DashboardController extends UIController {
 
     @Override
     public void onDestroyHost(UIHost host) {
-        if(layout != null)
+        if (layout != null) {
             try {
                 host.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+        }
 
         U.unregisterReceiver(context, toggleReceiver);
         U.unregisterReceiver(context, addWidgetReceiver);
@@ -434,11 +435,17 @@ public class DashboardController extends UIController {
         U.unregisterReceiver(context, hideReceiver);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(!LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
-                || !pref.getBoolean(PREF_DONT_STOP_DASHBOARD, false))
+        if (shouldSendDisappearingBroadcast(context, pref)) {
             U.sendBroadcast(context, ACTION_DASHBOARD_DISAPPEARING);
+        }
 
         pref.edit().remove(PREF_DONT_STOP_DASHBOARD).apply();
+    }
+
+    @VisibleForTesting
+    boolean shouldSendDisappearingBroadcast(Context context, SharedPreferences pref) {
+        return !LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
+                || !pref.getBoolean(PREF_DONT_STOP_DASHBOARD, false);
     }
 
     private void cellClick(View view, boolean isActualClick) {

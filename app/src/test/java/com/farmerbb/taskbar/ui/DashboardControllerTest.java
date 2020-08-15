@@ -11,6 +11,8 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.Constants;
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.helper.LauncherHelper;
+import com.farmerbb.taskbar.mockito.BooleanAnswer;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
@@ -19,6 +21,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
@@ -40,16 +43,20 @@ import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_TUTORIAL_SHOWN;
 import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX;
 import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PREFIX;
 import static com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_DONT_STOP_DASHBOARD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
         "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"
 })
-@PrepareForTest(value = {U.class, TaskbarPosition.class})
+@PrepareForTest(value = {U.class, TaskbarPosition.class,
+        DashboardController.class, LauncherHelper.class})
 public class DashboardControllerTest {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
@@ -110,12 +117,43 @@ public class DashboardControllerTest {
     }
 
     @Test
+    public void testShouldSendDisappearingBroadcast() {
+        LauncherHelper helper = PowerMockito.mock(LauncherHelper.class);
+        BooleanAnswer isOnSecondaryHomeScreenAnswer = new BooleanAnswer();
+        when(helper.isOnSecondaryHomeScreen(context))
+                .thenAnswer(isOnSecondaryHomeScreenAnswer);
+        PowerMockito.mockStatic(LauncherHelper.class);
+        when(LauncherHelper.getInstance()).thenReturn(helper);
+
+        isOnSecondaryHomeScreenAnswer.answer = true;
+        prefs.edit().putBoolean(PREF_DONT_STOP_DASHBOARD, true).apply();
+        assertFalse(uiController.shouldSendDisappearingBroadcast(context, prefs));
+
+        isOnSecondaryHomeScreenAnswer.answer = true;
+        prefs.edit().putBoolean(PREF_DONT_STOP_DASHBOARD, false).apply();
+        assertTrue(uiController.shouldSendDisappearingBroadcast(context, prefs));
+
+        isOnSecondaryHomeScreenAnswer.answer = false;
+        prefs.edit().putBoolean(PREF_DONT_STOP_DASHBOARD, true).apply();
+        assertTrue(uiController.shouldSendDisappearingBroadcast(context, prefs));
+
+        isOnSecondaryHomeScreenAnswer.answer = false;
+        prefs.edit().putBoolean(PREF_DONT_STOP_DASHBOARD, false).apply();
+        assertTrue(uiController.shouldSendDisappearingBroadcast(context, prefs));
+    }
+
+    @Test
     public void testSaveWidgetInfo() {
         AppWidgetProviderInfo info = new AppWidgetProviderInfo();
         info.provider = new ComponentName(TEST_PACKAGE, TEST_NAME);
         int cellId = DEFAULT_TEST_CELL_ID;
         int appWidgetId = 100;
-        prefs.edit().putString(PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX, "");
+        prefs.edit().putString(
+                PREF_DASHBOARD_WIDGET_PREFIX
+                        + cellId
+                        + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
+                ""
+        );
         uiController.saveWidgetInfo(context, info, cellId, appWidgetId);
         assertEquals(
                 appWidgetId,
@@ -155,8 +193,8 @@ public class DashboardControllerTest {
     public void testGenerateProviderPlaceholderPrefKey() {
         assertEquals(
                 PREF_DASHBOARD_WIDGET_PREFIX
-                + DEFAULT_TEST_CELL_ID
-                + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
+                        + DEFAULT_TEST_CELL_ID
+                        + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
                 uiController.generateProviderPlaceholderPrefKey(DEFAULT_TEST_CELL_ID)
         );
     }
