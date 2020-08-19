@@ -83,7 +83,7 @@ public class TaskbarShadowLauncherApps extends ShadowLauncherApps {
     }
 
     @Implementation
-    public List<LauncherActivityInfo> getActivityList(String packageName, UserHandle user) {
+    protected List<LauncherActivityInfo> getActivityList(String packageName, UserHandle user) {
         List<LauncherActivityInfo> activityInfoList = activityList.get(user);
         if (activityInfoList == null || packageName == null) {
             return Collections.emptyList();

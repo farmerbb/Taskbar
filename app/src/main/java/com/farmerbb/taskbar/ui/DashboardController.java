@@ -423,10 +423,11 @@ public class DashboardController extends UIController {
 
     @Override
     public void onDestroyHost(UIHost host) {
-        if(layout != null)
+        if (layout != null) {
             try {
                 host.removeView(layout);
             } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+        }
 
         U.unregisterReceiver(context, toggleReceiver);
         U.unregisterReceiver(context, addWidgetReceiver);
@@ -434,11 +435,17 @@ public class DashboardController extends UIController {
         U.unregisterReceiver(context, hideReceiver);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(!LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
-                || !pref.getBoolean(PREF_DONT_STOP_DASHBOARD, false))
+        if (shouldSendDisappearingBroadcast(context, pref)) {
             U.sendBroadcast(context, ACTION_DASHBOARD_DISAPPEARING);
+        }
 
         pref.edit().remove(PREF_DONT_STOP_DASHBOARD).apply();
+    }
+
+    @VisibleForTesting
+    boolean shouldSendDisappearingBroadcast(Context context, SharedPreferences pref) {
+        return !LauncherHelper.getInstance().isOnSecondaryHomeScreen(context)
+                || !pref.getBoolean(PREF_DONT_STOP_DASHBOARD, false);
     }
 
     private void cellClick(View view, boolean isActualClick) {
@@ -462,20 +469,8 @@ public class DashboardController extends UIController {
             intent.putExtra(EXTRA_CELL_ID, cellId);
             U.sendBroadcast(context, intent);
 
-            if(shouldShowPlaceholder) {
-                String providerName =
-                        pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
-                if(!providerName.equals(PREF_DEFAULT_NULL)) {
-                    ComponentName componentName = ComponentName.unflattenFromString(providerName);
-
-                    List<AppWidgetProviderInfo> providerInfoList = appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
-                    for(AppWidgetProviderInfo info : providerInfoList) {
-                        if(info.provider.equals(componentName)) {
-                            U.showToast(context, context.getString(R.string.tb_widget_restore_toast, info.loadLabel(context.getPackageManager())), Toast.LENGTH_SHORT);
-                            break;
-                        }
-                    }
-                }
+            if (shouldShowPlaceholder) {
+                showPlaceholderToast(context, appWidgetManager, cellId, pref);
             }
 
             previouslySelectedCell = -1;
@@ -497,6 +492,31 @@ public class DashboardController extends UIController {
     @VisibleForTesting
     String generateProviderPlaceholderPrefKey(int cellId) {
         return PREF_DASHBOARD_WIDGET_PREFIX + cellId + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX;
+    }
+
+    @VisibleForTesting
+    void showPlaceholderToast(Context context,
+                              AppWidgetManager appWidgetManager,
+                              int cellId,
+                              SharedPreferences pref) {
+        String providerName = pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
+        if (providerName != null && !PREF_DEFAULT_NULL.equals(providerName)) {
+            ComponentName componentName = ComponentName.unflattenFromString(providerName);
+
+            List<AppWidgetProviderInfo> providerInfoList =
+                    appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
+            for (AppWidgetProviderInfo info : providerInfoList) {
+                if (info.provider.equals(componentName)) {
+                    String text =
+                            context.getString(
+                                    R.string.tb_widget_restore_toast,
+                                    info.loadLabel(context.getPackageManager())
+                            );
+                    U.showToast(context, text, Toast.LENGTH_SHORT);
+                    break;
+                }
+            }
+        }
     }
 
     private void cellLongClick(View view) {
