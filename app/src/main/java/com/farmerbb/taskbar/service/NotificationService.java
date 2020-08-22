@@ -114,7 +114,9 @@ public class NotificationService extends Service {
                 }
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, id)
-                        .setSmallIcon(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(this)).equals("app_logo")
+                        .setSmallIcon(pref.getString(PREF_START_BUTTON_IMAGE,
+                                U.getDefaultStartButtonImage(this))
+                                .equals(PREF_START_BUTTON_IMAGE_APP_LOGO)
                                 ? R.drawable.tb_system
                                 : R.drawable.tb_allapps)
                         .setContentIntent(contentIntent)

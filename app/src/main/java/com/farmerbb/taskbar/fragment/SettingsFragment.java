@@ -160,8 +160,9 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                             new Handler().post(() -> U.startFreeformHack(getActivity()));
                         break;
                     case PREF_START_BUTTON_IMAGE:
-                        if(stringValue.equals("custom"))
+                        if (stringValue.equals(PREF_START_BUTTON_IMAGE_CUSTOM)) {
                             U.showImageChooser(getActivity());
+                        }
                         break;
                     case PREF_DISPLAY_DENSITY:
                         boolean isOnHomeScreen = LauncherHelper.getInstance().isOnSecondaryHomeScreen(getActivity());

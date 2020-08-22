@@ -436,11 +436,11 @@ public class TaskbarController extends UIController {
         int padding = 0;
 
         switch(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(context))) {
-            case "default":
+            case PREF_START_BUTTON_IMAGE_DEFAULT:
                 startButton.setImageDrawable(allAppsIcon);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;
-            case "app_logo":
+            case PREF_START_BUTTON_IMAGE_APP_LOGO:
                 Drawable drawable;
 
                 if(U.isBlissOs(context)) {
@@ -455,7 +455,7 @@ public class TaskbarController extends UIController {
                 startButton.setImageDrawable(drawable);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
                 break;
-            case "custom":
+            case PREF_START_BUTTON_IMAGE_CUSTOM:
                 U.applyCustomImage(context, "custom_image", startButton, allAppsIcon);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;
