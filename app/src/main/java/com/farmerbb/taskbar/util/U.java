@@ -245,7 +245,7 @@ public class U {
 
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(ACTION_ACCESSIBILITY_ACTION);
-                intent.putExtra("action", action);
+                intent.putExtra(EXTRA_ACTION, action);
                 sendBroadcast(context, intent);
 
                 try {
@@ -258,7 +258,7 @@ public class U {
             }, 100);
         } else if(isAccessibilityServiceEnabled) {
             Intent intent = new Intent(ACTION_ACCESSIBILITY_ACTION);
-            intent.putExtra("action", action);
+            intent.putExtra(EXTRA_ACTION, action);
             sendBroadcast(context, intent);
 
             if(onComplete != null) onComplete.run();

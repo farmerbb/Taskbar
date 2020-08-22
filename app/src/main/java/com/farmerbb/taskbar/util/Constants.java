@@ -248,4 +248,5 @@ public class Constants {
     public static final String EXTRA_APPWIDGET_ID = "appWidgetId";
     public static final String EXTRA_CELL_ID = "cellId";
     public static final String EXTRA_CONTEXT_MENU_FIX = "context_menu_fix";
+    public static final String EXTRA_ACTION = "action";
 }
