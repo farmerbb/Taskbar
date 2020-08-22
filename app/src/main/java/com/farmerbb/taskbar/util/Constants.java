@@ -230,6 +230,7 @@ public class Constants {
     public static final String PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY = "running_apps_only";
     public static final String PREF_RECENTS_AMOUNT_SHOW_ALL = "show_all";
 
+    public static final String PREF_START_BUTTON_IMAGE_APP_LOGO = "app_logo";
     // TaskbarPosition values
 
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";
