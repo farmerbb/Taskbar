@@ -78,7 +78,7 @@ public class NotificationCountService extends NotificationListenerService {
 
     private void broadcastNotificationCount(int count) {
         Intent intent = new Intent(ACTION_NOTIFICATION_COUNT_CHANGED);
-        intent.putExtra("count", Math.min(count, 99));
+        intent.putExtra(EXTRA_COUNT, Math.min(count, 99));
         U.sendBroadcast(this, intent);
     }
 }

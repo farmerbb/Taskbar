@@ -205,7 +205,7 @@ public class TaskbarController extends UIController {
         @SuppressLint("SetTextI18n")
         @Override
         public void onReceive(Context context, Intent intent) {
-            int count = intent.getIntExtra("count", 0);
+            int count = intent.getIntExtra(EXTRA_COUNT, 0);
             if(count > 0) {
                 int color = ColorUtils.setAlphaComponent(U.getBackgroundTint(context), 255);
                 notificationCountText.setTextColor(color);

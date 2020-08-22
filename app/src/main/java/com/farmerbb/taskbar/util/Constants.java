@@ -252,4 +252,5 @@ public class Constants {
     public static final String EXTRA_CONTEXT_MENU_FIX = "context_menu_fix";
     public static final String EXTRA_ACTION = "action";
     public static final String EXTRA_START_SERVICES = "start_services";
+    public static final String EXTRA_COUNT = "count";
 }
