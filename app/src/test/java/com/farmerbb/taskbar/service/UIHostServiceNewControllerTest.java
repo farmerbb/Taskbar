@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.android.controller.ServiceController;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,22 +15,19 @@ import static org.junit.Assert.assertTrue;
 public class UIHostServiceNewControllerTest {
     @Test
     public void testDashboardService() {
-        ServiceController<DashboardService> dashboardService =
-                Robolectric.buildService(DashboardService.class);
-        assertTrue(dashboardService.get().newController() instanceof DashboardController);
+        DashboardService dashboardService = Robolectric.setupService(DashboardService.class);
+        assertTrue(dashboardService.newController() instanceof DashboardController);
     }
 
     @Test
     public void testStartMenuService() {
-        ServiceController<StartMenuService> startMenuService =
-                Robolectric.buildService(StartMenuService.class);
-        assertTrue(startMenuService.get().newController() instanceof StartMenuController);
+        StartMenuService startMenuService = Robolectric.setupService(StartMenuService.class);
+        assertTrue(startMenuService.newController() instanceof StartMenuController);
     }
 
     @Test
     public void testTaskbarService() {
-        ServiceController<TaskbarService> taskbarService =
-                Robolectric.buildService(TaskbarService.class);
-        assertTrue(taskbarService.get().newController() instanceof TaskbarController);
+        TaskbarService taskbarService = Robolectric.setupService(TaskbarService.class);
+        assertTrue(taskbarService.newController() instanceof TaskbarController);
     }
 }
