@@ -81,7 +81,7 @@ public class StartReceiver extends BroadcastReceiver {
             }
 
             Intent notificationIntent = new Intent(context, NotificationService.class);
-            notificationIntent.putExtra("start_services", true);
+            notificationIntent.putExtra(EXTRA_START_SERVICES, true);
 
             U.startForegroundService(context, notificationIntent);
         } else if(intent.hasExtra("secondscreen"))

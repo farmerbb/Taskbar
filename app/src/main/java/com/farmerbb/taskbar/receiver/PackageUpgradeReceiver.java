@@ -45,9 +45,9 @@ public class PackageUpgradeReceiver extends BroadcastReceiver {
                 startServices = true;
             }
 
-            if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false)) {
+            if (pref.getBoolean(PREF_TASKBAR_ACTIVE, false)) {
                 Intent notificationIntent = new Intent(context, NotificationService.class);
-                notificationIntent.putExtra("start_services", startServices);
+                notificationIntent.putExtra(EXTRA_START_SERVICES, startServices);
 
                 U.startForegroundService(context, notificationIntent);
             }

@@ -61,7 +61,7 @@ public class BootReceiver extends BroadcastReceiver {
                 }
 
                 Intent notificationIntent = new Intent(context, NotificationService.class);
-                notificationIntent.putExtra("start_services", startServices);
+                notificationIntent.putExtra(EXTRA_START_SERVICES, startServices);
 
                 U.startForegroundService(context, notificationIntent);
             } else {
