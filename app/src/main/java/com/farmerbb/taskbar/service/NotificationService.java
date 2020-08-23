@@ -51,7 +51,7 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null && intent.getBooleanExtra("start_services", false)) {
+        if (intent != null && intent.getBooleanExtra(EXTRA_START_SERVICES, false)) {
             startService(new Intent(this, TaskbarService.class));
             startService(new Intent(this, StartMenuService.class));
             startService(new Intent(this, DashboardService.class));
@@ -114,7 +114,9 @@ public class NotificationService extends Service {
                 }
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, id)
-                        .setSmallIcon(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(this)).equals("app_logo")
+                        .setSmallIcon(pref.getString(PREF_START_BUTTON_IMAGE,
+                                U.getDefaultStartButtonImage(this))
+                                .equals(PREF_START_BUTTON_IMAGE_APP_LOGO)
                                 ? R.drawable.tb_system
                                 : R.drawable.tb_allapps)
                         .setContentIntent(contentIntent)

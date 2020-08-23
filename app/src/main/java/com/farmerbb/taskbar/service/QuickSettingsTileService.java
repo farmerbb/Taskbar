@@ -24,6 +24,8 @@ import android.os.Handler;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.U;
@@ -52,21 +54,28 @@ public class QuickSettingsTileService extends TileService {
         new Handler().postDelayed(this::updateState, 100);
     }
 
-    private void updateState() {
+    @VisibleForTesting
+    void updateState() {
         Tile tile = getQsTile();
-        if(tile != null) {
+        if (tile != null) {
             SharedPreferences pref = U.getSharedPreferences(this);
-            tile.setIcon(Icon.createWithResource(this,
-                    pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(this)).equals("app_logo")
+            String startButtonImage =
+                    pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(this));
+            int resId =
+                    PREF_START_BUTTON_IMAGE_APP_LOGO.equals(startButtonImage)
                             ? R.drawable.tb_system
-                            : R.drawable.tb_allapps));
+                            : R.drawable.tb_allapps;
+            tile.setIcon(Icon.createWithResource(this, resId));
 
-            if(U.canDrawOverlays(this))
-                tile.setState(U.isServiceRunning(this, NotificationService.class)
-                        ? Tile.STATE_ACTIVE
-                        : Tile.STATE_INACTIVE);
-            else
+            if (U.canDrawOverlays(this)) {
+                tile.setState(
+                        U.isServiceRunning(this, NotificationService.class)
+                                ? Tile.STATE_ACTIVE
+                                : Tile.STATE_INACTIVE
+                );
+            } else {
                 tile.setState(Tile.STATE_UNAVAILABLE);
+            }
 
             tile.updateTile();
         }

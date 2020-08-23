@@ -205,7 +205,7 @@ public class TaskbarController extends UIController {
         @SuppressLint("SetTextI18n")
         @Override
         public void onReceive(Context context, Intent intent) {
-            int count = intent.getIntExtra("count", 0);
+            int count = intent.getIntExtra(EXTRA_COUNT, 0);
             if(count > 0) {
                 int color = ColorUtils.setAlphaComponent(U.getBackgroundTint(context), 255);
                 notificationCountText.setTextColor(color);
@@ -436,11 +436,11 @@ public class TaskbarController extends UIController {
         int padding = 0;
 
         switch(pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(context))) {
-            case "default":
+            case PREF_START_BUTTON_IMAGE_DEFAULT:
                 startButton.setImageDrawable(allAppsIcon);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;
-            case "app_logo":
+            case PREF_START_BUTTON_IMAGE_APP_LOGO:
                 Drawable drawable;
 
                 if(U.isBlissOs(context)) {
@@ -455,7 +455,7 @@ public class TaskbarController extends UIController {
                 startButton.setImageDrawable(drawable);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
                 break;
-            case "custom":
+            case PREF_START_BUTTON_IMAGE_CUSTOM:
                 U.applyCustomImage(context, "custom_image", startButton, allAppsIcon);
                 padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
                 break;

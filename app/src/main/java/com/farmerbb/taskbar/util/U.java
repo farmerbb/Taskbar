@@ -245,7 +245,7 @@ public class U {
 
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(ACTION_ACCESSIBILITY_ACTION);
-                intent.putExtra("action", action);
+                intent.putExtra(EXTRA_ACTION, action);
                 sendBroadcast(context, intent);
 
                 try {
@@ -258,7 +258,7 @@ public class U {
             }, 100);
         } else if(isAccessibilityServiceEnabled) {
             Intent intent = new Intent(ACTION_ACCESSIBILITY_ACTION);
-            intent.putExtra("action", action);
+            intent.putExtra(EXTRA_ACTION, action);
             sendBroadcast(context, intent);
 
             if(onComplete != null) onComplete.run();
@@ -1304,7 +1304,7 @@ public class U {
             editor.putString(PREF_REFRESH_FREQUENCY, "0");
             editor.putString(PREF_MAX_NUM_OF_RECENTS, "2147483647");
             editor.putString(PREF_SORT_ORDER, "true");
-            editor.putString(PREF_START_BUTTON_IMAGE, "app_logo");
+            editor.putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_APP_LOGO);
             editor.putBoolean(PREF_BUTTON_BACK, true);
             editor.putBoolean(PREF_BUTTON_HOME, true);
             editor.putBoolean(PREF_BUTTON_RECENTS, true);
@@ -1737,8 +1737,8 @@ public class U {
     public static String getDefaultStartButtonImage(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         return pref.getBoolean(PREF_APP_DRAWER_ICON, false)
-                ? "app_logo"
-                : "default";
+                ? PREF_START_BUTTON_IMAGE_APP_LOGO
+                : PREF_START_BUTTON_IMAGE_DEFAULT;
     }
 
     private static boolean shouldLaunchTouchAbsorber(Context context) {

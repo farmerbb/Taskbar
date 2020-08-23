@@ -572,7 +572,10 @@ public class UTest {
         assertEquals("0", prefs.getString(PREF_REFRESH_FREQUENCY, ""));
         assertEquals("2147483647", prefs.getString(PREF_MAX_NUM_OF_RECENTS, ""));
         assertEquals("true", prefs.getString(PREF_SORT_ORDER, ""));
-        assertEquals("app_logo", prefs.getString(PREF_START_BUTTON_IMAGE, ""));
+        assertEquals(
+                PREF_START_BUTTON_IMAGE_APP_LOGO,
+                prefs.getString(PREF_START_BUTTON_IMAGE, "")
+        );
         assertTrue(prefs.getBoolean(PREF_BUTTON_BACK, false));
         assertTrue(prefs.getBoolean(PREF_BUTTON_HOME, false));
         assertTrue(prefs.getBoolean(PREF_BUTTON_RECENTS, false));
@@ -834,11 +837,11 @@ public class UTest {
     public void testGetDefaultStartButtonImage() {
         SharedPreferences prefs = U.getSharedPreferences(context);
         prefs.edit().putBoolean(PREF_APP_DRAWER_ICON, true).apply();
-        assertEquals("app_logo", U.getDefaultStartButtonImage(context));
+        assertEquals(PREF_START_BUTTON_IMAGE_APP_LOGO, U.getDefaultStartButtonImage(context));
         prefs.edit().putBoolean(PREF_APP_DRAWER_ICON, false).apply();
-        assertEquals("default", U.getDefaultStartButtonImage(context));
+        assertEquals(PREF_START_BUTTON_IMAGE_DEFAULT, U.getDefaultStartButtonImage(context));
         prefs.edit().remove(PREF_APP_DRAWER_ICON).apply();
-        assertEquals("default", U.getDefaultStartButtonImage(context));
+        assertEquals(PREF_START_BUTTON_IMAGE_DEFAULT, U.getDefaultStartButtonImage(context));
     }
 
     @Test

@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
@@ -31,8 +32,9 @@ public class PowerMenuService extends AccessibilityService {
     private BroadcastReceiver powerMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(!performGlobalAction(intent.getIntExtra("action", -1)))
+            if (!performGlobalAction(intent.getIntExtra(EXTRA_ACTION, -1))) {
                 U.showToast(PowerMenuService.this, R.string.tb_lock_device_not_supported);
+            }
         }
     };
 

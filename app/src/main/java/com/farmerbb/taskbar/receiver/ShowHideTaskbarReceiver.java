@@ -55,7 +55,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 context.startActivity(intent2);
             }
 
-            notificationIntent.putExtra("start_services", true);
+            notificationIntent.putExtra(EXTRA_START_SERVICES, true);
 
             U.startForegroundService(context, notificationIntent);
         } else {

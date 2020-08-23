@@ -230,6 +230,9 @@ public class Constants {
     public static final String PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY = "running_apps_only";
     public static final String PREF_RECENTS_AMOUNT_SHOW_ALL = "show_all";
 
+    public static final String PREF_START_BUTTON_IMAGE_APP_LOGO = "app_logo";
+    public static final String PREF_START_BUTTON_IMAGE_CUSTOM  = "custom";
+    public static final String PREF_START_BUTTON_IMAGE_DEFAULT = "default";
     // TaskbarPosition values
 
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";
@@ -247,4 +250,7 @@ public class Constants {
     public static final String EXTRA_APPWIDGET_ID = "appWidgetId";
     public static final String EXTRA_CELL_ID = "cellId";
     public static final String EXTRA_CONTEXT_MENU_FIX = "context_menu_fix";
+    public static final String EXTRA_ACTION = "action";
+    public static final String EXTRA_START_SERVICES = "start_services";
+    public static final String EXTRA_COUNT = "count";
 }

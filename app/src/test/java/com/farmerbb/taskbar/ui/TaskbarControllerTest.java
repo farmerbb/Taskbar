@@ -79,6 +79,9 @@ import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_APP_START;
 import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY;
 import static com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_SHOW_ALL;
 import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE;
+import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE_APP_LOGO;
+import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE_CUSTOM;
+import static com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE_DEFAULT;
 import static com.farmerbb.taskbar.util.Constants.PREF_TIME_OF_SERVICE_START;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -127,7 +130,7 @@ public class TaskbarControllerTest {
     public void testDrawStartButtonPadding() {
         ImageView startButton = new ImageView(context);
         prefs = U.getSharedPreferences(context);
-        prefs.edit().putString(PREF_START_BUTTON_IMAGE, "default").apply();
+        prefs.edit().putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_DEFAULT).apply();
         uiController.drawStartButton(context, startButton, prefs, Color.RED);
         int padding =
                 context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
@@ -136,13 +139,13 @@ public class TaskbarControllerTest {
         PowerMockito.spy(U.class);
         // Use bliss os logic to avoid using LauncherApps, that robolectric doesn't support
         when(U.isBlissOs(context)).thenReturn(true);
-        prefs.edit().putString(PREF_START_BUTTON_IMAGE, "app_logo").apply();
+        prefs.edit().putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_APP_LOGO).apply();
         uiController.drawStartButton(context, startButton, prefs, Color.RED);
         padding =
                 context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding_alt);
         checkStartButtonPadding(padding, startButton);
 
-        prefs.edit().putString(PREF_START_BUTTON_IMAGE, "custom").apply();
+        prefs.edit().putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_CUSTOM).apply();
         uiController.drawStartButton(context, startButton, prefs, Color.RED);
         padding = context.getResources().getDimensionPixelSize(R.dimen.tb_app_drawer_icon_padding);
         checkStartButtonPadding(padding, startButton);
