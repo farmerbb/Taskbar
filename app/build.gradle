@@ -128,7 +128,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'androidx.test:core:1.2.0'
-    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation "org.robolectric:robolectric:4.4"
     testImplementation "org.powermock:powermock-module-junit4:$POWERMOCK_VERSION"
     testImplementation "org.powermock:powermock-module-junit4-rule:$POWERMOCK_VERSION"
     testImplementation "org.powermock:powermock-api-mockito2:$POWERMOCK_VERSION"

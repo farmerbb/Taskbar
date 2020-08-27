@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.LooperMode;
 import org.robolectric.shadows.ShadowAccessibilityService;
 
 import static com.farmerbb.taskbar.util.Constants.ACTION_ACCESSIBILITY_ACTION;
@@ -16,6 +17,7 @@ import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
+@LooperMode(LooperMode.Mode.LEGACY)
 public class PowerMenuServiceTest {
     @Test
     public void testAccessibilityActionPerforming() {
