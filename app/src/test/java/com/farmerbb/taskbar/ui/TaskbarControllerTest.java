@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.Constants;
+import com.farmerbb.taskbar.LauncherAppsHelper;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.HomeActivity;
 import com.farmerbb.taskbar.activity.HomeActivityDelegate;
@@ -34,7 +35,6 @@ import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
 import com.farmerbb.taskbar.mockito.StringAnswer;
-import com.farmerbb.taskbar.shadow.TaskbarShadowLauncherApps;
 import com.farmerbb.taskbar.shadow.TaskbarShadowScrollView;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.DisplayInfo;
@@ -53,6 +53,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLauncherApps;
 import org.robolectric.shadows.ShadowUsageStatsManager.EventBuilder;
 import org.robolectric.util.ReflectionHelpers;
 
@@ -92,8 +93,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
-        "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"})
+@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class TaskbarControllerTest {
     @Rule
@@ -606,7 +606,6 @@ public class TaskbarControllerTest {
     }
 
     @Test
-    @Config(shadows = TaskbarShadowLauncherApps.class)
     public void testFilterRealPinnedApps() {
         List<AppEntry> pinnedApps = new ArrayList<>();
         List<AppEntry> entries = new ArrayList<>();
@@ -619,11 +618,10 @@ public class TaskbarControllerTest {
 
         LauncherApps launcherApps =
                 (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
-        TaskbarShadowLauncherApps taskbarShadowLauncherApps =
-                (TaskbarShadowLauncherApps) shadowOf(launcherApps);
+        ShadowLauncherApps shadowLauncherApps = shadowOf(launcherApps);
         AppEntry appEntry = generateTestAppEntry(1);
         pinnedApps.add(appEntry);
-        taskbarShadowLauncherApps
+        shadowLauncherApps
                 .addEnabledPackage(
                         UserHandle.getUserHandleForUid(Constants.DEFAULT_TEST_USER_ID),
                         appEntry.getPackageName()
@@ -645,12 +643,9 @@ public class TaskbarControllerTest {
         assertEquals(1, realNumOfPinnedApps);
         assertEquals(2, applicationIdsToRemove.size());
         assertEquals(1, entries.size());
-
-        taskbarShadowLauncherApps.reset();
     }
 
     @Test
-    @Config(shadows = TaskbarShadowLauncherApps.class)
     public void testGenerateAppEntries() {
         List<AppEntry> usageStatsList = new ArrayList<>();
         List<AppEntry> entries = new ArrayList<>();
@@ -671,8 +666,7 @@ public class TaskbarControllerTest {
                 );
         LauncherApps launcherApps =
                 (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
-        TaskbarShadowLauncherApps taskbarShadowLauncherApps =
-                (TaskbarShadowLauncherApps) Shadows.shadowOf(launcherApps);
+        ShadowLauncherApps shadowLauncherApps = Shadows.shadowOf(launcherApps);
 
         AppEntry appEntry = generateTestAppEntry(0);
         usageStatsList.add(appEntry);
@@ -684,31 +678,12 @@ public class TaskbarControllerTest {
         info.name = appEntry.getLabel();
         info.nonLocalizedLabel = appEntry.getLabel();
         LauncherActivityInfo launcherActivityInfo =
-                TaskbarShadowLauncherApps
+                LauncherAppsHelper
                         .generateTestLauncherActivityInfo(
                                 context, info, Constants.DEFAULT_TEST_USER_ID
                         );
-        taskbarShadowLauncherApps.addActivity(launcherActivityInfo.getUser(), launcherActivityInfo);
+        shadowLauncherApps.addActivity(launcherActivityInfo.getUser(), launcherActivityInfo);
 
-        uiController.generateAppEntries(context, 1, usageStatsList, entries, launcherAppCache);
-        assertEquals(1, entries.size());
-        assertEquals(1, launcherAppCache.size());
-        assertEquals(appEntry.getPackageName(), entries.get(0).getPackageName());
-        assertSame(launcherActivityInfo, launcherAppCache.get(0));
-        entries.clear();
-        launcherAppCache.clear();
-
-        ActivityInfo secondInfo = new ActivityInfo();
-        secondInfo.packageName = appEntry.getPackageName();
-        secondInfo.name = appEntry.getLabel() + "-second";
-        secondInfo.nonLocalizedLabel = appEntry.getLabel();
-        LauncherActivityInfo secondLauncherActivityInfo =
-                TaskbarShadowLauncherApps
-                        .generateTestLauncherActivityInfo(
-                                context, secondInfo, Constants.DEFAULT_TEST_USER_ID
-                        );
-        taskbarShadowLauncherApps
-                .addActivity(secondLauncherActivityInfo.getUser(), secondLauncherActivityInfo);
         uiController.generateAppEntries(context, 1, usageStatsList, entries, launcherAppCache);
         assertEquals(1, entries.size());
         assertEquals(1, launcherAppCache.size());
@@ -718,11 +693,11 @@ public class TaskbarControllerTest {
         launcherAppCache.clear();
 
         LauncherActivityInfo launcherActivityInfoForProfile =
-                TaskbarShadowLauncherApps
+                LauncherAppsHelper
                         .generateTestLauncherActivityInfo(
                                 context, info, Constants.DEFAULT_TEST_USER_PROFILE_ID
                         );
-        taskbarShadowLauncherApps.addActivity(
+        shadowLauncherApps.addActivity(
                 UserHandle.getUserHandleForUid(Constants.DEFAULT_TEST_USER_PROFILE_ID),
                 launcherActivityInfoForProfile
         );
@@ -749,11 +724,11 @@ public class TaskbarControllerTest {
         thirdInfo.name = appEntry.getLabel();
         thirdInfo.nonLocalizedLabel = appEntry.getLabel();
         LauncherActivityInfo thirdLauncherActivityInfo =
-                TaskbarShadowLauncherApps
+                LauncherAppsHelper
                         .generateTestLauncherActivityInfo(
                                 context, thirdInfo, Constants.DEFAULT_TEST_USER_ID
                         );
-        taskbarShadowLauncherApps
+        shadowLauncherApps
                 .addActivity(thirdLauncherActivityInfo.getUser(), thirdLauncherActivityInfo);
         uiController.generateAppEntries(context, 1, usageStatsList, entries, launcherAppCache);
         assertSame(thirdLauncherActivityInfo, launcherAppCache.get(0));
@@ -763,11 +738,11 @@ public class TaskbarControllerTest {
         ActivityInfo forthInfo = new ActivityInfo(thirdInfo);
         forthInfo.name = "com.google.android.googlequicksearchbox.SearchActivity";
         LauncherActivityInfo forthLauncherActivityInfo =
-                TaskbarShadowLauncherApps
+                LauncherAppsHelper
                         .generateTestLauncherActivityInfo(
                                 context, forthInfo, Constants.DEFAULT_TEST_USER_ID
                         );
-        taskbarShadowLauncherApps
+        shadowLauncherApps
                 .addActivity(forthLauncherActivityInfo.getUser(), forthLauncherActivityInfo);
         uiController.generateAppEntries(context, 1, usageStatsList, entries, launcherAppCache);
         assertSame(forthLauncherActivityInfo, launcherAppCache.get(0));
@@ -797,7 +772,7 @@ public class TaskbarControllerTest {
         info.name = Constants.TEST_NAME;
         info.nonLocalizedLabel = Constants.TEST_LABEL;
         LauncherActivityInfo launcherActivityInfo =
-                TaskbarShadowLauncherApps
+                LauncherAppsHelper
                         .generateTestLauncherActivityInfo(
                                 context, info, Constants.DEFAULT_TEST_USER_ID
                         );
