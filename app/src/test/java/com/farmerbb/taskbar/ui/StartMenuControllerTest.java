@@ -16,8 +16,8 @@ import android.view.Gravity;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.farmerbb.taskbar.Constants;
+import com.farmerbb.taskbar.LauncherAppsHelper;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.shadow.TaskbarShadowLauncherApps;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
@@ -49,8 +49,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@PowerMockIgnore({"org.mockito.*", "org.robolectric.*",
-        "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*"})
+@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
 @PrepareForTest(value = {U.class, TaskbarPosition.class})
 public class StartMenuControllerTest {
     private static final String NON_URL_QUERY = "test-query";
@@ -212,7 +211,7 @@ public class StartMenuControllerTest {
         activityInfo.applicationInfo = new ApplicationInfo();
         activityInfo.applicationInfo.packageName = activityInfo.packageName;
         LauncherActivityInfo launcherActivityInfo =
-                TaskbarShadowLauncherApps
+                LauncherAppsHelper
                         .generateTestLauncherActivityInfo(
                                 context, activityInfo, Constants.DEFAULT_TEST_USER_ID
                         );

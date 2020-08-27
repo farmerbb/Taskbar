@@ -40,6 +40,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
+import org.robolectric.annotation.LooperMode;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowBuild;
@@ -63,6 +64,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
 @PrepareForTest(U.class)
+@LooperMode(LooperMode.Mode.LEGACY)
 public class UTest {
     @Rule
     public PowerMockRule rule = new PowerMockRule();

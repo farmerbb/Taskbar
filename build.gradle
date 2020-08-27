@@ -48,3 +48,12 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+subprojects {
+    tasks.withType(Test) {
+        maxParallelForks = 2
+        forkEvery = 80
+        maxHeapSize = "2048m"
+        minHeapSize = "1024m"
+    }
+}
