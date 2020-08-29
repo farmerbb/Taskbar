@@ -32,6 +32,7 @@ import android.service.quicksettings.TileService;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.PersistentShortcutLaunchActivity;
 import com.farmerbb.taskbar.activity.PersistentShortcutSelectAppActivity;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
@@ -40,7 +41,7 @@ public abstract class FavoriteAppTileService extends TileService {
 
     protected abstract int tileNumber();
 
-    private String prefix = "qs_tile_" + tileNumber() + "_";
+    private String prefix = Constants.PREF_QS_TILE + "_" + tileNumber() + "_";
 
     @Override
     public void onStartListening() {
@@ -50,27 +51,28 @@ public abstract class FavoriteAppTileService extends TileService {
     @Override
     public void onTileRemoved() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean(prefix + "added", false).apply();
+        pref.edit().putBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false).apply();
     }
 
     @Override
     public void onClick() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!pref.getBoolean(prefix + "added", false)) {
+        if (!pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
             selectApp();
             return;
         }
 
-        if(isLocked())
+        if (isLocked()) {
             unlockAndRun(this::launchApp);
-        else
+        } else {
             launchApp();
+        }
     }
 
     private void selectApp() {
         Intent intent = U.getThemedIntent(this, PersistentShortcutSelectAppActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("qs_tile", tileNumber());
+        intent.putExtra(Constants.PREF_QS_TILE, tileNumber());
         startActivityAndCollapse(intent);
     }
 
@@ -94,7 +96,7 @@ public abstract class FavoriteAppTileService extends TileService {
         if(tile == null) return;
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean(prefix + "added", false)) {
+        if (pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
             tile.setState(Tile.STATE_ACTIVE);
             tile.setLabel(pref.getString(prefix + "label", getString(R.string.tb_new_shortcut)));
 

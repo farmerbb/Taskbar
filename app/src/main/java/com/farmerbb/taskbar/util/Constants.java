@@ -222,6 +222,8 @@ public class Constants {
     public static final String PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX = "_provider";
     public static final String PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX = "_placeholder";
     public static final String PREF_DEFAULT_NULL = "null";
+    public static final String PREF_QS_TILE = "qs_tile";
+    public static final String PREF_ADDED_SUFFIX = "added";
 
     // SharedPreference values
 

@@ -2,6 +2,7 @@ package com.farmerbb.taskbar.service;
 
 import android.content.SharedPreferences;
 
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 import org.junit.Before;
@@ -56,6 +57,12 @@ public class FavoriteAppTileServiceTest {
     @Test
     public void testOnTileRemoved() {
         app1.onTileRemoved();
-        assertFalse(prefs.getBoolean("qs_tile_" + app1.tileNumber() + "_" + "added", true));
+        assertFalse(
+                prefs.getBoolean(
+                        Constants.PREF_QS_TILE + "_" + app1.tileNumber()
+                                + "_" + Constants.PREF_ADDED_SUFFIX,
+                        true
+                )
+        );
     }
 }
