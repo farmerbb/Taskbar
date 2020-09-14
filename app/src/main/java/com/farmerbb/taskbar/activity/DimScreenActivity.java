@@ -167,8 +167,24 @@ public class DimScreenActivity extends AppCompatActivity {
     private void dimScreen(boolean shouldDim) {
         if(checkIfShouldFinish()) return;
 
+        // From android.os.PowerManager
+        int BRIGHTNESS_CONSTRAINT_TYPE_MINIMUM = 0;
+        Float screenBrightness = null;
+
+        if(shouldDim) {
+            U.allowReflection();
+            try {
+                screenBrightness = (Float) Class.forName("android.os.PowerManager")
+                        .getMethod("getBrightnessConstraint", int.class)
+                        .invoke(getSystemService(POWER_SERVICE), BRIGHTNESS_CONSTRAINT_TYPE_MINIMUM);
+            } catch (Exception e) { /* Gracefully fail */ }
+        }
+
+        if(screenBrightness == null)
+            screenBrightness = -1f;
+
         WindowManager.LayoutParams wmParams = getWindow().getAttributes();
-        wmParams.screenBrightness = shouldDim ? 1 / 255f : -1f;
+        wmParams.screenBrightness = screenBrightness;
         getWindow().setAttributes(wmParams);
 
         if(shouldDim) {
