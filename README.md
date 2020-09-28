@@ -63,7 +63,9 @@ Prerequisites:
 
 Once all the prerequisites are met, make sure that the `ANDROID_HOME` environment variable is set to your Android SDK directory, then run `./gradlew assembleFreeDebug` at the base directory of the project to start the build. After the build completes, navigate to `app/build/outputs/apk/free/debug` where you will end up with an APK file ready to install on your Android device.
 
-Also, we integrate [robolectric](https://github.com/robolectric/robolectric) as unit test tool, and we can execute `./gradlew test` to run all tests and `./gradlew jacocoTestReport` to run jacoco for coverage report. If you bring some code improvement such as bug fix, we recommend you to write test for it with robolectric.
+### Running tests
+
+Taskbar uses [Robolectric](https://github.com/robolectric/robolectric) as its unit testing framework.  The entire test suite can be run with `./gradlew test`, or you can generate a Jacoco coverage report using `./gradlew jacocoTestReport`.  If you contribute code improvements such as bug fixes, we recommend writing tests alongside it using Robolectric.
 
 ## For Third-Party App Developers
 
