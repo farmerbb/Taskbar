@@ -61,7 +61,6 @@ import android.os.UserManager;
 import android.provider.Settings;
 
 import androidx.annotation.DimenRes;
-import androidx.annotation.VisibleForTesting;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
@@ -1461,7 +1460,6 @@ public class U {
         }
     }
 
-    @VisibleForTesting
     public static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);

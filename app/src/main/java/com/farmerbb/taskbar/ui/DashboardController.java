@@ -256,14 +256,19 @@ public class DashboardController extends UIController {
 
         host.addView(layout, params);
 
-        new Handler().postDelayed(() ->
-                updatePaddingSize(
-                        context,
-                        layout,
-                        TaskbarPosition.getTaskbarPosition(context)
-                ),
-                100
-        );
+        new Handler().postDelayed(() -> {
+            updatePaddingSize(context, layout, TaskbarPosition.getTaskbarPosition(context));
+
+            // Workaround for bottom margin not being set correctly on Android 11
+            if(U.getCurrentApiVersion() > 29.0) {
+                layout.setPadding(
+                        layout.getPaddingLeft(),
+                        layout.getPaddingTop(),
+                        layout.getPaddingRight(),
+                        layout.getPaddingBottom() + getBottomMargin(context, host)
+                );
+            }
+        }, 100);
     }
 
     @VisibleForTesting
