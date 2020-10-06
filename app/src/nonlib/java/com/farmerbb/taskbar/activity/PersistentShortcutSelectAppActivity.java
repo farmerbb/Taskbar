@@ -36,6 +36,7 @@ import android.widget.Spinner;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
@@ -53,7 +54,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         selectedEntry = entry;
 
         boolean windowSizeOptions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && U.hasFreeformSupport(this);
-        boolean iconOptions = getIntent().getIntExtra("qs_tile", 0) > 0;
+        boolean iconOptions = getIntent().getIntExtra(PREF_QS_TILE, 0) > 0;
 
         if(!windowSizeOptions && !iconOptions) {
             createShortcut(null);
@@ -142,7 +143,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
     }
 
     private void createShortcut(String windowSize) {
-        int num = getIntent().getIntExtra("qs_tile", 0);
+        int num = getIntent().getIntExtra(PREF_QS_TILE, 0);
         if(num > 0)
             createQuickSettingTileShortcut(windowSize, num);
         else
@@ -186,7 +187,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         editor.putString(prefix + "window_size", windowSize);
         editor.putLong(prefix + "user_id", selectedEntry.getUserId(this));
         editor.putFloat(prefix + "icon_threshold", threshold);
-        editor.putBoolean(prefix + "added", true);
+        editor.putBoolean(prefix + PREF_ADDED_SUFFIX, true);
         editor.apply();
 
         try {

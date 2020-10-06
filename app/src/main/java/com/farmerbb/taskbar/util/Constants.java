@@ -222,6 +222,14 @@ public class Constants {
     public static final String PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX = "_provider";
     public static final String PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX = "_placeholder";
     public static final String PREF_DEFAULT_NULL = "null";
+    public static final String PREF_QS_TILE = "qs_tile";
+    public static final String PREF_ADDED_SUFFIX = "added";
+    public static final String PREF_ICON_THRESHOLD_SUFFIX = "icon_threshold";
+    public static final String PREF_LABEL_SUFFIX = "label";
+    public static final String PREF_PACKAGE_NAME_SUFFIX = "package_name";
+    public static final String PREF_COMPONENT_NAME_SUFFIX = "component_name";
+    public static final String PREF_WINDOW_SIZE_SUFFIX = "window_size";
+    public static final String PREF_USER_ID_SUFFIX = "user_id";
 
     // SharedPreference values
 
@@ -253,4 +261,8 @@ public class Constants {
     public static final String EXTRA_ACTION = "action";
     public static final String EXTRA_START_SERVICES = "start_services";
     public static final String EXTRA_COUNT = "count";
+    public static final String EXTRA_PACKAGE_NAME = "package_name";
+    public static final String EXTRA_COMPONENT_NAME = "component_name";
+    public static final String EXTRA_WINDOW_SIZE = "window_size";
+    public static final String EXTRA_USER_ID = "user_id";
 }
