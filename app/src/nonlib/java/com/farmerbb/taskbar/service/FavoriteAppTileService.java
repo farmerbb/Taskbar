@@ -29,6 +29,8 @@ import android.os.UserManager;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.PersistentShortcutLaunchActivity;
 import com.farmerbb.taskbar.activity.PersistentShortcutSelectAppActivity;
@@ -78,6 +80,11 @@ public abstract class FavoriteAppTileService extends TileService {
         } else {
             launchApp();
         }
+    }
+
+    @VisibleForTesting
+    String getPrefix() {
+        return prefix;
     }
 
     private void selectApp() {
