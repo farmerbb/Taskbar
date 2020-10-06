@@ -36,6 +36,17 @@ import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
+import static com.farmerbb.taskbar.util.Constants.EXTRA_COMPONENT_NAME;
+import static com.farmerbb.taskbar.util.Constants.EXTRA_PACKAGE_NAME;
+import static com.farmerbb.taskbar.util.Constants.EXTRA_USER_ID;
+import static com.farmerbb.taskbar.util.Constants.EXTRA_WINDOW_SIZE;
+import static com.farmerbb.taskbar.util.Constants.PREF_COMPONENT_NAME_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_ICON_THRESHOLD_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_LABEL_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_PACKAGE_NAME_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_USER_ID_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.PREF_WINDOW_SIZE_SUFFIX;
+
 @TargetApi(Build.VERSION_CODES.N)
 public abstract class FavoriteAppTileService extends TileService {
 
@@ -83,10 +94,25 @@ public abstract class FavoriteAppTileService extends TileService {
         Intent shortcutIntent = new Intent(this, PersistentShortcutLaunchActivity.class);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra("package_name", pref.getString(prefix + "package_name", null));
-        shortcutIntent.putExtra("component_name", pref.getString(prefix + "component_name", null));
-        shortcutIntent.putExtra("window_size", pref.getString(prefix + "window_size", null));
-        shortcutIntent.putExtra("user_id", pref.getLong(prefix + "user_id", userManager.getSerialNumberForUser(Process.myUserHandle())));
+        shortcutIntent.putExtra(
+                EXTRA_PACKAGE_NAME,
+                pref.getString(prefix + PREF_PACKAGE_NAME_SUFFIX, null)
+        );
+        shortcutIntent.putExtra(
+                EXTRA_COMPONENT_NAME,
+                pref.getString(prefix + PREF_COMPONENT_NAME_SUFFIX, null)
+        );
+        shortcutIntent.putExtra(
+                EXTRA_WINDOW_SIZE,
+                pref.getString(prefix + PREF_WINDOW_SIZE_SUFFIX, null)
+        );
+        shortcutIntent.putExtra(
+                EXTRA_USER_ID,
+                pref.getLong(
+                        prefix + PREF_USER_ID_SUFFIX,
+                        userManager.getSerialNumberForUser(Process.myUserHandle())
+                )
+        );
 
         startActivityAndCollapse(shortcutIntent);
     }
@@ -98,15 +124,18 @@ public abstract class FavoriteAppTileService extends TileService {
         SharedPreferences pref = U.getSharedPreferences(this);
         if (pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
             tile.setState(Tile.STATE_ACTIVE);
-            tile.setLabel(pref.getString(prefix + "label", getString(R.string.tb_new_shortcut)));
+            tile.setLabel(pref.getString(prefix + PREF_LABEL_SUFFIX, getString(R.string.tb_new_shortcut)));
 
-            String componentName = pref.getString(prefix + "component_name", null);
-            float threshold = pref.getFloat(prefix + "icon_threshold", -1);
+            String componentName = pref.getString(prefix + PREF_PACKAGE_NAME_SUFFIX, null);
+            float threshold = pref.getFloat(prefix + PREF_ICON_THRESHOLD_SUFFIX, -1);
 
-            if(componentName != null && threshold >= 0) {
+            if (componentName != null && threshold >= 0) {
                 UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
                 LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
-                long userId = pref.getLong(prefix + "user_id", userManager.getSerialNumberForUser(Process.myUserHandle()));
+                long userId = pref.getLong(
+                        prefix + PREF_USER_ID_SUFFIX,
+                        userManager.getSerialNumberForUser(Process.myUserHandle())
+                );
 
                 Intent intent = new Intent();
                 intent.setComponent(ComponentName.unflattenFromString(componentName));
@@ -116,8 +145,9 @@ public abstract class FavoriteAppTileService extends TileService {
                 BitmapDrawable icon = U.convertToMonochrome(this, cache.getIcon(this, info), threshold);
 
                 tile.setIcon(Icon.createWithBitmap(icon.getBitmap()));
-            } else
+            } else {
                 tile.setIcon(Icon.createWithResource(this, R.drawable.tb_favorite_app_tile));
+            }
         } else {
             tile.setState(Tile.STATE_INACTIVE);
             tile.setLabel(getString(R.string.tb_new_shortcut));
