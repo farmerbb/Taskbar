@@ -703,7 +703,11 @@ public class U {
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo defaultLauncher = context.getPackageManager().resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-        return defaultLauncher.activityInfo.packageName.equals(context.getPackageName());
+        try {
+            return defaultLauncher.activityInfo.packageName.equals(context.getPackageName());
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     private static int getMaxNumOfColumns(Context context) {
