@@ -59,7 +59,13 @@ public class IconCache {
 
     public BitmapDrawable getIcon(Context context, PackageManager pm, LauncherActivityInfo appInfo) {
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        String name = appInfo.getComponentName().flattenToString() + ":" + userManager.getSerialNumberForUser(appInfo.getUser());
+        String name;
+
+        try {
+           name = appInfo.getComponentName().flattenToString() + ":" + userManager.getSerialNumberForUser(appInfo.getUser());
+        } catch (NullPointerException e) {
+            return U.convertToBitmapDrawable(context, pm.getDefaultActivityIcon());
+        }
 
         BitmapDrawable drawable;
 
