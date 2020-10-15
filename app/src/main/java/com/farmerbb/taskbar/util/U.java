@@ -687,7 +687,7 @@ public class U {
             else
                 url = "https://play.google.com/store/apps/details?id=" + context.getPackageName();
         } else
-            url = "https://f-droid.org/repository/browse/?fdid=" + context.getPackageName();
+            url = "https://f-droid.org/packages/" + context.getPackageName();
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
