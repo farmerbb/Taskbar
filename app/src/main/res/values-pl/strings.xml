@@ -498,4 +498,6 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 
     <string name="tb_see_whats_new">See what\'s new in this release</string>
     <string name="tb_action_view">View</string>
+
+    <string name="tb_error_creating_widget">Error creating widget</string>
 </resources>

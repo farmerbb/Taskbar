@@ -239,7 +239,13 @@ public class DashboardActivity extends Activity {
             Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
             intent.setComponent(appWidgetInfo.configure);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+
+            try {
+                startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+            } catch (Exception e) {
+                U.showToast(this, R.string.tb_error_creating_widget);
+                return;
+            }
 
             SharedPreferences pref = U.getSharedPreferences(this);
             if(LauncherHelper.getInstance().isOnHomeScreen(this)

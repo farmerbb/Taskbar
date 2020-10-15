@@ -481,4 +481,6 @@
 
     <string name="tb_see_whats_new">Ver que hay de nuevo en este lanzamiento</string>
     <string name="tb_action_view">Ver</string>
+
+    <string name="tb_error_creating_widget">Error creating widget</string>
 </resources>
