@@ -261,8 +261,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     DisplayInfo display = U.getDisplayInfo(HomeActivityDelegate.this);
-                    if(display.width > 0 && display.height > 0)
-                        wallpaperManager.suggestDesiredDimensions(display.width, display.height);
+                    if(display.width > 0 && display.height > 0) {
+                        try {
+                            wallpaperManager.suggestDesiredDimensions(display.width, display.height);
+                        } catch (IllegalArgumentException ignored) {}
+                    }
                 }
 
                 boolean shouldStartFreeformHack = shouldDelayFreeformHack && hits > 0;
@@ -1054,7 +1057,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     View view = (View) event.getLocalState();
-                    view.setVisibility(View.VISIBLE);
+                    if(view != null) view.setVisibility(View.VISIBLE);
                     // fall through
                 case DragEvent.ACTION_DRAG_EXITED:
                     v.setBackground(null);

@@ -64,13 +64,14 @@ public class NotificationCountService extends NotificationListenerService {
         StatusBarNotification[] notifications;
         try {
             notifications = getActiveNotifications();
-        } catch (SecurityException e) {
+        } catch (Exception e) {
             notifications = new StatusBarNotification[0];
         }
 
         for(StatusBarNotification notification : notifications) {
-            if((notification.getNotification().flags & NotificationCompat.FLAG_GROUP_SUMMARY) == 0
-                && notification.isClearable()) count++;
+            if(notification != null
+                    && (notification.getNotification().flags & NotificationCompat.FLAG_GROUP_SUMMARY) == 0
+                    && notification.isClearable()) count++;
         }
 
         broadcastNotificationCount(count);

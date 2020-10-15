@@ -780,12 +780,14 @@ public class TaskbarController extends UIController {
         List<String> applicationIdsToRemove = new ArrayList<>();
 
         // Filter out anything on the pinned/blocked apps lists
-        int realNumOfPinnedApps =
-                filterRealPinnedApps(context, pinnedApps, entries, applicationIdsToRemove);
+        int realNumOfPinnedApps = filterRealPinnedApps(context, pinnedApps, entries, applicationIdsToRemove);
 
         if(blockedApps.size() > 0) {
-            for(AppEntry entry : blockedApps) {
-                applicationIdsToRemove.add(entry.getPackageName());
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
+            synchronized(blockedApps) {
+                for(AppEntry entry : blockedApps) {
+                    applicationIdsToRemove.add(entry.getPackageName());
+                }
             }
         }
 
@@ -1109,23 +1111,27 @@ public class TaskbarController extends UIController {
                              List<String> applicationIdsToRemove) {
         int realNumOfPinnedApps = 0;
         if(pinnedApps.size() > 0) {
-            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-            LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
+            synchronized(pinnedApps) {
+                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+                LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
-            for(AppEntry entry : pinnedApps) {
-                boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
-                        userManager.getUserForSerialNumber(entry.getUserId(context)));
+                for(AppEntry entry : pinnedApps) {
+                    boolean packageEnabled = launcherApps.isPackageEnabled(entry.getPackageName(),
+                            userManager.getUserForSerialNumber(entry.getUserId(context)));
 
-                if(packageEnabled)
-                    entries.add(entry);
-                else
-                    realNumOfPinnedApps--;
+                    if(packageEnabled)
+                        entries.add(entry);
+                    else
+                        realNumOfPinnedApps--;
 
-                applicationIdsToRemove.add(entry.getPackageName());
+                    applicationIdsToRemove.add(entry.getPackageName());
+                }
+
+                realNumOfPinnedApps = realNumOfPinnedApps + pinnedApps.size();
             }
-
-            realNumOfPinnedApps = realNumOfPinnedApps + pinnedApps.size();
         }
+
         return realNumOfPinnedApps;
     }
 
