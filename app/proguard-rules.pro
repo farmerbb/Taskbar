@@ -11,3 +11,11 @@
 -dontwarn java.lang.invoke.*
 
 -keep class **.R$string
+
+-keepclassmembers class **.R$bool {
+    <fields>;
+}
+
+-keepclassmembers class **.R$integer {
+    <fields>;
+}
