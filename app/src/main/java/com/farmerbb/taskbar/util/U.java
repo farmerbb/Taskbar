@@ -1100,11 +1100,21 @@ public class U {
         if(blissVersion != null && !blissVersion.isEmpty())
             validBlissOsBuildProp = true;
 
+        return validBlissOsBuildProp
+                && context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
+                && isSystemApp(context);
+    }
+
+    public static boolean isAndroidGeneric(Context context) {
+        if(isBlissOs(context)) return true;
+
+        boolean validAndroidGenericBuildProp = false;
+
         String buildUser = getSystemProperty("ro.build.user");
         if(buildUser != null && buildUser.equals("electrikjesus"))
-            validBlissOsBuildProp = true;
+            validAndroidGenericBuildProp = true;
 
-        return validBlissOsBuildProp
+        return validAndroidGenericBuildProp
                 && context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
                 && isSystemApp(context);
     }
@@ -1295,7 +1305,7 @@ public class U {
         }
 
         // Customizations for BlissOS
-        if(isBlissOs(context) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        if(isAndroidGeneric(context) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !pref.getBoolean(PREF_BLISS_OS_PREFS, false)) {
             SharedPreferences.Editor editor = pref.edit();
 
@@ -1303,11 +1313,14 @@ public class U {
                 editor.putBoolean(PREF_FREEFORM_HACK, true);
             }
 
+            if(isBlissOs(context)) {
+                editor.putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_APP_LOGO);
+            }
+
             editor.putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY);
             editor.putString(PREF_REFRESH_FREQUENCY, "0");
             editor.putString(PREF_MAX_NUM_OF_RECENTS, "2147483647");
             editor.putString(PREF_SORT_ORDER, "true");
-            editor.putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_APP_LOGO);
             editor.putBoolean(PREF_BUTTON_BACK, true);
             editor.putBoolean(PREF_BUTTON_HOME, true);
             editor.putBoolean(PREF_BUTTON_RECENTS, true);

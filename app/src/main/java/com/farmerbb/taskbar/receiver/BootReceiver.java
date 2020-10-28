@@ -33,7 +33,7 @@ public class BootReceiver extends BroadcastReceiver {
         if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             // Initialize preferences on BlissOS
             SharedPreferences pref = U.getSharedPreferences(context);
-            if(U.isBlissOs(context) && !pref.getBoolean(PREF_BLISS_OS_PREFS, false))
+            if(U.isAndroidGeneric(context) && !pref.getBoolean(PREF_BLISS_OS_PREFS, false))
                 U.initPrefs(context);
 
             SharedPreferences.Editor editor = pref.edit();
