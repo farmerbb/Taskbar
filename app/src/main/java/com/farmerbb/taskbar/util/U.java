@@ -1110,8 +1110,8 @@ public class U {
 
         boolean validAndroidGenericBuildProp = false;
 
-        String buildUser = getSystemProperty("ro.build.user");
-        if(buildUser != null && buildUser.equals("electrikjesus"))
+        String manufacturer = getSystemProperty("ro.ag.product.manufacturer");
+        if(manufacturer != null && manufacturer.equals("Android-Generic"))
             validAndroidGenericBuildProp = true;
 
         return validAndroidGenericBuildProp
