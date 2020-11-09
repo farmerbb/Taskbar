@@ -21,4 +21,5 @@ public interface UIHost {
     void addView(View view, ViewParams params);
     void removeView(View view);
     void terminate();
+    void updateViewLayout(View view, ViewParams params);
 }

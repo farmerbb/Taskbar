@@ -15,8 +15,13 @@
 
 package com.farmerbb.taskbar.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.Handler;
+import android.view.View;
+import android.view.WindowInsets;
 
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.helper.LauncherHelper;
@@ -24,9 +29,11 @@ import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
+import static com.farmerbb.taskbar.util.U.getCurrentApiVersion;
 
 public abstract class UIController {
     protected Context context;
+    private boolean prevImeVisibility;
 
     public UIController(Context context) {
         this.context = context;
@@ -62,5 +69,26 @@ public abstract class UIController {
         return host instanceof SecondaryHomeActivity
                 && !U.isShowHideNavbarSupported()
                 && TaskbarPosition.isBottom(context) ? U.getNavbarHeight(context) : -1;
+    }
+
+    protected void applyMarginFix(UIHost host, View layout, ViewParams params) {
+        if(U.getCurrentApiVersion() <= 29.0) return;
+
+        layout.setOnApplyWindowInsetsListener((v, insets) -> {
+            boolean isImeVisible = isImeVisible(v);
+            if(isImeVisible != prevImeVisibility) {
+                prevImeVisibility = isImeVisible;
+
+                ViewParams newParams = isImeVisible ? params.noBottomMargin() : params;
+                host.updateViewLayout(layout, newParams);
+            }
+
+            return insets;
+        });
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private boolean isImeVisible(View view) {
+        return view.getRootWindowInsets().isVisible(WindowInsets.Type.ime());
     }
 }

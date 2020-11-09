@@ -52,4 +52,14 @@ public class ViewParams {
 
         return wmParams;
     }
+
+    public ViewParams noBottomMargin() {
+        return new ViewParams(
+                this.width,
+                this.height,
+                this.gravity,
+                this.flags,
+                0
+        );
+    }
 }

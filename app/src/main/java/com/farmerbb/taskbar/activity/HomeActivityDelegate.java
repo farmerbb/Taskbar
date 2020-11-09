@@ -707,6 +707,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         // no-op
     }
 
+    @Override
+    public void updateViewLayout(View view, ViewParams params) {
+        windowManager.updateViewLayout(view, params.toWindowManagerParams());
+    }
+
     private void initDesktopIcons() {
         desktopIcons = new GridLayout(this);
         fab = new FABWrapper(this);

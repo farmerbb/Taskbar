@@ -345,6 +345,8 @@ public class TaskbarController extends UIController {
         layout.findViewById(R.id.divider).setBackgroundColor(accentColor);
         button.setTextColor(accentColor);
 
+        applyMarginFix(host, layout, params);
+
         if(isFirstStart && FreeformHackHelper.getInstance().isInFreeformWorkspace())
             showTaskbar(false);
         else if(!pref.getBoolean(PREF_COLLAPSED, false) && pref.getBoolean(PREF_TASKBAR_ACTIVE, false))

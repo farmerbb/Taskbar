@@ -340,6 +340,8 @@ public class StartMenuController extends UIController {
         } else
             searchViewLayout.setVisibility(View.GONE);
 
+        applyMarginFix(host, layout, params);
+
         textView = layout.findViewById(R.id.no_apps_found);
 
         U.registerReceiver(context, toggleReceiver, ACTION_TOGGLE_START_MENU);

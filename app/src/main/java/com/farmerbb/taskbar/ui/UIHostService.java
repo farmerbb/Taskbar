@@ -73,5 +73,10 @@ public abstract class UIHostService extends Service implements UIHost {
         stopSelf();
     }
 
+    @Override
+    public void updateViewLayout(View view, ViewParams params) {
+        windowManager.updateViewLayout(view, params.toWindowManagerParams());
+    }
+
     public abstract UIController newController();
 }
