@@ -19,7 +19,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Handler;
 import android.view.View;
 import android.view.WindowInsets;
 
@@ -29,7 +28,6 @@ import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
-import static com.farmerbb.taskbar.util.U.getCurrentApiVersion;
 
 public abstract class UIController {
     protected Context context;
