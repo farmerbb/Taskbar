@@ -247,7 +247,9 @@ public class DashboardController extends UIController {
             }
         }
 
-        appWidgetHost.stopListening();
+        try {
+            appWidgetHost.stopListening();
+        } catch (Exception ignored) {}
 
         U.registerReceiver(context, toggleReceiver, ACTION_TOGGLE_DASHBOARD);
         U.registerReceiver(context, addWidgetReceiver, ACTION_ADD_WIDGET_COMPLETED);
@@ -389,7 +391,9 @@ public class DashboardController extends UIController {
     }
 
     private void fadeOut(final boolean sendIntent) {
-        appWidgetHost.stopListening();
+        try {
+            appWidgetHost.stopListening();
+        } catch (Exception ignored) {}
 
         DashboardHelper.getInstance().setDashboardOpen(false);
 
