@@ -9,4 +9,4 @@
 /app/build
 /lib/build
 /lib/demo/build
-output.json
+output*.json
