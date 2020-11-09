@@ -21,6 +21,7 @@ import android.os.Build;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.TaskerConditionActivity;
+import com.mikepenz.foundation_icons_typeface_library.FoundationIcons;
 import com.mikepenz.iconics.Iconics;
 
 // Utility class meant for abstracting out all third-party dependencies.
@@ -32,6 +33,7 @@ public class DependencyUtils {
     private DependencyUtils() {}
 
     public static CharSequence getKeyboardShortcutSummary(Context context) {
+        Iconics.registerFont(new FoundationIcons());
         return new Iconics.IconicsBuilder()
                 .ctx(context)
                 .on(context.getString(R.string.tb_pref_description_keyboard_shortcut))
