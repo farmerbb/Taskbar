@@ -31,6 +31,8 @@ android {
         buildConfigField "String", "SUPPORT_APPLICATION_ID", "\"com.farmerbb.taskbar.support\""
         buildConfigField "String", "ANDROIDX86_APPLICATION_ID", "\"com.farmerbb.taskbar.androidx86\""
 
+        buildConfigField "int", "VERSION_CODE", "$VERSION_CODE"
+
         buildConfigField "long", "TIMESTAMP", "${System.currentTimeMillis()}L"
     }
 
