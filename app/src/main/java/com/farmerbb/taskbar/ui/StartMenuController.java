@@ -91,60 +91,57 @@ public class StartMenuController extends UIController {
     private Handler handler;
     private Thread thread;
 
-    private boolean shouldShowSearchBox = false;
     private boolean hasSubmittedQuery = false;
     private boolean hasHardwareKeyboard = false;
     private boolean searchViewClicked = false;
 
-    private int layoutId = R.layout.tb_start_menu_left;
-
     private List<String> currentStartMenuIds = new ArrayList<>();
 
-    private View.OnClickListener ocl = view -> toggleStartMenu();
+    private final View.OnClickListener ocl = view -> toggleStartMenu();
 
-    private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             toggleStartMenu();
         }
     };
 
-    private BroadcastReceiver showSpaceReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver showSpaceReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             layout.findViewById(R.id.start_menu_space).setVisibility(View.VISIBLE);
         }
     };
 
-    private BroadcastReceiver hideSpaceReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver hideSpaceReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             layout.findViewById(R.id.start_menu_space).setVisibility(View.GONE);
         }
     };
 
-    private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             hideStartMenu(true);
         }
     };
 
-    private BroadcastReceiver hideReceiverNoReset = new BroadcastReceiver() {
+    private final BroadcastReceiver hideReceiverNoReset = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             hideStartMenu(false);
         }
     };
 
-    private BroadcastReceiver resetReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver resetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             startMenu.setSelection(0);
         }
     };
 
-    private Comparator<LauncherActivityInfo> comparator = (ai1, ai2) -> {
+    private final Comparator<LauncherActivityInfo> comparator = (ai1, ai2) -> {
         String label1;
         String label2;
 
@@ -177,7 +174,7 @@ public class StartMenuController extends UIController {
         IconCache.getInstance(context).clearCache();
 
         final SharedPreferences pref = U.getSharedPreferences(context);
-        shouldShowSearchBox = shouldShowSearchBox(pref, hasHardwareKeyboard);
+        boolean shouldShowSearchBox = shouldShowSearchBox(pref, hasHardwareKeyboard);
 
         // Initialize layout params
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -193,7 +190,7 @@ public class StartMenuController extends UIController {
 
         // Determine where to show the start menu on screen
         String taskbarPosition = TaskbarPosition.getTaskbarPosition(context);
-        layoutId = getStartMenuLayoutId(taskbarPosition);
+        int layoutId = getStartMenuLayoutId(taskbarPosition);
         params.gravity = getStartMenuGravity(taskbarPosition);
 
         // Initialize views
@@ -263,7 +260,7 @@ public class StartMenuController extends UIController {
                                 }
 
                                 Intent intent = generateQueryWebSearchIntent(query);
-                                if (intent.resolveActivity(context.getPackageManager()) != null) {
+                                if(intent.resolveActivity(context.getPackageManager()) != null) {
                                     context.startActivity(intent);
                                 } else {
                                     intent = generateQueryGoogleIntent(query);
@@ -634,7 +631,7 @@ public class StartMenuController extends UIController {
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
             if(!U.isChromeOs(context) && (!onHomeScreen || inFreeformMode)) {
-                Class clazz = inFreeformMode && !U.hasBrokenSetLaunchBoundsApi()
+                Class<?> clazz = inFreeformMode && !U.hasBrokenSetLaunchBoundsApi()
                         ? InvisibleActivityAlt.class
                         : InvisibleActivity.class;
 

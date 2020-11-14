@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.farmerbb.taskbar.R;
 
 class ToastFrameworkImpl implements ToastInterface {
-    private Toast toast;
+    private final Toast toast;
 
     @SuppressLint("ShowToast")
     ToastFrameworkImpl(Context context, String message, int length) {

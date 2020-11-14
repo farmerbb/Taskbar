@@ -48,7 +48,7 @@ public class HSLConfigActivity extends AppCompatActivity {
 
     private boolean returnToSettings;
 
-    private final class LauncherListAdapter extends ArrayAdapter<String> {
+    private static final class LauncherListAdapter extends ArrayAdapter<String> {
         private LauncherListAdapter(Context context, ArrayList<String> notes) {
             super(context, R.layout.tb_hsl_row_layout, notes);
         }

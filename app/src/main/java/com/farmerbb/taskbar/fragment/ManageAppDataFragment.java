@@ -38,7 +38,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 
 public class ManageAppDataFragment extends SettingsFragment {
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-kkmmss", Locale.US);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-kkmmss", Locale.US);
 
     @Override
     protected void loadPrefs() {

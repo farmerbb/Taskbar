@@ -30,7 +30,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 
 public class InvisibleActivity extends Activity {
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             finish();

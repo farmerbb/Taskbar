@@ -77,9 +77,9 @@ public class Constants {
     public static final String PREF_ABOUT = "about";
     public static final String PREF_ACCENT_COLOR = "accent_color";
     public static final String PREF_ACCENT_COLOR_PREF = "accent_color_pref";
+    public static final String PREF_ADDITIONAL_SETTINGS = "additional_settings";
     public static final String PREF_ADD_ICON_TO_DESKTOP = "add_icon_to_desktop";
     public static final String PREF_ADD_SHORTCUT = "add_shortcut";
-    public static final String PREF_ADDITIONAL_SETTINGS = "additional_settings";
     public static final String PREF_ALT_BUTTON_CONFIG = "alt_button_config";
     public static final String PREF_ANCHOR = "anchor";
     public static final String PREF_ANDROID_X86_PREFS = "android_x86_prefs";
@@ -110,7 +110,11 @@ public class Constants {
     public static final String PREF_DASHBOARD_GRID_SIZE = "dashboard_grid_size";
     public static final String PREF_DASHBOARD_HEIGHT = "dashboard_height";
     public static final String PREF_DASHBOARD_TUTORIAL_SHOWN = "dashboard_tutorial_shown";
+    public static final String PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX = "_placeholder";
+    public static final String PREF_DASHBOARD_WIDGET_PREFIX = "dashboard_widget_";
+    public static final String PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX = "_provider";
     public static final String PREF_DASHBOARD_WIDTH = "dashboard_width";
+    public static final String PREF_DEFAULT_NULL = "null";
     public static final String PREF_DESKTOP_ICONS = "desktop_icons";
     public static final String PREF_DESKTOP_MODE = "desktop_mode";
     public static final String PREF_DIM_SCREEN = "dim_screen";
@@ -148,8 +152,8 @@ public class Constants {
     public static final String PREF_IS_HIDDEN = "is_hidden";
     public static final String PREF_IS_RESTARTING = "is_restarting";
     public static final String PREF_KEYBOARD_SHORTCUT = "keyboard_shortcut";
-    public static final String PREF_LAUNCH_GAMES_FULLSCREEN = "launch_games_fullscreen";
     public static final String PREF_LAUNCHER = "launcher";
+    public static final String PREF_LAUNCH_GAMES_FULLSCREEN = "launch_games_fullscreen";
     public static final String PREF_LOCK_DEVICE = "lock_device";
     public static final String PREF_MANAGE_APP_DATA = "manage_app_data";
     public static final String PREF_MAX_NUM_OF_RECENTS = "max_num_of_recents";
@@ -168,6 +172,7 @@ public class Constants {
     public static final String PREF_PREF_SCREEN_GENERAL = "pref_screen_general";
     public static final String PREF_PREF_SCREEN_RECENT_APPS = "pref_screen_recent_apps";
     public static final String PREF_PRIMARY_LAUNCHER = "primary_launcher";
+    public static final String PREF_QS_TILE = "qs_tile";
     public static final String PREF_QUIT_TASKBAR = "quit_taskbar";
     public static final String PREF_RECENTS_AMOUNT = "recents_amount";
     public static final String PREF_REFRESH_FREQUENCY = "refresh_frequency";
@@ -200,8 +205,8 @@ public class Constants {
     public static final String PREF_START_MENU_APPS = "start_menu_apps";
     public static final String PREF_START_MENU_LAYOUT = "start_menu_layout";
     public static final String PREF_START_ON_BOOT = "start_on_boot";
-    public static final String PREF_SYS_TRAY = "sys_tray";
     public static final String PREF_SYSTEM_SETTINGS = "system_settings";
+    public static final String PREF_SYS_TRAY = "sys_tray";
     public static final String PREF_TASKBAR_ACTIVE = "taskbar_active";
     public static final String PREF_TASKER_ENABLED = "tasker_enabled";
     public static final String PREF_THEME = "theme";
@@ -218,18 +223,14 @@ public class Constants {
     public static final String PREF_WINDOW_SIZE_LARGE = "window_size_large";
     public static final String PREF_WINDOW_SIZE_PHONE_SIZE = "window_size_phone_size";
     public static final String PREF_WINDOW_SIZE_STANDARD = "window_size_standard";
-    public static final String PREF_DASHBOARD_WIDGET_PREFIX = "dashboard_widget_";
-    public static final String PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX = "_provider";
-    public static final String PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX = "_placeholder";
-    public static final String PREF_DEFAULT_NULL = "null";
-    public static final String PREF_QS_TILE = "qs_tile";
+
     public static final String PREF_ADDED_SUFFIX = "added";
+    public static final String PREF_COMPONENT_NAME_SUFFIX = "component_name";
     public static final String PREF_ICON_THRESHOLD_SUFFIX = "icon_threshold";
     public static final String PREF_LABEL_SUFFIX = "label";
     public static final String PREF_PACKAGE_NAME_SUFFIX = "package_name";
-    public static final String PREF_COMPONENT_NAME_SUFFIX = "component_name";
-    public static final String PREF_WINDOW_SIZE_SUFFIX = "window_size";
     public static final String PREF_USER_ID_SUFFIX = "user_id";
+    public static final String PREF_WINDOW_SIZE_SUFFIX = "window_size";
 
     // SharedPreference values
 
@@ -241,6 +242,7 @@ public class Constants {
     public static final String PREF_START_BUTTON_IMAGE_APP_LOGO = "app_logo";
     public static final String PREF_START_BUTTON_IMAGE_CUSTOM  = "custom";
     public static final String PREF_START_BUTTON_IMAGE_DEFAULT = "default";
+
     // TaskbarPosition values
 
     public static final String POSITION_BOTTOM_LEFT = "bottom_left";
@@ -254,15 +256,15 @@ public class Constants {
 
     // Intent extra keys
 
-    public static final String EXTRA_IS_LAUNCHING_SHORTCUT = "is_launching_shortcut";
+    public static final String EXTRA_ACTION = "action";
     public static final String EXTRA_APPWIDGET_ID = "appWidgetId";
     public static final String EXTRA_CELL_ID = "cellId";
-    public static final String EXTRA_CONTEXT_MENU_FIX = "context_menu_fix";
-    public static final String EXTRA_ACTION = "action";
-    public static final String EXTRA_START_SERVICES = "start_services";
-    public static final String EXTRA_COUNT = "count";
-    public static final String EXTRA_PACKAGE_NAME = "package_name";
     public static final String EXTRA_COMPONENT_NAME = "component_name";
-    public static final String EXTRA_WINDOW_SIZE = "window_size";
+    public static final String EXTRA_CONTEXT_MENU_FIX = "context_menu_fix";
+    public static final String EXTRA_COUNT = "count";
+    public static final String EXTRA_IS_LAUNCHING_SHORTCUT = "is_launching_shortcut";
+    public static final String EXTRA_PACKAGE_NAME = "package_name";
+    public static final String EXTRA_START_SERVICES = "start_services";
     public static final String EXTRA_USER_ID = "user_id";
+    public static final String EXTRA_WINDOW_SIZE = "window_size";
 }

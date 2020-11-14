@@ -115,7 +115,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
         }
     }
 
-    private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+    private final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
@@ -160,7 +160,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
                             new Handler().post(() -> U.startFreeformHack(getActivity()));
                         break;
                     case PREF_START_BUTTON_IMAGE:
-                        if (stringValue.equals(PREF_START_BUTTON_IMAGE_CUSTOM)) {
+                        if(stringValue.equals(PREF_START_BUTTON_IMAGE_CUSTOM)) {
                             U.showImageChooser(getActivity());
                         }
                         break;

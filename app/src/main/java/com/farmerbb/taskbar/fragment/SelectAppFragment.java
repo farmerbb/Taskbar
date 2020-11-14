@@ -16,6 +16,8 @@
 package com.farmerbb.taskbar.fragment;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +43,7 @@ public class SelectAppFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SelectAppActivity activity = (SelectAppActivity) getActivity();
         ListView appList = new ListView(activity);
         int type = getArguments().getInt(ARG_SECTION_NUMBER);

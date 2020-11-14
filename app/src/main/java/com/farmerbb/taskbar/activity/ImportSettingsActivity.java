@@ -28,7 +28,7 @@ public class ImportSettingsActivity extends AbstractProgressActivity {
 
     boolean broadcastSent = false;
 
-    private BroadcastReceiver settingsReceivedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver settingsReceivedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             U.restartApp(ImportSettingsActivity.this, true);

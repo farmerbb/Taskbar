@@ -29,7 +29,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 
 public class NotificationCountService extends NotificationListenerService {
 
-    private BroadcastReceiver requestCountReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver requestCountReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             broadcastNotificationCount();

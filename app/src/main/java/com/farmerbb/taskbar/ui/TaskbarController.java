@@ -142,7 +142,6 @@ public class TaskbarController extends UIController {
     private String sortOrder = "false";
     private boolean runningAppsOnly = false;
 
-    private int layoutId = R.layout.tb_taskbar_left;
     private int currentTaskbarPosition = 0;
     private boolean showHideAutomagically = false;
     private boolean positionIsVertical = false;
@@ -157,40 +156,40 @@ public class TaskbarController extends UIController {
     private int notificationCount = 0;
     private int numOfSysTrayIcons = 0;
 
-    private Map<Integer, Boolean> sysTrayIconStates = new HashMap<>();
+    private final Map<Integer, Boolean> sysTrayIconStates = new HashMap<>();
 
-    private View.OnClickListener ocl = view ->
+    private final View.OnClickListener ocl = view ->
             U.sendBroadcast(context, ACTION_TOGGLE_START_MENU);
 
-    private BroadcastReceiver showReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver showReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             showTaskbar(true);
         }
     };
 
-    private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             hideTaskbar(true);
         }
     };
 
-    private BroadcastReceiver tempShowReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver tempShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             tempShowTaskbar();
         }
     };
 
-    private BroadcastReceiver tempHideReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver tempHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             tempHideTaskbar(false);
         }
     };
 
-    private BroadcastReceiver startMenuAppearReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver startMenuAppearReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(startButton.getVisibility() == View.GONE
@@ -199,7 +198,7 @@ public class TaskbarController extends UIController {
         }
     };
 
-    private BroadcastReceiver startMenuDisappearReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver startMenuDisappearReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(startButton.getVisibility() == View.GONE)
@@ -207,8 +206,7 @@ public class TaskbarController extends UIController {
         }
     };
 
-    private BroadcastReceiver notificationCountReceiver = new BroadcastReceiver() {
-        @SuppressLint("SetTextI18n")
+    private final BroadcastReceiver notificationCountReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             notificationCount = intent.getIntExtra(EXTRA_COUNT, 0);
@@ -216,7 +214,7 @@ public class TaskbarController extends UIController {
     };
 
     @TargetApi(Build.VERSION_CODES.M)
-    private PhoneStateListener listener = new PhoneStateListener() {
+    private final PhoneStateListener listener = new PhoneStateListener() {
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             try {
@@ -231,13 +229,11 @@ public class TaskbarController extends UIController {
         super(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCreateHost(UIHost host) {
         init(context, host, () -> drawTaskbar(host));
     }
 
-    @SuppressLint("RtlHardcoded")
     private void drawTaskbar(UIHost host) {
         IconCache.getInstance(context).clearCache();
 
@@ -256,7 +252,7 @@ public class TaskbarController extends UIController {
         // Determine where to show the taskbar on screen
         String taskbarPosition = TaskbarPosition.getTaskbarPosition(context);
         params.gravity = getTaskbarGravity(taskbarPosition);
-        layoutId = getTaskbarLayoutId(taskbarPosition);
+        int layoutId = getTaskbarLayoutId(taskbarPosition);
         positionIsVertical = TaskbarPosition.isVertical(taskbarPosition);
 
         // Initialize views
@@ -987,7 +983,7 @@ public class TaskbarController extends UIController {
         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
-        if (TaskbarPosition.isVertical(context)) {
+        if(TaskbarPosition.isVertical(context)) {
             int maxScreenSize = Math.max(0, display.height
                     - U.getStatusBarHeight(context)
                     - U.getBaseTaskbarSize(context, sysTrayIconStates));
@@ -995,13 +991,13 @@ public class TaskbarController extends UIController {
             params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
                     + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
 
-            if (fullLength) {
+            if(fullLength) {
                 try {
                     Space whitespaceTop = layout.findViewById(R.id.whitespace_top);
                     Space whitespaceBottom = layout.findViewById(R.id.whitespace_bottom);
                     int height = maxScreenSize - recentsSize;
 
-                    if (pref.getBoolean(PREF_CENTERED_ICONS, false)) {
+                    if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
                         ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
                         topParams.height = height / 2;
                         whitespaceTop.setLayoutParams(topParams);
@@ -1009,7 +1005,7 @@ public class TaskbarController extends UIController {
                         ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
                         bottomParams.height = height / 2;
                         whitespaceBottom.setLayoutParams(bottomParams);
-                    } else if (TaskbarPosition.isBottom(context)) {
+                    } else if(TaskbarPosition.isBottom(context)) {
                         ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
                         topParams.height = height;
                         whitespaceTop.setLayoutParams(topParams);
@@ -1026,7 +1022,7 @@ public class TaskbarController extends UIController {
             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                     + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
 
-            if (fullLength) {
+            if(fullLength) {
                 try {
                     Space whitespaceLeft = layout.findViewById(R.id.whitespace_left);
                     Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
@@ -1060,43 +1056,42 @@ public class TaskbarController extends UIController {
                        String taskbarPosition,
                        String sortOrder,
                        boolean shouldRefreshRecents) {
-        if (TaskbarPosition.isVertical(taskbarPosition)) {
-            if (sortOrder.contains("false")) {
+        if(TaskbarPosition.isVertical(taskbarPosition)) {
+            if(sortOrder.contains("false")) {
                 scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
-            } else if (sortOrder.contains("true")) {
+            } else if(sortOrder.contains("true")) {
                 scrollView.scrollTo(0, 0);
             }
         } else {
-            if (sortOrder.contains("false")) {
+            if(sortOrder.contains("false")) {
                 scrollView.scrollTo(0, 0);
-            } else if (sortOrder.contains("true")) {
+            } else if(sortOrder.contains("true")) {
                 scrollView.scrollTo(taskbar.getWidth(), taskbar.getHeight());
             }
         }
 
-        if (shouldRefreshRecents) {
+        if(shouldRefreshRecents) {
             scrollView.setVisibility(View.VISIBLE);
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @VisibleForTesting
     void filterForegroundApp(Context context,
                              SharedPreferences pref,
                              long searchInterval,
                              List<String> applicationIdsToRemove) {
-        if (pref.getBoolean(PREF_HIDE_FOREGROUND, false)) {
-            UsageStatsManager mUsageStatsManager =
-                    (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-            UsageEvents events =
-                    mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
+        if(pref.getBoolean(PREF_HIDE_FOREGROUND, false)) {
+            UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+            UsageEvents events = mUsageStatsManager.queryEvents(searchInterval, System.currentTimeMillis());
             UsageEvents.Event eventCache = new UsageEvents.Event();
             String currentForegroundApp = null;
 
             while (events.hasNextEvent()) {
                 events.getNextEvent(eventCache);
 
-                if (eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-                    if (!(eventCache.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
+                if(eventCache.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                    if(!(eventCache.getPackageName().contains(BuildConfig.BASE_APPLICATION_ID)
                             && !eventCache.getClassName().equals(MainActivity.class.getCanonicalName())
                             && !eventCache.getClassName().equals(HomeActivity.class.getCanonicalName())
                             && !eventCache.getClassName().equals(HomeActivityDelegate.class.getCanonicalName())
@@ -1107,7 +1102,7 @@ public class TaskbarController extends UIController {
                 }
             }
 
-            if (!applicationIdsToRemove.contains(currentForegroundApp)) {
+            if(!applicationIdsToRemove.contains(currentForegroundApp)) {
                 applicationIdsToRemove.add(currentForegroundApp);
             }
         }
@@ -1177,7 +1172,7 @@ public class TaskbarController extends UIController {
                 List<LauncherActivityInfo> list = launcherApps.getActivityList(packageName, handle);
                 if(!list.isEmpty()) {
                     // Google App workaround
-                    if (!packageName.equals(googleSearchBoxPackage)) {
+                    if(!packageName.equals(googleSearchBoxPackage)) {
                         launcherAppCache.add(list.get(0));
                     } else {
                         boolean added = false;
@@ -1188,7 +1183,7 @@ public class TaskbarController extends UIController {
                             }
                         }
 
-                        if (!added) {
+                        if(!added) {
                             launcherAppCache.add(list.get(0));
                         }
                     }
@@ -1205,6 +1200,7 @@ public class TaskbarController extends UIController {
         }
     }
 
+    @SuppressWarnings("SuspiciousListRemoveInLoop")
     @VisibleForTesting
     void populateAppEntries(Context context,
                             PackageManager pm,
@@ -1688,6 +1684,7 @@ public class TaskbarController extends UIController {
         return !pm.isInteractive();
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateSystemTray() {
         if(!sysTrayEnabled || isScreenOff()) return;
 

@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private SwitchCompat theSwitch;
     private ImageView helpButton;
 
-    private BroadcastReceiver switchReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver switchReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateSwitch();
@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void proceedWithAppLaunch(Bundle savedInstanceState) {
         try {
             setContentView(R.layout.tb_main);

@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.farmerbb.taskbar.service.NotificationService;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
 

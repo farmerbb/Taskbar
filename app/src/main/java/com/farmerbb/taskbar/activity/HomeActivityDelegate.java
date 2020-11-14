@@ -116,21 +116,21 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     private GestureDetector detector;
 
-    private BroadcastReceiver killReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             killHomeActivity();
         }
     };
 
-    private BroadcastReceiver forceTaskbarStartReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver forceTaskbarStartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             forceTaskbarStart = true;
         }
     };
 
-    private BroadcastReceiver restartReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver restartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(taskbarController != null) taskbarController.onRecreateHost(HomeActivityDelegate.this);
@@ -139,7 +139,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         }
     };
 
-    private BroadcastReceiver freeformToggleReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver freeformToggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(isDesktopIconsEnabled == U.isDesktopIconsEnabled(HomeActivityDelegate.this))
@@ -149,49 +149,49 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         }
     };
 
-    private BroadcastReceiver refreshDesktopIconsReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver refreshDesktopIconsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             refreshDesktopIcons();
         }
     };
 
-    private BroadcastReceiver iconArrangeModeReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver iconArrangeModeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             enterIconArrangeMode();
         }
     };
 
-    private BroadcastReceiver sortDesktopIconsReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver sortDesktopIconsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             sortDesktopIcons();
         }
     };
 
-    private BroadcastReceiver updateMarginsReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver updateMarginsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateMargins();
         }
     };
 
-    private BroadcastReceiver removeDesktopWallpaperReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver removeDesktopWallpaperReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             removeCustomWallpaper();
         }
     };
 
-    private BroadcastReceiver wallpaperChangeRequestReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver wallpaperChangeRequestReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             U.showImageChooser(HomeActivityDelegate.this);
         }
     };
 
-    private LauncherApps.Callback callback = new LauncherApps.Callback() {
+    private final LauncherApps.Callback callback = new LauncherApps.Callback() {
         @Override
         public void onPackageRemoved(String packageName, UserHandle user) {
             refreshDesktopIcons();

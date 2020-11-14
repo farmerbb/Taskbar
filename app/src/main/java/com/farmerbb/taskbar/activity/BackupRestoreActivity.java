@@ -68,6 +68,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
         }).start();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void exportData(Uri uri) {
         try {
             ZipOutputStream output = new ZipOutputStream(
@@ -111,6 +112,7 @@ public class BackupRestoreActivity extends AbstractProgressActivity {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void importData(Uri uri) {
         File importedFile = new File(getFilesDir(), "temp.zip");
         File statusFile = new File(getFilesDir(), "restore_in_progress");

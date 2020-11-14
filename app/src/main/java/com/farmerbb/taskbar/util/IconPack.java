@@ -30,6 +30,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import androidx.core.content.ContextCompat;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -51,9 +53,9 @@ public class IconPack {
 
     private boolean mIsLoading = false;
     private boolean mLoaded = false;
-    private Map<String, String> mPackagesDrawables = new HashMap<>();
+    private final Map<String, String> mPackagesDrawables = new HashMap<>();
 
-    private List<Bitmap> mBackImages = new ArrayList<>();
+    private final List<Bitmap> mBackImages = new ArrayList<>();
     private Bitmap mMaskImage = null;
     private Bitmap mFrontImage = null;
     private float mFactor = 0.5f;
@@ -108,29 +110,34 @@ public class IconPack {
                     while(eventType != XmlPullParser.END_DOCUMENT) {
                         if(eventType == XmlPullParser.START_TAG) {
                             if(loadMasks) {
-                                if(xpp.getName().equals("iconback")) {
-                                    for(int i = 0; i < xpp.getAttributeCount(); i++) {
-                                        if(xpp.getAttributeName(i).startsWith("img")) {
-                                            String drawableName = xpp.getAttributeValue(i);
-                                            Bitmap iconback = loadBitmap(mContext, drawableName);
-                                            if(iconback != null)
-                                                mBackImages.add(iconback);
+                                switch(xpp.getName()) {
+                                    case "iconback":
+                                        for(int i = 0; i < xpp.getAttributeCount(); i++) {
+                                            if(xpp.getAttributeName(i).startsWith("img")) {
+                                                String drawableName = xpp.getAttributeValue(i);
+                                                Bitmap iconback = loadBitmap(mContext, drawableName);
+                                                if(iconback != null)
+                                                    mBackImages.add(iconback);
+                                            }
                                         }
-                                    }
-                                } else if(xpp.getName().equals("iconmask")) {
-                                    if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
-                                        String drawableName = xpp.getAttributeValue(0);
-                                        mMaskImage = loadBitmap(mContext, drawableName);
-                                    }
-                                } else if(xpp.getName().equals("iconupon")) {
-                                    if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
-                                        String drawableName = xpp.getAttributeValue(0);
-                                        mFrontImage = loadBitmap(mContext, drawableName);
-                                    }
-                                } else if(xpp.getName().equals("scale")) {
-                                    if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("factor")) {
-                                        mFactor = Float.valueOf(xpp.getAttributeValue(0));
-                                    }
+                                        break;
+                                    case "iconmask":
+                                        if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
+                                            String drawableName = xpp.getAttributeValue(0);
+                                            mMaskImage = loadBitmap(mContext, drawableName);
+                                        }
+                                        break;
+                                    case "iconupon":
+                                        if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("img1")) {
+                                            String drawableName = xpp.getAttributeValue(0);
+                                            mFrontImage = loadBitmap(mContext, drawableName);
+                                        }
+                                        break;
+                                    case "scale":
+                                        if(xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("factor")) {
+                                            mFactor = Float.parseFloat(xpp.getAttributeValue(0));
+                                        }
+                                        break;
                                 }
                             }
 
@@ -165,7 +172,7 @@ public class IconPack {
     private Bitmap loadBitmap(Context context, String drawableName) {
         int id = getResources(context).getIdentifier(drawableName, "drawable", packageName);
         if(id > 0) {
-            Drawable bitmap = getResources(context).getDrawable(id);
+            Drawable bitmap = ContextCompat.getDrawable(context, id);
             if(bitmap instanceof BitmapDrawable)
                 return ((BitmapDrawable) bitmap).getBitmap();
         }
@@ -175,7 +182,7 @@ public class IconPack {
     private Drawable loadDrawable(Context context, String drawableName) {
         int id = getResources(context).getIdentifier(drawableName, "drawable", packageName);
         if(id > 0) {
-            return getResources(context).getDrawable(id);
+            return ContextCompat.getDrawable(context, id);
         }
         return null;
     }
@@ -248,11 +255,11 @@ public class IconPack {
 
         // Create a mutable mask bitmap with the same mask
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(defaultBitmap, (int) (w * mFactor), (int) (h * mFactor), true);
+        Bitmap mutableMask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas maskCanvas = new Canvas(mutableMask);
 
         if(mMaskImage != null) {
             // Draw the scaled bitmap with mask
-            Bitmap mutableMask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            Canvas maskCanvas = new Canvas(mutableMask);
             maskCanvas.drawBitmap(mMaskImage, 0, 0, new Paint());
 
             // Paint the bitmap with mask into the result
@@ -263,8 +270,6 @@ public class IconPack {
             paint.setXfermode(null);
         } else {
             // Draw the scaled bitmap with the back image as mask
-            Bitmap mutableMask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            Canvas maskCanvas = new Canvas(mutableMask);
             maskCanvas.drawBitmap(backImage, 0, 0, new Paint());
 
             // Paint the bitmap with mask into the result

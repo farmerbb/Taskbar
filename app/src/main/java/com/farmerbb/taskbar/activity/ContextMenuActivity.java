@@ -80,7 +80,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
     List<ShortcutInfo> shortcuts;
 
-    private BroadcastReceiver dashboardOrStartMenuAppearingReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver dashboardOrStartMenuAppearingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             dashboardOrStartMenuAppearing = true;
@@ -88,7 +88,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
         }
     };
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             finish();

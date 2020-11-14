@@ -70,12 +70,12 @@ public abstract class FavoriteAppTileService extends TileService {
     @Override
     public void onClick() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        if (!pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
+        if(!pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
             selectApp();
             return;
         }
 
-        if (isLocked()) {
+        if(isLocked()) {
             unlockAndRun(this::launchApp);
         } else {
             launchApp();
@@ -129,14 +129,14 @@ public abstract class FavoriteAppTileService extends TileService {
         if(tile == null) return;
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if (pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
+        if(pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
             tile.setState(Tile.STATE_ACTIVE);
             tile.setLabel(pref.getString(prefix + PREF_LABEL_SUFFIX, getString(R.string.tb_new_shortcut)));
 
             String componentName = pref.getString(prefix + PREF_PACKAGE_NAME_SUFFIX, null);
             float threshold = pref.getFloat(prefix + PREF_ICON_THRESHOLD_SUFFIX, -1);
 
-            if (componentName != null && threshold >= 0) {
+            if(componentName != null && threshold >= 0) {
                 UserManager userManager = (UserManager) getSystemService(USER_SERVICE);
                 LauncherApps launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
                 long userId = pref.getLong(

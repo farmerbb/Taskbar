@@ -39,7 +39,7 @@ public class TouchAbsorberActivity extends Activity {
     private static long lastStartTime = 0;
     private static String transitionAnimScale = "";
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             finish();

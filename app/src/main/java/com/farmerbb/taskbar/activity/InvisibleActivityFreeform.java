@@ -48,21 +48,21 @@ public class InvisibleActivityFreeform extends Activity {
     boolean bootToFreeform = false;
     boolean initialLaunch = true;
 
-    private BroadcastReceiver appearingReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver appearingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             doNotHide = true;
         }
     };
 
-    private BroadcastReceiver disappearingReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver disappearingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             doNotHide = false;
         }
     };
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             reallyFinish();

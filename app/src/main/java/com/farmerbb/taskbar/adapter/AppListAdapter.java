@@ -38,7 +38,7 @@ public class AppListAdapter extends ArrayAdapter<BlacklistEntry> {
     private final Blacklist blacklist = Blacklist.getInstance(getContext());
     private final TopApps topApps = TopApps.getInstance(getContext());
 
-    private int type;
+    private final int type;
 
     public AppListAdapter(Context context, int layout, List<BlacklistEntry> list, int type) {
         super(context, layout, list);

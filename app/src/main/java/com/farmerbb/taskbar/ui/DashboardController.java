@@ -75,8 +75,8 @@ public class DashboardController extends UIController {
 
     private LinearLayout layout;
 
-    private SparseArray<DashboardCell> cells = new SparseArray<>();
-    private SparseArray<AppWidgetHostView> widgets = new SparseArray<>();
+    private final SparseArray<DashboardCell> cells = new SparseArray<>();
+    private final SparseArray<AppWidgetHostView> widgets = new SparseArray<>();
 
     private final int APPWIDGET_HOST_ID = 123;
 
@@ -85,11 +85,11 @@ public class DashboardController extends UIController {
     private int maxSize;
     private int previouslySelectedCell = -1;
 
-    private View.OnClickListener ocl = view -> toggleDashboard();
+    private final View.OnClickListener ocl = view -> toggleDashboard();
 
-    private View.OnClickListener cellOcl = view -> cellClick(view, true);
+    private final View.OnClickListener cellOcl = view -> cellClick(view, true);
 
-    private View.OnHoverListener cellOhl = (v, event) -> {
+    private final View.OnHoverListener cellOhl = (v, event) -> {
         cellClick(v, false);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -98,12 +98,12 @@ public class DashboardController extends UIController {
         return false;
     };
 
-    private View.OnLongClickListener olcl = v -> {
+    private final View.OnLongClickListener olcl = v -> {
         cellLongClick(v);
         return true;
     };
 
-    private View.OnGenericMotionListener ogml = (view, motionEvent) -> {
+    private final View.OnGenericMotionListener ogml = (view, motionEvent) -> {
         if(motionEvent.getAction() == MotionEvent.ACTION_BUTTON_PRESS
                 && motionEvent.getButtonState() == MotionEvent.BUTTON_SECONDARY)
             cellLongClick(view);
@@ -111,16 +111,16 @@ public class DashboardController extends UIController {
         return false;
     };
 
-    private DashboardCell.OnInterceptedLongPressListener listener = this::cellLongClick;
+    private final DashboardCell.OnInterceptedLongPressListener listener = this::cellLongClick;
 
-    private BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver toggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             toggleDashboard();
         }
     };
 
-    private BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             fadeIn();
@@ -128,7 +128,7 @@ public class DashboardController extends UIController {
         }
     };
 
-    private BroadcastReceiver removeWidgetReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver removeWidgetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             fadeIn();
@@ -141,7 +141,7 @@ public class DashboardController extends UIController {
         }
     };
 
-    private BroadcastReceiver hideReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver hideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             hideDashboard();
@@ -240,9 +240,9 @@ public class DashboardController extends UIController {
 
         for(int i = 0; i < maxSize; i++) {
             int appWidgetId = pref.getInt(PREF_DASHBOARD_WIDGET_PREFIX + i, -1);
-            if (appWidgetId != -1) {
+            if(appWidgetId != -1) {
                 addWidget(appWidgetId, i, false);
-            } else if (pref.getBoolean(generateProviderPlaceholderPrefKey(i), false)) {
+            } else if(pref.getBoolean(generateProviderPlaceholderPrefKey(i), false)) {
                 addPlaceholder(i);
             }
         }
@@ -319,8 +319,8 @@ public class DashboardController extends UIController {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-            if (inFreeformMode) {
-                if (U.hasBrokenSetLaunchBoundsApi()) {
+            if(inFreeformMode) {
+                if(U.hasBrokenSetLaunchBoundsApi()) {
                     intent.putExtra(EXTRA_CONTEXT_MENU_FIX, true);
                 }
 
@@ -432,7 +432,7 @@ public class DashboardController extends UIController {
 
     @Override
     public void onDestroyHost(UIHost host) {
-        if (layout != null) {
+        if(layout != null) {
             try {
                 host.removeView(layout);
             } catch (IllegalArgumentException ignored) {}
@@ -444,7 +444,7 @@ public class DashboardController extends UIController {
         U.unregisterReceiver(context, hideReceiver);
 
         SharedPreferences pref = U.getSharedPreferences(context);
-        if (shouldSendDisappearingBroadcast(context, pref)) {
+        if(shouldSendDisappearingBroadcast(context, pref)) {
             U.sendBroadcast(context, ACTION_DASHBOARD_DISAPPEARING);
         }
 
@@ -478,7 +478,7 @@ public class DashboardController extends UIController {
             intent.putExtra(EXTRA_CELL_ID, cellId);
             U.sendBroadcast(context, intent);
 
-            if (shouldShowPlaceholder) {
+            if(shouldShowPlaceholder) {
                 showPlaceholderToast(context, appWidgetManager, cellId, pref);
             }
 
@@ -509,13 +509,13 @@ public class DashboardController extends UIController {
                               int cellId,
                               SharedPreferences pref) {
         String providerName = pref.getString(generateProviderPrefKey(cellId), PREF_DEFAULT_NULL);
-        if (providerName != null && !PREF_DEFAULT_NULL.equals(providerName)) {
+        if(providerName != null && !PREF_DEFAULT_NULL.equals(providerName)) {
             ComponentName componentName = ComponentName.unflattenFromString(providerName);
 
             List<AppWidgetProviderInfo> providerInfoList =
                     appWidgetManager.getInstalledProvidersForProfile(Process.myUserHandle());
             for (AppWidgetProviderInfo info : providerInfoList) {
-                if (info.provider.equals(componentName)) {
+                if(info.provider.equals(componentName)) {
                     String text =
                             context.getString(
                                     R.string.tb_widget_restore_toast,
@@ -541,7 +541,7 @@ public class DashboardController extends UIController {
 
     @VisibleForTesting
     void addWidget(Intent intent) {
-        if (intent.hasExtra(EXTRA_APPWIDGET_ID) && intent.hasExtra(EXTRA_CELL_ID)) {
+        if(intent.hasExtra(EXTRA_APPWIDGET_ID) && intent.hasExtra(EXTRA_CELL_ID)) {
             int appWidgetId = intent.getExtras().getInt(EXTRA_APPWIDGET_ID, -1);
             int cellId = intent.getExtras().getInt(EXTRA_CELL_ID, -1);
 
@@ -575,7 +575,7 @@ public class DashboardController extends UIController {
 
         widgets.put(cellId, hostView);
 
-        if (shouldSave) {
+        if(shouldSave) {
             saveWidgetInfo(context, appWidgetInfo, cellId, appWidgetId);
         }
 
@@ -627,7 +627,7 @@ public class DashboardController extends UIController {
         SharedPreferences.Editor editor = pref.edit();
         editor.remove(PREF_DASHBOARD_WIDGET_PREFIX + cellId);
 
-        if (tempRemove) {
+        if(tempRemove) {
             editor.putBoolean(generateProviderPlaceholderPrefKey(cellId), true);
             addPlaceholder(cellId);
         } else {

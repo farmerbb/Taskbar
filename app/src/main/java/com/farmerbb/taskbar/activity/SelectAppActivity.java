@@ -28,6 +28,8 @@ import android.os.UserHandle;
 import android.os.UserManager;
 
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -67,6 +69,7 @@ public class SelectAppActivity extends AppCompatActivity {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return SelectAppFragment.newInstance(position);

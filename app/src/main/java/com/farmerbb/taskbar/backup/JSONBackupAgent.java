@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 public class JSONBackupAgent implements BackupAgent {
 
-    private JSONObject json;
+    private final JSONObject json;
 
     public JSONBackupAgent(JSONObject json) {
         this.json = json;

@@ -57,7 +57,7 @@ public class QuickSettingsTileService extends TileService {
     @VisibleForTesting
     void updateState() {
         Tile tile = getQsTile();
-        if (tile != null) {
+        if(tile != null) {
             SharedPreferences pref = U.getSharedPreferences(this);
             String startButtonImage =
                     pref.getString(PREF_START_BUTTON_IMAGE, U.getDefaultStartButtonImage(this));
@@ -67,7 +67,7 @@ public class QuickSettingsTileService extends TileService {
                             : R.drawable.tb_allapps;
             tile.setIcon(Icon.createWithResource(this, resId));
 
-            if (U.canDrawOverlays(this)) {
+            if(U.canDrawOverlays(this)) {
                 tile.setState(
                         U.isServiceRunning(this, NotificationService.class)
                                 ? Tile.STATE_ACTIVE

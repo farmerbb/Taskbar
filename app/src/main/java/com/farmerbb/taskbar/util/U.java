@@ -669,7 +669,7 @@ public class U {
         if(hasFreeformSupport(context) && FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
             DisplayInfo display = getDisplayInfo(context);
 
-            if (hasBrokenSetLaunchBoundsApi()) {
+            if(hasBrokenSetLaunchBoundsApi()) {
                 intent.putExtra(EXTRA_CONTEXT_MENU_FIX, true);
             }
 
@@ -725,7 +725,7 @@ public class U {
 
         float iconSize = context.getResources().getDimension(R.dimen.tb_icon_size) / density;
 
-        int userMaxNumOfColumns = Integer.valueOf(pref.getString(PREF_MAX_NUM_OF_RECENTS, "10"));
+        int userMaxNumOfColumns = Integer.parseInt(pref.getString(PREF_MAX_NUM_OF_RECENTS, "10"));
 
         while(baseTaskbarSize + iconSize < maxScreenSize
                 && numOfColumns < userMaxNumOfColumns) {
@@ -740,7 +740,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         return pref.getBoolean(PREF_DISABLE_SCROLLING_LIST, false)
                 ? getMaxNumOfColumns(context)
-                : Integer.valueOf(pref.getString(PREF_MAX_NUM_OF_RECENTS, "10"));
+                : Integer.parseInt(pref.getString(PREF_MAX_NUM_OF_RECENTS, "10"));
     }
 
     public static int getStatusBarHeight(Context context) {
@@ -1186,7 +1186,6 @@ public class U {
             baseTaskbarSize += sysTraySize;
         }
 
-
         return baseTaskbarSize;
     }
 
@@ -1494,7 +1493,7 @@ public class U {
 
     public static float getCurrentApiVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            return Float.valueOf(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
+            return Float.parseFloat(Build.VERSION.SDK_INT + "." + Build.VERSION.PREVIEW_SDK_INT);
         else
             return (float) Build.VERSION.SDK_INT;
     }

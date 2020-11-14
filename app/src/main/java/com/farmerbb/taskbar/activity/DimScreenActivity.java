@@ -64,14 +64,14 @@ public class DimScreenActivity extends AppCompatActivity {
         return shouldFinish;
     }
 
-    private BroadcastReceiver unDimScreenReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver unDimScreenReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             dimScreen(false);
         }
     };
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             finish();

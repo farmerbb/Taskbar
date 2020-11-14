@@ -19,7 +19,7 @@ import android.content.Intent;
 
 public class IntentBackupAgent implements BackupAgent {
 
-    private Intent intent;
+    private final Intent intent;
 
     public IntentBackupAgent(Intent intent) {
         this.intent = intent;

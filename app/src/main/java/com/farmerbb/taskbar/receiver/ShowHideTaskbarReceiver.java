@@ -56,8 +56,6 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
             }
 
             notificationIntent.putExtra(EXTRA_START_SERVICES, true);
-
-            U.startForegroundService(context, notificationIntent);
         } else {
             pref.edit().putBoolean(PREF_IS_HIDDEN, true).apply();
 
@@ -73,7 +71,8 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 U.sendBroadcast(context, ACTION_START_MENU_DISAPPEARING);
             }
 
-            U.startForegroundService(context, notificationIntent);
         }
+
+        U.startForegroundService(context, notificationIntent);
     }
 }

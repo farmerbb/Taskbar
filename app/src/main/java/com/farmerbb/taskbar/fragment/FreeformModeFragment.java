@@ -39,7 +39,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 
 public class FreeformModeFragment extends SettingsFragment {
 
-    private BroadcastReceiver checkBoxReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver checkBoxReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             CheckBoxPreference preference = (CheckBoxPreference) findPreference(PREF_FREEFORM_HACK);

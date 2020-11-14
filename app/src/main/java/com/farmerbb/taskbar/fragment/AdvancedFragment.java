@@ -54,7 +54,7 @@ public class AdvancedFragment extends SettingsFragment {
 
     boolean secondScreenPrefEnabled = false;
 
-    private BroadcastReceiver homeToggleReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver homeToggleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             SharedPreferences pref = U.getSharedPreferences(getActivity());

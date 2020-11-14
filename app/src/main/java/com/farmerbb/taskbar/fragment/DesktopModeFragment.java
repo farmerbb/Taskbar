@@ -50,7 +50,7 @@ public class DesktopModeFragment extends SettingsFragment {
 
     private boolean updateAdditionalSettings;
 
-    private DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
+    private final DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
         @Override
         public void onDisplayAdded(int displayId) {
             updateAdditionalSettings();

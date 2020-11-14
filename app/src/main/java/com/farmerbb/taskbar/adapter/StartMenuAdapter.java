@@ -56,7 +56,7 @@ import static com.farmerbb.taskbar.util.Constants.*;
 
 public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionIndexer {
 
-    private boolean isGrid;
+    private final boolean isGrid;
 
     private final List<Character> sections = new ArrayList<>();
     private final SparseIntArray gpfsCache = new SparseIntArray();

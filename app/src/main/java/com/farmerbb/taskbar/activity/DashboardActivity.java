@@ -57,7 +57,7 @@ public class DashboardActivity extends Activity {
     private boolean contextMenuFix = false;
     private int cellId = -1;
 
-    private BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver addWidgetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             mAppWidgetManager = AppWidgetManager.getInstance(context);
@@ -80,7 +80,7 @@ public class DashboardActivity extends Activity {
         }
     };
 
-    private BroadcastReceiver removeWidgetReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver removeWidgetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
             cellId = intent.getIntExtra(EXTRA_CELL_ID, -1);
@@ -109,7 +109,7 @@ public class DashboardActivity extends Activity {
         }
     };
 
-    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             shouldCollapse = false;
