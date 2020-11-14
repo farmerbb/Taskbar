@@ -30,6 +30,7 @@
         tools:ignore="SpUsage" />
 
     <FrameLayout
+        android:id="@+id/notification_count_layout"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical">

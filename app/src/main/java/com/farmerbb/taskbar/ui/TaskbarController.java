@@ -77,6 +77,7 @@ import android.widget.ImageView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -119,6 +120,7 @@ public class TaskbarController extends UIController {
     private TextView time;
     private ImageView notificationCountCircle;
     private TextView notificationCountText;
+    private boolean[] sysTrayIconStates = { false, false, false, false, false };
 
     private Handler handler;
     private Handler handler2;
@@ -152,6 +154,14 @@ public class TaskbarController extends UIController {
     private int numOfPinnedApps = -1;
 
     private int cellStrength = -1;
+    private int notificationCount = 0;
+    private int numOfSysTrayIcons = 0;
+
+    private final int BATTERY = 0;
+    private final int WIFI = 1;
+    private final int CELLULAR = 2;
+    private final int BLUETOOTH = 3;
+    private final int NOTIFICATIONS = 4;
 
     private View.OnClickListener ocl = view ->
             U.sendBroadcast(context, ACTION_TOGGLE_START_MENU);
@@ -205,20 +215,7 @@ public class TaskbarController extends UIController {
         @SuppressLint("SetTextI18n")
         @Override
         public void onReceive(Context context, Intent intent) {
-            int count = intent.getIntExtra(EXTRA_COUNT, 0);
-            if(count > 0) {
-                int color = ColorUtils.setAlphaComponent(U.getBackgroundTint(context), 255);
-                notificationCountText.setTextColor(color);
-
-                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.tb_circle);
-                drawable.setTint(U.getAccentColor(context));
-
-                notificationCountCircle.setImageDrawable(drawable);
-                notificationCountText.setText(Integer.toString(count));
-            } else {
-                notificationCountCircle.setImageDrawable(null);
-                notificationCountText.setText(null);
-            }
+            notificationCount = intent.getIntExtra(EXTRA_COUNT, 0);
         }
     };
 
@@ -733,7 +730,7 @@ public class TaskbarController extends UIController {
                     updateSystemTray();
                     updateRecentApps(false);
 
-                    if(showHideAutomagically && !positionIsVertical && !MenuHelper.getInstance().isStartMenuOpen())
+                    if(showHideAutomagically && !positionIsVertical && !MenuHelper.getInstance().isStartMenuOpen()) {
                         handler.post(() -> {
                             if(layout != null) {
                                 int[] location = new int[2];
@@ -753,6 +750,7 @@ public class TaskbarController extends UIController {
                                 }
                             }
                         });
+                    }
 
                     SystemClock.sleep(refreshInterval);
                 }
@@ -890,8 +888,14 @@ public class TaskbarController extends UIController {
                 finalApplicationIds.add(entry.getPackageName());
             }
 
+            int realNumOfSysTrayIcons = 0;
+            for(Boolean state : sysTrayIconStates) {
+                if(state) realNumOfSysTrayIcons++;
+            }
+
             if(finalApplicationIds.size() != currentTaskbarIds.size()
-                    || numOfPinnedApps != realNumOfPinnedApps)
+                    || numOfPinnedApps != realNumOfPinnedApps
+                    || numOfSysTrayIcons != realNumOfSysTrayIcons)
                 shouldRedrawTaskbar = true;
             else {
                 for(int i = 0; i < finalApplicationIds.size(); i++) {
@@ -905,6 +909,7 @@ public class TaskbarController extends UIController {
             if(shouldRedrawTaskbar) {
                 currentTaskbarIds = finalApplicationIds;
                 numOfPinnedApps = realNumOfPinnedApps;
+                numOfSysTrayIcons = realNumOfSysTrayIcons;
 
                 populateAppEntries(context, pm, entries, launcherAppCache);
 
@@ -915,6 +920,26 @@ public class TaskbarController extends UIController {
                         ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                         calculateScrollViewParams(context, pref, params, fullLength, numOfEntries);
                         scrollView.setLayoutParams(params);
+
+                        sysTrayLayout.findViewById(R.id.battery).setVisibility(
+                                sysTrayIconStates[BATTERY] ? View.VISIBLE : View.GONE
+                        );
+
+                        sysTrayLayout.findViewById(R.id.wifi).setVisibility(
+                                sysTrayIconStates[WIFI] ? View.VISIBLE : View.GONE
+                        );
+
+                        sysTrayLayout.findViewById(R.id.cellular).setVisibility(
+                                sysTrayIconStates[CELLULAR] ? View.VISIBLE : View.GONE
+                        );
+
+                        sysTrayLayout.findViewById(R.id.bluetooth).setVisibility(
+                                sysTrayIconStates[BLUETOOTH] ? View.VISIBLE : View.GONE
+                        );
+
+                        sysTrayLayout.findViewById(R.id.notification_count_layout).setVisibility(
+                                sysTrayIconStates[NOTIFICATIONS] ? View.VISIBLE : View.GONE
+                        );
 
                         taskbar.removeAllViews();
                         for(int i = 0; i < entries.size(); i++) {
@@ -932,7 +957,7 @@ public class TaskbarController extends UIController {
                                 scrollView.setVisibility(View.VISIBLE);
                         }
 
-                        if(firstRefresh && scrollView.getVisibility() != View.VISIBLE)
+                        if(firstRefresh && scrollView.getVisibility() != View.VISIBLE) {
                             new Handler().post(
                                     () -> scrollTaskbar(
                                             scrollView,
@@ -942,6 +967,7 @@ public class TaskbarController extends UIController {
                                             shouldRefreshRecents
                                     )
                             );
+                        }
                     } else {
                         isShowingRecents = false;
                         scrollView.setVisibility(View.GONE);
@@ -965,14 +991,13 @@ public class TaskbarController extends UIController {
                                    boolean fullLength,
                                    int numOfEntries) {
         DisplayInfo display = U.getDisplayInfo(context, true);
-        int recentsSize =
-                context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
+        int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
 
         if (TaskbarPosition.isVertical(context)) {
             int maxScreenSize = Math.max(0, display.height
                     - U.getStatusBarHeight(context)
-                    - U.getBaseTaskbarSize(context));
+                    - U.getBaseTaskbarSize(context, sysTrayIconStates));
 
             params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
                     + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
@@ -1003,7 +1028,7 @@ public class TaskbarController extends UIController {
                 } catch (NullPointerException ignored) {}
             }
         } else {
-            int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
+            int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context, sysTrayIconStates));
 
             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                     + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
@@ -1674,17 +1699,39 @@ public class TaskbarController extends UIController {
         if(!sysTrayEnabled || isScreenOff()) return;
 
         handler.post(() -> {
+            Drawable batteryDrawable = getBatteryDrawable();
+            Drawable wifiDrawable = getWifiDrawable();
+            Drawable bluetoothDrawable = getBluetoothDrawable();
+            Drawable cellularDrawable = getCellularDrawable();
+
             ImageView battery = sysTrayLayout.findViewById(R.id.battery);
-            battery.setImageDrawable(getBatteryDrawable());
+            if(batteryDrawable != null) battery.setImageDrawable(batteryDrawable);
+            sysTrayIconStates[BATTERY] = batteryDrawable != null;
 
             ImageView wifi = sysTrayLayout.findViewById(R.id.wifi);
-            wifi.setImageDrawable(getWifiDrawable());
+            if(wifiDrawable != null) wifi.setImageDrawable(wifiDrawable);
+            sysTrayIconStates[WIFI] = wifiDrawable != null;
 
             ImageView bluetooth = sysTrayLayout.findViewById(R.id.bluetooth);
-            bluetooth.setImageDrawable(getBluetoothDrawable());
+            if(bluetoothDrawable != null) bluetooth.setImageDrawable(bluetoothDrawable);
+            sysTrayIconStates[BLUETOOTH] = bluetoothDrawable != null;
 
             ImageView cellular = sysTrayLayout.findViewById(R.id.cellular);
-            cellular.setImageDrawable(getCellularDrawable());
+            if(cellularDrawable != null) cellular.setImageDrawable(cellularDrawable);
+            sysTrayIconStates[CELLULAR] = cellularDrawable != null;
+
+            if(notificationCount > 0) {
+                int color = ColorUtils.setAlphaComponent(U.getBackgroundTint(context), 255);
+                notificationCountText.setTextColor(color);
+
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.tb_circle);
+                drawable.setTint(U.getAccentColor(context));
+
+                notificationCountCircle.setImageDrawable(drawable);
+                notificationCountText.setText(Integer.toString(notificationCount));
+                sysTrayIconStates[NOTIFICATIONS] = true;
+            } else
+                sysTrayIconStates[NOTIFICATIONS] = false;
 
             time.setText(context.getString(R.string.tb_systray_clock,
                     DateFormat.getTimeFormat(context).format(new Date()),
