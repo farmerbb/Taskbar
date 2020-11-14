@@ -80,7 +80,7 @@ android {
 
     sourceSets {
         main {
-            java { srcDirs('src/main/java', 'src/playstore/java', 'src/nonlib/java') }
+            java { srcDirs('src/main/java', 'src/playstore/java', 'src/nonlib/java', "src/compat-$COMPILE_SDK_VERSION/java") }
             res { srcDirs('src/main/res', 'src/playstore/res', 'src/nonlib/res') }
             manifest.srcFile 'src/playstore/AndroidManifest.xml'
         }

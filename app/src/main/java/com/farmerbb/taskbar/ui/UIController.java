@@ -15,15 +15,13 @@
 
 package com.farmerbb.taskbar.ui;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.view.View;
-import android.view.WindowInsets;
 
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
 import com.farmerbb.taskbar.helper.LauncherHelper;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
@@ -73,7 +71,7 @@ public abstract class UIController {
         if(U.getCurrentApiVersion() <= 29.0) return;
 
         layout.setOnApplyWindowInsetsListener((v, insets) -> {
-            boolean isImeVisible = isImeVisible(v);
+            boolean isImeVisible = CompatUtils.isImeVisible(v);
             if(isImeVisible != prevImeVisibility) {
                 prevImeVisibility = isImeVisible;
 
@@ -83,10 +81,5 @@ public abstract class UIController {
 
             return insets;
         });
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean isImeVisible(View view) {
-        return view.getRootWindowInsets().isVisible(WindowInsets.Type.ime());
     }
 }

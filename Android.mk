@@ -13,7 +13,8 @@ LOCAL_SRC_FILES := \
         $(call all-java-files-under, app/src/main/java) \
         $(call all-java-files-under, app/src/androidx86/java) \
         $(call all-java-files-under, app/src/nonlib/java) \
-        $(call all-java-files-under, app/src/nonplaystore/java)
+        $(call all-java-files-under, app/src/nonplaystore/java) \
+        $(call all-java-files-under, app/src/compat-$(PLATFORM_SDK_VERSION)/java)
 
 LOCAL_MANIFEST_FILE := app/src/androidx86/AndroidManifest.xml
 
