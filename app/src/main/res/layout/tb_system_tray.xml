@@ -29,8 +29,14 @@
         android:visibility="gone"
         tools:ignore="SpUsage" />
 
+    <Space
+        android:id="@+id/space_left"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <FrameLayout
-        android:id="@+id/notification_count_layout"
+        android:id="@+id/notification_count"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical">
@@ -83,6 +89,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         tools:src="@drawable/tb_battery_80"/>
+
+    <Space
+        android:id="@+id/space_right"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/time_right"

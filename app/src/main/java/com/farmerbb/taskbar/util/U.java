@@ -98,8 +98,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.farmerbb.taskbar.util.Constants.*;
 
@@ -1140,15 +1141,15 @@ public class U {
         }
     }
 
-    public static int getBaseTaskbarSize(Context context, boolean[] sysTrayIconStates) {
+    public static int getBaseTaskbarSize(Context context, Map<Integer, Boolean> sysTrayIconStates) {
         return Math.round(getBaseTaskbarSizeFloat(context, sysTrayIconStates));
     }
 
     private static float getBaseTaskbarSizeFloat(Context context) {
-        return getBaseTaskbarSizeFloat(context, new boolean[] {});
+        return getBaseTaskbarSizeFloat(context, new HashMap<>());
     }
 
-    private static float getBaseTaskbarSizeFloat(Context context, boolean[] sysTrayIconStates) {
+    private static float getBaseTaskbarSizeFloat(Context context, Map<Integer, Boolean> sysTrayIconStates) {
         SharedPreferences pref = getSharedPreferences(context);
         float baseTaskbarSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         boolean navbarButtonsEnabled = false;
@@ -1177,8 +1178,9 @@ public class U {
         if(isSystemTrayEnabled(context)) {
             float sysTraySize = context.getResources().getDimension(R.dimen.tb_systray_size);
 
-            for(boolean state : sysTrayIconStates) {
-                if(!state) sysTraySize -= context.getResources().getDimension(R.dimen.tb_systray_icon_size);
+            for(Integer key : sysTrayIconStates.keySet()) {
+                if(!sysTrayIconStates.get(key))
+                    sysTraySize -= context.getResources().getDimension(R.dimen.tb_systray_icon_size);
             }
 
             baseTaskbarSize += sysTraySize;

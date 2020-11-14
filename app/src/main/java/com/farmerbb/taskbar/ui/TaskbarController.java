@@ -77,10 +77,11 @@ import android.widget.ImageView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.widget.LinearLayout;
 import android.widget.Space;
@@ -120,7 +121,6 @@ public class TaskbarController extends UIController {
     private TextView time;
     private ImageView notificationCountCircle;
     private TextView notificationCountText;
-    private boolean[] sysTrayIconStates = { false, false, false, false, false };
 
     private Handler handler;
     private Handler handler2;
@@ -157,11 +157,7 @@ public class TaskbarController extends UIController {
     private int notificationCount = 0;
     private int numOfSysTrayIcons = 0;
 
-    private final int BATTERY = 0;
-    private final int WIFI = 1;
-    private final int CELLULAR = 2;
-    private final int BLUETOOTH = 3;
-    private final int NOTIFICATIONS = 4;
+    private Map<Integer, Boolean> sysTrayIconStates = new HashMap<>();
 
     private View.OnClickListener ocl = view ->
             U.sendBroadcast(context, ACTION_TOGGLE_START_MENU);
@@ -648,9 +644,11 @@ public class TaskbarController extends UIController {
         if(layoutId == R.layout.tb_taskbar_right) {
             time = sysTrayLayout.findViewById(R.id.time_left);
             sysTrayParams.gravity = Gravity.START;
+            sysTrayLayout.findViewById(R.id.space_right).setVisibility(View.VISIBLE);
         } else {
             time = sysTrayLayout.findViewById(R.id.time_right);
             sysTrayParams.gravity = Gravity.END;
+            sysTrayLayout.findViewById(R.id.space_left).setVisibility(View.VISIBLE);
         }
 
         time.setVisibility(View.VISIBLE);
@@ -708,6 +706,13 @@ public class TaskbarController extends UIController {
         sysTrayParentLayout = layout.findViewById(R.id.add_systray_here);
         sysTrayParentLayout.setVisibility(View.VISIBLE);
         sysTrayParentLayout.addView(sysTrayLayout);
+
+        sysTrayIconStates.clear();
+        sysTrayIconStates.put(R.id.cellular, false);
+        sysTrayIconStates.put(R.id.bluetooth, false);
+        sysTrayIconStates.put(R.id.wifi, false);
+        sysTrayIconStates.put(R.id.battery, false);
+        sysTrayIconStates.put(R.id.notification_count, false);
     }
 
     private void startRefreshingRecents() {
@@ -727,7 +732,6 @@ public class TaskbarController extends UIController {
                 isRefreshingRecents = true;
 
                 while(shouldRefreshRecents) {
-                    updateSystemTray();
                     updateRecentApps(false);
 
                     if(showHideAutomagically && !positionIsVertical && !MenuHelper.getInstance().isStartMenuOpen()) {
@@ -766,6 +770,8 @@ public class TaskbarController extends UIController {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private void updateRecentApps(final boolean firstRefresh) {
         if(isScreenOff()) return;
+
+        updateSystemTray();
 
         SharedPreferences pref = U.getSharedPreferences(context);
         final PackageManager pm = context.getPackageManager();
@@ -889,8 +895,9 @@ public class TaskbarController extends UIController {
             }
 
             int realNumOfSysTrayIcons = 0;
-            for(Boolean state : sysTrayIconStates) {
-                if(state) realNumOfSysTrayIcons++;
+            for(Integer key : sysTrayIconStates.keySet()) {
+                if(sysTrayIconStates.get(key))
+                    realNumOfSysTrayIcons++;
             }
 
             if(finalApplicationIds.size() != currentTaskbarIds.size()
@@ -921,25 +928,11 @@ public class TaskbarController extends UIController {
                         calculateScrollViewParams(context, pref, params, fullLength, numOfEntries);
                         scrollView.setLayoutParams(params);
 
-                        sysTrayLayout.findViewById(R.id.battery).setVisibility(
-                                sysTrayIconStates[BATTERY] ? View.VISIBLE : View.GONE
-                        );
-
-                        sysTrayLayout.findViewById(R.id.wifi).setVisibility(
-                                sysTrayIconStates[WIFI] ? View.VISIBLE : View.GONE
-                        );
-
-                        sysTrayLayout.findViewById(R.id.cellular).setVisibility(
-                                sysTrayIconStates[CELLULAR] ? View.VISIBLE : View.GONE
-                        );
-
-                        sysTrayLayout.findViewById(R.id.bluetooth).setVisibility(
-                                sysTrayIconStates[BLUETOOTH] ? View.VISIBLE : View.GONE
-                        );
-
-                        sysTrayLayout.findViewById(R.id.notification_count_layout).setVisibility(
-                                sysTrayIconStates[NOTIFICATIONS] ? View.VISIBLE : View.GONE
-                        );
+                        for(Integer key : sysTrayIconStates.keySet()) {
+                            sysTrayLayout.findViewById(key).setVisibility(
+                                    sysTrayIconStates.get(key) ? View.VISIBLE : View.GONE
+                            );
+                        }
 
                         taskbar.removeAllViews();
                         for(int i = 0; i < entries.size(); i++) {
@@ -1699,26 +1692,19 @@ public class TaskbarController extends UIController {
         if(!sysTrayEnabled || isScreenOff()) return;
 
         handler.post(() -> {
-            Drawable batteryDrawable = getBatteryDrawable();
-            Drawable wifiDrawable = getWifiDrawable();
-            Drawable bluetoothDrawable = getBluetoothDrawable();
-            Drawable cellularDrawable = getCellularDrawable();
+            Map<Integer, Drawable> drawables = new HashMap<>();
+            drawables.put(R.id.battery, getBatteryDrawable());
+            drawables.put(R.id.wifi, getWifiDrawable());
+            drawables.put(R.id.bluetooth, getBluetoothDrawable());
+            drawables.put(R.id.cellular, getCellularDrawable());
 
-            ImageView battery = sysTrayLayout.findViewById(R.id.battery);
-            if(batteryDrawable != null) battery.setImageDrawable(batteryDrawable);
-            sysTrayIconStates[BATTERY] = batteryDrawable != null;
+            for(Integer key : drawables.keySet()) {
+                ImageView view = sysTrayLayout.findViewById(key);
+                Drawable drawable = drawables.get(key);
 
-            ImageView wifi = sysTrayLayout.findViewById(R.id.wifi);
-            if(wifiDrawable != null) wifi.setImageDrawable(wifiDrawable);
-            sysTrayIconStates[WIFI] = wifiDrawable != null;
-
-            ImageView bluetooth = sysTrayLayout.findViewById(R.id.bluetooth);
-            if(bluetoothDrawable != null) bluetooth.setImageDrawable(bluetoothDrawable);
-            sysTrayIconStates[BLUETOOTH] = bluetoothDrawable != null;
-
-            ImageView cellular = sysTrayLayout.findViewById(R.id.cellular);
-            if(cellularDrawable != null) cellular.setImageDrawable(cellularDrawable);
-            sysTrayIconStates[CELLULAR] = cellularDrawable != null;
+                if(drawable != null) view.setImageDrawable(drawable);
+                sysTrayIconStates.put(key, drawable != null);
+            }
 
             if(notificationCount > 0) {
                 int color = ColorUtils.setAlphaComponent(U.getBackgroundTint(context), 255);
@@ -1729,9 +1715,9 @@ public class TaskbarController extends UIController {
 
                 notificationCountCircle.setImageDrawable(drawable);
                 notificationCountText.setText(Integer.toString(notificationCount));
-                sysTrayIconStates[NOTIFICATIONS] = true;
+                sysTrayIconStates.put(R.id.notification_count, true);
             } else
-                sysTrayIconStates[NOTIFICATIONS] = false;
+                sysTrayIconStates.put(R.id.notification_count, false);
 
             time.setText(context.getString(R.string.tb_systray_clock,
                     DateFormat.getTimeFormat(context).format(new Date()),
