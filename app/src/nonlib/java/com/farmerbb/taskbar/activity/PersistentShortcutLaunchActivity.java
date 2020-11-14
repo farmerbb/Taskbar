@@ -56,7 +56,7 @@ public class PersistentShortcutLaunchActivity extends Activity {
 
                 try {
                     startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, null));
-                } catch (ActivityNotFoundException | IllegalArgumentException e1) { /* Gracefully fail */ }
+                } catch (ActivityNotFoundException | IllegalArgumentException ignored) {}
             });
         } else
             U.showToast(this, R.string.tb_invalid_shortcut);

@@ -128,7 +128,7 @@ public class AboutFragment extends SettingsFragment {
 
                             try {
                                 startActivity(intent2);
-                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                            } catch (ActivityNotFoundException ignored) {}
                         })
                         .setNegativeButton(noThanksCount == 2 ? R.string.tb_action_dont_show_again : R.string.tb_action_no_thanks, (dialog, which) -> {
                             noThanksCount++;

@@ -45,7 +45,7 @@ public class DesktopIconInfo implements Serializable {
             json.put("app_name", entry.getLabel());
             json.put("component_name", entry.getComponentName());
             json.put("user_id", entry.getUserId(context));
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
 
         return json;
     }

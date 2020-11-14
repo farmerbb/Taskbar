@@ -417,7 +417,7 @@ public class DashboardController extends UIController {
         if(layout != null) {
             try {
                 host.removeView(layout);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } catch (IllegalArgumentException ignored) {}
 
             SharedPreferences pref = U.getSharedPreferences(context);
             if(U.canDrawOverlays(context))
@@ -435,7 +435,7 @@ public class DashboardController extends UIController {
         if (layout != null) {
             try {
                 host.removeView(layout);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } catch (IllegalArgumentException ignored) {}
         }
 
         U.unregisterReceiver(context, toggleReceiver);

@@ -269,7 +269,7 @@ public class StartMenuController extends UIController {
                                     intent = generateQueryGoogleIntent(query);
                                     try {
                                         context.startActivity(intent);
-                                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                                    } catch (ActivityNotFoundException ignored) {}
                                 }
                             }
                         }
@@ -740,7 +740,7 @@ public class StartMenuController extends UIController {
         if(layout != null)
             try {
                 host.removeView(layout);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } catch (IllegalArgumentException ignored) {}
 
         U.unregisterReceiver(context, toggleReceiver);
         U.unregisterReceiver(context, hideReceiver);
@@ -758,7 +758,7 @@ public class StartMenuController extends UIController {
         if(layout != null) {
             try {
                 host.removeView(layout);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } catch (IllegalArgumentException ignored) {}
 
             if(U.canDrawOverlays(context))
                 drawStartMenu(host);

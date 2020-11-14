@@ -119,7 +119,7 @@ public class GeneralFragment extends SettingsFragment {
                 try {
                     startActivity(intent2);
                     restartNotificationService = true;
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                } catch (ActivityNotFoundException ignored) {}
                 break;
         }
 

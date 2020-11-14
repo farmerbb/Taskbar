@@ -100,7 +100,7 @@ public class IconPack {
                         factory.setNamespaceAware(true);
                         xpp = factory.newPullParser();
                         xpp.setInput(appfilterstream, "utf-8");
-                    } catch (IOException e) { /* Gracefully fail */ }
+                    } catch (IOException ignored) {}
                 }
 
                 if(xpp != null) {
@@ -156,7 +156,7 @@ public class IconPack {
                 }
 
                 mLoaded = true;
-            } catch (XmlPullParserException | IOException e) { /* Gracefully fail */ }
+            } catch (XmlPullParserException | IOException ignored) {}
 
             mIsLoading = false;
         }

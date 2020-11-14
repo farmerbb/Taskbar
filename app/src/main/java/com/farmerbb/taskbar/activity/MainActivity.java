@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         } else try {
             Fragment oldFragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
             navigateTo(oldFragment.getClass().newInstance());
-        } catch (IllegalAccessException | InstantiationException e) { /* Gracefully fail */ }
+        } catch (IllegalAccessException | InstantiationException ignored) {}
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(!getPackageName().equals(BuildConfig.BASE_APPLICATION_ID) && freeVersionInstalled()) {
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
                                 startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + BuildConfig.BASE_APPLICATION_ID)));
-                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                            } catch (ActivityNotFoundException ignored) {}
                         });
 
                 if(pref.getBoolean(PREF_UNINSTALL_DIALOG_SHOWN, false))
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     startActivity(intent);
-                } catch (ActivityNotFoundException | IllegalArgumentException e1) { /* Gracefully fail */ }
+                } catch (ActivityNotFoundException | IllegalArgumentException ignored) {}
             });
 
             snackbar.show();

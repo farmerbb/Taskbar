@@ -50,7 +50,7 @@ public class ReceiveSettingsReceiver extends BroadcastReceiver {
                 if(file.createNewFile()) {
                     U.sendBroadcast(context, ACTION_IMPORT_FINISHED);
                 }
-            } catch (IOException e) { /* Gracefully fail */ }
+            } catch (IOException ignored) {}
         }
     }
 }

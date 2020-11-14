@@ -177,7 +177,7 @@ public class DimScreenActivity extends AppCompatActivity {
                 screenBrightness = (Float) Class.forName("android.os.PowerManager")
                         .getMethod("getBrightnessConstraint", int.class)
                         .invoke(getSystemService(POWER_SERVICE), BRIGHTNESS_CONSTRAINT_TYPE_MINIMUM);
-            } catch (Exception e) { /* Gracefully fail */ }
+            } catch (Exception ignored) {}
         }
 
         if(screenBrightness == null)

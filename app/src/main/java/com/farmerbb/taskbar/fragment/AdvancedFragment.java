@@ -285,7 +285,7 @@ public class AdvancedFragment extends SettingsFragment {
 
                     try {
                         startActivity(intent2);
-                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                    } catch (ActivityNotFoundException ignored) {}
                 }
 
                 break;

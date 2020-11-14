@@ -465,14 +465,14 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
                     try {
                         startActivity(intent2);
-                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                    } catch (IllegalArgumentException ignored) {}
                 } else {
                     Intent intent2 = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + entry.getPackageName()));
                     intent2.putExtra(Intent.EXTRA_USER, userManager.getUserForSerialNumber(entry.getUserId(this)));
 
                     try {
                         startActivity(intent2);
-                    } catch (ActivityNotFoundException | IllegalArgumentException e) { /* Gracefully fail */ }
+                    } catch (ActivityNotFoundException | IllegalArgumentException ignored) {}
                 }
 
                 prepareToClose();
@@ -489,7 +489,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                     try {
                         startActivity(intent2,
                                 U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, getListView().getChildAt(p.getOrder())));
-                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                    } catch (IllegalArgumentException ignored) {}
                 });
 
                 prepareToClose();
@@ -604,7 +604,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 } else {
                     try {
                         startActivity(intent);
-                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                    } catch (IllegalArgumentException ignored) {}
                 }
 
                 prepareToClose();
@@ -642,7 +642,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                                 U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.tb_lock_device_not_supported);
-                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                    } catch (IllegalArgumentException ignored) {}
                 });
 
                 prepareToClose();
@@ -657,7 +657,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                                 U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, getListView().getChildAt(p.getOrder())));
                     } catch (ActivityNotFoundException e) {
                         U.showToast(this, R.string.tb_lock_device_not_supported);
-                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                    } catch (IllegalArgumentException ignored) {}
                 });
 
                 prepareToClose();
@@ -690,7 +690,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 } else {
                     try {
                         startActivity(intent2);
-                    } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+                    } catch (IllegalArgumentException ignored) {}
                 }
 
                 prepareToClose();
@@ -732,7 +732,7 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                         pref5.edit().putString(PREF_DESKTOP_ICONS, jsonIcons.toString()).apply();
                         U.sendBroadcast(this, ACTION_REFRESH_DESKTOP_ICONS);
                     }
-                } catch (JSONException e) { /* Gracefully fail */ }
+                } catch (JSONException ignored) {}
                 break;
             case PREF_CHANGE_WALLPAPER_GLOBAL:
                 changeWallpaper();

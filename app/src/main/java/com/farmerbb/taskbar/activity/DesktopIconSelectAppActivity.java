@@ -47,7 +47,7 @@ public class DesktopIconSelectAppActivity extends AbstractSelectAppActivity {
 
             pref.edit().putString(PREF_DESKTOP_ICONS, icons.toString()).apply();
             U.sendBroadcast(this, ACTION_REFRESH_DESKTOP_ICONS);
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
 
         finish();
     }

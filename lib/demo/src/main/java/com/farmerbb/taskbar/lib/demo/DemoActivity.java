@@ -54,6 +54,6 @@ public class DemoActivity extends AppCompatActivity {
 
         try {
             startActivity(intent);
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException ignored) {}
     }
 }

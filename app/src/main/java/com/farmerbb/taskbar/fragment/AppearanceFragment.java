@@ -107,7 +107,7 @@ public class AppearanceFragment extends SettingsFragment {
             } else {
                 try {
                     iconPackListPref.setSummary(pm.getApplicationLabel(pm.getApplicationInfo(iconPackPackage, 0)));
-                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+                } catch (PackageManager.NameNotFoundException ignored) {}
             }
         }
     }

@@ -313,7 +313,7 @@ public class TaskbarController extends UIController {
 
         try {
             button.setTypeface(Typeface.createFromFile("/system/fonts/Roboto-Regular.ttf"));
-        } catch (RuntimeException e) { /* Gracefully fail */ }
+        } catch (RuntimeException ignored) {}
 
         updateButton(false);
         button.setOnClickListener(v -> toggleTaskbar(true));
@@ -560,7 +560,7 @@ public class TaskbarController extends UIController {
 
                 try {
                     context.startActivity(voiceSearchIntent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                } catch (ActivityNotFoundException ignored) {}
 
                 if(U.shouldCollapse(context, false))
                     hideTaskbar(true);
@@ -576,7 +576,7 @@ public class TaskbarController extends UIController {
 
                     try {
                         context.startActivity(voiceSearchIntent);
-                    } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                    } catch (ActivityNotFoundException ignored) {}
 
                     if(U.shouldCollapse(context, false))
                         hideTaskbar(true);
@@ -872,7 +872,7 @@ public class TaskbarController extends UIController {
                 try {
                     entries.remove(entries.size() - 1);
                     launcherAppCache.remove(launcherAppCache.size() - 1);
-                } catch (ArrayIndexOutOfBoundsException e) { /* Gracefully fail */ }
+                } catch (ArrayIndexOutOfBoundsException ignored) {}
             }
 
             // Determine if we need to reverse the order again
@@ -1000,7 +1000,7 @@ public class TaskbarController extends UIController {
                         bottomParams.height = height;
                         whitespaceBottom.setLayoutParams(bottomParams);
                     }
-                } catch (NullPointerException e) { /* Gracefully fail */ }
+                } catch (NullPointerException ignored) {}
             }
         } else {
             int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context));
@@ -1031,7 +1031,7 @@ public class TaskbarController extends UIController {
                         rightParams.width = width;
                         whitespaceRight.setLayoutParams(rightParams);
                     }
-                } catch (NullPointerException e) { /* Gracefully fail */ }
+                } catch (NullPointerException ignored) {}
             }
         }
     }
@@ -1427,7 +1427,7 @@ public class TaskbarController extends UIController {
         if(layout != null)
             try {
                 host.removeView(layout);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } catch (IllegalArgumentException ignored) {}
 
         SharedPreferences pref = U.getSharedPreferences(context);
         if(pref.getBoolean(PREF_SKIP_AUTO_HIDE_NAVBAR, false)) {
@@ -1478,7 +1478,7 @@ public class TaskbarController extends UIController {
         if(layout != null) {
             try {
                 host.removeView(layout);
-            } catch (IllegalArgumentException e) { /* Gracefully fail */ }
+            } catch (IllegalArgumentException ignored) {}
 
             currentTaskbarPosition = 0;
 
@@ -1788,7 +1788,7 @@ public class TaskbarController extends UIController {
         Drawable drawable = null;
         try {
             drawable = ContextCompat.getDrawable(context, id);
-        } catch (Resources.NotFoundException e) { /* Gracefully fail */ }
+        } catch (Resources.NotFoundException ignored) {}
 
         if(drawable == null) return null;
 

@@ -70,7 +70,7 @@ public class DummyActivity extends Activity {
 
                 try {
                     startActivity(intent);
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                } catch (ActivityNotFoundException ignored) {}
             } else if(getIntent().hasExtra("accessibility")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
                 builder.setTitle(R.string.tb_permission_dialog_title)

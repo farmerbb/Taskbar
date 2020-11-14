@@ -239,7 +239,7 @@ public class U {
                             finalServices.isEmpty()
                                     ? powerMenuService
                                     : finalServices + ":" + powerMenuService);
-                } catch (Exception e) { /* Gracefully fail */ }
+                } catch (Exception ignored) {}
             }
 
             new Handler().postDelayed(() -> {
@@ -251,7 +251,7 @@ public class U {
                     Settings.Secure.putString(context.getContentResolver(),
                             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
                             finalServices);
-                } catch (Exception e) { /* Gracefully fail */ }
+                } catch (Exception ignored) {}
 
                 if(onComplete != null) onComplete.run();
             }, 100);
@@ -269,7 +269,7 @@ public class U {
 
                 try {
                     context.startActivity(intent, getActivityOptionsBundle(context, ApplicationType.APP_PORTRAIT, null));
-                } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
+                } catch (IllegalArgumentException | SecurityException ignored) {}
             });
         }
     }
@@ -465,7 +465,7 @@ public class U {
                         context.startActivity(intent, bundle);
                     } catch (ActivityNotFoundException e) {
                         launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context), onError);
-                    } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
+                    } catch (IllegalArgumentException | SecurityException ignored) {}
                 } else
                     launchAndroidForWork(context, intent.getComponent(), bundle, entry.getUserId(context), onError);
             } else
@@ -625,7 +625,7 @@ public class U {
                             display.width + 1,
                             display.height + 1
                     ));
-        } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
+        } catch (IllegalArgumentException | SecurityException ignored) {}
     }
 
     public static void startTouchAbsorberActivity(Context context) {
@@ -656,7 +656,7 @@ public class U {
             context.startActivity(intent,
                     getActivityOptionsBundle(context, ApplicationType.FREEFORM_HACK, null,
                             left, top, right, bottom));
-        } catch (IllegalArgumentException | SecurityException e) { /* Gracefully fail */ }
+        } catch (IllegalArgumentException | SecurityException ignored) {}
     }
 
     public static void startContextMenuActivity(Context context, Bundle args) {
@@ -695,7 +695,7 @@ public class U {
 
         try {
             context.startActivity(intent);
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException ignored) {}
     }
 
     public static boolean launcherIsDefault(Context context) {
@@ -966,7 +966,7 @@ public class U {
         try {
             Method method = ActivityOptions.class.getMethod(getWindowingModeMethodName(), int.class);
             method.invoke(options, stackId);
-        } catch (Exception e) { /* Gracefully fail */ }
+        } catch (Exception ignored) {}
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int launchDisplayId = LauncherHelper.getInstance().getSecondaryDisplayId();
@@ -1067,7 +1067,7 @@ public class U {
                 case ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT:
                     return ApplicationType.APP_PORTRAIT;
             }
-        } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+        } catch (PackageManager.NameNotFoundException ignored) {}
 
         return context.getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)
                 ? ApplicationType.APP_LANDSCAPE
@@ -1239,7 +1239,7 @@ public class U {
             Runnable runnable = () -> {
                 try {
                     setOverscan(displayID, value.get());
-                } catch (Exception e) { /* Gracefully fail */ }
+                } catch (Exception ignored) {}
             };
 
             if(delay == 0)
@@ -1269,7 +1269,7 @@ public class U {
                 Settings.Secure.putInt(context.getContentResolver(), "navigation_bar_visible", show ? 1 : 0);
             else
                 Settings.System.putInt(context.getContentResolver(), "navigation_bar_show", show ? 1 : 0);
-        } catch (Exception e) { /* Gracefully fail */ }
+        } catch (Exception ignored) {}
     }
 
     public static boolean isShowHideNavbarSupported() {
@@ -1530,7 +1530,7 @@ public class U {
             ApplicationInfo applicationInfo = null;
             try {
                 applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
-            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+            } catch (PackageManager.NameNotFoundException ignored) {}
 
             if(applicationInfo != null) {
                 AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
@@ -1624,7 +1624,7 @@ public class U {
                 if(signature.equals(playStoreSignature))
                     return true;
             }
-        } catch (Exception e) { /* Gracefully fail */ }
+        } catch (Exception ignored) {}
 
         return false;
     }
@@ -2120,7 +2120,7 @@ public class U {
 
             Object vmRuntime = getRuntime.invoke(null);
             setHiddenApiExemptions.invoke(vmRuntime, new Object[]{new String[]{"L"}});
-        } catch (Throwable e) { /* Gracefully fail */ }
+        } catch (Throwable ignored) {}
 
         helper.setReflectionAllowed(true);
     }

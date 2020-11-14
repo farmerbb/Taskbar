@@ -448,7 +448,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         try {
             startActivity(Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER), getString(R.string.tb_set_wallpaper)));
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException ignored) {}
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -469,7 +469,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 try {
                     startActivity(homeIntent);
                     finish();
-                } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                } catch (ActivityNotFoundException ignored) {}
             }
         } else
             performOnResumeLogic();
@@ -543,7 +543,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 startService(new Intent(this, TaskbarService.class));
                 startService(new Intent(this, StartMenuService.class));
                 startService(new Intent(this, DashboardService.class));
-            } catch (IllegalStateException e) { /* Gracefully fail */ }
+            } catch (IllegalStateException ignored) {}
         }
 
         if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !U.isServiceRunning(this, NotificationService.class))
@@ -776,7 +776,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
                 pref.edit().putString(PREF_DESKTOP_ICONS, jsonIcons.toString()).apply();
             }
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
 
         for(int i = 0; i < columns * rows; i++) {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(
@@ -888,7 +888,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
             pref.edit().putString(PREF_DESKTOP_ICONS, jsonIcons.toString()).apply();
             refreshDesktopIcons();
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
     }
 
     private void reassignDroppedIcon() {
@@ -917,7 +917,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
                 pref.edit().putString(PREF_DESKTOP_ICONS, jsonIcons.toString()).apply();
             }
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
     }
 
     private void enterIconArrangeMode() {
@@ -935,7 +935,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
             iconArrangeMode = true;
             fab.show();
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
     }
 
     private void updateMargins() {

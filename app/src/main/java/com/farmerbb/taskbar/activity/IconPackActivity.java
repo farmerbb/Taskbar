@@ -82,7 +82,7 @@ public class IconPackActivity extends AppCompatActivity {
 
         try {
             startActivity(intent);
-        } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+        } catch (ActivityNotFoundException ignored) {}
     }
 
     private class AppListAdapter extends ArrayAdapter<IconPack> {

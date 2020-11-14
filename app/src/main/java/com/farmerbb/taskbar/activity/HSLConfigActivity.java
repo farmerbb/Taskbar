@@ -135,7 +135,7 @@ public class HSLConfigActivity extends AppCompatActivity {
                     try {
                         packageNames.add(manager.getApplicationInfo("com.google.android.launcher", 0).loadLabel(manager).toString());
                         packageIds.add(string);
-                    } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+                    } catch (PackageManager.NameNotFoundException ignored) {}
                 } else {
                     packageNames.add(launcher.activityInfo.applicationInfo.loadLabel(manager).toString());
                     packageIds.add(string);
@@ -168,7 +168,7 @@ public class HSLConfigActivity extends AppCompatActivity {
                         if(!returnToSettings) {
                             try {
                                 startActivity(homeIntent);
-                            } catch (ActivityNotFoundException e) { /* Gracefully fail */ }
+                            } catch (ActivityNotFoundException ignored) {}
                         }
 
                         finish();

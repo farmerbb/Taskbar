@@ -199,7 +199,7 @@ public class DesktopModeFragment extends SettingsFragment {
                                         try {
                                             startActivity(intent);
                                             U.showToastLong(getActivity(), R.string.tb_enable_developer_options);
-                                        } catch (ActivityNotFoundException e2) { /* Gracefully fail */ }
+                                        } catch (ActivityNotFoundException ignored) {}
                                     }
                                 });
 

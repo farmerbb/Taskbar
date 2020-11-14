@@ -171,7 +171,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
             intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedEntry.getLabel());
 
             setResult(RESULT_OK, intent);
-        } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+        } catch (PackageManager.NameNotFoundException ignored) {}
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -193,6 +193,6 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
         try {
             Class<?> clazz = Class.forName("com.farmerbb.taskbar.service.FavoriteApp" + num);
             TileService.requestListeningState(this, new ComponentName(this, clazz));
-        } catch (ClassNotFoundException e) { /* Gracefully fail */ }
+        } catch (ClassNotFoundException ignored) {}
     }
 }

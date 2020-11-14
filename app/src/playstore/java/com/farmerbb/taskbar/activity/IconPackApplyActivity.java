@@ -68,7 +68,7 @@ public class IconPackApplyActivity extends Activity {
                 try {
                     builder.setMessage(getString(R.string.tb_apply_icon_pack_description,
                             pm.getApplicationLabel(pm.getApplicationInfo(iconPackPackage, 0))));
-                } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+                } catch (PackageManager.NameNotFoundException ignored) {}
 
                 AlertDialog dialog = builder.create();
                 dialog.show();

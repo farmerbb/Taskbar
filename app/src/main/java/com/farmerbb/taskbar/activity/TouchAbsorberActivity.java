@@ -76,7 +76,7 @@ public class TouchAbsorberActivity extends Activity {
                 Settings.Global.putString(getContentResolver(),
                         Settings.Global.TRANSITION_ANIMATION_SCALE,
                         "0.0");
-            } catch (Exception e) { /* Gracefully fail */ }
+            } catch (Exception ignored) {}
         }
     }
 
@@ -89,7 +89,7 @@ public class TouchAbsorberActivity extends Activity {
                 Settings.Global.putString(getContentResolver(),
                         Settings.Global.TRANSITION_ANIMATION_SCALE,
                         transitionAnimScale);
-            } catch (Exception e) { /* Gracefully fail */ }
+            } catch (Exception ignored) {}
         }
 
         finish();

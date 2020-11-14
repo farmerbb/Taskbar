@@ -31,7 +31,7 @@ public class JSONBackupAgent implements BackupAgent {
     public void putString(String key, String value) {
         try {
             json.put(key, value);
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
     }
 
     @Override
@@ -44,7 +44,7 @@ public class JSONBackupAgent implements BackupAgent {
             }
 
             json.put(key, array);
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
     }
 
     @Override
@@ -57,7 +57,7 @@ public class JSONBackupAgent implements BackupAgent {
             }
 
             json.put(key, array);
-        } catch (JSONException e) { /* Gracefully fail */ }
+        } catch (JSONException ignored) {}
     }
 
     @Override

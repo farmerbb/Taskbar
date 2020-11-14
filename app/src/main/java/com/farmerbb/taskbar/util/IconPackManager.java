@@ -55,7 +55,7 @@ public class IconPackManager {
                 ai = pm.getApplicationInfo(ip.getPackageName(), PackageManager.GET_META_DATA);
                 ip.setName(mContext.getPackageManager().getApplicationLabel(ai).toString());
                 iconPacks.add(ip);
-            } catch (PackageManager.NameNotFoundException e) { /* Gracefully fail */ }
+            } catch (PackageManager.NameNotFoundException ignored) {}
         }
 
         return iconPacks;

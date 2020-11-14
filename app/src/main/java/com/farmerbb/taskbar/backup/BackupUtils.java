@@ -152,7 +152,7 @@ public class BackupUtils {
             }
 
             reader.close();
-        } catch (IOException e) { /* Gracefully fail */ }
+        } catch (IOException ignored) {}
 
         agent.putString("preferences", preferences.toString());
     }
@@ -265,6 +265,6 @@ public class BackupUtils {
                 FileOutputStream output = new FileOutputStream(file);
                 output.write(contents.getBytes());
                 output.close();
-            } catch (IOException e) { /* Gracefully fail */ }
+            } catch (IOException ignored) {}
     }
 }
