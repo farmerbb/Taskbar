@@ -715,7 +715,7 @@ public class U {
     private static int getMaxNumOfColumns(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         DisplayInfo display = getDisplayInfo(context);
-        float density = display.currentDensity / 160;
+        float density = display.currentDensity / 160.0f;
         float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
         int numOfColumns = 0;
 

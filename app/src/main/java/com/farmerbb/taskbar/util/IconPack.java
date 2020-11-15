@@ -265,7 +265,7 @@ public class IconPack {
             // Paint the bitmap with mask into the result
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-            mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth()) / 2, (h - scaledBitmap.getHeight()) / 2, null);
+            mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth()) / 2.0f, (h - scaledBitmap.getHeight()) / 2.0f, null);
             mCanvas.drawBitmap(mutableMask, 0, 0, paint);
             paint.setXfermode(null);
         } else {
@@ -275,7 +275,7 @@ public class IconPack {
             // Paint the bitmap with mask into the result
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-            mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth()) / 2, (h - scaledBitmap.getHeight()) / 2, null);
+            mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth()) / 2.0f, (h - scaledBitmap.getHeight()) / 2.0f, null);
             mCanvas.drawBitmap(mutableMask, 0, 0, paint);
             paint.setXfermode(null);
 
