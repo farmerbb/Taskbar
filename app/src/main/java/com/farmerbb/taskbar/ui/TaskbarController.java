@@ -1069,7 +1069,9 @@ public class TaskbarController extends UIController {
             }
         }
 
-        boolean realMatchParent = maxRecentsSize >= maxScreenSize;
+        boolean realMatchParent = maxRecentsSize >= maxScreenSize
+                && pref.getBoolean(PREF_COLLAPSED, false);
+
         if(realMatchParent != matchParent) {
             matchParent = realMatchParent;
             new Handler().post(updateParamsRunnable);
