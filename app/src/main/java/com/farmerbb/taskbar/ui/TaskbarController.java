@@ -156,6 +156,9 @@ public class TaskbarController extends UIController {
     private int notificationCount = 0;
     private int numOfSysTrayIcons = 0;
 
+    private boolean matchParent;
+    private Runnable updateParamsRunnable;
+
     private final Map<Integer, Boolean> sysTrayIconStates = new HashMap<>();
 
     private final View.OnClickListener ocl = view ->
@@ -364,6 +367,22 @@ public class TaskbarController extends UIController {
             U.registerReceiver(context, notificationCountReceiver, ACTION_NOTIFICATION_COUNT_CHANGED);
             U.sendBroadcast(context, ACTION_REQUEST_NOTIFICATION_COUNT);
         }
+
+        matchParent = false;
+        updateParamsRunnable = () -> {
+            ViewParams newParams;
+            if(TaskbarPosition.isVertical(context)) {
+                newParams = matchParent
+                        ? params.updateHeight(WindowManager.LayoutParams.MATCH_PARENT)
+                        : params.updateHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+            } else {
+                newParams = matchParent
+                        ? params.updateWidth(WindowManager.LayoutParams.MATCH_PARENT)
+                        : params.updateWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+            }
+
+            host.updateViewLayout(layout, newParams);
+        };
 
         startRefreshingRecents();
 
@@ -982,9 +1001,10 @@ public class TaskbarController extends UIController {
         DisplayInfo display = U.getDisplayInfo(context, true);
         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
+        int maxScreenSize;
 
         if(TaskbarPosition.isVertical(context)) {
-            int maxScreenSize = Math.max(0, display.height
+            maxScreenSize = Math.max(0, display.height
                     - U.getStatusBarHeight(context)
                     - U.getBaseTaskbarSize(context, sysTrayIconStates));
 
@@ -1017,7 +1037,7 @@ public class TaskbarController extends UIController {
                 } catch (NullPointerException ignored) {}
             }
         } else {
-            int maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context, sysTrayIconStates));
+            maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context, sysTrayIconStates));
 
             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                     + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
@@ -1047,6 +1067,12 @@ public class TaskbarController extends UIController {
                     }
                 } catch (NullPointerException ignored) {}
             }
+        }
+
+        boolean realMatchParent = maxRecentsSize >= maxScreenSize;
+        if(realMatchParent != matchParent) {
+            matchParent = realMatchParent;
+            new Handler().post(updateParamsRunnable);
         }
     }
 
@@ -1307,8 +1333,7 @@ public class TaskbarController extends UIController {
 
             updateButton(false);
 
-            new Handler().post(() ->
-                    U.sendBroadcast(context, ACTION_SHOW_START_MENU_SPACE));
+            new Handler().post(() -> U.sendBroadcast(context, ACTION_SHOW_START_MENU_SPACE));
         }
     }
 
@@ -1347,8 +1372,12 @@ public class TaskbarController extends UIController {
                 U.sendBroadcast(context, ACTION_HIDE_DASHBOARD);
             }
 
-            new Handler().post(() ->
-                    U.sendBroadcast(context, ACTION_HIDE_START_MENU_SPACE));
+            if(matchParent) {
+                matchParent = false;
+                new Handler().post(updateParamsRunnable);
+            }
+
+            new Handler().post(() -> U.sendBroadcast(context, ACTION_HIDE_START_MENU_SPACE));
         }
     }
 

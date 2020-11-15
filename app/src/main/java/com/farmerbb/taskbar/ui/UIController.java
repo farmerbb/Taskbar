@@ -75,7 +75,7 @@ public abstract class UIController {
             if(isImeVisible != prevImeVisibility) {
                 prevImeVisibility = isImeVisible;
 
-                ViewParams newParams = isImeVisible ? params.noBottomMargin() : params;
+                ViewParams newParams = isImeVisible ? params.updateBottomMargin(0) : params;
                 host.updateViewLayout(layout, newParams);
             }
 

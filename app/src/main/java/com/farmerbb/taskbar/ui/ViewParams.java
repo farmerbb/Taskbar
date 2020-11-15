@@ -53,13 +53,15 @@ public class ViewParams {
         return wmParams;
     }
 
-    public ViewParams noBottomMargin() {
-        return new ViewParams(
-                this.width,
-                this.height,
-                this.gravity,
-                this.flags,
-                0
-        );
+    public ViewParams updateWidth(int width) {
+        return new ViewParams(width, height, gravity, flags, bottomMargin);
+    }
+
+    public ViewParams updateHeight(int height) {
+        return new ViewParams(width, height, gravity, flags, bottomMargin);
+    }
+
+    public ViewParams updateBottomMargin(int bottomMargin) {
+        return new ViewParams(width, height, gravity, flags, bottomMargin);
     }
 }
