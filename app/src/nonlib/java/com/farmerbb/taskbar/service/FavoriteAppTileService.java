@@ -34,27 +34,17 @@ import androidx.annotation.VisibleForTesting;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.PersistentShortcutLaunchActivity;
 import com.farmerbb.taskbar.activity.PersistentShortcutSelectAppActivity;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
-import static com.farmerbb.taskbar.util.Constants.EXTRA_COMPONENT_NAME;
-import static com.farmerbb.taskbar.util.Constants.EXTRA_PACKAGE_NAME;
-import static com.farmerbb.taskbar.util.Constants.EXTRA_USER_ID;
-import static com.farmerbb.taskbar.util.Constants.EXTRA_WINDOW_SIZE;
-import static com.farmerbb.taskbar.util.Constants.PREF_COMPONENT_NAME_SUFFIX;
-import static com.farmerbb.taskbar.util.Constants.PREF_ICON_THRESHOLD_SUFFIX;
-import static com.farmerbb.taskbar.util.Constants.PREF_LABEL_SUFFIX;
-import static com.farmerbb.taskbar.util.Constants.PREF_PACKAGE_NAME_SUFFIX;
-import static com.farmerbb.taskbar.util.Constants.PREF_USER_ID_SUFFIX;
-import static com.farmerbb.taskbar.util.Constants.PREF_WINDOW_SIZE_SUFFIX;
+import static com.farmerbb.taskbar.util.Constants.*;
 
 @TargetApi(Build.VERSION_CODES.N)
 public abstract class FavoriteAppTileService extends TileService {
 
     protected abstract int tileNumber();
 
-    private String prefix = Constants.PREF_QS_TILE + "_" + tileNumber() + "_";
+    private final String prefix = PREF_QS_TILE + "_" + tileNumber() + "_";
 
     @Override
     public void onStartListening() {
@@ -64,13 +54,13 @@ public abstract class FavoriteAppTileService extends TileService {
     @Override
     public void onTileRemoved() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        pref.edit().putBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false).apply();
+        pref.edit().putBoolean(prefix + PREF_ADDED_SUFFIX, false).apply();
     }
 
     @Override
     public void onClick() {
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
+        if(!pref.getBoolean(prefix + PREF_ADDED_SUFFIX, false)) {
             selectApp();
             return;
         }
@@ -90,7 +80,7 @@ public abstract class FavoriteAppTileService extends TileService {
     private void selectApp() {
         Intent intent = U.getThemedIntent(this, PersistentShortcutSelectAppActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Constants.PREF_QS_TILE, tileNumber());
+        intent.putExtra(PREF_QS_TILE, tileNumber());
         startActivityAndCollapse(intent);
     }
 
@@ -129,11 +119,11 @@ public abstract class FavoriteAppTileService extends TileService {
         if(tile == null) return;
 
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(pref.getBoolean(prefix + Constants.PREF_ADDED_SUFFIX, false)) {
+        if(pref.getBoolean(prefix + PREF_ADDED_SUFFIX, false)) {
             tile.setState(Tile.STATE_ACTIVE);
             tile.setLabel(pref.getString(prefix + PREF_LABEL_SUFFIX, getString(R.string.tb_new_shortcut)));
 
-            String componentName = pref.getString(prefix + PREF_PACKAGE_NAME_SUFFIX, null);
+            String componentName = pref.getString(prefix + PREF_COMPONENT_NAME_SUFFIX, null);
             float threshold = pref.getFloat(prefix + PREF_ICON_THRESHOLD_SUFFIX, -1);
 
             if(componentName != null && threshold >= 0) {

@@ -23,7 +23,7 @@ import com.farmerbb.taskbar.R;
 import moe.banana.support.ToastCompat;
 
 class ToastCompatImpl implements ToastInterface {
-    private ToastCompat toast;
+    private final ToastCompat toast;
 
     ToastCompatImpl(Context context, String message, int length) {
         toast = ToastCompat.makeText(context, message, length);

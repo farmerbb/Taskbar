@@ -36,7 +36,6 @@ import android.widget.Spinner;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.AppEntry;
-import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
