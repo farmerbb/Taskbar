@@ -483,4 +483,6 @@
     <string name="tb_action_view">Anzeigen</string>
 
     <string name="tb_error_creating_widget">Error creating widget</string>
+
+    <string name="tb_desktop_mode_ime_fix">IME fix for Desktop Mode</string>
 </resources>

@@ -376,6 +376,16 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        <service
+            android:name=".service.DisableKeyboardService"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/tb_disable_keyboard" />
+        </service>
 
         <receiver
             android:name=".receiver.ShowHideTaskbarReceiver"

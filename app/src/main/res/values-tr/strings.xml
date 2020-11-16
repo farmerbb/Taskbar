@@ -475,4 +475,6 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_action_view">View</string>
 
     <string name="tb_error_creating_widget">Error creating widget</string>
+
+    <string name="tb_desktop_mode_ime_fix">IME fix for Desktop Mode</string>
 </resources>

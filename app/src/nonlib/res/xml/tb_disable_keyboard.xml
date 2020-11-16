@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<input-method xmlns:android="http://schemas.android.com/apk/res/android">
+    <subtype android:label="@string/tb_desktop_mode_ime_fix"
+             android:icon="@mipmap/tb_launcher"
+             android:imeSubtypeLocale="en_US"
+             android:imeSubtypeMode="keyboard" />
+</input-method>
