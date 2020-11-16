@@ -12,4 +12,7 @@ public class MockUIHost implements UIHost {
 
     @Override
     public void terminate() {}
+
+    @Override
+    public void updateViewLayout(View view, ViewParams params) {}
 }

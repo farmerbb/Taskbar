@@ -50,6 +50,8 @@ import org.robolectric.shadows.ShadowSettings;
 import org.robolectric.shadows.ShadowToast;
 import org.robolectric.util.ReflectionHelpers;
 
+import java.util.HashMap;
+
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -515,7 +517,7 @@ public class UTest {
         // So we only test the different in this test method.
         float initialSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
         initialSize += context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
-        assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context));
+        assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context, new HashMap<>()));
     }
 
     @Test
@@ -525,12 +527,12 @@ public class UTest {
         when(U.isSystemTrayEnabled(context)).thenAnswer(isSystemTrayEnabledAnswer);
         isSystemTrayEnabledAnswer.answer = false;
         float initialSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
-        assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context));
+        assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context, new HashMap<>()));
         SharedPreferences prefs = U.getSharedPreferences(context);
         prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
         float dashboardButtonSize =
                 context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
-        assertEquals(Math.round(initialSize + dashboardButtonSize), U.getBaseTaskbarSize(context));
+        assertEquals(Math.round(initialSize + dashboardButtonSize), U.getBaseTaskbarSize(context, new HashMap<>()));
         prefs.edit().remove(PREF_DASHBOARD).apply();
         float navbarButtonsMargin =
                 context.getResources().getDimension(R.dimen.tb_navbar_buttons_margin);
@@ -539,24 +541,24 @@ public class UTest {
         prefs.edit().putBoolean(PREF_BUTTON_BACK, true).apply();
         assertEquals(
                 Math.round(initialSize + navbarButtonsMargin + iconSize),
-                U.getBaseTaskbarSize(context)
+                U.getBaseTaskbarSize(context, new HashMap<>())
         );
         prefs.edit().remove(PREF_BUTTON_BACK).apply();
         prefs.edit().putBoolean(PREF_BUTTON_HOME, true).apply();
         assertEquals(
                 Math.round(initialSize + navbarButtonsMargin + iconSize),
-                U.getBaseTaskbarSize(context)
+                U.getBaseTaskbarSize(context, new HashMap<>())
         );
         prefs.edit().remove(PREF_BUTTON_HOME).apply();
         prefs.edit().putBoolean(PREF_BUTTON_RECENTS, true).apply();
         assertEquals(
                 Math.round(initialSize + navbarButtonsMargin + iconSize),
-                U.getBaseTaskbarSize(context)
+                U.getBaseTaskbarSize(context, new HashMap<>())
         );
         prefs.edit().remove(PREF_BUTTON_RECENTS).apply();
         isSystemTrayEnabledAnswer.answer = true;
         float systemTraySize = context.getResources().getDimension(R.dimen.tb_systray_size);
-        assertEquals(Math.round(initialSize + systemTraySize), U.getBaseTaskbarSize(context));
+        assertEquals(Math.round(initialSize + systemTraySize), U.getBaseTaskbarSize(context, new HashMap<>()));
     }
 
     @Test
