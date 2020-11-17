@@ -40,7 +40,7 @@ public class DimScreenActivity extends AppCompatActivity {
     private boolean isResumed = false;
     private boolean isTopResumed = false;
 
-    private DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
+    private final DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
         @Override
         public void onDisplayAdded(int displayId) {
             checkIfShouldFinish();
@@ -87,7 +87,7 @@ public class DimScreenActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.textView);
         textView.setText(R.string.tb_desktop_mode_is_active);
 
-        DisplayManager manager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+        DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         manager.registerDisplayListener(listener, null);
 
         U.registerReceiver(this, unDimScreenReceiver, ACTION_UNDIM_SCREEN);
@@ -111,7 +111,7 @@ public class DimScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        DisplayManager manager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+        DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         manager.unregisterDisplayListener(listener);
         
         U.unregisterReceiver(this, unDimScreenReceiver);

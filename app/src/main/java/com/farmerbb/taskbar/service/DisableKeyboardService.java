@@ -15,11 +15,54 @@
 
 package com.farmerbb.taskbar.service;
 
+import android.hardware.display.DisplayManager;
 import android.inputmethodservice.InputMethodService;
 
+import com.farmerbb.taskbar.util.U;
+
 public class DisableKeyboardService extends InputMethodService {
+
     @Override
     public boolean onShowInputRequested(int flags, boolean configChange) {
         return false;
+    }
+
+    private final DisplayManager.DisplayListener listener = new DisplayManager.DisplayListener() {
+        @Override
+        public void onDisplayAdded(int displayId) {
+            checkIfShouldDisable();
+        }
+
+        @Override
+        public void onDisplayChanged(int displayId) {
+            checkIfShouldDisable();
+        }
+
+        @Override
+        public void onDisplayRemoved(int displayId) {
+            checkIfShouldDisable();
+        }
+    };
+
+    private void checkIfShouldDisable() {
+        if(!U.isDesktopModeActive(this)) {
+            U.setComponentEnabled(this, getClass(), false);
+        }
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        manager.registerDisplayListener(listener, null);
+    }
+
+    @Override
+    public void onDestroy() {
+        DisplayManager manager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        manager.unregisterDisplayListener(listener);
+
+        super.onDestroy();
     }
 }
