@@ -114,6 +114,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private boolean isSecondaryHome;
     private boolean waitingForPermission;
     private boolean isWallpaperEnabled;
+    private boolean isTaskVirtualDisplay;
 
     private GestureDetector detector;
 
@@ -228,7 +229,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         isSecondaryHome = this instanceof SecondaryHomeActivity;
         if(isSecondaryHome) {
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            if(windowManager.getDefaultDisplay().getDisplayId() == Display.DEFAULT_DISPLAY
+            Display display = windowManager.getDefaultDisplay();
+
+            isTaskVirtualDisplay = display.getName().startsWith("TaskVirtualDisplay");
+
+            if(display.getDisplayId() == Display.DEFAULT_DISPLAY
                     || (!U.isDesktopModeActive(this) && !U.isLibrary(this))) {
                 finish();
                 return;
@@ -281,14 +286,14 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         };
 
-        isWallpaperEnabled = isSecondaryHome || U.isChromeOs(this);
+        isWallpaperEnabled = !isTaskVirtualDisplay && (isSecondaryHome || U.isChromeOs(this));
         if(isWallpaperEnabled) {
             wallpaper = new ImageView(this);
             wallpaper.setScaleType(ImageView.ScaleType.CENTER_CROP);
             layout.addView(wallpaper);
         }
 
-        isDesktopIconsEnabled = U.isDesktopIconsEnabled(this);
+        isDesktopIconsEnabled = !isTaskVirtualDisplay && U.isDesktopIconsEnabled(this);
         if(isDesktopIconsEnabled) {
             layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -301,7 +306,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     initDesktopIcons();
                 }
             });
-        } else {
+        } else if(!isTaskVirtualDisplay) {
             layout.setOnClickListener(
                     view1 -> U.sendBroadcast(this, ACTION_HIDE_START_MENU));
 
@@ -699,11 +704,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     @Override
     public void addView(View view, ViewParams params) {
+        if(isTaskVirtualDisplay) return;
         windowManager.addView(view, params.toWindowManagerParams());
     }
 
     @Override
     public void removeView(View view) {
+        if(isTaskVirtualDisplay) return;
         windowManager.removeView(view);
     }
 
@@ -714,6 +721,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
     @Override
     public void updateViewLayout(View view, ViewParams params) {
+        if(isTaskVirtualDisplay) return;
         windowManager.updateViewLayout(view, params.toWindowManagerParams());
     }
 
@@ -1151,14 +1159,5 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         if(wallpaper != null) wallpaper.setImageDrawable(null);
 
         getWindow().setNavigationBarColor(0);
-    }
-
-    @Override
-    public void finish() {
-        if(isSecondaryHome && U.getCurrentApiVersion() > 29.0 && !U.isLibrary(this)) {
-            U.setComponentEnabled(this, DisableKeyboardService.class, false);
-        }
-
-        super.finish();
     }
 }
