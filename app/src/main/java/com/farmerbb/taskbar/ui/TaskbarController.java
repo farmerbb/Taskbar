@@ -1717,7 +1717,7 @@ public class TaskbarController extends UIController {
 
     @SuppressLint("SetTextI18n")
     private void updateSystemTray() {
-        if(!sysTrayEnabled || isScreenOff()) return;
+        if(!sysTrayEnabled) return;
 
         handler.post(() -> {
             Map<Integer, Drawable> drawables = new HashMap<>();
