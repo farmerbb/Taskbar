@@ -381,7 +381,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_start_button_image_default">Default</string>
     <string name="tb_start_button_image_custom">Custom</string>
 
-    <string name="tb_pref_centered_icons">Center icons within whitespace</string>
+    <string name="tb_pref_centered_icons">Centered app icons</string>
     <string name="tb_pref_title_sys_tray">Show status icons and clock</string>
     <string name="tb_pref_description_sys_tray">Only visible when Taskbar is horizontal</string>
 
