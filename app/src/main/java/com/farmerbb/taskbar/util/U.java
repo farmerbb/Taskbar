@@ -1150,8 +1150,16 @@ public class U {
     }
 
     private static float getBaseTaskbarSizeFloat(Context context, Map<Integer, Boolean> sysTrayIconStates) {
+        return getBaseTaskbarSizeStart(context) + getBaseTaskbarSizeEnd(context, sysTrayIconStates);
+    }
+
+    private static float getBaseTaskbarSizeStart(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
-        float baseTaskbarSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
+        float baseTaskbarSize = context.getResources().getDimension(R.dimen.tb_base_size_start_plus_divider);
+
+        baseTaskbarSize += pref.getBoolean(PREF_ALT_BUTTON_CONFIG, false)
+                ? context.getResources().getDimension(R.dimen.tb_base_size_collapse_button) : 0;
+
         boolean navbarButtonsEnabled = false;
 
         if(getBooleanPrefWithDefault(context, PREF_DASHBOARD))
@@ -1174,6 +1182,14 @@ public class U {
 
         if(navbarButtonsEnabled)
             baseTaskbarSize += context.getResources().getDimension(R.dimen.tb_navbar_buttons_margin);
+
+        return baseTaskbarSize;
+    }
+
+    private static float getBaseTaskbarSizeEnd(Context context, Map<Integer, Boolean> sysTrayIconStates) {
+        SharedPreferences pref = getSharedPreferences(context);
+        float baseTaskbarSize = pref.getBoolean(PREF_ALT_BUTTON_CONFIG, false)
+                ? 0 : context.getResources().getDimension(R.dimen.tb_base_size_collapse_button);
 
         if(isSystemTrayEnabled(context)) {
             float sysTraySize = context.getResources().getDimension(R.dimen.tb_systray_size);

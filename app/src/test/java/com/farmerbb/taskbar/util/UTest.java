@@ -515,7 +515,8 @@ public class UTest {
         isSystemTrayEnabledAnswer.answer = false;
         // The only difference of the different screen size, is the initial taskbar size.
         // So we only test the different in this test method.
-        float initialSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
+        float initialSize = context.getResources().getDimension(R.dimen.tb_base_size_start_plus_divider);
+        initialSize += context.getResources().getDimension(R.dimen.tb_base_size_collapse_button);
         initialSize += context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
         assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context, new HashMap<>()));
     }
@@ -526,7 +527,8 @@ public class UTest {
         BooleanAnswer isSystemTrayEnabledAnswer = new BooleanAnswer();
         when(U.isSystemTrayEnabled(context)).thenAnswer(isSystemTrayEnabledAnswer);
         isSystemTrayEnabledAnswer.answer = false;
-        float initialSize = context.getResources().getDimension(R.dimen.tb_base_taskbar_size);
+        float initialSize = context.getResources().getDimension(R.dimen.tb_base_size_start_plus_divider);
+        initialSize += context.getResources().getDimension(R.dimen.tb_base_size_collapse_button);
         assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context, new HashMap<>()));
         SharedPreferences prefs = U.getSharedPreferences(context);
         prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
