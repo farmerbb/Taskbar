@@ -57,6 +57,7 @@ import android.speech.RecognizerIntent;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
@@ -453,9 +454,16 @@ public class TaskbarController extends UIController {
             case PREF_START_BUTTON_IMAGE_APP_LOGO:
                 Drawable drawable;
 
-                if(U.isBlissOs(context)) {
-                    drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
-                    drawable.setTint(accentColor);
+                if(U.isAndroidGeneric(context)) {
+                    try {
+                        String bdPackageName = "com.boringdroid.systemui";
+                        Resources res = context.getPackageManager().getResourcesForApplication(bdPackageName);
+                        int id = res.getIdentifier("bt_all_apps", "drawable", bdPackageName);
+                        drawable = ResourcesCompat.getDrawable(res, id, null);
+                    } catch (Exception e) {
+                        drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
+                        drawable.setTint(accentColor);
+                    }
                 } else {
                     LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
                     LauncherActivityInfo info = launcherApps.getActivityList(context.getPackageName(), Process.myUserHandle()).get(0);

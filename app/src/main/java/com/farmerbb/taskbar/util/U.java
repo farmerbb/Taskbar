@@ -1338,10 +1338,7 @@ public class U {
                 editor.putBoolean(PREF_FREEFORM_HACK, true);
             }
 
-            if(isBlissOs(context)) {
-                editor.putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_APP_LOGO);
-            }
-
+            editor.putString(PREF_START_BUTTON_IMAGE, PREF_START_BUTTON_IMAGE_APP_LOGO);
             editor.putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY);
             editor.putString(PREF_REFRESH_FREQUENCY, "0");
             editor.putString(PREF_MAX_NUM_OF_RECENTS, "2147483647");
@@ -1695,7 +1692,7 @@ public class U {
     }
 
     @SuppressLint("PrivateApi")
-    private static String getSystemProperty(String key) {
+    public static String getSystemProperty(String key) {
         allowReflection();
         try {
             Class<?> cls = Class.forName("android.os.SystemProperties");

@@ -209,6 +209,7 @@
 
     <string name="tb_pref_title_app_drawer_icon">Использовать иконку Taskbar в качестве иконки меню</string>
     <string name="tb_pref_title_app_drawer_icon_bliss">Использовать иконку Taskbar в качестве иконки меню</string>
+    <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 
     <string name="tb_already_blacklisted">%1$s нельзя выбрать, он уже в списке</string>
     <string name="tb_already_top_app">%1$s нельзя выбрать, он уже в списке</string>

@@ -58,8 +58,17 @@ public class AppearanceFragment extends SettingsFragment {
         findPreference(PREF_BACKGROUND_TINT_PREF).setOnPreferenceClickListener(this);
         findPreference(PREF_ACCENT_COLOR_PREF).setOnPreferenceClickListener(this);
 
-        if(U.isBlissOs(getActivity()))
-            ((ListPreference) findPreference(PREF_START_BUTTON_IMAGE)).setEntries(R.array.tb_pref_start_button_image_list_alt);
+        if(U.isAndroidGeneric(getActivity())) {
+            String[] array = getResources().getStringArray(R.array.tb_pref_start_button_image_list);
+            String flavor = U.getSystemProperty("ro.ag.flavor");
+
+            if(flavor != null && flavor.length() > 0)
+                array[1] = flavor;
+            else
+                array[1] = getString(R.string.tb_pref_title_app_drawer_icon_bliss);
+
+            ((ListPreference) findPreference(PREF_START_BUTTON_IMAGE)).setEntries(array);
+        }
 
         bindPreferenceSummaryToValue(findPreference(PREF_THEME));
         bindPreferenceSummaryToValue(findPreference(PREF_INVISIBLE_BUTTON));

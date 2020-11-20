@@ -209,6 +209,7 @@
 
     <string name="tb_pref_title_app_drawer_icon">Taakbalk-logo gebruiken als startmenu-pictogram</string>
     <string name="tb_pref_title_app_drawer_icon_bliss">Bliss-logo gebruiken als startmenu-pictogram</string>
+    <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 
     <string name="tb_already_blacklisted">%1$s kan niet worden gekozen omdat hij op de verborgen apps-lijst staat</string>
     <string name="tb_already_top_app">%1$s kan niet worden gekozen omdat hij op de top-apps-lijst staat</string>

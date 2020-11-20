@@ -273,6 +273,7 @@ Pokaż menu Start
 <string name="tb_pref_title_anchor">Zakotwiczenie Taskbar podczas obracania ekranu</string>
 <string name="tb_pref_title_app_drawer_icon">Logo Taskbar</string>
 <string name="tb_pref_title_app_drawer_icon_bliss">Logo Bliss</string>
+<string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 <string name="tb_pref_title_background_tint">Barwa tła</string>
 <string name="tb_pref_title_blacklist">Konfiguracja aplikacji w menu startowym</string>
 <string name="tb_pref_title_chrome_os_context_menu_fix">Poprawka zgodności stacji dokującej Chrome OS</string>

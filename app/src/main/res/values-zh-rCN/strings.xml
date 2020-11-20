@@ -209,6 +209,7 @@
 
     <string name="tb_pref_title_app_drawer_icon">使用 任务栏 徽标作为开始菜单图标</string>
     <string name="tb_pref_title_app_drawer_icon_bliss">使用 任务栏 徽标作为开始菜单图标</string>
+    <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 
     <string name="tb_already_blacklisted">%1$s 无法选中，因为在隐藏应用列表中</string>
     <string name="tb_already_top_app">%1$s 无法选中，因为在置顶应用列表中</string>

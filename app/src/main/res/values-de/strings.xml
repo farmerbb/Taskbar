@@ -209,6 +209,7 @@
 
     <string name="tb_pref_title_app_drawer_icon">Das Logo von Taskbar als Menüknopf verwenden</string>
     <string name="tb_pref_title_app_drawer_icon_bliss">Das Logo von Taskbar als Menüknopf verwenden</string>
+    <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 
     <string name="tb_already_blacklisted">%1$s kann nicht ausgewählt werden, da es auf der Liste der verborgenen Apps ist.</string>
     <string name="tb_already_top_app">%1$s kann nicht ausgewählt werden, da es auf der Liste der top Apps ist.</string>

@@ -209,6 +209,7 @@
 
     <string name="tb_pref_title_app_drawer_icon">Logo de Taskbar</string>
     <string name="tb_pref_title_app_drawer_icon_bliss">Logo de Bliss</string>
+    <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 
     <string name="tb_already_blacklisted">No es posible seleccionar %1$s porque está en la lista de aplicaciones ocultas</string>
     <string name="tb_already_top_app">No es posible seleccionar %1$s porque está en la lista de aplicaciones más populares</string>

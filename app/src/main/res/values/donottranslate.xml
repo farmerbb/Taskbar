@@ -100,12 +100,6 @@
         <item>@string/tb_start_button_image_custom</item>
     </string-array>
 
-    <string-array name="tb_pref_start_button_image_list_alt">
-        <item>@string/tb_start_button_image_default</item>
-        <item>@string/tb_pref_title_app_drawer_icon_bliss</item>
-        <item>@string/tb_start_button_image_custom</item>
-    </string-array>
-
     <string-array name="tb_pref_start_button_image_list_values">
         <item>default</item>
         <item>app_logo</item>
