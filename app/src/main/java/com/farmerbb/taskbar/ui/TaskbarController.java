@@ -1025,12 +1025,25 @@ public class TaskbarController extends UIController {
                     int height = maxScreenSize - recentsSize;
 
                     if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
+                        int startHeight = (height / 2) + (diff / (startIsBigger ? -2 : 2));
+                        int endHeight = (height / 2) + (diff / (startIsBigger ? 2 : -2));
+                        
+                        if(startHeight < 0) {
+                            startHeight = 0;
+                            endHeight = height;
+                        }
+
+                        if(endHeight < 0) {
+                            startHeight = height;
+                            endHeight = 0;
+                        }
+                        
                         ViewGroup.LayoutParams startParams = whitespaceStart.getLayoutParams();
-                        startParams.height = (height / 2) + (diff / (startIsBigger ? -2 : 2));
+                        startParams.height = startHeight;
                         whitespaceStart.setLayoutParams(startParams);
 
                         ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
-                        endParams.height = (height / 2) + (diff / (startIsBigger ? 2 : -2));
+                        endParams.height = endHeight;
                         whitespaceEnd.setLayoutParams(endParams);
                     } else {
                         ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
@@ -1052,12 +1065,25 @@ public class TaskbarController extends UIController {
                     int width = maxScreenSize - recentsSize;
 
                     if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
+                        int startWidth = (width / 2) + (diff / (startIsBigger ? -2 : 2));
+                        int endWidth = (width / 2) + (diff / (startIsBigger ? 2 : -2));
+
+                        if(startWidth < 0) {
+                            startWidth = 0;
+                            endWidth = width;
+                        }
+                        
+                        if(endWidth < 0) {
+                            startWidth = width;
+                            endWidth = 0;
+                        }
+                        
                         ViewGroup.LayoutParams startParams = whitespaceStart.getLayoutParams();
-                        startParams.width = (width / 2) + (diff / (startIsBigger ? -2 : 2));
+                        startParams.width = startWidth;
                         whitespaceStart.setLayoutParams(startParams);
 
                         ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
-                        endParams.width = (width / 2) + (diff / (startIsBigger ? 2 : -2));
+                        endParams.width = endWidth;
                         whitespaceEnd.setLayoutParams(endParams);
                     } else {
                         ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
