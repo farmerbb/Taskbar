@@ -170,7 +170,7 @@
                 android:layout_marginBottom="2dp" />
 
             <Space
-                android:id="@+id/whitespace_top"
+                android:id="@+id/whitespace_start"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
@@ -182,7 +182,7 @@
                 android:clickable="false" />
 
             <Space
-                android:id="@+id/whitespace_bottom"
+                android:id="@+id/whitespace_end"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 

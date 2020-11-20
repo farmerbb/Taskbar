@@ -1003,67 +1003,66 @@ public class TaskbarController extends UIController {
         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
         int maxScreenSize;
 
+        float baseStart = U.getBaseTaskbarSizeStart(context);
+        float baseEnd = U.getBaseTaskbarSizeEnd(context, sysTrayIconStates);
+        int baseTotal = Math.round(baseStart + baseEnd);
+
+        int diff = Math.round(Math.max(baseStart, baseEnd) - Math.min(baseStart, baseEnd));
+        boolean startIsBigger = Math.max(baseStart, baseEnd) == baseStart;
+
         if(TaskbarPosition.isVertical(context)) {
             maxScreenSize = Math.max(0, display.height
                     - U.getStatusBarHeight(context)
-                    - U.getBaseTaskbarSize(context, sysTrayIconStates));
+                    - baseTotal);
 
             params.height = (int) Math.min(maxRecentsSize, maxScreenSize)
                     + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
 
             if(fullLength) {
                 try {
-                    Space whitespaceTop = layout.findViewById(R.id.whitespace_top);
-                    Space whitespaceBottom = layout.findViewById(R.id.whitespace_bottom);
+                    Space whitespaceStart = layout.findViewById(R.id.whitespace_start);
+                    Space whitespaceEnd = layout.findViewById(R.id.whitespace_end);
                     int height = maxScreenSize - recentsSize;
 
                     if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
-                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
-                        topParams.height = height / 2;
-                        whitespaceTop.setLayoutParams(topParams);
+                        ViewGroup.LayoutParams startParams = whitespaceStart.getLayoutParams();
+                        startParams.height = (height / 2) + (diff / (startIsBigger ? -2 : 2));
+                        whitespaceStart.setLayoutParams(startParams);
 
-                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
-                        bottomParams.height = height / 2;
-                        whitespaceBottom.setLayoutParams(bottomParams);
-                    } else if(TaskbarPosition.isBottom(context)) {
-                        ViewGroup.LayoutParams topParams = whitespaceTop.getLayoutParams();
-                        topParams.height = height;
-                        whitespaceTop.setLayoutParams(topParams);
+                        ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
+                        endParams.height = (height / 2) + (diff / (startIsBigger ? 2 : -2));
+                        whitespaceEnd.setLayoutParams(endParams);
                     } else {
-                        ViewGroup.LayoutParams bottomParams = whitespaceBottom.getLayoutParams();
-                        bottomParams.height = height;
-                        whitespaceBottom.setLayoutParams(bottomParams);
+                        ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
+                        endParams.height = height;
+                        whitespaceEnd.setLayoutParams(endParams);
                     }
                 } catch (NullPointerException ignored) {}
             }
         } else {
-            maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context, sysTrayIconStates));
+            maxScreenSize = Math.max(0, display.width - baseTotal);
 
             params.width = (int) Math.min(maxRecentsSize, maxScreenSize)
                     + context.getResources().getDimensionPixelSize(R.dimen.tb_divider_size);
 
             if(fullLength) {
                 try {
-                    Space whitespaceLeft = layout.findViewById(R.id.whitespace_left);
-                    Space whitespaceRight = layout.findViewById(R.id.whitespace_right);
+                    Space whitespaceStart = layout.findViewById(R.id.whitespace_start);
+                    Space whitespaceEnd = layout.findViewById(R.id.whitespace_end);
                     int width = maxScreenSize - recentsSize;
 
                     if(pref.getBoolean(PREF_CENTERED_ICONS, false)) {
-                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
-                        leftParams.width = width / 2;
-                        whitespaceLeft.setLayoutParams(leftParams);
+                        ViewGroup.LayoutParams startParams = whitespaceStart.getLayoutParams();
+                        startParams.width = (width / 2) + (diff / (startIsBigger ? -2 : 2));
+                        whitespaceStart.setLayoutParams(startParams);
 
-                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
-                        rightParams.width = width / 2;
-                        whitespaceRight.setLayoutParams(rightParams);
-                    } else if(TaskbarPosition.isRight(context)) {
-                        ViewGroup.LayoutParams leftParams = whitespaceLeft.getLayoutParams();
-                        leftParams.width = width;
-                        whitespaceLeft.setLayoutParams(leftParams);
+                        ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
+                        endParams.width = (width / 2) + (diff / (startIsBigger ? 2 : -2));
+                        whitespaceEnd.setLayoutParams(endParams);
                     } else {
-                        ViewGroup.LayoutParams rightParams = whitespaceRight.getLayoutParams();
-                        rightParams.width = width;
-                        whitespaceRight.setLayoutParams(rightParams);
+                        ViewGroup.LayoutParams endParams = whitespaceEnd.getLayoutParams();
+                        endParams.width = width;
+                        whitespaceEnd.setLayoutParams(endParams);
                     }
                 } catch (NullPointerException ignored) {}
             }

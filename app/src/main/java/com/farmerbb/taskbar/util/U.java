@@ -98,7 +98,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -716,7 +715,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         DisplayInfo display = getDisplayInfo(context);
         float density = display.currentDensity / 160.0f;
-        float baseTaskbarSize = getBaseTaskbarSizeFloat(context) / density;
+        float baseTaskbarSize = getBaseTaskbarSize(context, null) / density;
         int numOfColumns = 0;
 
         float maxScreenSize = TaskbarPosition.isVertical(context)
@@ -1141,19 +1140,11 @@ public class U {
         }
     }
 
-    public static int getBaseTaskbarSize(Context context, Map<Integer, Boolean> sysTrayIconStates) {
-        return Math.round(getBaseTaskbarSizeFloat(context, sysTrayIconStates));
-    }
-
-    private static float getBaseTaskbarSizeFloat(Context context) {
-        return getBaseTaskbarSizeFloat(context, new HashMap<>());
-    }
-
-    private static float getBaseTaskbarSizeFloat(Context context, Map<Integer, Boolean> sysTrayIconStates) {
+    private static float getBaseTaskbarSize(Context context, Map<Integer, Boolean> sysTrayIconStates) {
         return getBaseTaskbarSizeStart(context) + getBaseTaskbarSizeEnd(context, sysTrayIconStates);
     }
 
-    private static float getBaseTaskbarSizeStart(Context context) {
+    public static float getBaseTaskbarSizeStart(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         float baseTaskbarSize = context.getResources().getDimension(R.dimen.tb_base_size_start_plus_divider);
 
@@ -1186,7 +1177,7 @@ public class U {
         return baseTaskbarSize;
     }
 
-    private static float getBaseTaskbarSizeEnd(Context context, Map<Integer, Boolean> sysTrayIconStates) {
+    public static float getBaseTaskbarSizeEnd(Context context, Map<Integer, Boolean> sysTrayIconStates) {
         SharedPreferences pref = getSharedPreferences(context);
         float baseTaskbarSize = pref.getBoolean(PREF_ALT_BUTTON_CONFIG, false)
                 ? 0 : context.getResources().getDimension(R.dimen.tb_base_size_collapse_button);
@@ -1194,9 +1185,11 @@ public class U {
         if(isSystemTrayEnabled(context)) {
             float sysTraySize = context.getResources().getDimension(R.dimen.tb_systray_size);
 
-            for(Integer key : sysTrayIconStates.keySet()) {
-                if(!sysTrayIconStates.get(key))
-                    sysTraySize -= context.getResources().getDimension(R.dimen.tb_systray_icon_size);
+            if(sysTrayIconStates != null) {
+                for(Integer key : sysTrayIconStates.keySet()) {
+                    if(!sysTrayIconStates.get(key))
+                        sysTraySize -= context.getResources().getDimension(R.dimen.tb_systray_icon_size);
+                }
             }
 
             baseTaskbarSize += sysTraySize;
