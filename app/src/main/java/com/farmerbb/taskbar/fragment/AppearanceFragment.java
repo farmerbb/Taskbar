@@ -62,11 +62,10 @@ public class AppearanceFragment extends SettingsFragment {
             String[] array = getResources().getStringArray(R.array.tb_pref_start_button_image_list);
             String flavor = U.getSystemProperty("ro.ag.flavor");
 
-            if(flavor != null && flavor.length() > 0)
-                array[1] = flavor;
-            else
-                array[1] = getString(R.string.tb_pref_title_app_drawer_icon_bliss);
+            if(flavor == null || flavor.isEmpty())
+                flavor = getString(R.string.tb_rom);
 
+            array[1] = getString(R.string.tb_pref_title_app_drawer_icon_ag, flavor);
             ((ListPreference) findPreference(PREF_START_BUTTON_IMAGE)).setEntries(array);
         }
 

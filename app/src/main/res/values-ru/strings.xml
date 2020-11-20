@@ -208,7 +208,6 @@
     <string name="tb_pref_description_use_mask">Когда пакет иконок установлен, генерировать иконки используя найденные маски</string>
 
     <string name="tb_pref_title_app_drawer_icon">Использовать иконку Taskbar в качестве иконки меню</string>
-    <string name="tb_pref_title_app_drawer_icon_bliss">Использовать иконку Taskbar в качестве иконки меню</string>
     <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 
     <string name="tb_already_blacklisted">%1$s нельзя выбрать, он уже в списке</string>
@@ -486,4 +485,6 @@
     <string name="tb_error_creating_widget">Error creating widget</string>
 
     <string name="tb_desktop_mode_ime_fix">IME fix for Desktop Mode</string>
+
+    <string name="tb_rom">ROM</string>
 </resources>

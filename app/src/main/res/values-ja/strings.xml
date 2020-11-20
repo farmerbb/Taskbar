@@ -208,7 +208,6 @@
     <string name="tb_pref_description_use_mask">アイコンパックが設定されているとパフォーマンスが低下することがあります</string>
 
     <string name="tb_pref_title_app_drawer_icon">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
-    <string name="tb_pref_title_app_drawer_icon_bliss">スタートメニューアイコンとして Taskbar ロゴを使用する</string>
     <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 
     <string name="tb_already_blacklisted">非表示アプリリストにあるため %1$s は選択できません</string>
@@ -486,4 +485,6 @@
     <string name="tb_error_creating_widget">Error creating widget</string>
 
     <string name="tb_desktop_mode_ime_fix">IME fix for Desktop Mode</string>
+
+    <string name="tb_rom">ROM</string>
 </resources>

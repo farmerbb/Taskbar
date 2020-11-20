@@ -259,7 +259,6 @@ Başlat menüsü gösterme
 <string name="tb_pref_title_amount_of_recents">Son kullanılan uygulamaları görüntüle</string>
 <string name="tb_pref_title_anchor">Ekran döndürmede Taskbar tut</string>
 <string name="tb_pref_title_app_drawer_icon">Başlat menüsü simgesi olarak Taskbar logosunu kullan</string>
-<string name="tb_pref_title_app_drawer_icon_bliss">Başlat menüsü simgesi olarak Taskbar logosunu kullan</string>
 <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 <string name="tb_pref_title_background_tint">Arkaplan tonu</string>
 <string name="tb_pref_title_blacklist">Uygulamaları başlangıç menüsünde yapılandır</string>
@@ -478,4 +477,6 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
     <string name="tb_error_creating_widget">Error creating widget</string>
 
     <string name="tb_desktop_mode_ime_fix">IME fix for Desktop Mode</string>
+
+    <string name="tb_rom">ROM</string>
 </resources>

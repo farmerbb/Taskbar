@@ -272,7 +272,6 @@ Pokaż menu Start
 <string name="tb_pref_title_amount_of_recents">Ostatnie aplikacje do wyświetlania</string>
 <string name="tb_pref_title_anchor">Zakotwiczenie Taskbar podczas obracania ekranu</string>
 <string name="tb_pref_title_app_drawer_icon">Logo Taskbar</string>
-<string name="tb_pref_title_app_drawer_icon_bliss">Logo Bliss</string>
 <string name="tb_pref_title_app_drawer_icon_ag">%s logo</string>
 <string name="tb_pref_title_background_tint">Barwa tła</string>
 <string name="tb_pref_title_blacklist">Konfiguracja aplikacji w menu startowym</string>
@@ -503,4 +502,6 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
     <string name="tb_error_creating_widget">Error creating widget</string>
 
     <string name="tb_desktop_mode_ime_fix">IME fix for Desktop Mode</string>
+
+    <string name="tb_rom">ROM</string>
 </resources>
