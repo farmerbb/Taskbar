@@ -516,7 +516,7 @@ public class UTest {
         float initialSize = context.getResources().getDimension(R.dimen.tb_base_size_start_plus_divider);
         initialSize += context.getResources().getDimension(R.dimen.tb_base_size_collapse_button);
         initialSize += context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
-        assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context, null));
+        assertEquals(initialSize, U.getBaseTaskbarSize(context), 0);
     }
 
     @Test
@@ -527,12 +527,12 @@ public class UTest {
         isSystemTrayEnabledAnswer.answer = false;
         float initialSize = context.getResources().getDimension(R.dimen.tb_base_size_start_plus_divider);
         initialSize += context.getResources().getDimension(R.dimen.tb_base_size_collapse_button);
-        assertEquals(Math.round(initialSize), U.getBaseTaskbarSize(context, null));
+        assertEquals(initialSize, U.getBaseTaskbarSize(context), 0);
         SharedPreferences prefs = U.getSharedPreferences(context);
         prefs.edit().putBoolean(PREF_DASHBOARD, true).apply();
         float dashboardButtonSize =
                 context.getResources().getDimension(R.dimen.tb_dashboard_button_size);
-        assertEquals(Math.round(initialSize + dashboardButtonSize), U.getBaseTaskbarSize(context, null));
+        assertEquals(initialSize + dashboardButtonSize, U.getBaseTaskbarSize(context), 0);
         prefs.edit().remove(PREF_DASHBOARD).apply();
         float navbarButtonsMargin =
                 context.getResources().getDimension(R.dimen.tb_navbar_buttons_margin);
@@ -540,25 +540,28 @@ public class UTest {
                 context.getResources().getDimension(R.dimen.tb_icon_size);
         prefs.edit().putBoolean(PREF_BUTTON_BACK, true).apply();
         assertEquals(
-                Math.round(initialSize + navbarButtonsMargin + iconSize),
-                U.getBaseTaskbarSize(context, null)
+                initialSize + navbarButtonsMargin + iconSize,
+                U.getBaseTaskbarSize(context),
+                0
         );
         prefs.edit().remove(PREF_BUTTON_BACK).apply();
         prefs.edit().putBoolean(PREF_BUTTON_HOME, true).apply();
         assertEquals(
-                Math.round(initialSize + navbarButtonsMargin + iconSize),
-                U.getBaseTaskbarSize(context, null)
+                initialSize + navbarButtonsMargin + iconSize,
+                U.getBaseTaskbarSize(context),
+                0
         );
         prefs.edit().remove(PREF_BUTTON_HOME).apply();
         prefs.edit().putBoolean(PREF_BUTTON_RECENTS, true).apply();
         assertEquals(
-                Math.round(initialSize + navbarButtonsMargin + iconSize),
-                U.getBaseTaskbarSize(context, null)
+                initialSize + navbarButtonsMargin + iconSize,
+                U.getBaseTaskbarSize(context),
+                0
         );
         prefs.edit().remove(PREF_BUTTON_RECENTS).apply();
         isSystemTrayEnabledAnswer.answer = true;
         float systemTraySize = context.getResources().getDimension(R.dimen.tb_systray_size);
-        assertEquals(Math.round(initialSize + systemTraySize), U.getBaseTaskbarSize(context, null));
+        assertEquals(initialSize + systemTraySize, U.getBaseTaskbarSize(context), 0);
     }
 
     @Test

@@ -61,6 +61,7 @@ import android.os.UserManager;
 import android.provider.Settings;
 
 import androidx.annotation.DimenRes;
+import androidx.annotation.VisibleForTesting;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
@@ -715,7 +716,7 @@ public class U {
         SharedPreferences pref = getSharedPreferences(context);
         DisplayInfo display = getDisplayInfo(context);
         float density = display.currentDensity / 160.0f;
-        float baseTaskbarSize = getBaseTaskbarSize(context, null) / density;
+        float baseTaskbarSize = getBaseTaskbarSize(context) / density;
         int numOfColumns = 0;
 
         float maxScreenSize = TaskbarPosition.isVertical(context)
@@ -1140,8 +1141,9 @@ public class U {
         }
     }
 
-    private static float getBaseTaskbarSize(Context context, Map<Integer, Boolean> sysTrayIconStates) {
-        return getBaseTaskbarSizeStart(context) + getBaseTaskbarSizeEnd(context, sysTrayIconStates);
+    @VisibleForTesting
+    public static float getBaseTaskbarSize(Context context) {
+        return getBaseTaskbarSizeStart(context) + getBaseTaskbarSizeEnd(context, null);
     }
 
     public static float getBaseTaskbarSizeStart(Context context) {

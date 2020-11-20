@@ -58,7 +58,6 @@ import org.robolectric.shadows.ShadowUsageStatsManager.EventBuilder;
 import org.robolectric.util.ReflectionHelpers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static android.app.usage.UsageEvents.Event.MOVE_TO_BACKGROUND;
@@ -407,7 +406,7 @@ public class TaskbarControllerTest {
                         0,
                         display.height
                                 - U.getStatusBarHeight(context)
-                                - U.getBaseTaskbarSize(context, new HashMap<>())
+                                - Math.round(U.getBaseTaskbarSize(context))
                 );
 
         uiController.calculateScrollViewParams(context, prefs, params, true, 1);
@@ -426,7 +425,7 @@ public class TaskbarControllerTest {
         params.height = defaultSize;
 
         isVerticalAnswer.answer = false;
-        maxScreenSize = Math.max(0, display.width - U.getBaseTaskbarSize(context, new HashMap<>()));
+        maxScreenSize = Math.max(0, display.width - Math.round(U.getBaseTaskbarSize(context)));
 
         uiController.calculateScrollViewParams(context, prefs, params, true, 1);
         assertEquals(maxScreenSize + dividerSize, params.width);
