@@ -60,6 +60,7 @@ import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
+import com.farmerbb.taskbar.service.DisableKeyboardService;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
@@ -677,7 +678,7 @@ public class StartMenuController extends UIController {
                     if(!hasHardwareKeyboard) {
                         ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
                         params1.height = context.getResources().getDimensionPixelSize(
-                                b && !isSecondScreenDisablingKeyboard()
+                                b && !isKeyboardDisabled()
                                         ? R.dimen.tb_start_menu_height_half
                                         : R.dimen.tb_start_menu_height);
                         startMenu.setLayoutParams(params1);
@@ -786,8 +787,9 @@ public class StartMenuController extends UIController {
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
     }
 
-    private boolean isSecondScreenDisablingKeyboard() {
-        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD)
-                .startsWith("com.farmerbb.secondscreen");
+    private boolean isKeyboardDisabled() {
+        String ime = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
+        return ime.equals(new ComponentName(context, DisableKeyboardService.class).flattenToString())
+                || ime.startsWith("com.farmerbb.secondscreen");
     }
 }
