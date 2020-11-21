@@ -1189,8 +1189,10 @@ public class U {
 
             if(sysTrayIconStates != null) {
                 for(Integer key : sysTrayIconStates.keySet()) {
-                    if(!sysTrayIconStates.get(key))
-                        sysTraySize -= context.getResources().getDimension(R.dimen.tb_systray_icon_size);
+                    if(!sysTrayIconStates.get(key)) {
+                        sysTraySize -= context.getResources().getDimension(key == R.id.notification_count
+                                ? R.dimen.tb_systray_icon_size_notifications : R.dimen.tb_systray_icon_size);
+                    }
                 }
             }
 
