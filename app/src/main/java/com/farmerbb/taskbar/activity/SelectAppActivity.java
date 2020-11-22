@@ -36,8 +36,10 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.adapter.AppListAdapter;
 import com.farmerbb.taskbar.fragment.SelectAppFragment;
@@ -253,8 +255,19 @@ public class SelectAppActivity extends AppCompatActivity {
             ViewPager viewPager = findViewById(R.id.pager);
             viewPager.setAdapter(pagerAdapter);
 
-            TabLayout tabLayout = findViewById(R.id.sliding_tabs);
-            tabLayout.setupWithViewPager(viewPager);
+            FrameLayout container = findViewById(R.id.inflate_tabs_here);
+            View tabLayout;
+
+            if(getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
+                tabLayout = getLayoutInflater().inflate(R.layout.tb_tab_layout, container, false);
+                tabLayout.findViewById(R.id.hidden).setOnClickListener(v -> viewPager.setCurrentItem(U.HIDDEN));
+                tabLayout.findViewById(R.id.top_apps).setOnClickListener(v -> viewPager.setCurrentItem(U.TOP_APPS));
+            } else {
+                tabLayout = new TabLayout(SelectAppActivity.this);
+                ((TabLayout) tabLayout).setupWithViewPager(viewPager);
+            }
+
+            container.addView(tabLayout);
 
             findViewById(R.id.configure_start_menu_layout).setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);

@@ -125,8 +125,11 @@ public class MainActivity extends AppCompatActivity {
                     U.enableFreeformModeShortcut(this));
 
             U.setComponentEnabled(this, StartTaskbarActivity.class, true);
-            U.setComponentEnabled(this, SecondaryHomeActivity.class, desktopModeEnabled);
-            U.setComponentEnabled(this, HSLActivity.class, desktopModeEnabled);
+
+            if(!getPackageName().equals(BuildConfig.ANDROIDX86_APPLICATION_ID)) {
+                U.setComponentEnabled(this, SecondaryHomeActivity.class, desktopModeEnabled);
+                U.setComponentEnabled(this, HSLActivity.class, desktopModeEnabled);
+            }
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 U.setComponentEnabled(this, KeyboardShortcutActivityLockDevice.class,

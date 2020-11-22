@@ -35,8 +35,8 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/sliding_tabs"
+        <FrameLayout
+            android:id="@+id/inflate_tabs_here"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
