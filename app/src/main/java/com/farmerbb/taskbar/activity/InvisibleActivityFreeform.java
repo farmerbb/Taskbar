@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.view.WindowManager;
 
@@ -124,7 +123,7 @@ public class InvisibleActivityFreeform extends Activity {
         if(getPackageManager().hasSystemFeature("com.cyanogenmod.android")) {
             SharedPreferences pref = U.getSharedPreferences(this);
             if(!pref.getString(PREF_POWER_BUTTON_WARNING, "null").equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))) {
-                new Handler().postDelayed(() -> {
+                U.newHandler().postDelayed(() -> {
                     if(helper.isInFreeformWorkspace()) {
                         Intent intent = U.getThemedIntent(this, InvisibleActivityAlt.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -187,7 +186,7 @@ public class InvisibleActivityFreeform extends Activity {
                 editor.putBoolean(PREF_COLLAPSED, true);
                 editor.apply();
 
-                new Handler().postDelayed(() -> {
+                U.newHandler().postDelayed(() -> {
                     Intent intent = new Intent(this, DummyActivity.class);
                     intent.putExtra("show_recent_apps_dialog", true);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -206,7 +205,7 @@ public class InvisibleActivityFreeform extends Activity {
 
             // Show the taskbar when activity is started
             if(showTaskbar) {
-                new Handler().postDelayed(() ->
+                U.newHandler().postDelayed(() ->
                         U.sendBroadcast(this, ACTION_SHOW_TASKBAR), 100);
             }
         }
@@ -255,7 +254,7 @@ public class InvisibleActivityFreeform extends Activity {
 
     private void possiblyHideTaskbar() {
         if(!doNotHide) {
-            new Handler().postDelayed(() -> {
+            U.newHandler().postDelayed(() -> {
                 if(U.shouldCollapse(this, false)
                         && !LauncherHelper.getInstance().isOnHomeScreen(this)) {
                     U.sendBroadcast(this, ACTION_HIDE_TASKBAR);

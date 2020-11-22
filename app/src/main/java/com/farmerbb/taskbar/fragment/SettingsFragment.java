@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -157,7 +156,7 @@ public abstract class SettingsFragment extends PreferenceFragment implements Pre
 
                         SharedPreferences pref = U.getSharedPreferences(getActivity());
                         if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !pref.getBoolean(PREF_IS_HIDDEN, false))
-                            new Handler().post(() -> U.startFreeformHack(getActivity()));
+                            U.newHandler().post(() -> U.startFreeformHack(getActivity()));
                         break;
                     case PREF_START_BUTTON_IMAGE:
                         if(stringValue.equals(PREF_START_BUTTON_IMAGE_CUSTOM)) {

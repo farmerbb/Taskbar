@@ -22,7 +22,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -113,9 +112,9 @@ public class TouchAbsorberActivity extends Activity {
 
         super.onBackPressed();
 
-        new Handler().postDelayed(() ->
+        U.newHandler().postDelayed(() ->
                 U.sendAccessibilityAction(this, AccessibilityService.GLOBAL_ACTION_BACK, () ->
-                        new Handler().postDelayed(() -> U.startTouchAbsorberActivity(this), 100)
+                        U.newHandler().postDelayed(() -> U.startTouchAbsorberActivity(this), 100)
                 ), 100);
     }
 }

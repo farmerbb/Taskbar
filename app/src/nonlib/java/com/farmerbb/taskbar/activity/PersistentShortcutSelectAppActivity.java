@@ -101,7 +101,7 @@ public class PersistentShortcutSelectAppActivity extends AbstractSelectAppActivi
 
                     if(processing) return;
 
-                    Handler handler = new Handler();
+                    Handler handler = U.newHandler();
                     new Thread(() -> {
                         processing = true;
 

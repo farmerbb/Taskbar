@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
@@ -196,7 +195,7 @@ public class StartMenuAdapter extends ArrayAdapter<AppEntry> implements SectionI
         args.putInt("x", location[0]);
         args.putInt("y", location[1]);
 
-        new Handler().postDelayed(() -> U.startContextMenuActivity(getContext(), args), shouldDelay() ? 100 : 0);
+        U.newHandler().postDelayed(() -> U.startContextMenuActivity(getContext(), args), shouldDelay() ? 100 : 0);
     }
 
     private boolean shouldDelay() {

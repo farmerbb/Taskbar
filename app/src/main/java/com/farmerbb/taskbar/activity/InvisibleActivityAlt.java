@@ -19,7 +19,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -51,7 +50,7 @@ public class InvisibleActivityAlt extends InvisibleActivity {
         if(!MenuHelper.getInstance().isStartMenuOpen() && !powerButtonWarning) finish();
 
         if(powerButtonWarning)
-            new Handler().postDelayed(() -> {
+            U.newHandler().postDelayed(() -> {
                 if(FreeformHackHelper.getInstance().isInFreeformWorkspace()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(R.string.tb_power_button_warning_title)

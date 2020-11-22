@@ -39,7 +39,6 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Process;
 
 import androidx.annotation.VisibleForTesting;
@@ -258,7 +257,7 @@ public class DashboardController extends UIController {
 
         host.addView(layout, params);
 
-        new Handler().postDelayed(() -> {
+        U.newHandler().postDelayed(() -> {
             updatePaddingSize(context, layout, TaskbarPosition.getTaskbarPosition(context));
 
             // Workaround for bottom margin not being set correctly on Android 11
@@ -579,7 +578,7 @@ public class DashboardController extends UIController {
             saveWidgetInfo(context, appWidgetInfo, cellId, appWidgetId);
         }
 
-        new Handler().post(() -> {
+        U.newHandler().post(() -> {
             ViewGroup.LayoutParams params = hostView.getLayoutParams();
             params.width = cellLayout.getWidth();
             params.height = cellLayout.getHeight();

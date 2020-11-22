@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
@@ -98,7 +97,7 @@ public class HSLActivity extends Activity {
 
                 // Fire the intent twice to fix launchers that specifically listen
                 // for home button presses (i.e. to jump to the default panel)
-                new Handler().post(() -> startActivity(intent));
+                U.newHandler().post(() -> startActivity(intent));
             } catch (ActivityNotFoundException e) {
                 launcherNotFound();
             }

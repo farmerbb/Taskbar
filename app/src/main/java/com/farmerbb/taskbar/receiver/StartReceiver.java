@@ -19,7 +19,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 
 import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.service.NotificationService;
@@ -36,7 +35,7 @@ public class StartReceiver extends BroadcastReceiver {
         boolean taskbarActiveButHidden = !taskbarNotActive && pref.getBoolean(PREF_IS_HIDDEN, false);
 
         if(!U.canDrawOverlays(context)) {
-            new Handler().postDelayed(() -> {
+            U.newHandler().postDelayed(() -> {
                 Intent intent2 = new Intent(context, DummyActivity.class);
                 intent2.putExtra("show_permission_dialog", true);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -54,7 +53,7 @@ public class StartReceiver extends BroadcastReceiver {
                     editor.putBoolean(PREF_FIRST_RUN, false);
                     editor.putBoolean(PREF_COLLAPSED, true);
 
-                    new Handler().postDelayed(() -> {
+                    U.newHandler().postDelayed(() -> {
                         Intent intent2 = new Intent(context, DummyActivity.class);
                         intent2.putExtra("show_recent_apps_dialog", true);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -23,7 +23,6 @@ import android.content.pm.LauncherApps;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 
@@ -128,7 +127,7 @@ public class SelectAppActivity extends AppCompatActivity {
             finish();
 
             if(!noShadow)
-                new Handler().post(() -> {
+                U.newHandler().post(() -> {
                     Intent intent = U.getThemedIntent(this, SelectAppActivity.class);
                     startActivity(intent);
                 });

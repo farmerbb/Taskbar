@@ -32,7 +32,6 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && U.isChromeOs(this)) {
             getWindow().setRestrictedCaptionAreaListener(rect -> hasCaption = true);
 
-            new Handler().postDelayed(() -> pref.edit().putBoolean(PREF_HAS_CAPTION, hasCaption).apply(), 500);
+            U.newHandler().postDelayed(() -> pref.edit().putBoolean(PREF_HAS_CAPTION, hasCaption).apply(), 500);
         }
 
         if(getPackageName().equals(BuildConfig.PAID_APPLICATION_ID)) {

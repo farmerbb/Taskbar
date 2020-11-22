@@ -27,7 +27,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import androidx.appcompat.app.ActionBar;
@@ -259,7 +258,7 @@ public class AdvancedFragment extends SettingsFragment {
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
-                new Handler().post(() -> {
+                U.newHandler().post(() -> {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(editText2, InputMethodManager.SHOW_IMPLICIT);
                 });

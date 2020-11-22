@@ -55,6 +55,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -244,7 +245,7 @@ public class U {
                 } catch (Exception ignored) {}
             }
 
-            new Handler().postDelayed(() -> {
+            newHandler().postDelayed(() -> {
                 Intent intent = new Intent(ACTION_ACCESSIBILITY_ACTION);
                 intent.putExtra(EXTRA_ACTION, action);
                 sendBroadcast(context, intent);
@@ -389,13 +390,13 @@ public class U {
         if(hasFreeformSupport(context)
                 && (isFreeformModeEnabled(context) || isPersistentShortcut)
                 && (!helper.isInFreeformWorkspace() || specialLaunch)) {
-            new Handler().postDelayed(() -> {
+            newHandler().postDelayed(() -> {
                 startFreeformHack(context, true);
 
-                new Handler().postDelayed(runnable, helper.isFreeformHackActive() ? 0 : isAndroidR ? 300 : 100);
+                newHandler().postDelayed(runnable, helper.isFreeformHackActive() ? 0 : isAndroidR ? 300 : 100);
             }, launchedFromTaskbar ? 0 : 100);
         } else
-            new Handler().postDelayed(runnable, !launchedFromTaskbar && noAnimation ? 100 : isAndroidR ? 100 : 0);
+            newHandler().postDelayed(runnable, !launchedFromTaskbar && noAnimation ? 100 : isAndroidR ? 100 : 0);
     }
 
     public static void startFreeformHack(Context context) {
@@ -599,7 +600,7 @@ public class U {
         if(!FreeformHackHelper.getInstance().isTouchAbsorberActive()
                 && shouldLaunchTouchAbsorber(context)) {
             startTouchAbsorberActivity(context);
-            new Handler().postDelayed(runnable, 100);
+            newHandler().postDelayed(runnable, 100);
         } else if(openInNewWindow) {
             Intent intent = new Intent(context, DummyActivity.class);
             intent.putExtra("finish_on_pause", true);
@@ -607,7 +608,7 @@ public class U {
                     | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivityLowerRight(context, intent);
 
-            new Handler().postDelayed(runnable, 100);
+            newHandler().postDelayed(runnable, 100);
         } else
             runnable.run();
     }
@@ -1272,7 +1273,7 @@ public class U {
             if(delay == 0)
                 runnable.run();
             else
-                new Handler().postDelayed(runnable, delay);
+                newHandler().postDelayed(runnable, delay);
 
             return;
         }
@@ -1755,7 +1756,7 @@ public class U {
     public static void applyCustomImage(Context context, String filename, ImageView view, Drawable errorDrawable) {
         File file = new File(context.getFilesDir() + "/tb_images", filename);
         if(file.exists()) {
-            Handler handler = new Handler();
+            Handler handler = newHandler();
             new Thread(() -> {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
                 handler.post(() -> {
@@ -2147,5 +2148,9 @@ public class U {
         } catch (Throwable ignored) {}
 
         helper.setReflectionAllowed(true);
+    }
+
+    public static Handler newHandler() {
+        return new Handler(Looper.getMainLooper());
     }
 }

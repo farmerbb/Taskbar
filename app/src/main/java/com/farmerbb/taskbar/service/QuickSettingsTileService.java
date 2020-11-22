@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Icon;
 import android.os.Build;
-import android.os.Handler;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
@@ -51,7 +50,7 @@ public class QuickSettingsTileService extends TileService {
         intent.setPackage(getPackageName());
         sendBroadcast(intent);
 
-        new Handler().postDelayed(this::updateState, 100);
+        U.newHandler().postDelayed(this::updateState, 100);
     }
 
     @VisibleForTesting

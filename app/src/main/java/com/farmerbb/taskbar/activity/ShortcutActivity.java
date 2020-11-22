@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.ShortcutUtils;
 import com.farmerbb.taskbar.util.U;
@@ -47,7 +46,7 @@ public class ShortcutActivity extends Activity {
                 intent.setPackage(getPackageName());
                 sendBroadcast(intent);
 
-                new Handler().postDelayed(() -> U.startFreeformHack(this, true), 100);
+                U.newHandler().postDelayed(() -> U.startFreeformHack(this, true), 100);
             } else
                 U.showToastLong(this, R.string.tb_no_freeform_support);
         } else

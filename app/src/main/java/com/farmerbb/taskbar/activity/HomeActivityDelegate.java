@@ -31,7 +31,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 
@@ -500,7 +499,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
                 if(forceTaskbarStart) {
                     forceTaskbarStart = false;
-                    new Handler().postDelayed(() -> {
+                    U.newHandler().postDelayed(() -> {
                         setOnHomeScreen(true);
                         startTaskbar();
                     }, 250);
@@ -560,7 +559,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             pref.edit().putBoolean(PREF_TASKBAR_ACTIVE, false).apply();
 
         // Show the Taskbar temporarily, as nothing else will be visible on screen
-        new Handler().postDelayed(() ->
+        U.newHandler().postDelayed(() ->
                 U.sendBroadcast(this, ACTION_TEMP_SHOW_TASKBAR), 100);
     }
 
@@ -610,7 +609,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             if(isChangingConfigurations())
                 setOnHomeScreen(false);
             else
-                new Handler().post(() -> setOnHomeScreen(false));
+                U.newHandler().post(() -> setOnHomeScreen(false));
         }
 
         if(dialog != null) {
@@ -688,7 +687,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         }
 
-        new Handler().post(() -> {
+        U.newHandler().post(() -> {
             setOnHomeScreen(false);
             finish();
         });

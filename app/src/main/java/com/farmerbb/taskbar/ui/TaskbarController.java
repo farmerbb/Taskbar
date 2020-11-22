@@ -351,7 +351,7 @@ public class TaskbarController extends UIController {
         if(FreeformHackHelper.getInstance().isTouchAbsorberActive()) {
             U.sendBroadcast(context, ACTION_FINISH_FREEFORM_ACTIVITY);
 
-            new Handler().postDelayed(() -> U.startTouchAbsorberActivity(context), 500);
+            U.newHandler().postDelayed(() -> U.startTouchAbsorberActivity(context), 500);
         }
 
         U.registerReceiver(context, showReceiver, ACTION_SHOW_TASKBAR);
@@ -747,7 +747,7 @@ public class TaskbarController extends UIController {
 
         currentTaskbarIds.clear();
 
-        handler = new Handler();
+        handler = U.newHandler();
         thread = new Thread(() -> {
             updateRecentApps(true);
 
@@ -974,7 +974,7 @@ public class TaskbarController extends UIController {
                         }
 
                         if(firstRefresh && scrollView.getVisibility() != View.VISIBLE) {
-                            new Handler().post(
+                            U.newHandler().post(
                                     () -> scrollTaskbar(
                                             scrollView,
                                             taskbar,
@@ -1108,7 +1108,7 @@ public class TaskbarController extends UIController {
 
         if(realMatchParent != matchParent) {
             matchParent = realMatchParent;
-            new Handler().post(updateParamsRunnable);
+            U.newHandler().post(updateParamsRunnable);
         }
     }
 
@@ -1369,7 +1369,7 @@ public class TaskbarController extends UIController {
 
             updateButton(false);
 
-            new Handler().post(() -> U.sendBroadcast(context, ACTION_SHOW_START_MENU_SPACE));
+            U.newHandler().post(() -> U.sendBroadcast(context, ACTION_SHOW_START_MENU_SPACE));
         }
     }
 
@@ -1410,10 +1410,10 @@ public class TaskbarController extends UIController {
 
             if(matchParent) {
                 matchParent = false;
-                new Handler().post(updateParamsRunnable);
+                U.newHandler().post(updateParamsRunnable);
             }
 
-            new Handler().post(() -> U.sendBroadcast(context, ACTION_HIDE_START_MENU_SPACE));
+            U.newHandler().post(() -> U.sendBroadcast(context, ACTION_HIDE_START_MENU_SPACE));
         }
     }
 
@@ -1443,7 +1443,7 @@ public class TaskbarController extends UIController {
         if(monitorPositionChanges && showHideAutomagically && !positionIsVertical) {
             if(thread2 != null) thread2.interrupt();
 
-            handler2 = new Handler();
+            handler2 = U.newHandler();
             thread2 = new Thread(() -> {
                 stopThread2 = false;
 

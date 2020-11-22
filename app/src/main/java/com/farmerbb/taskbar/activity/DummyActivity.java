@@ -25,7 +25,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.view.View;
@@ -75,7 +74,7 @@ public class DummyActivity extends Activity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(U.wrapContext(this));
                 builder.setTitle(R.string.tb_permission_dialog_title)
                         .setMessage(R.string.tb_enable_accessibility)
-                        .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> new Handler().post(this::finish))
+                        .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> U.newHandler().post(this::finish))
                         .setPositiveButton(R.string.tb_action_activate, (dialog, which) -> {
                             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 

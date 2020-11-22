@@ -285,7 +285,7 @@ public class StartMenuController extends UIController {
                     refreshApps(newText, false);
 
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        new Handler().postDelayed(() -> {
+                        U.newHandler().postDelayed(() -> {
                             EditText editText = searchView.findViewById(R.id.search_src_text);
                             if(editText != null) {
                                 editText.requestFocus();
@@ -349,7 +349,7 @@ public class StartMenuController extends UIController {
         U.registerReceiver(context, hideSpaceReceiver, ACTION_HIDE_START_MENU_SPACE);
         U.registerReceiver(context, resetReceiver, ACTION_RESET_START_MENU);
 
-        handler = new Handler();
+        handler = U.newHandler();
         refreshApps(true);
 
         host.addView(layout, params);
@@ -451,7 +451,7 @@ public class StartMenuController extends UIController {
     private void refreshApps(final String query, final boolean firstDraw) {
         if(thread != null) thread.interrupt();
 
-        handler = new Handler();
+        handler = U.newHandler();
         thread = new Thread(() -> {
             if(pm == null) pm = context.getPackageManager();
 
@@ -662,7 +662,7 @@ public class StartMenuController extends UIController {
 
             refreshApps(false);
 
-            new Handler().postDelayed(() -> {
+            U.newHandler().postDelayed(() -> {
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 || hasHardwareKeyboard)
                     layout.setAlpha(1);
 
@@ -778,7 +778,7 @@ public class StartMenuController extends UIController {
         args.putInt("x", location[0]);
         args.putInt("y", location[1]);
 
-        new Handler().postDelayed(() -> U.startContextMenuActivity(context, args), shouldDelay() ? 100 : 0);
+        U.newHandler().postDelayed(() -> U.startContextMenuActivity(context, args), shouldDelay() ? 100 : 0);
     }
 
     private boolean shouldDelay() {
