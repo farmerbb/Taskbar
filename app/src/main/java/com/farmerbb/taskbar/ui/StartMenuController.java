@@ -257,7 +257,7 @@ public class StartMenuController extends UIController {
                                 if(U.shouldCollapse(context, true)) {
                                     U.sendBroadcast(context, ACTION_HIDE_TASKBAR);
                                 } else {
-                                    U.sendBroadcast(context, ACTION_HIDE_START_MENU);
+                                    hideStartMenu(true);
                                 }
 
                                 Intent intent = generateQueryWebSearchIntent(query);
@@ -686,7 +686,7 @@ public class StartMenuController extends UIController {
 
                     if(!b && !(U.isBlissOs(context) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P)) {
                         if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                            U.sendBroadcast(context, ACTION_HIDE_START_MENU);
+                            hideStartMenu(true);
                         } else {
                             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -770,7 +770,7 @@ public class StartMenuController extends UIController {
     }
 
     private void openContextMenu(final int[] location) {
-        U.sendBroadcast(context, ACTION_HIDE_START_MENU_NO_RESET);
+        hideStartMenu(false);
 
         Bundle args = new Bundle();
         args.putBoolean("launched_from_start_menu", true);
