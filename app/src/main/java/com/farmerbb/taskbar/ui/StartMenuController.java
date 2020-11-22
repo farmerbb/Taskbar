@@ -684,7 +684,7 @@ public class StartMenuController extends UIController {
                         startMenu.setLayoutParams(params1);
                     }
 
-                    if(!b) {
+                    if(!b && !(U.isBlissOs(context) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P)) {
                         if(hasHardwareKeyboard && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                             U.sendBroadcast(context, ACTION_HIDE_START_MENU);
                         } else {
