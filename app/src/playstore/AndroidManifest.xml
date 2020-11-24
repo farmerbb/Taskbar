@@ -600,6 +600,10 @@
                 <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receiver.KeyboardChangeReceiver"
+            android:enabled="false"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

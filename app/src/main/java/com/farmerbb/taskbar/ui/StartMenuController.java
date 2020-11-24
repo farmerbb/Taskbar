@@ -35,7 +35,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
-import android.provider.Settings;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.SearchView;
@@ -56,12 +55,10 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
 import com.farmerbb.taskbar.adapter.StartMenuAdapter;
-import com.farmerbb.taskbar.service.DisableKeyboardService;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.AppEntry;
 import com.farmerbb.taskbar.util.Blacklist;
@@ -679,7 +676,7 @@ public class StartMenuController extends UIController {
                     if(!hasHardwareKeyboard) {
                         ViewGroup.LayoutParams params1 = startMenu.getLayoutParams();
                         params1.height = context.getResources().getDimensionPixelSize(
-                                b && !isKeyboardDisabled()
+                                b && isImeFixDisabled()
                                         ? R.dimen.tb_start_menu_height_half
                                         : R.dimen.tb_start_menu_height);
                         startMenu.setLayoutParams(params1);
@@ -786,10 +783,5 @@ public class StartMenuController extends UIController {
         return U.hasFreeformSupport(context)
                 && U.isFreeformModeEnabled(context)
                 && !FreeformHackHelper.getInstance().isFreeformHackActive();
-    }
-
-    private boolean isKeyboardDisabled() {
-        String ime = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
-        return ime.startsWith(BuildConfig.BASE_APPLICATION_ID) || ime.startsWith("com.farmerbb.secondscreen");
     }
 }

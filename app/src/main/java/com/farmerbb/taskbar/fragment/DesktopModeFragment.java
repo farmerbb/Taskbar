@@ -37,6 +37,8 @@ import com.farmerbb.taskbar.activity.EnableAdditionalSettingsActivity;
 import com.farmerbb.taskbar.activity.HSLActivity;
 import com.farmerbb.taskbar.activity.HSLConfigActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
+import com.farmerbb.taskbar.receiver.KeyboardChangeReceiver;
+import com.farmerbb.taskbar.service.DisableKeyboardService;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -83,6 +85,11 @@ public class DesktopModeFragment extends SettingsFragment {
             PreferenceCategory category = (PreferenceCategory) findPreference(PREF_ADDITIONAL_SETTINGS);
             category.removePreference(findPreference(PREF_AUTO_HIDE_NAVBAR_DESKTOP_MODE));
         }
+
+        if(U.getCurrentApiVersion() > 29.0)
+            findPreference(PREF_DESKTOP_MODE_IME_FIX).setOnPreferenceClickListener(this);
+        else
+            getPreferenceScreen().removePreference(findPreference(PREF_DESKTOP_MODE_IME_FIX));
 
         SharedPreferences pref = U.getSharedPreferences(getActivity());
         if(pref.getBoolean(PREF_LAUNCHER, false)) {
@@ -235,6 +242,15 @@ public class DesktopModeFragment extends SettingsFragment {
                 updateAdditionalSettings = true;
                 startActivity(U.getThemedIntent(getActivity(), EnableAdditionalSettingsActivity.class));
                 break;
+            case PREF_DESKTOP_MODE_IME_FIX:
+                U.setComponentEnabled(getActivity(), DisableKeyboardService.class, true);
+                U.setComponentEnabled(getActivity(), KeyboardChangeReceiver.class, true);
+
+                try {
+                    startActivity(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
+                } catch (ActivityNotFoundException ignored) {}
+
+                break;
         }
 
         return super.onPreferenceClick(p);
@@ -308,6 +324,12 @@ public class DesktopModeFragment extends SettingsFragment {
     private void handleDesktopModePrefChange(boolean isChecked) {
         U.setComponentEnabled(getActivity(), SecondaryHomeActivity.class, isChecked);
         U.setComponentEnabled(getActivity(), HSLActivity.class, isChecked);
+
+        if(U.getCurrentApiVersion() > 29.0) {
+            U.setComponentEnabled(getActivity(), DisableKeyboardService.class, isChecked);
+            U.setComponentEnabled(getActivity(), KeyboardChangeReceiver.class, isChecked);
+        }
+
         startStopDesktopMode(isChecked);
         updateAdditionalSettings(isChecked);
     }

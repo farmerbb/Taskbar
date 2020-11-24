@@ -117,6 +117,7 @@ public class Constants {
     public static final String PREF_DEFAULT_NULL = "null";
     public static final String PREF_DESKTOP_ICONS = "desktop_icons";
     public static final String PREF_DESKTOP_MODE = "desktop_mode";
+    public static final String PREF_DESKTOP_MODE_IME_FIX = "desktop_mode_ime_fix";
     public static final String PREF_DIM_SCREEN = "dim_screen";
     public static final String PREF_DISABLE_ANIMATIONS = "disable_animations";
     public static final String PREF_DISABLE_SCROLLING_LIST = "disable_scrolling_list";

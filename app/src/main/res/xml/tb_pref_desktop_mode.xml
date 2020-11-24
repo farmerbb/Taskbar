@@ -40,6 +40,12 @@
         android:summary="@string/tb_pref_dim_screen_description"
         android:dependency="desktop_mode"/>
 
+    <Preference
+        android:key="desktop_mode_ime_fix"
+        android:title="@string/tb_desktop_mode_ime_fix_title"
+        android:summary="@string/tb_desktop_mode_ime_fix_summary"
+        android:dependency="desktop_mode"/>
+
     <PreferenceCategory
         android:key="additional_settings">
 
