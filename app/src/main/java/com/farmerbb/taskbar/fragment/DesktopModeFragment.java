@@ -37,7 +37,6 @@ import com.farmerbb.taskbar.activity.EnableAdditionalSettingsActivity;
 import com.farmerbb.taskbar.activity.HSLActivity;
 import com.farmerbb.taskbar.activity.HSLConfigActivity;
 import com.farmerbb.taskbar.activity.SecondaryHomeActivity;
-import com.farmerbb.taskbar.receiver.KeyboardChangeReceiver;
 import com.farmerbb.taskbar.service.DisableKeyboardService;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.helper.LauncherHelper;
@@ -244,7 +243,6 @@ public class DesktopModeFragment extends SettingsFragment {
                 break;
             case PREF_DESKTOP_MODE_IME_FIX:
                 U.setComponentEnabled(getActivity(), DisableKeyboardService.class, true);
-                U.setComponentEnabled(getActivity(), KeyboardChangeReceiver.class, true);
 
                 try {
                     startActivity(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
@@ -327,7 +325,6 @@ public class DesktopModeFragment extends SettingsFragment {
 
         if(U.getCurrentApiVersion() > 29.0) {
             U.setComponentEnabled(getActivity(), DisableKeyboardService.class, isChecked);
-            U.setComponentEnabled(getActivity(), KeyboardChangeReceiver.class, isChecked);
         }
 
         startStopDesktopMode(isChecked);
