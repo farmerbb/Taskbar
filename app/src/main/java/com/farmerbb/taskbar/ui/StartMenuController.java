@@ -56,6 +56,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.farmerbb.taskbar.BuildConfig;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.InvisibleActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityAlt;
@@ -789,7 +790,6 @@ public class StartMenuController extends UIController {
 
     private boolean isKeyboardDisabled() {
         String ime = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
-        return ime.equals(new ComponentName(context, DisableKeyboardService.class).flattenToString())
-                || ime.startsWith("com.farmerbb.secondscreen");
+        return ime.startsWith(BuildConfig.BASE_APPLICATION_ID) || ime.startsWith("com.farmerbb.secondscreen");
     }
 }
