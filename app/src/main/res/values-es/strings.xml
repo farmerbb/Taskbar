@@ -488,8 +488,7 @@
     <string name="tb_desktop_mode_ime_fix_title">Enable input method fix</string>
     <string name="tb_desktop_mode_ime_fix_summary">Fixes visual glitches caused by input methods on Android 11. Requires you to temporarily set Taskbar as your input method each time desktop mode starts.</string>
     <string name="tb_desktop_mode_ime_fix_toast">Open desktop mode settings to enable a fix for visual glitches caused by input methods</string>
-    <string name="tb_disabling_soft_keyboard">Disabling soft keyboard</string>
-    <string name="tb_tap_to_change_keyboards">Tap to change keyboards</string>
+    <string name="tb_desktop_mode_ime_fix_toast_alt">Start desktop mode first before enabling the input method fix</string>
 
     <string name="tb_rom">ROM</string>
 </resources>
