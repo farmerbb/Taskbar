@@ -82,10 +82,12 @@ public abstract class UIController {
                 ViewParams newParams = isImeVisible ? params.updateBottomMargin(0) : params;
                 host.updateViewLayout(layout, newParams);
 
-                SharedPreferences pref = U.getSharedPreferences(context);
-                if(isImeFixDisabled() && !pref.getBoolean(PREF_DESKTOP_MODE_IME_FIX, false)) {
-                    pref.edit().putBoolean(PREF_DESKTOP_MODE_IME_FIX, true).apply();
-                    U.showToastLong(context, R.string.tb_desktop_mode_ime_fix_toast);
+                if(isImeFixDisabled() && !U.isLibrary(context)) {
+                    SharedPreferences pref = U.getSharedPreferences(context);
+                    if(!pref.getBoolean(PREF_DESKTOP_MODE_IME_FIX, false)) {
+                        pref.edit().putBoolean(PREF_DESKTOP_MODE_IME_FIX, true).apply();
+                        U.showToastLong(context, R.string.tb_desktop_mode_ime_fix_toast);
+                    }
                 }
             }
 

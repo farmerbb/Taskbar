@@ -58,7 +58,6 @@ import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.util.Callbacks;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
-import com.farmerbb.taskbar.service.DisableKeyboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
@@ -246,10 +245,6 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 getApplicationContext().startActivity(homeIntent);
-            }
-
-            if(U.getCurrentApiVersion() > 29.0 && !U.isLibrary(this)) {
-                U.setComponentEnabled(this, DisableKeyboardService.class, true);
             }
         }
 
