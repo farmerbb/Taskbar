@@ -17,6 +17,7 @@ package com.farmerbb.taskbar.service;
 
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
@@ -78,6 +79,7 @@ public class DisableKeyboardService extends InputMethodService {
         manager.registerDisplayListener(listener, null);
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         boolean isEditingText = attribute.inputType != InputType.TYPE_NULL;
@@ -87,7 +89,14 @@ public class DisableKeyboardService extends InputMethodService {
             Intent keyboardChangeIntent = new Intent(this, KeyboardChangeReceiver.class);
             PendingIntent keyboardChangePendingIntent = PendingIntent.getBroadcast(this, 0, keyboardChangeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
+            String id = getClass().getSimpleName();
+            CharSequence name = getString(R.string.tb_desktop_mode_ime_fix);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nm.createNotificationChannel(new NotificationChannel(id, name, importance));
+
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(this, id)
                     .setContentIntent(keyboardChangePendingIntent)
                     .setSmallIcon(android.R.drawable.stat_sys_warning)
                     .setContentTitle(getString(R.string.tb_disabling_soft_keyboard))
@@ -96,8 +105,6 @@ public class DisableKeyboardService extends InputMethodService {
                     .setShowWhen(false);
 
             notificationId = new Random().nextInt();
-
-            NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             nm.notify(notificationId, notification.build());
 
             boolean autoShowInputMethodPicker = false;
@@ -115,8 +122,8 @@ public class DisableKeyboardService extends InputMethodService {
 
             KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
             if(keyguardManager.inKeyguardRestrictedInputMode() && autoShowInputMethodPicker) {
-                InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                manager.showInputMethodPicker();
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.showInputMethodPicker();
             }
         } else if(notificationId != null && !isEditingText) {
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
