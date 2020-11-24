@@ -156,7 +156,7 @@ public class U {
 
     @TargetApi(Build.VERSION_CODES.M)
     private static AlertDialog.Builder buildPermissionDialogStandard(Context context, Callbacks callbacks) {
-        String message = context.getString(R.string.tb_permission_dialog_message)
+        String message = context.getString(R.string.tb_permission_dialog_message, getAppName(context))
                 + context.getString(R.string.tb_permission_dialog_instructions_phone);
 
         return new AlertDialog.Builder(context)
@@ -176,7 +176,7 @@ public class U {
     }
 
     private static AlertDialog.Builder buildPermissionDialogAndroidTV(Context context, Callbacks callbacks) {
-        String message = context.getString(R.string.tb_permission_dialog_message)
+        String message = context.getString(R.string.tb_permission_dialog_message, getAppName(context))
                 + context.getString(R.string.tb_permission_dialog_instructions_tv);
 
         return new AlertDialog.Builder(context)
@@ -1582,7 +1582,7 @@ public class U {
     }
 
     private static AlertDialog.Builder buildRecentAppsDialogStandard(Context context, Callbacks callbacks) {
-        String message = context.getString(R.string.tb_enable_recent_apps)
+        String message = context.getString(R.string.tb_enable_recent_apps, getAppName(context))
                 + context.getString(R.string.tb_enable_recent_apps_instructions_phone);
 
         return new AlertDialog.Builder(context)
@@ -1597,7 +1597,7 @@ public class U {
                             applyOpenInNewWindow(context, intent);
 
                         context.startActivity(intent);
-                        showToastLong(context, R.string.tb_usage_stats_message);
+                        showToast(context, context.getString(R.string.tb_usage_stats_message, getAppName(context)), Toast.LENGTH_LONG);
 
                         callbacks.onFinish.run();
                     } catch (ActivityNotFoundException e) {
@@ -1608,7 +1608,7 @@ public class U {
     }
 
     private static AlertDialog.Builder buildRecentAppsDialogAndroidTV(Context context, Callbacks callbacks) {
-        String message = context.getString(R.string.tb_enable_recent_apps)
+        String message = context.getString(R.string.tb_enable_recent_apps, getAppName(context))
                 + context.getString(R.string.tb_enable_recent_apps_instructions_tv);
 
         return new AlertDialog.Builder(context)
@@ -1832,7 +1832,7 @@ public class U {
     }
 
     public static boolean isDesktopModeSupported(Context context) {
-        if(isLauncherPermanentlyEnabled(context) || isChromeOs(context))
+        if(isLauncherPermanentlyEnabled(context) || isChromeOs(context) || isAndroidTV(context))
             return false;
 
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.P
@@ -2152,5 +2152,9 @@ public class U {
 
     public static Handler newHandler() {
         return new Handler(Looper.getMainLooper());
+    }
+
+    public static CharSequence getAppName(Context context) {
+        return context.getApplicationInfo().loadLabel(context.getPackageManager());
     }
 }

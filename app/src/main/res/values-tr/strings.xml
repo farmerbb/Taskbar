@@ -85,7 +85,7 @@ Taskbar, kesinlikle hiçbir reklam olmadan 100%% ücretsiz, açık kaynak. Ancak
 <string name="tb_enable_developer_options">Derleme numarasına 7 kez dokunarak Geliştirici seçeneklerini etkinleştirin</string>
 <string name="tb_enable_double_tap_to_sleep">Çift tıkla uykuya geçme aktif edilsin mi?</string>
 <string name="tb_enable_force_activities_resizable">Aşağı kaydırın ve \"%s\" yı açın.</string>
-<string name="tb_enable_recent_apps">"Taskbar, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için Taskbar, kullanım erişim izinleri gerektirir.
+<string name="tb_enable_recent_apps">"%1$s, en son kullandığınız uygulamaların ekranlarını isteğe bağlı olarak ekranınızın kenarı boyunca gösterebilir. Bunu yapmak için %1$s, kullanım erişim izinleri gerektirir.
 
 "</string>
 <string name="tb_enable_recent_apps_instructions_phone">Son kullanılan uygulamalar için desteği etkinleştirilsin mi?</string>
@@ -195,7 +195,7 @@ Daha yüksek değerler performansı düşürebilir."</string>
 <string name="tb_open_taskbar_settings">Ayarları aç</string>
 <string name="tb_permission_dialog_instructions_phone">Lütfen \"İzin Ver\" e basın ve \"Diğer uygulamaların üzerine çizim izni verme\" özelliğinin etkinleştirildiğinden emin olun.</string>
 <string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
-<string name="tb_permission_dialog_message">"Taskbar, başlamadan önce diğer uygulamaların üzerine çizim izni gerektirir.
+<string name="tb_permission_dialog_message">"%1$s, başlamadan önce diğer uygulamaların üzerine çizim izni gerektirir.
 
 "</string>
 <string name="tb_permission_dialog_title">İzin gereklidir</string>
@@ -328,7 +328,7 @@ Bu durumda, bu cihazdaki serbest biçimli modu kullanmak için özel bir ROM fla
 <string name="tb_unblock_app">Son kullanılandan engeli kaldır</string>
 <string name="tb_uninstall">Kaldır</string>
 <string name="tb_unpin_app">Son kullanılandan çıkar</string>
-<string name="tb_usage_stats_message">Lütfen Taskbar \"Açık\" olduğundan emin olun</string>
+<string name="tb_usage_stats_message">Lütfen %s \"Açık\" olduğundan emin olun</string>
 <string name="tb_use_default">Varsayılanı kullan</string>
 <string name="tb_visual_feedback">Simgeleri seçerken görsel geribildirim</string>
 <string name="tb_volume">Ses kontrol</string>

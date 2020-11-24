@@ -81,8 +81,8 @@ public class UTest {
     public void testShowPermissionDialogWithAndroidTVSettings() throws Exception {
         testShowPermissionDialog(
                 true,
-                context.getResources().getString(R.string.tb_permission_dialog_message)
-                        + context.getResources().getString(R.string.tb_permission_dialog_instructions_tv),
+                context.getResources().getString(R.string.tb_permission_dialog_message, U.getAppName(context))
+                        + context.getResources().getString(R.string.tb_permission_dialog_instructions_tv, U.getAppName(context)),
                 R.string.tb_action_open_settings
         );
     }
@@ -91,7 +91,7 @@ public class UTest {
     public void testShowPermissionDialogNormal() throws Exception {
         testShowPermissionDialog(
                 false,
-                context.getResources().getString(R.string.tb_permission_dialog_message)
+                context.getResources().getString(R.string.tb_permission_dialog_message, U.getAppName(context))
                         + context.getResources().getString(R.string.tb_permission_dialog_instructions_phone),
                 R.string.tb_action_grant_permission
         );

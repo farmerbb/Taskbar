@@ -89,7 +89,7 @@ Taskbar jest i zawsze będzie w 100%% darmowy, open source, bez reklam. Jednak w
 <string name="tb_enable_developer_options">Włącz opcje programisty, stukając wersję 7 razy</string>
 <string name="tb_enable_double_tap_to_sleep">Włączyć dwukrotne stuknięcie w  tryb uśpienia?</string>
 <string name="tb_enable_force_activities_resizable">Przewiń do dołu i włącz \"%s\"</string>
-<string name="tb_enable_recent_apps">"Na pasku zadań można opcjonalnie wyświetlać ikony ostatnio używanych aplikacji wzdłuż krawędzi ekranu. W tym celu Taskbar wymaga uprawnień dostępu do użytkowania.
+<string name="tb_enable_recent_apps">"Na pasku zadań można opcjonalnie wyświetlać ikony ostatnio używanych aplikacji wzdłuż krawędzi ekranu. W tym celu %1$s wymaga uprawnień dostępu do użytkowania.
 
 "</string>
 <string name="tb_enable_recent_apps_instructions_phone">Włączyć obsługę ostatnio używanych aplikacji?</string>
@@ -208,7 +208,7 @@ Wyższe wartości mogą zmniejszyć wydajność."</string>
 <string name="tb_open_taskbar_settings">Otwórz ustawienia</string>
 <string name="tb_permission_dialog_instructions_phone">Proszę nacisnąć \"Udziel uprawnień\" i upewnij się, że \"Zezwalaj na rysowanie nad innymi aplikacjami\" jest włączone.</string>
 <string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
-<string name="tb_permission_dialog_message">"Taskbar wymaga uprawnienia do rysowania nad innymi aplikacjami.
+<string name="tb_permission_dialog_message">"%s wymaga uprawnienia do rysowania nad innymi aplikacjami.
 
 "</string>
 <string name="tb_permission_dialog_title">Potrzebne jest pozwolenie</string>
@@ -352,7 +352,7 @@ W takim przypadku może być konieczne flashowanie niestandardowego ROM-u w celu
 <string name="tb_unblock_app">Odblokuj z Ostatnie</string>
 <string name="tb_uninstall">Odinstaluj</string>
 <string name="tb_unpin_app">Odpinanie z Ostatnie</string>
-<string name="tb_usage_stats_message">Proszę upewnić się, że Taskbar jest ustawiony na \"Włą\"</string>
+<string name="tb_usage_stats_message">Proszę upewnić się, że %s jest ustawiony na \"Włą\"</string>
 <string name="tb_use_default">Użyj domyślnych</string>
 <string name="tb_visual_feedback">Wizualne sprzężenie podczas wybierania ikon</string>
 <string name="tb_volume">Regulacja głośności</string>

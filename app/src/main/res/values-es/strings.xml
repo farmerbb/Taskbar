@@ -30,7 +30,7 @@
     <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">Acceso necesario</string>
-    <string name="tb_permission_dialog_message">La barra de tareas necesita el permiso para mostrar encima de otras aplicaciones para empezar.\n\n</string>
+    <string name="tb_permission_dialog_message">%s necesita el permiso para mostrar encima de otras aplicaciones para empezar.\n\n</string>
     <string name="tb_permission_dialog_instructions_phone">Por favor, pulsa \"Permitir acceso\" y asegúrase de que \"Mostar sobre otras apps\" está activado.</string>
     <string name="tb_permission_dialog_instructions_tv">Por favor, seleccione \"Abrir ajustes\" para abrir el menú de ajustes de Android TV. Escoga \"Acceso especial a la aplicación\", luego \"Mostrar encima de otras aplicaciones\" y asegúrase de que la barra de tareas esté activada.</string>
 
@@ -222,7 +222,7 @@
 
     <string name="tb_start_taskbar">Iniciar/detener Taskbar</string>
     <string name="tb_no_freeform_support">El modo ventana libre no está activado en su dispositivo &#8211; abra la Barra de tareas y habilítela primero</string>
-    <string name="tb_enable_recent_apps">Taskbar puede mostrar opcionalmente iconos de las aplicaciones más recientes en el borde de la pantalla.  Para ello, Taskbar requiere permisos de acceso de uso.</string>
+    <string name="tb_enable_recent_apps">%1$s puede mostrar opcionalmente iconos de las aplicaciones más recientes en el borde de la pantalla.  Para ello, %1$s requiere permisos de acceso de uso.</string>
     <string name="tb_enable_recent_apps_instructions_phone">¿Activar el soporte para aplicaciones recientes?</string>
     <string name="tb_enable_recent_apps_instructions_tv">Para habilitar el soporte para aplicaciones recientes, presione \"Abrir ajustes\" para abrir el menú de configuración de aplicaciones de Android TV. Selecciona \"Acceso especial a aplicaciones\", luego selecciona \"Acceso de uso\" y asegúrate de que la barra de tareas esté habilitada.</string>
 
@@ -234,7 +234,7 @@
 
     <string name="tb_app_shortcuts">Más acciones&#8230;</string>
 
-    <string name="tb_usage_stats_message">Por favor, asegúrate de que Taskbar está establecida como \"Activado\".</string>
+    <string name="tb_usage_stats_message">Por favor, asegúrate de que %s está establecida como \"Activado\".</string>
 
     <string name="tb_volume">Control de volumen</string>
     <string name="tb_file_manager">Gestor de archivos</string>

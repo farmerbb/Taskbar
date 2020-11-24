@@ -30,7 +30,7 @@
     <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">需要权限</string>
-    <string name="tb_permission_dialog_message">任务栏 需要在其他应用之上显示的权限才能开始。\n\n</string>
+    <string name="tb_permission_dialog_message">%s 需要在其他应用之上显示的权限才能开始。\n\n</string>
     <string name="tb_permission_dialog_instructions_phone">请点击 \"授予权限\" 并确保 \"允许在其他应用之上显示\" 已启用。</string>
     <string name="tb_permission_dialog_instructions_tv">请点击 \"打开设置\" 来打开 Android TV 应用设置菜单。选择 \"特殊应用访问\"，然后选择 \"允许在其他应用之上显示\" 并确保 任务栏 已被启用。</string>
 
@@ -222,7 +222,7 @@
 
     <string name="tb_start_taskbar">开始/停止 任务栏 </string>
     <string name="tb_no_freeform_support">自由式模式未在您的设备上启用 &#8211; 请先打开 任务栏 并启用</string>
-    <string name="tb_enable_recent_apps">任务栏 可以选择在屏幕边缘显示最常用应用的图标。要做到这个，任务栏 需要使用情况访问权限。\n\n</string>
+    <string name="tb_enable_recent_apps">%1$s 可以选择在屏幕边缘显示最常用应用的图标。要做到这个，%1$s 需要使用情况访问权限。\n\n</string>
     <string name="tb_enable_recent_apps_instructions_phone">启用对最近应用的支持?</string>
     <string name="tb_enable_recent_apps_instructions_tv">启用对最近应用的支持，点击 \"打开设置\" 来开启 Android TV 应用设置菜单。选择 \"特殊应用访问\"，然后选择 \"使用量数据访问\" 并确保任务栏已经被启用。</string>
 
@@ -234,7 +234,7 @@
 
     <string name="tb_app_shortcuts">更多操作&#8230;</string>
 
-    <string name="tb_usage_stats_message">请确保 任务栏 已设为 \"开启\"</string>
+    <string name="tb_usage_stats_message">请确保 %s 已设为 \"开启\"</string>
 
     <string name="tb_volume">音量控制</string>
     <string name="tb_file_manager">文件管理器</string>

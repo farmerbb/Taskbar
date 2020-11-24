@@ -30,7 +30,7 @@
     <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">アクセス許可が必要です</string>
-    <string name="tb_permission_dialog_message">Taskbar は他のアプリの上に描画するため、アプリの開始前にアクセス許可が必要です。\n\n</string>
+    <string name="tb_permission_dialog_message">%s は他のアプリの上に描画するため、アプリの開始前にアクセス許可が必要です。\n\n</string>
     <string name="tb_permission_dialog_instructions_phone">\"アクセス許可を付与\" を押して、Taskbar を \"はい\" に設定することを確認してください</string>
     <string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
 
@@ -222,7 +222,7 @@
 
     <string name="tb_start_taskbar">Taskbar を開始</string>
     <string name="tb_no_freeform_support">お使いのデバイスでフリーフォームモードは有効ではありません &#8211; Taskbar を開いて最初に有効にしてください</string>
-    <string name="tb_enable_recent_apps">Taskbar は、オプションで画面の端に最近使用したアプリのアイコンを表示することができます。 これを行うには、Taskbar は使用状況のアクセス許可が必要です。\n\n</string>
+    <string name="tb_enable_recent_apps">%1$s は、オプションで画面の端に最近使用したアプリのアイコンを表示することができます。 これを行うには、%1$s は使用状況のアクセス許可が必要です。\n\n</string>
     <string name="tb_enable_recent_apps_instructions_phone">最近使用したアプリのサポートを有効にしますか?</string>
     <string name="tb_enable_recent_apps_instructions_tv">To enable support for recent apps, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Usage access\" and ensure that Taskbar is enabled.</string>
 
@@ -234,7 +234,7 @@
 
     <string name="tb_app_shortcuts">追加の操作&#8230;</string>
 
-    <string name="tb_usage_stats_message">Taskbar が \"オン\" に設定されていることを確認してください</string>
+    <string name="tb_usage_stats_message">%s が \"オン\" に設定されていることを確認してください</string>
 
     <string name="tb_volume">ボリュームコントロール</string>
     <string name="tb_file_manager">ファイルマネージャー</string>

@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.view.View;
+import android.widget.Toast;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.util.ApplicationType;
@@ -85,7 +86,7 @@ public class DummyActivity extends Activity {
                             U.launchApp(this, () -> {
                                 try {
                                     startActivity(intent, U.getActivityOptionsBundle(this, ApplicationType.APP_PORTRAIT, null));
-                                    U.showToastLong(this, R.string.tb_usage_stats_message);
+                                    U.showToast(this, getString(R.string.tb_usage_stats_message, U.getAppName(this)), Toast.LENGTH_LONG);
                                 } catch (ActivityNotFoundException e) {
                                     U.showToast(this, R.string.tb_lock_device_not_supported);
 

@@ -30,7 +30,7 @@
     <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">Zugriff nötig</string>
-    <string name="tb_permission_dialog_message">Taskbar braucht die Berechtigung, über anderen Apps einblenden, um zu starten.\n\n</string>
+    <string name="tb_permission_dialog_message">%s braucht die Berechtigung, über anderen Apps einblenden, um zu starten.\n\n</string>
     <string name="tb_permission_dialog_instructions_phone">Bitte drücken Sie \"Zugriff erlauben\" und stellen Sie sicher, dass \"Über anderen Apps einblenden\" aktiviert ist.</string>
     <string name="tb_permission_dialog_instructions_tv">Bitte wählen sie \"Einstellungen öffnen\", um das Android TV-Einstellungsmenü zu öffnen. Wählen Sie \"Spezieller App-Zugriff\", dann \"Über anderen Apps einblenden\" und stellen Sie sicher, dass Taskbar aktiviert ist.</string>
 
@@ -222,7 +222,7 @@
 
     <string name="tb_start_taskbar">Taskbar starten</string>
     <string name="tb_no_freeform_support">Freiform ist auf diesem Gerät nicht aktiviert - öffnen Sie Taskbar und aktivieren Sie es zuerst.</string>
-    <string name="tb_enable_recent_apps">Taskbar kann optional die letzten Apps entlang der Kante ihres Bildschirms anzeigen. Dafür braucht Taskbar Nutzungsdatenzugriff.\n\n</string>
+    <string name="tb_enable_recent_apps">%1$s kann optional die letzten Apps entlang der Kante ihres Bildschirms anzeigen. Dafür braucht %1$s Nutzungsdatenzugriff.\n\n</string>
     <string name="tb_enable_recent_apps_instructions_phone">Unterstützung für letzte Apps aktivieren?</string>
     <string name="tb_enable_recent_apps_instructions_tv">To enable support for recent apps, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Usage access\" and ensure that Taskbar is enabled.</string>
 
@@ -234,7 +234,7 @@
 
     <string name="tb_app_shortcuts">Mehr Optionen</string>
 
-    <string name="tb_usage_stats_message">Bitte stellen Sie sicher, dass Taskbar auf \"An\" eingestellt ist</string>
+    <string name="tb_usage_stats_message">Bitte stellen Sie sicher, dass %s auf \"An\" eingestellt ist</string>
 
     <string name="tb_volume">Lautstärke</string>
     <string name="tb_file_manager">Dateimanager</string>

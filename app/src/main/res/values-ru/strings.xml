@@ -30,7 +30,7 @@
     <string name="tb_action_open_settings">@string/tb_action_grant_permission</string>
 
     <string name="tb_permission_dialog_title">Необходимо разрешение</string>
-    <string name="tb_permission_dialog_message">Taskbar требует разрешение "Показывать поверх других окон" для его запуска.\n\n</string>
+    <string name="tb_permission_dialog_message">%s требует разрешение "Показывать поверх других окон" для его запуска.\n\n</string>
     <string name="tb_permission_dialog_instructions_phone">Пожалуйста, нажмите \"Разрешить\" и проверьте, что у Taskbar значение \"Да\"</string>
     <string name="tb_permission_dialog_instructions_tv">Please press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Display over other apps\" and ensure that Taskbar is enabled.</string>
 
@@ -222,7 +222,7 @@
 
     <string name="tb_start_taskbar">Запустить Taskbar</string>
     <string name="tb_no_freeform_support">Режим не выключен на вашем устройстве &#8211; откройте Taskbar и включите его</string>
-    <string name="tb_enable_recent_apps">Taskbar может показывать список недавно запущенных приложений.  Для этого, Taskbar требует доступ к истории использования.\n\n</string>
+    <string name="tb_enable_recent_apps">%1$s может показывать список недавно запущенных приложений.  Для этого, %1$s требует доступ к истории использования.\n\n</string>
     <string name="tb_enable_recent_apps_instructions_phone">Включить поддержку недавних приложений?</string>
     <string name="tb_enable_recent_apps_instructions_tv">To enable support for recent apps, press \"Open Settings\" to open the Android TV app settings menu. Select \"Special app access\", then select \"Usage access\" and ensure that Taskbar is enabled.</string>
 
@@ -234,7 +234,7 @@
 
     <string name="tb_app_shortcuts">Действия&#8230;</string>
 
-    <string name="tb_usage_stats_message">Проверьте, включен ли Taskbar</string>
+    <string name="tb_usage_stats_message">Проверьте, включен ли %s</string>
 
     <string name="tb_volume">Настройка громкости</string>
     <string name="tb_file_manager">Проводник</string>
