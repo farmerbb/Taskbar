@@ -61,6 +61,8 @@ public class DependencyUtils {
         new CustomTabsIntent.Builder()
                 .setToolbarColor(ContextCompat.getColor(context, R.color.tb_colorPrimary))
                 .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.tb_main_activity_background))
+                .setStartAnimations(context, R.anim.tb_enter_from_right, R.anim.tb_exit_to_left)
+                .setExitAnimations(context, R.anim.tb_enter_from_left, R.anim.tb_exit_to_right)
                 .setShowTitle(true)
                 .addDefaultShareMenuItem()
                 .build()
