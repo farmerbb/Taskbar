@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.util;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.farmerbb.taskbar.R;
 
@@ -32,4 +33,6 @@ public class DependencyUtils {
     }
 
     public static void requestTaskerQuery(Context context) {}
+
+    public static void openChromeCustomTab(Context context, Uri uri) {}
 }

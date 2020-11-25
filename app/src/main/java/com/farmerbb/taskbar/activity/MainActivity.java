@@ -55,6 +55,7 @@ import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
+import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -318,11 +319,9 @@ public class MainActivity extends AppCompatActivity {
             snackbar.setAction(R.string.tb_action_view, v -> {
                 pref.edit().putInt("show_changelog", latestChangelogVersion).apply();
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://github.com/farmerbb/Taskbar/blob/" + BuildConfig.VERSION_CODE + "/CHANGELOG.md"));
-
+                Uri uri = Uri.parse("https://github.com/farmerbb/Taskbar/blob/" + BuildConfig.VERSION_CODE + "/CHANGELOG.md");
                 try {
-                    startActivity(intent);
+                    DependencyUtils.openChromeCustomTab(this, uri);
                 } catch (ActivityNotFoundException | IllegalArgumentException ignored) {}
             });
 

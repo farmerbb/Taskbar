@@ -17,7 +17,11 @@ package com.farmerbb.taskbar.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
+
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.TaskerConditionActivity;
@@ -51,5 +55,15 @@ public class DependencyUtils {
         Intent query = new Intent(com.twofortyfouram.locale.api.Intent.ACTION_REQUEST_QUERY);
         query.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_STRING_ACTIVITY_CLASS_NAME, TaskerConditionActivity.class.getName());
         context.sendBroadcast(query);
+    }
+
+    public static void openChromeCustomTab(Context context, Uri uri) {
+        new CustomTabsIntent.Builder()
+                .setToolbarColor(ContextCompat.getColor(context, R.color.tb_colorPrimary))
+                .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.tb_main_activity_background))
+                .setShowTitle(true)
+                .addDefaultShareMenuItem()
+                .build()
+                .launchUrl(context, uri);
     }
 }
