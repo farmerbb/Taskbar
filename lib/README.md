@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.farmerbb:libtaskbar:2.0.0' // see badge above for latest version
+    implementation 'com.farmerbb:libtaskbar:2.1.0' // see badge above for latest version
 }
 ```
 
@@ -63,13 +63,17 @@ You can also download a prebuilt APK here: https://github.com/farmerbb/libtaskba
 
 ### Changelog
 
+**v2.1.0**
+* Includes all changes from Taskbar 6.1
+* Prompts for enabling system alert window and usage access permissions now use the actual name of the app
+
+_Known issues:_
+* libtaskbar currently does not support launchers with a targetSdkVersion of 30 or higher
+
 **v2.0.0**
 * Includes all changes from Taskbar 6.0
 * libtaskbar components now run in a separate process from the rest of the app
 * The "Enable freeform windows" developer option is now required, in addition to "Force desktop mode"
-
-_Known issues:_
-* libtaskbar currently does not support launchers with a targetSdkVersion of 30 or higher
 
 **v1.0.1**
 * Includes all changes from Taskbar 5.0.1
