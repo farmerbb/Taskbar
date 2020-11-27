@@ -435,6 +435,13 @@
             </intent-filter>
         </receiver>
 
+        <provider
+            android:name=".provider.Kustom5SecsProvider"
+            android:authorities="${applicationId}.kustom5secsprovider"
+            android:grantUriPermissions="true"
+            android:exported="true"
+            android:enabled="true"/>
+
     </application>
 
 </manifest>
