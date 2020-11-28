@@ -83,7 +83,7 @@ public class StartReceiver extends BroadcastReceiver {
             notificationIntent.putExtra(EXTRA_START_SERVICES, true);
 
             U.startForegroundService(context, notificationIntent);
-        } else if(intent.hasExtra("secondscreen"))
+        } else if(intent.hasExtra(EXTRA_SECOND_SCREEN))
             pref.edit().putBoolean(PREF_SKIP_QUIT_RECEIVER, true).apply();
     }
 }

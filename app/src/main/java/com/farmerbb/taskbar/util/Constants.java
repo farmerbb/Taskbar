@@ -269,4 +269,5 @@ public class Constants {
     public static final String EXTRA_USER_ID = "user_id";
     public static final String EXTRA_WINDOW_SIZE = "window_size";
     public static final String EXTRA_START_FREEFORM_HACK = "start_freeform_hack";
+    public static final String EXTRA_SECOND_SCREEN = "secondscreen";
 }
