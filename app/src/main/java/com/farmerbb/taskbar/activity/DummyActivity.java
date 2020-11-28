@@ -106,7 +106,7 @@ public class DummyActivity extends Activity {
                 }
 
                 finish();
-            } else if(getIntent().hasExtra("show_permission_dialog"))
+            } else if(getIntent().hasExtra(EXTRA_SHOW_PERMISSION_DIALOG))
                 U.showPermissionDialog(U.wrapContext(this), new Callbacks(null, this::finish));
             else if(getIntent().hasExtra("show_recent_apps_dialog"))
                 U.showRecentAppsDialog(U.wrapContext(this), new Callbacks(null, this::finish));

@@ -37,7 +37,7 @@ public class StartReceiver extends BroadcastReceiver {
         if(!U.canDrawOverlays(context)) {
             U.newHandler().postDelayed(() -> {
                 Intent intent2 = new Intent(context, DummyActivity.class);
-                intent2.putExtra("show_permission_dialog", true);
+                intent2.putExtra(EXTRA_SHOW_PERMISSION_DIALOG, true);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent2);
