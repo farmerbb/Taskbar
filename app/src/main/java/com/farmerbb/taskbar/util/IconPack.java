@@ -18,6 +18,7 @@
 
 package com.farmerbb.taskbar.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -169,20 +170,22 @@ public class IconPack {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private Bitmap loadBitmap(Context context, String drawableName) {
         int id = getResources(context).getIdentifier(drawableName, "drawable", packageName);
         if(id > 0) {
-            Drawable bitmap = ContextCompat.getDrawable(context, id);
+          Drawable bitmap = getResources(context).getDrawable(id);
             if(bitmap instanceof BitmapDrawable)
                 return ((BitmapDrawable) bitmap).getBitmap();
         }
         return null;
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private Drawable loadDrawable(Context context, String drawableName) {
         int id = getResources(context).getIdentifier(drawableName, "drawable", packageName);
         if(id > 0) {
-            return ContextCompat.getDrawable(context, id);
+            return getResources(context).getDrawable(id);
         }
         return null;
     }
