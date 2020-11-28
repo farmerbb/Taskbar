@@ -98,7 +98,7 @@ public class DummyActivity extends Activity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 dialog.setCancelable(false);
-            } else if(getIntent().hasExtra("start_freeform_hack")) {
+            } else if(getIntent().hasExtra(EXTRA_START_FREEFORM_HACK)) {
                 if(U.hasFreeformSupport(this)
                         && U.isFreeformModeEnabled(this)
                         && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
