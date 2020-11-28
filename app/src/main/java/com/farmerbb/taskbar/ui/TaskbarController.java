@@ -382,7 +382,9 @@ public class TaskbarController extends UIController {
                         : params.updateWidth(WindowManager.LayoutParams.WRAP_CONTENT);
             }
 
-            host.updateViewLayout(layout, newParams);
+            try {
+                host.updateViewLayout(layout, newParams);
+            } catch (IllegalArgumentException ignored) {}
         };
 
         startRefreshingRecents();
