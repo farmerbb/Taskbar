@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.NotificationCompat;
 
 import com.farmerbb.taskbar.util.U;
@@ -79,7 +80,12 @@ public class NotificationCountService extends NotificationListenerService {
 
     private void broadcastNotificationCount(int count) {
         Intent intent = new Intent(ACTION_NOTIFICATION_COUNT_CHANGED);
-        intent.putExtra(EXTRA_COUNT, Math.min(count, 99));
+        intent.putExtra(EXTRA_COUNT, getValidCount(count));
         U.sendBroadcast(this, intent);
+    }
+
+    @VisibleForTesting
+    int getValidCount(int count) {
+        return Math.min(count, 99);
     }
 }
