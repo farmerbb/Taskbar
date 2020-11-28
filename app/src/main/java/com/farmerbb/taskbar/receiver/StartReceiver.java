@@ -55,7 +55,7 @@ public class StartReceiver extends BroadcastReceiver {
 
                     U.newHandler().postDelayed(() -> {
                         Intent intent2 = new Intent(context, DummyActivity.class);
-                        intent2.putExtra("show_recent_apps_dialog", true);
+                        intent2.putExtra(EXTRA_SHOW_RECENT_APP_DIALOG, true);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                         context.startActivity(intent2);
