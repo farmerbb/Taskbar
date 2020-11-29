@@ -31,7 +31,7 @@ public class EnableFreeformReceiver extends BroadcastReceiver {
 
         boolean freeformEnabled = pref.getBoolean(PREF_FREEFORM_HACK, false);
 
-        if(intent.hasExtra(EXTRA_SECOND_SCREEN) && freeformEnabled)
+        if(intent.hasExtra(EXTRA_SECONDSCREEN) && freeformEnabled)
             pref.edit().putBoolean(PREF_SKIP_DISABLE_FREEFORM_RECEIVER, true).apply();
         else if(U.hasFreeformSupport(context) && !freeformEnabled) {
             U.restartNotificationService(context);

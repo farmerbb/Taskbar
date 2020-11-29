@@ -55,7 +55,7 @@ public class StartReceiver extends BroadcastReceiver {
 
                     U.newHandler().postDelayed(() -> {
                         Intent intent2 = new Intent(context, DummyActivity.class);
-                        intent2.putExtra(EXTRA_SHOW_RECENT_APP_DIALOG, true);
+                        intent2.putExtra(EXTRA_SHOW_RECENT_APPS_DIALOG, true);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                         context.startActivity(intent2);
@@ -83,7 +83,7 @@ public class StartReceiver extends BroadcastReceiver {
             notificationIntent.putExtra(EXTRA_START_SERVICES, true);
 
             U.startForegroundService(context, notificationIntent);
-        } else if(intent.hasExtra(EXTRA_SECOND_SCREEN))
+        } else if(intent.hasExtra(EXTRA_SECONDSCREEN))
             pref.edit().putBoolean(PREF_SKIP_QUIT_RECEIVER, true).apply();
     }
 }

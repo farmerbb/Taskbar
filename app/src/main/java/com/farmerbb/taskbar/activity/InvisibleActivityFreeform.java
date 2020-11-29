@@ -188,7 +188,7 @@ public class InvisibleActivityFreeform extends Activity {
 
                 U.newHandler().postDelayed(() -> {
                     Intent intent = new Intent(this, DummyActivity.class);
-                    intent.putExtra(EXTRA_SHOW_RECENT_APP_DIALOG, true);
+                    intent.putExtra(EXTRA_SHOW_RECENT_APPS_DIALOG, true);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     startActivity(intent);

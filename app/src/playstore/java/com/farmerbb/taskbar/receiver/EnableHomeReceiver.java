@@ -28,7 +28,7 @@ public class EnableHomeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = U.getSharedPreferences(context);
-        if(intent.hasExtra(EXTRA_SECOND_SCREEN) && pref.getBoolean(PREF_LAUNCHER, false))
+        if(intent.hasExtra(EXTRA_SECONDSCREEN) && pref.getBoolean(PREF_LAUNCHER, false))
             pref.edit().putBoolean(PREF_SKIP_DISABLE_HOME_RECEIVER, true).apply();
         else if(U.canDrawOverlays(context)) {
             SharedPreferences.Editor editor = pref.edit();
