@@ -37,7 +37,7 @@ public class StartReceiver extends BroadcastReceiver {
         if(!U.canDrawOverlays(context)) {
             U.newHandler().postDelayed(() -> {
                 Intent intent2 = new Intent(context, DummyActivity.class);
-                intent2.putExtra("show_permission_dialog", true);
+                intent2.putExtra(EXTRA_SHOW_PERMISSION_DIALOG, true);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent2);
@@ -55,7 +55,7 @@ public class StartReceiver extends BroadcastReceiver {
 
                     U.newHandler().postDelayed(() -> {
                         Intent intent2 = new Intent(context, DummyActivity.class);
-                        intent2.putExtra("show_recent_apps_dialog", true);
+                        intent2.putExtra(EXTRA_SHOW_RECENT_APP_DIALOG, true);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                         context.startActivity(intent2);
@@ -73,7 +73,7 @@ public class StartReceiver extends BroadcastReceiver {
 
             if(U.hasFreeformSupport(context) && U.isFreeformModeEnabled(context)) {
                 Intent intent2 = new Intent(context, DummyActivity.class);
-                intent2.putExtra("start_freeform_hack", true);
+                intent2.putExtra(EXTRA_START_FREEFORM_HACK, true);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent2);
@@ -83,7 +83,7 @@ public class StartReceiver extends BroadcastReceiver {
             notificationIntent.putExtra(EXTRA_START_SERVICES, true);
 
             U.startForegroundService(context, notificationIntent);
-        } else if(intent.hasExtra("secondscreen"))
+        } else if(intent.hasExtra(EXTRA_SECOND_SCREEN))
             pref.edit().putBoolean(PREF_SKIP_QUIT_RECEIVER, true).apply();
     }
 }

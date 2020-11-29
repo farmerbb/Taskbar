@@ -98,7 +98,7 @@ public class DummyActivity extends Activity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 dialog.setCancelable(false);
-            } else if(getIntent().hasExtra("start_freeform_hack")) {
+            } else if(getIntent().hasExtra(EXTRA_START_FREEFORM_HACK)) {
                 if(U.hasFreeformSupport(this)
                         && U.isFreeformModeEnabled(this)
                         && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
@@ -106,9 +106,9 @@ public class DummyActivity extends Activity {
                 }
 
                 finish();
-            } else if(getIntent().hasExtra("show_permission_dialog"))
+            } else if(getIntent().hasExtra(EXTRA_SHOW_PERMISSION_DIALOG))
                 U.showPermissionDialog(U.wrapContext(this), new Callbacks(null, this::finish));
-            else if(getIntent().hasExtra("show_recent_apps_dialog"))
+            else if(getIntent().hasExtra(EXTRA_SHOW_RECENT_APP_DIALOG))
                 U.showRecentAppsDialog(U.wrapContext(this), new Callbacks(null, this::finish));
             else if(!finishOnPause)
                 finish();
