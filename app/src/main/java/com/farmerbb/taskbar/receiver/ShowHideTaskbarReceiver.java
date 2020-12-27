@@ -24,6 +24,7 @@ import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
+import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -33,6 +34,9 @@ import static com.farmerbb.taskbar.util.Constants.*;
 public class ShowHideTaskbarReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent == null || !ACTION_SHOW_HIDE_TASKBAR.equals(intent.getAction())) {
+            return;
+        }
         SharedPreferences pref = U.getSharedPreferences(context);
         if(!pref.getBoolean(PREF_TASKBAR_ACTIVE, false))
             return;
@@ -48,11 +52,11 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
             context.stopService(notificationIntent);
 
             if(U.hasFreeformSupport(context) && U.isFreeformModeEnabled(context)) {
-                Intent intent2 = new Intent(context, DummyActivity.class);
-                intent2.putExtra(EXTRA_START_FREEFORM_HACK, true);
-                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent dummyActivityIntent = new Intent(context, DummyActivity.class);
+                dummyActivityIntent.putExtra(EXTRA_START_FREEFORM_HACK, true);
+                dummyActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                context.startActivity(intent2);
+                context.startActivity(dummyActivityIntent);
             }
 
             notificationIntent.putExtra(EXTRA_START_SERVICES, true);
