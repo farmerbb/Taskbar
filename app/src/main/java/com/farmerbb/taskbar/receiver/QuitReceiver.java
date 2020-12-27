@@ -32,6 +32,9 @@ import static com.farmerbb.taskbar.util.Constants.*;
 public class QuitReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent == null || !ACTION_QUIT.equals(intent.getAction())) {
+            return;
+        }
         SharedPreferences pref = U.getSharedPreferences(context);
         if(!pref.getBoolean(PREF_SKIP_QUIT_RECEIVER, false)) {
             Intent taskbarIntent = new Intent(context, TaskbarService.class);
