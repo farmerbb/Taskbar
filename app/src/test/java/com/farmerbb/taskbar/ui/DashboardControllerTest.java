@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Process;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,8 +16,6 @@ import com.farmerbb.taskbar.Constants;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.mockito.BooleanAnswer;
-import com.farmerbb.taskbar.shadow.TaskbarShadowAppWidgetManager;
-import com.farmerbb.taskbar.shadow.TaskbarShadowAppWidgetProviderInfo;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.util.U;
 
@@ -30,8 +29,8 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-import org.robolectric.shadow.api.Shadow;
+import org.robolectric.shadows.AppWidgetProviderInfoBuilder;
+import org.robolectric.shadows.ShadowAppWidgetManager;
 import org.robolectric.shadows.ShadowToast;
 
 import static com.farmerbb.taskbar.Constants.DEFAULT_TEST_CELL_ID;
@@ -205,20 +204,17 @@ public class DashboardControllerTest {
     }
 
     @Test
-    @Config(shadows = {TaskbarShadowAppWidgetManager.class,
-            TaskbarShadowAppWidgetProviderInfo.class})
     public void testShowPlaceholderToast() {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         int cellId = DEFAULT_TEST_CELL_ID;
         String providerPrefKey = uiController.generateProviderPrefKey(cellId);
 
-        TaskbarShadowAppWidgetManager shadowAppWidgetManager =
-                (TaskbarShadowAppWidgetManager) shadowOf(appWidgetManager);
-        AppWidgetProviderInfo info = new AppWidgetProviderInfo();
+        ShadowAppWidgetManager shadowAppWidgetManager = shadowOf(appWidgetManager);
+        ActivityInfo providerInfo = new ActivityInfo();
+        providerInfo.nonLocalizedLabel = TEST_LABEL;
+        AppWidgetProviderInfo info =
+                AppWidgetProviderInfoBuilder.newBuilder().setProviderInfo(providerInfo).build();
         info.provider = new ComponentName(TEST_PACKAGE, TEST_NAME);
-        TaskbarShadowAppWidgetProviderInfo shadowAppWidgetProviderInfo =
-                (TaskbarShadowAppWidgetProviderInfo) Shadow.extract(info);
-        shadowAppWidgetProviderInfo.label = TEST_LABEL;
         shadowAppWidgetManager.addInstalledProvidersForProfile(Process.myUserHandle(), info);
 
         prefs.edit().putString(providerPrefKey, null).apply();
