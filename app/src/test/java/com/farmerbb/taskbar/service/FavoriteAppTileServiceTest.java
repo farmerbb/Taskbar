@@ -13,7 +13,6 @@ import androidx.test.core.app.ApplicationProvider;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.PersistentShortcutLaunchActivity;
 import com.farmerbb.taskbar.activity.PersistentShortcutSelectAppActivity;
-import com.farmerbb.taskbar.shadow.TaskbarShadowTileService;
 import com.farmerbb.taskbar.util.Constants;
 import com.farmerbb.taskbar.util.U;
 
@@ -22,7 +21,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import static android.content.Context.USER_SERVICE;
 import static com.farmerbb.taskbar.Constants.TEST_COMPONENT;
@@ -114,7 +112,6 @@ public class FavoriteAppTileServiceTest {
     }
 
     @Test
-    @Config(shadows = {TaskbarShadowTileService.class})
     public void testOnClickWithAdded() {
         prefs.edit().putBoolean(app1.getPrefix() + Constants.PREF_ADDED_SUFFIX, true).apply();
 
