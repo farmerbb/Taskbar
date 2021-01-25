@@ -21,7 +21,8 @@ LOCAL_MANIFEST_FILE := app/src/androidx86/AndroidManifest.xml
 LOCAL_STATIC_JAVA_LIBRARIES := \
         androidx.legacy_legacy-support-v4 \
         androidx.appcompat_appcompat \
-        com.google.android.material_material
+        androidx.browser_browser \
+        com.google.android.material_material \
 
 LOCAL_PROGUARD_ENABLED := disabled
 
