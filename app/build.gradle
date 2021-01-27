@@ -119,7 +119,7 @@ android {
 dependencies {
     implementation "androidx.legacy:legacy-support-v4:$SUPPORT_V4_VERSION"
     implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation "androidx.browser:browser:$BROWSER_VERSION"
     implementation "com.google.android.material:material:$MATERIAL_VERSION"
     //noinspection GradleDependency
     implementation 'com.mikepenz:iconics-core:3.2.5'
