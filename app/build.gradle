@@ -1,3 +1,4 @@
+apply from: '../dependencies.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 

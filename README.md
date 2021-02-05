@@ -72,7 +72,7 @@ Taskbar uses [Robolectric](https://github.com/robolectric/robolectric) as its un
 #### Android 10 Desktop Mode support via libtaskbar
 Taskbar can now be included as a library inside any third-party launcher, to quickly and easily add Android 10 Desktop Mode support into your existing launcher with no additional setup.
 
-For more information on including Taskbar inside your application, see the [libtaskbar documentation](https://github.com/farmerbb/Taskbar/blob/master/lib/README.md).
+For more information on including Taskbar inside your application, see the [libtaskbar documentation](https://github.com/farmerbb/libtaskbar/blob/master/README.md).
 
 #### Icon Pack Support
 Taskbar includes support for ADW-style icon packs.  If you are an icon pack developer and would like to include support for applying the icon pack from within your app, simply use the following code:

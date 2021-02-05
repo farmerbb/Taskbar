@@ -1,0 +1,20 @@
+allprojects {
+    ext {
+        // TODO keep version name and version code in sync with Android-x86 manifest
+        VERSION_CODE = 203
+        VERSION_NAME = "6.1.1"
+
+        MIN_SDK_VERSION = 21
+        COMPILE_SDK_VERSION = 30
+        BUILD_TOOLS_VERSION = "30.0.2"
+
+        // Keep at 29 for now, since bumping to 30 will break freeform mode on Android 11
+        TARGET_SDK_VERSION = 29
+
+        SUPPORT_V4_VERSION = "1.0.0"
+        APPCOMPAT_VERSION = "1.2.0"
+        BROWSER_VERSION = "1.0.0"
+        MATERIAL_VERSION = "1.2.1"
+        POWERMOCK_VERSION = "2.0.9"
+    }
+}
