@@ -4,11 +4,13 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 
     dependencies {
         classpath "com.android.tools.build:gradle:${AGP_VERSION}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTILN_VERSION"
     }
 }
 
@@ -25,6 +27,7 @@ allprojects {
     repositories {
         jcenter()
         google()
+        mavenCentral()
     }
 }
 
