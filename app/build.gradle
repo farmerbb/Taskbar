@@ -123,7 +123,7 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$KOTILN_VERSION"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION"
     implementation "androidx.legacy:legacy-support-v4:$SUPPORT_V4_VERSION"
     implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
     implementation "androidx.browser:browser:$BROWSER_VERSION"

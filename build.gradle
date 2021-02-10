@@ -10,7 +10,7 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:${AGP_VERSION}"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTILN_VERSION"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
     }
 }
 
