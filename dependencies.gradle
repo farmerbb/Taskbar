@@ -13,11 +13,10 @@ allprojects {
 
         SUPPORT_V4_VERSION = "1.0.0"
         APPCOMPAT_VERSION = "1.2.0"
-        BROWSER_VERSION = "1.0.0"
-        MATERIAL_VERSION = "1.2.1"
+        BROWSER_VERSION = "1.0.0" // keeping at 1.0.0 to preserve compatibility with Android-x86
+        MATERIAL_VERSION = "1.3.0"
         POWERMOCK_VERSION = "2.0.9"
         AGP_VERSION = "4.1.2"
-
-        KOTLIN_VERSION = "1.3.72"
+        KOTLIN_VERSION = "1.4.30"
     }
 }
