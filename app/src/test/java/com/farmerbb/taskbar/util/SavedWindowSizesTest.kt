@@ -2,8 +2,8 @@ package com.farmerbb.taskbar.util
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import junit.framework.Assert
 import org.apache.commons.lang3.SerializationUtils
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

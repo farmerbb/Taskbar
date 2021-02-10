@@ -45,29 +45,29 @@ class LauncherHelperTest {
 
     @Test
     fun testIsHomeScreen() {
-        Assert.assertFalse(launcherHelper!!.isOnHomeScreen(context))
-        launcherHelper!!.setOnPrimaryHomeScreen(true)
-        Assert.assertTrue(launcherHelper!!.isOnHomeScreen(context))
-        launcherHelper!!.setOnPrimaryHomeScreen(false)
-        launcherHelper!!.setOnSecondaryHomeScreen(true, 1)
-        Assert.assertFalse(launcherHelper!!.isOnHomeScreen(context))
-        getExternalDisplayIdAnswer!!.answer = 1
-        Assert.assertTrue(launcherHelper!!.isOnHomeScreen(context))
-        launcherHelper!!.setOnSecondaryHomeScreen(false, 1)
-        Assert.assertEquals(-1, launcherHelper!!.secondaryDisplayId.toLong())
+        Assert.assertFalse(launcherHelper.isOnHomeScreen(context))
+        launcherHelper.setOnPrimaryHomeScreen(true)
+        Assert.assertTrue(launcherHelper.isOnHomeScreen(context))
+        launcherHelper.setOnPrimaryHomeScreen(false)
+        launcherHelper.setOnSecondaryHomeScreen(true, 1)
+        Assert.assertFalse(launcherHelper.isOnHomeScreen(context))
+        getExternalDisplayIdAnswer.answer = 1
+        Assert.assertTrue(launcherHelper.isOnHomeScreen(context))
+        launcherHelper.setOnSecondaryHomeScreen(false, 1)
+        Assert.assertEquals(-1, launcherHelper.secondaryDisplayId.toLong())
     }
 
     @Test
     fun testIsOnSecondaryHomeScreen() {
-        Assert.assertFalse(launcherHelper!!.isOnSecondaryHomeScreen(context))
-        launcherHelper!!.setOnPrimaryHomeScreen(true)
-        Assert.assertFalse(launcherHelper!!.isOnSecondaryHomeScreen(context))
-        launcherHelper!!.setOnSecondaryHomeScreen(true, 1)
-        Assert.assertFalse(launcherHelper!!.isOnSecondaryHomeScreen(context))
-        getExternalDisplayIdAnswer!!.answer = 1
-        Assert.assertTrue(launcherHelper!!.isOnSecondaryHomeScreen(context))
-        launcherHelper!!.setOnPrimaryHomeScreen(false)
-        Assert.assertTrue(launcherHelper!!.isOnSecondaryHomeScreen(context))
-        launcherHelper!!.setOnSecondaryHomeScreen(false, 1)
+        Assert.assertFalse(launcherHelper.isOnSecondaryHomeScreen(context))
+        launcherHelper.setOnPrimaryHomeScreen(true)
+        Assert.assertFalse(launcherHelper.isOnSecondaryHomeScreen(context))
+        launcherHelper.setOnSecondaryHomeScreen(true, 1)
+        Assert.assertFalse(launcherHelper.isOnSecondaryHomeScreen(context))
+        getExternalDisplayIdAnswer.answer = 1
+        Assert.assertTrue(launcherHelper.isOnSecondaryHomeScreen(context))
+        launcherHelper.setOnPrimaryHomeScreen(false)
+        Assert.assertTrue(launcherHelper.isOnSecondaryHomeScreen(context))
+        launcherHelper.setOnSecondaryHomeScreen(false, 1)
     }
 }

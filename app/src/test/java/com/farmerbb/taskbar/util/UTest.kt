@@ -59,8 +59,8 @@ class UTest {
     @Throws(Exception::class)
     fun testShowPermissionDialogWithAndroidTVSettings() {
         testShowPermissionDialog(
-                true, context!!.resources.getString(R.string.tb_permission_dialog_message, U.getAppName(context))
-                + context!!.resources.getString(R.string.tb_permission_dialog_instructions_tv, U.getAppName(context)),
+                true, context.resources.getString(R.string.tb_permission_dialog_message, U.getAppName(context))
+                + context.resources.getString(R.string.tb_permission_dialog_instructions_tv, U.getAppName(context)),
                 R.string.tb_action_open_settings
         )
     }
@@ -69,8 +69,8 @@ class UTest {
     @Throws(Exception::class)
     fun testShowPermissionDialogNormal() {
         testShowPermissionDialog(
-                false, context!!.resources.getString(R.string.tb_permission_dialog_message, U.getAppName(context))
-                + context!!.resources.getString(R.string.tb_permission_dialog_instructions_phone),
+                false, context.resources.getString(R.string.tb_permission_dialog_message, U.getAppName(context))
+                + context.resources.getString(R.string.tb_permission_dialog_instructions_phone),
                 R.string.tb_action_grant_permission
         )
     }
@@ -85,7 +85,7 @@ class UTest {
         PowerMockito.`when`<Any>(U::class.java, "hasAndroidTVSettings", context).thenReturn(hasAndroidTVSettings)
         val dialog = U.showPermissionDialog(context, Callbacks(onError, onFinish))
         val shadowDialog = Shadows.shadowOf(dialog)
-        val resources = context!!.resources
+        val resources = context.resources
         Assert.assertEquals(
                 resources.getString(R.string.tb_permission_dialog_title),
                 shadowDialog.title
@@ -111,7 +111,7 @@ class UTest {
                 ClassParameter.from(Callbacks::class.java, Callbacks(null, onFinish))
         )
         val shadowDialog = Shadows.shadowOf(dialog)
-        val resources = context!!.resources
+        val resources = context.resources
         Assert.assertEquals(
                 resources.getString(R.string.tb_error_dialog_title),
                 shadowDialog.title
@@ -119,7 +119,7 @@ class UTest {
         Assert.assertEquals(
                 resources.getString(
                         R.string.tb_error_dialog_message,
-                        context!!.packageName,
+                        context.packageName,
                         appOpCommand
                 ),
                 shadowDialog.message
@@ -164,34 +164,39 @@ class UTest {
     @Test
     fun testIsAccessibilityServiceEnabled() {
         val enabledServices = Settings.Secure.getString(
-                context!!.contentResolver,
+                context.contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         )
-        val componentName = ComponentName(context!!, PowerMenuService::class.java)
+        val componentName = ComponentName(context, PowerMenuService::class.java)
         val flattenString = componentName.flattenToString()
         val flattenShortString = componentName.flattenToShortString()
-        val newEnabledService = enabledServices?.replace(":" + flattenString.toRegex(), "")?.replace(":" + flattenShortString.toRegex(), "")?.replace(flattenString.toRegex(), "")?.replace(flattenShortString.toRegex(), "")
-                ?: ""
+        val newEnabledService =
+                enabledServices
+                        ?.replace(":" + flattenString.toRegex(), "")
+                        ?.replace(":" + flattenShortString.toRegex(), "")
+                        ?.replace(flattenString.toRegex(), "")
+                        ?.replace(flattenShortString.toRegex(), "")
+                        ?: ""
         Settings.Secure.putString(
-                context!!.contentResolver,
+                context.contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
                 newEnabledService
         )
         Assert.assertFalse(U.isAccessibilityServiceEnabled(context))
         Settings.Secure.putString(
-                context!!.contentResolver,
+                context.contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
                 "$newEnabledService:$flattenString"
         )
         Assert.assertTrue(U.isAccessibilityServiceEnabled(context))
         Settings.Secure.putString(
-                context!!.contentResolver,
+                context.contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
                 "$newEnabledService:$flattenShortString"
         )
         Assert.assertTrue(U.isAccessibilityServiceEnabled(context))
         Settings.Secure.putString(
-                context!!.contentResolver,
+                context.contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
                 enabledServices
         )
@@ -221,7 +226,7 @@ class UTest {
         val toast = ShadowToast.getLatestToast()
         Assert.assertEquals(Toast.LENGTH_SHORT.toLong(), toast.duration.toLong())
         Assert.assertEquals(
-                context!!.resources.getString(R.string.tb_pin_shortcut_not_supported),
+                context.resources.getString(R.string.tb_pin_shortcut_not_supported),
                 ShadowToast.getTextOfLatestToast()
         )
     }
@@ -232,7 +237,7 @@ class UTest {
         val toast = ShadowToast.getLatestToast()
         Assert.assertEquals(Toast.LENGTH_LONG.toLong(), toast.duration.toLong())
         Assert.assertEquals(
-                context!!.resources.getString(R.string.tb_pin_shortcut_not_supported),
+                context.resources.getString(R.string.tb_pin_shortcut_not_supported),
                 ShadowToast.getTextOfLatestToast()
         )
     }
@@ -270,7 +275,7 @@ class UTest {
         PowerMockito.`when`(U.canEnableFreeform()).thenReturn(true)
         Assert.assertFalse(U.hasFreeformSupport(context))
         // Case 1, system has feature freeform.
-        val packageManager = context!!.packageManager
+        val packageManager = context.packageManager
         val shadowPackageManager = Shadows.shadowOf(packageManager)
         shadowPackageManager
                 .setSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT, true)
@@ -278,9 +283,9 @@ class UTest {
         shadowPackageManager
                 .setSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT, false)
         // Case 2, enable_freeform_support in Settings.Global is not 0
-        Settings.Global.putInt(context!!.contentResolver, "enable_freeform_support", 1)
+        Settings.Global.putInt(context.contentResolver, "enable_freeform_support", 1)
         Assert.assertTrue(U.hasFreeformSupport(context))
-        Settings.Global.putInt(context!!.contentResolver, "enable_freeform_support", 0)
+        Settings.Global.putInt(context.contentResolver, "enable_freeform_support", 0)
     }
 
     @Test
@@ -291,9 +296,9 @@ class UTest {
         Assert.assertFalse(U.hasFreeformSupport(context))
         // Case 3, version is less than or equal to N_MRI, and force_resizable_activities
         // in Settings.Global is not 0
-        Settings.Global.putInt(context!!.contentResolver, "force_resizable_activities", 1)
+        Settings.Global.putInt(context.contentResolver, "force_resizable_activities", 1)
         Assert.assertTrue(U.hasFreeformSupport(context))
-        Settings.Global.putInt(context!!.contentResolver, "force_resizable_activities", 0)
+        Settings.Global.putInt(context.contentResolver, "force_resizable_activities", 0)
     }
 
     @Test
@@ -346,7 +351,7 @@ class UTest {
         Assert.assertEquals(Color.GREEN.toLong(), U.getBackgroundTint(context).toLong())
         prefs.edit().remove(Constants.PREF_BACKGROUND_TINT).apply()
         Assert.assertEquals(
-                context!!.resources.getInteger(R.integer.tb_translucent_gray).toLong(),
+                context.resources.getInteger(R.integer.tb_translucent_gray).toLong(),
                 U.getBackgroundTint(context)
                         .toLong())
     }
@@ -356,7 +361,7 @@ class UTest {
         val prefs = U.getSharedPreferences(context)
         prefs.edit().remove(Constants.PREF_ACCENT_COLOR).apply()
         Assert.assertEquals(
-                context!!.resources.getInteger(R.integer.tb_translucent_white).toLong(),
+                context.resources.getInteger(R.integer.tb_translucent_white).toLong(),
                 U.getAccentColor(context)
                         .toLong())
         prefs.edit().putInt(Constants.PREF_ACCENT_COLOR, Color.GREEN).apply()
@@ -383,10 +388,10 @@ class UTest {
         // we don't have a good method to test code with ApplicationInfo.
         val prefs = U.getSharedPreferences(context)
         prefs.edit().putBoolean(Constants.PREF_LAUNCH_GAMES_FULLSCREEN, false).apply()
-        Assert.assertFalse(U.isGame(context, context!!.packageName))
+        Assert.assertFalse(U.isGame(context, context.packageName))
         prefs.edit().putBoolean(Constants.PREF_LAUNCH_GAMES_FULLSCREEN, true).apply()
-        Assert.assertFalse(U.isGame(context, context!!.packageName))
-        Assert.assertFalse(U.isGame(context, context!!.packageName + "un-exist-package"))
+        Assert.assertFalse(U.isGame(context, context.packageName))
+        Assert.assertFalse(U.isGame(context, context.packageName + "un-exist-package"))
     }
 
     @Test
@@ -467,7 +472,7 @@ class UTest {
 
     @Test
     fun testIsChromeOs() {
-        val packageManager = context!!.packageManager
+        val packageManager = context.packageManager
         val shadowPackageManager = Shadows.shadowOf(packageManager)
         shadowPackageManager.setSystemFeature("org.chromium.arc", true)
         Assert.assertTrue(U.isChromeOs(context))
@@ -484,9 +489,9 @@ class UTest {
         isSystemTrayEnabledAnswer.answer = false
         // The only difference of the different screen size, is the initial taskbar size.
         // So we only test the different in this test method.
-        var initialSize = context!!.resources.getDimension(R.dimen.tb_base_size_start_plus_divider)
-        initialSize += context!!.resources.getDimension(R.dimen.tb_base_size_collapse_button)
-        initialSize += context!!.resources.getDimension(R.dimen.tb_dashboard_button_size)
+        var initialSize = context.resources.getDimension(R.dimen.tb_base_size_start_plus_divider)
+        initialSize += context.resources.getDimension(R.dimen.tb_base_size_collapse_button)
+        initialSize += context.resources.getDimension(R.dimen.tb_dashboard_button_size)
         Assert.assertEquals(initialSize, U.getBaseTaskbarSize(context), 0f)
     }
 
@@ -496,16 +501,16 @@ class UTest {
         val isSystemTrayEnabledAnswer = BooleanAnswer()
         PowerMockito.`when`(U.isSystemTrayEnabled(context)).thenAnswer(isSystemTrayEnabledAnswer)
         isSystemTrayEnabledAnswer.answer = false
-        var initialSize = context!!.resources.getDimension(R.dimen.tb_base_size_start_plus_divider)
-        initialSize += context!!.resources.getDimension(R.dimen.tb_base_size_collapse_button)
+        var initialSize = context.resources.getDimension(R.dimen.tb_base_size_start_plus_divider)
+        initialSize += context.resources.getDimension(R.dimen.tb_base_size_collapse_button)
         Assert.assertEquals(initialSize, U.getBaseTaskbarSize(context), 0f)
         val prefs = U.getSharedPreferences(context)
         prefs.edit().putBoolean(Constants.PREF_DASHBOARD, true).apply()
-        val dashboardButtonSize = context!!.resources.getDimension(R.dimen.tb_dashboard_button_size)
+        val dashboardButtonSize = context.resources.getDimension(R.dimen.tb_dashboard_button_size)
         Assert.assertEquals(initialSize + dashboardButtonSize, U.getBaseTaskbarSize(context), 0f)
         prefs.edit().remove(Constants.PREF_DASHBOARD).apply()
-        val navbarButtonsMargin = context!!.resources.getDimension(R.dimen.tb_navbar_buttons_margin)
-        val iconSize = context!!.resources.getDimension(R.dimen.tb_icon_size)
+        val navbarButtonsMargin = context.resources.getDimension(R.dimen.tb_navbar_buttons_margin)
+        val iconSize = context.resources.getDimension(R.dimen.tb_icon_size)
         prefs.edit().putBoolean(Constants.PREF_BUTTON_BACK, true).apply()
         Assert.assertEquals(
                 initialSize + navbarButtonsMargin + iconSize,
@@ -522,7 +527,7 @@ class UTest {
                 U.getBaseTaskbarSize(context), 0f)
         prefs.edit().remove(Constants.PREF_BUTTON_RECENTS).apply()
         isSystemTrayEnabledAnswer.answer = true
-        val systemTraySize = context!!.resources.getDimension(R.dimen.tb_systray_size)
+        val systemTraySize = context.resources.getDimension(R.dimen.tb_systray_size)
         Assert.assertEquals(initialSize + systemTraySize, U.getBaseTaskbarSize(context), 0f)
     }
 
