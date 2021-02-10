@@ -25,9 +25,9 @@ import org.robolectric.Shadows
 @PrepareForTest(value = [U::class])
 class QuickSettingsTileServiceTest {
     @get:Rule
-    var rule = PowerMockRule()
-    private var tileService: QuickSettingsTileService? = null
-    private var prefs: SharedPreferences? = null
+    val rule = PowerMockRule()
+    private lateinit var tileService: QuickSettingsTileService
+    private lateinit var prefs: SharedPreferences
 
     @Before
     fun setUp() {
@@ -37,13 +37,13 @@ class QuickSettingsTileServiceTest {
 
     @Test
     fun testUpdateStateForIcon() {
-        prefs!!.edit().putString(Constants.PREF_START_BUTTON_IMAGE, Constants.PREF_START_BUTTON_IMAGE_APP_LOGO).apply()
-        tileService!!.updateState()
-        var icon = tileService!!.qsTile.icon
+        prefs.edit().putString(Constants.PREF_START_BUTTON_IMAGE, Constants.PREF_START_BUTTON_IMAGE_APP_LOGO).apply()
+        tileService.updateState()
+        var icon = tileService.qsTile.icon
         Assert.assertEquals(R.drawable.tb_system.toLong(), Shadows.shadowOf(icon).resId.toLong())
-        prefs!!.edit().putString(Constants.PREF_START_BUTTON_IMAGE, UNSUPPORTED).apply()
-        tileService!!.updateState()
-        icon = tileService!!.qsTile.icon
+        prefs.edit().putString(Constants.PREF_START_BUTTON_IMAGE, UNSUPPORTED).apply()
+        tileService.updateState()
+        icon = tileService.qsTile.icon
         Assert.assertEquals(R.drawable.tb_allapps.toLong(), Shadows.shadowOf(icon).resId.toLong())
     }
 
@@ -57,19 +57,19 @@ class QuickSettingsTileServiceTest {
                 .thenAnswer(isServiceRunningAnswer)
         canDrawOverlaysAnswer.answer = true
         isServiceRunningAnswer.answer = true
-        tileService!!.updateState()
-        Assert.assertEquals(Tile.STATE_ACTIVE.toLong(), tileService!!.qsTile.state.toLong())
+        tileService.updateState()
+        Assert.assertEquals(Tile.STATE_ACTIVE.toLong(), tileService.qsTile.state.toLong())
         canDrawOverlaysAnswer.answer = true
         isServiceRunningAnswer.answer = false
-        tileService!!.updateState()
-        Assert.assertEquals(Tile.STATE_INACTIVE.toLong(), tileService!!.qsTile.state.toLong())
+        tileService.updateState()
+        Assert.assertEquals(Tile.STATE_INACTIVE.toLong(), tileService.qsTile.state.toLong())
         canDrawOverlaysAnswer.answer = false
         isServiceRunningAnswer.answer = true
-        tileService!!.updateState()
-        Assert.assertEquals(Tile.STATE_UNAVAILABLE.toLong(), tileService!!.qsTile.state.toLong())
+        tileService.updateState()
+        Assert.assertEquals(Tile.STATE_UNAVAILABLE.toLong(), tileService.qsTile.state.toLong())
         canDrawOverlaysAnswer.answer = false
         isServiceRunningAnswer.answer = false
-        tileService!!.updateState()
-        Assert.assertEquals(Tile.STATE_UNAVAILABLE.toLong(), tileService!!.qsTile.state.toLong())
+        tileService.updateState()
+        Assert.assertEquals(Tile.STATE_UNAVAILABLE.toLong(), tileService.qsTile.state.toLong())
     }
 }

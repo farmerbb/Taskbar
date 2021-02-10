@@ -15,9 +15,9 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class QuitReceiverTest {
-    private var quitReceiver: QuitReceiver? = null
-    private var context: Context? = null
-    private var prefs: SharedPreferences? = null
+    private lateinit var quitReceiver: QuitReceiver
+    private lateinit var context: Context
+    private lateinit var prefs: SharedPreferences
 
     @Before
     fun setUp() {
@@ -28,26 +28,26 @@ class QuitReceiverTest {
 
     @Test
     fun testSkipQuitReceiver() {
-        prefs!!.edit().putBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true).apply()
-        quitReceiver!!.onReceive(context, null)
-        Assert.assertTrue(prefs!!.getBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true))
+        prefs.edit().putBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true).apply()
+        quitReceiver.onReceive(context, null)
+        Assert.assertTrue(prefs.getBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true))
         val intent = Intent()
-        quitReceiver!!.onReceive(context, intent)
-        Assert.assertTrue(prefs!!.getBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true))
+        quitReceiver.onReceive(context, intent)
+        Assert.assertTrue(prefs.getBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true))
         intent.action = Constants.ACTION_QUIT + UNSUPPORTED
-        quitReceiver!!.onReceive(context, intent)
-        Assert.assertTrue(prefs!!.getBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true))
+        quitReceiver.onReceive(context, intent)
+        Assert.assertTrue(prefs.getBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, true))
         intent.action = Constants.ACTION_QUIT
-        quitReceiver!!.onReceive(context, intent)
-        Assert.assertFalse(prefs!!.contains(Constants.PREF_SKIP_QUIT_RECEIVER))
+        quitReceiver.onReceive(context, intent)
+        Assert.assertFalse(prefs.contains(Constants.PREF_SKIP_QUIT_RECEIVER))
     }
 
     @Test
     fun testNonSkipQuitReceiver() {
-        prefs!!.edit().putBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, false).apply()
-        prefs!!.edit().putBoolean(Constants.PREF_TASKBAR_ACTIVE, true).apply()
+        prefs.edit().putBoolean(Constants.PREF_SKIP_QUIT_RECEIVER, false).apply()
+        prefs.edit().putBoolean(Constants.PREF_TASKBAR_ACTIVE, true).apply()
         val intent = Intent(Constants.ACTION_QUIT)
-        quitReceiver!!.onReceive(context, intent)
-        Assert.assertFalse(prefs!!.getBoolean(Constants.PREF_TASKBAR_ACTIVE, true))
+        quitReceiver.onReceive(context, intent)
+        Assert.assertFalse(prefs.getBoolean(Constants.PREF_TASKBAR_ACTIVE, true))
     }
 }

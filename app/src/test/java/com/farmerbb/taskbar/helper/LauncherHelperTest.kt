@@ -20,10 +20,10 @@ import org.robolectric.RobolectricTestRunner
 @PrepareForTest(U::class)
 class LauncherHelperTest {
     @get:Rule
-    var rule = PowerMockRule()
-    private var launcherHelper: LauncherHelper? = null
-    private var context: Context? = null
-    private var getExternalDisplayIdAnswer: IntAnswer? = null
+    val rule = PowerMockRule()
+    private lateinit var launcherHelper: LauncherHelper
+    private lateinit var context: Context
+    private lateinit var getExternalDisplayIdAnswer: IntAnswer
 
     @Before
     fun setUp() {

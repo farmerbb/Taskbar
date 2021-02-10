@@ -15,19 +15,19 @@ import org.robolectric.util.ReflectionHelpers
 
 @RunWith(RobolectricTestRunner::class)
 class DesktopIconInfoTest {
-    private var context: Context? = null
-    private var appEntry: AppEntry? = null
-    private var desktopIconInfo: DesktopIconInfo? = null
+    private lateinit var context: Context
+    private lateinit var appEntry: AppEntry
+    private lateinit var desktopIconInfo: DesktopIconInfo
     private val defaultColumn = 3
     private val defaultRow = 3
-    private var packageName: String? = null
+    private lateinit var packageName: String
 
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
-        packageName = context!!.packageName
-        val icon = context!!.resources.getDrawable(R.drawable.tb_apps)
-        val componentName = ComponentName(context!!, MainActivity::class.java)
+        packageName = context.packageName
+        val icon = context.resources.getDrawable(R.drawable.tb_apps)
+        val componentName = ComponentName(context, MainActivity::class.java)
         appEntry = AppEntry(
                 packageName,
                 componentName.flattenToString(),
@@ -40,7 +40,7 @@ class DesktopIconInfoTest {
 
     @Test
     fun testFromJson() {
-        val newDesktopIconInfo = DesktopIconInfo.fromJson(desktopIconInfo!!.toJson(context))
+        val newDesktopIconInfo = DesktopIconInfo.fromJson(desktopIconInfo.toJson(context))
         testNewDesktopIconInfo(newDesktopIconInfo)
     }
 
@@ -52,21 +52,21 @@ class DesktopIconInfoTest {
 
     private fun testNewDesktopIconInfo(newDesktopIconInfo: DesktopIconInfo) {
         Assert.assertNotNull(newDesktopIconInfo)
-        Assert.assertEquals(desktopIconInfo!!.column.toLong(), newDesktopIconInfo.column.toLong())
-        Assert.assertEquals(desktopIconInfo!!.row.toLong(), newDesktopIconInfo.row.toLong())
+        Assert.assertEquals(desktopIconInfo.column.toLong(), newDesktopIconInfo.column.toLong())
+        Assert.assertEquals(desktopIconInfo.row.toLong(), newDesktopIconInfo.row.toLong())
         Assert.assertEquals(
-                desktopIconInfo!!.entry.componentName,
+                desktopIconInfo.entry.componentName,
                 newDesktopIconInfo.entry.componentName
         )
         Assert.assertEquals(
-                desktopIconInfo!!.entry.packageName,
+                desktopIconInfo.entry.packageName,
                 newDesktopIconInfo.entry.packageName
         )
         Assert.assertEquals(
-                desktopIconInfo!!.entry.label,
+                desktopIconInfo.entry.label,
                 newDesktopIconInfo.entry.label
         )
-        Assert.assertNotNull(ReflectionHelpers.getField(desktopIconInfo!!.entry, "icon"))
+        Assert.assertNotNull(ReflectionHelpers.getField(desktopIconInfo.entry, "icon"))
         Assert.assertNull(ReflectionHelpers.getField(newDesktopIconInfo.entry, "icon"))
     }
 }

@@ -3,11 +3,9 @@ package com.farmerbb.taskbar.ui
 import androidx.test.core.app.ApplicationProvider
 
 class TestUIHostService : UIHostService() {
-    var controller: TestUIController? = null
+    var controller: TestUIController =
+            TestUIController(ApplicationProvider.getApplicationContext())
     override fun newController(): UIController {
-        if (controller == null) {
-            controller = TestUIController(ApplicationProvider.getApplicationContext())
-        }
-        return controller!!
+        return controller
     }
 }

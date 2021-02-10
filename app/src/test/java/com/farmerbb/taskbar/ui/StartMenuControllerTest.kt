@@ -16,6 +16,7 @@ import com.farmerbb.taskbar.Constants
 import com.farmerbb.taskbar.LauncherAppsHelper.generateTestLauncherActivityInfo
 import com.farmerbb.taskbar.R
 import com.farmerbb.taskbar.util.AppEntry
+import com.farmerbb.taskbar.util.Constants.*
 import com.farmerbb.taskbar.util.TaskbarPosition
 import com.farmerbb.taskbar.util.U
 import org.junit.*
@@ -31,10 +32,10 @@ import java.util.*
 @PrepareForTest(value = [U::class, TaskbarPosition::class])
 class StartMenuControllerTest {
     @get:Rule
-    var rule = PowerMockRule()
-    private var uiController: StartMenuController? = null
-    private var context: Context? = null
-    private var prefs: SharedPreferences? = null
+    val rule = PowerMockRule()
+    private lateinit var uiController: StartMenuController
+    private lateinit var context: Context
+    private lateinit var prefs: SharedPreferences
     private val host: UIHost = MockUIHost()
 
     @Before
@@ -42,63 +43,63 @@ class StartMenuControllerTest {
         context = ApplicationProvider.getApplicationContext()
         uiController = StartMenuController(context)
         prefs = U.getSharedPreferences(context)
-        uiController!!.onCreateHost(host)
+        uiController.onCreateHost(host)
     }
 
     @After
     fun tearDown() {
-        prefs!!.edit().remove(com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR).apply()
-        uiController!!.onDestroyHost(host)
+        prefs.edit().remove(PREF_SHOW_SEARCH_BAR).apply()
+        uiController.onDestroyHost(host)
     }
 
     @Test
     fun testShouldShowSearchBox() {
-        prefs!!.edit().remove(com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR).apply()
-        Assert.assertTrue(uiController!!.shouldShowSearchBox(prefs, false))
-        prefs!!.edit().putString(com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR, "always").apply()
-        Assert.assertTrue(uiController!!.shouldShowSearchBox(prefs, false))
-        prefs!!.edit().putString(com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR, "keyboard").apply()
-        Assert.assertFalse(uiController!!.shouldShowSearchBox(prefs, false))
-        Assert.assertTrue(uiController!!.shouldShowSearchBox(prefs, true))
-        prefs!!.edit().putString(com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR, "never").apply()
-        Assert.assertFalse(uiController!!.shouldShowSearchBox(prefs, true))
-        prefs!!.edit().putString(com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR, Constants.UNSUPPORTED).apply()
-        Assert.assertFalse(uiController!!.shouldShowSearchBox(prefs, true))
+        prefs.edit().remove(PREF_SHOW_SEARCH_BAR).apply()
+        Assert.assertTrue(uiController.shouldShowSearchBox(prefs, false))
+        prefs.edit().putString(PREF_SHOW_SEARCH_BAR, "always").apply()
+        Assert.assertTrue(uiController.shouldShowSearchBox(prefs, false))
+        prefs.edit().putString(PREF_SHOW_SEARCH_BAR, "keyboard").apply()
+        Assert.assertFalse(uiController.shouldShowSearchBox(prefs, false))
+        Assert.assertTrue(uiController.shouldShowSearchBox(prefs, true))
+        prefs.edit().putString(PREF_SHOW_SEARCH_BAR, "never").apply()
+        Assert.assertFalse(uiController.shouldShowSearchBox(prefs, true))
+        prefs.edit().putString(PREF_SHOW_SEARCH_BAR, Constants.UNSUPPORTED).apply()
+        Assert.assertFalse(uiController.shouldShowSearchBox(prefs, true))
     }
 
     @Test
     fun testGetStartMenuLayoutId() {
         Assert.assertEquals(
                 R.layout.tb_start_menu_left.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT)
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_LEFT)
                         .toLong())
         Assert.assertEquals(
                 R.layout.tb_start_menu_right.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT)
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_RIGHT)
                         .toLong())
         Assert.assertEquals(
                 R.layout.tb_start_menu_top_left.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT)
+                uiController.getStartMenuLayoutId(POSITION_TOP_LEFT)
                         .toLong())
         Assert.assertEquals(
                 R.layout.tb_start_menu_vertical_left.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT)
+                uiController.getStartMenuLayoutId(POSITION_TOP_VERTICAL_LEFT)
                         .toLong())
         Assert.assertEquals(
                 R.layout.tb_start_menu_vertical_left.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT)
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_VERTICAL_LEFT)
                         .toLong())
         Assert.assertEquals(
                 R.layout.tb_start_menu_top_right.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT)
+                uiController.getStartMenuLayoutId(POSITION_TOP_RIGHT)
                         .toLong())
         Assert.assertEquals(
                 R.layout.tb_start_menu_vertical_right.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT)
+                uiController.getStartMenuLayoutId(POSITION_TOP_VERTICAL_RIGHT)
                         .toLong())
         Assert.assertEquals(
                 R.layout.tb_start_menu_vertical_right.toLong(),
-                uiController!!.getStartMenuLayoutId(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_RIGHT)
+                uiController.getStartMenuLayoutId(POSITION_BOTTOM_VERTICAL_RIGHT)
                         .toLong())
     }
 
@@ -106,46 +107,38 @@ class StartMenuControllerTest {
     fun testGetStartMenuGravity() {
         Assert.assertEquals(
                 (Gravity.BOTTOM or Gravity.LEFT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_BOTTOM_LEFT).toLong())
         Assert.assertEquals(
                 (Gravity.BOTTOM or Gravity.LEFT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_BOTTOM_VERTICAL_LEFT).toLong())
         Assert.assertEquals(
                 (Gravity.BOTTOM or Gravity.RIGHT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_BOTTOM_RIGHT).toLong())
         Assert.assertEquals(
                 (Gravity.BOTTOM or Gravity.RIGHT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_RIGHT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_BOTTOM_VERTICAL_RIGHT).toLong())
         Assert.assertEquals(
                 (Gravity.TOP or Gravity.LEFT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_TOP_LEFT).toLong())
         Assert.assertEquals(
                 (Gravity.TOP or Gravity.LEFT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_TOP_VERTICAL_LEFT).toLong())
         Assert.assertEquals(
                 (Gravity.TOP or Gravity.RIGHT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_TOP_RIGHT).toLong())
         Assert.assertEquals(
                 (Gravity.TOP or Gravity.RIGHT).toLong(),
-                uiController!!.getStartMenuGravity(com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT)
-                        .toLong())
+                uiController.getStartMenuGravity(POSITION_TOP_VERTICAL_RIGHT).toLong())
     }
 
     @Test
     fun testGenerateQueryWebSearchIntent() {
-        var intent = uiController!!.generateQueryWebSearchIntent(NON_URL_QUERY)
+        var intent = uiController.generateQueryWebSearchIntent(NON_URL_QUERY)
         Assert.assertEquals(Intent.ACTION_WEB_SEARCH, intent.action)
         Assert.assertEquals(NON_URL_QUERY, intent.getStringExtra(SearchManager.QUERY))
         Assert.assertEquals(Intent.FLAG_ACTIVITY_NEW_TASK.toLong(), intent.flags.toLong())
         val urlQuery = "https://github.com/farmerbb/Taskbar"
-        intent = uiController!!.generateQueryWebSearchIntent(urlQuery)
+        intent = uiController.generateQueryWebSearchIntent(urlQuery)
         Assert.assertEquals(Intent.ACTION_VIEW, intent.action)
         Assert.assertEquals(Uri.parse(urlQuery), intent.data)
         Assert.assertEquals(Intent.FLAG_ACTIVITY_NEW_TASK.toLong(), intent.flags.toLong())
@@ -153,7 +146,7 @@ class StartMenuControllerTest {
 
     @Test
     fun testGenerateQueryGoogleIntent() {
-        val intent = uiController!!.generateQueryGoogleIntent(NON_URL_QUERY)
+        val intent = uiController.generateQueryGoogleIntent(NON_URL_QUERY)
         Assert.assertEquals(Intent.ACTION_VIEW, intent.action)
         Assert.assertEquals(Intent.FLAG_ACTIVITY_NEW_TASK.toLong(), intent.flags.toLong())
         val uri = intent.data
@@ -166,9 +159,9 @@ class StartMenuControllerTest {
     @Test
     fun testGenerateAppEntries() {
         val queryList: MutableList<LauncherActivityInfo> = ArrayList()
-        val userManager = context!!.getSystemService(Context.USER_SERVICE) as UserManager
-        val packageManager = context!!.packageManager
-        var appEntries = uiController!!.generateAppEntries(context, userManager, packageManager, queryList)
+        val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
+        val packageManager = context.packageManager
+        var appEntries = uiController.generateAppEntries(context, userManager, packageManager, queryList)
         Assert.assertEquals(0, appEntries.size.toLong())
         val activityInfo = ActivityInfo()
         activityInfo.packageName = Constants.TEST_PACKAGE
@@ -177,14 +170,14 @@ class StartMenuControllerTest {
         activityInfo.applicationInfo = ApplicationInfo()
         activityInfo.applicationInfo.packageName = activityInfo.packageName
         val launcherActivityInfo = generateTestLauncherActivityInfo(
-                context!!, activityInfo, Constants.DEFAULT_TEST_USER_ID
+                context, activityInfo, Constants.DEFAULT_TEST_USER_ID
         )
         queryList.add(launcherActivityInfo)
-        appEntries = uiController!!.generateAppEntries(context, userManager, packageManager, queryList)
+        appEntries = uiController.generateAppEntries(context, userManager, packageManager, queryList)
         Assert.assertEquals(1, appEntries.size.toLong())
         verifyAppEntryContent(activityInfo, appEntries[0])
         queryList.add(launcherActivityInfo)
-        appEntries = uiController!!.generateAppEntries(context, userManager, packageManager, queryList)
+        appEntries = uiController.generateAppEntries(context, userManager, packageManager, queryList)
         Assert.assertEquals(2, appEntries.size.toLong())
         verifyAppEntryContent(activityInfo, appEntries[0])
         verifyAppEntryContent(activityInfo, appEntries[1])

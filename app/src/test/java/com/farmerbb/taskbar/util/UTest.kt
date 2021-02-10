@@ -46,8 +46,8 @@ import org.robolectric.util.ReflectionHelpers.ClassParameter
 @LooperMode(LooperMode.Mode.LEGACY)
 class UTest {
     @get:Rule
-    var rule = PowerMockRule()
-    private var context: Context? = null
+    val rule = PowerMockRule()
+    private lateinit var context: Context
 
     @Before
     fun setUp() {
@@ -892,13 +892,13 @@ class UTest {
         Assert.assertFalse(U.isDesktopModeActive(context))
         isDesktopModeSupportedAnswer.answer = true
         Settings.Global.putInt(
-                context!!.contentResolver,
+                context.contentResolver,
                 "force_desktop_mode_on_external_displays",
                 0
         )
         Assert.assertFalse(U.isDesktopModeActive(context))
         Settings.Global.putInt(
-                context!!.contentResolver,
+                context.contentResolver,
                 "force_desktop_mode_on_external_displays",
                 1
         )
@@ -908,7 +908,7 @@ class UTest {
         hasFreeformSupportAnswer.answer = true
         Assert.assertTrue(U.isDesktopModeActive(context))
         Settings.Global.putInt(
-                context!!.contentResolver,
+                context.contentResolver,
                 "force_desktop_mode_on_external_displays",
                 0
         )
@@ -918,7 +918,7 @@ class UTest {
     fun testSendBroadcast() {
         val receiver = TestBroadcastReceiver()
         val filter = IntentFilter(TestBroadcastReceiver.ACTION)
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(receiver, filter)
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter)
         U.sendBroadcast(context, TestBroadcastReceiver.ACTION)
         Assert.assertTrue(receiver.onReceived)
         receiver.onReceived = false
@@ -929,7 +929,7 @@ class UTest {
     private class TestBroadcastReceiver : BroadcastReceiver() {
         var onReceived = false
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent == null || ACTION != intent.action) {
+            if (ACTION != intent.action) {
                 return
             }
             onReceived = true

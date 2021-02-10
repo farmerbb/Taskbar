@@ -10,8 +10,8 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class TopAppsTest {
-    private var context: Context? = null
-    private var topApps: TopApps? = null
+    private lateinit var context: Context
+    private lateinit var topApps: TopApps
 
     @Before
     fun setUp() {
@@ -29,23 +29,23 @@ class TopAppsTest {
 
     @Test
     fun testIsTopApp() {
-        Assert.assertFalse(topApps!!.isTopApp(context!!.packageName))
+        Assert.assertFalse(topApps.isTopApp(context.packageName))
         addCurrentPackageToTopApps()
-        Assert.assertTrue(topApps!!.isTopApp(context!!.packageName))
-        topApps!!.removeTopApp(context, context!!.packageName)
+        Assert.assertTrue(topApps.isTopApp(context.packageName))
+        topApps.removeTopApp(context, context.packageName)
     }
 
     @Test
     fun testRemoveTopApp() {
         addCurrentPackageToTopApps()
-        Assert.assertTrue(topApps!!.isTopApp(context!!.packageName))
-        topApps!!.removeTopApp(context, context!!.packageName)
-        Assert.assertFalse(topApps!!.isTopApp(context!!.packageName))
+        Assert.assertTrue(topApps.isTopApp(context.packageName))
+        topApps.removeTopApp(context, context.packageName)
+        Assert.assertFalse(topApps.isTopApp(context.packageName))
     }
 
     private fun addCurrentPackageToTopApps() {
-        val packageName = context!!.packageName
+        val packageName = context.packageName
         val entry = BlacklistEntry(packageName, packageName)
-        topApps!!.addTopApp(context, entry)
+        topApps.addTopApp(context, entry)
     }
 }

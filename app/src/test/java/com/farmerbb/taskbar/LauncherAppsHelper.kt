@@ -16,7 +16,10 @@ object LauncherAppsHelper {
                 LauncherActivityInfo::class.java,
                 ClassParameter.from(Context::class.java, context),
                 ClassParameter.from(ActivityInfo::class.java, activityInfo),
-                ClassParameter.from(UserHandle::class.java, UserHandle.getUserHandleForUid(userHandleId))
+                ClassParameter.from(
+                        UserHandle::class.java,
+                        UserHandle.getUserHandleForUid(userHandleId)
+                )
         )
     }
 }

@@ -12,20 +12,20 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class BlacklistTest {
-    private var context: Context? = null
-    private var blacklist: Blacklist? = null
-    private var entry: BlacklistEntry? = null
+    private lateinit var context: Context
+    private lateinit var blacklist: Blacklist
+    private lateinit var entry: BlacklistEntry
 
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         blacklist = Blacklist.getInstance(context)
-        entry = BlacklistEntry(context!!.packageName, context!!.packageName)
+        entry = BlacklistEntry(context.packageName, context.packageName)
     }
 
     @After
     fun tearDown() {
-        blacklist!!.clear(context)
+        blacklist.clear(context)
     }
 
     @Test
@@ -38,30 +38,30 @@ class BlacklistTest {
 
     @Test
     fun testAddBlockedApp() {
-        Assert.assertEquals(0, blacklist!!.blockedApps.size.toLong())
-        blacklist!!.addBlockedApp(context, entry)
-        Assert.assertEquals(1, blacklist!!.blockedApps.size.toLong())
-        Assert.assertTrue(blacklist!!.isBlocked(context!!.packageName))
+        Assert.assertEquals(0, blacklist.blockedApps.size.toLong())
+        blacklist.addBlockedApp(context, entry)
+        Assert.assertEquals(1, blacklist.blockedApps.size.toLong())
+        Assert.assertTrue(blacklist.isBlocked(context.packageName))
     }
 
     @Test
     fun testRemoveBlockedApp() {
-        blacklist!!.addBlockedApp(context, entry)
-        blacklist!!.removeBlockedApp(context, context!!.packageName)
-        Assert.assertEquals(0, blacklist!!.blockedApps.size.toLong())
+        blacklist.addBlockedApp(context, entry)
+        blacklist.removeBlockedApp(context, context.packageName)
+        Assert.assertEquals(0, blacklist.blockedApps.size.toLong())
     }
 
     @Test
     fun testClear() {
-        blacklist!!.addBlockedApp(context, entry)
-        blacklist!!.clear(context)
-        Assert.assertEquals(0, blacklist!!.blockedApps.size.toLong())
+        blacklist.addBlockedApp(context, entry)
+        blacklist.clear(context)
+        Assert.assertEquals(0, blacklist.blockedApps.size.toLong())
     }
 
     @Test
     fun testSerializable() {
-        blacklist!!.addBlockedApp(context, entry)
+        blacklist.addBlockedApp(context, entry)
         val newBlacklist = SerializationUtils.deserialize<Blacklist>(SerializationUtils.serialize(blacklist))
-        Assert.assertTrue(newBlacklist.isBlocked(context!!.packageName))
+        Assert.assertTrue(newBlacklist.isBlocked(context.packageName))
     }
 }

@@ -22,17 +22,17 @@ import org.robolectric.android.controller.ServiceController
 @PrepareForTest(U::class)
 class UIControllerTest {
     @get:Rule
-    var rule = PowerMockRule()
-    private var controller: ServiceController<TestUIHostService>? = null
-    private var hostService: TestUIHostService? = null
-    private var uiController: TestUIController? = null
-    private var context: Context? = null
+    val rule = PowerMockRule()
+    private lateinit var controller: ServiceController<TestUIHostService>
+    private lateinit var hostService: TestUIHostService
+    private lateinit var uiController: TestUIController
+    private lateinit var context: Context
 
     @Before
     fun setUp() {
         controller = Robolectric.buildService(TestUIHostService::class.java)
-        hostService = controller!!.create().get()
-        uiController = hostService!!.controller
+        hostService = controller.create().get()
+        uiController = hostService.controller
         context = ApplicationProvider.getApplicationContext()
     }
 
@@ -46,7 +46,7 @@ class UIControllerTest {
         LauncherHelper.getInstance().setOnSecondaryHomeScreen(true, 1)
         val runnable = TestRunnable()
         val context = ApplicationProvider.getApplicationContext<Context>()
-        uiController!!.init(context, hostService, runnable)
+        uiController.init(context, hostService, runnable)
         val shadowService = Shadows.shadowOf(hostService)
         Assert.assertTrue(shadowService.isStoppedBySelf)
     }
@@ -70,11 +70,11 @@ class UIControllerTest {
         canDrawOverlaysAnswer.answer = true
         val runnable = TestRunnable()
         val context = ApplicationProvider.getApplicationContext<Context>()
-        uiController!!.init(context, hostService, runnable)
+        uiController.init(context, hostService, runnable)
         Assert.assertTrue(runnable.hasRun)
         runnable.hasRun = false
         canDrawOverlaysAnswer.answer = false
-        uiController!!.init(context, hostService, runnable)
+        uiController.init(context, hostService, runnable)
         val shadowService = Shadows.shadowOf(hostService)
         Assert.assertTrue(shadowService.isStoppedBySelf)
         Assert.assertFalse(

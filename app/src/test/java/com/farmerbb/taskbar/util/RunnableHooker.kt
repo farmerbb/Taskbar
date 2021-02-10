@@ -14,14 +14,14 @@ package com.farmerbb.taskbar.util
  * @Override
  * public void run() {}
  * }
-</pre> *
+ * </pre>
  *
  *
  * or
  *
  * <pre>
  * Runnable runnable = () -> {}
-</pre> *
+ * </pre>
  *
  *
  * So we create a implementation to avoid powermock exception.

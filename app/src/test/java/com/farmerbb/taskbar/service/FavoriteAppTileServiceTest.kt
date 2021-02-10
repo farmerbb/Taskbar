@@ -27,9 +27,9 @@ import org.robolectric.Shadows
 
 @RunWith(RobolectricTestRunner::class)
 class FavoriteAppTileServiceTest {
-    private var app1: FavoriteApp1? = null
-    private var prefs: SharedPreferences? = null
-    private var context: Context? = null
+    private lateinit var app1: FavoriteApp1
+    private lateinit var prefs: SharedPreferences
+    private lateinit var context: Context
 
     @Before
     fun setUp() {
@@ -40,7 +40,7 @@ class FavoriteAppTileServiceTest {
 
     @Test
     fun testFavoriteApp1TileNumber() {
-        Assert.assertEquals(1, app1!!.tileNumber().toLong())
+        Assert.assertEquals(1, app1.tileNumber().toLong())
     }
 
     @Test
@@ -69,20 +69,20 @@ class FavoriteAppTileServiceTest {
 
     @Test
     fun testOnTileRemoved() {
-        app1!!.onTileRemoved()
+        app1.onTileRemoved()
         Assert.assertFalse(
-                prefs!!.getBoolean(app1!!.prefix + Constants.PREF_ADDED_SUFFIX, true)
+                prefs.getBoolean(app1.prefix + Constants.PREF_ADDED_SUFFIX, true)
         )
     }
 
     @Test
     fun testOnClickWithoutAdded() {
-        prefs!!.edit().putBoolean(app1!!.prefix + Constants.PREF_ADDED_SUFFIX, false).apply()
-        app1!!.onClick()
+        prefs.edit().putBoolean(app1.prefix + Constants.PREF_ADDED_SUFFIX, false).apply()
+        app1.onClick()
         val startedActivityIntent = Shadows.shadowOf(context as Application?).nextStartedActivity
         Assert.assertNotNull(startedActivityIntent)
         Assert.assertEquals(
-                app1!!.tileNumber().toLong(),
+                app1.tileNumber().toLong(),
                 startedActivityIntent.getIntExtra(Constants.PREF_QS_TILE, Int.MIN_VALUE)
                         .toLong())
         Assert.assertNotNull(startedActivityIntent.component)
@@ -96,27 +96,27 @@ class FavoriteAppTileServiceTest {
 
     @Test
     fun testOnClickWithAdded() {
-        prefs!!.edit().putBoolean(app1!!.prefix + Constants.PREF_ADDED_SUFFIX, true).apply()
+        prefs.edit().putBoolean(app1.prefix + Constants.PREF_ADDED_SUFFIX, true).apply()
         Shadows.shadowOf(app1).setLocked(true)
-        app1!!.onClick()
-        Assert.assertFalse(app1!!.isLocked)
+        app1.onClick()
+        Assert.assertFalse(app1.isLocked)
         Shadows.shadowOf(app1).setLocked(false)
         val testPackageName: String = TEST_PACKAGE
-        prefs!!
+        prefs
                 .edit()
-                .putString(app1!!.prefix + Constants.PREF_PACKAGE_NAME_SUFFIX, testPackageName)
+                .putString(app1.prefix + Constants.PREF_PACKAGE_NAME_SUFFIX, testPackageName)
                 .apply()
         val testComponentName: String = TEST_COMPONENT
-        prefs!!
+        prefs
                 .edit()
-                .putString(app1!!.prefix + Constants.PREF_COMPONENT_NAME_SUFFIX, testComponentName)
+                .putString(app1.prefix + Constants.PREF_COMPONENT_NAME_SUFFIX, testComponentName)
                 .apply()
         val testWindowSize: String = TEST_WINDOW_SIZE
-        prefs!!
+        prefs
                 .edit()
-                .putString(app1!!.prefix + Constants.PREF_WINDOW_SIZE_SUFFIX, testWindowSize)
+                .putString(app1.prefix + Constants.PREF_WINDOW_SIZE_SUFFIX, testWindowSize)
                 .apply()
-        app1!!.onClick()
+        app1.onClick()
         val startedActivityIntent = Shadows.shadowOf(context as Application?).nextStartedActivity
         Assert.assertNotNull(startedActivityIntent)
         Assert.assertNotNull(startedActivityIntent.component)
@@ -139,7 +139,7 @@ class FavoriteAppTileServiceTest {
                 testWindowSize,
                 startedActivityIntent.getStringExtra(Constants.EXTRA_WINDOW_SIZE)
         )
-        val userManager = context!!.getSystemService(Context.USER_SERVICE) as UserManager
+        val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
         Assert.assertEquals(
                 userManager.getSerialNumberForUser(Process.myUserHandle()),
                 startedActivityIntent.getLongExtra(Constants.EXTRA_USER_ID, Long.MIN_VALUE)
@@ -148,20 +148,20 @@ class FavoriteAppTileServiceTest {
 
     @Test
     fun testOnStartListeningWithoutAdded() {
-        prefs!!.edit().putBoolean(app1!!.prefix + Constants.PREF_ADDED_SUFFIX, false).apply()
-        app1!!.onStartListening()
-        val tile = app1!!.qsTile
+        prefs.edit().putBoolean(app1.prefix + Constants.PREF_ADDED_SUFFIX, false).apply()
+        app1.onStartListening()
+        val tile = app1.qsTile
         Assert.assertEquals(Tile.STATE_INACTIVE.toLong(), tile.state.toLong())
-        Assert.assertEquals(app1!!.getString(R.string.tb_new_shortcut), tile.label)
+        Assert.assertEquals(app1.getString(R.string.tb_new_shortcut), tile.label)
     }
 
     @Test
     fun testOnStartListeningWithAdded() {
-        prefs!!.edit().putBoolean(app1!!.prefix + Constants.PREF_ADDED_SUFFIX, true).apply()
+        prefs.edit().putBoolean(app1.prefix + Constants.PREF_ADDED_SUFFIX, true).apply()
         val testLabel: String = TEST_LABEL
-        prefs!!.edit().putString(app1!!.prefix + Constants.PREF_LABEL_SUFFIX, testLabel).apply()
-        app1!!.onStartListening()
-        val tile = app1!!.qsTile
+        prefs.edit().putString(app1.prefix + Constants.PREF_LABEL_SUFFIX, testLabel).apply()
+        app1.onStartListening()
+        val tile = app1.qsTile
         Assert.assertEquals(Tile.STATE_ACTIVE.toLong(), tile.state.toLong())
         Assert.assertEquals(testLabel, tile.label)
     }

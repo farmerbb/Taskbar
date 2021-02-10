@@ -17,7 +17,7 @@ import java.util.function.Consumer
 @RunWith(RobolectricTestRunner::class)
 class IconPackManagerTest {
     private val iconPackManager = IconPackManager.getInstance()
-    private var context: Context? = null
+    private lateinit var context: Context
 
     @Before
     fun setUp() {
@@ -38,7 +38,7 @@ class IconPackManagerTest {
         var iconPacks = iconPackManager.getAvailableIconPacks(context)
         Assert.assertEquals(0, iconPacks.size.toLong())
         val testPackageName = "com.test.package"
-        val packageManager = context!!.packageManager
+        val packageManager = context.packageManager
         val shadowPackageManager = Shadows.shadowOf(packageManager)
         val testIconPackSize = 20
         for (i in 1..testIconPackSize) {
@@ -64,13 +64,13 @@ class IconPackManagerTest {
 
     @Test
     fun testGetIconPack() {
-        val iconPack = iconPackManager.getIconPack(context!!.packageName)
+        val iconPack = iconPackManager.getIconPack(context.packageName)
         Assert.assertNotNull(iconPack)
-        Assert.assertEquals(context!!.packageName, iconPack.packageName)
-        Assert.assertSame(iconPack, iconPackManager.getIconPack(context!!.packageName))
+        Assert.assertEquals(context.packageName, iconPack.packageName)
+        Assert.assertSame(iconPack, iconPackManager.getIconPack(context.packageName))
         iconPackManager.nullify()
-        val newIconPack = iconPackManager.getIconPack(context!!.packageName)
-        Assert.assertEquals(context!!.packageName, newIconPack.packageName)
+        val newIconPack = iconPackManager.getIconPack(context.packageName)
+        Assert.assertEquals(context.packageName, newIconPack.packageName)
         Assert.assertNotSame(iconPack, newIconPack)
     }
 }

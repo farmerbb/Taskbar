@@ -16,20 +16,20 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class AppEntryTest {
-    private var context: Context? = null
-    private var appEntry: AppEntry? = null
-    private var componentName: ComponentName? = null
-    private var icon: Drawable? = null
+    private lateinit var context: Context
+    private lateinit var appEntry: AppEntry
+    private lateinit var componentName: ComponentName
+    private lateinit var icon: Drawable
 
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
-        componentName = ComponentName(context!!, MainActivity::class.java)
-        icon = context!!.resources.getDrawable(R.drawable.tb_apps)
+        componentName = ComponentName(context, MainActivity::class.java)
+        icon = context.resources.getDrawable(R.drawable.tb_apps)
         appEntry = AppEntry(
-                context!!.packageName,
-                componentName!!.flattenToString(),
-                context!!.packageName,
+                context.packageName,
+                componentName.flattenToString(),
+                context.packageName,
                 icon,
                 true
         )
@@ -37,47 +37,47 @@ class AppEntryTest {
 
     @Test
     fun testGetComponentName() {
-        Assert.assertEquals(componentName!!.flattenToString(), appEntry!!.componentName)
+        Assert.assertEquals(componentName.flattenToString(), appEntry.componentName)
     }
 
     @Test
     fun testGetPackageName() {
-        Assert.assertEquals(context!!.packageName, appEntry!!.packageName)
+        Assert.assertEquals(context.packageName, appEntry.packageName)
     }
 
     @Test
     fun testGetLabel() {
-        Assert.assertEquals(context!!.packageName, appEntry!!.label)
+        Assert.assertEquals(context.packageName, appEntry.label)
     }
 
     @Test
     fun testGetUserId() {
-        val userManager = context!!.getSystemService(Context.USER_SERVICE) as UserManager
+        val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
         val currentUser = userManager.getSerialNumberForUser(Process.myUserHandle())
-        Assert.assertEquals(currentUser, appEntry!!.getUserId(context))
-        appEntry!!.setUserId(currentUser + 1)
-        Assert.assertEquals(currentUser + 1, appEntry!!.getUserId(context))
-        appEntry!!.setUserId(currentUser)
+        Assert.assertEquals(currentUser, appEntry.getUserId(context))
+        appEntry.setUserId(currentUser + 1)
+        Assert.assertEquals(currentUser + 1, appEntry.getUserId(context))
+        appEntry.setUserId(currentUser)
     }
 
     @Test
     fun testGetIcon() {
-        Assert.assertEquals(icon, appEntry!!.getIcon(context))
+        Assert.assertEquals(icon, appEntry.getIcon(context))
     }
 
     @Test
     fun testSetLastTimeUsed() {
-        Assert.assertEquals(0, appEntry!!.lastTimeUsed)
-        appEntry!!.lastTimeUsed = 100
-        Assert.assertEquals(100, appEntry!!.lastTimeUsed)
-        appEntry!!.lastTimeUsed = 0
+        Assert.assertEquals(0, appEntry.lastTimeUsed)
+        appEntry.lastTimeUsed = 100
+        Assert.assertEquals(100, appEntry.lastTimeUsed)
+        appEntry.lastTimeUsed = 0
     }
 
     @Test
     fun testSetTotalTimeInForeground() {
-        Assert.assertEquals(0, appEntry!!.totalTimeInForeground)
-        appEntry!!.totalTimeInForeground = 100
-        Assert.assertEquals(100, appEntry!!.totalTimeInForeground)
-        appEntry!!.totalTimeInForeground = 0
+        Assert.assertEquals(0, appEntry.totalTimeInForeground)
+        appEntry.totalTimeInForeground = 100
+        Assert.assertEquals(100, appEntry.totalTimeInForeground)
+        appEntry.totalTimeInForeground = 0
     }
 }

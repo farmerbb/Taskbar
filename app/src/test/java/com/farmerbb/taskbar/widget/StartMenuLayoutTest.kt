@@ -18,8 +18,8 @@ import org.robolectric.annotation.LooperMode
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.LEGACY)
 class StartMenuLayoutTest {
-    private var context: Context? = null
-    private var layout: StartMenuLayout? = null
+    private lateinit var context: Context
+    private lateinit var layout: StartMenuLayout
 
     @Before
     fun setUp() {
@@ -31,19 +31,19 @@ class StartMenuLayoutTest {
     fun testDispatchKeyEvent() {
         val filter = IntentFilter(Constants.ACTION_HIDE_START_MENU)
         val receiver = TestBroadcastReceiver()
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(receiver, filter)
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter)
         val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
-        layout!!.dispatchKeyEvent(keyEvent)
+        layout.dispatchKeyEvent(keyEvent)
         Assert.assertFalse(receiver.onReceived)
-        layout!!.viewHandlesBackButton()
-        layout!!.dispatchKeyEvent(keyEvent)
+        layout.viewHandlesBackButton()
+        layout.dispatchKeyEvent(keyEvent)
         Assert.assertTrue(receiver.onReceived)
     }
 
     private class TestBroadcastReceiver : BroadcastReceiver() {
         var onReceived = false
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent == null || Constants.ACTION_HIDE_START_MENU != intent.action) {
+            if (Constants.ACTION_HIDE_START_MENU != intent.action) {
                 return
             }
             onReceived = true

@@ -11,8 +11,8 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class SavedWindowSizesTest {
-    private var context: Context? = null
-    private var savedWindowSizes: SavedWindowSizes? = null
+    private lateinit var context: Context
+    private lateinit var savedWindowSizes: SavedWindowSizes
 
     @Before
     fun setUp() {
@@ -34,42 +34,44 @@ class SavedWindowSizesTest {
         val defaultWindowSize = prefs.getString(Constants.PREF_WINDOW_SIZE, "standard")
         Assert.assertEquals(
                 defaultWindowSize,
-                savedWindowSizes!!.getWindowSize(context, context!!.packageName)
+                savedWindowSizes.getWindowSize(context, context.packageName)
         )
         val newWindowSize = "$defaultWindowSize-new"
         prefs.edit().putString(Constants.PREF_WINDOW_SIZE, newWindowSize).apply()
         Assert.assertEquals(
                 newWindowSize,
-                savedWindowSizes!!.getWindowSize(context, context!!.packageName)
+                savedWindowSizes.getWindowSize(context, context.packageName)
         )
         prefs.edit().remove(Constants.PREF_WINDOW_SIZE).apply()
-        savedWindowSizes!!.setWindowSize(context, context!!.packageName, CUSTOM_WINDOW_SIZE)
+        savedWindowSizes.setWindowSize(context, context.packageName, CUSTOM_WINDOW_SIZE)
         Assert.assertEquals(
                 CUSTOM_WINDOW_SIZE,
-                savedWindowSizes!!.getWindowSize(context, context!!.packageName)
+                savedWindowSizes.getWindowSize(context, context.packageName)
         )
-        savedWindowSizes!!.clear(context)
+        savedWindowSizes.clear(context)
     }
 
     @Test
     fun testClear() {
-        savedWindowSizes!!.setWindowSize(context, context!!.packageName, CUSTOM_WINDOW_SIZE)
-        savedWindowSizes!!.clear(context)
+        savedWindowSizes.setWindowSize(context, context.packageName, CUSTOM_WINDOW_SIZE)
+        savedWindowSizes.clear(context)
         org.junit.Assert.assertNotEquals(
                 CUSTOM_WINDOW_SIZE,
-                savedWindowSizes!!.getWindowSize(context, context!!.packageName)
+                savedWindowSizes.getWindowSize(context, context.packageName)
         )
     }
 
     @Test
     fun testSerializable() {
-        savedWindowSizes!!.setWindowSize(context, context!!.packageName, CUSTOM_WINDOW_SIZE)
-        val newSavedWindowSizes = SerializationUtils.deserialize<SavedWindowSizes>(SerializationUtils.serialize(savedWindowSizes))
+        savedWindowSizes.setWindowSize(context, context.packageName, CUSTOM_WINDOW_SIZE)
+        val newSavedWindowSizes =
+                SerializationUtils.deserialize<SavedWindowSizes>(
+                        SerializationUtils.serialize(savedWindowSizes))
         Assert.assertEquals(
                 CUSTOM_WINDOW_SIZE,
-                newSavedWindowSizes.getWindowSize(context, context!!.packageName)
+                newSavedWindowSizes.getWindowSize(context, context.packageName)
         )
-        savedWindowSizes!!.clear(context)
+        savedWindowSizes.clear(context)
     }
 
     companion object {

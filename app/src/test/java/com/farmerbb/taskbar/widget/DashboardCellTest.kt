@@ -14,9 +14,9 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DashboardCellTest {
-    private var cell: DashboardCell? = null
-    private var context: Context? = null
-    private var listener: TestOnInterceptedLongPressListener? = null
+    private lateinit var cell: DashboardCell
+    private lateinit var context: Context
+    private lateinit var listener: TestOnInterceptedLongPressListener
     private var longPressTimeout = 0
 
     @Before
@@ -24,7 +24,7 @@ class DashboardCellTest {
         context = ApplicationProvider.getApplicationContext()
         cell = DashboardCell(context)
         listener = TestOnInterceptedLongPressListener()
-        cell!!.setOnInterceptedLongPressListener(listener)
+        cell.setOnInterceptedLongPressListener(listener)
         longPressTimeout = ViewConfiguration.getLongPressTimeout()
     }
 
@@ -33,16 +33,16 @@ class DashboardCellTest {
         var downTime = SystemClock.uptimeMillis()
         dispatchTouchEvent(downTime, MotionEvent.ACTION_DOWN)
         dispatchTouchEvent(downTime + longPressTimeout - 1, MotionEvent.ACTION_UP)
-        Assert.assertNull(listener!!.longPressedCell)
+        Assert.assertNull(listener.longPressedCell)
         downTime = SystemClock.uptimeMillis()
         dispatchTouchEvent(downTime, MotionEvent.ACTION_DOWN)
         dispatchTouchEvent(downTime + longPressTimeout, MotionEvent.ACTION_UP)
-        Assert.assertNull(listener!!.longPressedCell)
+        Assert.assertNull(listener.longPressedCell)
         downTime = SystemClock.uptimeMillis()
         dispatchTouchEvent(downTime, MotionEvent.ACTION_DOWN)
         dispatchTouchEvent(downTime + longPressTimeout + 1, MotionEvent.ACTION_UP)
-        Assert.assertNotNull(listener!!.longPressedCell)
-        Assert.assertSame(cell, listener!!.longPressedCell)
+        Assert.assertNotNull(listener.longPressedCell)
+        Assert.assertSame(cell, listener.longPressedCell)
     }
 
     private fun dispatchTouchEvent(downTime: Long, event: Int) {
@@ -50,7 +50,7 @@ class DashboardCellTest {
         val y = 0.0f
         val metaState = 0
         val motionEvent = MotionEvent.obtain(downTime, downTime, event, x, y, metaState)
-        cell!!.onInterceptTouchEvent(motionEvent)
+        cell.onInterceptTouchEvent(motionEvent)
     }
 
     private class TestOnInterceptedLongPressListener : OnInterceptedLongPressListener {
