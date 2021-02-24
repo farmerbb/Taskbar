@@ -25,15 +25,44 @@ import androidx.test.core.app.ApplicationProvider
 import com.farmerbb.taskbar.Constants
 import com.farmerbb.taskbar.LauncherAppsHelper.generateTestLauncherActivityInfo
 import com.farmerbb.taskbar.R
-import com.farmerbb.taskbar.activity.*
+import com.farmerbb.taskbar.activity.HomeActivity
+import com.farmerbb.taskbar.activity.HomeActivityDelegate
+import com.farmerbb.taskbar.activity.InvisibleActivityFreeform
+import com.farmerbb.taskbar.activity.MainActivity
+import com.farmerbb.taskbar.activity.SecondaryHomeActivity
 import com.farmerbb.taskbar.mockito.BooleanAnswer
 import com.farmerbb.taskbar.mockito.StringAnswer
 import com.farmerbb.taskbar.shadow.TaskbarShadowScrollView
 import com.farmerbb.taskbar.util.AppEntry
-import com.farmerbb.taskbar.util.Constants.*
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT
+import com.farmerbb.taskbar.util.Constants.PREF_BUTTON_BACK
+import com.farmerbb.taskbar.util.Constants.PREF_BUTTON_HOME
+import com.farmerbb.taskbar.util.Constants.PREF_BUTTON_RECENTS
+import com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD
+import com.farmerbb.taskbar.util.Constants.PREF_HIDE_FOREGROUND
+import com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT
+import com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_APP_START
+import com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY
+import com.farmerbb.taskbar.util.Constants.PREF_RECENTS_AMOUNT_SHOW_ALL
+import com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE
+import com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE_APP_LOGO
+import com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE_CUSTOM
+import com.farmerbb.taskbar.util.Constants.PREF_START_BUTTON_IMAGE_DEFAULT
+import com.farmerbb.taskbar.util.Constants.PREF_TIME_OF_SERVICE_START
 import com.farmerbb.taskbar.util.TaskbarPosition
 import com.farmerbb.taskbar.util.U
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.powermock.api.mockito.PowerMockito
 import org.powermock.core.classloader.annotations.PowerMockIgnore
@@ -44,7 +73,6 @@ import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowUsageStatsManager
 import org.robolectric.util.ReflectionHelpers
-import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 @PowerMockIgnore("org.mockito.*", "org.robolectric.*", "android.*", "androidx.*")
@@ -189,11 +217,13 @@ class TaskbarControllerTest {
         val layout = LayoutInflater.from(context).inflate(layoutId, null) as LinearLayout
         val dashboardButton = layout.findViewById<FrameLayout>(R.id.dashboard_button)
         prefs.edit().putBoolean(PREF_DASHBOARD, false).apply()
-        var dashboardEnabled = uiController.drawDashboardButton(context, layout, dashboardButton, accentColor)
+        var dashboardEnabled = uiController.drawDashboardButton(context, layout,
+                dashboardButton, accentColor)
         Assert.assertFalse(dashboardEnabled)
         Assert.assertEquals(View.GONE.toLong(), dashboardButton.visibility.toLong())
         prefs.edit().putBoolean(PREF_DASHBOARD, true).apply()
-        dashboardEnabled = uiController.drawDashboardButton(context, layout, dashboardButton, accentColor)
+        dashboardEnabled = uiController.drawDashboardButton(context, layout, dashboardButton,
+                accentColor)
         Assert.assertTrue(dashboardEnabled)
         Assert.assertTrue(dashboardButton.hasOnClickListeners())
         Assert.assertEquals(View.VISIBLE.toLong(), dashboardButton.visibility.toLong())
@@ -223,15 +253,18 @@ class TaskbarControllerTest {
         Assert.assertFalse(uiController.drawNavbarButtons(context, layout, prefs, Color.RED))
         prefs.edit().putBoolean(PREF_BUTTON_BACK, true).apply()
         Assert.assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED))
-        Assert.assertEquals(View.VISIBLE.toLong(), layout.findViewById<View>(R.id.button_back).visibility.toLong())
+        Assert.assertEquals(View.VISIBLE.toLong(), layout.findViewById<View>(R.id.button_back)
+                .visibility.toLong())
         prefs.edit().remove(PREF_BUTTON_BACK).apply()
         prefs.edit().putBoolean(PREF_BUTTON_HOME, true).apply()
         Assert.assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED))
-        Assert.assertEquals(View.VISIBLE.toLong(), layout.findViewById<View>(R.id.button_home).visibility.toLong())
+        Assert.assertEquals(View.VISIBLE.toLong(), layout.findViewById<View>(R.id.button_home)
+                .visibility.toLong())
         prefs.edit().remove(PREF_BUTTON_HOME).apply()
         prefs.edit().putBoolean(PREF_BUTTON_RECENTS, true).apply()
         Assert.assertTrue(uiController.drawNavbarButtons(context, layout, prefs, Color.RED))
-        Assert.assertEquals(View.VISIBLE.toLong(), layout.findViewById<View>(R.id.button_recents).visibility.toLong())
+        Assert.assertEquals(View.VISIBLE.toLong(), layout.findViewById<View>(R.id.button_recents)
+                .visibility.toLong())
         prefs.edit().remove(PREF_BUTTON_RECENTS).apply()
     }
 
@@ -241,7 +274,8 @@ class TaskbarControllerTest {
         prefs.edit().remove(PREF_RECENTS_AMOUNT).apply()
         var searchInterval = uiController.getSearchInterval(prefs)
         val lastDayTime = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY
-        Assert.assertEquals(lastDayTime.toFloat(), searchInterval.toFloat(), permitTimeDeltaMillis.toFloat())
+        Assert.assertEquals(lastDayTime.toFloat(), searchInterval.toFloat(),
+                permitTimeDeltaMillis.toFloat())
         prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_APP_START).apply()
         var deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime()
         // The service start time is larger than device start time
@@ -254,7 +288,8 @@ class TaskbarControllerTest {
         prefs.edit().putLong(PREF_TIME_OF_SERVICE_START, deviceStartTime - 100).apply()
         searchInterval = uiController.getSearchInterval(prefs)
         deviceStartTime = System.currentTimeMillis() - SystemClock.elapsedRealtime()
-        Assert.assertEquals(deviceStartTime.toFloat(), searchInterval.toFloat(), permitTimeDeltaMillis.toFloat())
+        Assert.assertEquals(deviceStartTime.toFloat(), searchInterval.toFloat(),
+                permitTimeDeltaMillis.toFloat())
         prefs.edit().remove(PREF_TIME_OF_SERVICE_START).apply()
         prefs.edit().putString(PREF_RECENTS_AMOUNT, PREF_RECENTS_AMOUNT_SHOW_ALL).apply()
         searchInterval = uiController.getSearchInterval(prefs)
@@ -313,9 +348,9 @@ class TaskbarControllerTest {
         isVerticalAnswer.answer = true
         var maxScreenSize = Math.max(
                 0,
-                display.height
-                        - U.getStatusBarHeight(context)
-                        - Math.round(U.getBaseTaskbarSize(context))
+                display.height -
+                        U.getStatusBarHeight(context) -
+                        Math.round(U.getBaseTaskbarSize(context))
         )
         uiController.calculateScrollViewParams(context, prefs, params, true, 1)
         Assert.assertEquals(defaultSize.toLong(), params.width.toLong())
@@ -376,7 +411,8 @@ class TaskbarControllerTest {
         ReflectionHelpers.setField(taskbar, "mBottom", taskbarHeight)
         val isVerticalAnswer = BooleanAnswer()
         PowerMockito.spy(TaskbarPosition::class.java)
-        PowerMockito.`when`(TaskbarPosition.isVertical(taskbarPosition)).thenAnswer(isVerticalAnswer)
+        PowerMockito.`when`(TaskbarPosition.isVertical(taskbarPosition))
+                .thenAnswer(isVerticalAnswer)
         isVerticalAnswer.answer = false
         uiController.scrollTaskbar(scrollView, taskbar, taskbarPosition, "false", true)
         Assert.assertEquals(0, scrollView.scrollX.toLong())
@@ -398,7 +434,8 @@ class TaskbarControllerTest {
         prefs.edit().putBoolean(PREF_HIDE_FOREGROUND, true).apply()
         val searchInterval = 0L
         val applicationIdsToRemove: MutableList<String> = ArrayList()
-        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE)
+                as UsageStatsManager
         val entryTestPackage1 = Constants.TEST_PACKAGE + "-1"
         var event = ShadowUsageStatsManager.EventBuilder
                 .buildEvent()
@@ -421,23 +458,31 @@ class TaskbarControllerTest {
         event = buildTaskbarForegroundAppEvent(MainActivity::class.java.canonicalName, 300L)
         Shadows.shadowOf(usageStatsManager).addEvent(event)
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove)
-        Assert.assertEquals(MainActivity::class.java.canonicalName, applicationIdsToRemove.removeAt(0))
+        Assert.assertEquals(MainActivity::class.java.canonicalName,
+                applicationIdsToRemove.removeAt(0))
         event = buildTaskbarForegroundAppEvent(HomeActivity::class.java.canonicalName, 400L)
         Shadows.shadowOf(usageStatsManager).addEvent(event)
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove)
-        Assert.assertEquals(HomeActivity::class.java.canonicalName, applicationIdsToRemove.removeAt(0))
-        event = buildTaskbarForegroundAppEvent(HomeActivityDelegate::class.java.canonicalName, 500L)
+        Assert.assertEquals(HomeActivity::class.java.canonicalName,
+                applicationIdsToRemove.removeAt(0))
+        event = buildTaskbarForegroundAppEvent(
+                HomeActivityDelegate::class.java.canonicalName, 500L)
         Shadows.shadowOf(usageStatsManager).addEvent(event)
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove)
-        Assert.assertEquals(HomeActivityDelegate::class.java.canonicalName, applicationIdsToRemove.removeAt(0))
-        event = buildTaskbarForegroundAppEvent(SecondaryHomeActivity::class.java.canonicalName, 600L)
+        Assert.assertEquals(HomeActivityDelegate::class.java.canonicalName,
+                applicationIdsToRemove.removeAt(0))
+        event = buildTaskbarForegroundAppEvent(
+                SecondaryHomeActivity::class.java.canonicalName, 600L)
         Shadows.shadowOf(usageStatsManager).addEvent(event)
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove)
-        Assert.assertEquals(SecondaryHomeActivity::class.java.canonicalName, applicationIdsToRemove.removeAt(0))
-        event = buildTaskbarForegroundAppEvent(InvisibleActivityFreeform::class.java.canonicalName, 700L)
+        Assert.assertEquals(SecondaryHomeActivity::class.java.canonicalName,
+                applicationIdsToRemove.removeAt(0))
+        event = buildTaskbarForegroundAppEvent(
+                InvisibleActivityFreeform::class.java.canonicalName, 700L)
         Shadows.shadowOf(usageStatsManager).addEvent(event)
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove)
-        Assert.assertEquals(InvisibleActivityFreeform::class.java.canonicalName, applicationIdsToRemove.removeAt(0))
+        Assert.assertEquals(InvisibleActivityFreeform::class.java.canonicalName,
+                applicationIdsToRemove.removeAt(0))
         event = buildTaskbarForegroundAppEvent(Constants.UNSUPPORTED, 800L)
         Shadows.shadowOf(usageStatsManager).addEvent(event)
         uiController.filterForegroundApp(context, prefs, searchInterval, applicationIdsToRemove)
@@ -642,7 +687,8 @@ class TaskbarControllerTest {
                 populatedEntry.componentName
         )
         Assert.assertEquals(info.nonLocalizedLabel.toString(), populatedEntry.label)
-        Assert.assertEquals(Constants.DEFAULT_TEST_USER_ID.toLong(), populatedEntry.getUserId(context))
+        Assert.assertEquals(Constants.DEFAULT_TEST_USER_ID.toLong(),
+                populatedEntry.getUserId(context))
         Assert.assertEquals(appEntry.lastTimeUsed, populatedEntry.lastTimeUsed)
     }
 
@@ -658,7 +704,8 @@ class TaskbarControllerTest {
         return appEntry
     }
 
-    private fun buildTaskbarForegroundAppEvent(className: String, timestamp: Long): UsageEvents.Event {
+    private fun buildTaskbarForegroundAppEvent(className: String, timestamp: Long):
+            UsageEvents.Event {
         return ShadowUsageStatsManager.EventBuilder
                 .buildEvent()
                 .setPackage(className)
@@ -678,13 +725,15 @@ class TaskbarControllerTest {
         val layoutId = uiController.getTaskbarLayoutId(POSITION_BOTTOM_LEFT)
         val layout = LayoutInflater.from(context).inflate(layoutId, null) as LinearLayout
         val dashboardButton = layout.findViewById<FrameLayout>(R.id.dashboard_button)
-        val dashboardEnabled = uiController.drawDashboardButton(context, layout, dashboardButton, Color.RED)
+        val dashboardEnabled = uiController.drawDashboardButton(context, layout,
+                dashboardButton, Color.RED)
         Assert.assertEquals(expectedDashboardEnabled, dashboardEnabled)
     }
 
     private fun checkDrawSysTrayTimeVisibility(position: String, timeId: Int) {
         val sysTrayLayout = initializeSysTrayLayout(position)
-        Assert.assertEquals(View.VISIBLE.toLong(), sysTrayLayout.findViewById<View>(timeId).visibility.toLong())
+        Assert.assertEquals(View.VISIBLE.toLong(), sysTrayLayout.findViewById<View>(timeId)
+                .visibility.toLong())
     }
 
     private fun checkDrawSysTrayGravity(position: String, gravity: Int) {

@@ -18,10 +18,27 @@ import com.farmerbb.taskbar.Constants.UNSUPPORTED
 import com.farmerbb.taskbar.R
 import com.farmerbb.taskbar.helper.LauncherHelper
 import com.farmerbb.taskbar.mockito.BooleanAnswer
-import com.farmerbb.taskbar.util.Constants.*
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT
+import com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_TUTORIAL_SHOWN
+import com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX
+import com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PREFIX
+import com.farmerbb.taskbar.util.Constants.PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX
+import com.farmerbb.taskbar.util.Constants.PREF_DEFAULT_NULL
+import com.farmerbb.taskbar.util.Constants.PREF_DONT_STOP_DASHBOARD
 import com.farmerbb.taskbar.util.TaskbarPosition
 import com.farmerbb.taskbar.util.U
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.powermock.api.mockito.PowerMockito
 import org.powermock.core.classloader.annotations.PowerMockIgnore
@@ -33,8 +50,10 @@ import org.robolectric.shadows.AppWidgetProviderInfoBuilder
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(RobolectricTestRunner::class)
-@PowerMockIgnore("org.mockito.*", "org.robolectric.*", "android.*", "androidx.*", "com.farmerbb.taskbar.shadow.*")
-@PrepareForTest(value = [U::class, TaskbarPosition::class, DashboardController::class, LauncherHelper::class])
+@PowerMockIgnore("org.mockito.*", "org.robolectric.*", "android.*", "androidx.*",
+        "com.farmerbb.taskbar.shadow.*")
+@PrepareForTest(value = [U::class, TaskbarPosition::class, DashboardController::class,
+    LauncherHelper::class])
 class DashboardControllerTest {
     @get:Rule
     val rule = PowerMockRule()
@@ -138,9 +157,9 @@ class DashboardControllerTest {
     @Test
     fun testGenerateProviderPrefKey() {
         Assert.assertEquals(
-                PREF_DASHBOARD_WIDGET_PREFIX
-                        + DEFAULT_TEST_CELL_ID
-                        + PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
+                PREF_DASHBOARD_WIDGET_PREFIX +
+                        DEFAULT_TEST_CELL_ID +
+                        PREF_DASHBOARD_WIDGET_PROVIDER_SUFFIX,
                 uiController.generateProviderPrefKey(DEFAULT_TEST_CELL_ID)
         )
     }
@@ -148,9 +167,9 @@ class DashboardControllerTest {
     @Test
     fun testGenerateProviderPlaceholderPrefKey() {
         Assert.assertEquals(
-                PREF_DASHBOARD_WIDGET_PREFIX
-                        + DEFAULT_TEST_CELL_ID
-                        + PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
+                PREF_DASHBOARD_WIDGET_PREFIX +
+                        DEFAULT_TEST_CELL_ID +
+                        PREF_DASHBOARD_WIDGET_PLACEHOLDER_SUFFIX,
                 uiController.generateProviderPlaceholderPrefKey(DEFAULT_TEST_CELL_ID)
         )
     }

@@ -1,3 +1,6 @@
+plugins {
+    id "com.diffplug.spotless" version "5.10.2"
+}
 apply from: '../dependencies.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -6,6 +9,13 @@ apply plugin: 'jacoco'
 repositories {
     google()
     maven { url "https://jitpack.io" }
+}
+
+spotless {
+    kotlin {
+        target '**/*.kt'
+        ktlint()userData(['max_line_length': '100'])
+    }
 }
 
 android {

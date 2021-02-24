@@ -68,7 +68,8 @@ class ShowHideTaskbarReceiverTest {
         var startedServiceIntent = Shadows.shadowOf(application).peekNextStartedService()
         Assert.assertNotNull(startedServiceIntent)
         Assert.assertEquals(notificationIntent.component, startedServiceIntent.component)
-        Assert.assertTrue(startedServiceIntent.getBooleanExtra(Constants.EXTRA_START_SERVICES, false))
+        Assert.assertTrue(startedServiceIntent.getBooleanExtra(
+                Constants.EXTRA_START_SERVICES, false))
         Shadows.shadowOf(application).clearStartedServices()
         prefs.edit().putBoolean(Constants.PREF_IS_HIDDEN, false).apply()
         showHideTaskbarReceiver.onReceive(context, intent)

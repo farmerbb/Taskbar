@@ -46,7 +46,8 @@ class DesktopIconInfoTest {
 
     @Test
     fun testSerializable() {
-        val newDesktopIconInfo = SerializationUtils.deserialize<DesktopIconInfo>(SerializationUtils.serialize(desktopIconInfo))
+        val newDesktopIconInfo = SerializationUtils.deserialize<DesktopIconInfo>(
+                SerializationUtils.serialize(desktopIconInfo))
         testNewDesktopIconInfo(newDesktopIconInfo)
     }
 
