@@ -16,16 +16,27 @@ import com.farmerbb.taskbar.Constants
 import com.farmerbb.taskbar.LauncherAppsHelper.generateTestLauncherActivityInfo
 import com.farmerbb.taskbar.R
 import com.farmerbb.taskbar.util.AppEntry
-import com.farmerbb.taskbar.util.Constants.*
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_BOTTOM_VERTICAL_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_RIGHT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_LEFT
+import com.farmerbb.taskbar.util.Constants.POSITION_TOP_VERTICAL_RIGHT
+import com.farmerbb.taskbar.util.Constants.PREF_SHOW_SEARCH_BAR
 import com.farmerbb.taskbar.util.TaskbarPosition
 import com.farmerbb.taskbar.util.U
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.powermock.core.classloader.annotations.PowerMockIgnore
 import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.rule.PowerMockRule
 import org.robolectric.RobolectricTestRunner
-import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 @PowerMockIgnore("org.mockito.*", "org.robolectric.*", "android.*", "androidx.*")
@@ -161,7 +172,8 @@ class StartMenuControllerTest {
         val queryList: MutableList<LauncherActivityInfo> = ArrayList()
         val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
         val packageManager = context.packageManager
-        var appEntries = uiController.generateAppEntries(context, userManager, packageManager, queryList)
+        var appEntries = uiController.generateAppEntries(context, userManager,
+                packageManager, queryList)
         Assert.assertEquals(0, appEntries.size.toLong())
         val activityInfo = ActivityInfo()
         activityInfo.packageName = Constants.TEST_PACKAGE
@@ -173,11 +185,13 @@ class StartMenuControllerTest {
                 context, activityInfo, Constants.DEFAULT_TEST_USER_ID
         )
         queryList.add(launcherActivityInfo)
-        appEntries = uiController.generateAppEntries(context, userManager, packageManager, queryList)
+        appEntries = uiController.generateAppEntries(context, userManager,
+                packageManager, queryList)
         Assert.assertEquals(1, appEntries.size.toLong())
         verifyAppEntryContent(activityInfo, appEntries[0])
         queryList.add(launcherActivityInfo)
-        appEntries = uiController.generateAppEntries(context, userManager, packageManager, queryList)
+        appEntries = uiController.generateAppEntries(context, userManager,
+                packageManager, queryList)
         Assert.assertEquals(2, appEntries.size.toLong())
         verifyAppEntryContent(activityInfo, appEntries[0])
         verifyAppEntryContent(activityInfo, appEntries[1])

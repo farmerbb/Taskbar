@@ -37,7 +37,8 @@ class QuickSettingsTileServiceTest {
 
     @Test
     fun testUpdateStateForIcon() {
-        prefs.edit().putString(Constants.PREF_START_BUTTON_IMAGE, Constants.PREF_START_BUTTON_IMAGE_APP_LOGO).apply()
+        prefs.edit().putString(Constants.PREF_START_BUTTON_IMAGE,
+                Constants.PREF_START_BUTTON_IMAGE_APP_LOGO).apply()
         tileService.updateState()
         var icon = tileService.qsTile.icon
         Assert.assertEquals(R.drawable.tb_system.toLong(), Shadows.shadowOf(icon).resId.toLong())

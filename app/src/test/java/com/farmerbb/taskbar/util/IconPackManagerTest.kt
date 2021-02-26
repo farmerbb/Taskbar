@@ -5,14 +5,13 @@ import android.content.Context
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.test.core.app.ApplicationProvider
+import java.util.function.Consumer
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
-import java.util.*
-import java.util.function.Consumer
 
 @RunWith(RobolectricTestRunner::class)
 class IconPackManagerTest {
@@ -50,7 +49,8 @@ class IconPackManagerTest {
         }
         Assert.assertEquals(testIconPackSize.toLong(), iconPacks.size.toLong())
         val fetchedIconPackPackages: MutableSet<String> = HashSet()
-        iconPacks.forEach(Consumer { iconPack: IconPack -> fetchedIconPackPackages.add(iconPack.packageName) })
+        iconPacks.forEach(Consumer { iconPack: IconPack ->
+            fetchedIconPackPackages.add(iconPack.packageName) })
         Assert.assertEquals(testIconPackSize.toLong(), fetchedIconPackPackages.size.toLong())
         val expectedIconPackPackages: MutableSet<String> = HashSet()
         for (i in 1..testIconPackSize) {

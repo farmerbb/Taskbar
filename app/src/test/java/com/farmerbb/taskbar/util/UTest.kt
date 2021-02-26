@@ -5,7 +5,11 @@ import android.accessibilityservice.AccessibilityService
 import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.app.Application
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.provider.Settings
@@ -59,8 +63,11 @@ class UTest {
     @Throws(Exception::class)
     fun testShowPermissionDialogWithAndroidTVSettings() {
         testShowPermissionDialog(
-                true, context.resources.getString(R.string.tb_permission_dialog_message, U.getAppName(context))
-                + context.resources.getString(R.string.tb_permission_dialog_instructions_tv, U.getAppName(context)),
+                true,
+                context.resources.getString(
+                        R.string.tb_permission_dialog_message, U.getAppName(context)) +
+                context.resources.getString(
+                        R.string.tb_permission_dialog_instructions_tv, U.getAppName(context)),
                 R.string.tb_action_open_settings
         )
     }
@@ -69,20 +76,26 @@ class UTest {
     @Throws(Exception::class)
     fun testShowPermissionDialogNormal() {
         testShowPermissionDialog(
-                false, context.resources.getString(R.string.tb_permission_dialog_message, U.getAppName(context))
-                + context.resources.getString(R.string.tb_permission_dialog_instructions_phone),
+                false,
+                context.resources.getString(
+                        R.string.tb_permission_dialog_message, U.getAppName(context)) +
+                context.resources.getString(
+                        R.string.tb_permission_dialog_instructions_phone),
                 R.string.tb_action_grant_permission
         )
     }
 
     @Throws(Exception::class)
-    private fun testShowPermissionDialog(hasAndroidTVSettings: Boolean,
-                                         message: String,
-                                         buttonTextResId: Int) {
+    private fun testShowPermissionDialog(
+        hasAndroidTVSettings: Boolean,
+        message: String,
+        buttonTextResId: Int
+    ) {
         val onError = RunnableHooker()
         val onFinish = RunnableHooker()
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`<Any>(U::class.java, "hasAndroidTVSettings", context).thenReturn(hasAndroidTVSettings)
+        PowerMockito.`when`<Any>(U::class.java, "hasAndroidTVSettings", context)
+                .thenReturn(hasAndroidTVSettings)
         val dialog = U.showPermissionDialog(context, Callbacks(onError, onFinish))
         val shadowDialog = Shadows.shadowOf(dialog)
         val resources = context.resources
@@ -146,9 +159,11 @@ class UTest {
         testSendAccessibilityAction(false, false, false)
     }
 
-    private fun testSendAccessibilityAction(serviceEnabled: Boolean,
-                                            hasPermission: Boolean,
-                                            hasRun: Boolean) {
+    private fun testSendAccessibilityAction(
+        serviceEnabled: Boolean,
+        hasPermission: Boolean,
+        hasRun: Boolean
+    ) {
         PowerMockito.spy(U::class.java)
         PowerMockito.`when`(U.isAccessibilityServiceEnabled(context)).thenReturn(serviceEnabled)
         PowerMockito.`when`(U.hasWriteSecureSettingsPermission(context)).thenReturn(hasPermission)
@@ -307,7 +322,8 @@ class UTest {
         val hasFreeformSupportAnswer = BooleanAnswer()
         val isOverridingFreeformHackAnswer = BooleanAnswer()
         PowerMockito.`when`(U.hasFreeformSupport(context)).thenAnswer(hasFreeformSupportAnswer)
-        PowerMockito.`when`(U.isOverridingFreeformHack(context, true)).thenAnswer(isOverridingFreeformHackAnswer)
+        PowerMockito.`when`(U.isOverridingFreeformHack(context, true))
+                .thenAnswer(isOverridingFreeformHackAnswer)
         // Case 1, all return true
         hasFreeformSupportAnswer.answer = true
         isOverridingFreeformHackAnswer.answer = true
@@ -352,8 +368,8 @@ class UTest {
         prefs.edit().remove(Constants.PREF_BACKGROUND_TINT).apply()
         Assert.assertEquals(
                 context.resources.getInteger(R.integer.tb_translucent_gray).toLong(),
-                U.getBackgroundTint(context)
-                        .toLong())
+                U.getBackgroundTint(context).toLong()
+        )
     }
 
     @Test
@@ -362,8 +378,8 @@ class UTest {
         prefs.edit().remove(Constants.PREF_ACCENT_COLOR).apply()
         Assert.assertEquals(
                 context.resources.getInteger(R.integer.tb_translucent_white).toLong(),
-                U.getAccentColor(context)
-                        .toLong())
+                U.getAccentColor(context).toLong()
+        )
         prefs.edit().putInt(Constants.PREF_ACCENT_COLOR, Color.GREEN).apply()
         Assert.assertEquals(Color.GREEN.toLong(), U.getAccentColor(context).toLong())
     }
@@ -405,13 +421,16 @@ class UTest {
         testGetActivityOptions(-1, 2, -1)
     }
 
-    private fun testGetActivityOptions(defaultStackId: Int,
-                                       freeformStackId: Int,
-                                       stackIdWithoutBrokenApi: Int) {
+    private fun testGetActivityOptions(
+        defaultStackId: Int,
+        freeformStackId: Int,
+        stackIdWithoutBrokenApi: Int
+    ) {
         PowerMockito.spy(U::class.java)
         val hasBrokenSetLaunchBoundsApiAnswer = BooleanAnswer()
         val isChromeOsAnswer = BooleanAnswer()
-        PowerMockito.`when`(U.hasBrokenSetLaunchBoundsApi()).thenAnswer(hasBrokenSetLaunchBoundsApiAnswer)
+        PowerMockito.`when`(U.hasBrokenSetLaunchBoundsApi())
+                .thenAnswer(hasBrokenSetLaunchBoundsApiAnswer)
         PowerMockito.`when`(U.isChromeOs(context)).thenAnswer(isChromeOsAnswer)
         val originFreeformHackActive = FreeformHackHelper.getInstance().isFreeformHackActive
         checkActivityOptionsStackIdForNonContextMenu(
@@ -445,16 +464,20 @@ class UTest {
         checkActivityOptionsStackIdForContextMenu(context, -1)
     }
 
-    private fun checkActivityOptionsStackIdForContextMenu(context: Context?,
-                                                          stackId: Int) {
+    private fun checkActivityOptionsStackIdForContextMenu(
+        context: Context?,
+        stackId: Int
+    ) {
         val options = U.getActivityOptions(context, ApplicationType.CONTEXT_MENU, null)
         Assert.assertEquals(stackId.toLong(), getActivityOptionsStackId(options).toLong())
     }
 
-    private fun checkActivityOptionsStackIdForNonContextMenu(context: Context?,
-                                                             applicationType: ApplicationType?,
-                                                             isFreeformHackActive: Boolean,
-                                                             stackId: Int) {
+    private fun checkActivityOptionsStackIdForNonContextMenu(
+        context: Context?,
+        applicationType: ApplicationType?,
+        isFreeformHackActive: Boolean,
+        stackId: Int
+    ) {
         FreeformHackHelper.getInstance().isFreeformHackActive = isFreeformHackActive
         val options = U.getActivityOptions(context, applicationType, null)
         Assert.assertEquals(stackId.toLong(), getActivityOptionsStackId(options).toLong())
@@ -507,7 +530,8 @@ class UTest {
         val prefs = U.getSharedPreferences(context)
         prefs.edit().putBoolean(Constants.PREF_DASHBOARD, true).apply()
         val dashboardButtonSize = context.resources.getDimension(R.dimen.tb_dashboard_button_size)
-        Assert.assertEquals(initialSize + dashboardButtonSize, U.getBaseTaskbarSize(context), 0f)
+        Assert.assertEquals(initialSize + dashboardButtonSize,
+                U.getBaseTaskbarSize(context), 0f)
         prefs.edit().remove(Constants.PREF_DASHBOARD).apply()
         val navbarButtonsMargin = context.resources.getDimension(R.dimen.tb_navbar_buttons_margin)
         val iconSize = context.resources.getDimension(R.dimen.tb_icon_size)
@@ -528,13 +552,15 @@ class UTest {
         prefs.edit().remove(Constants.PREF_BUTTON_RECENTS).apply()
         isSystemTrayEnabledAnswer.answer = true
         val systemTraySize = context.resources.getDimension(R.dimen.tb_systray_size)
-        Assert.assertEquals(initialSize + systemTraySize, U.getBaseTaskbarSize(context), 0f)
+        Assert.assertEquals(initialSize + systemTraySize,
+                U.getBaseTaskbarSize(context), 0f)
     }
 
     @Test
     fun testInitPrefsForBlissOS() {
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`(U.isBlissOs(ArgumentMatchers.any(Context::class.java))).thenReturn(true)
+        PowerMockito.`when`(U.isBlissOs(ArgumentMatchers.any(Context::class.java)))
+                .thenReturn(true)
         Assert.assertTrue(U.isBlissOs(context))
         val prefs = U.getSharedPreferences(context)
         Assert.assertFalse(prefs.getBoolean(Constants.PREF_BLISS_OS_PREFS, false))
@@ -543,9 +569,12 @@ class UTest {
                 Constants.PREF_RECENTS_AMOUNT_RUNNING_APPS_ONLY,
                 prefs.getString(Constants.PREF_RECENTS_AMOUNT, "")
         )
-        Assert.assertEquals("0", prefs.getString(Constants.PREF_REFRESH_FREQUENCY, ""))
-        Assert.assertEquals("2147483647", prefs.getString(Constants.PREF_MAX_NUM_OF_RECENTS, ""))
-        Assert.assertEquals("true", prefs.getString(Constants.PREF_SORT_ORDER, ""))
+        Assert.assertEquals("0",
+                prefs.getString(Constants.PREF_REFRESH_FREQUENCY, ""))
+        Assert.assertEquals("2147483647",
+                prefs.getString(Constants.PREF_MAX_NUM_OF_RECENTS, ""))
+        Assert.assertEquals("true",
+                prefs.getString(Constants.PREF_SORT_ORDER, ""))
         Assert.assertEquals(
                 Constants.PREF_START_BUTTON_IMAGE_APP_LOGO,
                 prefs.getString(Constants.PREF_START_BUTTON_IMAGE, "")
@@ -597,25 +626,29 @@ class UTest {
                 .putBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false)
                 .apply()
         U.initPrefs(context)
-        Assert.assertFalse(prefs.getBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
+        Assert.assertFalse(prefs.getBoolean(
+                Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
         prefs.edit()
                 .putBoolean(Constants.PREF_FREEFORM_HACK, true)
                 .putBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false)
                 .apply()
         U.initPrefs(context)
-        Assert.assertTrue(prefs.getBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
+        Assert.assertTrue(prefs.getBoolean(
+                Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
         prefs.edit()
                 .putBoolean(Constants.PREF_FREEFORM_HACK, false)
                 .putBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, true)
                 .apply()
         U.initPrefs(context)
-        Assert.assertTrue(prefs.getBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
+        Assert.assertTrue(prefs.getBoolean(
+                Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
         prefs.edit()
                 .putBoolean(Constants.PREF_FREEFORM_HACK, true)
                 .putBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, true)
                 .apply()
         U.initPrefs(context)
-        Assert.assertTrue(prefs.getBoolean(Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
+        Assert.assertTrue(prefs.getBoolean(
+                Constants.PREF_SHOW_FREEFORM_DISABLED_MESSAGE, false))
     }
 
     @Test
@@ -708,7 +741,8 @@ class UTest {
         val isSamsungDeviceAnswer = BooleanAnswer()
         val isNvidiaDevice = BooleanAnswer()
         PowerMockito.`when`(U.isSamsungDevice()).thenAnswer(isSamsungDeviceAnswer)
-        PowerMockito.`when`<Any>(U::class.java, "isNvidiaDevice").thenAnswer(isNvidiaDevice)
+        PowerMockito.`when`<Any>(U::class.java, "isNvidiaDevice")
+                .thenAnswer(isNvidiaDevice)
         isSamsungDeviceAnswer.answer = false
         isNvidiaDevice.answer = false
         Assert.assertTrue(U.hasBrokenSetLaunchBoundsApi())
@@ -793,24 +827,31 @@ class UTest {
     @Test
     @Config(sdk = [26])
     fun testGetOverlayTypeForOAndAboveVersion() {
-        Assert.assertEquals(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY.toLong(), U.getOverlayType().toLong())
+        Assert.assertEquals(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY.toLong(),
+                U.getOverlayType().toLong())
     }
 
     @Test
     @Config(sdk = [25])
     fun testGetOverlayTypeForOBelowVersion() {
-        Assert.assertEquals(WindowManager.LayoutParams.TYPE_PHONE.toLong(), U.getOverlayType().toLong())
+        Assert.assertEquals(
+                WindowManager.LayoutParams.TYPE_PHONE.toLong(),
+                U.getOverlayType().toLong()
+        )
     }
 
     @Test
     fun testGetDefaultStartButtonImage() {
         val prefs = U.getSharedPreferences(context)
         prefs.edit().putBoolean(Constants.PREF_APP_DRAWER_ICON, true).apply()
-        Assert.assertEquals(Constants.PREF_START_BUTTON_IMAGE_APP_LOGO, U.getDefaultStartButtonImage(context))
+        Assert.assertEquals(Constants.PREF_START_BUTTON_IMAGE_APP_LOGO,
+                U.getDefaultStartButtonImage(context))
         prefs.edit().putBoolean(Constants.PREF_APP_DRAWER_ICON, false).apply()
-        Assert.assertEquals(Constants.PREF_START_BUTTON_IMAGE_DEFAULT, U.getDefaultStartButtonImage(context))
+        Assert.assertEquals(Constants.PREF_START_BUTTON_IMAGE_DEFAULT,
+                U.getDefaultStartButtonImage(context))
         prefs.edit().remove(Constants.PREF_APP_DRAWER_ICON).apply()
-        Assert.assertEquals(Constants.PREF_START_BUTTON_IMAGE_DEFAULT, U.getDefaultStartButtonImage(context))
+        Assert.assertEquals(Constants.PREF_START_BUTTON_IMAGE_DEFAULT,
+                U.getDefaultStartButtonImage(context))
     }
 
     @Test
@@ -873,8 +914,8 @@ class UTest {
         Assert.assertTrue(U.applyDisplayCutoutModeTo(layoutParams))
         Assert.assertEquals(
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES.toLong(),
-                layoutParams.layoutInDisplayCutoutMode
-                        .toLong())
+                layoutParams.layoutInDisplayCutoutMode.toLong()
+        )
     }
 
     @Test
@@ -890,9 +931,12 @@ class UTest {
         val isDesktopModeSupportedAnswer = BooleanAnswer()
         val getExternalDisplayIdAnswer = IntAnswer()
         val hasFreeformSupportAnswer = BooleanAnswer()
-        PowerMockito.`when`(U.isDesktopModeSupported(context)).thenAnswer(isDesktopModeSupportedAnswer)
-        PowerMockito.`when`(U.getExternalDisplayID(context)).thenAnswer(getExternalDisplayIdAnswer)
-        PowerMockito.`when`(U.hasFreeformSupport(context)).thenAnswer(hasFreeformSupportAnswer)
+        PowerMockito.`when`(U.isDesktopModeSupported(context))
+                .thenAnswer(isDesktopModeSupportedAnswer)
+        PowerMockito.`when`(U.getExternalDisplayID(context))
+                .thenAnswer(getExternalDisplayIdAnswer)
+        PowerMockito.`when`(U.hasFreeformSupport(context))
+                .thenAnswer(hasFreeformSupportAnswer)
         isDesktopModeSupportedAnswer.answer = false
         Assert.assertFalse(U.isDesktopModeActive(context))
         isDesktopModeSupportedAnswer.answer = true

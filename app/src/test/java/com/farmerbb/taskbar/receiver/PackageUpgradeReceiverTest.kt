@@ -60,7 +60,8 @@ class PackageUpgradeReceiverTest {
         Assert.assertTrue(startedIntent.getBooleanExtra(Constants.EXTRA_START_FREEFORM_HACK, false))
         Assert.assertEquals(Intent.FLAG_ACTIVITY_NEW_TASK.toLong(), startedIntent.flags.toLong())
         Assert.assertNotNull(startedIntent.component)
-        Assert.assertEquals(DummyActivity::class.java.canonicalName, startedIntent.component!!.className)
+        Assert.assertEquals(DummyActivity::class.java.canonicalName,
+                startedIntent.component!!.className)
         Shadows.shadowOf(application).clearNextStartedActivities()
         answer.answer = false
         packageUpgradeReceiver.onReceive(context, intent)

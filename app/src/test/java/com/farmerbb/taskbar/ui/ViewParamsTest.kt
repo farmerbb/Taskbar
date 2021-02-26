@@ -25,7 +25,8 @@ class ViewParamsTest {
         Assert.assertEquals(flags.toLong(), generatedParams.flags.toLong())
         Assert.assertEquals(bottomMargin.toLong(), generatedParams.y.toLong())
         Assert.assertEquals(PixelFormat.TRANSLUCENT.toLong(), generatedParams.format.toLong())
-        Assert.assertEquals(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY.toLong(), generatedParams.type.toLong())
+        Assert.assertEquals(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY.toLong(),
+                generatedParams.type.toLong())
         params.gravity = -1
         generatedParams = params.toWindowManagerParams()
         Assert.assertEquals(0, generatedParams.gravity.toLong())

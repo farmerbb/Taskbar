@@ -29,7 +29,8 @@ class NotificationCountServiceTest {
         service = Robolectric.setupService(NotificationCountService::class.java)
         LocalBroadcastManager
                 .getInstance(context)
-                .registerReceiver(receiver, IntentFilter(Constants.ACTION_NOTIFICATION_COUNT_CHANGED))
+                .registerReceiver(receiver,
+                        IntentFilter(Constants.ACTION_NOTIFICATION_COUNT_CHANGED))
         receiver.reset()
     }
 

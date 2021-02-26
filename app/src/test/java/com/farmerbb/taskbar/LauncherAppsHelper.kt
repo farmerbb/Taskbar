@@ -9,9 +9,11 @@ import org.robolectric.util.ReflectionHelpers.ClassParameter
 
 object LauncherAppsHelper {
     @JvmStatic
-    fun generateTestLauncherActivityInfo(context: Context,
-                                         activityInfo: ActivityInfo,
-                                         userHandleId: Int): LauncherActivityInfo {
+    fun generateTestLauncherActivityInfo(
+        context: Context,
+        activityInfo: ActivityInfo,
+        userHandleId: Int
+    ): LauncherActivityInfo {
         return ReflectionHelpers.callConstructor(
                 LauncherActivityInfo::class.java,
                 ClassParameter.from(Context::class.java, context),
