@@ -57,7 +57,6 @@ import android.speech.RecognizerIntent;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
@@ -281,7 +280,7 @@ public class TaskbarController extends UIController {
         space.setOnClickListener(v -> toggleTaskbar(true));
 
         startButton = layout.findViewById(R.id.start_button);
-        drawStartButton(context, startButton, pref, accentColor);
+        drawStartButton(context, startButton, pref);
 
         refreshInterval = (int) (Float.parseFloat(pref.getString(PREF_REFRESH_FREQUENCY, "1")) * 1000);
         if(refreshInterval == 0)
@@ -444,7 +443,7 @@ public class TaskbarController extends UIController {
     }
 
     @VisibleForTesting
-    void drawStartButton(Context context, ImageView startButton, SharedPreferences pref, int accentColor) {
+    void drawStartButton(Context context, ImageView startButton, SharedPreferences pref) {
         Drawable allAppsIcon = ContextCompat.getDrawable(context, R.drawable.tb_all_apps_button_icon);
         int padding = 0;
 
@@ -457,15 +456,7 @@ public class TaskbarController extends UIController {
                 Drawable drawable;
 
                 if(U.isAndroidGeneric(context)) {
-                    try {
-                        String bdPackageName = "com.boringdroid.systemui";
-                        Resources res = context.getPackageManager().getResourcesForApplication(bdPackageName);
-                        int id = res.getIdentifier("bt_all_apps", "drawable", bdPackageName);
-                        drawable = ResourcesCompat.getDrawable(res, id, null);
-                    } catch (Exception e) {
-                        drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
-                        drawable.setTint(accentColor);
-                    }
+                    drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
                 } else {
                     LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
                     LauncherActivityInfo info = launcherApps.getActivityList(context.getPackageName(), Process.myUserHandle()).get(0);
