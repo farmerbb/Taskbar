@@ -41,6 +41,28 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class BackupUtils {
+    private static final String BACKUP_KEY_PINNED_APPS_PACKAGE_NAMES = "pinned_apps_package_names";
+    private static final String BACKUP_KEY_PINNED_APPS_COMPONENT_NAMES =
+            "pinned_apps_component_names";
+    private static final String BACKUP_KEY_PINNED_APPS_LABELS = "pinned_apps_labels";
+    private static final String BACKUP_KEY_PINNED_APPS_USER_IDS = "pinned_apps_user_ids";
+    private static final String BACKUP_KEY_BLOCKED_APPS_PACKAGE_NAMES =
+            "blocked_apps_package_names";
+    private static final String BACKUP_KEY_BLOCKED_APPS_COMPONENT_NAMES =
+            "blocked_apps_component_names";
+    private static final String BACKUP_KEY_BLOCKED_APPS_LABELS = "blocked_apps_labels";
+    private static final String BACKUP_KEY_BLACKLIST_PACKAGE_NAMES = "blacklist_package_names";
+    private static final String BACKUP_KEY_BLACKLIST_LABELS = "blacklist_labels";
+    private static final String BACKUP_KEY_TOP_APPS_PACKAGE_NAMES = "top_apps_package_names";
+    private static final String BACKUP_KEY_TOP_APPS_LABELS = "top_apps_labels";
+    private static final String BACKUP_KEY_SAVED_WINDOW_SIZES_COMPONENT_NAMES =
+            "saved_window_sizes_component_names";
+    private static final String BACKUP_KEY_SAVED_WINDOW_SIZES_WINDOW_SIZES =
+            "saved_window_sizes_window_sizes";
+    private static final String BACKUP_KEY_PREFERENCE = "preferences";
+
+    private static final String BACKUP_DIR_SHARED_PREFS =
+            File.separator + "shared_prefs" + File.separator;
 
     private BackupUtils() {}
 
@@ -62,10 +84,10 @@ public class BackupUtils {
             pinnedAppsUserIds[i] = entry.getUserId(context);
         }
 
-        agent.putStringArray("pinned_apps_package_names", pinnedAppsPackageNames);
-        agent.putStringArray("pinned_apps_component_names", pinnedAppsComponentNames);
-        agent.putStringArray("pinned_apps_labels", pinnedAppsLabels);
-        agent.putLongArray("pinned_apps_user_ids", pinnedAppsUserIds);
+        agent.putStringArray(BACKUP_KEY_PINNED_APPS_PACKAGE_NAMES, pinnedAppsPackageNames);
+        agent.putStringArray(BACKUP_KEY_PINNED_APPS_COMPONENT_NAMES, pinnedAppsComponentNames);
+        agent.putStringArray(BACKUP_KEY_PINNED_APPS_LABELS, pinnedAppsLabels);
+        agent.putLongArray(BACKUP_KEY_PINNED_APPS_USER_IDS, pinnedAppsUserIds);
 
         List<AppEntry> blockedAppsList = pba.getBlockedApps();
 
@@ -80,9 +102,9 @@ public class BackupUtils {
             blockedAppsLabels[i] = entry.getLabel();
         }
 
-        agent.putStringArray("blocked_apps_package_names", blockedAppsPackageNames);
-        agent.putStringArray("blocked_apps_component_names", blockedAppsComponentNames);
-        agent.putStringArray("blocked_apps_labels", blockedAppsLabels);
+        agent.putStringArray(BACKUP_KEY_BLOCKED_APPS_PACKAGE_NAMES, blockedAppsPackageNames);
+        agent.putStringArray(BACKUP_KEY_BLOCKED_APPS_COMPONENT_NAMES, blockedAppsComponentNames);
+        agent.putStringArray(BACKUP_KEY_BLOCKED_APPS_LABELS, blockedAppsLabels);
 
         // Get blacklist
         Blacklist blacklist = Blacklist.getInstance(context);
@@ -97,8 +119,8 @@ public class BackupUtils {
             blacklistLabels[i] = entry.getLabel();
         }
 
-        agent.putStringArray("blacklist_package_names", blacklistPackageNames);
-        agent.putStringArray("blacklist_labels", blacklistLabels);
+        agent.putStringArray(BACKUP_KEY_BLACKLIST_PACKAGE_NAMES, blacklistPackageNames);
+        agent.putStringArray(BACKUP_KEY_BLACKLIST_LABELS, blacklistLabels);
 
         // Get top apps
         TopApps topApps = TopApps.getInstance(context);
@@ -113,8 +135,8 @@ public class BackupUtils {
             topAppsLabels[i] = entry.getLabel();
         }
 
-        agent.putStringArray("top_apps_package_names", topAppsPackageNames);
-        agent.putStringArray("top_apps_labels", topAppsLabels);
+        agent.putStringArray(BACKUP_KEY_TOP_APPS_PACKAGE_NAMES, topAppsPackageNames);
+        agent.putStringArray(BACKUP_KEY_TOP_APPS_LABELS, topAppsLabels);
 
         // Get saved window sizes
         if(U.canEnableFreeform()) {
@@ -130,15 +152,17 @@ public class BackupUtils {
                 savedWindowSizesWindowSizes[i] = entry.getWindowSize();
             }
 
-            agent.putStringArray("saved_window_sizes_component_names", savedWindowSizesComponentNames);
-            agent.putStringArray("saved_window_sizes_window_sizes", savedWindowSizesWindowSizes);
+            agent.putStringArray(BACKUP_KEY_SAVED_WINDOW_SIZES_COMPONENT_NAMES,
+                    savedWindowSizesComponentNames);
+            agent.putStringArray(BACKUP_KEY_SAVED_WINDOW_SIZES_WINDOW_SIZES,
+                    savedWindowSizesWindowSizes);
         }
 
         // Get shared preferences
         StringBuilder preferences = new StringBuilder();
 
         try {
-            File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
+            File file = new File(getSharedPreferencePath(context));
             FileInputStream input = new FileInputStream(file);
             InputStreamReader reader = new InputStreamReader(input);
             BufferedReader buffer = new BufferedReader(reader);
@@ -154,7 +178,7 @@ public class BackupUtils {
             reader.close();
         } catch (IOException ignored) {}
 
-        agent.putString("preferences", preferences.toString());
+        agent.putString(BACKUP_KEY_PREFERENCE, preferences.toString());
     }
 
     public static void restore(Context context, BackupAgent agent) {
@@ -162,13 +186,16 @@ public class BackupUtils {
         PinnedBlockedApps pba = PinnedBlockedApps.getInstance(context);
         pba.clear(context);
 
-        String[] pinnedAppsPackageNames = agent.getStringArray("pinned_apps_package_names");
-        String[] pinnedAppsComponentNames = agent.getStringArray("pinned_apps_component_names");
-        String[] pinnedAppsLabels = agent.getStringArray("pinned_apps_labels");
-        long[] pinnedAppsUserIds = agent.getLongArray("pinned_apps_user_ids");
+        String[] pinnedAppsPackageNames =
+                agent.getStringArray(BACKUP_KEY_PINNED_APPS_PACKAGE_NAMES);
+        String[] pinnedAppsComponentNames =
+                agent.getStringArray(BACKUP_KEY_PINNED_APPS_COMPONENT_NAMES);
+        String[] pinnedAppsLabels = agent.getStringArray(BACKUP_KEY_PINNED_APPS_LABELS);
+        long[] pinnedAppsUserIds = agent.getLongArray(BACKUP_KEY_PINNED_APPS_USER_IDS);
 
-        UserManager userManager =(UserManager) context.getSystemService(Context.USER_SERVICE);
-        LauncherApps launcherApps =(LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        LauncherApps launcherApps =
+                (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
         if(pinnedAppsPackageNames != null && pinnedAppsComponentNames != null && pinnedAppsLabels != null)
             for(int i = 0; i < pinnedAppsPackageNames.length; i++) {
@@ -195,9 +222,11 @@ public class BackupUtils {
                 pba.addPinnedApp(context, newEntry);
             }
 
-        String[] blockedAppsPackageNames = agent.getStringArray("blocked_apps_package_names");
-        String[] blockedAppsComponentNames = agent.getStringArray("blocked_apps_component_names");
-        String[] blockedAppsLabels = agent.getStringArray("blocked_apps_labels");
+        String[] blockedAppsPackageNames =
+                agent.getStringArray(BACKUP_KEY_BLOCKED_APPS_PACKAGE_NAMES);
+        String[] blockedAppsComponentNames =
+                agent.getStringArray(BACKUP_KEY_BLOCKED_APPS_COMPONENT_NAMES);
+        String[] blockedAppsLabels = agent.getStringArray(BACKUP_KEY_BLOCKED_APPS_LABELS);
 
         if(blockedAppsPackageNames != null && blockedAppsComponentNames != null && blockedAppsLabels != null)
             for(int i = 0; i < blockedAppsPackageNames.length; i++) {
@@ -214,8 +243,8 @@ public class BackupUtils {
         Blacklist blacklist = Blacklist.getInstance(context);
         blacklist.clear(context);
 
-        String[] blacklistPackageNames = agent.getStringArray("blacklist_package_names");
-        String[] blacklistLabels = agent.getStringArray("blacklist_labels");
+        String[] blacklistPackageNames = agent.getStringArray(BACKUP_KEY_BLACKLIST_PACKAGE_NAMES);
+        String[] blacklistLabels = agent.getStringArray(BACKUP_KEY_BLACKLIST_LABELS);
 
         if(blacklistPackageNames != null && blacklistLabels != null)
             for(int i = 0; i < blacklistPackageNames.length; i++) {
@@ -229,8 +258,8 @@ public class BackupUtils {
         TopApps topApps = TopApps.getInstance(context);
         topApps.clear(context);
 
-        String[] topAppsPackageNames = agent.getStringArray("top_apps_package_names");
-        String[] topAppsLabels = agent.getStringArray("top_apps_labels");
+        String[] topAppsPackageNames = agent.getStringArray(BACKUP_KEY_TOP_APPS_PACKAGE_NAMES);
+        String[] topAppsLabels = agent.getStringArray(BACKUP_KEY_TOP_APPS_LABELS);
 
         if(topAppsPackageNames != null && topAppsLabels != null)
             for(int i = 0; i < topAppsPackageNames.length; i++) {
@@ -245,8 +274,10 @@ public class BackupUtils {
             SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
             savedWindowSizes.clear(context);
 
-            String[] savedWindowSizesComponentNames = agent.getStringArray("saved_window_sizes_component_names");
-            String[] savedWindowSizesWindowSizes = agent.getStringArray("saved_window_sizes_window_sizes");
+            String[] savedWindowSizesComponentNames =
+                    agent.getStringArray(BACKUP_KEY_SAVED_WINDOW_SIZES_COMPONENT_NAMES);
+            String[] savedWindowSizesWindowSizes =
+                    agent.getStringArray(BACKUP_KEY_SAVED_WINDOW_SIZES_WINDOW_SIZES);
 
             if(savedWindowSizesComponentNames != null && savedWindowSizesWindowSizes != null)
                 for(int i = 0; i < savedWindowSizesComponentNames.length; i++) {
@@ -258,13 +289,18 @@ public class BackupUtils {
         }
 
         // Get shared preferences
-        String contents = agent.getString("preferences");
+        String contents = agent.getString(BACKUP_KEY_PREFERENCE);
         if(contents.length() > 0)
             try {
-                File file = new File(context.getFilesDir().getParent() + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
+                File file = new File(getSharedPreferencePath(context));
                 FileOutputStream output = new FileOutputStream(file);
                 output.write(contents.getBytes());
                 output.close();
             } catch (IOException ignored) {}
+    }
+
+    private static String getSharedPreferencePath(Context context) {
+        return context.getFilesDir().getParent()
+                + BACKUP_DIR_SHARED_PREFS + context.getPackageName() + "_preferences.xml";
     }
 }
