@@ -960,16 +960,19 @@ public class U {
                 break;
             case CONTEXT_MENU:
                 if(hasBrokenSetLaunchBoundsApi()
-                        || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f))
+                        || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f)
+                        || (isChromeOs(context) && getCurrentApiVersion() >= 30.0f))
                     stackId = getFullscreenWindowModeId();
                 break;
         }
 
-        allowReflection();
-        try {
-            Method method = ActivityOptions.class.getMethod(getWindowingModeMethodName(), int.class);
-            method.invoke(options, stackId);
-        } catch (Exception ignored) {}
+        if(stackId != -1) {
+            allowReflection();
+            try {
+                Method method = ActivityOptions.class.getMethod(getWindowingModeMethodName(), int.class);
+                method.invoke(options, stackId);
+            } catch (Exception ignored) {}
+        }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int launchDisplayId = LauncherHelper.getInstance().getSecondaryDisplayId();
@@ -1400,8 +1403,7 @@ public class U {
         DisplayInfo info = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, 0);
 
         if(isChromeOs(context)) {
-            SharedPreferences pref = getSharedPreferences(context);
-            if(!pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)) {
+            if(!getChromeOsContextMenuFix(context)) {
                 info.width = realMetrics.widthPixels;
                 info.height = realMetrics.heightPixels;
             }
@@ -1488,9 +1490,10 @@ public class U {
     public static boolean isOverridingFreeformHack(Context context, boolean checkPref) {
         SharedPreferences pref = getSharedPreferences(context);
         return (!checkPref || isFreeformModeEnabled(context))
-                && ((isChromeOs(context) && (pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)
+                && ((isChromeOs(context) && (getChromeOsContextMenuFix(context)
                 || (pref.getBoolean(PREF_LAUNCHER, false) && launcherIsDefault(context))))
-                || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f));
+                || (!isChromeOs(context) && getCurrentApiVersion() >= 28.0f)
+                || (isChromeOs(context) && getCurrentApiVersion() >= 30.0f));
     }
 
     public static boolean isPlayStoreInstalled(Context context) {
@@ -2156,5 +2159,12 @@ public class U {
 
     public static CharSequence getAppName(Context context) {
         return context.getApplicationInfo().loadLabel(context.getPackageManager());
+    }
+
+    public static boolean getChromeOsContextMenuFix(Context context) {
+        if(getCurrentApiVersion() >= 30.0f) return false;
+
+        SharedPreferences pref = getSharedPreferences(context);
+        return pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true);
     }
 }

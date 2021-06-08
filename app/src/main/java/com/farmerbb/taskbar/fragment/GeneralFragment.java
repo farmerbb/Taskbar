@@ -64,7 +64,7 @@ public class GeneralFragment extends SettingsFragment {
         bindPreferenceSummaryToValue(findPreference(PREF_SHOW_SEARCH_BAR));
         bindPreferenceSummaryToValue(findPreference(PREF_HIDE_WHEN_KEYBOARD_SHOWN));
 
-        if(U.isChromeOs(getActivity()))
+        if(U.isChromeOs(getActivity()) && U.getCurrentApiVersion() < 30.0f)
             bindPreferenceSummaryToValue(findPreference(PREF_CHROME_OS_CONTEXT_MENU_FIX));
         else
             getPreferenceScreen().removePreference(findPreference(PREF_CHROME_OS_CONTEXT_MENU_FIX));

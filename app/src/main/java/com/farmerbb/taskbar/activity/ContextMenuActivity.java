@@ -222,15 +222,18 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 && TaskbarPosition.isBottom(this)) {
             SharedPreferences pref = U.getSharedPreferences(this);
 
-            if(pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)
+            if(U.getChromeOsContextMenuFix(this)
                     && !pref.getBoolean(PREF_HAS_CAPTION, false))
                 params.y = params.y - getResources().getDimensionPixelSize(R.dimen.tb_caption_offset);
         }
 
         getWindow().setAttributes(params);
 
-        if(U.isChromeOs(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+        if(U.isChromeOs(this)
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
+                && U.getCurrentApiVersion() < 30.0f) {
             getWindow().setElevation(0);
+        }
 
         View view = findViewById(android.R.id.list);
         if(view != null) view.setPadding(0, 0, 0, 0);
