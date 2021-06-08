@@ -10,13 +10,13 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:${AGP_VERSION}"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10'
     }
 }
 
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.16'
-    id 'com.github.ben-manes.versions' version '0.38.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.17'
+    id 'com.github.ben-manes.versions' version '0.39.0'
 }
 
 dependencyUpdates {

@@ -17,6 +17,5 @@ allprojects {
         MATERIAL_VERSION = "1.3.0"
         POWERMOCK_VERSION = "2.0.9"
         AGP_VERSION = "4.2.1"
-        KOTLIN_VERSION = "1.5.0"
     }
 }
