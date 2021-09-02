@@ -1111,8 +1111,20 @@ public class U {
                 && isSystemApp(context);
     }
 
+    public static boolean isProjectSakura(Context context) {
+        boolean validSakuraBuildProp = false;
+
+        String sakuraVersion = getSystemProperty("ro.lineage.build.version");
+        if(sakuraVersion != null && !sakuraVersion.isEmpty())
+            validSakuraBuildProp = true;
+
+        return validSakuraBuildProp
+                && context.getPackageName().equals(BuildConfig.BASE_APPLICATION_ID)
+                && isSystemApp(context);
+    }
+
     public static boolean isAndroidGeneric(Context context) {
-        if(isBlissOs(context)) return true;
+        if(isBlissOs(context) || isProjectSakura(context)) return true;
 
         boolean validAndroidGenericBuildProp = false;
 
@@ -1260,6 +1272,7 @@ public class U {
         if(!isShowHideNavbarSupported()
                 || (!isDesktopModeActive(context)
                 && !isBlissOs(context)
+                && !isProjectSakura(context)
                 && !hasSupportLibrary(context, 7))) {
             return;
         }
@@ -1292,8 +1305,8 @@ public class U {
             return;
         }
 
-        // Show or hide the system navigation bar on Bliss-x86
-        if(!isBlissOs(context)) return;
+        // Show or hide the system navigation bar on Bliss-x86 and Project Sakura
+        if(!isBlissOs(context) || !isProjectSakura(context)) return;
 
         try {
             if(getCurrentApiVersion() >= 28.0f)
