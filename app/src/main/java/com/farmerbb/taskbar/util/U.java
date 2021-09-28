@@ -1114,6 +1114,7 @@ public class U {
     public static boolean isProjectSakura(Context context) {
         boolean validSakuraBuildProp = false;
 
+        // TODO replace with more specific logic for Project Sakura
         String sakuraVersion = getSystemProperty("ro.lineage.build.version");
         if(sakuraVersion != null && !sakuraVersion.isEmpty())
             validSakuraBuildProp = true;

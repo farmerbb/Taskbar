@@ -457,7 +457,7 @@ public class TaskbarController extends UIController {
 
                 if(U.isBlissOs(context)) {
                     drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
-            }   else if(U.isProjectSakura(context)) {
+                } else if(U.isProjectSakura(context)) {
                     drawable = ContextCompat.getDrawable(context, R.drawable.tb_sakura);                         
                 } else {
                     LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
