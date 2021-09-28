@@ -455,8 +455,10 @@ public class TaskbarController extends UIController {
             case PREF_START_BUTTON_IMAGE_APP_LOGO:
                 Drawable drawable;
 
-                if(U.isAndroidGeneric(context)) {
+                if(U.isBlissOs(context)) {
                     drawable = ContextCompat.getDrawable(context, R.drawable.tb_bliss);
+            }   else if(U.isProjectSakura(context)) {
+                    drawable = ContextCompat.getDrawable(context, R.drawable.tb_sakura);                         
                 } else {
                     LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
                     LauncherActivityInfo info = launcherApps.getActivityList(context.getPackageName(), Process.myUserHandle()).get(0);
