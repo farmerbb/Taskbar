@@ -103,6 +103,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.farmerbb.taskbar.util.Constants.*;
 
@@ -2083,10 +2085,7 @@ public class U {
     }
 
     public static Context getDisplayContext(Context context) {
-        if(isDesktopModeActive(context))
-            return context.createDisplayContext(getExternalDisplay(context));
-        else
-            return context.getApplicationContext();
+        return context.createDisplayContext(getExternalDisplay(context));
     }
 
     public static int getDisplayOrientation(Context context) {
@@ -2168,5 +2167,16 @@ public class U {
     public static void clearCaches(Context context) {
         IconCache.getInstance(context).clearCache();
         DisplayHelper.getInstance().clear();
+    }
+
+    public static String getConfigString(Context context) {
+        String configString = getDisplayContext(context).getResources().getConfiguration().toString();
+        Pattern pattern = Pattern.compile("sw.*dpi");
+        Matcher matcher = pattern.matcher(configString);
+        if(matcher.find()) {
+            return matcher.group(0);
+        }
+
+        return configString;
     }
 }

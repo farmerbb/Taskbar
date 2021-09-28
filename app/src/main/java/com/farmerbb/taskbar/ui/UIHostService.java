@@ -22,10 +22,13 @@ import android.os.IBinder;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.farmerbb.taskbar.util.U;
+
 public abstract class UIHostService extends Service implements UIHost {
 
     private UIController controller;
     private WindowManager windowManager;
+    private String configString;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,6 +45,7 @@ public abstract class UIHostService extends Service implements UIHost {
         super.onCreate();
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        configString = U.getConfigString(this);
 
         controller = newController();
         controller.onCreateHost(this);
@@ -49,6 +53,10 @@ public abstract class UIHostService extends Service implements UIHost {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        String newConfigString = U.getConfigString(this);
+        if(newConfigString.equals(configString)) return;
+
+        configString = newConfigString;
         controller.onRecreateHost(this);
     }
 
