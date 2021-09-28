@@ -334,7 +334,9 @@ public class TaskbarController extends UIController {
         }
 
         layout.setBackgroundColor(backgroundTint);
-        layout.findViewById(R.id.divider).setBackgroundColor(accentColor);
+        layout.findViewById(R.id.divider).setBackgroundColor(
+                pref.getBoolean(PREF_CENTERED_ICONS, false) ? 0 : accentColor
+        );
         button.setTextColor(accentColor);
 
         applyMarginFix(host, layout, params);
