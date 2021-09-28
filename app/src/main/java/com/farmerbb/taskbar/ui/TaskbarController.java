@@ -249,7 +249,7 @@ public class TaskbarController extends UIController {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 -1,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
-                getBottomMargin(context, host)
+                getBottomMargin(context)
         );
 
         // Determine where to show the taskbar on screen
@@ -999,7 +999,7 @@ public class TaskbarController extends UIController {
                                    ViewGroup.LayoutParams params,
                                    boolean fullLength,
                                    int numOfEntries) {
-        DisplayInfo display = U.getDisplayInfo(context, true);
+        DisplayInfo display = U.getDisplayInfo(context);
         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
         int maxScreenSize;

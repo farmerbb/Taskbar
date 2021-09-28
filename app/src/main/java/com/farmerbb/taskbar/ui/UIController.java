@@ -64,14 +64,14 @@ public abstract class UIController {
             host.terminate();
     }
 
-    protected int getBottomMargin(Context context, UIHost host) {
-        return host instanceof SecondaryHomeActivity
+    protected int getBottomMargin(Context context) {
+        return U.getDisplayInfo(context).displayDefaultsToFreeform
                 && !U.isShowHideNavbarSupported()
                 && TaskbarPosition.isBottom(context) ? U.getNavbarHeight(context) : -1;
     }
 
     protected void applyMarginFix(UIHost host, View layout, ViewParams params) {
-        if(U.getCurrentApiVersion() <= 29.0 || !(host instanceof SecondaryHomeActivity))
+        if(U.getCurrentApiVersion() <= 29.0 || !U.getDisplayInfo(context).displayDefaultsToFreeform)
             return;
 
         layout.setOnApplyWindowInsetsListener((v, insets) -> {

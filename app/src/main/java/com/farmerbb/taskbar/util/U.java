@@ -1374,10 +1374,6 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context) {
-        return getDisplayInfo(context, false);
-    }
-
-    public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
         context = getDisplayContext(context);
         int displayID = getTaskbarDisplayID(context);
 
@@ -1392,43 +1388,13 @@ public class U {
         }
 
         if(currentDisplay == null)
-            return new DisplayInfo(0, 0, 0, 0);
+            return new DisplayInfo(0, 0, 0, 0, false);
 
         DisplayMetrics metrics = new DisplayMetrics();
-        currentDisplay.getMetrics(metrics);
+        currentDisplay.getRealMetrics(metrics);
 
-        DisplayMetrics realMetrics = new DisplayMetrics();
-        currentDisplay.getRealMetrics(realMetrics);
-
-        DisplayInfo info = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, 0);
-
-        if(isChromeOs(context)) {
-            if(!getChromeOsContextMenuFix(context)) {
-                info.width = realMetrics.widthPixels;
-                info.height = realMetrics.heightPixels;
-            }
-
-            return info;
-        }
-
-        // Workaround for incorrect display size on devices with notches in landscape mode
-        if(fromTaskbar && getDisplayOrientation(context) == Configuration.ORIENTATION_LANDSCAPE)
-            return info;
-
-        boolean sameWidth = metrics.widthPixels == realMetrics.widthPixels;
-        boolean sameHeight = metrics.heightPixels == realMetrics.heightPixels;
-
-        if(sameWidth && !sameHeight) {
-            info.width = realMetrics.widthPixels;
-            info.height = realMetrics.heightPixels - getNavbarHeight(context);
-        }
-
-        if(!sameWidth && sameHeight) {
-            info.width = realMetrics.widthPixels - getNavbarHeight(context);
-            info.height = realMetrics.heightPixels;
-        }
-
-        return info;
+        boolean displayDefaultsToFreeform = displayDefaultsToFreeform(context, currentDisplay);
+        return new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, 0, displayDefaultsToFreeform);
     }
 
     private static int getTaskbarDisplayID(Context context) {
@@ -1875,7 +1841,7 @@ public class U {
     public static DisplayInfo getExternalDisplayInfo(Context context) {
         Display display = getExternalDisplay(context);
         if(display == null)
-            return new DisplayInfo(0, 0, 0, 0);
+            return new DisplayInfo(0, 0, 0, 0, false);
 
         DisplayMetrics metrics = new DisplayMetrics();
         display.getRealMetrics(metrics);
@@ -1887,7 +1853,8 @@ public class U {
             defaultDensity = 0;
         }
 
-        return new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, defaultDensity);
+        boolean displayDefaultsToFreeform = displayDefaultsToFreeform(context, display);
+        return new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, defaultDensity, displayDefaultsToFreeform);
     }
 
     @SuppressLint("PrivateApi")
@@ -2166,5 +2133,11 @@ public class U {
 
         SharedPreferences pref = getSharedPreferences(context);
         return pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true);
+    }
+
+    private static boolean displayDefaultsToFreeform(Context context, Display display) {
+        Context dispContext = context.createDisplayContext(display);
+        String configString = dispContext.getResources().getConfiguration().toString();
+        return configString.contains("mDisplayWindowingMode=freeform");
     }
 }

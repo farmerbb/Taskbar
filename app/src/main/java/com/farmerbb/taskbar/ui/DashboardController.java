@@ -167,7 +167,7 @@ public class DashboardController extends UIController {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 -1,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
-                getBottomMargin(context, host)
+                getBottomMargin(context)
         );
 
         // Initialize views
@@ -266,7 +266,7 @@ public class DashboardController extends UIController {
                         layout.getPaddingLeft(),
                         layout.getPaddingTop(),
                         layout.getPaddingRight(),
-                        layout.getPaddingBottom() + getBottomMargin(context, host)
+                        layout.getPaddingBottom() + getBottomMargin(context)
                 );
             }
         }, 100);

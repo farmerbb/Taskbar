@@ -20,11 +20,13 @@ public class DisplayInfo {
     public int height;
     public int currentDensity;
     public int defaultDensity;
+    public boolean displayDefaultsToFreeform;
 
-    DisplayInfo(int width, int height, int currentDensity, int defaultDensity) {
+    DisplayInfo(int width, int height, int currentDensity, int defaultDensity, boolean displayDefaultsToFreeform) {
         this.width = width;
         this.height = height;
         this.currentDensity = currentDensity;
         this.defaultDensity = defaultDensity;
+        this.displayDefaultsToFreeform = displayDefaultsToFreeform;
     }
 }
