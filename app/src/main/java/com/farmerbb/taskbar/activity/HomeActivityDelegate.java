@@ -54,6 +54,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.helper.DisplayHelper;
 import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.util.Callbacks;
 import com.farmerbb.taskbar.util.TaskbarPosition;
@@ -580,7 +581,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 if(startMenuController != null) startMenuController.onDestroyHost(this);
                 if(dashboardController != null) dashboardController.onDestroyHost(this);
 
-                IconCache.getInstance(this).clearCache();
+                U.clearCaches(this);
 
                 // Stop using HomeActivityDelegate as UI host and restart services if needed
                 if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false) && !pref.getBoolean(PREF_IS_HIDDEN, false)) {
@@ -597,7 +598,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                     if(!pref.getBoolean(PREF_DONT_STOP_DASHBOARD, false))
                         stopService(new Intent(this, DashboardService.class));
 
-                    IconCache.getInstance(this).clearCache();
+                    U.clearCaches(this);
                 }
             }
 
@@ -657,8 +658,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             if(startMenuController != null) startMenuController.onDestroyHost(this);
             if(dashboardController != null) dashboardController.onDestroyHost(this);
 
-            IconCache.getInstance(this).clearCache();
-
+            U.clearCaches(this);
             U.stopFreeformHack(this);
 
             // Stop using HomeActivityDelegate as UI host and restart services if needed
@@ -676,8 +676,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 stopService(new Intent(this, StartMenuService.class));
                 stopService(new Intent(this, DashboardService.class));
 
-                IconCache.getInstance(this).clearCache();
-
+                U.clearCaches(this);
                 U.stopFreeformHack(this);
             }
         }

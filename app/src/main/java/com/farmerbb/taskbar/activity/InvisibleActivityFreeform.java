@@ -243,7 +243,7 @@ public class InvisibleActivityFreeform extends Activity {
                 stopService(new Intent(this, StartMenuService.class));
                 stopService(new Intent(this, DashboardService.class));
 
-                IconCache.getInstance(this).clearCache();
+                U.clearCaches(this);
             }
         }
     }

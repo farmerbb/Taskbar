@@ -79,6 +79,7 @@ import com.farmerbb.taskbar.activity.DummyActivity;
 import com.farmerbb.taskbar.activity.InvisibleActivityFreeform;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.activity.TouchAbsorberActivity;
+import com.farmerbb.taskbar.helper.DisplayHelper;
 import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.helper.LauncherHelper;
@@ -2150,8 +2151,22 @@ public class U {
     }
 
     private static boolean displayDefaultsToFreeform(Context context, Display display) {
+        if(!canEnableFreeform()) return false;
+
+        DisplayHelper helper = DisplayHelper.getInstance();
+        int id = display.getDisplayId();
+        if(helper.get(id)) return true;
+
         Context dispContext = context.createDisplayContext(display);
         String configString = dispContext.getResources().getConfiguration().toString();
-        return configString.contains("mDisplayWindowingMode=freeform");
+        boolean value = configString.contains("mDisplayWindowingMode=freeform");
+
+        if(value) helper.put(id);
+        return value;
+    }
+
+    public static void clearCaches(Context context) {
+        IconCache.getInstance(context).clearCache();
+        DisplayHelper.getInstance().clear();
     }
 }

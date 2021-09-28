@@ -70,8 +70,7 @@ public class ShowHideTaskbarReceiver extends BroadcastReceiver {
                 context.stopService(startMenuIntent);
                 context.stopService(dashboardIntent);
 
-                IconCache.getInstance(context).clearCache();
-
+                U.clearCaches(context);
                 U.sendBroadcast(context, ACTION_START_MENU_DISAPPEARING);
             }
 
