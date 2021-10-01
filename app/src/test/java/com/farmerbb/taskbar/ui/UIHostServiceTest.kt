@@ -39,7 +39,18 @@ class UIHostServiceTest {
     @Test
     fun testOnConfigurationChanged() {
         Assert.assertNull(uiController.onRecreateHost)
-        hostService.onConfigurationChanged(Configuration())
+
+        val newConfig = Configuration().apply {
+            smallestScreenWidthDp = 123
+            screenHeightDp = 456
+            screenWidthDp = 789
+        }
+
+        val config = uiController.context.resources.configuration.apply {
+            updateFrom(newConfig)
+        }
+
+        hostService.onConfigurationChanged(config)
         Assert.assertEquals(hostService, uiController.onRecreateHost)
     }
 

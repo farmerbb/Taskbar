@@ -411,20 +411,29 @@ class UTest {
     }
 
     @Test
-    fun testGetActivityOptionsWithPAndAboveVersion() {
-        testGetActivityOptions(0, 5, 1)
+    fun testGetActivityOptionsWithQAndAboveVersion() {
+        testGetActivityOptions(0, 5, 1, 1)
+    }
+
+    @Test
+    @Config(sdk = [28])
+    fun testGetActivityOptionsWithP() {
+        // The stack id isn't changed from the default on Chrome OS with Android P
+        val stackId = getActivityOptionsStackId(ActivityOptions.makeBasic())
+        testGetActivityOptions(0, 5, 1, stackId)
     }
 
     @Test
     @Config(sdk = [27])
     fun testGetActivityOptionsWithPBelowVersion() {
-        testGetActivityOptions(-1, 2, -1)
+        testGetActivityOptions(-1, 2, -1, -1)
     }
 
     private fun testGetActivityOptions(
         defaultStackId: Int,
         freeformStackId: Int,
-        stackIdWithoutBrokenApi: Int
+        stackIdWithoutBrokenApi: Int,
+        chromeOsStackId: Int
     ) {
         PowerMockito.spy(U::class.java)
         val hasBrokenSetLaunchBoundsApiAnswer = BooleanAnswer()
@@ -461,7 +470,7 @@ class UTest {
         isChromeOsAnswer.answer = false
         checkActivityOptionsStackIdForContextMenu(context, stackIdWithoutBrokenApi)
         isChromeOsAnswer.answer = true
-        checkActivityOptionsStackIdForContextMenu(context, -1)
+        checkActivityOptionsStackIdForContextMenu(context, chromeOsStackId)
     }
 
     private fun checkActivityOptionsStackIdForContextMenu(
@@ -684,6 +693,18 @@ class UTest {
 
     @Test
     fun testIsOverridingFreeformHackForChromeOS() {
+        PowerMockito.spy(U::class.java)
+        PowerMockito.`when`(U.isChromeOs(context)).thenReturn(true)
+        Assert.assertFalse(U.isOverridingFreeformHack(context, true))
+        val prefs = U.getSharedPreferences(context)
+        prefs.edit().putBoolean(Constants.PREF_FREEFORM_HACK, true).apply()
+        Assert.assertTrue(U.isOverridingFreeformHack(context, true))
+        prefs.edit().remove(Constants.PREF_FREEFORM_HACK).apply()
+    }
+
+    @Test
+    @Config(sdk = [28])
+    fun testIsOverridingFreeformHackForChromeOSApi28() {
         PowerMockito.spy(U::class.java)
         PowerMockito.`when`(U.isChromeOs(context)).thenReturn(true)
         // Check preferences
