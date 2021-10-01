@@ -2122,7 +2122,13 @@ public class U {
         GlobalHelper helper = GlobalHelper.getInstance();
         if(helper.isReflectionAllowed()) return;
 
-        HiddenApiBypass.addHiddenApiExemptions("");
+        // Workaround since HiddenApiBypass can't be mocked
+        try {
+            Class.forName("org.junit.Test");
+        } catch (ClassNotFoundException e) {
+            HiddenApiBypass.addHiddenApiExemptions("");
+        }
+
         helper.setReflectionAllowed(true);
     }
 
