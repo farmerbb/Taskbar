@@ -340,7 +340,7 @@ class TaskbarControllerTest {
         val isVerticalAnswer = BooleanAnswer()
         PowerMockito.spy(TaskbarPosition::class.java)
         PowerMockito.`when`(TaskbarPosition.isVertical(context)).thenAnswer(isVerticalAnswer)
-        val display = U.getDisplayInfo(context, true)
+        val display = U.getDisplayInfo(context)
         val dividerSize = context.resources.getDimensionPixelSize(R.dimen.tb_divider_size)
         val defaultSize = -1
         val params = ViewGroup.LayoutParams(defaultSize, defaultSize)
