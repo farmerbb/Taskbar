@@ -469,10 +469,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateTo(Fragment fragment) {
-        getFragmentManager()
+        U.newHandler().post(() -> getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, fragment.getClass().getSimpleName())
-                .commit();
+                .commit());
     }
 
     private void showHelpDialog(int helpText) {
