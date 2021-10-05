@@ -516,10 +516,11 @@ public class U {
         boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
+        // TODO: Use WindowInsets to correctly handle location of navbar, notches, etc.
         int left = 0;
         int top = statusBarHeight;
         int right = display.width;
-        int bottom = display.height;
+        int bottom = display.height - getNavbarHeight(context);
 
         int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen(context)
                 ? 0 : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
