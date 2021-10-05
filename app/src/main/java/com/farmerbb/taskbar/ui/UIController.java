@@ -35,7 +35,7 @@ public abstract class UIController {
     private boolean prevImeVisibility;
 
     public UIController(Context context) {
-        this.context = context;
+        this.context = U.getDisplayContext(context);
     }
 
     abstract void onCreateHost(UIHost host);
