@@ -22,6 +22,8 @@
      * All services and receivers are removed as they are never run
      * All components run inside a ":libtaskbar" process for isolation from the
        host application, in case of crashes, etc.
+     * SecondaryHomeActivity has its order set to 100 to prevent clashing with
+       the default Launcher3 secondary home activity
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -34,6 +36,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <application>
 
@@ -78,7 +81,7 @@
             android:excludeFromRecents="true"
             android:configChanges="screenSize|keyboard|keyboardHidden"
             android:theme="@style/Taskbar.HomeActivity">
-            <intent-filter>
+            <intent-filter android:order="100">
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
