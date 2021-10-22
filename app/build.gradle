@@ -4,7 +4,17 @@ plugins {
 apply from: '../dependencies.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'jacoco'
+apply plugin: 'com.dicedmelon.gradle.jacoco-android'
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
+}
 
 repositories {
     google()
@@ -80,11 +90,6 @@ android {
                 }
             }
         }
-
-        jacoco {
-            initWith buildTypes.debug
-            testCoverageEnabled true
-        }
     }
 
     flavorDimensions "default"
@@ -118,12 +123,10 @@ android {
 
                     showStandardStreams = false
                     exceptionFormat = 'full'
-                }
-
-                //noinspection GrDeprecatedAPIUsage
-                jacoco {
-                    includeNoLocationClasses = true
-                    excludes = ['jdk.internal.*']
+                    jacoco {
+                        includeNoLocationClasses = true
+                        excludes = ['jdk.internal.*']
+                    }
                 }
             }
             
@@ -154,29 +157,4 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:$POWERMOCK_VERSION"
     testImplementation "org.powermock:powermock-classloading-xstream:$POWERMOCK_VERSION"
     testImplementation 'org.apache.commons:commons-lang3:3.12.0'
-}
-
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testFreeJacocoUnitTest']) {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-        csv.enabled = true
-    }
-
-    def fileFilter = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/BuildConfig.class'
-    ]
-
-    def jacocoTree = fileTree(dir: "$buildDir/intermediates/javac/freeJacoco/classes", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    sourceDirectories.from = [mainSrc]
-    classDirectories.from = [jacocoTree]
-    executionData.from = "$buildDir/jacoco/testFreeJacocoUnitTest.exec"
-
-    doLast {
-        println "Test report link: file://$buildDir/reports/jacoco/jacocoTestReport/html/index.html"
-    }
 }
