@@ -72,7 +72,6 @@ import com.farmerbb.taskbar.util.DesktopIconInfo;
 import com.farmerbb.taskbar.util.DisplayInfo;
 import com.farmerbb.taskbar.util.FABWrapper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
-import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.helper.MenuHelper;
 import com.farmerbb.taskbar.util.U;

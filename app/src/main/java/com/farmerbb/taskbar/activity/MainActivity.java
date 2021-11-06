@@ -57,7 +57,6 @@ import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
 import com.farmerbb.taskbar.util.DependencyUtils;
-import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
 import com.google.android.material.snackbar.Snackbar;

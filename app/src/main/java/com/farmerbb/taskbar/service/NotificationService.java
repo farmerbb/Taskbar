@@ -34,9 +34,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import com.farmerbb.taskbar.activity.MainActivity;
 import com.farmerbb.taskbar.R;
-import com.farmerbb.taskbar.helper.DisplayHelper;
 import com.farmerbb.taskbar.util.DependencyUtils;
-import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
