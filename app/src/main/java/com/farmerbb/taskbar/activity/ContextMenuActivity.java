@@ -131,7 +131,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
 
         if(showStartMenu || desktopIcon != null) {
             int x = args.getInt("x", 0);
-            int y = args.getInt("y", 0);
+            int y = args.getInt("y", 0)
+                    + (U.getDisplayInfo(this).displayDefaultsToFreeform ? U.getNavbarHeight(this) : 0);
             int offsetResourceId = isOverflowMenu ? R.dimen.tb_context_menu_offset_overflow : R.dimen.tb_context_menu_offset;
             int offset = getResources().getDimensionPixelSize(offsetResourceId);
 
@@ -165,7 +166,8 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
             U.sendBroadcast(this, ACTION_HIDE_START_MENU);
 
             int x = args.getInt("x", display.width);
-            int y = args.getInt("y", display.height);
+            int y = args.getInt("y", display.height)
+                    + (U.getDisplayInfo(this).displayDefaultsToFreeform ? U.getNavbarHeight(this) : 0);
             int offset = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
             switch(TaskbarPosition.getTaskbarPosition(this)) {
