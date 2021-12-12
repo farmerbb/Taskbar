@@ -181,10 +181,11 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.tb_main);
         }
 
+        setSupportActionBar(findViewById(R.id.toolbar));
+
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null && !U.isLibrary(this)) {
-            actionBar.setCustomView(R.layout.tb_switch_layout);
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
         }
 
         theSwitch = findViewById(R.id.the_switch);
