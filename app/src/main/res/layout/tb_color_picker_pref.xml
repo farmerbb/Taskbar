@@ -58,7 +58,7 @@
             android:id="@+id/alpha_value"
             android:gravity="end"
             android:layout_gravity="center_vertical"
-            android:layout_width="24dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -90,7 +90,7 @@
             android:id="@+id/red_value"
             android:gravity="end"
             android:layout_gravity="center_vertical"
-            android:layout_width="24dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -122,7 +122,7 @@
             android:id="@+id/green_value"
             android:gravity="end"
             android:layout_gravity="center_vertical"
-            android:layout_width="24dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -154,7 +154,7 @@
             android:id="@+id/blue_value"
             android:gravity="end"
             android:layout_gravity="center_vertical"
-            android:layout_width="24dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
