@@ -65,7 +65,7 @@ Once all the prerequisites are met, make sure that the `ANDROID_HOME` environmen
 
 ### Running tests
 
-Taskbar uses [Robolectric](https://github.com/robolectric/robolectric) as its unit testing framework.  The entire test suite can be run with `./gradlew test`, or you can generate a Jacoco coverage report using `./gradlew jacocoTestReport`.  If you contribute code improvements such as bug fixes, we recommend writing tests alongside it using Robolectric.
+Taskbar uses [Robolectric](https://github.com/robolectric/robolectric) as its unit testing framework.  The entire test suite can be run with `./gradlew testFreeDebug`, or you can generate a Jacoco coverage report using `./gradlew jacocoTestFreeDebugUnitTestReport` which will be output to the `app/build/jacoco/jacocoHtml` directory.  If you contribute code improvements such as bug fixes, we recommend writing tests alongside it using Robolectric.
 
 ## For Third-Party App Developers
 
