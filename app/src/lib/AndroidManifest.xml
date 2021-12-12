@@ -80,7 +80,8 @@
             android:enabled="true"
             android:excludeFromRecents="true"
             android:configChanges="screenSize|keyboard|keyboardHidden"
-            android:theme="@style/Taskbar.HomeActivity">
+            android:theme="@style/Taskbar.HomeActivity"
+            android:exported="true">
             <intent-filter android:order="100">
                 <action android:name="android.intent.action.MAIN"/>
 

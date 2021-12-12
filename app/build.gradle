@@ -30,7 +30,6 @@ spotless {
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION
-    buildToolsVersion BUILD_TOOLS_VERSION
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"

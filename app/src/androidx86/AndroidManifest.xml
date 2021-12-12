@@ -74,7 +74,8 @@
         <activity-alias
             android:name=".MainActivity"
             android:targetActivity=".activity.MainActivity"
-            android:label="@string/tb_app_name">
+            android:label="@string/tb_app_name"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
@@ -115,7 +116,8 @@
             android:label="@string/tb_app_name"
             android:launchMode="singleTask"
             android:enabled="true"
-            android:theme="@style/Taskbar.HomeActivity">
+            android:theme="@style/Taskbar.HomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -135,7 +137,8 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:enabled="false"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.ASSIST" />
@@ -151,7 +154,8 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:enabled="false"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -202,7 +206,8 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:enabled="false"
-            android:theme="@android:style/Theme.NoDisplay" >
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
@@ -216,7 +221,8 @@
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:enabled="true"
-            android:theme="@android:style/Theme.NoDisplay" >
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
@@ -260,7 +266,8 @@
             android:label="@string/tb_new_shortcut"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:theme="@style/Taskbar.Dialog.Blacklist" >
+            android:theme="@style/Taskbar.Dialog.Blacklist"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
@@ -278,7 +285,8 @@
             android:name=".activity.PersistentShortcutLaunchActivity"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoDisplay" >
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -296,8 +304,8 @@
         <service
             android:name=".service.PowerMenuService"
             android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -308,7 +316,8 @@
             android:name=".service.QuickSettingsTileService"
             android:label="@string/tb_app_name"
             android:icon="@drawable/tb_allapps"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -319,7 +328,8 @@
             android:name=".service.FavoriteApp1"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -330,7 +340,8 @@
             android:name=".service.FavoriteApp2"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -341,7 +352,8 @@
             android:name=".service.FavoriteApp3"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -352,7 +364,8 @@
             android:name=".service.FavoriteApp4"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -363,7 +376,8 @@
             android:name=".service.FavoriteApp5"
             android:label="@string/tb_new_shortcut"
             android:icon="@drawable/tb_favorite_app_tile"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -372,7 +386,8 @@
         </service>
         <service
             android:name=".service.NotificationCountService"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
@@ -380,7 +395,8 @@
 
         <receiver
             android:name=".receiver.ShowHideTaskbarReceiver"
-            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.SHOW_HIDE_TASKBAR"/>
             </intent-filter>
@@ -388,8 +404,8 @@
         <receiver
             android:name=".receiver.StartReceiver"
             android:enabled="true"
-            android:exported="true"
-            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.START"/>
             </intent-filter>
@@ -397,8 +413,8 @@
         <receiver
             android:name=".receiver.QuitReceiver"
             android:enabled="true"
-            android:exported="true"
-            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.QUIT"/>
             </intent-filter>
@@ -422,7 +438,7 @@
         <receiver
             android:name=".receiver.UninstallReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
                 <data android:scheme="package" />
@@ -430,7 +446,8 @@
         </receiver>
         <receiver
             android:name=".receiver.ToggleFreeformModeReceiver"
-            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR" >
+            android:permission="com.farmerbb.taskbar.androidx86.START_STOP_TASKBAR"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.farmerbb.taskbar.TOGGLE_FREEFORM_MODE"/>
             </intent-filter>
