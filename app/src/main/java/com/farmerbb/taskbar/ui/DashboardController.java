@@ -154,10 +154,12 @@ public class DashboardController extends UIController {
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCreateHost(UIHost host) {
-        if(U.getBooleanPrefWithDefault(context, PREF_DASHBOARD))
-            init(context, host, () -> drawDashboard(host));
-        else
-            host.terminate();
+        U.newHandler().postDelayed(() -> {
+            if(U.getBooleanPrefWithDefault(context, PREF_DASHBOARD))
+                init(context, host, () -> drawDashboard(host));
+            else
+                host.terminate();
+        }, 250);
     }
 
     @SuppressLint("RtlHardcoded")
