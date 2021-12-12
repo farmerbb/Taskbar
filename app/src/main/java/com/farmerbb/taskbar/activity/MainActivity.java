@@ -86,15 +86,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(U.relaunchActivityIfNeeded(this)) return;
 
         U.registerReceiver(this, switchReceiver, ACTION_UPDATE_SWITCH);
 
         final SharedPreferences pref = U.getSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
 
-        if(!U.isLibrary(this))
-            setTheme(U.isDarkTheme(this) ? R.style.Taskbar_Dark : R.style.Taskbar);
-        else {
+        if(!U.isLibrary(this)) {
+            boolean isRelaunched = getIntent().hasExtra("is_relaunched");
+            int lightTheme = isRelaunched ? R.style.Taskbar_Floating : R.style.Taskbar;
+            int darkTheme = isRelaunched ? R.style.Taskbar_Dark_Floating : R.style.Taskbar_Dark;
+
+            setTheme(U.isDarkTheme(this) ? darkTheme : lightTheme);
+        } else {
             int theme = getIntent().getIntExtra("theme", -1);
             if(theme != -1)
                 setTheme(theme);

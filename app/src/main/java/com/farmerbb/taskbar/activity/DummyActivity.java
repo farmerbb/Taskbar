@@ -46,6 +46,8 @@ public class DummyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(U.relaunchActivityIfNeeded(this)) return;
+
         setContentView(new View(this));
 
         if(getIntent().hasExtra("finish_on_pause"))

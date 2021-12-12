@@ -836,9 +836,9 @@ public class U {
         return canEnableFreeform(context, true);
     }
 
-    public static boolean canEnableFreeform(Context context, boolean checkPref) {
+    public static boolean canEnableFreeform(Context context, boolean allowOverride) {
         if(getCurrentApiVersion() == 31.0f && !displayDefaultsToFreeform(context, getExternalDisplay(context))) {
-            if(!checkPref) return false;
+            if(!allowOverride) return false;
 
             SharedPreferences pref = getSharedPreferences(context);
             return pref.getBoolean(PREF_OVERRIDE_FREEFORM_UNSUPPORTED, false);
@@ -2186,5 +2186,22 @@ public class U {
         }
 
         return configString;
+    }
+
+    public static boolean relaunchActivityIfNeeded(Activity activity) {
+        if(isLibrary(activity)) return false;
+
+        Intent intent = activity.getIntent();
+        if(getCurrentApiVersion() != 30.0f
+                || !displayDefaultsToFreeform(activity, getExternalDisplay(activity))
+                || intent.hasExtra("is_relaunched")) {
+            return false;
+        }
+
+        intent.putExtra("is_relaunched", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        newHandler().post(() -> startActivityMaximized(activity, intent));
+        activity.finish();
+        return true;
     }
 }

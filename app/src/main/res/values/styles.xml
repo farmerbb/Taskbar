@@ -40,6 +40,14 @@
 
     <style name="Taskbar.Dark" parent="TaskbarBase.Dark" />
 
+    <style name="Taskbar.Floating">
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="Taskbar.Dark.Floating">
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
     <style name="Taskbar.HomeActivity" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowShowWallpaper">true</item>
