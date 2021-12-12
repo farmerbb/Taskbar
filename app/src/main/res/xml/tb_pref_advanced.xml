@@ -63,6 +63,12 @@
         android:key="clear_pinned_apps"
         android:title="@string/tb_clear_pinned_apps"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="override_freeform_unsupported"
+        android:title="@string/tb_override_freeform_unsupported"
+        android:summary="@string/tb_override_freeform_unsupported_description"/>
+
     <PreferenceCategory android:key="dummy" android:title="\n\n" />
 
 </PreferenceScreen>

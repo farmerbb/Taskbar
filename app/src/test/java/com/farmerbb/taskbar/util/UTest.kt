@@ -268,26 +268,26 @@ class UTest {
 
     @Test
     fun testCanEnableFreeformWithNougatAndAboveVersion() {
-        Assert.assertTrue(U.canEnableFreeform())
+        Assert.assertTrue(U.canEnableFreeform(context))
     }
 
     @Test
     @Config(sdk = [23])
     fun testCanEnableFreeformWithMarshmallowAndBelowVersion() {
-        Assert.assertFalse(U.canEnableFreeform())
+        Assert.assertFalse(U.canEnableFreeform(context))
     }
 
     @Test
     fun testHasFreeformSupportWithoutFreeformEnabled() {
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`(U.canEnableFreeform()).thenReturn(false)
-        Assert.assertFalse(U.canEnableFreeform())
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenReturn(false)
+        Assert.assertFalse(U.canEnableFreeform(context))
     }
 
     @Test
     fun testHasFreeformSupportWithFreeformEnabledAndNMR1AboveVersion() {
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`(U.canEnableFreeform()).thenReturn(true)
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenReturn(true)
         Assert.assertFalse(U.hasFreeformSupport(context))
         // Case 1, system has feature freeform.
         val packageManager = context.packageManager
@@ -307,7 +307,7 @@ class UTest {
     @Config(sdk = [25])
     fun testHasFreeformSupportWithFreeformEnabledAndNMR1AndBelowVersion() {
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`(U.canEnableFreeform()).thenReturn(true)
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenReturn(true)
         Assert.assertFalse(U.hasFreeformSupport(context))
         // Case 3, version is less than or equal to N_MRI, and force_resizable_activities
         // in Settings.Global is not 0
@@ -600,7 +600,7 @@ class UTest {
     @Test
     fun testInitPrefsForNormalWithCanEnableFreeformAndHackOverrideFalse() {
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`(U.canEnableFreeform()).thenReturn(true)
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenReturn(true)
         val prefs = U.getSharedPreferences(context)
         prefs.edit().putBoolean(Constants.PREF_FREEFORM_HACK_OVERRIDE, false).apply()
         U.initPrefs(context)
@@ -615,7 +615,7 @@ class UTest {
     @Test
     fun testInitPrefsForNormalWithCanEnableFreeformAndHackOverrideTrueButNoSupport() {
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`(U.canEnableFreeform()).thenReturn(true)
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenReturn(true)
         val prefs = U.getSharedPreferences(context)
         prefs.edit().putBoolean(Constants.PREF_FREEFORM_HACK_OVERRIDE, true).apply()
         PowerMockito.`when`(U.hasFreeformSupport(context)).thenReturn(false)
@@ -626,7 +626,7 @@ class UTest {
     @Test
     fun testInitPrefsForNormalWithCantEnableFreeform() {
         PowerMockito.spy(U::class.java)
-        PowerMockito.`when`(U.canEnableFreeform()).thenReturn(false)
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenReturn(false)
         val prefs = U.getSharedPreferences(context)
         U.initPrefs(context)
         Assert.assertFalse(prefs.getBoolean(Constants.PREF_FREEFORM_HACK, false))
@@ -807,7 +807,7 @@ class UTest {
         val canEnableFreeformAnswer = BooleanAnswer()
         val isOverridingFreeformHackAnswer = BooleanAnswer()
         val isChromeOsAnswer = BooleanAnswer()
-        PowerMockito.`when`(U.canEnableFreeform()).thenAnswer(canEnableFreeformAnswer)
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenAnswer(canEnableFreeformAnswer)
         PowerMockito.`when`(U.isOverridingFreeformHack(context, false))
                 .thenAnswer(isOverridingFreeformHackAnswer)
         PowerMockito.`when`(U.isChromeOs(context)).thenAnswer(isChromeOsAnswer)

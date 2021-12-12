@@ -64,7 +64,7 @@ public class AboutFragment extends SettingsFragment {
         }
 
         // Set OnClickListeners for certain preferences
-        if(U.canEnableFreeform())
+        if(U.canEnableFreeform(getActivity()))
             findPreference(PREF_PREF_SCREEN_FREEFORM).setOnPreferenceClickListener(this);
         else
             getPreferenceScreen().removePreference(findPreference(PREF_PREF_SCREEN_FREEFORM));

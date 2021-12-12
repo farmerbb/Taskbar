@@ -139,7 +139,7 @@ public class BackupUtils {
         agent.putStringArray(BACKUP_KEY_TOP_APPS_LABELS, topAppsLabels);
 
         // Get saved window sizes
-        if(U.canEnableFreeform()) {
+        if(U.canEnableFreeform(context)) {
             SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
             List<SavedWindowSizesEntry> savedWindowSizesList = savedWindowSizes.getSavedWindowSizes();
 
@@ -270,7 +270,7 @@ public class BackupUtils {
             }
 
         // Get saved window sizes
-        if(U.canEnableFreeform()) {
+        if(U.canEnableFreeform(context)) {
             SavedWindowSizes savedWindowSizes = SavedWindowSizes.getInstance(context);
             savedWindowSizes.clear(context);
 

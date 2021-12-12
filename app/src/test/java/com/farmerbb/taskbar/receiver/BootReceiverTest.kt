@@ -48,7 +48,7 @@ class BootReceiverTest {
     fun testPrefsInit() {
         PowerMockito.mockStatic(U::class.java)
         PowerMockito.`when`(U.getSharedPreferences(context)).thenReturn(prefs)
-        PowerMockito.`when`(U.canEnableFreeform()).thenReturn(false)
+        PowerMockito.`when`(U.canEnableFreeform(context)).thenReturn(false)
         prefs.edit().putBoolean(Constants.PREF_FREEFORM_HACK, true).apply()
         prefs.edit().putBoolean(Constants.PREF_BLISS_OS_PREFS, false).apply()
         PowerMockito.`when`(U.isAndroidGeneric(context)).thenReturn(true)

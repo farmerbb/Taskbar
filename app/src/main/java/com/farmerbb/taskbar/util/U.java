@@ -832,13 +832,24 @@ public class U {
         }
     }
 
-    public static boolean canEnableFreeform() {
+    public static boolean canEnableFreeform(Context context) {
+        return canEnableFreeform(context, true);
+    }
+
+    public static boolean canEnableFreeform(Context context, boolean checkPref) {
+        if(getCurrentApiVersion() == 31.0f && !displayDefaultsToFreeform(context, getExternalDisplay(context))) {
+            if(!checkPref) return false;
+
+            SharedPreferences pref = getSharedPreferences(context);
+            return pref.getBoolean(PREF_OVERRIDE_FREEFORM_UNSUPPORTED, false);
+        }
+
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     }
 
     @TargetApi(Build.VERSION_CODES.N)
     public static boolean hasFreeformSupport(Context context) {
-        return canEnableFreeform()
+        return canEnableFreeform(context)
                 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)
                 || Settings.Global.getInt(context.getContentResolver(), "enable_freeform_support", 0) != 0
                 || (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
@@ -1016,7 +1027,7 @@ public class U {
     }
 
     private static Bundle getActivityOptionsBundle(Context context, ApplicationType type, String windowSize, View view) {
-        if(!canEnableFreeform() || !isFreeformModeEnabled(context))
+        if(!canEnableFreeform(context) || !isFreeformModeEnabled(context))
             return getActivityOptions(view).toBundle();
 
         switch(windowSize) {
@@ -1330,7 +1341,7 @@ public class U {
     public static void initPrefs(Context context) {
         // Enable freeform hack automatically on supported devices
         SharedPreferences pref = getSharedPreferences(context);
-        if(canEnableFreeform()) {
+        if(canEnableFreeform(context)) {
             if(!pref.getBoolean(PREF_FREEFORM_HACK_OVERRIDE, false)) {
                 pref.edit()
                         .putBoolean(PREF_FREEFORM_HACK, hasFreeformSupport(context) && !isSamsungDevice())
@@ -1413,7 +1424,7 @@ public class U {
         DisplayMetrics metrics = new DisplayMetrics();
         currentDisplay.getRealMetrics(metrics);
 
-        boolean displayDefaultsToFreeform = displayDefaultsToFreeform(context, currentDisplay);
+        boolean displayDefaultsToFreeform = canEnableFreeform(context) && displayDefaultsToFreeform(context, currentDisplay);
         return new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, 0, displayDefaultsToFreeform);
     }
 
@@ -1651,7 +1662,7 @@ public class U {
     }
 
     public static boolean enableFreeformModeShortcut(Context context) {
-        return canEnableFreeform()
+        return canEnableFreeform(context)
                 && !isOverridingFreeformHack(context, false)
                 && !isChromeOs(context);
     }
@@ -1873,7 +1884,7 @@ public class U {
             defaultDensity = 0;
         }
 
-        boolean displayDefaultsToFreeform = displayDefaultsToFreeform(context, display);
+        boolean displayDefaultsToFreeform = canEnableFreeform(context) && displayDefaultsToFreeform(context, display);
         return new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, defaultDensity, displayDefaultsToFreeform);
     }
 
@@ -2149,8 +2160,6 @@ public class U {
     }
 
     private static boolean displayDefaultsToFreeform(Context context, Display display) {
-        if(!canEnableFreeform()) return false;
-
         DisplayHelper helper = DisplayHelper.getInstance();
         int id = display.getDisplayId();
         if(helper.get(id)) return true;

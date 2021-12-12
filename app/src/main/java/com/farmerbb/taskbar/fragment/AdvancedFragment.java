@@ -118,6 +118,13 @@ public class AdvancedFragment extends SettingsFragment {
             getPreferenceScreen().removePreference(findPreference(PREF_SECONDSCREEN));
 
         bindPreferenceSummaryToValue(findPreference(PREF_DASHBOARD));
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && !isLibrary
+                && !U.canEnableFreeform(getActivity(), false)) {
+            bindPreferenceSummaryToValue(findPreference(PREF_OVERRIDE_FREEFORM_UNSUPPORTED));
+        } else
+            getPreferenceScreen().removePreference(findPreference(PREF_OVERRIDE_FREEFORM_UNSUPPORTED));
     }
 
     @Override

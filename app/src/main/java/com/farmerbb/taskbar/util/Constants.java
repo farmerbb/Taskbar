@@ -162,6 +162,7 @@ public class Constants {
     public static final String PREF_NOTIFICATION_COUNT = "notification_count";
     public static final String PREF_NOTIFICATION_SETTINGS = "notification_settings";
     public static final String PREF_OPEN_TASKBAR_SETTINGS = "open_taskbar_settings";
+    public static final String PREF_OVERRIDE_FREEFORM_UNSUPPORTED = "override_freeform_unsupported";
     public static final String PREF_PIN_APP = "pin_app";
     public static final String PREF_POSITION = "position";
     public static final String PREF_POWER_BUTTON_WARNING = "power_button_warning";

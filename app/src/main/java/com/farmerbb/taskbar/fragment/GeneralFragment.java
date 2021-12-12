@@ -51,7 +51,7 @@ public class GeneralFragment extends SettingsFragment {
         } else
             findPreference(PREF_NOTIFICATION_SETTINGS).setOnPreferenceClickListener(this);
 
-        if(U.canEnableFreeform()
+        if(U.canEnableFreeform(getActivity())
                 && !U.isChromeOs(getActivity())
                 && !U.isOverridingFreeformHack(getActivity(), false))
             findPreference(PREF_HIDE_TASKBAR).setSummary(R.string.tb_hide_taskbar_disclaimer);
