@@ -15,5 +15,6 @@ allprojects {
         POWERMOCK_VERSION = "2.0.9"
         AGP_VERSION = "7.0.4"
         HIDDEN_API_BYPASS_VERSION = "3.0"
+        SHIZUKU_VERSION = "11.0.3"
     }
 }

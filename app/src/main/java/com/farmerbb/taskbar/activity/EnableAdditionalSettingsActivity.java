@@ -16,19 +16,15 @@
 package com.farmerbb.taskbar.activity;
 
 import android.Manifest;
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.farmerbb.taskbar.R;
 
-public class EnableAdditionalSettingsActivity extends AppCompatActivity {
+public class EnableAdditionalSettingsActivity extends EnableAdditionalSettingsActivityBase {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void proceedWithOnCreate() {
         setContentView(R.layout.tb_enable_additional_settings);
         setTitle(R.string.tb_enable_additional_settings);
 

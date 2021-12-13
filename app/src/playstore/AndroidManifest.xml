@@ -52,6 +52,9 @@
 
     <uses-permission-sdk-23 android:name="com.farmerbb.taskbar.support.USE_SUPPORT_LIBRARY" />
 
+    <uses-sdk
+        tools:overrideLibrary="rikka.shizuku.provider,rikka.shizuku.api,rikka.shizuku.shared,rikka.shizuku.aidl"/>
+
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false"/>
@@ -639,6 +642,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/tb_file_paths" />
         </provider>
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:multiprocess="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
     </application>
 
