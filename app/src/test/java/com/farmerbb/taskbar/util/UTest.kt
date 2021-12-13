@@ -951,13 +951,10 @@ class UTest {
         PowerMockito.spy(U::class.java)
         val isDesktopModeSupportedAnswer = BooleanAnswer()
         val getExternalDisplayIdAnswer = IntAnswer()
-        val hasFreeformSupportAnswer = BooleanAnswer()
         PowerMockito.`when`(U.isDesktopModeSupported(context))
                 .thenAnswer(isDesktopModeSupportedAnswer)
         PowerMockito.`when`(U.getExternalDisplayID(context))
                 .thenAnswer(getExternalDisplayIdAnswer)
-        PowerMockito.`when`(U.hasFreeformSupport(context))
-                .thenAnswer(hasFreeformSupportAnswer)
         isDesktopModeSupportedAnswer.answer = false
         Assert.assertFalse(U.isDesktopModeActive(context))
         isDesktopModeSupportedAnswer.answer = true
@@ -974,8 +971,6 @@ class UTest {
         )
         Assert.assertFalse(U.isDesktopModeActive(context))
         getExternalDisplayIdAnswer.answer = 1
-        Assert.assertFalse(U.isDesktopModeActive(context))
-        hasFreeformSupportAnswer.answer = true
         Assert.assertTrue(U.isDesktopModeActive(context))
         Settings.Global.putInt(
                 context.contentResolver,
