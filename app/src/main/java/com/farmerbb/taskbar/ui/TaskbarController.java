@@ -1003,7 +1003,7 @@ public class TaskbarController extends UIController {
                                    ViewGroup.LayoutParams params,
                                    boolean fullLength,
                                    int numOfEntries) {
-        DisplayInfo display = U.getDisplayInfo(context);
+        DisplayInfo display = U.getDisplayInfo(context, true);
         int recentsSize = context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size) * numOfEntries;
         float maxRecentsSize = fullLength ? Float.MAX_VALUE : recentsSize;
         int maxScreenSize;

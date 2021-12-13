@@ -516,11 +516,10 @@ public class U {
         boolean isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT;
         boolean isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-        // TODO: Use WindowInsets to correctly handle location of navbar, notches, etc.
         int left = 0;
         int top = statusBarHeight;
         int right = display.width;
-        int bottom = display.height - getNavbarHeight(context);
+        int bottom = display.height;
 
         int iconSize = isOverridingFreeformHack(context) && !LauncherHelper.getInstance().isOnHomeScreen(context)
                 ? 0 : context.getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
@@ -1405,6 +1404,10 @@ public class U {
     }
 
     public static DisplayInfo getDisplayInfo(Context context) {
+        return getDisplayInfo(context, false);
+    }
+
+    public static DisplayInfo getDisplayInfo(Context context, boolean fromTaskbar) {
         context = getDisplayContext(context);
         int displayID = getTaskbarDisplayID(context);
 
@@ -1422,10 +1425,42 @@ public class U {
             return new DisplayInfo(0, 0, 0, 0, false);
 
         DisplayMetrics metrics = new DisplayMetrics();
-        currentDisplay.getRealMetrics(metrics);
+        currentDisplay.getMetrics(metrics);
+
+        DisplayMetrics realMetrics = new DisplayMetrics();
+        currentDisplay.getRealMetrics(realMetrics);
 
         boolean displayDefaultsToFreeform = canEnableFreeform(context) && displayDefaultsToFreeform(context, currentDisplay);
-        return new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, 0, displayDefaultsToFreeform);
+        DisplayInfo info = new DisplayInfo(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, 0, displayDefaultsToFreeform);
+
+        if(isChromeOs(context)) {
+            SharedPreferences pref = getSharedPreferences(context);
+            if(!pref.getBoolean(PREF_CHROME_OS_CONTEXT_MENU_FIX, true)) {
+                info.width = realMetrics.widthPixels;
+                info.height = realMetrics.heightPixels;
+            }
+
+            return info;
+        }
+
+        // Workaround for incorrect display size on devices with notches in landscape mode
+        if(fromTaskbar && getDisplayOrientation(context) == Configuration.ORIENTATION_LANDSCAPE)
+            return info;
+
+        boolean sameWidth = metrics.widthPixels == realMetrics.widthPixels;
+        boolean sameHeight = metrics.heightPixels == realMetrics.heightPixels;
+
+        if(sameWidth && !sameHeight) {
+            info.width = realMetrics.widthPixels;
+            info.height = realMetrics.heightPixels - getNavbarHeight(context);
+        }
+
+        if(!sameWidth && sameHeight) {
+            info.width = realMetrics.widthPixels - getNavbarHeight(context);
+            info.height = realMetrics.heightPixels;
+        }
+
+        return info;
     }
 
     private static int getTaskbarDisplayID(Context context) {
@@ -2099,7 +2134,10 @@ public class U {
     }
 
     public static Context getDisplayContext(Context context) {
-        return context.createDisplayContext(getExternalDisplay(context));
+        if(isDesktopModeActive(context))
+            return context.createDisplayContext(getExternalDisplay(context));
+        else
+            return context.getApplicationContext();
     }
 
     public static int getDisplayOrientation(Context context) {
