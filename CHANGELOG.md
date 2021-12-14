@@ -1,4 +1,25 @@
-## New features in Taskbar 6.1
+<!-- Don't forget to bump the latestChangelogVersion inside MainActivity -->
+
+## Changelog for Taskbar 6.2
+
+This is mostly a behind-the-scenes update, containing the following changes and fixes:
+
+* Many stability fixes for Android 11 and Android 12 devices, as well as Chrome OS devices running ARCVM
+
+* Hide freeform mode settings on most devices running Android 12, where launching freeform apps via Taskbar is non-functional
+
+* Fixed a crash that occurred when using Taskbar's Tasker plugin and a state condition is met
+
+* Hide divider when centering app icons
+
+* Support for enabling additional desktop mode settings via Shizuku
+
+* Themed start button support for Project Sakura PC builds
+
+## Older Changelogs
+
+<details>
+<summary>New features in Taskbar 6.1</summary>
 
 ### Desktop mode fixes for Android 11
 
@@ -20,7 +41,7 @@ On lower resolution devices, the start menu dimensions and font size have been t
 
 As usual, bugs have been fixed and top crashes have been dealt with.  Also, German and Chinese translations have been updated, and a Spanish translation has now been added.  Thank you very much to all who have contributed!
 
-## Older Changelogs
+</details>
 
 <details>
 <summary>New features in Taskbar 6.0</summary>
