@@ -25,6 +25,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.IBinder;
 
+import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.util.U;
+
 import java.lang.reflect.Method;
 
 import rikka.shizuku.Shizuku;
@@ -34,11 +37,17 @@ import rikka.shizuku.SystemServiceHelper;
 
 public abstract class EnableAdditionalSettingsActivityBase extends AppCompatActivity implements Shizuku.OnRequestPermissionResultListener {
 
+    private boolean isUsingShizuku = false;
+    private boolean shouldFinish = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("");
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Shizuku.pingBinder()) {
+            isUsingShizuku = true;
+
             boolean isGranted;
             if(Shizuku.isPreV11() || Shizuku.getVersion() < 11) {
                 isGranted = checkSelfPermission(ShizukuProvider.PERMISSION) == PackageManager.PERMISSION_GRANTED;
@@ -62,6 +71,18 @@ public abstract class EnableAdditionalSettingsActivityBase extends AppCompatActi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(shouldFinish) finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        shouldFinish = isUsingShizuku;
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         for(int i = 0; i < permissions.length; i++) {
@@ -80,6 +101,7 @@ public abstract class EnableAdditionalSettingsActivityBase extends AppCompatActi
         if(isGranted) {
             grantWriteSecureSettingsPermission();
         } else {
+            isUsingShizuku = false;
             proceedWithOnCreate();
         }
     }
@@ -94,6 +116,8 @@ public abstract class EnableAdditionalSettingsActivityBase extends AppCompatActi
 
             Object iPmInstance = asInterfaceMethod.invoke(null, new ShizukuBinderWrapper(SystemServiceHelper.getSystemService("package")));
             grantRuntimePermissionMethod.invoke(iPmInstance, getPackageName(), android.Manifest.permission.WRITE_SECURE_SETTINGS, 0);
+
+            U.showToast(this, R.string.tb_shizuku_successful);
         } catch (Exception ignored) {}
 
         finish();
