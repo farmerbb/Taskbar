@@ -16,7 +16,8 @@
 
 <resources>
 
-    <string name="tb_pref_description_keyboard_shortcut">Taskbar starten / anhalten\n - Super + M / Suche + M\n\nGerät sperren\n - Super + L / Suche + L\n\nStartmenü anzeigen\n - Super / Suche\n(Muss in den Einstellungen als Suchassistent festgelegt werden)</string>
+    <string name="tb_pref_description_keyboard_shortcut">Taskbar starten/beenden: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nGerät sperren: &#160; {fou_social-windows} + L &#160; {fou_magnifying-glass} + L\n\nStartmenü anzeigen: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(Taskbar muss in den Einstellungen die Assistent-App sein)</string>
+    <string name="tb_pref_description_keyboard_shortcut_alt">Taskbar starten/beenden: &#160; Super+M / Suche+M\n\nGerät sperren: &#160; Super+L / Suche+L\n\nStartmenü anzeigen: &#160; Super / Suche\n(Taskbar muss in den Einstellungen die Assistent-App sein)</string>
 
     <string-array name="tb_pref_theme_list">
         <item>System</item>
