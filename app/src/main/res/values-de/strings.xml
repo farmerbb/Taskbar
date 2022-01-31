@@ -20,7 +20,7 @@
     <string name="tb_app_name_debug">Taskbar (Debug)</string>
 
     <string name="tb_taskbar_is_active">Taskbar ist aktiv</string>
-    <string name="tb_click_to_open_settings">Zum Öffnen der Einstellungen hier klicken</string>
+    <string name="tb_click_to_open_settings">Klicken Sie hier, um die Einstellungen zu öffnen.</string>
     <string name="tb_action_show">Taskbar anzeigen</string>
     <string name="tb_action_hide">Taskbar ausblenden</string>
     <string name="tb_action_show_alt">Anzeigen</string>
@@ -81,7 +81,7 @@
     <string name="tb_pref_description_freeform_hack">(Erlaubt Taskbar, Apps für ein Desktop-ähnlicheres Erlebnis im Freiform-Fenstermodus zu öffnen.\n\nDiese Funktion ist experimentell und kann Probleme mit dem üblichen Multitasking mit geteiltem Bildschirm verursachen.)</string>
 
     <string name="tb_pref_header_about">Über Taskbar</string>
-    <string name="tb_pref_about_description">Taskbar: PC-ähnliche Produktivität für Android\n\n&#169; %1$d Braden Farmer\nApp-Logo von Mark Morilla\n\nKlicken Sie hier, um nach Updates zu suchen oder eine Bewertung abzugeben! %2$s</string>
+    <string name="tb_pref_about_description">Taskbar: PC-ähnliche Produktivität für Android\n\n&#169; %1$d Braden Farmer\nApp-Logo von Mark Morilla\n\nKlicken Sie hier, um nach Updates zu suchen oder eine Bewertung abzugeben. %2$s</string>
     <string name="tb_pref_about_description_alt">Taskbar: PC-ähnliche Produktivität für Android\n\n&#169; %1$d Braden Farmer\nApp-Logo von Mark Morilla</string>
 
     <string name="tb_pref_title_hide_taskbar">Taskbar nach Auswahl einer App verbergen</string>
@@ -179,8 +179,8 @@
 
     <string name="tb_pref_title_anchor">Taskbar verankern, wenn der Bildschirm gedreht wird</string>
     <string name="tb_pref_title_donate">Spenden</string>
-    <string name="tb_pref_summary_donate">Unterstützen Sie die Taskbar-Entwicklung durch eine kleine Spende, indem Sie auf die Spenden-Version upgraden</string>
-    <string name="tb_dialog_donate_message">Unterstützen Sie die Taskbar-Entwicklung, indem Sie für %1$s auf die Spenden-Version upgraden!\n\nDie Spenden-Version ist identisch zur freien Version und Ihre Einstellungen werden automatisch übernommen.\n\nTaskbar ist und wird immer zu 100%% frei sein, quelloffen und ohne jede Werbung. Ihre Unterstützung ist allerdings sehr erwünscht!</string>
+    <string name="tb_pref_summary_donate">Unterstützen Sie die Taskbar-Entwicklung durch eine kleine Spende, indem Sie auf die Spenden-Version upgraden.</string>
+    <string name="tb_dialog_donate_message">Unterstützen Sie die Taskbar-Entwicklung, indem Sie für %1$s auf die Spenden-Version upgraden!\n\nDie Spenden-Version ist identisch zur freien Version und Ihre Einstellungen werden automatisch übernommen.\n\nTaskbar ist und wird immer zu 100%% frei sein, quelloffen und ohne jede Werbung. Ihre Unterstützung wird jedoch dankbar entgegen genommen!</string>
     <string name="tb_action_no_thanks">Nein, danke</string>
 
     <string name="tb_importing_settings">Einstellungen werden importiert &#8230;, bitte warten.</string>
