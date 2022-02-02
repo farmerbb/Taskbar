@@ -97,7 +97,7 @@ Pull requests are welcome!  See the [contributor guidelines](https://github.com/
 * Diego Sangunietti (Spanish translation)
 * Tommy He (Chinese translation for Desktop Mode)
 * Aaron Dewes (German translation updates)
-* ib (German translation updates)
+* Ingo Brückl (German translation updates)
 
 #### Special Thanks
 * Mishaal Rahman (xda-developers)
