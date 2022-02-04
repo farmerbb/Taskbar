@@ -20,7 +20,7 @@
     <string name="tb_app_name_debug">Taskbar (Debug)</string>
 
     <string name="tb_taskbar_is_active">Taskbar ist aktiv</string>
-    <string name="tb_click_to_open_settings">Klicken Sie hier, um die Einstellungen zu öffnen.</string>
+    <string name="tb_click_to_open_settings">Hier klicken, um die Einstellungen zu öffnen.</string>
     <string name="tb_action_show">Taskbar anzeigen</string>
     <string name="tb_action_hide">Taskbar ausblenden</string>
     <string name="tb_action_show_alt">Anzeigen</string>
@@ -143,10 +143,10 @@
     <string name="tb_freeform_dialog_title">Freiform-Unterstützung aktivieren</string>
     <string name="tb_freeform_dialog_message">Um Apps mit Taskbar im Freiform-Fenstermodus zu öffnen, führen Sie bitte die folgenden Schritte aus:\n\n&#8226; Öffnen Sie die Entwickleroptionen\n\n&#8226; Scrollen Sie nach unten und aktivieren Sie »%s«\n\n&#8226; Starten Sie Ihr Gerät neu</string>
 
-    <string name="tb_pref_title_invisible_button">Schaltfläche ausblenden, wenn Taskbar verborgen ist</string>
-    <string name="tb_pref_title_freeform_mode_help">Hilfe und Anleitung zum Freiform-Modus</string>
+    <string name="tb_pref_title_invisible_button">Start-Schaltfläche einklappen, wenn Taskbar verborgen ist</string>
+    <string name="tb_pref_title_freeform_mode_help">Hilfe und Anleitungen zum Freiform-Modus</string>
     <string name="tb_freeform_help_dialog_title">Hilfe und Anleitungen</string>
-    <string name="tb_freeform_help_dialog_message"><b>Über den Freiform-Modus</b>\n\nMit Taskbar können Sie ab Android 7.0 Apps in schwebenden Fenstern öffnen. Root-Zugriff ist nicht erforderlich, obwohl Geräte mit Android 8.0, 8.1 und 9 einen adb-Shell-Befehl erfordern, der während der Ersteinrichtung ausgeführt werden muss.\n\nFolgen Sie einfach den folgenden Anweisungen, um Apps im Freiform-Modus zu öffnen:\n\n<b>1.</b> Aktivieren Sie »Unterstützung von Freiform-Fenstern« in der Taskbar-App\n\n<b>2.</b> Folgen Sie den Anweisungen, die im Popup-Fenster erscheinen, um (einmalig) die passenden Einstellungen auf Ihrem Gerät zu aktivieren\n\n<b>3.</b> Öffnen Sie die Übersicht der kürzlich verwendeten Apps auf Ihrem Gerät und schließen alle\n\n<b>4.</b> Starten Sie Taskbar und wählen eine App, um sie in einem Freiform-Fenster zu öffnen\n\n<i>Für beste Ergebnisse, besonders unter Android 8.0 und 8.1, starten Sie Ihr Gerät neu, bevor Sie den Freiform-Modus verwenden.</i>\n\n<b>Voreinstellungen für die Fenstergröße</b>\n\nTaskbar kann App-Fenster in verschiedenen voreingestellten Größen öffnen. Sie können eine Fenstergröße auswählen, indem Sie lange auf ein App-Icon drücken oder mit der rechten Maustaste darauf klicken und »Neues Fenster« wählen.\n\nUm eine Voreinstellung der Fenstergröße für eine bestimmte App zu speichern, drücken Sie einfach lange auf die Voreinstellung, woraufhin ein Häkchen erscheint, das anzeigt, dass sie als Standard eingestellt ist. Taskbar startet die Anwendung beim nächsten Start mit dieser ausgewählten Größe.\n\nBeachten Sie, dass die Fenstergrößen unter Android 8.0 und 8.1 nicht korrekt funktionieren. Sie können dies jedoch umgehen, indem Sie die App öffnen, sie sofort schließen und dann über das Übersichtsmenü von Android erneut öffnen.\n\n<b>Fehlerbehebung</b>\n\n<i>&#8226; Apps starten immer noch im Vollbildmodus</i>\n\nWenn eine Anwendung geöffnet wird, die bereits in den Speicher geladen ist, wird sie von Taskbar in den Vordergrund geholt. Um die App im Freiform-Modus zu öffnen, muss sie neu geöffnet werden.\n\nZiehen Sie die App aus der Übersicht weg und öffnen Sie sie dann erneut über Taskbars letzte Apps. Wenn dies nicht funktioniert, drücken Sie lange auf das App-Icon, wählen Sie »Infos zur App« und erzwingen Sie dann das Beenden der App. Alternativ dazu können Sie Ihr Gerät neu starten.\n\n<i>&#8226; Maximierte Anwendungen können nicht in einem Fenster wiederhergestellt werden</i>\n\nWenn Sie die Maximieren-Schaltfläche in der Titelleiste einer App drücken, bringt Android die App aus dem Freiform-Modus in den Vollbild-Modus. Wie bereits erwähnt, kann Taskbar Apps nur dann in Freiform-Fenstern öffnen, wenn sie neu geöffnet werden.\n\nUm dieses Problem zu beheben, können Sie Fenster maximieren, indem Sie außerhalb des Fensterrahmens der App tippen oder klicken. Dadurch wird das Fenster so vergrößert, dass es den gesamten verfügbaren Platz ausfüllt, während es im Arbeitsbereich von Freiform-Fenstern bleibt.\n\n<i>&#8226; Das Maximieren von Fenstern funktioniert unter Android 9 nicht</i>\n\nDiese Funktionalität liegt außerhalb der Kontrolle der Taskbar und ist etwas, das Google seinerseits beheben muss. Wenn Sie ein Fenster unter Android 9 maximieren müssen, verwenden Sie stattdessen die Fenstergröße »Vollbild«.\n\n<i>&#8226; App-Übergänge scheinen besonders unter Android 9 nicht richtig zu funktionieren</i>\n\nDies ist ebenfalls ein Problem, das von Google behoben werden muss. Sie können es jedoch umgehen, indem Sie Übergangsanimationen deaktivieren.\n\nSie können Übergänge beim Öffnen einer App deaktivieren, indem Sie in den Taskbar-Einstellungen unter »Letzte Apps« die Option »Schnellerer App-Wechsel« aktivieren. Alternativ können Sie Übergänge systemweit deaktivieren, indem Sie in den Entwickleroptionen »Maßstab Übergangsanimation« auf »Animation aus« setzen.</string>
+    <string name="tb_freeform_help_dialog_message"><b>Über den Freiform-Modus</b>\n\nMit Taskbar können Sie ab Android 7.0 Apps in schwebenden Fenstern öffnen. Root-Zugriff ist nicht erforderlich, obwohl Geräte mit Android 8.0, 8.1 und 9 einen adb-Shell-Befehl erfordern, der während der Ersteinrichtung ausgeführt werden muss.\n\nFolgen Sie einfach den folgenden Anweisungen, um Apps im Freiform-Modus zu öffnen:\n\n<b>1.</b> Aktivieren Sie »Unterstützung von Freiform-Fenstern« in der Taskbar-App\n\n<b>2.</b> Folgen Sie den Anweisungen, die im Popup-Fenster erscheinen, um (einmalig) die passenden Einstellungen auf Ihrem Gerät zu aktivieren\n\n<b>3.</b> Öffnen Sie die Übersicht der kürzlich verwendeten Apps auf Ihrem Gerät und schließen alle\n\n<b>4.</b> Starten Sie Taskbar und wählen eine App, um sie in einem Freiform-Fenster zu öffnen\n\n<i>Für beste Ergebnisse, besonders unter Android 8.0 und 8.1, starten Sie Ihr Gerät neu, bevor Sie den Freiform-Modus verwenden.</i>\n\n<b>Voreinstellungen für die Fenstergröße</b>\n\nTaskbar kann App-Fenster in verschiedenen voreingestellten Größen öffnen. Sie können eine Fenstergröße auswählen, indem Sie lange auf ein App-Icon drücken oder mit der rechten Maustaste darauf klicken und »Neues Fenster« wählen.\n\nUm eine Voreinstellung der Fenstergröße für eine bestimmte App zu speichern, drücken Sie einfach lange auf die gewünschte Größe, woraufhin ein Häkchen erscheint, das anzeigt, dass diese als Standard eingestellt ist. Taskbar startet die Anwendung beim nächsten Start mit der ausgewählten Größe.\n\nBeachten Sie, dass die Fenstergrößen unter Android 8.0 und 8.1 nicht korrekt funktionieren. Sie können dies jedoch umgehen, indem Sie die App öffnen, sie sofort wieder schließen und sie dann über das Übersichtsmenü von Android erneut öffnen.\n\n<b>Fehlerbehebung</b>\n\n<i>&#8226; Apps starten immer noch im Vollbildmodus</i>\n\nWenn eine Anwendung geöffnet wird, die bereits in den Speicher geladen ist, wird sie von Taskbar in den Vordergrund geholt. Um die App im Freiform-Modus zu öffnen, muss sie neu geöffnet werden.\n\nZiehen Sie die App aus der Übersicht weg und öffnen sie dann erneut über Taskbars letzte Apps. Wenn dies nicht funktioniert, drücken Sie lange auf das App-Icon, wählen »Infos zur App« und erzwingen dann das Beenden der App. Alternativ dazu können Sie Ihr Gerät neu starten.\n\n<i>&#8226; Maximierte Anwendungen können nicht in einem Fenster wiederhergestellt werden</i>\n\nWenn Sie die Maximieren-Schaltfläche in der Titelleiste einer App drücken, bringt Android die App aus dem Freiform-Modus in den Vollbild-Modus. Wie bereits erwähnt, kann Taskbar Apps nur dann in Freiform-Fenstern öffnen, wenn sie neu geöffnet werden.\n\nUm dieses Problem zu beheben, können Sie Fenster maximieren, indem Sie außerhalb des Fensterrahmens der App tippen oder klicken. Dadurch wird das Fenster so vergrößert, dass es den gesamten verfügbaren Platz ausfüllt, während es im Arbeitsbereich von Freiform-Fenstern bleibt.\n\n<i>&#8226; Das Maximieren von Fenstern funktioniert unter Android 9 nicht</i>\n\nDiese Funktionalität liegt außerhalb der Kontrolle der Taskbar und ist etwas, das Google seinerseits beheben muss. Wenn Sie ein Fenster unter Android 9 maximieren müssen, verwenden Sie stattdessen die Fenstergröße »Vollbild«.\n\n<i>&#8226; App-Übergänge scheinen besonders unter Android 9 nicht richtig zu funktionieren</i>\n\nDies ist ebenfalls ein Problem, das von Google behoben werden muss. Sie können es jedoch umgehen, indem Sie Übergangsanimationen deaktivieren.\n\nSie können Übergänge beim Öffnen einer App deaktivieren, indem Sie in den Taskbar-Einstellungen unter »Letzte Apps« die Option »Schnellerer App-Wechsel« aktivieren. Alternativ können Sie Übergänge systemweit deaktivieren, indem Sie in den Entwickleroptionen »Maßstab Übergangsanimation« auf »Animation aus« setzen.</string>
 
     <string name="tb_action_developer_options">Entwickleroptionen öffnen</string>
     <string name="tb_action_close">Schließen</string>
@@ -183,7 +183,7 @@
     <string name="tb_dialog_donate_message">Unterstützen Sie die Taskbar-Entwicklung, indem Sie für %1$s auf die Spenden-Version upgraden!\n\nDie Spenden-Version ist identisch zur freien Version und Ihre Einstellungen werden automatisch übernommen.\n\nTaskbar ist und wird immer zu 100%% frei sein, quelloffen und ohne jede Werbung. Ihre Unterstützung wird jedoch dankbar entgegen genommen!</string>
     <string name="tb_action_no_thanks">Nein, danke</string>
 
-    <string name="tb_importing_settings">Einstellungen werden importiert &#8230;, bitte warten.</string>
+    <string name="tb_importing_settings">Einstellungen werden importiert, bitte warten &#8230;</string>
     <string name="tb_settings_imported_successfully">Einstellungen wurden erfolgreich importiert</string>
     <string name="tb_import_dialog_message">Danke für das Upgrade zur Spenden-Version von Taskbar!\n\nIhre Einstellungen wurden importiert und Sie können die freie Version der App jetzt deinstallieren.</string>
     <string name="tb_action_uninstall">Deinstallieren</string>
@@ -213,7 +213,7 @@
     <string name="tb_already_blacklisted">%1$s kann nicht ausgewählt werden, da es auf der Liste der versteckten Apps ist</string>
     <string name="tb_already_top_app">%1$s kann nicht ausgewählt werden, da es auf der Liste der Top-Apps ist</string>
 
-    <string name="tb_alt_button_config">Alternative Anordnung der Schaltfläche zum Verbergen</string>
+    <string name="tb_alt_button_config">Alternative Anordnung der Einklapp-Schaltfläche</string>
     <string name="tb_pref_title_save_window_sizes">Fenstergrößen der Apps speichern</string>
     <string name="tb_pref_description_save_window_sizes">(wenn neue Fenster aus dem Kontextmenü geöffnet werden)</string>
 
@@ -226,13 +226,13 @@
     <string name="tb_enable_recent_apps_instructions_phone">Unterstützung für letzte Apps aktivieren?</string>
     <string name="tb_enable_recent_apps_instructions_tv">Um die Unterstützung für letzte Apps zu aktivieren, drücken Sie »Einstellungen öffnen«, um das Android TV-Einstellungsmenü zu öffnen. Wählen Sie »Spezieller App-Zugriff«, dann »Nutzungsdatenzugriff« und stellen Sie sicher, dass Taskbar aktiviert ist.</string>
 
-    <string name="tb_disable_scrolling_list">Scrollen in der App-Liste deaktivieren</string>
+    <string name="tb_disable_scrolling_list">Scrolling in der App-Liste deaktivieren</string>
 
     <string name="tb_double_tap_to_sleep">Doppelklick zum Schlafen</string>
     <string name="tb_enable_double_tap_to_sleep">Doppelklick zum Schlafen aktivieren?</string>
     <string name="tb_action_dont_show_again">Nicht wieder anzeigen</string>
 
-    <string name="tb_app_shortcuts">Mehr Aktionen &#8230;</string>
+    <string name="tb_app_shortcuts">Weitere Aktionen &#8230;</string>
 
     <string name="tb_usage_stats_message">Bitte stellen Sie sicher, dass %s »An« ist</string>
 
@@ -259,10 +259,10 @@
 
     <string name="tb_enable_accessibility">@string/tb_accessibility_service_description</string>
     <string name="tb_accessibility_service_summary">Erlaubt Taskbar die Ausführung von Tastatureingaben</string>
-    <string name="tb_accessibility_service_description">Taskbar muss als Eingabehilfe aktiviert werden, um Tastatureingaben wie »Zurück«, »Startbildschirm«, »Übersicht« und »Energiemenü« auszuführen sowie die Benachrichtigungsleiste anzuzeigen.\n\nDiese Berechtigung wird nur zum Ausführen von Tastatureingaben und zu keinem anderen Zweck verwendet.</string>
+    <string name="tb_accessibility_service_description">Taskbar muss als Eingabehilfe aktiviert werden, um Tastatureingaben wie »Zurück«, »Startbildschirm«, »Übersicht« und »Energiemenü« ausführen oder die Benachrichtigungsleiste anzeigen zu können.\n\nDiese Berechtigung wird nur zum Ausführen von Tastatureingaben und zu keinem anderen Zweck verwendet.</string>
 
     <string name="tb_pref_title_force_new_window">Apps immer in neuen Fenstern öffnen</string>
-    <string name="tb_pref_description_force_new_window">(Erzwingt, sofern eine App mehrere Fenster zulässt, dass sie jedes Mal ein neues Fenster öffnet, wenn sie aus dem Startmenü oder den letzten Apps ausgewählt wird.)</string>
+    <string name="tb_pref_description_force_new_window">(Zwingt eine App, sofern sie mehrere Fenster erlaubt, jedes Mal ein neues Fenster zu öffnen, wenn sie aus dem Startmenü oder den letzten Apps ausgewählt wird.)</string>
     <string name="tb_change_wallpaper">Hintergrundbild ändern</string>
     <string name="tb_change_wallpaper_alt">Hintergrundbild ändern &#8230;</string>
 
@@ -273,7 +273,7 @@
     <string name="tb_dashboard_description">(Fügt der Taskbar eine Schaltfläche hinzu, die Widgets anzeigt, wenn sie gedrückt wird.)</string>
     <string name="tb_dashboard_grid_size">Gittergröße des Widget-Dashboards</string>
 
-    <string name="tb_click_to_add_widget">Zum Hinzufügen eines Widgets klicken</string>
+    <string name="tb_click_to_add_widget">Klicken, um ein Widget hinzuzufügen</string>
     <string name="tb_remove_widget">Widget entfernen</string>
     <string name="tb_are_you_sure">Sind Sie sicher?</string>
     <string name="tb_dashboard_tutorial">Klicken Sie auf eine beliebige Stelle auf dem Bildschirm, um ein Widget zum Dashboard hinzuzufügen</string>
@@ -368,7 +368,7 @@
     <string name="tb_toggle_start_menu">Startmenü umschalten</string>
     <string name="tb_toggle_dashboard">Dashboard umschalten</string>
 
-    <string name="tb_force_activities_resizable">Anpassen der Größe von Aktivitäten erzwingen</string>
+    <string name="tb_force_activities_resizable">Größenänderung von Apps erzwingen</string>
 
     <string name="tb_filepicker_select_an_image_file">Wählen Sie eine Bilddatei aus</string>
     <string name="tb_filepicker_install_file_manager">Fehler bei der Bild-Auswahl</string>
@@ -396,12 +396,12 @@
     <string name="tb_powered_by_taskbar">Ermöglicht durch Taskbar</string>
 
     <string name="tb_manage_app_data">App-Daten verwalten</string>
-    <string name="tb_manage_app_data_description">(Sicherung, Wiederherstellung oder Zurücksetzung von Einstellungen)</string>
+    <string name="tb_manage_app_data_description">(Sicherung, Wiederherstellung und Zurücksetzung von Einstellungen)</string>
     <string name="tb_backup_settings">Einstellungen in Datei sichern &#8230;</string>
     <string name="tb_restore_settings">Einstellungen aus Datei wiederherstellen &#8230;</string>
     <string name="tb_backup_successful">Sicherung war erfolgreich</string>
     <string name="tb_restore_successful">Wiederherstellung war erfolgreich</string>
-    <string name="tb_backup_failed">Beim der Sicherung ist ein Fehler aufgetreten</string>
+    <string name="tb_backup_failed">Bei der Sicherung ist ein Fehler aufgetreten</string>
     <string name="tb_restore_failed">Bei der Wiederherstellung ist ein Fehler aufgetreten</string>
     <string name="tb_backup_restore_not_available">Sichern und Wiederherstellen ist auf diesem Gerät nicht verfügbar</string>
     <string name="tb_backup_file_invalid">Die ausgewählte Sicherungsdatei ist ungültig. Bitte versuchen Sie es erneut.</string>
@@ -458,7 +458,7 @@
     <string name="tb_opening_volume_control">Geöffneter Lautstärkeregler auf dem Hauptbildschirm</string>
     <string name="tb_opening_power_menu">Geöffnetes Energiemenü auf dem Hauptbildschirm</string>
 
-    <string name="tb_pref_dim_screen_title">Handybildschirm während der Aktivierung sperren und abdunkeln</string>
+    <string name="tb_pref_dim_screen_title">Bildschirm während der Aktivierung sperren und abdunkeln</string>
     <string name="tb_pref_dim_screen_description">Drücken Sie zur manuellen Aktivierung die Startbildschirm-Schaltfläche</string>
     <string name="tb_desktop_mode_is_active">Desktop-Modus ist aktiv</string>
 
@@ -484,8 +484,8 @@
 
     <string name="tb_error_creating_widget">Fehler beim Erstellen des Widgets</string>
 
-    <string name="tb_desktop_mode_ime_fix">Desktop-Modus-Eingabemethode-Fix</string>
-    <string name="tb_desktop_mode_ime_fix_title">Desktop-Modus-Eingabemethode-Fix aktivieren</string>
+    <string name="tb_desktop_mode_ime_fix">Fix für die Eingabemethode im Desktop-Modus</string>
+    <string name="tb_desktop_mode_ime_fix_title">Fix für die Eingabemethode im Desktop-Modus aktivieren</string>
     <string name="tb_desktop_mode_ime_fix_summary">Behebt Anzeigefehler, die durch Eingabemethoden ab Android 11 verursacht werden. Sie müssen dazu bei jedem Start des Desktop-Modus vorübergehend Taskbar als Eingabemethode festlegen.</string>
     <string name="tb_desktop_mode_ime_fix_toast">Öffnen Sie die Einstellungen für den Desktop-Modus, um einen Fix für Anzeigefehler zu aktivieren, die durch Eingabemethoden verursacht werden</string>
     <string name="tb_desktop_mode_ime_fix_toast_alt">Starten Sie zuerst den Desktop-Modus, bevor Sie den Eingabemethode-Fix aktivieren</string>
