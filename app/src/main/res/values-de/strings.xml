@@ -89,7 +89,7 @@
     <string name="tb_pref_title_launcher">Startbildschirm ersetzen</string>
     <string name="tb_pref_description_launcher">(Taskbar als Startbildschirm-Ersatz verwenden)</string>
 
-    <string name="tb_set_wallpaper">Hintergrundbild festlegen mit &#8230;</string>
+    <string name="tb_set_wallpaper">Hintergrundbild festlegen mit&#8239;&#8230;</string>
     <string name="tb_pref_disable_animations">Schnellerer App-Wechsel</string>
 
     <string name="tb_pref_title_position">Lage auf dem Bildschirm</string>
@@ -112,9 +112,9 @@
     <string name="tb_pref_title_keyboard_shortcut">Tastenkombinationen aktivieren</string>
     <string name="tb_pref_description_keyboard_shortcut">Taskbar starten/beenden: &#160; {fou_social-windows} + M &#160; {fou_magnifying-glass} + M\n\nStartmenü anzeigen: &#160; {fou_social-windows} &#160; {fou_magnifying-glass}\n(Taskbar muss in den Einstellungen die Assistent-App sein)</string>
     <string name="tb_pref_description_keyboard_shortcut_alt">Taskbar starten/beenden: &#160; Super+M / Suche+M\n\nStartmenü anzeigen: &#160; Super / Suche\n(Taskbar muss in den Einstellungen die Assistent-App sein)</string>
-    <string name="tb_loading_apps">Apps werden geladen &#8230;</string>
+    <string name="tb_loading_apps">Apps werden geladen&#8239;&#8230;</string>
     <string name="tb_press_enter">Keine Apps gefunden\n\nDrücken Sie Enter, um mit Google zu suchen</string>
-    <string name="tb_nothing_to_see_here">Hier gibt es nichts zu sehen, machen Sie weiter &#8230;</string>
+    <string name="tb_nothing_to_see_here">Hier gibt es nichts zu sehen, machen Sie weiter&#8239;&#8230;</string>
 
     <string name="tb_error_dialog_title">Fehler</string>
     <string name="tb_error_dialog_message">Aufgrund von OEM-Beschränkungen kann diese Funktion auf Ihrem Gerät leider nicht aktiviert werden.\n\nMöglicherweise können Sie sie mit dem folgenden adb-Shell-Befehl dennoch aktivieren:\n\nappops set %1$s %2$s allow</string>
@@ -183,7 +183,7 @@
     <string name="tb_dialog_donate_message">Unterstützen Sie die Taskbar-Entwicklung, indem Sie für %1$s auf die Spenden-Version upgraden!\n\nDie Spenden-Version ist identisch zur freien Version und Ihre Einstellungen werden automatisch übernommen.\n\nTaskbar ist und wird immer zu 100%% frei sein, quelloffen und ohne jede Werbung. Ihre Unterstützung wird jedoch dankbar entgegen genommen!</string>
     <string name="tb_action_no_thanks">Nein, danke</string>
 
-    <string name="tb_importing_settings">Einstellungen werden importiert, bitte warten &#8230;</string>
+    <string name="tb_importing_settings">Einstellungen werden importiert, bitte warten&#8239;&#8230;</string>
     <string name="tb_settings_imported_successfully">Einstellungen wurden erfolgreich importiert</string>
     <string name="tb_import_dialog_message">Danke für das Upgrade zur Spenden-Version von Taskbar!\n\nIhre Einstellungen wurden importiert und Sie können die freie Version der App jetzt deinstallieren.</string>
     <string name="tb_action_uninstall">Deinstallieren</string>
@@ -193,7 +193,7 @@
 
     <string name="tb_pref_max_num_of_recents">Maximale Anzahl von letzten/angehefteten Apps</string>
 
-    <string name="tb_show_window_sizes">Neues Fenster &#8230;</string>
+    <string name="tb_show_window_sizes">Neues Fenster&#8239;&#8230;</string>
 
     <string name="tb_icon_pack">Icon-Paket</string>
     <string name="tb_icon_pack_none">Keins</string>
@@ -232,7 +232,7 @@
     <string name="tb_enable_double_tap_to_sleep">Doppelklick zum Schlafen aktivieren?</string>
     <string name="tb_action_dont_show_again">Nicht wieder anzeigen</string>
 
-    <string name="tb_app_shortcuts">Weitere Aktionen &#8230;</string>
+    <string name="tb_app_shortcuts">Weitere Aktionen&#8239;&#8230;</string>
 
     <string name="tb_usage_stats_message">Bitte stellen Sie sicher, dass %s »An« ist</string>
 
@@ -264,7 +264,7 @@
     <string name="tb_pref_title_force_new_window">Apps immer in neuen Fenstern öffnen</string>
     <string name="tb_pref_description_force_new_window">(Zwingt eine App, sofern sie mehrere Fenster erlaubt, jedes Mal ein neues Fenster zu öffnen, wenn sie aus dem Startmenü oder den letzten Apps ausgewählt wird.)</string>
     <string name="tb_change_wallpaper">Hintergrundbild ändern</string>
-    <string name="tb_change_wallpaper_alt">Hintergrundbild ändern &#8230;</string>
+    <string name="tb_change_wallpaper_alt">Hintergrundbild ändern&#8239;&#8230;</string>
 
     <string name="tb_notification_settings">Benachrichtigungseinstellungen</string>
 
@@ -397,8 +397,8 @@
 
     <string name="tb_manage_app_data">App-Daten verwalten</string>
     <string name="tb_manage_app_data_description">(Sicherung, Wiederherstellung und Zurücksetzung von Einstellungen)</string>
-    <string name="tb_backup_settings">Einstellungen in Datei sichern &#8230;</string>
-    <string name="tb_restore_settings">Einstellungen aus Datei wiederherstellen &#8230;</string>
+    <string name="tb_backup_settings">Einstellungen in Datei sichern&#8239;&#8230;</string>
+    <string name="tb_restore_settings">Einstellungen aus Datei wiederherstellen&#8239;&#8230;</string>
     <string name="tb_backup_successful">Sicherung war erfolgreich</string>
     <string name="tb_restore_successful">Wiederherstellung war erfolgreich</string>
     <string name="tb_backup_failed">Bei der Sicherung ist ein Fehler aufgetreten</string>
@@ -411,8 +411,8 @@
     <string name="tb_window_size">Fenstergröße</string>
     <string name="tb_invalid_shortcut">Ungültige Verknüpfung</string>
 
-    <string name="tb_backing_up_settings">Einstellungen sichern &#8230;</string>
-    <string name="tb_restoring_settings">Einstellungen wiederherstellen &#8230;</string>
+    <string name="tb_backing_up_settings">Einstellungen sichern&#8239;&#8230;</string>
+    <string name="tb_restoring_settings">Einstellungen wiederherstellen&#8239;&#8230;</string>
 
     <string name="tb_pref_header_desktop_mode">Desktop-Modus</string>
     <string name="tb_primary_launcher">Standard-Launcher</string>
