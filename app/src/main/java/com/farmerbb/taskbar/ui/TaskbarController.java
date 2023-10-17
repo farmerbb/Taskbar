@@ -896,7 +896,7 @@ public class TaskbarController extends UIController {
                 try {
                     entries.remove(entries.size() - 1);
                     launcherAppCache.remove(launcherAppCache.size() - 1);
-                } catch (ArrayIndexOutOfBoundsException ignored) {}
+                } catch (IndexOutOfBoundsException ignored) {}
             }
 
             // Determine if we need to reverse the order again
