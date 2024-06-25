@@ -5,7 +5,7 @@ buildscript {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven { url 'https://jitpack.io' }
+        maven { url 'https://jitpack.io' } // Add JitPack repository here if it's not already added
     }
 
     dependencies {
@@ -29,6 +29,7 @@ allprojects {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url 'https://jitpack.io' } // Add JitPack repository here as well, if necessary
     }
 }
 
@@ -43,4 +44,15 @@ subprojects {
         maxHeapSize = "2048m"
         minHeapSize = "1024m"
     }
+}
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'com.github.farmerbb:libtaskbar:2.2.0' // see badge above for latest version
 }
