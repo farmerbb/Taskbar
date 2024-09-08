@@ -17,8 +17,7 @@
 <!-- TODO when making changes, be sure to update the Android-x86 and libtaskbar manifests as well -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.farmerbb.taskbar">
+          xmlns:tools="http://schemas.android.com/tools">
 
     <permission android:name="${applicationId}.START_STOP_TASKBAR"
         android:protectionLevel="signature" />
