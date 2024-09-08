@@ -10,7 +10,7 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:${AGP_VERSION}"
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20'
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.5'
     }
 }

@@ -50,6 +50,7 @@
     <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH" />
     <uses-permission-sdk-23 android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission-sdk-23 android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-permission-sdk-23 android:name="com.farmerbb.taskbar.support.USE_SUPPORT_LIBRARY" />
 

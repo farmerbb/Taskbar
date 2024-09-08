@@ -56,6 +56,7 @@ import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.helper.GlobalHelper;
 import com.farmerbb.taskbar.helper.FreeformHackHelper;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.DependencyUtils;
 import com.farmerbb.taskbar.helper.LauncherHelper;
 import com.farmerbb.taskbar.util.U;
@@ -237,9 +238,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 navigateTo(new ManageAppDataFragment());
-            } else if(!getIntent().hasExtra("theme_change"))
+            } else if(!getIntent().hasExtra("theme_change")) {
+                CompatUtils.grantNotificationPermissionIfNeeded(this);
                 navigateTo(new AboutFragment());
-            else
+            } else
                 navigateTo(new AppearanceFragment());
         } else try {
             Fragment oldFragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);

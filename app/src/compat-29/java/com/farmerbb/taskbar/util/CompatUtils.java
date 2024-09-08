@@ -24,4 +24,6 @@ public class CompatUtils {
     public static boolean isImeVisible(View view) {
         return false;
     }
+
+    public static void grantNotificationPermissionIfNeeded(Activity activity) {}
 }
