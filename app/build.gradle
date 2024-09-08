@@ -4,6 +4,8 @@ plugins {
 apply from: '../dependencies.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+/* TODO disabling Jacoco due to incompatibility with AGP >= 8.0
+ * https://github.com/arturdm/jacoco-android-gradle-plugin/issues/102
 apply plugin: 'com.dicedmelon.gradle.jacoco-android'
 
 jacoco {
@@ -15,6 +17,7 @@ jacocoAndroidUnitTestReport {
     html.enabled true
     xml.enabled true
 }
+*/
 
 repositories {
     google()
@@ -29,7 +32,8 @@ spotless {
 }
 
 android {
-    compileSdkVersion COMPILE_SDK_VERSION
+    compileSdk COMPILE_SDK_VERSION
+    namespace "com.farmerbb.taskbar"
 
     defaultConfig {
         applicationId "com.farmerbb.taskbar"
@@ -50,13 +54,18 @@ android {
         buildConfigField "long", "TIMESTAMP", "${System.currentTimeMillis()}L"
     }
 
+    buildFeatures {
+        buildConfig true
+    }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     signingConfigs {
@@ -122,10 +131,13 @@ android {
 
                     showStandardStreams = false
                     exceptionFormat = 'full'
+                    /* TODO disabling Jacoco due to incompatibility with AGP >= 8.0
+                     * https://github.com/arturdm/jacoco-android-gradle-plugin/issues/102
                     jacoco {
                         includeNoLocationClasses = true
                         excludes = ['jdk.internal.*']
                     }
+                    */
                 }
             }
             
@@ -158,4 +170,6 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:$POWERMOCK_VERSION"
     testImplementation "org.powermock:powermock-classloading-xstream:$POWERMOCK_VERSION"
     testImplementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.2"
 }

@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             setContentView(R.layout.tb_main);
         } catch (IllegalStateException e) {
-            setTheme(R.style.Theme_AppCompat_Light);
+            setTheme(com.google.android.material.R.style.Theme_AppCompat_Light);
             setContentView(R.layout.tb_main);
         }
 

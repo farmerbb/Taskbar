@@ -277,14 +277,14 @@ public class StartMenuController extends UIController {
                 public boolean onQueryTextChange(String newText) {
                     searchView.setIconified(false);
 
-                    View closeButton = searchView.findViewById(R.id.search_close_btn);
+                    View closeButton = searchView.findViewById(com.google.android.material.R.id.search_close_btn);
                     if(closeButton != null) closeButton.setVisibility(View.GONE);
 
                     refreshApps(newText, false);
 
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                         U.newHandler().postDelayed(() -> {
-                            EditText editText = searchView.findViewById(R.id.search_src_text);
+                            EditText editText = searchView.findViewById(com.google.android.material.R.id.search_src_text);
                             if(editText != null) {
                                 editText.requestFocus();
                                 editText.setSelection(editText.getText().length());
@@ -647,7 +647,7 @@ public class StartMenuController extends UIController {
                     context.startActivity(intent);
             }
 
-            EditText editText = searchView.findViewById(R.id.search_src_text);
+            EditText editText = searchView.findViewById(com.google.android.material.R.id.search_src_text);
             if(searchView.getVisibility() == View.VISIBLE) {
                 if(hasHardwareKeyboard) {
                     searchView.setIconifiedByDefault(true);

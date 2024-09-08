@@ -369,6 +369,7 @@
     <string name="tb_toggle_dashboard">Dashboard umschalten</string>
 
     <string name="tb_force_activities_resizable">Größenänderung von Apps erzwingen</string>
+    <string name="tb_enable_freeform_windows">Freiform-Fenster aktivieren</string>
 
     <string name="tb_filepicker_select_an_image_file">Wählen Sie eine Bilddatei aus</string>
     <string name="tb_filepicker_install_file_manager">Fehler bei der Bild-Auswahl</string>

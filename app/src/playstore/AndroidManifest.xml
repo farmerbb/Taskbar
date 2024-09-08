@@ -49,6 +49,7 @@
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH" />
     <uses-permission-sdk-23 android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <uses-permission-sdk-23 android:name="com.farmerbb.taskbar.support.USE_SUPPORT_LIBRARY" />
 
@@ -393,8 +394,15 @@
 
         <service android:name=".service.TaskbarService"/>
         <service android:name=".service.StartMenuService"/>
-        <service android:name=".service.NotificationService"/>
         <service android:name=".service.DashboardService"/>
+
+        <service
+            android:name=".service.NotificationService"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="This foreground service is required because the app\'s core functionality draws an overlay over other apps, displaying UI that is hosted inside of services instead of an activity"/>
+        </service>
         <service
             android:name=".service.PowerMenuService"
             android:enabled="true"

@@ -369,6 +369,7 @@
     <string name="tb_toggle_dashboard">切换面板</string>
 
     <string name="tb_force_activities_resizable">强制将活动设为可调整大小</string>
+    <string name="tb_enable_freeform_windows">开启自由式窗口</string>
 
     <string name="tb_filepicker_select_an_image_file">选择一张图片</string>
     <string name="tb_filepicker_install_file_manager">请安装一个文件管理器。</string>

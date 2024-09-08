@@ -89,6 +89,7 @@ Taskbar jest i zawsze będzie w 100%% darmowy, open source, bez reklam. Jednak w
 <string name="tb_enable_developer_options">Włącz opcje programisty, stukając wersję 7 razy</string>
 <string name="tb_enable_double_tap_to_sleep">Włączyć dwukrotne stuknięcie w  tryb uśpienia?</string>
 <string name="tb_enable_force_activities_resizable">Przewiń do dołu i włącz \"%s\"</string>
+<string name="tb_enable_freeform_windows">Włącz okienka freeform</string>
 <string name="tb_enable_recent_apps">"Na pasku zadań można opcjonalnie wyświetlać ikony ostatnio używanych aplikacji wzdłuż krawędzi ekranu. W tym celu %1$s wymaga uprawnień dostępu do użytkowania.
 
 "</string>
