@@ -170,7 +170,7 @@ public class DashboardActivity extends Activity {
         return super.dispatchKeyShortcutEvent(event);
     }
 
- // @Override
+    @Override
     public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
         if(!isTopResumedActivity)
             performOnPauseLogic();

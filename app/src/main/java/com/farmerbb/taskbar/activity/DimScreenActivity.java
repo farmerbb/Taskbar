@@ -142,7 +142,7 @@ public class DimScreenActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {}
 
-    // @Override
+    @Override
     public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
         isTopResumed = isTopResumedActivity;
         dimScreen(true);

@@ -124,4 +124,11 @@ public class DummyActivity extends Activity {
         if(finishOnPause)
             finish();
     }
+
+    @Override
+    public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
+        if(isTopResumedActivity && finishOnPause) {
+            finish();
+        }
+    }
 }

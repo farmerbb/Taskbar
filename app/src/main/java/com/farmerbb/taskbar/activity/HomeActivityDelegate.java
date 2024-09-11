@@ -1110,7 +1110,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             helper.setOnPrimaryHomeScreen(value);
     }
 
- // @Override
+    @Override
     public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
         if(isTopResumedActivity)
             performOnResumeLogic();
