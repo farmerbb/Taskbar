@@ -26,8 +26,4 @@ public class CompatUtils {
     }
 
     public static void grantNotificationPermissionIfNeeded(Activity activity) {}
-
-    public static boolean needsInvisibleActivityHacks() {
-        return true;
-    }
 }

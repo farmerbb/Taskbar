@@ -606,7 +606,7 @@ public class U {
                 && shouldLaunchTouchAbsorber(context)) {
             startTouchAbsorberActivity(context);
             newHandler().postDelayed(runnable, 100);
-        } else if(openInNewWindow && CompatUtils.needsInvisibleActivityHacks()) {
+        } else if(openInNewWindow && needsInvisibleActivityHacks()) {
             Intent intent = new Intent(context, DummyActivity.class);
             intent.putExtra("finish_on_pause", true);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -2240,5 +2240,9 @@ public class U {
         newHandler().post(() -> startActivityMaximized(activity, intent));
         activity.finish();
         return true;
+    }
+
+    public static boolean needsInvisibleActivityHacks() {
+        return getCurrentApiVersion() < 32.0f;
     }
 }
