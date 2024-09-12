@@ -393,7 +393,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(U.hasFreeformSupport(this)
                 && U.isFreeformModeEnabled(this)
-                && !FreeformHackHelper.getInstance().isFreeformHackActive()) {
+                && !FreeformHackHelper.getInstance().isFreeformHackActive()
+                && CompatUtils.needsInvisibleActivityHacks()) {
             U.startFreeformHack(this, true);
         }
 

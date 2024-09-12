@@ -41,4 +41,8 @@ public class CompatUtils {
             activity.requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 42);
         }
     }
+
+    public static boolean needsInvisibleActivityHacks() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.S_V2;
+    }
 }

@@ -606,7 +606,7 @@ public class U {
                 && shouldLaunchTouchAbsorber(context)) {
             startTouchAbsorberActivity(context);
             newHandler().postDelayed(runnable, 100);
-        } else if(openInNewWindow) {
+        } else if(openInNewWindow && CompatUtils.needsInvisibleActivityHacks()) {
             Intent intent = new Intent(context, DummyActivity.class);
             intent.putExtra("finish_on_pause", true);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
