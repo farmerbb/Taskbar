@@ -629,7 +629,9 @@ public class StartMenuController extends UIController {
             boolean onHomeScreen = LauncherHelper.getInstance().isOnHomeScreen(context);
             boolean inFreeformMode = FreeformHackHelper.getInstance().isInFreeformWorkspace();
 
-            if(!U.isChromeOs(context) && (!onHomeScreen || inFreeformMode)) {
+            if(!U.isChromeOs(context)
+                    && U.needsInvisibleActivityHacks()
+                    && (!onHomeScreen || inFreeformMode)) {
                 Class<?> clazz = inFreeformMode && !U.hasBrokenSetLaunchBoundsApi()
                         ? InvisibleActivityAlt.class
                         : InvisibleActivity.class;
