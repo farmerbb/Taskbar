@@ -66,6 +66,7 @@ public abstract class UIController {
 
     protected int getBottomMargin(Context context) {
         return U.getDisplayInfo(context).displayDefaultsToFreeform
+                && U.getCurrentApiVersion() < 33.0f
                 && !U.isChromeOs(context)
                 && !U.isShowHideNavbarSupported()
                 && TaskbarPosition.isBottom(context) ? U.getNavbarHeight(context) : -1;
