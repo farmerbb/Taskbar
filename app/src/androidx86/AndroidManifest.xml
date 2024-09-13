@@ -19,8 +19,8 @@
      * HomeActivity is enabled by default
      * Certain activities and receivers are not exposed
 -->
-<manifest android:versionCode="204"
-          android:versionName="6.2"
+<manifest android:versionCode="205"
+          android:versionName="6.2.1"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="com.farmerbb.taskbar">
