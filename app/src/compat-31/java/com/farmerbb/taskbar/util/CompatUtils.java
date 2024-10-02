@@ -19,7 +19,10 @@ package com.farmerbb.taskbar.util;
 // and the Play Store version of Taskbar (compiled with SDK 34).
 // TODO Do not make changes to this file without making corresponding changes to the Android-x86 version.
 
+import android.app.Activity;
 import android.os.Build;
+import android.content.Intent;
+import android.service.quicksettings.TileService;
 import android.view.View;
 import android.view.WindowInsets;
 
@@ -33,4 +36,8 @@ public class CompatUtils {
     }
 
     public static void grantNotificationPermissionIfNeeded(Activity activity) {}
+
+    public static boolean startActivityAndCollapse(TileService service, Intent intent) {
+        return false;
+    }
 }

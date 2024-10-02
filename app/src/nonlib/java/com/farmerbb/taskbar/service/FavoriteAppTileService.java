@@ -34,6 +34,7 @@ import androidx.annotation.VisibleForTesting;
 import com.farmerbb.taskbar.R;
 import com.farmerbb.taskbar.activity.PersistentShortcutLaunchActivity;
 import com.farmerbb.taskbar.activity.PersistentShortcutSelectAppActivity;
+import com.farmerbb.taskbar.util.CompatUtils;
 import com.farmerbb.taskbar.util.IconCache;
 import com.farmerbb.taskbar.util.U;
 
@@ -81,7 +82,10 @@ public abstract class FavoriteAppTileService extends TileService {
         Intent intent = U.getThemedIntent(this, PersistentShortcutSelectAppActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(PREF_QS_TILE, tileNumber());
-        startActivityAndCollapse(intent);
+
+        if(!CompatUtils.startActivityAndCollapse(this, intent)) {
+            startActivityAndCollapse(intent);
+        }
     }
 
     private void launchApp() {
@@ -111,7 +115,9 @@ public abstract class FavoriteAppTileService extends TileService {
                 )
         );
 
-        startActivityAndCollapse(shortcutIntent);
+        if(!CompatUtils.startActivityAndCollapse(this, shortcutIntent)) {
+            startActivityAndCollapse(shortcutIntent);
+        }
     }
 
     private void updateState() {

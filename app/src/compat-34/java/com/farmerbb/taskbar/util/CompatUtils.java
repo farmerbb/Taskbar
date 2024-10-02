@@ -21,8 +21,11 @@ package com.farmerbb.taskbar.util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.service.quicksettings.TileService;
 import android.view.View;
 import android.view.WindowInsets;
 
@@ -39,6 +42,16 @@ public class CompatUtils {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             activity.requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 42);
+        }
+    }
+
+    public static boolean startActivityAndCollapse(TileService service, Intent intent) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(service, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            service.startActivityAndCollapse(pendingIntent);
+            return true;
+        } else {
+            return false;
         }
     }
 }

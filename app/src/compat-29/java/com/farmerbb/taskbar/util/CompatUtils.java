@@ -15,6 +15,9 @@
 
 package com.farmerbb.taskbar.util;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.service.quicksettings.TileService;
 import android.view.View;
 
 public class CompatUtils {
@@ -26,4 +29,8 @@ public class CompatUtils {
     }
 
     public static void grantNotificationPermissionIfNeeded(Activity activity) {}
+
+    public static boolean startActivityAndCollapse(TileService service, Intent intent) {
+        return false;
+    }
 }
