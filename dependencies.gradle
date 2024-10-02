@@ -1,8 +1,8 @@
 allprojects {
     ext {
         // TODO keep version name and version code in sync with Android-x86 manifest
-        VERSION_CODE = 206
-        VERSION_NAME = "6.2.1"
+        VERSION_CODE = 207
+        VERSION_NAME = "6.2.2"
 
         MIN_SDK_VERSION = 21
         COMPILE_SDK_VERSION = 34
