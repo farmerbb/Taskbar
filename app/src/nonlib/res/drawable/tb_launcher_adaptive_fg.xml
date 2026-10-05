@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A monitor showing a desktop: icons on the screen and a taskbar along the bottom -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Monitor body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,30 L74,30 A4,4 0 0 1 78,34 L78,64 A4,4 0 0 1 74,68 L34,68 A4,4 0 0 1 30,64 L30,34 A4,4 0 0 1 34,30 Z" />
+
+    <!-- Screen -->
+    <path
+        android:fillColor="#0B3D3A"
+        android:pathData="M34,34 L74,34 L74,64 L34,64 Z" />
+
+    <!-- Desktop icons -->
+    <path
+        android:fillColor="#80CBC4"
+        android:pathData="M38,38 h7 v7 h-7 z M38,48 h7 v7 h-7 z M49,38 h7 v7 h-7 z" />
+
+    <!-- Taskbar along the bottom of the screen -->
+    <path
+        android:fillColor="#FFB74D"
+        android:pathData="M34,58 L74,58 L74,64 L34,64 Z" />
+
+    <!-- Start button -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M36,59.5 h3 v3 h-3 z" />
+
+    <!-- Stand -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,68 L58,68 L58,73 L50,73 Z M43,73 L65,73 L65,76 L43,76 Z" />
+</vector>

@@ -16,8 +16,8 @@
 
 <resources>
 
-    <string name="tb_app_name">Taskbar</string>
-    <string name="tb_app_name_debug">Taskbar (Debug)</string>
+    <string name="tb_app_name">Android Desktop</string>
+    <string name="tb_app_name_debug">Android Desktop (Debug)</string>
 
     <string name="tb_taskbar_is_active">Taskbar está activa</string>
     <string name="tb_click_to_open_settings">Click para abrir los ajustes</string>

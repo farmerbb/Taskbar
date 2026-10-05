@@ -16,8 +16,8 @@
 
 <resources>
 
-    <string name="tb_app_name">任务栏</string>
-    <string name="tb_app_name_debug">任务栏 (Debug)</string>
+    <string name="tb_app_name">Android Desktop</string>
+    <string name="tb_app_name_debug">Android Desktop (Debug)</string>
 
     <string name="tb_taskbar_is_active">任务栏 正在运行</string>
     <string name="tb_click_to_open_settings">点击打开设置</string>

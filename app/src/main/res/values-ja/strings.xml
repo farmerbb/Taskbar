@@ -16,8 +16,8 @@
 
 <resources>
 
-    <string name="tb_app_name">Taskbar</string>
-    <string name="tb_app_name_debug">Taskbar (デバッグ)</string>
+    <string name="tb_app_name">Android Desktop</string>
+    <string name="tb_app_name_debug">Android Desktop (Debug)</string>
 
     <string name="tb_taskbar_is_active">Taskbar はアクティブです</string>
     <string name="tb_click_to_open_settings">クリックすると設定を開きます</string>

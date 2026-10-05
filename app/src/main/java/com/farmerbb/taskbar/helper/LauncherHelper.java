@@ -23,6 +23,7 @@ import com.farmerbb.taskbar.util.U;
 public class LauncherHelper {
 
     private boolean onPrimaryHomeScreen = false;
+    private boolean desktopLauncherOpen = false;
     private boolean onSecondaryHomeScreen = false;
     private int secondaryDisplayId = -1;
 
@@ -68,6 +69,14 @@ public class LauncherHelper {
     public void setOnSecondaryHomeScreen(boolean value, int displayId) {
         onSecondaryHomeScreen = value;
         secondaryDisplayId = value ? displayId : -1;
+    }
+
+    public boolean isDesktopLauncherOpen() {
+        return desktopLauncherOpen;
+    }
+
+    public void setDesktopLauncherOpen(boolean value) {
+        desktopLauncherOpen = value;
     }
 
     public int getSecondaryDisplayId() {

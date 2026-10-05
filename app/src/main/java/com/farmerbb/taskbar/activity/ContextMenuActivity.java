@@ -22,6 +22,7 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LauncherActivityInfo;
@@ -296,6 +297,13 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 findPreference(PREF_FILE_MANAGER).setOnPreferenceClickListener(this);
             else
                 getPreferenceScreen().removePreference(findPreference(PREF_FILE_MANAGER));
+
+            // When running as the desktop launcher, offer settings and a visible way to exit
+            if(LauncherHelper.getInstance().isDesktopLauncherOpen()) {
+                addPreferencesFromResource(R.xml.tb_pref_context_menu_desktop_session);
+                findPreference(PREF_OPEN_TASKBAR_SETTINGS).setOnPreferenceClickListener(this);
+                findPreference(PREF_QUIT_TASKBAR).setOnPreferenceClickListener(this);
+            }
         } else if(desktopIcon != null && entry == null) {
             addPreferencesFromResource(R.xml.tb_pref_context_menu_desktop_icons);
             findPreference(PREF_ADD_ICON_TO_DESKTOP).setOnPreferenceClickListener(this);
@@ -498,6 +506,27 @@ public class ContextMenuActivity extends PreferenceActivity implements Preferenc
                 prepareToClose();
                 break;
             case PREF_QUIT_TASKBAR:
+                if(isOverflowMenu && LauncherHelper.getInstance().isDesktopLauncherOpen()) {
+                    // Confirm first, so the desktop isn't closed by accident
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.tb_exit_desktop)
+                            .setMessage(R.string.tb_are_you_sure)
+                            .setNegativeButton(R.string.tb_action_cancel, (dialog, which) -> {
+                                prepareToClose();
+                                finish();
+                            })
+                            .setPositiveButton(R.string.tb_action_ok, (dialog, which) -> {
+                                Intent exitIntent = new Intent(ACTION_QUIT);
+                                exitIntent.setPackage(getPackageName());
+                                sendBroadcast(exitIntent);
+                                prepareToClose();
+                                finish();
+                            })
+                            .setCancelable(false)
+                            .show();
+                    break;
+                }
+
                 Intent quitIntent = new Intent(ACTION_QUIT);
                 quitIntent.setPackage(getPackageName());
                 sendBroadcast(quitIntent);

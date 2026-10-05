@@ -16,8 +16,8 @@
 
 <resources>
 
-    <string name="tb_app_name">Taakbalk</string>
-    <string name="tb_app_name_debug">Taakbalk (foutopsporing)</string>
+    <string name="tb_app_name">Android Desktop</string>
+    <string name="tb_app_name_debug">Android Desktop (Debug)</string>
 
     <string name="tb_taskbar_is_active">Taakbalk is actief</string>
     <string name="tb_click_to_open_settings">Druk om instellingen te openen</string>

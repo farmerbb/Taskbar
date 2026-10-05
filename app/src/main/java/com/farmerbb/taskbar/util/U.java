@@ -754,6 +754,24 @@ public class U {
                 ? 0 : getSystemDimen(context, "status_bar_height");
     }
 
+    /** True when the device uses gesture navigation (no on-screen back/home/recents buttons). */
+    public static boolean isGestureNavigation(Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                && Settings.Secure.getInt(context.getContentResolver(), "navigation_mode", 0) == 2;
+    }
+
+    /**
+     * Extra window flags that let the taskbar and start menu sit at the very bottom of the
+     * screen, instead of floating above the gesture navigation area.
+     */
+    public static int getGestureLayoutFlags(Context context) {
+        return LauncherHelper.getInstance().isDesktopLauncherOpen()
+                && isGestureNavigation(context)
+                && TaskbarPosition.isBottom(context)
+                ? WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                : 0;
+    }
+
     public static int getNavbarHeight(Context context) {
         SharedPreferences pref = getSharedPreferences(context);
         boolean isNavbarHidden = isShowHideNavbarSupported()
@@ -1247,6 +1265,28 @@ public class U {
         context.stopService(new Intent(context, StartMenuService.class));
         context.stopService(new Intent(context, DashboardService.class));
         if(fullRestart) context.stopService(new Intent(context, NotificationService.class));
+    }
+
+    /**
+     * If the app was killed while a desktop session was running (for example, by swiping it
+     * away from recents), Android restarts the "sticky" taskbar services with nothing behind
+     * them.  Detect that and shut the session down instead of showing a stray taskbar.
+     *
+     * @return true if an orphaned session was found and ended
+     */
+    public static boolean endOrphanedDesktopSession(Context context) {
+        SharedPreferences pref = getSharedPreferences(context);
+        if(!pref.getBoolean(PREF_DESKTOP_SESSION, false)
+                || LauncherHelper.getInstance().isDesktopLauncherOpen())
+            return false;
+
+        pref.edit()
+                .putBoolean(PREF_DESKTOP_SESSION, false)
+                .putBoolean(PREF_TASKBAR_ACTIVE, false)
+                .apply();
+
+        stopTaskbarService(context, true);
+        return true;
     }
 
     public static void restartTaskbar(Context context) {

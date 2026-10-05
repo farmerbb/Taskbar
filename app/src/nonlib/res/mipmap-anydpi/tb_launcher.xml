@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icon for Android versions before adaptive icons: the same monitor on a rounded square -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/tb_launcher_adaptive_bg" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/tb_launcher_adaptive_fg" />
+</layer-list>

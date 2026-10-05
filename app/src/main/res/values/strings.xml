@@ -16,8 +16,10 @@
 
 <resources>
 
-    <string name="tb_app_name">Taskbar</string>
-    <string name="tb_app_name_debug">Taskbar (Debug)</string>
+    <string name="tb_app_name">Android Desktop</string>
+    <string name="tb_add_widget">Add widget</string>
+    <string name="tb_move_resize_widget">Move / resize</string>
+    <string name="tb_app_name_debug">Android Desktop (Debug)</string>
 
     <string name="tb_taskbar_is_active">Taskbar is active</string>
     <string name="tb_click_to_open_settings">Click to open settings</string>
@@ -107,6 +109,7 @@
     <string name="tb_app_info">App info</string>
     <string name="tb_uninstall">Uninstall</string>
     <string name="tb_open_taskbar_settings">Open settings</string>
+    <string name="tb_exit_desktop">Exit desktop</string>
     <string name="tb_quit_taskbar">Quit</string>
 
     <string name="tb_pref_title_keyboard_shortcut">Enable keyboard shortcuts</string>

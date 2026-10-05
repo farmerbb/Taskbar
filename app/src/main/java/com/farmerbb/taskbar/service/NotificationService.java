@@ -59,6 +59,14 @@ public class NotificationService extends Service {
         return START_STICKY;
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+
+        // Give the desktop activity a moment to clean up first, then check for leftovers
+        U.newHandler().postDelayed(() -> U.endOrphanedDesktopSession(this), 2000);
+    }
+
     BroadcastReceiver userForegroundReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -83,6 +91,9 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Don't come back after the desktop has been closed
+        U.endOrphanedDesktopSession(this);
 
         SharedPreferences pref = U.getSharedPreferences(this);
         if(pref.getBoolean(PREF_TASKBAR_ACTIVE, false)) {

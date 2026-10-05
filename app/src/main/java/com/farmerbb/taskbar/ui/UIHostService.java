@@ -44,11 +44,22 @@ public abstract class UIHostService extends Service implements UIHost {
     public void onCreate() {
         super.onCreate();
 
+        // Don't come back as a stray taskbar after the desktop has been closed
+        U.endOrphanedDesktopSession(this);
+
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         configString = U.getConfigString(this);
 
         controller = newController();
         controller.onCreateHost(this);
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+
+        // Give the desktop activity a moment to clean up first, then check for leftovers
+        U.newHandler().postDelayed(() -> U.endOrphanedDesktopSession(this), 2000);
     }
 
     @Override

@@ -168,7 +168,8 @@ public class DashboardController extends UIController {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 -1,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                        | U.getGestureLayoutFlags(context),
                 getBottomMargin(context)
         );
 
@@ -199,6 +200,11 @@ public class DashboardController extends UIController {
         maxSize = columns * rows;
 
         int backgroundTint = U.getBackgroundTint(context);
+
+        // On the desktop, keep the widget panel light so it doesn't grey out the screen
+        if(LauncherHelper.getInstance().isDesktopLauncherOpen())
+            backgroundTint = ColorUtils.setAlphaComponent(backgroundTint, Color.alpha(backgroundTint) / 3);
+
         int accentColor = U.getAccentColor(context);
         int accentColorAlt = accentColor;
         accentColorAlt = ColorUtils.setAlphaComponent(accentColorAlt, Color.alpha(accentColorAlt) / 3);

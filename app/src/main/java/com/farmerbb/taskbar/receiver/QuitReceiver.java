@@ -53,6 +53,9 @@ public class QuitReceiver extends BroadcastReceiver {
             }
 
             context.stopService(notificationIntent);
+
+            // Close the desktop launcher, if it's open
+            U.sendBroadcast(context, ACTION_EXIT_DESKTOP_LAUNCHER);
         } else
             pref.edit().remove(PREF_SKIP_QUIT_RECEIVER).apply();
     }

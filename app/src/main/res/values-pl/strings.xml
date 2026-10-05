@@ -44,8 +44,8 @@ Uprawnienie to jest używane tylko do wykonywania czynności naciśnięcia przyc
 <string name="tb_alt_button_config">Alternatywna pozycja przycisku zwijania</string>
 <string name="tb_app_hidden">1 ukryta aplikacja</string>
 <string name="tb_app_info">Informacje o aplikacji</string>
-<string name="tb_app_name">Taskbar</string>
-<string name="tb_app_name_debug">Taskbar (Debug)</string>
+<string name="tb_app_name">Android Desktop</string>
+<string name="tb_app_name_debug">Android Desktop (Debug)</string>
 <string name="tb_app_shortcuts">Więcej akcji...</string>
 <string name="tb_apply_icon_pack">Zastosuj pakiet ikon</string>
 <string name="tb_apply_icon_pack_description">Zastosować \"%1$s\" do Taskbar?</string>

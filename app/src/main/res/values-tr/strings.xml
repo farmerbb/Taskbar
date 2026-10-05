@@ -43,8 +43,8 @@ Bu izin sadece düğme basma eylemlerini gerçekleştirmek için kullanılır ve
 <string name="tb_alt_button_config">Daralt düğmesi için alternatif konum</string>
 <string name="tb_app_hidden">1 uygulama gizli</string>
 <string name="tb_app_info">Uygulama bilgisi</string>
-<string name="tb_app_name">Taskbar</string>
-<string name="tb_app_name_debug">Taskbar (Debug)</string>
+<string name="tb_app_name">Android Desktop</string>
+<string name="tb_app_name_debug">Android Desktop (Debug)</string>
 <string name="tb_app_shortcuts">Daha fazla eylem…</string>
 <string name="tb_apply_icon_pack">Simge paketi uygula</string>
 <string name="tb_apply_icon_pack_description">\"%1$s\" Taskbar uygulamasından uygulansın mı?</string>

@@ -52,6 +52,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 
@@ -248,7 +249,8 @@ public class TaskbarController extends UIController {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 -1,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                        | U.getGestureLayoutFlags(context),
                 getBottomMargin(context)
         );
 
@@ -652,6 +654,39 @@ public class TaskbarController extends UIController {
         return searchInterval;
     }
 
+    private Intent getCalendarIntent() {
+        return Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_CALENDAR);
+    }
+
+    private Intent getClockIntent() {
+        return new Intent(AlarmClock.ACTION_SHOW_ALARMS);
+    }
+
+    private Intent getInternetPanelIntent() {
+        // The internet panel has Wi-Fi and mobile data toggles and the list of networks
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                ? new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY)
+                : null;
+    }
+
+    /** Opens the first intent that something on the device can handle. */
+    private void openSystemTrayTarget(Intent... candidates) {
+        for(Intent intent : candidates) {
+            if(intent == null) continue;
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            try {
+                context.startActivity(intent);
+
+                if(U.shouldCollapse(context, false))
+                    hideTaskbar(true);
+
+                return;
+            } catch(ActivityNotFoundException | SecurityException ignored) {}
+        }
+    }
+
     @VisibleForTesting
     void drawSysTray(Context context, int layoutId, LinearLayout layout) {
         sysTrayLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.tb_system_tray, null);
@@ -718,6 +753,25 @@ public class TaskbarController extends UIController {
                     return true;
                 });
             }
+        }
+
+        if(!U.isLibrary(context)) {
+            // Date and time open the calendar (long-press for the clock)
+            time.setOnClickListener(v -> openSystemTrayTarget(getCalendarIntent(), getClockIntent()));
+            time.setOnLongClickListener(v -> {
+                openSystemTrayTarget(getClockIntent());
+                return true;
+            });
+
+            // Connectivity and battery icons jump straight to the matching settings
+            sysTrayLayout.findViewById(R.id.wifi).setOnClickListener(v ->
+                    openSystemTrayTarget(getInternetPanelIntent(), new Intent(Settings.ACTION_WIFI_SETTINGS)));
+            sysTrayLayout.findViewById(R.id.bluetooth).setOnClickListener(v ->
+                    openSystemTrayTarget(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS)));
+            sysTrayLayout.findViewById(R.id.cellular).setOnClickListener(v ->
+                    openSystemTrayTarget(getInternetPanelIntent(), new Intent(Settings.ACTION_WIRELESS_SETTINGS)));
+            sysTrayLayout.findViewById(R.id.battery).setOnClickListener(v ->
+                    openSystemTrayTarget(new Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)));
         }
 
         notificationCountCircle = sysTrayLayout.findViewById(R.id.notification_count_circle);
@@ -1544,7 +1598,12 @@ public class TaskbarController extends UIController {
         SharedPreferences pref = U.getSharedPreferences(context);
         boolean hide = pref.getBoolean(PREF_INVISIBLE_BUTTON, false);
 
-        if(button != null) button.setText(context.getString(isCollapsed ? R.string.tb_right_arrow : R.string.tb_left_arrow));
+        if(button != null) {
+            button.setText(context.getString(isCollapsed ? R.string.tb_right_arrow : R.string.tb_left_arrow));
+
+            // On the desktop the hide button is a quiet, secondary control
+            button.setAlpha(LauncherHelper.getInstance().isDesktopLauncherOpen() ? 0.35f : 1f);
+        }
         if(layout != null) layout.setAlpha(isCollapsed && hide ? 0 : 1);
     }
 

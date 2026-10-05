@@ -16,6 +16,7 @@
 package com.farmerbb.taskbar.ui;
 
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.view.WindowManager;
 
 import com.farmerbb.taskbar.util.U;
@@ -48,6 +49,11 @@ public class ViewParams {
 
         if(gravity > -1)
             wmParams.gravity = gravity;
+
+        // Windows that extend into the gesture area shouldn't be pushed in by the system bars
+        if((flags & WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS) != 0
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            wmParams.setFitInsetsTypes(0);
 
         if(bottomMargin > -1)
             wmParams.y = bottomMargin;

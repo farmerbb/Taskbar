@@ -36,11 +36,16 @@ import android.os.UserManager;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -60,6 +65,7 @@ import com.farmerbb.taskbar.util.Callbacks;
 import com.farmerbb.taskbar.util.TaskbarPosition;
 import com.farmerbb.taskbar.service.DashboardService;
 import com.farmerbb.taskbar.service.NotificationService;
+import com.farmerbb.taskbar.widget.DesktopWidgetManager;
 import com.farmerbb.taskbar.service.StartMenuService;
 import com.farmerbb.taskbar.service.TaskbarService;
 import com.farmerbb.taskbar.ui.DashboardController;
@@ -110,6 +116,8 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private int endDragIndex;
 
     private boolean isSecondaryHome;
+    private boolean isDesktopLauncher;
+    private DesktopWidgetManager desktopWidgets;
     private boolean waitingForPermission;
     private boolean isWallpaperEnabled;
     private boolean isTaskVirtualDisplay;
@@ -119,7 +127,17 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     private final BroadcastReceiver killReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            killHomeActivity();
+            // The desktop launcher is a regular app, so it must not be killed
+            // just because the (unrelated) home screen component got disabled
+            if(!isDesktopLauncher)
+                killHomeActivity();
+        }
+    };
+
+    private final BroadcastReceiver exitDesktopReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
         }
     };
 
@@ -225,6 +243,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         SharedPreferences pref = U.getSharedPreferences(this);
 
         isSecondaryHome = this instanceof SecondaryHomeActivity;
+        isDesktopLauncher = this instanceof DesktopLauncherActivity;
+        if(isDesktopLauncher)
+            LauncherHelper.getInstance().setDesktopLauncherOpen(true);
         if(isSecondaryHome) {
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             Display display = windowManager.getDefaultDisplay();
@@ -280,7 +301,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             }
         };
 
-        isWallpaperEnabled = !isTaskVirtualDisplay && (isSecondaryHome || U.isChromeOs(this));
+        isWallpaperEnabled = !isTaskVirtualDisplay && (isSecondaryHome || isDesktopLauncher || U.isChromeOs(this));
         if(isWallpaperEnabled) {
             wallpaper = new ImageView(this);
             wallpaper.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -321,7 +342,21 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             });
         }
 
-        layout.setFitsSystemWindows(true);
+        if(isDesktopLauncher && U.isGestureNavigation(this)) {
+            // Draw behind the gesture bar so there's no gap at the bottom of the desktop
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                getWindow().setNavigationBarContrastEnforced(false);
+
+            ViewCompat.setOnApplyWindowInsetsListener(layout, (v, insets) -> {
+                Insets bars = insets.getInsets(
+                        WindowInsetsCompat.Type.statusBars() | WindowInsetsCompat.Type.displayCutout());
+                v.setPadding(bars.left, bars.top, bars.right, 0);
+                return insets;
+            });
+        } else
+            layout.setFitsSystemWindows(true);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P 
                 && isDesktopIconsEnabled
@@ -398,6 +433,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         if((this instanceof HomeActivity
                 || isSecondaryHome
+                || isDesktopLauncher
                 || U.isLauncherPermanentlyEnabled(this))) {
             setContentView(layout);
 
@@ -409,10 +445,23 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
                 }
             }
 
-            pref.edit()
-                    .putBoolean(PREF_LAUNCHER, !isSecondaryHome)
-                    .putBoolean(PREF_DESKTOP_MODE, U.isDesktopModeSupported(this) && isSecondaryHome)
-                    .apply();
+            if(isDesktopLauncher) {
+                desktopWidgets = new DesktopWidgetManager(this, layout);
+                updateMargins();
+                layout.setOnLongClickListener(v -> {
+                    showDesktopMenu();
+                    return true;
+                });
+            }
+
+            // The desktop launcher doesn't register as a system home screen,
+            // so it must not touch the home screen / desktop mode preferences
+            if(!isDesktopLauncher) {
+                pref.edit()
+                        .putBoolean(PREF_LAUNCHER, !isSecondaryHome)
+                        .putBoolean(PREF_DESKTOP_MODE, U.isDesktopModeSupported(this) && isSecondaryHome)
+                        .apply();
+            }
         } else
             killHomeActivity();
 
@@ -428,6 +477,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
 
         if(isSecondaryHome)
             U.registerReceiver(this, restartReceiver, ACTION_RESTART);
+
+        if(isDesktopLauncher)
+            U.registerReceiver(this, exitDesktopReceiver, ACTION_EXIT_DESKTOP_LAUNCHER);
 
         if(isWallpaperEnabled) {
             U.registerReceiver(this, removeDesktopWallpaperReceiver, ACTION_REMOVE_DESKTOP_WALLPAPER);
@@ -447,6 +499,28 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         U.initPrefs(this);
     }
 
+    private void showDesktopMenu() {
+        CharSequence[] items = {
+                getString(R.string.tb_add_widget),
+                getString(R.string.tb_set_wallpaper)
+        };
+
+        AlertDialog menu = new AlertDialog.Builder(this)
+                .setItems(items, (dialog, which) -> {
+                    if(which == 0)
+                        desktopWidgets.startAddWidget();
+                    else
+                        setWallpaper();
+                })
+                .create();
+
+        menu.show();
+
+        // Keep the desktop visible behind the menu instead of darkening it
+        if(menu.getWindow() != null)
+            menu.getWindow().setDimAmount(0.15f);
+    }
+
     private void setWallpaper() {
         U.sendBroadcast(this, ACTION_TEMP_HIDE_TASKBAR);
 
@@ -460,7 +534,7 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     protected void onResume() {
         super.onResume();
 
-        if(U.canBootToFreeform(this)) {
+        if(canBootToFreeform()) {
             if(U.launcherIsDefault(this))
                 startFreeformHack();
             else {
@@ -484,12 +558,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         super.onStart();
 
         U.sendBroadcast(this, ACTION_HIDE_START_MENU);
+        if(desktopWidgets != null) desktopWidgets.startListening();
         init();
     }
 
     private void init() {
         if(U.canDrawOverlays(this)) {
-            if(!U.canBootToFreeform(this)) {
+            if(!canBootToFreeform()) {
                 setOnHomeScreen(true);
 
                 if(forceTaskbarStart) {
@@ -542,11 +617,25 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             startMenuController.onCreateHost(this);
             dashboardController.onCreateHost(this);
         } else {
+            if(isDesktopLauncher) {
+                // Opening the desktop starts a Taskbar session that stays active
+                // (even while other apps are in front) until the desktop is closed
+                pref.edit()
+                        .putBoolean(PREF_IS_HIDDEN, false)
+                        .putBoolean(PREF_TASKBAR_ACTIVE, true)
+                        .putBoolean(PREF_DESKTOP_SESSION, true)
+                        .putLong(PREF_TIME_OF_SERVICE_START, System.currentTimeMillis())
+                        .apply();
+            }
+
             // We always start the Taskbar and Start Menu services, even if the app isn't normally running
             try {
                 startService(new Intent(this, TaskbarService.class));
                 startService(new Intent(this, StartMenuService.class));
                 startService(new Intent(this, DashboardService.class));
+
+                if(isDesktopLauncher)
+                    startService(new Intent(this, NotificationService.class));
             } catch (IllegalStateException ignored) {}
         }
 
@@ -556,6 +645,11 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         // Show the Taskbar temporarily, as nothing else will be visible on screen
         U.newHandler().postDelayed(() ->
                 U.sendBroadcast(this, ACTION_TEMP_SHOW_TASKBAR), 100);
+    }
+
+    private boolean canBootToFreeform() {
+        // The desktop launcher is never the system home screen, so it can't boot to freeform
+        return !isDesktopLauncher && U.canBootToFreeform(this);
     }
 
     private void startFreeformHack() {
@@ -569,8 +663,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     protected void onStop() {
         super.onStop();
 
+        if(desktopWidgets != null) {
+            desktopWidgets.exitEditMode();
+            desktopWidgets.stopListening();
+        }
+
         SharedPreferences pref = U.getSharedPreferences(this);
-        if(!U.canBootToFreeform(this)) {
+        if(!canBootToFreeform()) {
             if(U.shouldCollapse(this, false)) {
                 U.sendBroadcast(this, ACTION_TEMP_HIDE_TASKBAR);
             }
@@ -617,6 +716,13 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     protected void onDestroy() {
         super.onDestroy();
 
+        if(isDesktopLauncher) {
+            U.unregisterReceiver(this, exitDesktopReceiver);
+
+            if(isFinishing())
+                stopDesktopSession();
+        }
+
         U.unregisterReceiver(this, killReceiver);
         U.unregisterReceiver(this, forceTaskbarStartReceiver);
         U.unregisterReceiver(this, freeformToggleReceiver);
@@ -647,7 +753,32 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(isDesktopLauncher) {
+            // Windows/Meta key opens and closes the start menu
+            if((keyCode == KeyEvent.KEYCODE_META_LEFT || keyCode == KeyEvent.KEYCODE_META_RIGHT)
+                    && !event.isAltPressed() && !event.isCtrlPressed()) {
+                U.sendBroadcast(this, ACTION_TOGGLE_START_MENU);
+                return true;
+            }
+
+            // Alt+F4 exits the desktop
+            if(keyCode == KeyEvent.KEYCODE_F4 && event.isAltPressed()) {
+                Intent quitIntent = new Intent(ACTION_QUIT);
+                quitIntent.setPackage(getPackageName());
+                sendBroadcast(quitIntent);
+                return true;
+            }
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
     public void onBackPressed() {
+        if(desktopWidgets != null && desktopWidgets.exitEditMode())
+            return;
+
         U.sendBroadcast(this, ACTION_HIDE_START_MENU);
     }
 
@@ -684,6 +815,27 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
             setOnHomeScreen(false);
             finish();
         });
+    }
+
+    private void stopDesktopSession() {
+        LauncherHelper.getInstance().setDesktopLauncherOpen(false);
+
+        SharedPreferences pref = U.getSharedPreferences(this);
+        pref.edit()
+                .putBoolean(PREF_TASKBAR_ACTIVE, false)
+                .putBoolean(PREF_DESKTOP_SESSION, false)
+                .apply();
+
+        setOnHomeScreen(false);
+
+        stopService(new Intent(this, TaskbarService.class));
+        stopService(new Intent(this, StartMenuService.class));
+        stopService(new Intent(this, DashboardService.class));
+        stopService(new Intent(this, NotificationService.class));
+
+        U.clearCaches(this);
+        U.stopFreeformHack(this);
+        U.sendBroadcast(this, ACTION_START_MENU_DISAPPEARING);
     }
 
     private void updateWindowFlags() {
@@ -943,25 +1095,37 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
         } catch (JSONException ignored) {}
     }
 
-    private void updateMargins() {
-        if(desktopIcons == null || fab == null) return;
-
+    // Space taken up by the taskbar, as {left, top, right, bottom}
+    private int[] getTaskbarMargins() {
         String position = TaskbarPosition.getTaskbarPosition(this);
         int iconSize = getResources().getDimensionPixelSize(R.dimen.tb_icon_size);
 
-        int left = 0;
-        int top = 0;
-        int right = 0;
-        int bottom = 0;
-
+        int[] margins = new int[4];
         if(TaskbarPosition.isVerticalLeft(position))
-            left = iconSize;
+            margins[0] = iconSize;
         else if(TaskbarPosition.isVerticalRight(position))
-            right = iconSize;
+            margins[2] = iconSize;
         else if(TaskbarPosition.isBottom(position))
-            bottom = iconSize;
+            margins[3] = iconSize;
         else
-            top = iconSize;
+            margins[1] = iconSize;
+
+        return margins;
+    }
+
+    private void updateMargins() {
+        if(desktopWidgets != null) {
+            int[] m = getTaskbarMargins();
+            desktopWidgets.setMargins(m[0], m[1], m[2], m[3]);
+        }
+
+        if(desktopIcons == null || fab == null) return;
+
+        int[] taskbarMargins = getTaskbarMargins();
+        int left = taskbarMargins[0];
+        int top = taskbarMargins[1];
+        int right = taskbarMargins[2];
+        int bottom = taskbarMargins[3];
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -1129,6 +1293,9 @@ public class HomeActivityDelegate extends AppCompatActivity implements UIHost {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(desktopWidgets != null && desktopWidgets.handleActivityResult(requestCode, resultCode, data))
+            return;
 
         if(resultCode != RESULT_OK)
             return;

@@ -33,7 +33,7 @@
     <color name="tb_blue">#0000FF</color>
     <color name="tb_alpha">#80808080</color>
 
-    <color name="tb_launcher_adaptive_bg">#4557A6</color>
+    <color name="tb_launcher_adaptive_bg">#00796B</color>
     <color name="tb_freeform_mode_adaptive_bg">#4790CD</color>
 
     <color name="tb_app_shortcut_bg">#F5F5F5</color>

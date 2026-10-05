@@ -40,6 +40,7 @@ public class Constants {
     public static final String ACTION_HIDE_START_MENU_SPACE = "com.farmerbb.taskbar.HIDE_START_MENU_SPACE";
     public static final String ACTION_HIDE_TASKBAR = "com.farmerbb.taskbar.HIDE_TASKBAR";
     public static final String ACTION_IMPORT_FINISHED = "com.farmerbb.taskbar.IMPORT_FINISHED";
+    public static final String ACTION_EXIT_DESKTOP_LAUNCHER = "com.farmerbb.taskbar.EXIT_DESKTOP_LAUNCHER";
     public static final String ACTION_KILL_HOME_ACTIVITY = "com.farmerbb.taskbar.KILL_HOME_ACTIVITY";
     public static final String ACTION_LAUNCHER_PREF_CHANGED = "com.farmerbb.taskbar.LAUNCHER_PREF_CHANGED";
     public static final String ACTION_NOTIFICATION_COUNT_CHANGED = "com.farmerbb.taskbar.NOTIFICATION_COUNT_CHANGED";
@@ -106,6 +107,8 @@ public class Constants {
     public static final String PREF_CHROME_OS_CONTEXT_MENU_FIX = "chrome_os_context_menu_fix";
     public static final String PREF_CLEAR_PINNED_APPS = "clear_pinned_apps";
     public static final String PREF_COLLAPSED = "collapsed";
+    public static final String PREF_DESKTOP_WIDGETS = "desktop_widgets";
+    public static final String PREF_DESKTOP_SESSION = "desktop_session_active";
     public static final String PREF_DASHBOARD = "dashboard";
     public static final String PREF_DASHBOARD_GRID_SIZE = "dashboard_grid_size";
     public static final String PREF_DASHBOARD_HEIGHT = "dashboard_height";

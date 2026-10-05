@@ -70,4 +70,13 @@ class LauncherHelperTest {
         Assert.assertTrue(launcherHelper.isOnSecondaryHomeScreen(context))
         launcherHelper.setOnSecondaryHomeScreen(false, 1)
     }
+
+    @Test
+    fun testDesktopLauncherOpen() {
+        Assert.assertFalse(launcherHelper.isDesktopLauncherOpen)
+        launcherHelper.isDesktopLauncherOpen = true
+        Assert.assertTrue(launcherHelper.isDesktopLauncherOpen)
+        launcherHelper.isDesktopLauncherOpen = false
+        Assert.assertFalse(launcherHelper.isDesktopLauncherOpen)
+    }
 }
